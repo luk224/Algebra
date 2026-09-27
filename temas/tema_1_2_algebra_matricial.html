@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 1.2 Álgebra matricial</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 1 · Herramientas · Tema 1.2</div>
+  <h1>Álgebra matricial</h1>
+  <p>Cómo se suman, multiplican e invierten matrices; qué es una matriz elemental y por qué sirve para escalonar y para calcular la inversa; qué es el rango. Es la base algebraica de todo lo que viene después: sistemas de ecuaciones, aplicaciones lineales y diagonalización.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §1.2 (pp. 9-22)</span><span>Ejercicios: E Ej. 1.6–1.20 (pp. 11-21)</span><span>⏱ ~5 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="A" data-ref="Apuntes de tutoría ETSI (solo tema 1)">A</span> tutoría
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §1.2.1 Elementos didácticos, p. 9-10">U p.9-10</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>Una <b>matriz</b> es una tabla de números con la que se puede sumar, multiplicar por un número y, sobre todo, <b>multiplicar por otra matriz</b> siguiendo una regla concreta (fila por columna). Ese producto <b>no</b> se comporta como el producto de números: no es conmutativo. Las <b>matrices elementales</b> son el «traductor» entre hacer una operación con filas a mano y multiplicar por una matriz concreta; eso es lo que hace funcionar el algoritmo de Gauss para invertir matrices y calcular el rango.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Nociones de bachillerato sobre matrices: qué es una matriz, cómo se suman dos matrices del mismo tamaño y cómo se multiplica una fila por una columna.</li>
+  <li>Resolver sistemas 2×2 y 3×3 «a mano» (para entender de dónde sale el algoritmo de escalonamiento).</li>
+  <li>La sección 1.1 (introducción a Maxima) queda <b>fuera de examen</b> y no se resume; aquí no se usa Maxima en ningún cálculo.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde está en los libros</th></tr>
+  <tr><td>1 Notación y tipos</td><td>$\mathcal M_{m\times n}$, matriz cuadrada, tipos (identidad, nula, simétrica, diagonal, triangular…)</td><td>U pp.9-11</td></tr>
+  <tr><td>2 Suma y producto por escalar</td><td>Definiciones y sus propiedades (grupo conmutativo)</td><td>U pp.11-12</td></tr>
+  <tr><td>3 Producto de matrices</td><td>Definición, condiciones de tamaño, propiedades, no conmutatividad, traspuesta</td><td>U pp.12-13 · L §2.1 pp.92-101</td></tr>
+  <tr><td>4 Matriz inversa y traza</td><td>Regular/singular, propiedades de la inversa, traza</td><td>U pp.13-14 · L §2.2 pp.102-110</td></tr>
+  <tr><td>5 Operaciones y matrices elementales</td><td>Las 3 operaciones por filas, Def. 1.2, tipos, sus inversas</td><td>U pp.14-16</td></tr>
+  <tr><td>6 Matriz de paso y algoritmo de la inversa</td><td>Teorema 1.1, $(A\mid I)\to(I\mid A^{-1})$</td><td>U pp.18-19 · L §2.2 pp.104-106</td></tr>
+  <tr><td>7 Matrices equivalentes por filas</td><td>Def. 1.1, Teorema 1.2</td><td>U pp.15, 19</td></tr>
+  <tr><td>8 Matrices escalonadas</td><td>Def. 1.3-1.4, pivotes normalizados, unicidad de la reducida</td><td>U pp.19-21</td></tr>
+  <tr><td>9 Rango</td><td>Def. 1.5, Teorema 1.3, $A$ regular $\iff\operatorname{rang}A=n$</td><td>U p.22</td></tr>
+  <tr><td>10 Ejercicios</td><td>E <a href="#ej1-6">1.6</a>–1.20 + ejemplos propios</td><td>E pp.11-21</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios</span>
+  <p>Los ejercicios de esta sección piden: calcular potencias y sumas de matrices sin caer en las «trampas» de las identidades notables de números (1.6-1.10); manipular igualdades matriciales multiplicando por el mismo lado (1.11); reconocer matrices elementales y su efecto al multiplicar por la izquierda o por la derecha (1.12, 1.13, 1.15); escalonar una matriz y hallar matrices de paso (1.14); calcular una inversa por Gauss-Jordan (1.16); y trabajar con el rango: por qué no es aditivo (1.17), calcularlo correctamente (1.18), y demostrar que se conserva por equivalencia (1.19, 1.20).</p>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Notación $\mathcal M_{m\times n}$ y tipos de matrices <span class="src" data-l="U" data-ref="U §1.2.1, p. 10-11">U p.10-11</span></h2>
+
+<div class="box def"><span class="h">Definición</span>
+  <p>$\mathcal M_{m\times n}$ es el conjunto de las matrices reales de $m$ filas y $n$ columnas (orden o dimensión $m\times n$). Si $A\in\mathcal M_{m\times n}$:
+  $$A=\begin{pmatrix}a_{11}&a_{12}&\cdots&a_{1n}\\ \vdots&\vdots&\ddots&\vdots\\ a_{m1}&a_{m2}&\cdots&a_{mn}\end{pmatrix},\qquad a_{ij}\in\mathbb R,$$
+  abreviado $A=(a_{ij})$. Si $m=n$, $A$ es una matriz <b>cuadrada de orden $n$</b>. Una matriz $1\times n$ es una <b>matriz fila</b>, $A=(a_1\ a_2\ \cdots\ a_n)$; una matriz $m\times1$ es una <b>matriz columna</b> (se omiten subíndices innecesarios).</p>
+  <span class="src" data-l="U" data-ref="U §1.2.1, p. 10">U p.10</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.2 de U — tipos de matrices</span>
+  <ul>
+    <li>$I_2=\begin{pmatrix}1&0\\0&1\end{pmatrix}$ es la matriz <b>identidad</b> de orden 2.</li>
+    <li>$\begin{pmatrix}0&0\\0&0\\0&0\\0&0\end{pmatrix}$ es la matriz <b>nula</b> de orden $4\times2$.</li>
+    <li>$\begin{pmatrix}1&2&3&4\\2&2&5&6\\3&5&1&3\\4&6&3&4\end{pmatrix}$ es <b>simétrica</b> porque $a_{ij}=a_{ji}$ para todo $i,j$.</li>
+    <li>$\begin{pmatrix}1&2&3\\0&0&3\\0&0&2\end{pmatrix}$ es <b>triangular superior</b> porque $a_{ij}=0$ para $i>j$ (ceros por debajo de la diagonal).</li>
+  </ul>
+  <p>Otros tipos que hay que conocer (bachillerato + U): <b>diagonal</b> (solo elementos no nulos en la diagonal), <b>antisimétrica</b> ($a_{ij}=-a_{ji}$, en particular $a_{ii}=0$) y <b>triangular inferior</b>.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.2, p. 10-11">U p.10-11</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Confundir «cuadrada» con «diagonal» o «simétrica»: cuadrada solo dice $m=n$, no dice nada sobre los valores. Toda matriz diagonal es simétrica, pero no toda simétrica es diagonal (el ejemplo de arriba lo es y no es diagonal).</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Suma y producto por escalar <span class="src" data-l="U" data-ref="U §1.2.2, p. 11-12">U p.11-12</span></h2>
+
+<div class="box def"><span class="h">Definiciones</span>
+  <p>Si $A,B\in\mathcal M_{m\times n}$, la matriz <b>suma</b> $C=A+B$ verifica $c_{ij}=a_{ij}+b_{ij}$ (mismo orden $m\times n$): la suma es una <b>operación interna</b>. Si $\alpha\in\mathbb R$ (un <b>escalar</b>), la matriz <b>producto por escalar</b> $C=\alpha A$ verifica $c_{ij}=\alpha a_{ij}$; en particular $-A=(-a_{ij})$. Es una <b>operación externa</b> porque $\alpha$ y $A$ son de naturaleza distinta.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 11">U p.11</span>
+</div>
+
+<div class="box thm"><span class="h">Propiedades</span>
+  <p><b>De la suma</b> (para $A,B,C\in\mathcal M_{m\times n}$): asociativa $(A+B)+C=A+(B+C)$; conmutativa $A+B=B+A$; elemento neutro $A+0=A$ (matriz nula); elemento opuesto $A+(-A)=0$. (Esto da a $\mathcal M_{m\times n}$ estructura de grupo conmutativo.)</p>
+  <p><b>Del producto por escalar</b> (para $\alpha,\beta\in\mathbb R$): asociativa $(\alpha\beta)A=\alpha(\beta A)$; distributiva respecto a escalares $(\alpha+\beta)A=\alpha A+\beta A$; distributiva respecto a matrices $\alpha(A+B)=\alpha A+\alpha B$; elemento unidad $1A=A$.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 11-12">U p.11-12</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico</span>
+  <p>Con $A=\begin{pmatrix}2&1\\4&0\\5&3\end{pmatrix}$, $B=\begin{pmatrix}1&2\\-4&4\\2&-3\end{pmatrix}$: $A+B=\begin{pmatrix}3&3\\0&4\\7&0\end{pmatrix}$ y $3(A+B)=\begin{pmatrix}9&9\\0&12\\21&0\end{pmatrix}$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.3, p. 12">U p.12</span>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Producto de matrices <span class="src" data-l="U" data-ref="U §1.2.2, p. 12-13">U p.12-13</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Para multiplicar $A$ por $B$, cada elemento del resultado es «fila de $A$ punto columna de $B$»: se recorren a la vez, se multiplican término a término y se suman. Por eso hace falta que la fila de $A$ y la columna de $B$ tengan <b>la misma longitud</b>: el número de columnas de $A$ debe coincidir con el número de filas de $B$.</p>
+  <span class="src" data-l="L" data-ref="Lay §2.1, producto fila por columna, p. 96-97">L p.96-97</span>
+</div>
+
+<div class="box def"><span class="h">Definición</span>
+  <p>Si $A\in\mathcal M_{m\times n}$ y $B\in\mathcal M_{n\times r}$, existe la matriz producto $P=AB\in\mathcal M_{m\times r}$ y
+  $$p_{ij}=\sum_{k=1}^n a_{ik}b_{kj}.$$
+  En general $AB$ <b>no está definido</b> si los tamaños no encajan. Si $A$ es cuadrada de orden $n$, $AI_n=I_nA=A$.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 12">U p.12</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico $2\times2$</span>
+  <p>Sean $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$, $B=\begin{pmatrix}2&0\\1&1\end{pmatrix}$.
+  $$AB=\begin{pmatrix}1\cdot2+2\cdot1&1\cdot0+2\cdot1\\0\cdot2+1\cdot1&0\cdot0+1\cdot1\end{pmatrix}=\begin{pmatrix}4&2\\1&1\end{pmatrix},\qquad BA=\begin{pmatrix}2&4\\1&3\end{pmatrix}.$$
+  $AB\ne BA$: <b>el producto de matrices no es conmutativo</b>, ni siquiera en $2\times2$. En general, $AB=BA$ solo en casos particulares.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box thm"><span class="h">Propiedades del producto</span>
+  <p>Asociativa: $(AB)C=A(BC)$. Distributiva por la izquierda/derecha: $A(B+C)=AB+AC$, $(A+B)C=AC+BC$. Asociativa con el escalar: $\alpha(AB)=(\alpha A)B$. Existen ambos productos $AB$ y $BA$ si $A\in\mathcal M_{m\times n}$ y $B\in\mathcal M_{n\times m}$; además, $AB$ y $BA$ tienen el <b>mismo tamaño</b> si y solo si $A$ y $B$ son cuadradas del mismo orden.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 12-13">U p.12-13</span>
+</div>
+
+<div class="box warn"><span class="h">Imprecisión de U</span>
+  <p>U (p.12) afirma literalmente que «existen ambos productos $AB$ y $BA$ si y solo si $A$ y $B$ son cuadradas del mismo orden». Es una imprecisión: si $A\in\mathcal M_{m\times n}$ y $B\in\mathcal M_{n\times m}$ (no necesariamente cuadradas, ni $m=n$) ya existen los dos productos, aunque $AB\in\mathcal M_{m\times m}$ y $BA\in\mathcal M_{n\times n}$ pueden tener tamaños distintos entre sí. Lo que sí es cierto es que $AB$ y $BA$ tienen el mismo tamaño exactamente cuando $A,B$ son cuadradas del mismo orden.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 12">U p.12</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Usar identidades notables de números con matrices: $(A+B)^2=A^2+2AB+B^2$ y $A^2-B^2=(A+B)(A-B)$ son <b>falsas en general</b>, porque desarrollarlas exige que $AB=BA$ y eso no se puede suponer. Lo correcto es $(A+B)^2=A^2+AB+BA+B^2$ (ver <a href="#ej1-8">Ejercicio 1.8</a> más abajo).</p>
+</div>
+
+<div class="box def"><span class="h">Matriz traspuesta</span>
+  <p>$A^t$ se obtiene cambiando la fila $i$ por la columna $i$ (es decir, $(A^t)_{ij}=a_{ji}$). Propiedades: $(A^t)^t=A$, $(A+B)^t=A^t+B^t$, $(AB)^t=B^tA^t$ (<b>el orden se invierte</b>).</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 13">U p.13</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.4 de U — traspuesta de un producto</span>
+  <p>Con $A=\begin{pmatrix}2&1&2\\5&4&3\end{pmatrix}\in\mathcal M_{2\times3}$ y $B=\begin{pmatrix}1&2&3&3\\4&2&5&6\\0&1&3&2\end{pmatrix}\in\mathcal M_{3\times4}$, existe $AB\in\mathcal M_{2\times4}$:
+  $$AB=\begin{pmatrix}6&8&17&16\\21&21&44&45\end{pmatrix},\qquad (AB)^t=\begin{pmatrix}6&21\\8&21\\17&44\\16&45\end{pmatrix}.$$
+  $(AB)^t$ también se podría calcular como $B^tA^t$ (ver comprobación numérica en el <a href="#ejp-1">Ejemplo propio 1</a> más abajo).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.4, p. 13">U p.13</span>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Matriz inversa y traza <span class="src" data-l="U" data-ref="U §1.2.2, p. 13-14">U p.13-14</span></h2>
+
+<div class="box def"><span class="h">Definición</span>
+  <p>Si $A$ es cuadrada de orden $n$, la matriz $B$ de orden $n$ es la <b>matriz inversa</b> de $A$, $B=A^{-1}$, si $AB=BA=I_n$. Entonces $A$ es <b>regular</b> (si existe $A^{-1}$) o <b>singular</b> (si no existe). La inversa solo se define para matrices cuadradas, no siempre existe, y si existe <b>es única</b>. Propiedades:
+  $$(A^{-1})^{-1}=A,\qquad (AB)^{-1}=B^{-1}A^{-1}\ \text{(orden invertido, requiere que $A$ y $B$ sean regulares)},\qquad (A^{-1})^t=(A^t)^{-1}.$$</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 13">U p.13</span>
+</div>
+
+<div class="box def"><span class="h">Traza</span>
+  <p>La <b>traza</b> de una matriz cuadrada $A$ es la suma de los elementos de su diagonal: $\operatorname{tr}(A)=\sum_i a_{ii}$.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 13">U p.13</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.5 de U</span>
+  <p>Con $A=\begin{pmatrix}2&3\\1&5\end{pmatrix}$: $\operatorname{tr}(A)=2+5=7$. Buscando $A^{-1}=\begin{pmatrix}a&b\\c&d\end{pmatrix}$ tal que $AA^{-1}=I_2$ se plantea un sistema $2a+3c=1,\ 2b+3d=0,\ a+5c=0,\ b+5d=1$, cuya solución da
+  $$A^{-1}=\begin{pmatrix}\frac57&-\frac37\\-\frac17&\frac27\end{pmatrix}.$$
+  En cambio, $\begin{pmatrix}2&10\\1&5\end{pmatrix}$ es un ejemplo de matriz singular (no tiene inversa): sus filas son proporcionales.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.5, p. 14">U p.14</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen</span>
+  <p>Antes de lanzarte a plantear el sistema $AA^{-1}=I$, comprueba a ojo si las filas (o columnas) de $A$ son proporcionales: si lo son, $A$ es singular y te ahorras el cálculo. Esto se verá con rigor con el determinante (§1.3) y con el rango (§9 de este tema).</p>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Operaciones y matrices elementales <span class="src" data-l="U" data-ref="U §1.2.2-1.2.3, p. 14-16">U p.14-16</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Cuando resuelves un sistema «a mano» haces cosas como intercambiar dos ecuaciones o sumarle a una un múltiplo de otra. Cada una de esas acciones sobre las <b>filas</b> de una matriz se puede reproducir <b>multiplicando por la izquierda</b> por una matriz muy concreta: la matriz elemental de esa operación. Es la pieza que conecta «hacer Gauss a mano» con «multiplicar matrices», y es la base del algoritmo de la inversa.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia">P</span>
+</div>
+
+<div class="box def"><span class="h">Operaciones elementales por filas</span>
+  <p>Con $A\in\mathcal M_{m\times n}$, se denota $F_i$ la fila $i$-ésima. Las tres operaciones elementales por filas son:</p>
+  <ol>
+    <li>Permutar dos filas: $F_i\leftrightarrow F_j$.</li>
+    <li>Multiplicar una fila por un escalar $\alpha\ne0$: $F_i\to\alpha F_i$.</li>
+    <li>Sumar a una fila un múltiplo de otra: $F_i\to F_i+\alpha F_j$.</li>
+  </ol>
+  <p>Análogamente se definen las operaciones elementales por columnas ($C_i$).</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 14">U p.14</span>
+</div>
+
+<div class="box def"><span class="h">Definición 1.2 (matriz elemental)</span>
+  <p>Una <b>matriz elemental</b> (por filas) es la matriz cuadrada que resulta al realizar <b>una sola</b> operación elemental por filas en la matriz identidad.</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.2, p. 15">U p.15</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.7 de U — reconocer matrices elementales</span>
+  <p>$E_1=\begin{pmatrix}1&0&0\\0&2&0\\0&0&1\end{pmatrix}$ viene de $F_2\to2F_2$ en $I_3$. $E_2=\begin{pmatrix}1&0&0&5\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}$ viene de $F_1\to F_1+5F_4$ en $I_4$. $E_3=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}$ viene de $F_1\leftrightarrow F_2$ en $I_3$. $E_4=\begin{pmatrix}1&-1\\0&1\end{pmatrix}$ viene de $F_1\to F_1-F_2$ en $I_2$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.7, p. 15">U p.15</span>
+</div>
+
+<div class="box thm"><span class="h">Las matrices elementales son regulares</span>
+  <p>Cada operación se deshace con otra del mismo tipo, y esa operación «inversa» da la matriz inversa:</p>
+  <ol>
+    <li>La inversa de $F_i\leftrightarrow F_j$ es ella misma.</li>
+    <li>La inversa de $F_i\to\alpha F_i$ ($\alpha\ne0$) es $F_i\to\frac1\alpha F_i$.</li>
+    <li>La inversa de $F_i\to F_i+\alpha F_j$ es $F_i\to F_i-\alpha F_j$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U p. 16">U p.16</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.8 de U — inversa de una elemental</span>
+  <p>$E=\begin{pmatrix}1&0&0\\0&1&-4\\0&0&1\end{pmatrix}$ viene de $F_2\to F_2-4F_3$ en $I_3$. La operación que la deshace es $F_2\to F_2+4F_3$, así que
+  $$E^{-1}=\begin{pmatrix}1&0&0\\0&1&4\\0&0&1\end{pmatrix},\qquad EE^{-1}=I_3.$$</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.8, p. 16">U p.16</span>
+</div>
+
+<div class="box thm"><span class="h">Operación por filas = multiplicar por la izquierda</span>
+  <p>Hacer una operación elemental por filas en $A\in\mathcal M_{m\times n}$ equivale a multiplicar por la izquierda la matriz elemental asociada $E\in\mathcal M_{m\times m}$: el resultado es $EA$. Análogamente, hacer una operación elemental por <b>columnas</b> equivale a multiplicar por la <b>derecha</b>: $AF$. Como el producto no es conmutativo, hay que respetar el lado.</p>
+  <span class="src" data-l="U" data-ref="U p. 16 (texto y nota al margen)">U p.16</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico — mismo tipo de operación, dos lados distintos</span>
+  <p>Sea $A=\begin{pmatrix}2&1&3\\0&5&4\\1&7&6\end{pmatrix}$ y $E=\begin{pmatrix}1&0&0\\0&1&0\\0&3&1\end{pmatrix}$ (viene de $F_3\to F_3+3F_2$ en $I_3$).</p>
+  <ol class="steps">
+    <li><b>Por la izquierda ($EA$, operación por filas):</b> se suma $3F_2$ a $F_3$: $EA=\begin{pmatrix}2&1&3\\0&5&4\\1&22&18\end{pmatrix}$, pues $(1,7,6)+3(0,5,4)=(1,22,18)$.</li>
+    <li><b>Por la derecha ($AE$, operación por columnas):</b> la misma $E$, leída por columnas sobre $I_3$, es $C_2\to C_2+3C_3$ (el «3» de $E$ está en la posición $(3,2)$, así que al multiplicar por la derecha afecta a la columna 2 sumándole $3$ veces la columna 3 — <b>los índices se cruzan</b> respecto al caso por filas). $AE=\begin{pmatrix}2&10&3\\0&17&4\\1&25&6\end{pmatrix}$, pues $(1,5,7)^t+3(3,4,6)^t=(10,17,25)^t$.</li>
+  </ol>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.15, p. 18">E p.18</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Pensar que $AE$ hace «lo mismo» que $EA$ pero por columnas con los mismos índices: si $E$ tiene el escalar en la posición $(i,j)$ (con $i\ne j$), por filas es $F_i\to F_i+\alpha F_j$ pero por columnas es $C_j\to C_j+\alpha C_i$ (los índices se invierten). Repasa el <a href="#ej1-15">Ejercicio 1.15</a> más abajo, donde se ve con tres matrices elementales distintas.</p>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Teorema 1.1: matriz de paso y algoritmo de la inversa <span class="src" data-l="U" data-ref="U p. 18">U p.18</span></h2>
+
+<div class="box thm"><span class="h">Teorema 1.1</span>
+  <p>Si $B$ se obtiene de $A\in\mathcal M_{m\times n}$ mediante $p$ operaciones elementales por filas $O_1,\dots,O_p$ (con $E_i$ la matriz elemental de $O_i$), entonces
+  $$B=E_pE_{p-1}\cdots E_1A=EA,\qquad E=E_pE_{p-1}\cdots E_1.$$
+  Equivalentemente, si $(A\mid I_m)\xrightarrow{\text{mismas operaciones}}(B\mid E)$, entonces $B=EA$. Como $E$ es regular (producto de regulares), $E^{-1}=E_1^{-1}E_2^{-1}\cdots E_p^{-1}$. A $E$ se le llama <b>matriz de paso</b> de $A$ a $B$.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 1.1, p. 18">U p.18</span>
+</div>
+
+<div class="box thm"><span class="h">Algoritmo para calcular la inversa</span>
+  <p>Si $A$ es cuadrada de orden $n$ y regular, y $(A\mid I_n)\xrightarrow{\text{op. por filas}}(I_n\mid E)$, entonces por el Teorema 1.1, $I_n=EA$, luego $E=A^{-1}$. Si en algún paso aparece una fila nula en la parte izquierda, $A$ <b>no</b> es regular y es imposible llegar a $I_n$: se para el proceso.</p>
+  <span class="src" data-l="U" data-ref="U p. 18-19 · L §2.2, algoritmo [A|I]→[I|A⁻¹], pp. 106-108">U p.18-19</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.9-1.10 de U — varias operaciones seguidas</span>
+  <p>Con $A=\begin{pmatrix}1&2\\5&3\\2&2\\4&2\end{pmatrix}$, se hacen (en este orden) $F_1\to F_1-2F_2$ y luego $F_3\leftrightarrow F_4$:
+  $$A\xrightarrow{F_1\to F_1-2F_2}\begin{pmatrix}-9&-4\\5&3\\2&2\\4&2\end{pmatrix}\xrightarrow{F_3\leftrightarrow F_4}\begin{pmatrix}-9&-4\\5&3\\4&2\\2&2\end{pmatrix}=B.$$
+  Las matrices elementales asociadas son $E_1=\begin{pmatrix}1&-2&0&0\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}$ (de $F_1\to F_1-2F_2$) y $E_2=\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}$ (de $F_3\leftrightarrow F_4$), y se cumple $B=E_2E_1A$: <b>la última operación realizada queda más a la izquierda</b> en el producto.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 1.9-1.10, p. 17">U p.17</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Escribir $B=E_1E_2A$ en vez de $E_2E_1A$: como el producto no es conmutativo, el orden de las matrices elementales en el producto es el <b>inverso</b> al orden temporal en que se hicieron las operaciones (la última operación es la matriz más a la izquierda).</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.11 de U</span>
+  <p>Con $A=\begin{pmatrix}2&0\\4&1\end{pmatrix}$:
+  $$(A\mid I_2)\xrightarrow{F_1\to\frac12F_1}\begin{pmatrix}1&0&\frac12&0\\4&1&0&1\end{pmatrix}\xrightarrow{F_2\to F_2-4F_1}\begin{pmatrix}1&0&\frac12&0\\0&1&-2&1\end{pmatrix},$$
+  $$A^{-1}=\begin{pmatrix}\frac12&0\\-2&1\end{pmatrix}.$$</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.11, p. 19">U p.19</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo alternativo — método de Gauss para la inversa (A)</span>
+  <p>Con $A=\begin{pmatrix}3&5\\4&8\end{pmatrix}$: se aplican a $(A\mid I_2)$ las mismas operaciones que llevan $A$ a $I_2$ (aquí, combinaciones de filas hasta obtener $12$ en la diagonal y luego normalizar), obteniendo $A^{-1}=\begin{pmatrix}2&-\frac{15}{12}\\-1&\frac34\end{pmatrix}$. Se comprueba con $AA^{-1}=I_2$.</p>
+  <span class="src" data-l="A" data-ref="Inversa de una matriz con el método de Gauss">A</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen</span>
+  <p>Comprueba siempre el resultado multiplicando $AA^{-1}$ (o $A^{-1}A$): es rápido y detecta casi cualquier error de arrastre de fracciones. En el examen, escribir la comprobación también demuestra que dominas la definición de inversa (U p.13), no solo el algoritmo.</p>
+</div>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="s7"><span class="n">7</span>Matrices equivalentes por filas <span class="src" data-l="U" data-ref="U Def. 1.1, p. 15; Teorema 1.2, p. 19">U p.15, 19</span></h2>
+
+<div class="box def"><span class="h">Definición 1.1</span>
+  <p>Dos matrices $A,B\in\mathcal M_{m\times n}$ son <b>equivalentes por filas</b> si se puede pasar de una a otra mediante operaciones elementales por filas.</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.1, p. 15">U p.15</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.6 de U</span>
+  <p>Las matrices $\begin{pmatrix}2&1&2\\1&0&3\end{pmatrix}$ y $\begin{pmatrix}1&0&3\\1&1&-1\end{pmatrix}$ son equivalentes por filas:
+  $$\begin{pmatrix}2&1&2\\1&0&3\end{pmatrix}\xrightarrow{F_1\to F_1-F_2}\begin{pmatrix}1&1&-1\\1&0&3\end{pmatrix}\xrightarrow{F_1\leftrightarrow F_2}\begin{pmatrix}1&0&3\\1&1&-1\end{pmatrix}.$$
+  La matriz de paso es $Q=\begin{pmatrix}0&1\\1&-1\end{pmatrix}$ (producto de las elementales de $F_1\leftrightarrow F_2$ y $F_1\to F_1-F_2$, en ese orden): $Q\begin{pmatrix}2&1&2\\1&0&3\end{pmatrix}=\begin{pmatrix}1&0&3\\1&1&-1\end{pmatrix}$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.6, p. 15">U p.15</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 1.2</span>
+  <p>$A,B\in\mathcal M_{m\times n}$ son equivalentes por filas $\iff$ existe una matriz regular $Q\in\mathcal M_{m\times m}$ (matriz de paso) tal que $B=QA$. ($\Rightarrow$: $Q$ es la $E$ del Teorema 1.1. $\Leftarrow$: invirtiendo las operaciones de $Q$ se pasa de $B$ a $A$.)</p>
+  <span class="src" data-l="U" data-ref="U Teorema 1.2, p. 19">U p.19</span>
+</div>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="s8"><span class="n">8</span>Matrices escalonadas <span class="src" data-l="U" data-ref="U §1.2.4, p. 19-21">U p.19-21</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una matriz escalonada es la que, dibujada, forma una «escalera»: cada fila empieza más a la derecha que la anterior, y las filas de solo ceros quedan al final. Es la forma más simple a la que se puede llevar cualquier matriz usando solo operaciones por filas, y sirve para leer el rango a simple vista.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 1.3</span>
+  <p>$A\in\mathcal M_{m\times n}$ es <b>escalonada</b> (por filas) si: (i) el primer elemento no nulo de cada fila (el <b>pivote</b>) tiene ceros debajo; (ii) cada fila empieza con más ceros que la anterior; (iii) las filas nulas (si las hay) son las últimas.<br>
+  Es escalonada <b>con pivotes normalizados</b> si además todos los pivotes valen 1. Es <b>escalonada reducida</b> si, además de tener los pivotes a 1, todos los elementos <b>por encima</b> de cada pivote también son cero.</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.3, p. 20">U p.20</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.12 de U — matrices escalonadas</span>
+  <p>Son <b>escalonadas</b>:
+  $$\begin{pmatrix}1&0&2&3&4&2\\0&0&0&2&3&0\\0&0&0&0&3&4\end{pmatrix},\qquad\begin{pmatrix}1&2\\0&3\\0&0\\0&0\end{pmatrix},\qquad\begin{pmatrix}4&0&3&0&-1&4&2\\0&2&5&0&0&3&7\\0&0&0&1&2&5&-1\end{pmatrix}.$$
+  En las tres, cada pivote (primer elemento no nulo de su fila) tiene ceros debajo, cada fila empieza con más ceros que la anterior y las filas nulas (si las hay) están al final: los pivotes «forman una escalera».</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.12, p. 20">U p.20</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.12 de U — matrices NO escalonadas</span>
+  <ul>
+    <li>$\begin{pmatrix}2&2&3\\0&1&5\\0&2&0\\0&0&1\end{pmatrix}$: falla (i), hay un $2$ <b>debajo</b> del pivote $1$ de la fila 2.</li>
+    <li>$\begin{pmatrix}1&0&2&3&4&2\\0&0&0&2&3&0\\0&0&0&3&3&4\end{pmatrix}$: falla (ii), las filas 2 y 3 empiezan con el mismo número de ceros (su pivote cae en la misma columna).</li>
+    <li>$\begin{pmatrix}1&0&2&3&4\\0&0&0&0&1\\0&0&-3&2&2\end{pmatrix}$: falla (ii), la fila 3 empieza <b>antes</b> (con menos ceros) que la fila 2.</li>
+    <li>$\begin{pmatrix}1&2\\0&3\\0&2\\0&1\end{pmatrix}$: falla (i), hay elementos no nulos <b>debajo</b> del pivote $3$ de la fila 1.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.12, p. 20">U p.20</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que basta con que la matriz «tenga pinta» de escalera para serlo: hay que comprobar <b>las tres condiciones</b> de la Def. 1.3 una por una, elemento a elemento. Compárense $\begin{pmatrix}1&2\\0&3\\0&0\\0&0\end{pmatrix}$ (escalonada) y $\begin{pmatrix}1&2\\0&3\\0&2\\0&1\end{pmatrix}$ (no escalonada): son casi idénticas, pero en la segunda hay elementos no nulos debajo del pivote de la primera fila.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 1.4</span>
+  <p>Se llama matriz escalonada (o escalonada reducida) <b>de</b> $A\in\mathcal M_{m\times n}$ a una matriz escalonada (o escalonada reducida) $B\in\mathcal M_{m\times n}$ que se obtiene mediante operaciones elementales por filas en $A$. En consecuencia, $A$ es equivalente por filas a <b>cualquiera</b> de sus matrices escalonadas, y además se puede calcular la matriz de paso asociada (Teorema 1.1).</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.4, p. 20">U p.20</span>
+</div>
+
+<div class="box thm"><span class="h">Unicidad</span>
+  <p>Toda $A\in\mathcal M_{m\times n}$ se puede llevar a forma escalonada (o escalonada reducida) mediante operaciones por filas. La matriz escalonada <b>no es única</b> (depende de las operaciones elegidas), pero la escalonada <b>reducida sí es única</b>.</p>
+  <span class="src" data-l="U" data-ref="U p. 21">U p.21</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.13-1.14 de U</span>
+  <p>Con $A=\begin{pmatrix}1&2\\2&3\\1&1\end{pmatrix}$: escalonando $(A\mid I_3)$ con $F_2\to F_2-2F_1$, $F_3\to F_3-F_1$, $F_3\to F_3-F_2$ se llega a
+  $$A_e=\begin{pmatrix}1&2\\0&-1\\0&0\end{pmatrix}=EA,\qquad E=\begin{pmatrix}1&0&0\\-2&1&0\\1&-1&1\end{pmatrix}.$$
+  Otras escalonadas válidas de la misma $A$ son $\begin{pmatrix}1&2\\0&1\\0&0\end{pmatrix}$ o $\begin{pmatrix}2&4\\0&1\\0&0\end{pmatrix}$: distintas, pero <b>todas</b> tienen 2 filas no nulas. La escalonada reducida, en cambio, es única: $\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 1.13-1.14, p. 21">U p.21</span>
+</div>
+
+<!-- ============================ 9 ============================ -->
+<h2 id="s9"><span class="n">9</span>Rango de una matriz <span class="src" data-l="U" data-ref="U p. 22">U p.22</span></h2>
+
+<div class="box thm"><span class="h">Consecuencia del algoritmo de la inversa</span>
+  <p>$A\in\mathcal M_{n\times n}$ es regular $\iff$ su escalonada reducida es $I_n$ $\iff$ cualquiera de sus escalonadas es triangular superior sin ceros en la diagonal.</p>
+  <span class="src" data-l="U" data-ref="U p. 22">U p.22</span>
+</div>
+
+<div class="box def"><span class="h">Definición 1.5 (rango)</span>
+  <p>El <b>rango</b> de $A\in\mathcal M_{m\times n}$, denotado $\operatorname{rang}(A)$, es el número de filas no nulas de <b>cualquier</b> matriz escalonada de $A$ (el número no depende de cuál se elija).</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.5, p. 22">U p.22</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.15 de U</span>
+  <p>Retomando $A=\begin{pmatrix}1&2\\2&3\\1&1\end{pmatrix}$ del Ejemplo 1.13 (§8), su escalonada $A_e=\begin{pmatrix}1&2\\0&-1\\0&0\end{pmatrix}$ tiene 2 filas no nulas: $\operatorname{rang}(A)=2$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.15, p. 22">U p.22</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 1.3 y condición de regularidad</span>
+  <p>Si $A,B\in\mathcal M_{m\times n}$ son equivalentes por filas, entonces $\operatorname{rang}(A)=\operatorname{rang}(B)$ (condición <b>necesaria</b>, no suficiente: dos matrices con el mismo rango pueden no ser equivalentes por filas, p. ej. $\begin{pmatrix}2&1&0\\0&0&0\end{pmatrix}$ y $\begin{pmatrix}3&1&1\\0&0&0\end{pmatrix}$, ambas de rango 1).</p>
+  <p><b>Condición necesaria y suficiente de regularidad:</b> para $A\in\mathcal M_{n\times n}$, $A$ es regular $\iff\operatorname{rang}(A)=n$.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 1.3 y p. 22">U p.22</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Contar «filas no nulas» de una matriz que <b>no está escalonada todavía</b>: la definición de rango exige contarlas sobre una matriz escalonada, no sobre cualquier matriz. Si la matriz no es escalonada, primero hay que escalonarla (a veces basta una permutación de filas). Ver el <a href="#ej1-18">Ejercicio 1.18</a>.</p>
+</div>
+
+<!-- ============================ EJERCICIOS ============================ -->
+<h2 id="ejercicios"><span class="n">10</span>Ejercicios del libro, resueltos</h2>
+
+<details class="sol" id="ej1-6"><summary>Ejercicio 1.6 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.6, p. 11">E p.11</span></summary>
+  <p class="enun">Calcúlese $A^3$ sabiendo que $A$ es la matriz cuyas filas son $(0,\cos x,\operatorname{sen}x)$, $(\cos x,0,-1)$, $(\operatorname{sen}x,1,0)$.</p>
+  <ol class="steps">
+    <li>Escribimos $c=\cos x$, $s=\operatorname{sen}x$: $A=\begin{pmatrix}0&c&s\\c&0&-1\\s&1&0\end{pmatrix}$. $A^3=A\cdot A\cdot A$; por asociatividad, calculamos primero $A^2$ y luego $A\cdot A^2$.</li>
+    <li>$A^2$ fila por columna: $A^2=\begin{pmatrix}c^2+s^2&s&-c\\-s&c^2-1&cs\\c&cs&s^2-1\end{pmatrix}$.</li>
+    <li>Simplificamos con $s^2+c^2=1$: $A^2=\begin{pmatrix}1&s&-c\\-s&-s^2&cs\\c&cs&-c^2\end{pmatrix}$.</li>
+    <li>$A^3=A\cdot A^2$, fila por columna: cada entrada se cancela por parejas (p. ej. la $(1,1)$ es $c(-s)+s\cdot c=0$). Resultado: $A^3=0_3$ para todo $x\in\mathbb R$.</li>
+  </ol>
+  <p>Comprobado con sympy: <code>simplify(A**3) == zeros(3)</code>.</p>
+  <div class="recipe"><b>Receta:</b> para $A^n$, calcula $A^2$ y simplifica <b>antes</b> de seguir (aquí con $s^2+c^2=1$); usa $A^{k+1}=A\cdot A^k$, el orden de agrupación no importa por la asociatividad.</div>
+  <p><b>Error típico:</b> elevar al cubo cada elemento ($\cos^3x,\dots$): $A^3$ es el producto matricial, no la potencia elemento a elemento.</p>
+</details>
+
+<details class="sol" id="ej1-7"><summary>Ejercicio 1.7 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.7, p. 11">E p.11</span></summary>
+  <p class="enun">$A$ tiene filas $(0,a,0)$, $(0,0,b)$, $(c,0,0)$ con $a,b,c\in\mathbb R$. ¿Es cierto que A) $A^3$ es una matriz escalar? B) $A^n$ es escalar para todo $n\in\mathbb N$?</p>
+  <ol class="steps">
+    <li>Una <b>matriz escalar</b> es $\lambda I_n$: diagonal con la diagonal constante.</li>
+    <li>$A=\begin{pmatrix}0&a&0\\0&0&b\\c&0&0\end{pmatrix}$; $A^2=\begin{pmatrix}0&0&ab\\bc&0&0\\0&ac&0\end{pmatrix}$.</li>
+    <li>$A^3=A\cdot A^2=abc\,I_3=\begin{pmatrix}abc&0&0\\0&abc&0\\0&0&abc\end{pmatrix}$: es escalar para <b>cualesquiera</b> $a,b,c$. <b>Opción A cierta.</b></li>
+    <li>Para $n=1$, $A^1=A$ tiene $a$ fuera de la diagonal: si $a\ne0$ ni siquiera es diagonal. Basta este contraejemplo. <b>Opción B falsa</b> (salvo $a=b=c=0$).</li>
+  </ol>
+  <p>Comprobado con sympy: <code>A**3 == a*b*c*eye(3)</code>; <code>A**4</code> no es diagonal.</p>
+  <div class="recipe"><b>Receta:</b> calcula $A^2,A^3,\dots$ hasta ver un patrón (aquí $A^{3k+r}=(abc)^kA^r$). Una afirmación «para todo $n$» se refuta con un solo $n$.</div>
+  <p><b>Error típico:</b> generalizar de $A^3$ a $A^n$; que una potencia sea escalar no implica que todas lo sean.</p>
+</details>
+
+<details class="sol" id="ej1-8"><summary>Ejercicio 1.8 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.8, p. 12">E p.12</span></summary>
+  <p class="enun">$A+B=\begin{pmatrix}3&2\\7&0\end{pmatrix}$ y $A-B=\begin{pmatrix}2&3\\-1&0\end{pmatrix}$. ¿Cuál es cierta? A) $A^2+B^2=\begin{pmatrix}12&6\\\frac{19}2&\frac{11}2\end{pmatrix}$. B) $(A+B)^2=\begin{pmatrix}9&4\\49&0\end{pmatrix}$. C) $A^2-B^2=\begin{pmatrix}4&9\\14&21\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>Sumando y restando las dos igualdades: $A=\frac12[(A+B)+(A-B)]=\begin{pmatrix}\frac52&\frac52\\3&0\end{pmatrix}$, $B=\frac12[(A+B)-(A-B)]=\begin{pmatrix}\frac12&-\frac12\\4&0\end{pmatrix}$.</li>
+    <li>$A^2=\begin{pmatrix}\frac{55}4&\frac{25}4\\\frac{15}2&\frac{15}2\end{pmatrix}$, $B^2=\begin{pmatrix}-\frac74&-\frac14\\2&-2\end{pmatrix}$.</li>
+    <li><b>A:</b> $A^2+B^2=\begin{pmatrix}12&6\\\frac{19}2&\frac{11}2\end{pmatrix}$. <b>Cierta.</b></li>
+    <li><b>B:</b> $(A+B)^2=(A+B)(A+B)=\begin{pmatrix}23&6\\21&14\end{pmatrix}\ne\begin{pmatrix}9&4\\49&0\end{pmatrix}$. <b>Falsa</b> (la matriz de la opción B es la que sale de elevar cada elemento al cuadrado: trampa).</li>
+    <li><b>C:</b> $A^2-B^2=\begin{pmatrix}\frac{31}2&\frac{13}2\\\frac{11}2&\frac{19}2\end{pmatrix}\ne\begin{pmatrix}4&9\\14&21\end{pmatrix}$. <b>Falsa</b> (la matriz de C es $(A+B)(A-B)$, que solo coincide con $A^2-B^2$ si $AB=BA$, y aquí no conmutan).</li>
+  </ol>
+  <p>Comprobado con sympy.</p>
+  <div class="recipe"><b>Receta:</b> dados $A+B$ y $A-B$, despeja $A=\frac12[(A+B)+(A-B)]$, $B=\frac12[(A+B)-(A-B)]$. Desarrolla productos <b>solo</b> con la distributiva: $(A+B)^2=A^2+AB+BA+B^2$.</div>
+  <p><b>Error típico:</b> aplicar identidades notables de números ($(A+B)^2=A^2+2AB+B^2$, $A^2-B^2=(A+B)(A-B)$): falsas en general porque el producto no es conmutativo.</p>
+</details>
+
+<details class="sol" id="ej1-9"><summary>Ejercicio 1.9 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.9, p. 13">E p.13</span></summary>
+  <p class="enun">Con $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$, $B=\begin{pmatrix}2&0\\0&3\end{pmatrix}$, calcúlese $S=A+AB+AB^2+\cdots+AB^n$. A) $S=\begin{pmatrix}2^{n+1}-1&0\\0&\frac{3^{n+1}-1}2\end{pmatrix}$. B) $S=\begin{pmatrix}2^{n+1}-1&0\\0&3^{n+1}-1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>Sacando $A$ factor común por la izquierda (todos los sumandos la tienen a la izquierda): $S=A(I+B+B^2+\cdots+B^n)$.</li>
+    <li>Por inducción, $B^k=\begin{pmatrix}2^k&0\\0&3^k\end{pmatrix}$. La suma de diagonales es diagonal:
+    $$I+B+\cdots+B^n=\begin{pmatrix}1+2+\cdots+2^n&0\\0&1+3+\cdots+3^n\end{pmatrix}.$$</li>
+    <li>Progresión geométrica $1+r+\cdots+r^n=\frac{r^{n+1}-1}{r-1}$: da $2^{n+1}-1$ y $\frac{3^{n+1}-1}2$.</li>
+    <li>Multiplicando por $A$: $S=\begin{pmatrix}1&0\\0&2\end{pmatrix}\begin{pmatrix}2^{n+1}-1&0\\0&\frac{3^{n+1}-1}2\end{pmatrix}=\begin{pmatrix}2^{n+1}-1&0\\0&3^{n+1}-1\end{pmatrix}$. <b>Opción B cierta</b> (A es la suma sin multiplicar por $A$).</li>
+    <li>Comprobación $n=1$: $S=A+AB=\begin{pmatrix}3&0\\0&8\end{pmatrix}$, y B da $(2^2-1,3^2-1)=(3,8)$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> saca factor común respetando el lado; si son diagonales, trabaja entrada a entrada con la fórmula de la progresión geométrica; comprueba con $n=0$ o $n=1$.</div>
+  <p><b>Error típico:</b> olvidar el factor $A$ (da la opción A) o sacarlo por el lado equivocado.</p>
+</details>
+
+<details class="sol" id="ej1-10"><summary>Ejercicio 1.10 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.10, p. 14">E p.14</span></summary>
+  <p class="enun">Suponiendo que $I_n-A$ es regular con $A\in\mathcal M_{n\times n}$ y $A^3=0$, calcúlese $(I-A)^{-1}$ en función de las potencias de $A$.</p>
+  <ol class="steps">
+    <li>Analogía numérica: $1-x^3=(1-x)(1+x+x^2)$; si $x^3=0$, $(1-x)(1+x+x^2)=1$. Probamos $C=I+A+A^2$.</li>
+    <li>Hay que comprobar $(I-A)C=I$ <b>y</b> $C(I-A)=I$ (definición de inversa, U p.13).</li>
+    <li>$(I-A)(I+A+A^2)=I+A+A^2-A-A^2-A^3=I-A^3=I$.</li>
+    <li>$(I+A+A^2)(I-A)=I-A+A-A^2+A^2-A^3=I-A^3=I$.</li>
+    <li>Luego $(I-A)^{-1}=I+A+A^2$ (única, por unicidad de la inversa).</li>
+  </ol>
+  <p>Comprobado con sympy con $A=\begin{pmatrix}0&1&2\\0&0&3\\0&0&0\end{pmatrix}$ ($A^3=0$): $(I-A)^{-1}=I+A+A^2=\begin{pmatrix}1&1&5\\0&1&3\\0&0&1\end{pmatrix}$.</p>
+  <div class="recipe"><b>Receta:</b> si $A^k=0$, entonces $(I-A)^{-1}=I+A+\cdots+A^{k-1}$: se justifica multiplicando por ambos lados y viendo que queda $I-A^k=I$.</div>
+  <div class="box warn" style="margin-top:.6em"><span class="h">Aviso sobre E</span><p>E menciona «utilizando $A^{-1}$»: es una errata, porque $A$ <b>no puede</b> ser regular (si existiera $A^{-1}$, de $A^3=0$ saldría $I=0$, contradicción). Lo que en realidad se usa es $(I-A)^{-1}$. Además, la hipótesis «$I_n-A$ regular» es innecesaria: los pasos 3-4 la demuestran.</p></div>
+</details>
+
+<details class="sol" id="ej1-11"><summary>Ejercicio 1.11 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.11, p. 14">E p.14</span></summary>
+  <p class="enun">$A,B$ cuadradas de orden $n$ con $AB=A$ y $BA=B$. A) Si $A$ es regular, $B=I_n$. B) $A^2=A$ y $B^2=B$.</p>
+  <ol class="steps">
+    <li><b>A)</b> Si $A$ es regular, multiplicamos $AB=A$ por $A^{-1}$ a la <b>izquierda</b>: $A^{-1}(AB)=A^{-1}A\Rightarrow(A^{-1}A)B=I\Rightarrow B=I_n$. <b>Cierta.</b></li>
+    <li><b>B, $A^2=A$:</b> multiplicamos $BA=B$ por $A$ a la izquierda: $A(BA)=AB\Rightarrow(AB)A=AB$; sustituyendo $AB=A$: $A\cdot A=A$.</li>
+    <li><b>B, $B^2=B$:</b> multiplicamos $AB=A$ por $B$ a la izquierda: $B(AB)=BA\Rightarrow(BA)B=BA\Rightarrow B\cdot B=B$. <b>Cierta.</b></li>
+  </ol>
+  <p><b>Ambas opciones son ciertas.</b> Comprobado con el contraejemplo y el razonamiento anterior (no es un cálculo numérico, sino una demostración abstracta válida para cualquier $A,B$ que cumplan las hipótesis).</p>
+  <div class="recipe"><b>Receta:</b> en igualdades matriciales, multiplica por el <b>mismo lado</b> en ambos miembros y reagrupa con la asociatividad hasta poder sustituir las hipótesis.</div>
+  <div class="box warn" style="margin-top:.6em"><span class="h">Error en E (y error típico)</span><p>La solución de E llega exactamente a este razonamiento pero concluye «por tanto A) es <b>falsa</b>»: es una contradicción con su propio cálculo, que prueba que A) es <b>cierta</b>. El error típico real es «simplificar» $A$ en $AB=A$ para concluir $B=I$ sin saber que $A$ es regular: con $A$ singular es falso, p. ej. $A=B=\begin{pmatrix}1&0\\0&0\end{pmatrix}$ cumple $AB=A$, $BA=B$ y $B\ne I$.</p></div>
+</details>
+
+<details class="sol" id="ej1-12"><summary>Ejercicio 1.12 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.12, p. 15">E p.15</span></summary>
+  <p class="enun">A) Las matrices elementales son cuadradas. B) Son regulares. C) Permiten calcular la inversa de una matriz regular.</p>
+  <ol class="steps">
+    <li><b>A) Cierta</b>: Def. 1.2 parte de $I_n$ (cuadrada) y una operación por filas no cambia el tamaño.</li>
+    <li><b>B) Cierta</b>: cada operación se deshace con otra del mismo tipo, y esa es la inversa (U p.16).</li>
+    <li><b>C) Cierta</b>: si $A$ es regular, su reducida es $I_n$ (U p.22); por el Teorema 1.1 y el algoritmo, $E=A^{-1}$ con $E$ producto de elementales.</li>
+  </ol>
+  <p><b>Todas ciertas.</b></p>
+  <div class="recipe"><b>Receta:</b> en preguntas V/F sobre definiciones, cita la definición literal y la propiedad del libro que la garantiza.</div>
+  <p><b>Error típico:</b> olvidar que en $F_i\to\alpha F_i$ se exige $\alpha\ne0$; con $\alpha=0$ la matriz no sería regular ni elemental.</p>
+</details>
+
+<details class="sol" id="ej1-13"><summary>Ejercicio 1.13 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.13, p. 15">E p.15</span></summary>
+  <p class="enun">Justifíquese si son elementales las siguientes matrices:
+  $$A_1=\begin{pmatrix}1&0\\0&3\end{pmatrix},\quad A_2=\begin{pmatrix}1&2&0\\0&1&0\\0&0&1\end{pmatrix},\quad A_3=\begin{pmatrix}1&0&0\\0&0&1\\0&1&2\\0&0&1\end{pmatrix},$$
+  $$A_4=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix},\quad A_5=\begin{pmatrix}1&0&5&1\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix},\quad A_6=\begin{pmatrix}2&1&0\\0&0&0\\0&0&1\end{pmatrix}.$$</p>
+  <ol class="steps">
+    <li><b>Criterio</b>: compárese con $I_n$. Cada tipo deja una huella reconocible: intercambio cambia dos posiciones de la diagonal y crea dos unos fuera; $F_i\to\alpha F_i$ cambia <b>un</b> elemento de la diagonal; $F_i\to F_i+\alpha F_j$ cambia <b>un</b> elemento fuera de la diagonal.</li>
+    <li>$A_1$: <b>sí</b>, $F_2\to3F_2$ en $I_2$.</li>
+    <li>$A_2$: <b>sí</b>, $F_1\to F_1+2F_2$ en $I_3$.</li>
+    <li>$A_3$: <b>no</b>, es $4\times3$, no cuadrada.</li>
+    <li>$A_4$: <b>sí</b>, $F_1\leftrightarrow F_3$ en $I_3$.</li>
+    <li>$A_5$: <b>no</b>, difiere de $I_4$ en <b>dos</b> posiciones fuera de la diagonal, $(1,3)$ y $(1,4)$: ningún tipo produce esa huella (es producto de dos elementales).</li>
+    <li>$A_6$: <b>no</b>, tiene una fila nula ⇒ no es regular, pero toda elemental es regular.</li>
+  </ol>
+  <p><b>Respuesta:</b> son elementales $A_1,A_2,A_4$; no lo son $A_3,A_5,A_6$. Comprobado con sympy.</p>
+  <div class="recipe"><b>Receta:</b> compara con $I_n$: si es cuadrada y la diferencia es la huella de <b>una sola</b> operación, es elemental (indica cuál).</div>
+  <p><b>Error típico:</b> aceptar $A_5$ porque «solo tiene cosas en una fila» (son dos operaciones), o $A_6$ por parecer «casi» la identidad.</p>
+</details>
+
+<details class="sol" id="ej1-14"><summary>Ejercicio 1.14 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.14, p. 16">E p.16</span></summary>
+  <p class="enun">Dada $A=\begin{pmatrix}2&2&3\\1&2&5\\3&0&1\\5&3&1\end{pmatrix}$, calcúlese una escalonada, una escalonada con pivotes normalizados, la escalonada reducida, y sus matrices de paso.</p>
+  <ol class="steps">
+    <li>Partimos de $(A\mid I_4)$ (identidad de orden 4, tantas filas como $A$) y hacemos ceros bajo el pivote $a_{11}=2$ con $F_2\to F_2-\frac12F_1$, $F_3\to F_3-\frac32F_1$, $F_4\to F_4-\frac52F_1$:
+    $$\left(\begin{array}{ccc|cccc}2&2&3&1&0&0&0\\0&1&\frac72&-\frac12&1&0&0\\0&-3&-\frac72&-\frac32&0&1&0\\0&-2&-\frac{13}2&-\frac52&0&0&1\end{array}\right).$$</li>
+    <li>Ceros bajo el segundo pivote con $F_3\to F_3+3F_2$, $F_4\to F_4+2F_2$; luego bajo el tercero con $F_4\to F_4-\frac1{14}F_3$. Se llega a $(A_e\mid P_1)$:
+    $$\left(\begin{array}{ccc|cccc}2&2&3&1&0&0&0\\0&1&\frac72&-\frac12&1&0&0\\0&0&7&-3&3&1&0\\0&0&0&-\frac{23}7&\frac{25}{14}&-\frac1{14}&1\end{array}\right).$$</li>
+    <li>Normalizando los pivotes ($F_1\to\frac12F_1$, $F_3\to\frac17F_3$): $(A_{en}\mid P_2)$:
+    $$\left(\begin{array}{ccc|cccc}1&1&\frac32&\frac12&0&0&0\\0&1&\frac72&-\frac12&1&0&0\\0&0&1&-\frac37&\frac37&\frac17&0\\0&0&0&-\frac{23}7&\frac{25}{14}&-\frac1{14}&1\end{array}\right).$$</li>
+    <li>Haciendo ceros por encima de cada pivote con $F_1\to F_1-F_2$, $F_1\to F_1+2F_3$ y $F_2\to F_2-\frac72F_3$ se llega a la reducida $(A_{er}\mid P_3)$:
+    $$\left(\begin{array}{ccc|cccc}1&0&0&\frac17&-\frac17&\frac27&0\\0&1&0&1&-\frac12&-\frac12&0\\0&0&1&-\frac37&\frac37&\frac17&0\\0&0&0&-\frac{23}7&\frac{25}{14}&-\frac1{14}&1\end{array}\right).$$</li>
+    <li>$A_e$, $A_{en}$ y $A_{er}$ tienen 3 filas no nulas (la cuarta se anula): $\operatorname{rang}(A)=3$. Las matrices de paso $P_1,P_2,P_3$ son <b>regulares</b> (producto de elementales) pero <b>no tienen por qué ser escalonadas</b> ni tener relación directa con el número de filas no nulas. $A_{er}$ es única; $A_e$, $A_{en}$ y las matrices de paso dependen de las operaciones elegidas.</li>
+  </ol>
+  <p>Comprobado con sympy: $A_e=P_1A$, $A_{en}=P_2A$, $A_{er}=P_3A=$ <code>A.rref()[0]</code>, $\det P_1\ne0$.</p>
+  <div class="recipe"><b>Receta:</b> escribe $(A\mid I_m)$; baja columna a columna haciendo ceros bajo cada pivote con $F_i\to F_i-\frac{a_{ik}}{\text{pivote}}F_k$; normaliza; sube haciendo ceros encima. Lo que queda a la derecha es la matriz de paso.</div>
+  <p><b>Error típico:</b> usar $I_3$ en vez de $I_4$ (tantas filas como $A$); operar con una fila ya modificada sin darse cuenta; olvidar aplicar la operación también a la parte derecha.</p>
+</details>
+
+<details class="sol" id="ej1-15"><summary>Ejercicio 1.15 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.15, p. 18">E p.18</span></summary>
+  <p class="enun">Dada $A=\begin{pmatrix}2&1&3\\0&5&4\\1&7&6\end{pmatrix}$ y las matrices elementales
+  $$E_1=\begin{pmatrix}2&0&0\\0&1&0\\0&0&1\end{pmatrix},\quad E_2=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix},\quad E_3=\begin{pmatrix}1&0&0\\0&1&0\\0&3&1\end{pmatrix},$$
+  calcúlense e interprétense $E_iA$ y $AE_i$.</p>
+  <ol class="steps">
+    <li>Cada $E_i$ es la operación por filas sobre $I_3$: $E_1$: $F_1\to2F_1$; $E_2$: $F_1\leftrightarrow F_2$; $E_3$: $F_3\to F_3+3F_2$.</li>
+    <li><b>Por la izquierda (filas):</b> $E_1A=\begin{pmatrix}4&2&6\\0&5&4\\1&7&6\end{pmatrix}$, $E_2A=\begin{pmatrix}0&5&4\\2&1&3\\1&7&6\end{pmatrix}$, $E_3A=\begin{pmatrix}2&1&3\\0&5&4\\1&22&18\end{pmatrix}$.</li>
+    <li>Las mismas $E_i$ vistas por columnas sobre $I_3$: $E_1$: $C_1\to2C_1$; $E_2$: $C_1\leftrightarrow C_2$; $E_3$: $C_2\to C_2+3C_3$ (los índices se cruzan respecto al caso por filas).</li>
+    <li><b>Por la derecha (columnas):</b> $AE_1=\begin{pmatrix}4&1&3\\0&5&4\\2&7&6\end{pmatrix}$, $AE_2=\begin{pmatrix}1&2&3\\5&0&4\\7&1&6\end{pmatrix}$, $AE_3=\begin{pmatrix}2&10&3\\0&17&4\\1&25&6\end{pmatrix}$.</li>
+  </ol>
+  <p>Comprobado con sympy.</p>
+  <div class="recipe"><b>Receta:</b> $EA$ aplica a las filas de $A$ la operación que convierte $I$ en $E$ por filas; $AE$ aplica a las columnas la misma operación leída por columnas. Si $E$ es de tipo 3 con $\alpha$ en $(i,j)$: por filas $F_i\to F_i+\alpha F_j$, por columnas $C_j\to C_j+\alpha C_i$.</div>
+  <p><b>Error típico:</b> creer que $AE_3$ hace $C_3\to C_3+3C_2$ (índices invertidos); confundir el orden, ya que $EA\ne AE$ en general.</p>
+</details>
+
+<details class="sol" id="ej1-16"><summary>Ejercicio 1.16 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.16, p. 19">E p.19</span></summary>
+  <p class="enun">Calcúlese, si es posible, la inversa de $A=\begin{pmatrix}0&5&-3\\1&0&0\\0&0&1\end{pmatrix}$ mediante operaciones elementales por filas.</p>
+  <ol class="steps">
+    <li>$(A\mid I_3)\xrightarrow{F_1\leftrightarrow F_2}\begin{pmatrix}1&0&0&0&1&0\\0&5&-3&1&0&0\\0&0&1&0&0&1\end{pmatrix}$ (había que permutar: $a_{11}=0$ no puede ser pivote).</li>
+    <li>$\xrightarrow{F_2\to\frac15F_2}\begin{pmatrix}1&0&0&0&1&0\\0&1&-\frac35&\frac15&0&0\\0&0&1&0&0&1\end{pmatrix}$.</li>
+    <li>$\xrightarrow{F_2\to F_2+\frac35F_3}\begin{pmatrix}1&0&0&0&1&0\\0&1&0&\frac15&0&\frac35\\0&0&1&0&0&1\end{pmatrix}$.</li>
+    <li>La parte izquierda es $I_3$, luego $A$ es regular: $A^{-1}=\begin{pmatrix}0&1&0\\\frac15&0&\frac35\\0&0&1\end{pmatrix}$.</li>
+  </ol>
+  <p>Comprobación $AA^{-1}=I_3$ ✓ (sympy: <code>A.inv()</code> coincide, $\det A=-5$).</p>
+  <div class="recipe"><b>Receta:</b> $(A\mid I)\to(I\mid A^{-1})$ solo con operaciones por filas: pivote no nulo (permuta si hace falta), normaliza, ceros debajo y luego encima.</div>
+  <div class="box warn" style="margin-top:.6em"><span class="h">Error en E</span><p>Una nota al margen de E afirma que a veces «pueden ser necesarias también operaciones elementales por columnas» para invertir por filas: es <b>falso</b>. U p.22 asegura que $A$ regular $\iff$ su reducida (obtenida solo por filas) es $I_n$, así que el algoritmo por filas funciona <b>siempre</b> con una matriz regular. Lo que nunca se debe hacer es <b>mezclar</b> filas y columnas en el mismo cálculo.</p></div>
+</details>
+
+<details class="sol" id="ej1-17"><summary>Ejercicio 1.17 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.17, p. 19">E p.19</span></summary>
+  <p class="enun">¿Es cierto que $\operatorname{rang}(A)+\operatorname{rang}(B)=\operatorname{rang}(A+B)$ para $A,B\in\mathcal M_{m\times n}$?</p>
+  <ol class="steps">
+    <li>Una igualdad «en general» se refuta con un contraejemplo.</li>
+    <li>Contraejemplo simple: $A=I_2$, $B=-I_2$. $\operatorname{rang}A=\operatorname{rang}B=2$, pero $A+B=0$ tiene rango 0: $2+2\ne0$.</li>
+    <li>Contraejemplo de E: $A=\begin{pmatrix}2&1\\0&0\end{pmatrix}$ (escalonada, rango 1), $B=\begin{pmatrix}2&1\\1&0\end{pmatrix}$ (con $F_2\to F_2-\frac12F_1$ da $\begin{pmatrix}2&1\\0&-\frac12\end{pmatrix}$, rango 2). $A+B=\begin{pmatrix}4&2\\1&0\end{pmatrix}$ tiene rango 2 (con $F_2\to F_2-\frac14F_1$): $1+2\ne2$.</li>
+  </ol>
+  <p><b>No es cierto en general</b> (aunque en casos concretos sí puede coincidir, p. ej. $\operatorname{diag}(1,0)+\operatorname{diag}(0,1)$: $1+1=2$). Comprobado con sympy.</p>
+  <div class="recipe"><b>Receta:</b> para «¿es cierto en general?», prueba con matrices simples ($I$, $-I$, $0$, diagonales); un solo contraejemplo basta.</div>
+  <p><b>Error típico:</b> «demostrar» algo con un ejemplo donde sí se cumple; el rango no respeta sumas.</p>
+</details>
+
+<details class="sol" id="ej1-18"><summary>Ejercicio 1.18 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.18, p. 20">E p.20</span></summary>
+  <p class="enun">Calcúlese el rango de las matrices del <a href="#ej1-13">Ejercicio 1.13</a>.</p>
+  <ol class="steps">
+    <li>$A_1$ ya es escalonada: $\operatorname{rang}=2$.</li>
+    <li>$A_2$ es escalonada (triangular superior sin ceros en la diagonal): $\operatorname{rang}=3$.</li>
+    <li>$A_3$ ($4\times3$) <b>no</b> es escalonada; tras $F_2\leftrightarrow F_3$ y $F_4\to F_4-F_3$ queda con 3 filas no nulas: $\operatorname{rang}=3$.</li>
+    <li>$A_4$ <b>no</b> es escalonada (la fila 2 empieza con menos ceros que la fila 1); con $F_1\leftrightarrow F_3$ se obtiene $I_3$: $\operatorname{rang}=3$.</li>
+    <li>$A_5$ es escalonada (triangular superior con unos en la diagonal): $\operatorname{rang}=4$.</li>
+    <li>$A_6$ <b>no</b> es escalonada (la fila nula no está al final); tras $F_2\leftrightarrow F_3$: $\operatorname{rang}=2$ (confirma que $A_6$ no es regular, Ej. 1.13).</li>
+  </ol>
+  <p><b>Rangos:</b> $2,3,3,3,4,2$. Comprobado con sympy (<code>.rank()</code>).</p>
+  <div class="recipe"><b>Receta:</b> antes de contar filas no nulas, comprueba que la matriz es escalonada (Def. 1.3); si no, escalona primero (a menudo basta una permutación).</div>
+  <div class="box warn" style="margin-top:.6em"><span class="h">Error en E</span><p>E justifica $\operatorname{rang}(A_4)=3$ diciendo que $A_4$ «es escalonada»: no lo es (la fila 2 empieza en la columna 2 y la fila 1 en la columna 3, contradiciendo la Def. 1.3). El resultado es correcto pero la justificación no; en examen hay que dar la operación que escalona ($F_1\leftrightarrow F_3$) o el argumento «elemental ⇒ regular ⇒ rango 3».</p></div>
+</details>
+
+<details class="sol" id="ej1-19"><summary>Ejercicio 1.19 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.19, p. 21">E p.21</span></summary>
+  <p class="enun">Si $A$ y $B$ son matrices <b>no cuadradas</b> de orden $m\times n$, se pide decidir si son o no ciertas las siguientes proposiciones. A) Si $A,B$ son equivalentes por filas, $\operatorname{rang}(A)=\operatorname{rang}(B)$. B) Si son equivalentes por columnas, $\operatorname{rang}(A)=\operatorname{rang}(B)$.</p>
+  <ol class="steps">
+    <li><b>A) Cierta</b>: es el <a href="#s9">Teorema 1.3</a> (que $A,B$ no sean cuadradas no cambia nada: el teorema vale para cualquier $A,B\in\mathcal M_{m\times n}$).</li>
+    <li><b>B) Cierta</b>, pasando a traspuestas: equivalentes por columnas significa $B=AQ$ con $Q$ regular (producto de elementales); trasponiendo, $B^t=Q^tA^t$ con $Q^t$ regular, así que $A^t,B^t$ son equivalentes por filas (Teorema 1.2) y por A) tienen el mismo rango.</li>
+    <li>Falta $\operatorname{rang}(M)=\operatorname{rang}(M^t)$ (fuera de §1.2, se obtiene con determinantes en §1.3: el rango es el mayor orden de un menor no nulo y $\det N=\det N^t$). Con esto, $\operatorname{rang}A=\operatorname{rang}A^t=\operatorname{rang}B^t=\operatorname{rang}B$.</li>
+  </ol>
+  <p><b>Ambas ciertas.</b> (El recíproco de A) es falso: igual rango no implica equivalencia por filas.)</p>
+  <div class="recipe"><b>Receta:</b> «columnas» se convierte en «filas» trasponiendo: $B=AQ\Rightarrow B^t=Q^tA^t$.</div>
+  <p><b>Error típico:</b> escribir $(AQ)^t=A^tQ^t$ (el orden se invierte) o usar $\operatorname{rang}A=\operatorname{rang}A^t$ sin justificarlo.</p>
+</details>
+
+<details class="sol" id="ej1-20"><summary>Ejercicio 1.20 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.20, p. 21">E p.21</span></summary>
+  <p class="enun">Si $A,B\in\mathcal M_{m\times n}$ y existen $P,Q$ regulares con $B=PAQ$, justifíquese en términos de operaciones elementales y decídase si $\operatorname{rang}(A)=\operatorname{rang}(B)$.</p>
+  <ol class="steps">
+    <li>Toda matriz regular es producto de elementales (por el algoritmo de la inversa, $P^{-1}=E_p\cdots E_1\Rightarrow P=E_1^{-1}\cdots E_p^{-1}$).</li>
+    <li><b>Interpretación:</b> $AQ$ = hacer operaciones por <b>columnas</b> en $A$ (matriz de paso $Q$); $P(AQ)$ = hacer luego operaciones por <b>filas</b>. Como $P(AQ)=(PA)Q$, el orden entre ambas da igual.</li>
+    <li><b>Rango:</b> $AQ$ es equivalente por columnas a $A\Rightarrow\operatorname{rang}(AQ)=\operatorname{rang}(A)$ (Ej. 1.19 B); $B=P(AQ)$ es equivalente por filas a $AQ\Rightarrow\operatorname{rang}(B)=\operatorname{rang}(AQ)$ (Teorema 1.3). <b>Luego $\operatorname{rang}(A)=\operatorname{rang}(B)$.</b></li>
+  </ol>
+  <p><b>Ejemplo propio:</b> $A=\begin{pmatrix}1&2&3\\2&4&6\end{pmatrix}$. Filas: $F_2\to F_2-2F_1$, $P=\begin{pmatrix}1&0\\-2&1\end{pmatrix}$. Columnas: $C_2\to C_2-2C_1$, $C_3\to C_3-3C_1$. $PAQ=\begin{pmatrix}1&0&0\\0&0&0\end{pmatrix}$, rango 1 como $A$ (sympy ✓).</p>
+  <div class="recipe"><b>Receta:</b> $P\cdot(\ )$ = filas, $(\ )\cdot Q$ = columnas; multiplicar por matrices regulares, a cualquier lado, no cambia el rango.</div>
+  <p><b>Error típico:</b> pensar que $B=PAQ$ implica que $A,B$ son equivalentes <b>por filas</b> sin más (en general solo lo son «por filas y columnas»), o que $PAQ=PQA$.</p>
+</details>
+
+<h3>Ejemplos propios (dificultad creciente)</h3>
+
+<details class="sol" id="ejp-1"><summary>Ejemplo propio 1 — operaciones con matrices (fácil) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Con $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$, $B=\begin{pmatrix}2&0\\1&1\end{pmatrix}$: (a) $AB$ y $BA$; (b) comprobar $(A+B)^2\ne A^2+2AB+B^2$; (c) comprobar $(AB)^t=B^tA^t\ne A^tB^t$; (d) hallar $A^n$.</p>
+  <ol class="steps">
+    <li>$AB=\begin{pmatrix}4&2\\1&1\end{pmatrix}$, $BA=\begin{pmatrix}2&4\\1&3\end{pmatrix}$: no conmutan.</li>
+    <li>$A+B=\begin{pmatrix}3&2\\1&2\end{pmatrix}$, $(A+B)^2=\begin{pmatrix}11&10\\5&6\end{pmatrix}$. $A^2=\begin{pmatrix}1&4\\0&1\end{pmatrix}$, $B^2=\begin{pmatrix}4&0\\3&1\end{pmatrix}$, $A^2+2AB+B^2=\begin{pmatrix}13&8\\5&4\end{pmatrix}\ne(A+B)^2$, pero $A^2+AB+BA+B^2=\begin{pmatrix}11&10\\5&6\end{pmatrix}$ ✓.</li>
+    <li>$(AB)^t=\begin{pmatrix}4&1\\2&1\end{pmatrix}=B^tA^t$; $A^tB^t=\begin{pmatrix}2&1\\4&3\end{pmatrix}\ne(AB)^t$.</li>
+    <li>$A^2=\begin{pmatrix}1&4\\0&1\end{pmatrix}$, $A^3=\begin{pmatrix}1&6\\0&1\end{pmatrix}$: conjetura $A^n=\begin{pmatrix}1&2n\\0&1\end{pmatrix}$; se prueba por inducción con $A^{n+1}=A^nA$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> desarrolla con la distributiva sin conmutar; para $A^n$, conjetura con $n=2,3$ y demuestra por inducción.</div>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 2 — inversa por Gauss-Jordan y detección de singular (medio) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">(a) Calcula la inversa de $A=\begin{pmatrix}1&2&1\\0&1&1\\1&2&2\end{pmatrix}$ por filas. (b) Intenta lo mismo con $S=\begin{pmatrix}1&2&3\\2&4&7\\1&2&4\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>(a) $F_3\to F_3-F_1$ da pivotes 1 en escalera, así que $A$ es regular. Tras normalizar y subir: $A^{-1}=\begin{pmatrix}0&-2&1\\1&1&-1\\-1&0&1\end{pmatrix}$ (comprobado $AA^{-1}=I_3$, $\det A=1$).</li>
+    <li>(b) $F_2\to F_2-2F_1$, $F_3\to F_3-F_1$ dejan $\begin{pmatrix}1&2&3\\0&0&1\\0&0&1\end{pmatrix}$; $F_3\to F_3-F_2$ anula la tercera fila: $\operatorname{rang}S=2\lt3$, $S$ <b>no es regular</b> ($\det S=0$): no tiene inversa.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en cuanto aparezca una fila nula en la parte izquierda del algoritmo, para: la matriz es singular.</div>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 3 — rango por escalonamiento, numérico y con parámetro (difícil) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">(a) Rango de $C=\begin{pmatrix}1&2&0&1\\2&1&3&0\\3&3&3&1\\1&-1&3&-1\end{pmatrix}$. (b) Discute según $k\in\mathbb R$ el rango de $M=\begin{pmatrix}1&1&k\\1&k&1\\k&1&1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>(a) $F_2-2F_1$, $F_3-3F_1$, $F_4-F_1$ dan tres filas iguales $(0,-3,3,-2)$; tras $F_3-F_2$, $F_4-F_2$ quedan dos filas nulas: $\operatorname{rang}C=2$.</li>
+    <li>(b) $F_2\to F_2-F_1$, $F_3\to F_3-kF_1$ (válidas para todo $k$, tipo 3) y luego $F_3\to F_3+F_2$ dan pivotes $1$, $k-1$, $-(k-1)(k+2)$.</li>
+    <li><b>Casos:</b> $k\ne1,-2$: $\operatorname{rang}M=3$. $k=1$: $\operatorname{rang}M=1$. $k=-2$: $\operatorname{rang}M=2$.</li>
+  </ol>
+  <p>Comprobado con sympy ($\det M=-(k-1)^2(k+2)$).</p>
+  <div class="recipe"><b>Receta:</b> con parámetros, usa solo operaciones de tipo 3 (y permutaciones) mientras puedas; los valores que anulan un posible pivote se estudian aparte, nunca dividiendo por algo que podría ser cero.</div>
+  <p><b>Error típico:</b> hacer $F_2\to\frac1{k-1}F_2$ sin excluir antes $k=1$ (la operación de tipo 2 exige $\alpha\ne0$).</p>
+</details>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">11</span>Chuleta y lista de comprobación</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula</th><th>Hipótesis</th></tr>
+  <tr><td>Suma / producto por escalar</td><td>$(A+B)+C=A+(B+C)$, $A+0=A$, $\alpha(A+B)=\alpha A+\alpha B$</td><td>$A,B,C\in\mathcal M_{m\times n}$, mismo tamaño</td></tr>
+  <tr><td>Producto de matrices</td><td>$p_{ij}=\sum_k a_{ik}b_{kj}$, $(AB)C=A(BC)$</td><td>$A\in\mathcal M_{m\times n}$, $B\in\mathcal M_{n\times r}$: columnas de $A$ = filas de $B$</td></tr>
+  <tr><td>No conmutatividad</td><td>$AB\ne BA$ en general</td><td>incluso si ambos productos existen (cuadradas, mismo orden)</td></tr>
+  <tr><td>Traspuesta</td><td>$(AB)^t=B^tA^t$, $(A+B)^t=A^t+B^t$</td><td>tamaños compatibles</td></tr>
+  <tr><td>Inversa</td><td>$AA^{-1}=A^{-1}A=I_n$; $(AB)^{-1}=B^{-1}A^{-1}$; $(A^{-1})^t=(A^t)^{-1}$</td><td>$A$ cuadrada regular (y $B$ regular para el producto)</td></tr>
+  <tr><td>Matriz elemental</td><td>$EA$ = operación por filas; $AF$ = operación por columnas</td><td>$E,F$ elementales del tamaño adecuado</td></tr>
+  <tr><td>Inversas de elementales</td><td>$F_i\leftrightarrow F_j\to$ ella misma; $F_i\to\alpha F_i\to F_i\to\frac1\alpha F_i$; $F_i\to F_i+\alpha F_j\to F_i\to F_i-\alpha F_j$</td><td>$\alpha\ne0$ en el tipo 2</td></tr>
+  <tr><td>Algoritmo de la inversa</td><td>$(A\mid I_n)\to(I_n\mid A^{-1})$</td><td>$A$ cuadrada regular; solo operaciones por filas</td></tr>
+  <tr><td>Rango</td><td>$\operatorname{rang}(A)=$ nº de filas no nulas de una escalonada</td><td>contar sobre una matriz <b>ya escalonada</b></td></tr>
+  <tr><td>Regularidad y rango</td><td>$A$ regular $\iff\operatorname{rang}(A)=n$</td><td>$A\in\mathcal M_{n\times n}$</td></tr>
+  <tr><td>Multiplicar por regulares</td><td>$\operatorname{rang}(A)=\operatorname{rang}(PA)=\operatorname{rang}(AQ)=\operatorname{rang}(PAQ)$</td><td>$P,Q$ regulares</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé escribir la notación $\mathcal M_{m\times n}$ y reconocer los tipos básicos de matrices (cuadrada, identidad, nula, simétrica, antisimétrica, diagonal, triangular).</li>
+  <li>Sé sumar matrices y multiplicarlas por un escalar, y citar sus propiedades.</li>
+  <li>Sé decidir si un producto $AB$ existe (comprobando tamaños) y calcularlo fila por columna.</li>
+  <li>Sé por qué $AB\ne BA$ en general y evito aplicar identidades notables de números a matrices.</li>
+  <li>Sé trasponer y usar $(AB)^t=B^tA^t$ (orden invertido).</li>
+  <li>Sé definir matriz regular/singular, calcular la traza y usar las propiedades de la inversa.</li>
+  <li>Sé identificar si una matriz es elemental y hallar su inversa sin cálculo, solo con la operación que la deshace.</li>
+  <li>Sé que multiplicar por la izquierda es operar por filas y por la derecha es operar por columnas, sin confundir los índices en el tipo 3.</li>
+  <li>Sé aplicar el algoritmo $(A\mid I)\to(I\mid A^{-1})$ y detectar cuándo una matriz es singular (aparece una fila nula).</li>
+  <li>Sé escalonar una matriz, normalizar pivotes y hallar la escalonada reducida (única).</li>
+  <li>Sé calcular el rango correctamente (comprobando antes que la matriz es escalonada) y usarlo para decidir la regularidad.</li>
+  <li>Sé que multiplicar por matrices regulares (a cualquier lado) no cambia el rango.</li>
+</ul>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>
