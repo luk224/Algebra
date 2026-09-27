@@ -35,7 +35,7 @@
 > **Enunciado.** Calcúlese $A^3$ sabiendo que $A$ es la matriz cuyas filas son: $(0,\cos x,\operatorname{sen}x)$, $(\cos x,0,-1)$ y $(\operatorname{sen}x,1,0)$.
 
 Escribimos $c=\cos x$, $s=\operatorname{sen}x$:
-$$A=\begin{pmatrix}0&c&s\ c&0&-1\ s&1&0\end{pmatrix}.$$
+$$A=\begin{pmatrix}0&c&s\\ c&0&-1\\ s&1&0\end{pmatrix}.$$
 
 **Solución.**
 
@@ -45,7 +45,7 @@ $$A=\begin{pmatrix}0&c&s\ c&0&-1\ s&1&0\end{pmatrix}.$$
    - Fila 2 $(c,0,-1)$: col. 1: $0+0-s=-s$; col. 2: $c^2+0-1$; col. 3: $cs+0+0=cs$.
    - Fila 3 $(s,1,0)$: col. 1: $0+c+0=c$; col. 2: $sc+0+0=sc$; col. 3: $s^2-1$.
 3. **Simplificamos con $s^2+c^2=1$** (identidad trigonométrica fundamental): $c^2+s^2=1$, $c^2-1=-s^2$, $s^2-1=-c^2$:
-$$A^2=\begin{pmatrix}1&s&-c\ -s&-s^2&sc\ c&sc&-c^2\end{pmatrix}.$$
+$$A^2=\begin{pmatrix}1&s&-c\\ -s&-s^2&sc\\ c&sc&-c^2\end{pmatrix}.$$
 4. **Cálculo de $A^3=A\cdot A^2$**, fila por columna:
    - Fila 1 $(0,c,s)$: col. 1 $(1,-s,c)^t$: $-cs+sc=0$; col. 2 $(s,-s^2,sc)^t$: $-cs^2+s^2c=0$; col. 3 $(-c,sc,-c^2)^t$: $c^2s-sc^2=0$.
    - Fila 2 $(c,0,-1)$: col. 1: $c-c=0$; col. 2: $cs-sc=0$; col. 3: $-c^2+c^2=0$.
@@ -70,11 +70,11 @@ Comprobado con sympy: `simplify(A**3) == zeros(3)`.
 
 **Solución.**
 
-1. $A=\begin{pmatrix}0&a&0\0&0&b\c&0&0\end{pmatrix}$. Calculamos $A^2=AA$ por la fórmula del producto (U p.12):
-$$A^2=\begin{pmatrix}0&0&ab\ bc&0&0\ 0&ac&0\end{pmatrix}.$$
+1. $A=\begin{pmatrix}0&a&0\\0&0&b\\c&0&0\end{pmatrix}$. Calculamos $A^2=AA$ por la fórmula del producto (U p.12):
+$$A^2=\begin{pmatrix}0&0&ab\\ bc&0&0\\ 0&ac&0\end{pmatrix}.$$
    (Ej.: $p_{13}=0\cdot0+a\cdot b+0\cdot0=ab$; $p_{21}=0+0+b\cdot c=bc$; $p_{32}=c\cdot a=ac$; el resto da 0.)
 2. $A^3=A\cdot A^2$:
-$$A^3=\begin{pmatrix}0&a&0\0&0&b\c&0&0\end{pmatrix}\begin{pmatrix}0&0&ab\ bc&0&0\ 0&ac&0\end{pmatrix}=\begin{pmatrix}abc&0&0\0&abc&0\0&0&abc\end{pmatrix}=abc\,I_3.$$
+$$A^3=\begin{pmatrix}0&a&0\\0&0&b\\c&0&0\end{pmatrix}\begin{pmatrix}0&0&ab\\ bc&0&0\\ 0&ac&0\end{pmatrix}=\begin{pmatrix}abc&0&0\\0&abc&0\\0&0&abc\end{pmatrix}=abc\,I_3.$$
 3. **Opción A: cierta.** $A^3=abc\,I_3$ es diagonal con diagonal constante, luego escalar, **para cualesquiera** $a,b,c$ (si $abc=0$ da $0_3=0\cdot I_3$, que también es escalar).
 4. **Opción B: falsa en general.** Basta un contraejemplo: para $n=1$, $A^1=A$ tiene $a$ fuera de la diagonal, así que si $a\neq0$ no es ni siquiera diagonal. (Más aún, $A^{3k+1}=(abc)^kA$ y $A^{3k+2}=(abc)^kA^2$ no son escalares salvo casos degenerados; B solo es cierta si $a=b=c=0$.)
 
@@ -90,17 +90,17 @@ Comprobado con sympy (`A**3 == a*b*c*eye(3)`; `A**4` no es diagonal).
 
 ## Ejercicio 1.8 (E p.12)
 
-> **Enunciado.** Se pide determinar la opción cierta, sabiendo que las matrices $A$ y $B$ satisfacen $A+B=\begin{pmatrix}3&2\7&0\end{pmatrix}$ y $A-B=\begin{pmatrix}2&3\-1&0\end{pmatrix}$.
-> A) $A^2+B^2=\begin{pmatrix}12&6\ \frac{19}{2}&\frac{11}{2}\end{pmatrix}$. B) $(A+B)^2=\begin{pmatrix}9&4\49&0\end{pmatrix}$. C) $A^2-B^2=\begin{pmatrix}4&9\14&21\end{pmatrix}$.
+> **Enunciado.** Se pide determinar la opción cierta, sabiendo que las matrices $A$ y $B$ satisfacen $A+B=\begin{pmatrix}3&2\\7&0\end{pmatrix}$ y $A-B=\begin{pmatrix}2&3\\-1&0\end{pmatrix}$.
+> A) $A^2+B^2=\begin{pmatrix}12&6\\ \frac{19}{2}&\frac{11}{2}\end{pmatrix}$. B) $(A+B)^2=\begin{pmatrix}9&4\\49&0\end{pmatrix}$. C) $A^2-B^2=\begin{pmatrix}4&9\\14&21\end{pmatrix}$.
 
 **Solución.**
 
 1. **Despejar $A$ y $B$.** Sumando y restando las dos igualdades, y usando las propiedades de la suma (asociativa, conmutativa, opuesto; U p.11) y del producto por escalar (distributivas; U p.12): $(A+B)+(A-B)=2A$ y $(A+B)-(A-B)=2B$. Luego
-$$A=\tfrac12\begin{pmatrix}5&5\6&0\end{pmatrix}=\begin{pmatrix}\frac52&\frac52\3&0\end{pmatrix},\qquad B=\tfrac12\begin{pmatrix}1&-1\8&0\end{pmatrix}=\begin{pmatrix}\frac12&-\frac12\4&0\end{pmatrix}.$$
-2. **Potencias.** $A^2=\begin{pmatrix}\frac{55}{4}&\frac{25}{4}\ \frac{15}{2}&\frac{15}{2}\end{pmatrix}$, $B^2=\begin{pmatrix}-\frac74&-\frac14\ 2&-2\end{pmatrix}$ (p. ej. $(A^2)_{11}=\frac52\cdot\frac52+\frac52\cdot3=\frac{25}{4}+\frac{30}{4}=\frac{55}{4}$).
-3. **Opción A.** $A^2+B^2=\begin{pmatrix}\frac{48}{4}&\frac{24}{4}\ \frac{19}{2}&\frac{11}{2}\end{pmatrix}=\begin{pmatrix}12&6\\frac{19}{2}&\frac{11}{2}\end{pmatrix}$. **Cierta.**
-4. **Opción B.** $(A+B)^2=(A+B)(A+B)=\begin{pmatrix}3&2\7&0\end{pmatrix}\begin{pmatrix}3&2\7&0\end{pmatrix}=\begin{pmatrix}23&6\21&14\end{pmatrix}\ne\begin{pmatrix}9&4\49&0\end{pmatrix}$. **Falsa.** (La matriz de la opción B es la que resulta de elevar **cada elemento** al cuadrado: trampa deliberada.)
-5. **Opción C.** $A^2-B^2=\begin{pmatrix}\frac{31}{2}&\frac{13}{2}\ \frac{11}{2}&\frac{19}{2}\end{pmatrix}$. **Falsa.** (La matriz de la opción C es $(A+B)(A-B)=\begin{pmatrix}4&9\14&21\end{pmatrix}$: otra trampa, porque $(A+B)(A-B)=A^2-AB+BA-B^2$, que solo es $A^2-B^2$ si $AB=BA$. Aquí $AB=\begin{pmatrix}\frac{45}{4}&-\frac54\\frac32&-\frac32\end{pmatrix}\ne BA=\begin{pmatrix}-\frac14&\frac54\10&10\end{pmatrix}$.)
+$$A=\tfrac12\begin{pmatrix}5&5\\6&0\end{pmatrix}=\begin{pmatrix}\frac52&\frac52\\3&0\end{pmatrix},\qquad B=\tfrac12\begin{pmatrix}1&-1\\8&0\end{pmatrix}=\begin{pmatrix}\frac12&-\frac12\\4&0\end{pmatrix}.$$
+2. **Potencias.** $A^2=\begin{pmatrix}\frac{55}{4}&\frac{25}{4}\\ \frac{15}{2}&\frac{15}{2}\end{pmatrix}$, $B^2=\begin{pmatrix}-\frac74&-\frac14\\ 2&-2\end{pmatrix}$ (p. ej. $(A^2)_{11}=\frac52\cdot\frac52+\frac52\cdot3=\frac{25}{4}+\frac{30}{4}=\frac{55}{4}$).
+3. **Opción A.** $A^2+B^2=\begin{pmatrix}\frac{48}{4}&\frac{24}{4}\\ \frac{19}{2}&\frac{11}{2}\end{pmatrix}=\begin{pmatrix}12&6\\frac{19}{2}&\frac{11}{2}\end{pmatrix}$. **Cierta.**
+4. **Opción B.** $(A+B)^2=(A+B)(A+B)=\begin{pmatrix}3&2\\7&0\end{pmatrix}\begin{pmatrix}3&2\\7&0\end{pmatrix}=\begin{pmatrix}23&6\\21&14\end{pmatrix}\ne\begin{pmatrix}9&4\\49&0\end{pmatrix}$. **Falsa.** (La matriz de la opción B es la que resulta de elevar **cada elemento** al cuadrado: trampa deliberada.)
+5. **Opción C.** $A^2-B^2=\begin{pmatrix}\frac{31}{2}&\frac{13}{2}\\ \frac{11}{2}&\frac{19}{2}\end{pmatrix}$. **Falsa.** (La matriz de la opción C es $(A+B)(A-B)=\begin{pmatrix}4&9\\14&21\end{pmatrix}$: otra trampa, porque $(A+B)(A-B)=A^2-AB+BA-B^2$, que solo es $A^2-B^2$ si $AB=BA$. Aquí $AB=\begin{pmatrix}\frac{45}{4}&-\frac54\\frac32&-\frac32\end{pmatrix}\ne BA=\begin{pmatrix}-\frac14&\frac54\\10&10\end{pmatrix}$.)
 
 Comprobado con sympy. (Observación: para decidir **solo** entre las opciones basta el paso 4 y comparar $A^2+B^2$; no hace falta hallar $A$ y $B$ para descartar B.)
 
@@ -114,20 +114,20 @@ Comprobado con sympy. (Observación: para decidir **solo** entre las opciones ba
 
 ## Ejercicio 1.9 (E p.13)
 
-> **Enunciado.** Sean $A=\begin{pmatrix}1&0\0&2\end{pmatrix}$, $B=\begin{pmatrix}2&0\0&3\end{pmatrix}$. Se pide calcular la suma $S=A+AB+AB^2+AB^3+\cdots+AB^n$.
-> A) $S=\begin{pmatrix}2^{n+1}-1&0\0&\frac{3^{n+1}-1}{2}\end{pmatrix}$. B) $S=\begin{pmatrix}2^{n+1}-1&0\0&3^{n+1}-1\end{pmatrix}$.
+> **Enunciado.** Sean $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$, $B=\begin{pmatrix}2&0\\0&3\end{pmatrix}$. Se pide calcular la suma $S=A+AB+AB^2+AB^3+\cdots+AB^n$.
+> A) $S=\begin{pmatrix}2^{n+1}-1&0\\0&\frac{3^{n+1}-1}{2}\end{pmatrix}$. B) $S=\begin{pmatrix}2^{n+1}-1&0\\0&3^{n+1}-1\end{pmatrix}$.
 
 **Solución.**
 
 1. **Sacar factor común $A$ por la izquierda.** Por la distributiva por la izquierda (U p.12) y $A=AI$ (U p.12): $S=A(I+B+B^2+\cdots+B^n)$. Ojo: $A$ se saca **por la izquierda** porque en todos los sumandos está a la izquierda.
-2. **Potencias de una diagonal.** Afirmamos $B^k=\begin{pmatrix}2^k&0\0&3^k\end{pmatrix}$. Por inducción: para $k=1$ es cierto; si vale para $k$, $B^{k+1}=B^kB=\begin{pmatrix}2^k\cdot2&0\0&3^k\cdot3\end{pmatrix}$ (fórmula del producto). Para $k=0$, $B^0=I$.
+2. **Potencias de una diagonal.** Afirmamos $B^k=\begin{pmatrix}2^k&0\\0&3^k\end{pmatrix}$. Por inducción: para $k=1$ es cierto; si vale para $k$, $B^{k+1}=B^kB=\begin{pmatrix}2^k\cdot2&0\\0&3^k\cdot3\end{pmatrix}$ (fórmula del producto). Para $k=0$, $B^0=I$.
 3. **Sumar.** La suma de diagonales es diagonal, sumando elemento a elemento (U p.11):
-$$I+B+\cdots+B^n=\begin{pmatrix}1+2+\cdots+2^n&0\0&1+3+\cdots+3^n\end{pmatrix}.$$
+$$I+B+\cdots+B^n=\begin{pmatrix}1+2+\cdots+2^n&0\\0&1+3+\cdots+3^n\end{pmatrix}.$$
 4. **Progresiones geométricas.** $1+r+\cdots+r^n=\dfrac{r^{n+1}-1}{r-1}$ ($n+1$ términos, $r\neq1$). Así $1+2+\cdots+2^n=2^{n+1}-1$ y $1+3+\cdots+3^n=\dfrac{3^{n+1}-1}{2}$.
 5. **Multiplicar por $A$:**
-$$S=\begin{pmatrix}1&0\0&2\end{pmatrix}\begin{pmatrix}2^{n+1}-1&0\0&\frac{3^{n+1}-1}{2}\end{pmatrix}=\begin{pmatrix}2^{n+1}-1&0\0&3^{n+1}-1\end{pmatrix}.$$
+$$S=\begin{pmatrix}1&0\\0&2\end{pmatrix}\begin{pmatrix}2^{n+1}-1&0\\0&\frac{3^{n+1}-1}{2}\end{pmatrix}=\begin{pmatrix}2^{n+1}-1&0\\0&3^{n+1}-1\end{pmatrix}.$$
    **Opción B cierta; A falsa** (A es la suma $I+B+\dots+B^n$ olvidando multiplicar por $A$).
-6. **Comprobación** con $n=1$: $S=A+AB=\begin{pmatrix}1&0\0&2\end{pmatrix}+\begin{pmatrix}2&0\0&6\end{pmatrix}=\begin{pmatrix}3&0\0&8\end{pmatrix}$, y B da $\begin{pmatrix}2^2-1&0\0&3^2-1\end{pmatrix}=\begin{pmatrix}3&0\0&8\end{pmatrix}$ ✓ (sympy lo verifica para $n=0,\dots,4$).
+6. **Comprobación** con $n=1$: $S=A+AB=\begin{pmatrix}1&0\\0&2\end{pmatrix}+\begin{pmatrix}2&0\\0&6\end{pmatrix}=\begin{pmatrix}3&0\\0&8\end{pmatrix}$, y B da $\begin{pmatrix}2^2-1&0\\0&3^2-1\end{pmatrix}=\begin{pmatrix}3&0\\0&8\end{pmatrix}$ ✓ (sympy lo verifica para $n=0,\dots,4$).
 
 **Receta.** Suma de potencias: saca factor común respetando el lado; si las matrices son diagonales, trabaja entrada a entrada y aplica la fórmula de la progresión geométrica. Comprueba siempre con $n=0$ o $n=1$.
 
@@ -154,7 +154,7 @@ $$S=\begin{pmatrix}1&0\0&2\end{pmatrix}\begin{pmatrix}2^{n+1}-1&0\0&\frac{3^{n+1
 - La hipótesis «$I_n-A$ regular» es innecesaria: los pasos 3–4 **demuestran** que lo es.
 - La deducción de E ($(I-A)^2=(I-A)^{-1}-3A$, …) es correcta pero enrevesada; comprobar el candidato es suficiente y es lo que se espera en examen.
 
-Comprobado con sympy con $A=\begin{pmatrix}0&1&2\0&0&3\0&0&0\end{pmatrix}$ ($A^3=0$): $(I-A)^{-1}=I+A+A^2=\begin{pmatrix}1&1&5\0&1&3\0&0&1\end{pmatrix}$.
+Comprobado con sympy con $A=\begin{pmatrix}0&1&2\\0&0&3\\0&0&0\end{pmatrix}$ ($A^3=0$): $(I-A)^{-1}=I+A+A^2=\begin{pmatrix}1&1&5\\0&1&3\\0&0&1\end{pmatrix}$.
 
 **Receta.** Si $A^k=0$, entonces $(I-A)^{-1}=I+A+\cdots+A^{k-1}$; se justifica multiplicando por ambos lados y viendo que queda $I-A^k=I$.
 
@@ -179,7 +179,7 @@ Comprobado con sympy con $A=\begin{pmatrix}0&1&2\0&0&3\0&0&0\end{pmatrix}$ ($A^3
 
 **Receta.** En igualdades matriciales, multiplica **por el mismo lado** en ambos miembros y usa la asociatividad para reagrupar hasta poder sustituir las hipótesis.
 
-**Error típico.** «Simplificar» $A$ en $AB=A$ para concluir $B=I$ sin saber que $A$ es regular (con $A$ singular es falso; p. ej. $A=B=\begin{pmatrix}1&0\0&0\end{pmatrix}$ cumple $AB=A$, $BA=B$ y $B\ne I$). También multiplicar un miembro por la izquierda y el otro por la derecha.
+**Error típico.** «Simplificar» $A$ en $AB=A$ para concluir $B=I$ sin saber que $A$ es regular (con $A$ singular es falso; p. ej. $A=B=\begin{pmatrix}1&0\\0&0\end{pmatrix}$ cumple $AB=A$, $BA=B$ y $B\ne I$). También multiplicar un miembro por la izquierda y el otro por la derecha.
 
 **Teoría:** U §1.2.2 p.12–13.
 
@@ -208,7 +208,7 @@ Comprobado con sympy con $A=\begin{pmatrix}0&1&2\0&0&3\0&0&0\end{pmatrix}$ ($A^3
 ## Ejercicio 1.13 (E p.15)
 
 > **Enunciado.** Se pide justificar si las siguientes matrices son o no son elementales:
-> $A_1=\begin{pmatrix}1&0\0&3\end{pmatrix}$, $A_2=\begin{pmatrix}1&2&0\0&1&0\0&0&1\end{pmatrix}$, $A_3=\begin{pmatrix}1&0&0\0&0&1\0&1&2\0&0&1\end{pmatrix}$, $A_4=\begin{pmatrix}0&0&1\0&1&0\1&0&0\end{pmatrix}$, $A_5=\begin{pmatrix}1&0&5&1\0&1&0&0\0&0&1&0\0&0&0&1\end{pmatrix}$, $A_6=\begin{pmatrix}2&1&0\0&0&0\0&0&1\end{pmatrix}$.
+> $A_1=\begin{pmatrix}1&0\\0&3\end{pmatrix}$, $A_2=\begin{pmatrix}1&2&0\\0&1&0\\0&0&1\end{pmatrix}$, $A_3=\begin{pmatrix}1&0&0\\0&0&1\\0&1&2\\0&0&1\end{pmatrix}$, $A_4=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix}$, $A_5=\begin{pmatrix}1&0&5&1\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}$, $A_6=\begin{pmatrix}2&1&0\\0&0&0\\0&0&1\end{pmatrix}$.
 
 **Criterio (Def. 1.2, U p.15).** $M$ es elemental si y solo si es cuadrada y se obtiene de $I_n$ con **una sola** operación elemental por filas. Cada tipo deja una «huella» reconocible en $I_n$:
 - $F_i\leftrightarrow F_j$: los unos de la diagonal en $ii$, $jj$ pasan a 0 y aparecen unos en $ij$ y $ji$;
@@ -238,7 +238,7 @@ Comprobado con sympy con $A=\begin{pmatrix}0&1&2\0&0&3\0&0&0\end{pmatrix}$ ($A^3
 
 ## Ejercicio 1.14 (E p.16)
 
-> **Enunciado.** Dada $A=\begin{pmatrix}2&2&3\1&2&5\3&0&1\5&3&1\end{pmatrix}$, se pide calcular: una matriz escalonada de $A$; una matriz escalonada de $A$ con los pivotes normalizados; la forma escalonada reducida de $A$; y la matriz de paso asociada a cada una de ellas.
+> **Enunciado.** Dada $A=\begin{pmatrix}2&2&3\\1&2&5\\3&0&1\\5&3&1\end{pmatrix}$, se pide calcular: una matriz escalonada de $A$; una matriz escalonada de $A$ con los pivotes normalizados; la forma escalonada reducida de $A$; y la matriz de paso asociada a cada una de ellas.
 
 **Idea.** Por el Teorema 1.1 (U p.18), si hacemos las operaciones sobre $(A\mid I_4)$ (identidad $4\times4$ porque $A$ tiene 4 filas), al final la parte derecha es la matriz de paso $P$ con $B=PA$.
 
@@ -271,17 +271,17 @@ Comprobado con sympy: $A_e=P_1A$, $A_{en}=P_2A$, $A_{er}=P_3A$, `A.rref()[0]` $=
 
 ## Ejercicio 1.15 (E p.18)
 
-> **Enunciado.** Dada $A=\begin{pmatrix}2&1&3\0&5&4\1&7&6\end{pmatrix}$ y las matrices elementales $E_1=\begin{pmatrix}2&0&0\0&1&0\0&0&1\end{pmatrix}$, $E_2=\begin{pmatrix}0&1&0\1&0&0\0&0&1\end{pmatrix}$ y $E_3=\begin{pmatrix}1&0&0\0&1&0\0&3&1\end{pmatrix}$, se pide calcular e interpretar los productos $E_1A,E_2A,E_3A$ (por la izquierda) y $AE_1,AE_2,AE_3$ (por la derecha).
+> **Enunciado.** Dada $A=\begin{pmatrix}2&1&3\\0&5&4\\1&7&6\end{pmatrix}$ y las matrices elementales $E_1=\begin{pmatrix}2&0&0\\0&1&0\\0&0&1\end{pmatrix}$, $E_2=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}$ y $E_3=\begin{pmatrix}1&0&0\\0&1&0\\0&3&1\end{pmatrix}$, se pide calcular e interpretar los productos $E_1A,E_2A,E_3A$ (por la izquierda) y $AE_1,AE_2,AE_3$ (por la derecha).
 
 **Solución.**
 
 1. **Identificar cada elemental como operación por filas sobre $I_3$** (Def. 1.2): $E_1$: $F_1\to2F_1$; $E_2$: $F_1\leftrightarrow F_2$; $E_3$: $F_3\to F_3+3F_2$ (el 3 está en la posición $(3,2)$).
 2. **Por la izquierda = operación por filas en $A$** (U p.16):
-$$E_1A=\begin{pmatrix}4&2&6\0&5&4\1&7&6\end{pmatrix}\ (F_1\to2F_1),\qquad E_2A=\begin{pmatrix}0&5&4\2&1&3\1&7&6\end{pmatrix}\ (F_1\leftrightarrow F_2),$$
-$$E_3A=\begin{pmatrix}2&1&3\0&5&4\1&22&18\end{pmatrix}\ (F_3\to F_3+3F_2:\ (1,7,6)+3(0,5,4)).$$
+$$E_1A=\begin{pmatrix}4&2&6\\0&5&4\\1&7&6\end{pmatrix}\ (F_1\to2F_1),\qquad E_2A=\begin{pmatrix}0&5&4\\2&1&3\\1&7&6\end{pmatrix}\ (F_1\leftrightarrow F_2),$$
+$$E_3A=\begin{pmatrix}2&1&3\\0&5&4\\1&22&18\end{pmatrix}\ (F_3\to F_3+3F_2:\ (1,7,6)+3(0,5,4)).$$
 3. **Las mismas matrices vistas como operaciones por columnas sobre $I_3$:** $E_1$: $C_1\to2C_1$; $E_2$: $C_1\leftrightarrow C_2$; $E_3$: $C_2\to C_2+3C_3$ (la columna 2 de $E_3$ es $(0,1,3)^t=e_2+3e_3$). **Atención:** en el tipo 3 los índices «se cruzan»: fila 3 += 3·fila 2 equivale a columna 2 += 3·columna 3.
 4. **Por la derecha = operación por columnas en $A$** (U p.16, nota al margen):
-$$AE_1=\begin{pmatrix}4&1&3\0&5&4\2&7&6\end{pmatrix},\qquad AE_2=\begin{pmatrix}1&2&3\5&0&4\7&1&6\end{pmatrix},\qquad AE_3=\begin{pmatrix}2&10&3\0&17&4\1&25&6\end{pmatrix}$$
+$$AE_1=\begin{pmatrix}4&1&3\\0&5&4\\2&7&6\end{pmatrix},\qquad AE_2=\begin{pmatrix}1&2&3\\5&0&4\\7&1&6\end{pmatrix},\qquad AE_3=\begin{pmatrix}2&10&3\\0&17&4\\1&25&6\end{pmatrix}$$
    (en $AE_3$: $C_2=(1,5,7)^t+3(3,4,6)^t=(10,17,25)^t$).
 
 Comprobado con sympy.
@@ -296,7 +296,7 @@ Comprobado con sympy.
 
 ## Ejercicio 1.16 (E p.19)
 
-> **Enunciado.** Calcúlese, si es posible, la inversa de $A=\begin{pmatrix}0&5&-3\1&0&0\0&0&1\end{pmatrix}$ mediante operaciones elementales por filas.
+> **Enunciado.** Calcúlese, si es posible, la inversa de $A=\begin{pmatrix}0&5&-3\\1&0&0\\0&0&1\end{pmatrix}$ mediante operaciones elementales por filas.
 
 **Solución.**
 
@@ -305,7 +305,7 @@ Comprobado con sympy.
 3. $\xrightarrow{F_2\to\frac15F_2}\left(\begin{array}{ccc|ccc}1&0&0&0&1&0\0&1&-\frac35&\frac15&0&0\0&0&1&0&0&1\end{array}\right)$ (normalizar el pivote).
 4. $\xrightarrow{F_2\to F_2+\frac35F_3}\left(\begin{array}{ccc|ccc}1&0&0&0&1&0\0&1&0&\frac15&0&\frac35\0&0&1&0&0&1\end{array}\right)$ (cero encima del tercer pivote).
 5. La parte izquierda es $I_3$, luego $A$ es regular y
-$$A^{-1}=\begin{pmatrix}0&1&0\\frac15&0&\frac35\0&0&1\end{pmatrix}.$$
+$$A^{-1}=\begin{pmatrix}0&1&0\\frac15&0&\frac35\\0&0&1\end{pmatrix}.$$
 6. **Comprobación** $AA^{-1}=I_3$: fila 1 $(0,5,-3)$ por las columnas de $A^{-1}$: $(5\cdot\frac15,\ 0,\ 5\cdot\frac35-3)=(1,0,0)$; fila 2 $(1,0,0)$ da $(0,1,0)$; fila 3 $(0,0,1)$ da $(0,0,1)$ ✓ (sympy: `A.inv()` coincide; $\det A=-5$).
 
 **Error en E (nota al margen de p.19).** E afirma que «si $A$ es regular, $A^{-1}$ no siempre admite una construcción realizando operaciones elementales por filas a la matriz $A$ ya que pueden ser necesarias también operaciones elementales por columnas». **Es falso**: U p.22 establece que $A$ es regular $\iff$ su escalonada reducida (obtenida **solo por filas**) es $I_n$, así que el algoritmo por filas funciona **siempre** con una matriz regular. Lo que no se debe hacer es **mezclar** filas y columnas en el mismo cálculo.
@@ -327,8 +327,8 @@ $$A^{-1}=\begin{pmatrix}0&1&0\\frac15&0&\frac35\0&0&1\end{pmatrix}.$$
 1. **Estrategia:** una igualdad «general» se refuta con **un contraejemplo**.
 2. **Cota útil:** una escalonada de $A\in\mathcal M_{m\times n}$ tiene a lo sumo $m$ filas no nulas y, como cada pivote está en una columna distinta, a lo sumo $n$. Luego $\operatorname{rang}(A)\le\min\{m,n\}$ (Def. 1.5, U p.22). Si la igualdad fuera cierta, tomando $A$ y $B$ con $\operatorname{rang}A=\operatorname{rang}B=\min\{m,n\}\ge1$ obtendríamos $\operatorname{rang}(A+B)=2\min\{m,n\}>\min\{m,n\}$, imposible. Esto ya indica que es falsa.
 3. **Contraejemplo más simple:** $A=I_2$, $B=-I_2$. $\operatorname{rang}A=\operatorname{rang}B=2$ (son escalonadas con 2 filas no nulas), pero $A+B=0$ tiene rango 0: $2+2\ne0$.
-4. **Contraejemplo de E:** $A=\begin{pmatrix}2&1\0&0\end{pmatrix}$ (escalonada, rango 1), $B=\begin{pmatrix}2&1\1&0\end{pmatrix}$ ($F_2\to F_2-\frac12F_1$ da $\begin{pmatrix}2&1\0&-\frac12\end{pmatrix}$, rango 2), $A+B=\begin{pmatrix}4&2\1&0\end{pmatrix}$ ($F_2\to F_2-\frac14F_1$ da $\begin{pmatrix}4&2\0&-\frac12\end{pmatrix}$, rango 2). $1+2=3\ne2$ (sympy ✓).
-5. **Conclusión:** **no** es cierto en general (puede cumplirse en casos concretos, p. ej. $\begin{pmatrix}1&0\0&0\end{pmatrix}+\begin{pmatrix}0&0\0&1\end{pmatrix}$: $1+1=2$).
+4. **Contraejemplo de E:** $A=\begin{pmatrix}2&1\\0&0\end{pmatrix}$ (escalonada, rango 1), $B=\begin{pmatrix}2&1\\1&0\end{pmatrix}$ ($F_2\to F_2-\frac12F_1$ da $\begin{pmatrix}2&1\\0&-\frac12\end{pmatrix}$, rango 2), $A+B=\begin{pmatrix}4&2\\1&0\end{pmatrix}$ ($F_2\to F_2-\frac14F_1$ da $\begin{pmatrix}4&2\\0&-\frac12\end{pmatrix}$, rango 2). $1+2=3\ne2$ (sympy ✓).
+5. **Conclusión:** **no** es cierto en general (puede cumplirse en casos concretos, p. ej. $\begin{pmatrix}1&0\\0&0\end{pmatrix}+\begin{pmatrix}0&0\\0&1\end{pmatrix}$: $1+1=2$).
 
 Nota: en el `.txt` de E el signo «$\ne$» se ha perdido y aparece «$=$»; el libro dice $\neq$.
 
@@ -346,13 +346,13 @@ Nota: en el `.txt` de E el signo «$\ne$» se ha perdido y aparece «$=$»; el l
 
 **Solución.** Por la Def. 1.5 (U p.22), el rango es el número de filas no nulas de **cualquier** escalonada. Para cuadradas también sirve: $A$ regular $\iff\operatorname{rang}A=n$ (U p.22).
 
-1. **$A_1=\begin{pmatrix}1&0\0&3\end{pmatrix}$:** ya es escalonada (Def. 1.3), 2 filas no nulas: $\operatorname{rang}=2$ (coherente: es elemental ⇒ regular ⇒ rango = orden).
+1. **$A_1=\begin{pmatrix}1&0\\0&3\end{pmatrix}$:** ya es escalonada (Def. 1.3), 2 filas no nulas: $\operatorname{rang}=2$ (coherente: es elemental ⇒ regular ⇒ rango = orden).
 2. **$A_2$:** escalonada (triangular superior sin ceros en la diagonal), 3 filas no nulas: $\operatorname{rang}=3$.
 3. **$A_3$** ($4\times3$): no es escalonada (la fila 2 empieza en la columna 3 y la fila 3 en la columna 2). $F_2\leftrightarrow F_3$ y luego $F_4\to F_4-F_3$:
-$$\begin{pmatrix}1&0&0\0&0&1\0&1&2\0&0&1\end{pmatrix}\to\begin{pmatrix}1&0&0\0&1&2\0&0&1\0&0&1\end{pmatrix}\to\begin{pmatrix}1&0&0\0&1&2\0&0&1\0&0&0\end{pmatrix},\qquad\operatorname{rang}A_3=3.$$
-4. **$A_4=\begin{pmatrix}0&0&1\0&1&0\1&0&0\end{pmatrix}$:** **no** es escalonada (la fila 2 empieza con menos ceros que la 1). Con $F_1\leftrightarrow F_3$ queda $I_3$: $\operatorname{rang}=3$ (o bien: es elemental ⇒ regular ⇒ rango 3).
+$$\begin{pmatrix}1&0&0\\0&0&1\\0&1&2\\0&0&1\end{pmatrix}\to\begin{pmatrix}1&0&0\\0&1&2\\0&0&1\\0&0&1\end{pmatrix}\to\begin{pmatrix}1&0&0\\0&1&2\\0&0&1\\0&0&0\end{pmatrix},\qquad\operatorname{rang}A_3=3.$$
+4. **$A_4=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix}$:** **no** es escalonada (la fila 2 empieza con menos ceros que la 1). Con $F_1\leftrightarrow F_3$ queda $I_3$: $\operatorname{rang}=3$ (o bien: es elemental ⇒ regular ⇒ rango 3).
 5. **$A_5$:** es escalonada (triangular superior con unos en la diagonal), 4 filas no nulas: $\operatorname{rang}=4$.
-6. **$A_6=\begin{pmatrix}2&1&0\0&0&0\0&0&1\end{pmatrix}$:** no es escalonada (la fila nula no está al final). $F_2\leftrightarrow F_3$ da $\begin{pmatrix}2&1&0\0&0&1\0&0&0\end{pmatrix}$: $\operatorname{rang}=2$ (luego $A_6$ no es regular, lo que confirma el Ej. 1.13).
+6. **$A_6=\begin{pmatrix}2&1&0\\0&0&0\\0&0&1\end{pmatrix}$:** no es escalonada (la fila nula no está al final). $F_2\leftrightarrow F_3$ da $\begin{pmatrix}2&1&0\\0&0&1\\0&0&0\end{pmatrix}$: $\operatorname{rang}=2$ (luego $A_6$ no es regular, lo que confirma el Ej. 1.13).
 
 **Resumen:** rangos $2,3,3,3,4,2$ (sympy: `.rank()` coincide).
 
@@ -379,7 +379,7 @@ $$\begin{pmatrix}1&0&0\0&0&1\0&1&2\0&0&1\end{pmatrix}\to\begin{pmatrix}1&0&0\0&1
    - Por el Teorema 1.2 (U p.19), $A^t$ y $B^t$ son equivalentes por filas, y por A), $\operatorname{rang}(A^t)=\operatorname{rang}(B^t)$.
    - Falta $\operatorname{rang}(M)=\operatorname{rang}(M^t)$. Esto **no** está en U §1.2; se obtiene de U §1.3: el rango es el mayor orden de un menor no nulo (U p.27), y cada menor de $M^t$ es el determinante de la traspuesta de una submatriz cuadrada de $M$, con el mismo valor porque $\det N=\det N^t$ (U p.26). Luego $\operatorname{rang}A=\operatorname{rang}A^t=\operatorname{rang}B^t=\operatorname{rang}B$.
 
-**Observaciones.** Que sean «no cuadradas» no influye. El recíproco de A) es falso: igual rango no implica equivalencia por filas (ejemplo de U p.22: $\begin{pmatrix}2&1&0\0&0&0\end{pmatrix}$ y $\begin{pmatrix}3&1&1\0&0&0\end{pmatrix}$, ambas de rango 1).
+**Observaciones.** Que sean «no cuadradas» no influye. El recíproco de A) es falso: igual rango no implica equivalencia por filas (ejemplo de U p.22: $\begin{pmatrix}2&1&0\\0&0&0\end{pmatrix}$ y $\begin{pmatrix}3&1&1\\0&0&0\end{pmatrix}$, ambas de rango 1).
 
 **Receta.** «Columnas» se convierte en «filas» trasponiendo: $B=AQ\Rightarrow B^t=Q^tA^t$.
 
@@ -399,7 +399,7 @@ $$\begin{pmatrix}1&0&0\0&0&1\0&1&2\0&0&1\end{pmatrix}\to\begin{pmatrix}1&0&0\0&1
 2. **Interpretación.** $AQ=AF_1F_2\cdots F_r$: multiplicar a la derecha por elementales = hacer operaciones **por columnas** en $A$ (U p.16). Después $P(AQ)=E'_1\cdots E'_s(AQ)$: multiplicar a la izquierda = operaciones **por filas**. Así, $B$ se obtiene de $A$ haciendo operaciones por columnas (matriz de paso $Q$) y luego por filas (matriz de paso $P$); como $P(AQ)=(PA)Q$ (asociatividad), el orden entre ambas da igual. En U esta relación se llama «matrices equivalentes» (Def. 4.3, p.146).
 3. **Rango.** $AQ$ es equivalente por columnas a $A$ ⇒ $\operatorname{rang}(AQ)=\operatorname{rang}(A)$ (Ej. 1.19 B). $B=P(AQ)$ es equivalente por filas a $AQ$ (Teorema 1.2) ⇒ $\operatorname{rang}(B)=\operatorname{rang}(AQ)$ (Teorema 1.3). **Luego sí: $\operatorname{rang}(A)=\operatorname{rang}(B)$.**
 
-**Ejemplo (propio).** $A=\begin{pmatrix}1&2&3\2&4&6\end{pmatrix}$. Filas: $F_2\to F_2-2F_1$, $P=\begin{pmatrix}1&0\-2&1\end{pmatrix}$. Columnas: $C_2\to C_2-2C_1$, $C_3\to C_3-3C_1$, $Q=\begin{pmatrix}1&-2&-3\0&1&0\0&0&1\end{pmatrix}$. Entonces $PAQ=\begin{pmatrix}1&0&0\0&0&0\end{pmatrix}$, de rango 1 como $A$ (sympy ✓).
+**Ejemplo (propio).** $A=\begin{pmatrix}1&2&3\\2&4&6\end{pmatrix}$. Filas: $F_2\to F_2-2F_1$, $P=\begin{pmatrix}1&0\\-2&1\end{pmatrix}$. Columnas: $C_2\to C_2-2C_1$, $C_3\to C_3-3C_1$, $Q=\begin{pmatrix}1&-2&-3\\0&1&0\\0&0&1\end{pmatrix}$. Entonces $PAQ=\begin{pmatrix}1&0&0\\0&0&0\end{pmatrix}$, de rango 1 como $A$ (sympy ✓).
 
 **Receta.** $P\cdot(\ )$ = filas, $(\ )\cdot Q$ = columnas; multiplicar por matrices regulares, a cualquier lado, **no cambia el rango**.
 
@@ -413,49 +413,49 @@ $$\begin{pmatrix}1&0&0\0&0&1\0&1&2\0&0&1\end{pmatrix}\to\begin{pmatrix}1&0&0\0&1
 
 ### Ejemplo propio 1 — Operaciones con matrices (fácil)
 
-**Enunciado (propio).** Sean $A=\begin{pmatrix}1&2\0&1\end{pmatrix}$, $B=\begin{pmatrix}2&0\1&1\end{pmatrix}$. (a) Calcula $AB$ y $BA$. (b) Comprueba que $(A+B)^2\ne A^2+2AB+B^2$. (c) Comprueba $(AB)^t=B^tA^t$ y que $(AB)^t\ne A^tB^t$. (d) Calcula $A^n$.
+**Enunciado (propio).** Sean $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$, $B=\begin{pmatrix}2&0\\1&1\end{pmatrix}$. (a) Calcula $AB$ y $BA$. (b) Comprueba que $(A+B)^2\ne A^2+2AB+B^2$. (c) Comprueba $(AB)^t=B^tA^t$ y que $(AB)^t\ne A^tB^t$. (d) Calcula $A^n$.
 
 **Solución.**
-1. $AB=\begin{pmatrix}1\cdot2+2\cdot1&1\cdot0+2\cdot1\0\cdot2+1\cdot1&0\cdot0+1\cdot1\end{pmatrix}=\begin{pmatrix}4&2\1&1\end{pmatrix}$; $BA=\begin{pmatrix}2&4\1&3\end{pmatrix}$. Distintas: no conmutan (U p.13).
-2. $A+B=\begin{pmatrix}3&2\1&2\end{pmatrix}$, $(A+B)^2=\begin{pmatrix}11&10\5&6\end{pmatrix}$. $A^2=\begin{pmatrix}1&4\0&1\end{pmatrix}$, $B^2=\begin{pmatrix}4&0\3&1\end{pmatrix}$, y $A^2+2AB+B^2=\begin{pmatrix}13&8\5&4\end{pmatrix}\ne(A+B)^2$. En cambio $A^2+AB+BA+B^2=\begin{pmatrix}11&10\5&6\end{pmatrix}$ ✓.
-3. $(AB)^t=\begin{pmatrix}4&1\2&1\end{pmatrix}$; $B^tA^t=\begin{pmatrix}2&1\0&1\end{pmatrix}\begin{pmatrix}1&0\2&1\end{pmatrix}=\begin{pmatrix}4&1\2&1\end{pmatrix}$ ✓; $A^tB^t=\begin{pmatrix}1&0\2&1\end{pmatrix}\begin{pmatrix}2&1\0&1\end{pmatrix}=\begin{pmatrix}2&1\4&3\end{pmatrix}\ne(AB)^t$.
-4. $A^2=\begin{pmatrix}1&4\0&1\end{pmatrix}$, $A^3=\begin{pmatrix}1&6\0&1\end{pmatrix}$: conjetura $A^n=\begin{pmatrix}1&2n\0&1\end{pmatrix}$. Inducción: si vale para $n$, $A^{n+1}=A^nA=\begin{pmatrix}1&2+2n\0&1\end{pmatrix}=\begin{pmatrix}1&2(n+1)\0&1\end{pmatrix}$ ✓.
+1. $AB=\begin{pmatrix}1\cdot2+2\cdot1&1\cdot0+2\cdot1\\0\cdot2+1\cdot1&0\cdot0+1\cdot1\end{pmatrix}=\begin{pmatrix}4&2\\1&1\end{pmatrix}$; $BA=\begin{pmatrix}2&4\\1&3\end{pmatrix}$. Distintas: no conmutan (U p.13).
+2. $A+B=\begin{pmatrix}3&2\\1&2\end{pmatrix}$, $(A+B)^2=\begin{pmatrix}11&10\\5&6\end{pmatrix}$. $A^2=\begin{pmatrix}1&4\\0&1\end{pmatrix}$, $B^2=\begin{pmatrix}4&0\\3&1\end{pmatrix}$, y $A^2+2AB+B^2=\begin{pmatrix}13&8\\5&4\end{pmatrix}\ne(A+B)^2$. En cambio $A^2+AB+BA+B^2=\begin{pmatrix}11&10\\5&6\end{pmatrix}$ ✓.
+3. $(AB)^t=\begin{pmatrix}4&1\\2&1\end{pmatrix}$; $B^tA^t=\begin{pmatrix}2&1\\0&1\end{pmatrix}\begin{pmatrix}1&0\\2&1\end{pmatrix}=\begin{pmatrix}4&1\\2&1\end{pmatrix}$ ✓; $A^tB^t=\begin{pmatrix}1&0\\2&1\end{pmatrix}\begin{pmatrix}2&1\\0&1\end{pmatrix}=\begin{pmatrix}2&1\\4&3\end{pmatrix}\ne(AB)^t$.
+4. $A^2=\begin{pmatrix}1&4\\0&1\end{pmatrix}$, $A^3=\begin{pmatrix}1&6\\0&1\end{pmatrix}$: conjetura $A^n=\begin{pmatrix}1&2n\\0&1\end{pmatrix}$. Inducción: si vale para $n$, $A^{n+1}=A^nA=\begin{pmatrix}1&2+2n\\0&1\end{pmatrix}=\begin{pmatrix}1&2(n+1)\\0&1\end{pmatrix}$ ✓.
 
 (sympy ✓.) **Receta:** desarrolla con la distributiva **sin conmutar**; para $A^n$, conjetura con $n=2,3$ y demuestra por inducción.
 
 ### Ejemplo propio 2 — Inversa por Gauss–Jordan y detección de matriz singular (medio)
 
-**Enunciado (propio).** (a) Calcula la inversa de $A=\begin{pmatrix}1&2&1\0&1&1\1&2&2\end{pmatrix}$ por operaciones elementales por filas. (b) Intenta lo mismo con $S=\begin{pmatrix}1&2&3\2&4&7\1&2&4\end{pmatrix}$.
+**Enunciado (propio).** (a) Calcula la inversa de $A=\begin{pmatrix}1&2&1\\0&1&1\\1&2&2\end{pmatrix}$ por operaciones elementales por filas. (b) Intenta lo mismo con $S=\begin{pmatrix}1&2&3\\2&4&7\\1&2&4\end{pmatrix}$.
 
 **Solución (a).**
 1. $(A\mid I_3)\xrightarrow{F_3\to F_3-F_1}\left(\begin{array}{ccc|ccc}1&2&1&1&0&0\0&1&1&0&1&0\0&0&1&-1&0&1\end{array}\right)$ — ya es escalonada con pivotes 1 (luego $A$ es regular, U p.22).
 2. $\xrightarrow{F_1\to F_1-2F_2}\left(\begin{array}{ccc|ccc}1&0&-1&1&-2&0\0&1&1&0&1&0\0&0&1&-1&0&1\end{array}\right)$.
 3. $\xrightarrow{F_1\to F_1+F_3,\ F_2\to F_2-F_3}\left(\begin{array}{ccc|ccc}1&0&0&0&-2&1\0&1&0&1&1&-1\0&0&1&-1&0&1\end{array}\right)$.
-4. $A^{-1}=\begin{pmatrix}0&-2&1\1&1&-1\-1&0&1\end{pmatrix}$. Comprobación: fila 1 de $A$, $(1,2,1)$, por las columnas de $A^{-1}$: $(0+2-1,\ -2+2+0,\ 1-2+1)=(1,0,0)$; análogamente las filas 2 y 3 dan $(0,1,0)$ y $(0,0,1)$ ✓ (sympy ✓, $\det A=1$).
+4. $A^{-1}=\begin{pmatrix}0&-2&1\\1&1&-1\\-1&0&1\end{pmatrix}$. Comprobación: fila 1 de $A$, $(1,2,1)$, por las columnas de $A^{-1}$: $(0+2-1,\ -2+2+0,\ 1-2+1)=(1,0,0)$; análogamente las filas 2 y 3 dan $(0,1,0)$ y $(0,0,1)$ ✓ (sympy ✓, $\det A=1$).
 
 **Solución (b).**
-1. $F_2\to F_2-2F_1$, $F_3\to F_3-F_1$: la parte izquierda queda $\begin{pmatrix}1&2&3\0&0&1\0&0&1\end{pmatrix}$.
+1. $F_2\to F_2-2F_1$, $F_3\to F_3-F_1$: la parte izquierda queda $\begin{pmatrix}1&2&3\\0&0&1\\0&0&1\end{pmatrix}$.
 2. $F_3\to F_3-F_2$: la tercera fila de la izquierda es nula. La escalonada tiene 2 filas no nulas, $\operatorname{rang}S=2<3$, así que $S$ **no es regular** (U p.22) y es imposible llegar a $I_3$ (U p.19): **no tiene inversa** (sympy: $\det S=0$, rango 2).
 
 **Receta:** en cuanto aparezca una fila nula en la parte izquierda, para: la matriz es singular.
 
 ### Ejemplo propio 3 — Rango por escalonamiento, numérico y con parámetro (difícil)
 
-**Enunciado (propio).** (a) Calcula el rango de $C=\begin{pmatrix}1&2&0&1\2&1&3&0\3&3&3&1\1&-1&3&-1\end{pmatrix}$. (b) Discute, según $k\in\mathbb R$, el rango de $M=\begin{pmatrix}1&1&k\1&k&1\k&1&1\end{pmatrix}$.
+**Enunciado (propio).** (a) Calcula el rango de $C=\begin{pmatrix}1&2&0&1\\2&1&3&0\\3&3&3&1\\1&-1&3&-1\end{pmatrix}$. (b) Discute, según $k\in\mathbb R$, el rango de $M=\begin{pmatrix}1&1&k\\1&k&1\\k&1&1\end{pmatrix}$.
 
 **Solución (a).**
 1. $F_2\to F_2-2F_1$, $F_3\to F_3-3F_1$, $F_4\to F_4-F_1$: las tres filas nuevas son iguales, $(0,-3,3,-2)$.
-2. $F_3\to F_3-F_2$, $F_4\to F_4-F_2$: $\begin{pmatrix}1&2&0&1\0&-3&3&-2\0&0&0&0\0&0&0&0\end{pmatrix}$, escalonada con 2 filas no nulas: $\operatorname{rang}C=2$ (sympy ✓).
+2. $F_3\to F_3-F_2$, $F_4\to F_4-F_2$: $\begin{pmatrix}1&2&0&1\\0&-3&3&-2\\0&0&0&0\\0&0&0&0\end{pmatrix}$, escalonada con 2 filas no nulas: $\operatorname{rang}C=2$ (sympy ✓).
 
 **Solución (b).** Cuidado: **no se puede tomar como pivote ni dividir por una expresión que pueda valer 0** sin separar casos.
 1. $F_2\to F_2-F_1$, $F_3\to F_3-kF_1$ (tipo 3, válidas para todo $k$):
-$$\begin{pmatrix}1&1&k\0&k-1&1-k\0&1-k&1-k^2\end{pmatrix}.$$
+$$\begin{pmatrix}1&1&k\\0&k-1&1-k\\0&1-k&1-k^2\end{pmatrix}.$$
 2. $F_3\to F_3+F_2$ (tipo 3, válida para todo $k$): tercera fila $(0,\,0,\,1-k^2+1-k)=(0,\,0,\,-(k-1)(k+2))$:
-$$\begin{pmatrix}1&1&k\0&k-1&1-k\0&0&-(k-1)(k+2)\end{pmatrix}.$$
+$$\begin{pmatrix}1&1&k\\0&k-1&1-k\\0&0&-(k-1)(k+2)\end{pmatrix}.$$
 3. **Casos:**
    - $k\ne1$ y $k\ne-2$: los tres pivotes $1,\ k-1,\ -(k-1)(k+2)$ son no nulos; escalonada con 3 filas no nulas: $\operatorname{rang}M=3$.
-   - $k=1$: queda $\begin{pmatrix}1&1&1\0&0&0\0&0&0\end{pmatrix}$: $\operatorname{rang}M=1$.
-   - $k=-2$: queda $\begin{pmatrix}1&1&-2\0&-3&3\0&0&0\end{pmatrix}$: $\operatorname{rang}M=2$.
+   - $k=1$: queda $\begin{pmatrix}1&1&1\\0&0&0\\0&0&0\end{pmatrix}$: $\operatorname{rang}M=1$.
+   - $k=-2$: queda $\begin{pmatrix}1&1&-2\\0&-3&3\\0&0&0\end{pmatrix}$: $\operatorname{rang}M=2$.
 4. Comprobado con sympy ($\det M=-(k-1)^2(k+2)$; rangos 1, 2 y 3 para $k=1$, $k=-2$ y, p. ej., $k=0,2$).
 
 **Receta:** con parámetros, usa solo operaciones de tipo 3 (y permutaciones) mientras puedas; los valores que anulan un posible pivote se estudian aparte.
