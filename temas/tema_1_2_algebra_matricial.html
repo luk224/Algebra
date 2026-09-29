@@ -276,13 +276,24 @@
 
 <div class="box ex"><span class="h">Ejemplo 1.11 de U</span>
   <p>Con $A=\begin{pmatrix}2&0\\4&1\end{pmatrix}$:
-  $$(A\mid I_2)\xrightarrow{F_1\to\frac12F_1}\begin{pmatrix}1&0&\frac12&0\\4&1&0&1\end{pmatrix}\xrightarrow{F_2\to F_2-4F_1}\begin{pmatrix}1&0&\frac12&0\\0&1&-2&1\end{pmatrix},$$
+  $$\left(\begin{array}{cc|cc}2&0&1&0\\4&1&0&1\end{array}\right)\xrightarrow{F_1\to\frac12F_1}\left(\begin{array}{cc|cc}1&0&\frac12&0\\4&1&0&1\end{array}\right)\xrightarrow{F_2\to F_2-4F_1}\left(\begin{array}{cc|cc}1&0&\frac12&0\\0&1&-2&1\end{array}\right),$$
   $$A^{-1}=\begin{pmatrix}\frac12&0\\-2&1\end{pmatrix}.$$</p>
   <span class="src" data-l="U" data-ref="U Ejemplo 1.11, p. 19">U p.19</span>
 </div>
 
 <div class="box ex"><span class="h">Ejemplo alternativo — método de Gauss para la inversa (A)</span>
-  <p>Con $A=\begin{pmatrix}3&5\\4&8\end{pmatrix}$: se aplican a $(A\mid I_2)$ las mismas operaciones que llevan $A$ a $I_2$ (aquí, combinaciones de filas hasta obtener $12$ en la diagonal y luego normalizar), obteniendo $A^{-1}=\begin{pmatrix}2&-\frac{15}{12}\\-1&\frac34\end{pmatrix}$. Se comprueba con $AA^{-1}=I_2$.</p>
+  <p>Variante sin fracciones a medio camino: en vez de normalizar cada pivote a $1$ nada más aparecer (como en el Ejemplo 1.11), primero se iguala la <b>columna</b> que se quiere anular a un múltiplo común de sus dos entradas, se resta, y solo al final se divide para dejar $1$s en la diagonal. Con $A=\begin{pmatrix}3&5\\4&8\end{pmatrix}$:</p>
+  <ol class="steps">
+    <li>$\left(\begin{array}{cc|cc}3&5&1&0\\4&8&0&1\end{array}\right)$. La primera columna es $\binom{3}{4}$; $\operatorname{mcm}(3,4)=12$, así que se multiplica $F_1$ por $4$ y $F_2$ por $3$ para que ambas tengan un $12$ ahí (no es que el $12$ vaya "en la diagonal": es el valor común elegido en la <b>columna 1</b> para poder restar sin fracciones):
+    $$\xrightarrow[F_2\to3F_2]{F_1\to4F_1}\left(\begin{array}{cc|cc}12&20&4&0\\12&24&0&3\end{array}\right).$$</li>
+    <li>Con el $12$ igualado, $F_2\to F_2-F_1$ anula la columna 1 en la fila 2:
+    $$\left(\begin{array}{cc|cc}12&20&4&0\\0&4&-4&3\end{array}\right).$$</li>
+    <li>Ahora toca anular la columna 2 por encima del pivote $4$: para no arrastrar fracciones, se iguala también esa columna a un múltiplo común ($20$ y $4$, $\operatorname{mcm}=20$, o directamente $F_1\to F_1-5F_2$ ya que $20=5\cdot4$):
+    $$\xrightarrow{F_1\to F_1-5F_2}\left(\begin{array}{cc|cc}12&0&24&-15\\0&4&-4&3\end{array}\right).$$</li>
+    <li>Por último se normaliza cada fila dividiendo por su pivote ($F_1\to\frac1{12}F_1$, $F_2\to\frac14F_2$):
+    $$\left(\begin{array}{cc|cc}1&0&2&-\frac{15}{12}\\0&1&-1&\frac34\end{array}\right)\;\Rightarrow\;A^{-1}=\begin{pmatrix}2&-\frac{15}{12}\\-1&\frac34\end{pmatrix}.$$</li>
+  </ol>
+  <p>Se comprueba con $AA^{-1}=I_2$. El $12$ del enunciado del apunte A es, pues, solo el <b>mínimo común múltiplo de las entradas de la primera columna</b> en este ejemplo concreto ($3$ y $4$); con otra matriz sería otro número, uno distinto para cada columna que se vaya anulando.</p>
   <span class="src" data-l="A" data-ref="Inversa de una matriz con el método de Gauss">A</span>
 </div>
 
@@ -538,9 +549,9 @@
 <details class="sol" id="ej1-16"><summary>Ejercicio 1.16 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.16, p. 19">E p.19</span></summary>
   <p class="enun">Calcúlese, si es posible, la inversa de $A=\begin{pmatrix}0&5&-3\\1&0&0\\0&0&1\end{pmatrix}$ mediante operaciones elementales por filas.</p>
   <ol class="steps">
-    <li>$(A\mid I_3)\xrightarrow{F_1\leftrightarrow F_2}\begin{pmatrix}1&0&0&0&1&0\\0&5&-3&1&0&0\\0&0&1&0&0&1\end{pmatrix}$ (había que permutar: $a_{11}=0$ no puede ser pivote).</li>
-    <li>$\xrightarrow{F_2\to\frac15F_2}\begin{pmatrix}1&0&0&0&1&0\\0&1&-\frac35&\frac15&0&0\\0&0&1&0&0&1\end{pmatrix}$.</li>
-    <li>$\xrightarrow{F_2\to F_2+\frac35F_3}\begin{pmatrix}1&0&0&0&1&0\\0&1&0&\frac15&0&\frac35\\0&0&1&0&0&1\end{pmatrix}$.</li>
+    <li>$\left(\begin{array}{ccc|ccc}0&5&-3&1&0&0\\1&0&0&0&1&0\\0&0&1&0&0&1\end{array}\right)\xrightarrow{F_1\leftrightarrow F_2}\left(\begin{array}{ccc|ccc}1&0&0&0&1&0\\0&5&-3&1&0&0\\0&0&1&0&0&1\end{array}\right)$ (había que permutar: $a_{11}=0$ no puede ser pivote).</li>
+    <li>$\xrightarrow{F_2\to\frac15F_2}\left(\begin{array}{ccc|ccc}1&0&0&0&1&0\\0&1&-\frac35&\frac15&0&0\\0&0&1&0&0&1\end{array}\right)$.</li>
+    <li>$\xrightarrow{F_2\to F_2+\frac35F_3}\left(\begin{array}{ccc|ccc}1&0&0&0&1&0\\0&1&0&\frac15&0&\frac35\\0&0&1&0&0&1\end{array}\right)$.</li>
     <li>La parte izquierda es $I_3$, luego $A$ es regular: $A^{-1}=\begin{pmatrix}0&1&0\\\frac15&0&\frac35\\0&0&1\end{pmatrix}$.</li>
   </ol>
   <p>Comprobación $AA^{-1}=I_3$ ✓ (sympy: <code>A.inv()</code> coincide, $\det A=-5$).</p>
