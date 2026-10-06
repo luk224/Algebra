@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 2.2 Sistemas de generadores</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 2 · Espacios vectoriales · Tema 2.2</div>
+  <h1>Sistemas de generadores</h1>
+  <p>¿Con qué «ingredientes» se puede fabricar todo un subespacio? Aquí aprenderás a construir vectores como <b>combinaciones lineales</b> de otros, a describir un subespacio con unos pocos <b>generadores</b>, a detectar los vectores que sobran (sistemas <b>ligados</b> frente a <b>libres</b>) y a medirlo todo con el <b>rango</b>. Es la herramienta que más se usa en el resto del módulo.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §2.2 (pp. 69-81)</span><span>Ejercicios: E Ej. 2.15–2.22 (pp. 57-63)</span><span>⏱ ~7 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §2.2.1 Elementos didácticos, p. 69">U p.69</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>Con unos pocos vectores y las dos operaciones de un espacio vectorial (sumar y multiplicar por números) se pueden fabricar muchísimos más. Es como mezclar pinturas: con rojo, azul y amarillo obtienes casi cualquier color. El conjunto de todo lo que se puede fabricar con unos vectores dados es un <b>subespacio</b>; y a veces algún «ingrediente» sobra porque se puede obtener mezclando los demás. Decidir <b>qué se puede fabricar</b> y <b>qué sobra</b> es el contenido de este tema.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del tema 2.1: qué es un espacio vectorial y un subespacio (rectas y planos por el origen en $\mathbb R^3$); aquí se sigue trabajando sobre todo en $\mathbb R^n$, pero también aparecen matrices y funciones.</li>
+  <li>Del tema 1.4: plantear y resolver un sistema lineal (Gauss) y el <b>teorema de Rouché-Frobenius</b>: un sistema es compatible si y solo si $\operatorname{rang}A=\operatorname{rang}(A\mid b)$, y un sistema homogéneo cuyo $\operatorname{rang}A$ es igual al número de incógnitas solo tiene la solución nula (U p.30).</li>
+  <li>Del tema 1.2 y 1.3: el <b>rango</b> de una matriz (U p.22) y que es el mayor orden de un menor no nulo (U p.27); las operaciones elementales de fila no lo cambian.</li>
+  <li>Dos vectores de $\mathbb R^n$ son iguales si y solo si lo son <b>todas</b> sus componentes: una igualdad vectorial equivale a un sistema de $n$ ecuaciones.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde está en los libros</th></tr>
+  <tr><td>1 Combinación lineal</td><td>Definición 2.3; ejemplos 2.14 y 2.19; «¿es combinación lineal?» = «¿es compatible el sistema?»</td><td>U p.70, p.75-77 · L §4.1 p.194</td></tr>
+  <tr><td>2 Sistemas de generadores</td><td>Definición 2.4, $\langle S\rangle$, ejemplos 2.15-2.16, ecuaciones paramétricas y cartesianas, sistemas equivalentes</td><td>U p.71-73</td></tr>
+  <tr><td>3 Dependencia e independencia lineal</td><td>Definiciones 2.5 y 2.6, caracterizaciones, ejemplos 2.17, 2.18 y 2.20, lema práctico</td><td>U p.73-78 · L §4.3 p.208</td></tr>
+  <tr><td>4 Rango de un sistema</td><td>Definición 2.7, relación con el rango de una matriz</td><td>U p.78 (y p.88 como adelanto)</td></tr>
+  <tr><td>5 Supresión y sustitución</td><td>Teoremas 2.1 y 2.2, ejemplos 2.21-2.23, relación libres–generadores</td><td>U p.79-81 · L §4.3 p.210</td></tr>
+  <tr><td>6 Ejercicios del libro</td><td>E 2.15–2.22 (los ocho) + 3 ejemplos propios</td><td>E pp.57-63</td></tr>
+  <tr><td>7 Ejemplos de examen</td><td>6 preguntas de convocatorias anteriores, resueltas</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p>Casi siempre la misma pregunta con distinto disfraz: <b>(a)</b> ¿es $w$ combinación lineal de $u_1,\dots,u_p$? o «¿para qué valor del parámetro lo es?»; <b>(b)</b> ¿es libre o ligado este sistema (quizá según un parámetro)?; <b>(c)</b> ¿genera este sistema el subespacio $U$ (dado por ecuaciones)?; <b>(d)</b> hallar un sistema generador de un subespacio dado por ecuaciones; <b>(e)</b> verdadero/falso razonado. Todo se reduce a <b>plantear un sistema lineal</b> y a calcular un <b>rango</b>.</p>
+</div>
+
+<div class="box warn"><span class="h">Aviso de numeración</span>
+  <p>El libro de teoría (U) numera sus ejemplos como «Ejemplo 2.14, 2.15, …» y el de ejercicios (E) numera sus ejercicios «Ejercicio 2.15, 2.16, …»: son <b>cosas distintas</b> con números parecidos. Aquí se escribe «Ej. U 2.15» para el ejemplo de teoría y «Ejercicio 2.15» para el de E.</p>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Combinación lineal <span class="src" data-l="U" data-ref="U §2.2.2 Definición 2.3 y Ejemplo 2.14, p. 70">U p.70</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una <b>combinación lineal</b> de unos vectores es «una mezcla» de ellos: cada vector se toma multiplicado por un número (cuánto de ese ingrediente se pone; puede ser negativo o cero) y se suman los resultados. Si tienes en la despensa $u_1=(1,0,1)$ y $u_2=(2,0,1)$, la mezcla «una parte de $u_1$ y dos de $u_2$» da $1\cdot(1,0,1)+2\cdot(2,0,1)=(5,0,3)$. La pregunta típica es la inversa: <i>si te piden fabricar un vector concreto $w$, ¿hay una receta (unos números) que lo consiga?</i></p>
+</div>
+
+<div class="box def"><span class="h">Definición 2.3 — combinación lineal</span>
+  <p>Sea $(V,+,\mathbb R)$ un espacio vectorial y $S=\{u_1,u_2,\dots,u_p\}$ un sistema (conjunto) de vectores de $V$. Se dice que $v\in V$ es <b>combinación lineal</b> de $S$ (o <b>depende linealmente</b> de $S$) si
+  $$v=\lambda_1u_1+\lambda_2u_2+\dots+\lambda_pu_p,\qquad \lambda_1,\dots,\lambda_p\in\mathbb R.$$
+  Los números $\lambda_i$ se llaman <b>coeficientes</b> de la combinación.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.3, p. 70">U p.70</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.14 — combinaciones de dos vectores de $\mathbb R^3$</span>
+  <p>Sean $u_1=(1,0,1)$ y $u_2=(2,0,1)$. Cualquier $v=\lambda_1u_1+\lambda_2u_2$ es combinación lineal de ellos. En componentes:
+  $$(v_1,v_2,v_3)=\lambda(1,0,1)+\mu(2,0,1)=(\lambda+2\mu,\ 0,\ \lambda+\mu).$$
+  Esto es la forma <b>paramétrica</b> $\;v_1=\lambda+2\mu,\ v_2=0,\ v_3=\lambda+\mu$ ($\lambda,\mu\in\mathbb R$). Con $\lambda=1,\mu=2$ sale $(5,0,3)$. Observa lo que dice: la segunda componente es <b>siempre 0</b>, mientras que $v_1$ y $v_3$ pueden valer cualquier cosa (para cada pareja de valores deseados de $v_1,v_3$ hay $\lambda,\mu$ que los dan). Es decir, todas las mezclas viven en el plano $x_2=0$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.14, p. 70-71">U p.70-71</span>
+</div>
+
+<div class="box thm"><span class="h">Traducción clave «vector ↔ sistema de ecuaciones»</span>
+  <p>Decir que $w$ es combinación lineal de $u_1,\dots,u_p\in\mathbb R^n$ es decir que el sistema de $n$ ecuaciones (una por componente)
+  $$\lambda_1u_1+\dots+\lambda_pu_p=w,\qquad\text{incógnitas }\lambda_1,\dots,\lambda_p,$$
+  es <b>compatible</b>. Si pones los $u_i$ como <b>columnas</b> de una matriz $A$: $\;w\in\langle u_1,\dots,u_p\rangle\iff\operatorname{rang}A=\operatorname{rang}(A\mid w)$ (Rouché-Frobenius, U p.30). Si el sistema tiene solución única, la combinación es única; si tiene infinitas, hay infinitas maneras de escribir $w$.</p>
+  <span class="src" data-l="P" data-ref="Traducción de la Definición 2.3 (U p.70) al teorema de Rouché-Frobenius (U p.30); explicación propia">P</span>
+  <span class="src" data-l="U" data-ref="U §1.4, clasificación de sistemas por rangos, p. 30">U p.30</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.19 — mezcla de abonos (¿se puede fabricar tal mezcla?)</span>
+  <p>Tres abonos en pastillas de 300 g, con las cantidades (en gramos) de fósforo P, potasio K, nitrógeno N, calcio Ca y hierro Fe: $a=(100,50,100,50,0)$, $b=(90,50,105,45,10)$, $c=(60,50,120,30,10)$.</p>
+  <ol class="steps">
+    <li><b>a) ¿Se puede fabricar $(500,100,500,2500,150)$?</b> Hay que ver si es $\alpha a+\beta b+\gamma c$. La 1.ª ecuación es $500=100\alpha+90\beta+60\gamma$ y la 4.ª $2500=50\alpha+45\beta+30\gamma$. Pero los coeficientes de la 1.ª son <b>el doble</b> exactamente de los de la 4.ª, así que el lado izquierdo de la 1.ª vale el doble que el de la 4.ª; los términos independientes, en cambio, no cumplen $500=2\cdot2500$. <b>Sistema incompatible: no se puede</b> (ni rompiendo pastillas, porque $\alpha,\beta,\gamma$ pueden ser fracciones y sigue sin haber solución).</li>
+    <li><b>b) ¿Y bloques $(290,150,u_3,u_4,10)$ con $u_3,u_4$ libres?</b> Las ecuaciones 1.ª, 2.ª y 5.ª (que no contienen $u_3,u_4$) dan: de la 5.ª, $\beta+\gamma=1$; de la 2.ª, $\alpha+\beta+\gamma=3\Rightarrow\alpha=2$; en la 1.ª, $200+90\beta+60\gamma=290$, y con $\gamma=1-\beta$ queda $30\beta=30$: $\beta=1,\ \gamma=0$. Las ecuaciones 3.ª y 4.ª <b>definen</b> entonces $u_3=2\cdot100+105=305$ y $u_4=2\cdot50+45=145$.</li>
+    <li><b>c) Conclusión.</b> Cada bloque es $(290,150,305,145,10)$, pesa $290+150+305+145+10=900$ g y se forma con 2 pastillas de A y 1 de B ($2a+b=(290,150,305,145,10)$ ✓).</li>
+  </ol>
+  <p>Fíjate en la estrategia: resolver primero las ecuaciones «fáciles» y <b>sustituir en las demás</b>; es la misma que se usa en los Ejercicios 2.19, 2.20 y 2.22.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.19, p. 75-77">U p.75-77</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Resolver solo las ecuaciones «que tienen incógnitas» y olvidar la que no tiene ninguna (p. ej. $2=0\cdot\alpha+0\cdot\beta$). Una ecuación sin incógnitas también es una condición, y es la que decide si el sistema es compatible. Otro error: pensar que los coeficientes de una combinación lineal son únicos; solo lo son cuando los vectores son «independientes» (§3).</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Sistemas de generadores y envoltura lineal <span class="src" data-l="U" data-ref="U §2.2.2 Definición 2.4 y Ejemplos 2.15-2.16, p. 71-73">U p.71-73</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Para describir <b>todo</b> un plano de $\mathbb R^3$ no hace falta dar sus infinitos puntos: basta con dar dos vectores del plano «no alineados» y decir <i>«el plano es todo lo que se obtiene mezclando estos dos»</i>. Esos dos vectores son un <b>sistema de generadores</b> del plano, como las dos direcciones en las que puedes moverte sobre una mesa. El conjunto de todas las mezclas posibles se llama <b>envoltura lineal</b> (o subespacio generado) y es siempre un subespacio.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 2.4 — sistema de generadores</span>
+  <p>Decir que $S$ es un <b>sistema de generadores</b> de un subespacio $U$ de $V$ (o que $U$ está <b>generado</b> por $S$) equivale a decir que <b>cualquier vector de $U$ es combinación lineal de vectores de $S$</b>. Para expresar que $U$ es el conjunto de todas las combinaciones lineales de los vectores de $S$ se escribe
+  $$U=\langle S\rangle=\{\lambda_1u_1+\dots+\lambda_pu_p:\ \lambda_i\in\mathbb R\}.$$
+  Es frecuente llamar a $\langle S\rangle$ la <b>envoltura lineal</b> de $S$. (Lay lo escribe $\operatorname{Gen}\{v_1,\dots,v_p\}$.)</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.4, p. 71">U p.71</span>
+  <span class="src" data-l="L" data-ref="Lay §4.1, Teorema 1 y definición de Gen{v1,...,vp}, p. 194">L p.194</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.15 — el plano generado por dos vectores, en tres formas</span>
+  <p>$S=\{(1,0,1),(2,0,1)\}\subset\mathbb R^3$ genera $\langle S\rangle=\{(\lambda+2\mu,\ 0,\ \lambda+\mu):\lambda,\mu\in\mathbb R\}$.</p>
+  <ul>
+    <li><b>Paramétricas:</b> $x_1=\lambda+2\mu,\ x_2=0,\ x_3=\lambda+\mu$ (los parámetros son los coeficientes de la combinación).</li>
+    <li><b>Cartesiana:</b> $x_2=0$ (la única condición que cumplen todos los vectores: $x_1$ y $x_3$ pueden valer cualquier cosa).</li>
+    <li><b>Geométricamente:</b> el plano $x_2=0$. Cada vector suyo es la diagonal de un paralelogramo cuyos lados son ampliaciones o reducciones de $(1,0,1)$ y $(2,0,1)$.</li>
+  </ul>
+  <figure>
+  <svg class="fig" viewBox="0 0 300 220" role="img" aria-label="Plano x2=0 visto de frente (ejes x1 y x3): los vectores u1=(1,0,1), u2=(2,0,1), la diagonal u1+u2=(3,0,2) y el vector 1·u1+2·u2=(5,0,3)">
+    <line class="ax" x1="30" y1="190" x2="290" y2="190"></line><line class="ax" x1="30" y1="190" x2="30" y2="14"></line>
+    <line class="th" x1="70" y1="150" x2="150" y2="110" stroke-dasharray="6 5"></line>
+    <line class="th" x1="110" y1="150" x2="150" y2="110" stroke-dasharray="6 5"></line>
+    <line class="a" x1="30" y1="190" x2="70" y2="150"></line>
+    <line class="b" x1="30" y1="190" x2="110" y2="150"></line>
+    <line class="th" x1="30" y1="190" x2="230" y2="70" stroke-dasharray="2 4"></line>
+    <circle class="pt" cx="70" cy="150" r="4"></circle><circle class="pt" cx="110" cy="150" r="4"></circle>
+    <circle class="op" cx="150" cy="110" r="4"></circle><circle class="op" cx="230" cy="70" r="4"></circle>
+    <text class="lg" x="60" y="140" text-anchor="end">u₁=(1,0,1)</text>
+    <text class="lg" x="116" y="170">u₂=(2,0,1)</text>
+    <text class="lg" x="142" y="102" text-anchor="end">u₁+u₂</text>
+    <text class="lg" x="238" y="58" text-anchor="end">u₁+2u₂=(5,0,3)</text>
+    <text class="sm" x="286" y="206" text-anchor="end">x₁</text><text class="sm" x="18" y="24">x₃</text>
+    <text class="sm" x="150" y="16" text-anchor="middle">Plano x₂ = 0 visto de frente</text>
+  </svg>
+  <figcaption>El plano $x_2=0$ visto de frente (ejes $x_1,x_3$). Con $u_1=(1,0,1)$ y $u_2=(2,0,1)$ se llega a cualquier punto del plano; por ejemplo $(5,0,3)=u_1+2u_2$. Figura propia. <span class="src" data-l="P" data-ref="Figura propia para el Ejemplo 2.15 de U, p. 71">P</span></figcaption>
+  </figure>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.15, p. 71-72">U p.71-72</span>
+</div>
+
+<div class="box thm"><span class="h">Dos hechos importantes</span>
+  <ul>
+    <li><b>$\langle S\rangle$ es el subespacio más pequeño que contiene a $S$:</b> cualquier subespacio que contenga a los vectores de $S$ contiene también todas sus combinaciones lineales. (En el ejemplo, el plano $x_2=0$ es lo mínimo que contiene a $(1,0,1)$ y $(2,0,1)$.)</li>
+    <li><b>Un subespacio tiene infinitos sistemas generadores.</b> No hay un único «catálogo de ingredientes»: se puede cambiar de generadores sin cambiar el subespacio.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §2.2.2, subespacio más pequeño e infinitos sistemas generadores, p. 72">U p.72</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.16 — dos sistemas distintos, el mismo plano</span>
+  <p>$S'=\{(1,0,1),(3,0,2)\}$ genera <b>el mismo</b> subespacio que $S=\{(1,0,1),(2,0,1)\}$: $\langle S\rangle=\langle S'\rangle$. U lo razona así: los vectores de $\langle S'\rangle$ son $(\lambda+3\mu,\ 0,\ \lambda+2\mu)$ con $\lambda,\mu$ cualesquiera, así que $x_1,x_3$ son libres y la única condición es $x_2=0$: las mismas ecuaciones cartesianas y paramétricas «en esencia».</p>
+  <p><i>Comprobación directa (propia):</i> $(3,0,2)=(1,0,1)+(2,0,1)$ y $(2,0,1)=-(1,0,1)+(3,0,2)$ ($(-1+3,\,0,\,-1+2)=(2,0,1)$ ✓). Cada generador de un sistema es combinación lineal de los del otro.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.16, p. 72">U p.72</span>
+</div>
+
+<div class="box def"><span class="h">Sistemas de generadores equivalentes</span>
+  <p>Cuando dos sistemas de vectores generan el <b>mismo</b> subespacio se llaman <b>sistemas de generadores equivalentes</b>. Así, $S$ y $S'$ del ejemplo anterior son equivalentes.</p>
+  <span class="src" data-l="U" data-ref="U §2.2.2, sistemas de generadores equivalentes, p. 73">U p.73</span>
+</div>
+
+<div class="box tip"><span class="h">Cartesianas ↔ paramétricas: dos formas de dar un subespacio</span>
+  <ul>
+    <li><b>De cartesianas a generadores</b> (el problema más frecuente): resuelve el sistema homogéneo, escribe la solución general con parámetros y separa «lo que multiplica a cada parámetro»: cada uno es un vector generador. Ej.: $x_1+x_2+x_3=0$ da $(x_1,x_2,-x_1-x_2)=x_1(1,0,-1)+x_2(0,1,-1)$, luego $\langle(1,0,-1),(0,1,-1)\rangle$ es ese plano.</li>
+    <li><b>De generadores a cartesianas</b>: escribe $(x_1,x_2,x_3)=\lambda u_1+\mu u_2$ y elimina los parámetros (en el Ej. U 2.15 resultó $x_2=0$).</li>
+  </ul>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo resuelto — de generadores a cartesianas: $\langle(1,0,-1),(0,1,-1)\rangle$</span>
+  <p>Es el plano que en el Ejercicio 2.17-B se obtuvo desde $x_1+x_2+x_3=0$; hacemos ahora el camino inverso. Queremos las condiciones que cumple $x=(x_1,x_2,x_3)$ para estar en $\langle u_1,u_2\rangle$, con $u_1=(1,0,-1)$, $u_2=(0,1,-1)$.</p>
+  <ol class="steps">
+    <li><b>Plantear la pertenencia</b> (Def. 2.4): $x=\lambda u_1+\mu u_2$, es decir, $\lambda=x_1,\ \mu=x_2,\ -\lambda-\mu=x_3$ (incógnitas $\lambda,\mu$; los $x_i$ son datos).</li>
+    <li><b>Condición de compatibilidad</b> (Rouché-Frobenius). Con $u_1,u_2$ en columnas, $A=\begin{pmatrix}1&0\\0&1\\-1&-1\end{pmatrix}$ tiene $\operatorname{rang}A=2$ (el menor de las dos primeras filas vale $1$). El sistema es compatible $\iff\operatorname{rang}A=\operatorname{rang}(A\mid x)$, es decir, $\operatorname{rang}(A\mid x)=2$ y, como $(A\mid x)$ es cuadrada $3\times3$, su determinante debe anularse:
+      $$\begin{vmatrix}1&0&x_1\\0&1&x_2\\-1&-1&x_3\end{vmatrix}=1\cdot(x_3+x_2)-0+x_1\cdot(0+1)=x_1+x_2+x_3=0.$$</li>
+    <li><b>Vía alternativa (eliminar parámetros).</b> De las dos primeras ecuaciones $\lambda=x_1$, $\mu=x_2$; sustituyendo en la tercera, $x_3=-x_1-x_2$, o sea $x_1+x_2+x_3=0$. Mismo resultado, sin determinantes.</li>
+    <li><b>Conclusión.</b> $\langle(1,0,-1),(0,1,-1)\rangle=\{x_1+x_2+x_3=0\}$: dos generadores libres en $\mathbb R^3$ dan $3-2=1$ ecuación cartesiana.</li>
+  </ol>
+  <p><i>Receta:</i> con generadores libres $u_1,\dots,u_k$ en $\mathbb R^n$, $x\in\langle u_i\rangle\iff\operatorname{rang}(A\mid x)=k$, lo que da $n-k$ ecuaciones (anular los menores de orden $k+1$ que contienen un menor no nulo de $A$). Es el sentido inverso del Ejercicio 2.17.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; enlaza con E Ej. 2.17, p. 60">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que los generadores de un subespacio dado por ecuaciones son los <b>coeficientes</b> de las ecuaciones. Para $x_1+x_2+x_3=0$ el vector de coeficientes $(1,1,1)$ ni siquiera está en el plano ($1+1+1=3\neq0$). Un generador de $U$ debe <b>estar en $U$</b>: él mismo es combinación lineal de sí mismo.</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Dependencia e independencia lineal <span class="src" data-l="U" data-ref="U §2.2.2-2.2.3 Definiciones 2.5 y 2.6, p. 73-75">U p.73-75</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>En el sistema $\{(1,0,1),(2,0,1),(3,0,2)\}$ el tercer vector no aporta nada: ya se obtiene como $(1,0,1)+(2,0,1)$. Es un <b>vector redundante</b>, un ingrediente que puedes preparar con los otros. Un sistema con algún vector redundante es <b>ligado</b> (linealmente dependiente); si cada vector aporta una dirección nueva y ninguno se obtiene con los demás, es <b>libre</b> (linealmente independiente). En $\mathbb R^2$: dos vectores son ligados si están sobre la <b>misma recta</b> por el origen; libres si no.</p>
+</div>
+
+<figure>
+  <div class="figpair">
+  <svg class="fig" viewBox="0 0 230 210" role="img" aria-label="Dos vectores de R2 no alineados, u=(2,1) y v=(1,2): sistema libre; su suma forma un paralelogramo">
+    <line class="ax" x1="20" y1="180" x2="220" y2="180"></line><line class="ax" x1="20" y1="180" x2="20" y2="24"></line>
+    <line class="th" x1="120" y1="130" x2="170" y2="30" stroke-dasharray="6 5"></line><line class="th" x1="70" y1="80" x2="170" y2="30" stroke-dasharray="6 5"></line>
+    <line class="a" x1="20" y1="180" x2="120" y2="130"></line><line class="b" x1="20" y1="180" x2="70" y2="80"></line>
+    <circle class="pt" cx="120" cy="130" r="4"></circle><circle class="pt" cx="70" cy="80" r="4"></circle>
+    <text class="lg" x="126" y="152">u=(2,1)</text><text class="lg" x="62" y="72" text-anchor="end">v=(1,2)</text>
+    <text class="lg" x="115" y="16" text-anchor="middle">Libre: llegas a todo R²</text>
+  </svg>
+  <svg class="fig" viewBox="0 0 230 210" role="img" aria-label="Dos vectores de R2 sobre la misma recta, u=(1,1) y v=(2,2): sistema ligado, solo se llega a esa recta">
+    <line class="ax" x1="20" y1="180" x2="220" y2="180"></line><line class="ax" x1="20" y1="180" x2="20" y2="24"></line>
+    <line class="th" x1="20" y1="180" x2="190" y2="10" stroke-dasharray="3 5"></line>
+    <line class="b" x1="20" y1="180" x2="120" y2="80"></line><line class="a" x1="20" y1="180" x2="70" y2="130"></line>
+    <circle class="pt" cx="70" cy="130" r="4"></circle><circle class="pt" cx="120" cy="80" r="4"></circle>
+    <text class="lg" x="62" y="152" text-anchor="end">u=(1,1)</text><text class="lg" x="128" y="84">v=(2,2)=2u</text>
+    <text class="lg" x="115" y="16" text-anchor="middle">Ligado: solo una recta</text>
+  </svg>
+  </div>
+  <figcaption>Izquierda: $u=(2,1)$ y $v=(1,2)$ no están alineados; combinándolos se alcanza todo el plano. Derecha: $v=2u$ (ambos dibujados desde el origen: $u$ solapa la primera mitad de $v$); la combinación $2u-v=0$ es una relación de dependencia y todas las mezclas caen en la recta $y=x$. Figura propia. <span class="src" data-l="P" data-ref="Figura propia, ilustra las Definiciones 2.5 y 2.6 de U, p. 73-74">P</span></figcaption>
+</figure>
+
+<div class="box def"><span class="h">Definición 2.5 — sistema ligado (linealmente dependiente)</span>
+  <p>$S=\{u_1,\dots,u_p\}$ es <b>linealmente dependiente o ligado</b> si <b>al menos uno</b> de sus vectores es combinación lineal de los otros vectores de $S$.</p>
+  <p><b>Caracterización</b> (la que se usa en la práctica): $S$ es ligado si y solo si existen $\lambda_1,\dots,\lambda_p$ <b>no todos nulos</b> tales que
+  $$0=\lambda_1u_1+\lambda_2u_2+\dots+\lambda_pu_p.$$
+  <i>Por qué:</i> si $u_i=\sum_{j\neq i}\lambda_ju_j$, pasando $u_i$ al otro lado queda $0=\dots-u_i+\dots$ con el coeficiente de $u_i$ igual a $-1\neq0$. Al revés, si algún $\lambda_i\neq0$, se multiplica por $1/\lambda_i$ y se despeja $u_i$. Una igualdad así se llama una <b>relación de dependencia</b>.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.5 y caracterización de vectores linealmente dependientes, p. 73">U p.73</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, definición de dependencia lineal y relación de dependencia, p. 208">L p.208</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.17 — un sistema con el vector cero es ligado</span>
+  <p>$A=\{(1,2,0),(0,0,0),(4,5,6)\}$ es ligado, porque $0\cdot(1,2,0)+\mu\cdot(0,0,0)+0\cdot(4,5,6)=(0,0,0)$ para <b>cualquier $\mu\neq0$</b>, por ejemplo $\mu=1$: hay una combinación nula con un coeficiente distinto de cero. En general: <b>si $0$ pertenece a un sistema, este es ligado</b>, ya que $\lambda\cdot0=0$ para cualquier $\lambda$, así que el coeficiente del vector nulo puede ser $\neq0$ sin que importen los demás.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.17 y observación «si 0 pertenece a un sistema S, éste es ligado», p. 73-74">U p.73-74</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, «cualquier conjunto que contenga al vector cero es linealmente dependiente», p. 208">L p.208</span>
+</div>
+
+<div class="box def"><span class="h">Definición 2.6 — sistema libre (linealmente independiente)</span>
+  <p>$S=\{u_1,\dots,u_p\}$ es <b>linealmente independiente o libre</b> si <b>no</b> es ligado, es decir, si ninguno de los $u_i$ depende linealmente de los otros.</p>
+  <p><b>Caracterización</b> (la más útil en los ejercicios): $S$ es libre si y solo si
+  $$0=\lambda_1u_1+\lambda_2u_2+\dots+\lambda_pu_p\ \Longrightarrow\ \lambda_1=\dots=\lambda_p=0,$$
+  es decir, el sistema homogéneo $\sum\lambda_iu_i=0$ solo tiene la solución nula.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.6 y caracterización de vectores linealmente independientes, p. 74">U p.74</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, definición de independencia lineal en un espacio vectorial, p. 208">L p.208</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.18 — dos sistemas libres</span>
+  <ul>
+    <li>$B=\{(1,0,0,0),(0,1,0,0),(0,0,1,0),(0,0,0,1)\}$: $\lambda(1,0,0,0)+\mu(0,1,0,0)+\gamma(0,0,1,0)+\delta(0,0,0,1)=(\lambda,\mu,\gamma,\delta)=0\Rightarrow\lambda=\mu=\gamma=\delta=0$. <b>Libre.</b></li>
+    <li>$C=\{(1,4,7),(5,-3,4)\}$: $\lambda(1,4,7)+\mu(5,-3,4)=0$ da $\lambda+5\mu=0,\ 4\lambda-3\mu=0,\ 7\lambda+4\mu=0$. De las dos primeras: $\lambda=-5\mu$ y $-20\mu-3\mu=-23\mu=0$, luego $\mu=0=\lambda$. <b>Libre.</b></li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.18, p. 75">U p.75</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.20 — libre o ligado en un espacio de funciones</span>
+  <p>En $F=\{f:[0,2]\to\mathbb R\}$, ¿es libre $W=\{e^{3x},\,x^3,\,x\}$? Plantea $\lambda e^{3x}+\beta x^3+\gamma x=0$, igualdad que debe valer <b>para todo</b> $x\in[0,2]$; sustituyendo valores de $x$ salen ecuaciones en $\lambda,\beta,\gamma$:</p>
+  <ol class="steps">
+    <li>$x=0$: $\lambda e^0=\lambda=0$.</li>
+    <li>$x=1$ (con $\lambda=0$): $\beta+\gamma=0$. $x=2$: $8\beta+2\gamma=0$.</li>
+    <li>De las dos últimas, $\gamma=-\beta$ y $8\beta-2\beta=6\beta=0$, luego $\beta=\gamma=0$. Solo la solución trivial: <b>$W$ es libre</b> (rango 3).</li>
+  </ol>
+  <p>Cuando los «vectores» son funciones no hay columnas ni matriz: se usa directamente la caracterización de sistema libre, y se eligen valores de $x$ convenientes (basta con que den suficientes ecuaciones para forzar los coeficientes a cero).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.20, p. 77-78">U p.77-78</span>
+</div>
+
+<div class="box thm"><span class="h">Lema práctico: «libre + uno más ligado ⇒ ese uno depende»</span>
+  <p>Si $S=\{u_1,\dots,u_p\}$ es <b>libre</b> y $S\cup\{w\}$ es <b>ligado</b>, entonces $w\in\langle S\rangle$.</p>
+  <p><i>Demostración.</i> Hay $\alpha,\lambda_1,\dots,\lambda_p$ no todos nulos con $\alpha w+\lambda_1u_1+\dots+\lambda_pu_p=0$. Si fuese $\alpha=0$, quedaría $\sum\lambda_iu_i=0$ con algún $\lambda_i\neq0$, lo que contradice que $S$ sea libre. Luego $\alpha\neq0$ y $w=-\frac{\lambda_1}{\alpha}u_1-\dots-\frac{\lambda_p}{\alpha}u_p$. $\square$ El recíproco es inmediato (Def. 2.5).</p>
+  <p><b>Consecuencia:</b> con $S$ libre, «$w\in\langle S\rangle$» $\iff$ «$S\cup\{w\}$ ligado» $\iff$ rango de $S\cup\{w\}$ menor que el número de sus vectores. Cuando hay tantos vectores como dimensión del ambiente ($n$ vectores de $\mathbb R^n$) basta con <b>determinante $=0$</b>. <b>Ojo:</b> sin la hipótesis «$S$ libre» el lema es falso: $\{(1,0),(2,0),(0,1)\}$ es ligado y sin embargo $(0,1)\notin\langle(1,0),(2,0)\rangle$.</p>
+  <span class="src" data-l="P" data-ref="Lema demostrado con las caracterizaciones de U, p. 73-74; resultado propio, sin página">P</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Teorema 4 (resultado relacionado: conjunto dependiente ⇔ algún v_j es combinación de los anteriores), p. 208">L p.208</span>
+</div>
+
+<div class="box tip"><span class="h">Atajos para sistemas pequeños</span>
+  <ul>
+    <li><b>Un vector</b> $\{v\}$: libre $\iff v\neq0$.</li>
+    <li><b>Dos vectores</b>: ligados $\iff$ uno es múltiplo del otro (cuidado: si uno es $0$, es múltiplo del otro).</li>
+    <li><b>Más de $n$ vectores en $\mathbb R^n$ son siempre ligados</b>: el sistema homogéneo $\sum\lambda_iu_i=0$ tiene $n$ ecuaciones y más de $n$ incógnitas, luego por Rouché es compatible indeterminado y hay soluciones no nulas.</li>
+    <li><b>Con el vector $0$ dentro</b>: siempre ligado.</li>
+  </ul>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que «ligado» significa que <b>todo</b> vector depende de los demás: basta con que lo haga <b>uno</b> (en $\{(1,0),(2,0),(0,1)\}$, $(0,1)$ no depende de los otros dos, pero el sistema es ligado). Y confundir «libre» con «generador»: son propiedades independientes (§5).</p>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Rango de un sistema de vectores <span class="src" data-l="U" data-ref="U §2.2.3 Definición 2.7, p. 78">U p.78</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>El <b>rango</b> cuenta cuántos vectores «de verdad» hay en un sistema, es decir, cuántas direcciones independientes aporta, descontando los redundantes. En $\{(1,0,1),(2,0,1),(3,0,2)\}$ hay 3 vectores pero solo 2 aportan algo: el rango es 2.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 2.7 — rango de un sistema</span>
+  <p>El <b>rango</b> de $\{u_1,\dots,u_p\}\subset V$ es el <b>mayor número de vectores linealmente independientes</b> que contiene el sistema; se escribe $\operatorname{rang}\{u_1,\dots,u_p\}$. Su relación con la independencia es:
+  $$\text{Un sistema de }p\text{ vectores es libre}\iff\operatorname{rang}=p.$$
+  En los ejemplos de U: $B$, $C$ y $W$ (Ej. U 2.18 y 2.20) tienen rangos 4, 2 y 3.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.7 y caracterización por el rango, p. 78">U p.78</span>
+</div>
+
+<div class="box thm"><span class="h">Cómo se calcula (resultado de §2.3 que conviene adelantar)</span>
+  <p>El <b>rango del sistema</b> de vectores de $\mathbb R^n$ es el <b>rango de la matriz</b> que tiene por filas (o por columnas) las coordenadas de esos vectores (U p.88). Por tanto se calcula escalonando por Gauss (U p.22) o buscando el mayor menor no nulo (U p.27).</p>
+  <span class="src" data-l="U" data-ref="U §2.3.3, Teorema 2.5 y rango del sistema = rango de la matriz, p. 88 (adelanto de §2.3)">U p.88</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo — escalonar $\{(1,0,1),(2,0,1),(3,0,2)\}$</span>
+  <p>Vectores en <b>filas</b>, sin intercambiar filas:
+  $$\begin{pmatrix}1&0&1\\2&0&1\\3&0&2\end{pmatrix}\ \xrightarrow{F_2\to F_2-2F_1,\ F_3\to F_3-3F_1}\ \begin{pmatrix}1&0&1\\0&0&-1\\0&0&-1\end{pmatrix}\ \xrightarrow{F_3\to F_3-F_2}\ \begin{pmatrix}1&0&1\\0&0&-1\\0&0&0\end{pmatrix}.$$
+  Primero se resta a cada fila el múltiplo de $F_1$ que anula su primera entrada; después se resta $F_2$ de $F_3$ porque quedaron iguales. Hay 2 filas no nulas: <b>rango 2</b>, sistema ligado (3 vectores). La fila nula es la 3.ª: $v_3$ depende de $v_1,v_2$ (en efecto $v_3=v_1+v_2$) y $\langle S\rangle=\langle v_1,v_2\rangle$, el plano $x_2=0$.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio con los vectores de los Ej. U 2.14-2.16 (U p.70-72), verificado con sympy">P</span>
+</div>
+
+<div class="recipe"><b>Receta «¿libre o ligado?» y «rango» en $\mathbb R^n$:</b>
+  <ol>
+    <li>Escribe los vectores como <b>filas</b> de una matriz. Con filas o con columnas el <b>rango</b> es el mismo, pero para <b>leer el subespacio generado o qué vectores sobran</b> hay que poner los vectores en FILAS y <b>no permutar</b> filas (cada fila nula corresponde a su vector). Con columnas solo se conserva el rango: las operaciones de fila cambian las columnas (L p.212).</li>
+    <li>Escalona (las operaciones de fila no cambian el subespacio generado por las filas ni el rango). El rango es el número de filas no nulas.</li>
+    <li>Si rango $=p$ (nº de vectores): <b>libre</b>. Si rango $\lt p$: <b>ligado</b>, y las filas que se anulan señalan qué vectores dependen de los demás.</li>
+    <li>Si hay tantos vectores como la dimensión ($n$ vectores de $\mathbb R^n$) basta el determinante: libre $\iff\det\neq0$.</li>
+    <li>Con parámetros: escalona dejando los parámetros para el final; el rango baja cuando se anula una fila <b>entera</b> (ver Examen 6).</li>
+  </ol>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Supresión y sustitución en un sistema generador <span class="src" data-l="U" data-ref="U §2.2.3 Teoremas 2.1 y 2.2 y Ejemplos 2.21-2.23, p. 79-80">U p.79-80</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Dos cambios que <b>no alteran lo que se puede fabricar</b>: (1) tirar un ingrediente que se puede preparar con los demás (<b>supresión</b>); (2) cambiar un ingrediente por una mezcla en la que él mismo interviene (<b>sustitución</b>). Si un ingrediente se puede preparar con los demás, tenerlo o no tenerlo da exactamente los mismos resultados; si se sustituye sin cuidado, en cambio, se pueden perder resultados (ver el ejemplo de los colores tras el Teorema 2.2).</p>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.1 — supresión de vectores de un sistema generador</span>
+  <p>Si $G=\{u_1,\dots,u_p\}$ es un sistema generador de $V$ y un $u_i$ es combinación lineal de los otros vectores de $G$, entonces $G_1=G\setminus\{u_i\}$ genera también $V$: $\langle G\rangle=\langle G_1\rangle=V$. Es decir, se puede prescindir de los vectores que dependen de otros del sistema.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.1, p. 79">U p.79</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Teorema 5 (del conjunto generador), p. 210">L p.210</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.21 — suprimir un vector</span>
+  <p>$G=\{(0,1),(3,0),(0,2)\}$ sigue generando lo mismo si se suprime $(0,2)$, porque $(0,2)=2(0,1)+0\cdot(3,0)$. Ambos, $G$ y $G_1=\{(0,1),(3,0)\}$, generan $\mathbb R^2$. Cualquier vector de $\mathbb R^2$ se expresa con los de $G$, aunque no de forma única.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.21, p. 79">U p.79</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.2 — sustitución de vectores de un sistema generador</span>
+  <p>Si $v\in V$ es combinación lineal de los vectores de un sistema generador $G=\{u_1,\dots,u_p\}$ de $V$, y en esa combinación el vector $u_{i_j}$ tiene coeficiente <b>distinto de cero</b>, entonces al <b>sustituir</b> $u_{i_j}$ por $v$ el sistema obtenido sigue generando $V$. En palabras: en un sistema generador se puede sustituir un vector por cualquier combinación lineal de los vectores del sistema donde <b>él intervenga con coeficiente no nulo</b>.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.2, p. 79">U p.79</span>
+</div>
+
+<div class="box intu"><span class="h">Ej. U 2.22 — los colores de la pantalla</span>
+  <p>Los colores de la pantalla de un monitor se obtienen como combinación lineal de <b>rojo, verde y azul</b>: con esos tres ingredientes se fabrica cualquier color. Si se cambia el verde por el <b>morado</b>, que es una mezcla de rojo y azul (el verde interviene en ella con coeficiente $0$), el sistema {rojo, azul, morado} <b>ya no genera todos los colores</b>: el morado no aporta nada que no se obtuviera con rojo y azul. Es el aviso del Teorema 2.2: se puede sustituir un vector por una mezcla solo si el vector que se quita <b>interviene en ella con coeficiente no nulo</b>.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.22, p. 79">U p.79</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.23 — sustituir sí, pero solo con coeficiente no nulo</span>
+  <p>$G=\{(1,0,0),(0,1,0)\}$ genera el plano $x_3=0$. Sea $v=2(1,0,0)+0\cdot(0,1,0)=(2,0,0)$.</p>
+  <ul>
+    <li>$v$ <b>sí puede sustituir a $(1,0,0)$</b> (su coeficiente en $v$ es $2\neq0$): $G_1=\{(2,0,0),(0,1,0)\}$ sigue generando el plano $x_3=0$.</li>
+    <li>$v$ <b>no puede sustituir a $(0,1,0)$</b> (su coeficiente es $0$): $G_2=\{(1,0,0),(2,0,0)\}$ solo genera la <b>recta</b> $x_2=x_3=0$.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.23, p. 80">U p.80</span>
+</div>
+
+<div class="box thm"><span class="h">Relación entre sistemas libres y sistemas generadores</span>
+  <p>Si $\{v_1,\dots,v_h\}$ es un sistema <b>libre</b> que genera $V$ y $\{u_1,\dots,u_p\}$ es <b>otro</b> sistema generador de $V$, entonces $h\le p$. En palabras: un sistema generador libre tiene tantos vectores o menos que cualquier otro sistema generador. <i>Ejemplo:</i> $\{e_1,e_2,e_3\}$ es libre y genera $\mathbb R^3$; luego cualquier sistema generador de $\mathbb R^3$ tiene al menos 3 vectores y <b>dos vectores nunca generan $\mathbb R^3$</b>. U cierra con la observación de que con un sistema finito se obtienen infinitos vectores del espacio.</p>
+  <span class="src" data-l="U" data-ref="U §2.2.3, relación entre los sistemas libres y los sistemas generadores, p. 81">U p.81</span>
+</div>
+
+<div class="box intu"><span class="h">Lay, en una línea</span>
+  <p>Lay llama a la supresión «teorema del conjunto generador»: si un vector del conjunto depende de los demás, se puede quitar sin perder nada, y repitiendo el proceso se llega a un conjunto libre con el mismo $\langle\cdot\rangle$. Su Ejemplo 7 (p.210) lo ilustra con $v_3=5v_1+3v_2$: $\operatorname{Gen}\{v_1,v_2,v_3\}=\operatorname{Gen}\{v_1,v_2\}$. Además advierte que las columnas de una forma escalonada «a menudo no están en el espacio columna» de la matriz original: cuidado al mezclar filas y columnas (Tema 2.3).</p>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Teorema 5 y Ejemplo 7, p. 210">L p.210</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Advertencia tras el Ejemplo 9 (columnas de una forma escalonada), p. 212">L p.212</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>(1) Sustituir un vector por una combinación en la que su coeficiente es $0$ (Ej. U 2.23). (2) Al suprimir <b>varios</b> vectores a la vez, comprobar que cada uno depende de los demás usando precisamente los que también se van a quitar: hay que suprimir <b>de uno en uno</b> y expresar cada vector con los que <b>se quedan</b>. (3) Pensar que $p$ generadores generan un subespacio «de tamaño $p$»: el tamaño real es el rango.</p>
+</div>
+
+<div class="box intu"><span class="h">Dónde sigue esto</span>
+  <p>Un sistema <b>libre y generador</b> a la vez se llama <b>base</b>: es el sistema generador «sin vectores sobrantes» y se estudia en el tema 2.3. Aquí solo hace falta saber que libre y generador son propiedades <b>independientes</b>.</p>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="ejercicios"><span class="n">6</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §2.2, p. 57-63">E p.57-63</span></h2>
+
+<p>E tiene 8 ejercicios en esta sección (2.15 a 2.22, pp. 58-63) y se resuelven <b>todos</b>. Orden sugerido de fácil a difícil: 2.15 → 2.22 → 2.16 → 2.19 → 2.20 → 2.17 → 2.18 → 2.21. La idea común: <b>«¿es $w$ combinación lineal de…?» $=$ «¿tiene solución el sistema $\sum\lambda_iu_i=w$?»</b>.</p>
+
+<details class="sol" id="ej2-15"><summary>Ejercicio 2.15 — ¿es $(2,3,0)$ combinación lineal de cada par? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.15, p. 58">E p.58</span></summary>
+  <p class="enun">Se pide comprobar si es cierto que el vector $(2,3,0)$ es combinación lineal de los pares de vectores siguientes y, en su caso, la combinación lineal que lo genera: A) $(0,0,1)$ y $(0,1,0)$. B) $(1,0,0)$ y $(0,1,0)$. C) $(1,0,0)$ y $(0,0,1)$.</p>
+  <ol class="steps">
+    <li><b>Qué hay que comprobar.</b> Por la Def. 2.3 (U p.70), $(2,3,0)$ es combinación lineal de $u,v$ si <b>existen</b> $\alpha,\beta$ con $(2,3,0)=\alpha u+\beta v$. Se plantea esa igualdad en cada apartado y se mira si el sistema tiene solución.</li>
+    <li><b>A.</b> $(2,3,0)=\alpha(0,0,1)+\beta(0,1,0)=(0,\beta,\alpha)$:
+      $$\begin{cases}2=0\\ 3=\beta\\ 0=\alpha\end{cases}$$
+      La 1.ª ecuación dice $2=0$, falsa <b>para cualquier</b> $\alpha,\beta$: sistema incompatible, <b>no</b> es combinación lineal. <i>Por qué:</i> los dos vectores tienen primera componente $0$ y cualquier mezcla de ellos también; $(2,3,0)$ tiene un $2$. <b>A es falsa.</b></li>
+    <li><b>B.</b> $(2,3,0)=\alpha(1,0,0)+\beta(0,1,0)=(\alpha,\beta,0)$:
+      $$\begin{cases}2=\alpha\\ 3=\beta\\ 0=0\end{cases}$$
+      La 3.ª se cumple siempre y las otras dan $\alpha=2,\ \beta=3$. <b>B es cierta:</b> $(2,3,0)=2(1,0,0)+3(0,1,0)$ (comprobación: $(2,0,0)+(0,3,0)=(2,3,0)$ ✓).</li>
+    <li><b>C.</b> $(2,3,0)=\alpha(1,0,0)+\beta(0,0,1)=(\alpha,0,\beta)$: la 2.ª ecuación es $3=0$, imposible (los dos vectores tienen segunda componente $0$). <b>C es falsa.</b></li>
+  </ol>
+  <p><b>Resultado:</b> solo B. <i>(Verificado con sympy: sin solución en A y C, solución $(2,3)$ en B.)</i></p>
+  <div class="recipe"><b>Receta:</b> para saber si $w$ es combinación lineal de $u_1,\dots,u_p$: escribe $w=\lambda_1u_1+\dots+\lambda_pu_p$, iguala componente a componente y resuelve. Si sale una ecuación imposible ($2=0$) no lo es; si hay solución, los $\lambda_i$ son los coeficientes.</div>
+  <p><b>Error típico:</b> resolver solo las ecuaciones «con incógnitas» y olvidar la que no tiene ninguna ($2=0\alpha+0\beta$): es justo la que decide.</p>
+  <p><b>Teoría:</b> Def. 2.3, U p.70</p>
+</details>
+
+<details class="sol" id="ej2-16"><summary>Ejercicio 2.16 — tres opciones para generar $(2,3,2)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.16, p. 59">E p.59</span></summary>
+  <p class="enun">Se pide encontrar entre las opciones siguientes las combinaciones lineales que generan el vector $(2,3,2)$: A) $(1,1,1)$, $(2,0,2)$ y $(3,4,3)$. B) $(1,1,1)$ y $(3,4,3)$. C) $(2,0,2)$ y $(3,4,3)$.</p>
+  <p>Notación: $u_1=(1,1,1)$, $u_2=(2,0,2)$, $u_3=(3,4,3)$, $w=(2,3,2)$.</p>
+  <ol class="steps">
+    <li><b>Planteamiento.</b> En cada opción, ¿existen coeficientes con $w$ igual a la combinación? (Def. 2.3, U p.70).</li>
+    <li><b>Apartado A.</b> $w=\alpha u_1+\beta u_2+\gamma u_3$ da
+      $$\begin{cases}\alpha+2\beta+3\gamma=2\\ \alpha+4\gamma=3\\ \alpha+2\beta+3\gamma=2\end{cases}$$
+      La 3.ª es idéntica a la 1.ª, quedan 2 ecuaciones independientes y 3 incógnitas: compatible indeterminado (Rouché, U p.30: $\operatorname{rang}A=\operatorname{rang}(A\mid b)=2\lt3$, 1 parámetro). De la 2.ª, $\alpha=3-4\gamma$; en la 1.ª, $3-4\gamma+2\beta+3\gamma=2\Rightarrow\beta=\frac{\gamma-1}{2}$. Solución general $(\alpha,\beta,\gamma)=\big(3-4\gamma,\ \tfrac{\gamma-1}{2},\ \gamma\big)$. Con $\gamma=-1$: $(2,3,2)=7u_1-u_2-u_3$ (comprobación: $(7-2-3,\ 7-0-4,\ 7-2-3)=(2,3,2)$ ✓). <b>A genera $w$</b>, de infinitas maneras.</li>
+    <li><b>Apartado B.</b> $w=\alpha u_1+\gamma u_3$: $\alpha+3\gamma=2,\ \alpha+4\gamma=3$ (la 3.ª repite la 1.ª). Restando: $\gamma=1$, $\alpha=-1$. $(2,3,2)=-u_1+u_3$ (comprobación $(-1+3,-1+4,-1+3)$ ✓). <b>B genera $w$.</b> <i>(E lo obtiene tomando $\gamma=1$ en la solución general de A, que da $\beta=0$; es correcto, pero conviene saber resolverlo directamente.)</i></li>
+    <li><b>Apartado C.</b> $w=\beta u_2+\gamma u_3$: $2\beta+3\gamma=2,\ 4\gamma=3$. $\gamma=\frac34$, $2\beta=2-\frac94=-\frac14$, $\beta=-\frac18$. $(2,3,2)=-\frac18u_2+\frac34u_3$ (comprobación: $\big(-\frac14+\frac94,\ 3,\ -\frac14+\frac94\big)=(2,3,2)$ ✓). <b>C genera $w$.</b></li>
+    <li><b>Conclusión:</b> las <b>tres</b> opciones generan $(2,3,2)$.</li>
+    <li><b>Consecuencia: $\{u_1,u_2,u_3\}$ es ligado.</b> En A hay <b>dos</b> expresiones distintas de $w$, con $(\alpha,\beta,\gamma)=(7,-1,-1)$ y $(-1,0,1)$. Restándolas: $0=8u_1-u_2-2u_3$, con coeficientes no todos nulos (comprobación: $8(1,1,1)-(2,0,2)-2(3,4,3)=(0,0,0)$ ✓). Por la caracterización de ligado (U p.73) el sistema es dependiente; por ejemplo $u_2=8u_1-2u_3$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> si al resolver $w=\sum\lambda_iu_i$ el sistema es compatible <b>indeterminado</b>, $w$ se escribe de infinitas maneras y $\{u_i\}$ es ligado; la diferencia de dos soluciones da una relación $0=\sum c_iu_i$ no trivial.</div>
+  <p><b>Error típico:</b> creer que los coeficientes de una combinación lineal son únicos; solo lo están cuando los vectores son libres.</p>
+  <p><b>Teoría:</b> Def. 2.3, U p.70 · caracterización de ligado, U p.73</p>
+</details>
+
+<details class="sol" id="ej2-17"><summary>Ejercicio 2.17 — ¿genera esto el plano $x_1+x_2+x_3=0$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.17, p. 60">E p.60</span></summary>
+  <p class="enun">Se pide comprobar si el subespacio vectorial de $\mathbb R^3$, $U:\ x_1+x_2+x_3=0$, puede ser generado por: A) $\{(1,0,-1)\}$. B) $\{(1,0,-1),(0,1,-1)\}$. C) $\{(0,1,0)\}$.</p>
+  <ol class="steps">
+    <li><b>Qué significa «$T$ genera $U$».</b> $U=\langle T\rangle$ es una igualdad de conjuntos: hay que probar <b>dos inclusiones</b>.
+      <ul>
+        <li>(i) $\langle T\rangle\subset U$: basta ver que <b>cada vector de $T$ está en $U$</b> (como $U$ es subespacio y $\langle T\rangle$ es el más pequeño que contiene a $T$, U p.72).</li>
+        <li>(ii) $U\subset\langle T\rangle$: todo vector de $U$ es combinación lineal de los de $T$.</li>
+      </ul></li>
+    <li><b>Parametrizar $U$.</b> Despejando $x_3=-x_1-x_2$: $(x_1,x_2,x_3)=(x_1,\ x_2,\ -x_1-x_2)$ con $x_1,x_2$ libres.</li>
+    <li><b>B (verdadero).</b> (i) $(1,0,-1)$: $1+0-1=0$ ✓; $(0,1,-1)$: $0+1-1=0$ ✓. (ii) Separando lo que multiplica a cada parámetro:
+      $$\begin{pmatrix}x_1\\x_2\\-x_1-x_2\end{pmatrix}=x_1\begin{pmatrix}1\\0\\-1\end{pmatrix}+x_2\begin{pmatrix}0\\1\\-1\end{pmatrix}.$$
+      Luego $U=\langle(1,0,-1),(0,1,-1)\rangle$. <b>B es verdadera.</b></li>
+    <li><b>A (falso).</b> $(1,0,-1)\in U$, pero $\langle(1,0,-1)\rangle=\{(\alpha,0,-\alpha)\}$ tiene todas las segundas componentes nulas. Contraejemplo: $(0,1,-1)\in U$ ($0+1-1=0$) y $(0,1,-1)=\alpha(1,0,-1)$ exigiría $1=0$: imposible. Falla (ii): se queda corto (genera una recta dentro del plano). <b>A es falsa.</b></li>
+    <li><b>C (falso).</b> $(0,1,0)\notin U$ ($0+1+0=1\neq0$): falla ya (i). Un generador de $U$ tiene que estar en $U$. De $\langle(0,1,0)\rangle=\{(0,\alpha,0)\}$ solo el vector nulo está en $U$. <b>C es falsa.</b></li>
+    <li><b>Argumento alternativo (contando vectores).</b> $S=\{(1,0,-1),(0,1,-1)\}$ es libre ($\lambda(1,0,-1)+\mu(0,1,-1)=(\lambda,\mu,-\lambda-\mu)=0\Rightarrow\lambda=\mu=0$) y genera $U$; por la relación libres–generadores (U p.81), cualquier sistema generador de $U$ tiene <b>al menos 2</b> vectores. A y C tienen uno: no pueden generar $U$.</li>
+  </ol>
+  <p><i>(sympy: $x_1+x_2+x_3$ vale $0$ en los vectores de B y $1$ en $(0,1,0)$; $\operatorname{rang}(S)=2$ y $\operatorname{rang}(S\cup\{(0,1,0)\})=3$, luego $(0,1,0)\notin\langle S\rangle=U$.)</i> E en C solo dice que «en general» no estarán en $U$; la razón decisiva es que el propio generador $(0,1,0)\notin U$.</p>
+  <div class="recipe"><b>Receta:</b> para ver si $T$ genera un subespacio $U$ dado por ecuaciones: (i) comprueba que cada vector de $T$ cumple las ecuaciones de $U$; (ii) escribe el vector genérico de $U$ con parámetros, sepáralo como combinación de vectores fijos y comprueba que esos son combinación de los de $T$.</div>
+  <p><b>Error típico:</b> comprobar solo (i): en A, $(1,0,-1)\in U$ y aun así no lo genera.</p>
+  <p><b>Teoría:</b> Def. 2.4, U p.71 · subespacio más pequeño, U p.72 · libre, U p.74 · libres–generadores, U p.81</p>
+</details>
+
+<details class="sol" id="ej2-18"><summary>Ejercicio 2.18 — cinco sistemas equivalentes para el mismo plano <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.18, p. 61">E p.61</span></summary>
+  <p class="enun">Se pide justificar si son generadores del subespacio $U$ del Ejercicio 2.17 los conjuntos: A) $S_1=\{(1,0,-1),(0,2,-2)\}$. B) $S_2=\{(1,0,-1),(0,1,-1),(1,1,-2)\}$. C) $S_3=\{(1,0,-1),(0,1,-1),(1,1,-2),(3,0,-3)\}$. D) $S_4=\{(1,1,-2),(3,0,-3)\}$. E) $S,S_1,S_2,S_3$ y $S_4$ son equivalentes.</p>
+  <p>Aquí $S=\{u_1,u_2\}$ con $u_1=(1,0,-1)$, $u_2=(0,1,-1)$, que en el Ej. 2.17-B generaba $U$. Idea: partir de $S$ y llegar a cada $S_i$ con cambios que no alteran el subespacio generado (Teoremas 2.1 y 2.2, U p.79).</p>
+  <ol class="steps">
+    <li><b>A: $S\to S_1$ por sustitución.</b> $(0,2,-2)=0\cdot u_1+2u_2$; $u_2$ aparece con coeficiente $2\neq0$, luego por el Teor. 2.2 puede sustituirse $u_2$ por $(0,2,-2)$. <b>$S_1$ genera $U$.</b> <i>(En cambio $(0,2,-2)$ no podría sustituir a $u_1$, cuyo coeficiente es $0$: saldría $\{(0,2,-2),u_2\}$, que solo genera una recta; es el aviso del Ej. U 2.23.)</i></li>
+    <li><b>B: $S\to S_2$ añadiendo un vector dependiente.</b> $(1,1,-2)=u_1+u_2$ ($(1+0,\,0+1,\,-1-1)$ ✓). Por el Teor. 2.1 puede suprimirse: $\langle S_2\rangle=\langle S\rangle=U$. <b>$S_2$ genera $U$.</b></li>
+    <li><b>C: $S\to S_3$.</b> $(1,1,-2)=u_1+u_2$ y $(3,0,-3)=3u_1$. Se suprimen, uno a uno, ambos (cada uno depende de los que se quedan): $\langle S_3\rangle=\langle S\rangle=U$. <b>$S_3$ genera $U$.</b></li>
+    <li><b>D: $S_3\to S_4$ suprimiendo $u_1$ y $u_2$, de uno en uno.</b>
+      <ul>
+        <li>$u_1=(1,0,-1)=\tfrac13(3,0,-3)$ ✓: se suprime $u_1$ y queda $\{u_2,(1,1,-2),(3,0,-3)\}$, que sigue generando $U$.</li>
+        <li>$u_2=(0,1,-1)=(1,1,-2)-\tfrac13(3,0,-3)=(1-1,\ 1-0,\ -2+1)$ ✓: se suprime $u_2$ y queda $S_4$.</li>
+      </ul>
+      <b>$S_4$ genera $U$.</b></li>
+    <li><b>E.</b> Dos sistemas son equivalentes si generan el mismo subespacio (U p.73). Por A–D, $\langle S\rangle=\langle S_1\rangle=\dots=\langle S_4\rangle=U$. <b>E es correcta.</b></li>
+    <li><b>Comprobación alternativa para el examen.</b> Todos los vectores de todos los $S_i$ cumplen $x_1+x_2+x_3=0$, luego $\langle S_i\rangle\subset U$; y la matriz con los vectores de $S_i$ junto con $u_1,u_2$ tiene rango 2, igual que $S_i$ solo, así $u_1,u_2\in\langle S_i\rangle$ y $U\subset\langle S_i\rangle$. <i>(Rango de un sistema = rango de la matriz de sus coordenadas, U p.88.)</i></li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> para decidir si un sistema nuevo genera lo mismo que uno conocido, transfórmalo con las tres operaciones permitidas: <b>añadir</b> o <b>quitar</b> vectores que sean combinación lineal de los restantes (Teor. 2.1) y <b>sustituir</b> un vector por una combinación en la que él tenga coeficiente $\neq0$ (Teor. 2.2).</div>
+  <p><b>Error típico:</b> (1) sustituir con coeficiente $0$; (2) quitar varios vectores a la vez, comprobando cada uno con los que también se van a quitar. Hay que ir de uno en uno y usar los que quedan.</p>
+  <p><b>Teoría:</b> Teoremas 2.1 y 2.2, U p.79 · Ej. U 2.23, U p.80 · equivalentes, U p.73</p>
+</details>
+
+<details class="sol" id="ej2-19"><summary>Ejercicio 2.19 — parámetros $m,n$ para que $(1,-1,m,n)\in\langle S\rangle$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.19, p. 62">E p.62</span></summary>
+  <p class="enun">Se pide calcular los valores que deben tener $m$ y $n$ para que el vector $(1,-1,m,n)$ de $\mathbb R^4$ pertenezca al subespacio vectorial generado por $S=\{(2,1,3,4),(1,2,-1,2),(1,-1,4,2)\}$.</p>
+  <p>Notación: $u_1=(2,1,3,4)$, $u_2=(1,2,-1,2)$, $u_3=(1,-1,4,2)$, $w=(1,-1,m,n)$.</p>
+  <p><b>Método del libro (simplificar primero los generadores).</b></p>
+  <ol class="steps">
+    <li><b>Detectar un vector dependiente.</b> $u_1-u_2=(1,-1,4,2)=u_3$. Por el Teor. 2.1 (supresión), $\langle S\rangle=\langle u_1,u_2\rangle$. Ahora hay solo dos incógnitas.</li>
+    <li><b>Plantear la pertenencia.</b> $w=\alpha u_1+\beta u_2$ (Def. 2.4):
+      $$\begin{cases}2\alpha+\beta=1\\ \alpha+2\beta=-1\\ 3\alpha-\beta=m\\ 4\alpha+2\beta=n\end{cases}$$</li>
+    <li><b>Las dos primeras ecuaciones (sin $m,n$) fijan $\alpha,\beta$.</b> De la 1.ª, $\beta=1-2\alpha$; en la 2.ª, $\alpha+2-4\alpha=-1\Rightarrow\alpha=1$, $\beta=-1$ (solución única: $\begin{vmatrix}2&1\\1&2\end{vmatrix}=3\neq0$).</li>
+    <li><b>Las otras dos deben cumplirse</b> con esos valores (si no, sistema incompatible): $m=3\cdot1-(-1)=4$, $n=4\cdot1+2\cdot(-1)=2$.</li>
+    <li><b>Conclusión.</b> $w\in\langle S\rangle\iff m=4,\ n=2$; entonces $w=(1,-1,4,2)=u_1-u_2$ (que es justamente $u_3$).</li>
+  </ol>
+  <p><b>Solución alternativa (Gauss, sin ver la dependencia).</b> Matriz ampliada de $\alpha u_1+\beta u_2+\gamma u_3=w$ (vectores en columnas):
+  $$\left(\begin{array}{ccc|c}2&1&1&1\\1&2&-1&-1\\3&-1&4&m\\4&2&2&n\end{array}\right)$$
+  Operaciones: $F_2\to2F_2-F_1$, $F_3\to2F_3-3F_1$, $F_4\to F_4-2F_1$ (cada una anula la 1.ª entrada de la fila usando el pivote $2$):
+  $$\left(\begin{array}{ccc|c}2&1&1&1\\0&3&-3&-3\\0&-5&5&2m-3\\0&0&0&n-2\end{array}\right)$$
+  Después $F_3\to3F_3+5F_2$ (anula el $-5$ con el pivote $3$):
+  $$\left(\begin{array}{ccc|c}2&1&1&1\\0&3&-3&-3\\0&0&0&6m-24\\0&0&0&n-2\end{array}\right)$$
+  Aquí $\operatorname{rang}A=2$; por Rouché-Frobenius (U p.30) el sistema es compatible si y solo si $\operatorname{rang}(A\mid b)=2$, es decir $6m-24=0$ y $n-2=0$: <b>$m=4$, $n=2$</b>. Además, rango 2 con 3 vectores confirma que $S$ es ligado.</p>
+  <div class="recipe"><b>Receta:</b> «¿para qué parámetros $w\in\langle S\rangle$?» $\Rightarrow$ sistema $\sum\lambda_iu_i=w$; escalona la ampliada (o usa solo las ecuaciones que fijan los $\lambda_i$) e impón que las filas que se anulan en $A$ también se anulen en la columna de $w$ ($\operatorname{rang}A=\operatorname{rang}(A\mid b)$).</div>
+  <p><b>Error típico:</b> quedarse con las dos primeras ecuaciones ($\alpha=1,\beta=-1$) y olvidar que $w$ debe cumplir <b>las cuatro</b>; o calcular un determinante con una matriz no cuadrada ($4\times3$).</p>
+  <p><b>Teoría:</b> Teor. 2.1, U p.79 · Def. 2.4, U p.71 · Rouché, U p.30</p>
+</details>
+
+<details class="sol" id="ej2-20"><summary>Ejercicio 2.20 — tres matrices linealmente dependientes <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.20, p. 62">E p.62</span></summary>
+  <p class="enun">Se pide hallar los valores de $x$ e $y$ para que las matrices $A=\begin{pmatrix}3&2\\x&y\end{pmatrix}$, $B=\begin{pmatrix}1&4\\5&2\end{pmatrix}$, $C=\begin{pmatrix}1&2\\3&4\end{pmatrix}$ sean linealmente dependientes.</p>
+  <p>Se trabaja en el espacio vectorial $\mathcal M_{2\times2}$ (tema 2.1): las «matrices-vector» son iguales si lo son sus 4 entradas, así que una igualdad matricial equivale a 4 ecuaciones.</p>
+  <ol class="steps">
+    <li><b>$B$ y $C$ son independientes</b> (E lo afirma sin comprobarlo; hay que justificarlo). Si $\lambda B+\mu C=0$:
+      $$\begin{pmatrix}\lambda+\mu&4\lambda+2\mu\\5\lambda+3\mu&2\lambda+4\mu\end{pmatrix}=\begin{pmatrix}0&0\\0&0\end{pmatrix}.$$
+      Entrada $(1,1)$: $\mu=-\lambda$; entrada $(1,2)$: $4\lambda-2\lambda=2\lambda=0$. Luego $\lambda=\mu=0$ y $\{B,C\}$ es libre (U p.74).</li>
+    <li><b>Reducción.</b> Como $\{B,C\}$ es libre, por el lema práctico de §3: $\{A,B,C\}$ ligado $\iff A\in\langle B,C\rangle$. (E lo usa sin decirlo.)</li>
+    <li><b>Plantear $A=\alpha B+\beta C$</b> entrada a entrada:
+      $$\begin{cases}\alpha+\beta=3&(1,1)\\ 4\alpha+2\beta=2&(1,2)\\ 5\alpha+3\beta=x&(2,1)\\ 2\alpha+4\beta=y&(2,2)\end{cases}$$</li>
+    <li><b>Las dos primeras (sin $x,y$) dan $\alpha,\beta$.</b> Restando a la 2.ª el doble de la 1.ª: $2\alpha=2-6=-4\Rightarrow\alpha=-2$, y $\beta=3-(-2)=5$.</li>
+    <li><b>Las dos últimas dan $x,y$:</b> $x=5(-2)+3\cdot5=5$; $y=2(-2)+4\cdot5=16$.</li>
+    <li><b>Comprobación.</b> $-2B+5C=\begin{pmatrix}-2+5&-8+10\\-10+15&-4+20\end{pmatrix}=\begin{pmatrix}3&2\\5&16\end{pmatrix}=A$ ✓. <b>$x=5$, $y=16$</b> (para cualquier otro par las tres son independientes).</li>
+  </ol>
+  <p><b>Alternativa con rango.</b> Identificando cada matriz con $(a_{11},a_{12},a_{21},a_{22})$, son dependientes $\iff\operatorname{rang}\begin{pmatrix}3&2&x&y\\1&4&5&2\\1&2&3&4\end{pmatrix}\lt3$. Con $F_2\to3F_2-F_1$ y $F_3\to3F_3-F_1$ sale $\begin{pmatrix}3&2&x&y\\0&10&15-x&6-y\\0&4&9-x&12-y\end{pmatrix}$ (cada una anula la 1.ª entrada con el pivote $3$), y con $F_3\to10F_3-4F_2$ (anula el $4$ con el pivote $10$) queda $\begin{pmatrix}3&2&x&y\\0&10&15-x&6-y\\0&0&30-6x&96-6y\end{pmatrix}$, pues $10(9-x)-4(15-x)=30-6x$ y $10(12-y)-4(6-y)=96-6y$. El rango es 2 $\iff30-6x=0$ y $96-6y=0$: $x=5,\ y=16$.</p>
+  <div class="recipe"><b>Receta:</b> con $B,C$ libres, $\{A,B,C\}$ ligado $\iff A=\alpha B+\beta C$: usa las ecuaciones sin parámetros para hallar $\alpha,\beta$ y sustitúyelos en las que contienen los parámetros.</div>
+  <p><b>Error típico:</b> aplicar «$A$ es c.l. de $B$ y $C$» sin haber comprobado que $B,C$ son independientes: si fueran proporcionales, las tres serían dependientes <b>para cualquier</b> $x,y$ y este método no lo detectaría.</p>
+  <p><b>Teoría:</b> Def. 2.5 y caracterización, U p.73 · libre, U p.74 · rango, U p.78</p>
+</details>
+
+<details class="sol" id="ej2-21"><summary>Ejercicio 2.21 — $\{(-1,1,2),(a,0,b)\}$ según $a$ y $b$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.21, p. 63">E p.63</span></summary>
+  <p class="enun">Se pide comprobar si $\{(-1,1,2),(a,0,b)\}\subset\mathbb R^3$ verifica: A) Es un sistema libre para valores cualesquiera de $a$ y de $b$. B) Puede ser un sistema ligado. C) Genera un subespacio de $\mathbb R^3$ de dimensión 1.</p>
+  <ol class="steps">
+    <li><b>Estudio de la independencia (U p.74).</b> $\lambda(-1,1,2)+\mu(a,0,b)=(0,0,0)$:
+      $$\begin{cases}-\lambda+a\mu=0\\ \lambda=0\\ 2\lambda+b\mu=0\end{cases}$$
+      La 2.ª da $\lambda=0$. Quedan $a\mu=0$ y $b\mu=0$.
+      <ul>
+        <li>Si $(a,b)\neq(0,0)$: alguno de $a,b$ es no nulo, luego $\mu=0$: solo la solución trivial, <b>libre</b>.</li>
+        <li>Si $a=b=0$: el segundo vector es $0$ y $0\cdot(-1,1,2)+1\cdot(0,0,0)=0$ con coeficiente $1\neq0$: <b>ligado</b> (U p.74: si $0$ está en el sistema, es ligado).</li>
+      </ul>
+      <i>Con rango (como E):</i> los menores de orden 2 de $\begin{pmatrix}-1&1&2\\a&0&b\end{pmatrix}$ son $\begin{vmatrix}-1&1\\a&0\end{vmatrix}=-a$, $\begin{vmatrix}-1&2\\a&b\end{vmatrix}=-b-2a$ y $\begin{vmatrix}1&2\\0&b\end{vmatrix}=b$; todos se anulan $\iff a=b=0$. Rango 2 $\iff(a,b)\neq(0,0)$.</li>
+    <li><b>A) Falsa.</b> No es libre «para valores cualesquiera»: con $a=b=0$ es ligado (basta un contraejemplo).</li>
+    <li><b>B) Verdadera.</b> Puede ser ligado: exactamente cuando $a=b=0$.</li>
+    <li><b>C) Falsa como afirmación general.</b> El subespacio generado tiene por dimensión el rango del sistema (Teor. 2.5, U p.88; aquí basta leer «dimensión 1 = recta, dimensión 2 = plano»):
+      <ul>
+        <li>si $(a,b)\neq(0,0)$: rango 2, genera un <b>plano</b> (dimensión 2);</li>
+        <li>si $a=b=0$: $(0,0,0)=0\cdot(-1,1,2)$ se suprime (Teor. 2.1) y $\langle S\rangle=\langle(-1,1,2)\rangle$ es una <b>recta</b> (dimensión 1).</li>
+      </ul>
+      Así que C solo es cierta en el caso particular $a=b=0$.</li>
+  </ol>
+  <div class="box warn"><span class="h">Aviso sobre la solución de E</span><p>E declara C «falso» sin matizar. Es correcto si C se lee como A («para valores cualesquiera de $a$ y $b$»), pero la justificación de E solo trata el caso $(a,b)\neq(0,0)$ y omite que con $a=b=0$ la dimensión <b>sí</b> es 1. En un examen conviene responder completo: «Dim $=1\iff a=b=0$; en otro caso Dim $=2$». Además E afirma que el rango es 2 si $a$ o $b$ son no nulos sin dar el menor; arriba se dan los menores $-a$ y $b$ que lo justifican.</p></div>
+  <div class="recipe"><b>Receta:</b> con parámetros, plantea $\sum\lambda_iu_i=0$ (o calcula los menores de la matriz de coordenadas) y <b>separa casos</b> según los valores que anulan los menores. Responde a cada afirmación diciendo <b>para qué valores</b> es cierta.</div>
+  <p><b>Error típico:</b> olvidar el caso degenerado en que un vector se hace nulo ($a=b=0$): el vector cero hace ligado a cualquier sistema que lo contenga.</p>
+  <p><b>Teoría:</b> libre, U p.74 · rango, U p.78 · Teor. 2.1, U p.79 · Teor. 2.5, U p.88 · menores, U p.27</p>
+</details>
+
+<details class="sol" id="ej2-22"><summary>Ejercicio 2.22 — valor de $c$ para que $(1,-2,c)\in\langle S_1\rangle$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.22, p. 63">E p.63</span></summary>
+  <p class="enun">Se pide calcular el valor de $c$ para que el vector $(1,-2,c)$ pertenezca al subespacio generado por $S_1=\{(3,0,-2),(2,-1,-5)\}$.</p>
+  <ol class="steps">
+    <li><b>Planteamiento (Def. 2.4).</b> $(1,-2,c)=\lambda(3,0,-2)+\mu(2,-1,-5)$:
+      $$\begin{cases}1=3\lambda+2\mu\\ -2=-\mu\\ c=-2\lambda-5\mu\end{cases}$$</li>
+    <li><b>Las dos primeras (sin $c$) determinan $\lambda,\mu$.</b> De la 2.ª, $\mu=2$; en la 1.ª, $3\lambda=1-4=-3\Rightarrow\lambda=-1$.</li>
+    <li><b>La 3.ª debe cumplirse:</b> $c=-2(-1)-5\cdot2=2-10=-8$.</li>
+    <li><b>Conclusión.</b> $c=-8$ y $(1,-2,-8)=-(3,0,-2)+2(2,-1,-5)$ (comprobación: $(-3+4,\ 0-2,\ 2-10)=(1,-2,-8)$ ✓).</li>
+  </ol>
+  <p><b>Alternativa con determinante.</b> Los dos generadores no son proporcionales (el primero tiene un $0$ en la 2.ª componente y el segundo un $-1$), luego $S_1$ es libre. Por el lema práctico de §3, $w\in\langle S_1\rangle\iff\{(3,0,-2),(2,-1,-5),w\}$ es ligado $\iff$ rango $\lt3$ $\iff$
+  $$\begin{vmatrix}3&0&-2\\2&-1&-5\\1&-2&c\end{vmatrix}=3\big((-1)c-(-5)(-2)\big)-0+(-2)\big(2(-2)-(-1)\cdot1\big)=3(-c-10)-2(-3)=-3c-24=0,$$
+  es decir $c=-8$ (desarrollo por la 1.ª fila).</p>
+  <div class="recipe"><b>Receta:</b> si los generadores son libres y hay tantos vectores (generadores $+\ w$) como dimensión del espacio, «$w\in\langle S\rangle$» equivale a «determinante $=0$»: una sola ecuación en el parámetro.</div>
+  <p><b>Error típico:</b> usar el determinante con generadores que <b>no</b> son libres (si $u_1,u_2$ fueran proporcionales, el determinante valdría $0$ para todo $c$ y no diría nada), o con una matriz no cuadrada.</p>
+  <p><b>Teoría:</b> Def. 2.4, U p.71 · determinantes y rango, U p.27</p>
+</details>
+
+<h3>Ejemplos propios, de dificultad creciente</h3>
+
+<details class="sol"><summary>Ejemplo propio 1 (fácil) — ¿combinación lineal? <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">¿Es $w=(3,1,5)$ combinación lineal de $u_1=(1,0,1)$ y $u_2=(1,1,2)$? ¿Y $w'=(3,1,4)$?</p>
+  <ol class="steps">
+    <li>$w=\alpha u_1+\beta u_2$: $\alpha+\beta=3,\ \beta=1,\ \alpha+2\beta=5$.</li>
+    <li>De la 2.ª, $\beta=1$; de la 1.ª, $\alpha=2$.</li>
+    <li>La 3.ª exigiría $2+2=5$: falso, sistema incompatible. <b>$w$ no es combinación lineal.</b></li>
+    <li>Para $w'$ la 3.ª es $\alpha+2\beta=4$ y $2+2=4$ ✓. <b>$w'=2u_1+u_2$</b> (comprobación: $(2+1,\ 0+1,\ 2+2)=(3,1,4)$ ✓).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> halla los coeficientes con las ecuaciones más sencillas y <b>comprueba las que sobran</b>.</div>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 2 (medio) — sistema ligado según un parámetro <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">¿Para qué $k$ es ligado $\{(1,2,1),(0,1,k),(2,3,1)\}$? En ese caso, escribe un vector como combinación de los otros.</p>
+  <ol class="steps">
+    <li>Son 3 vectores de $\mathbb R^3$: libre $\iff$ rango 3 $\iff$ el determinante de la matriz de coordenadas es $\neq0$ (U p.78, p.88; U p.27).</li>
+    <li>Desarrollando por la 1.ª fila:
+      $$\begin{vmatrix}1&2&1\\0&1&k\\2&3&1\end{vmatrix}=1(1-3k)-2(0-2k)+1(0-2)=1-3k+4k-2=k-1.$$</li>
+    <li>Ligado $\iff k-1=0\iff k=1$.</li>
+    <li>Con $k=1$ se busca $(2,3,1)=\alpha(1,2,1)+\beta(0,1,1)$: de la 1.ª componente $\alpha=2$; la 2.ª, $2\alpha+\beta=3\Rightarrow\beta=-1$; la 3.ª, $\alpha+\beta=1$ ✓. Así $(2,3,1)=2(1,2,1)-(0,1,1)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $n$ vectores de $\mathbb R^n$ con parámetro: determinante $=0$ da los valores críticos; después, para cada valor, resuelve la relación concreta.</div>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 3 (difícil) — rango, sistema libre generador y pertenencia en $\mathbb R^4$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Sea $S=\{u_1,u_2,u_3,u_4\}$ con $u_1=(1,1,0,2)$, $u_2=(2,1,1,3)$, $u_3=(0,1,-1,1)$, $u_4=(1,0,1,1)$. (a) Halla el rango de $S$ y un sistema <b>libre</b> que genere $\langle S\rangle$. (b) ¿Está $(1,2,-1,3)$ en $\langle S\rangle$? ¿Y $(1,2,-1,4)$?</p>
+  <ol class="steps">
+    <li><b>Escalonar</b> la matriz con los vectores en filas (las operaciones de fila no cambian el rango, U p.22). Primero $F_2\to F_2-2F_1$ y $F_4\to F_4-F_1$:
+      $$\begin{pmatrix}1&1&0&2\\2&1&1&3\\0&1&-1&1\\1&0&1&1\end{pmatrix}\ \longrightarrow\ \begin{pmatrix}1&1&0&2\\0&-1&1&-1\\0&1&-1&1\\0&-1&1&-1\end{pmatrix}.$$
+      Después $F_3\to F_3+F_2$ y $F_4\to F_4-F_2$:
+      $$\longrightarrow\ \begin{pmatrix}1&1&0&2\\0&-1&1&-1\\0&0&0&0\\0&0&0&0\end{pmatrix}.$$
+      <b>Rango 2</b>. Con 4 vectores y rango 2, $S$ es ligado.</li>
+    <li><b>Relaciones explícitas.</b> Las filas anuladas indican que $u_3$ y $u_4$ dependen de $u_1,u_2$: $u_3=2u_1-u_2$ (comprobación: $(2-2,\ 2-1,\ 0-1,\ 4-3)=(0,1,-1,1)$ ✓) y $u_4=u_2-u_1$ ($(1,0,1,1)$ ✓).</li>
+    <li><b>Suprimir</b> $u_3$ y luego $u_4$ (Teor. 2.1; cada uno es combinación de $u_1,u_2$, que se quedan): $\langle S\rangle=\langle u_1,u_2\rangle$. $\{u_1,u_2\}$ es libre ($u_2=k\,u_1$ exigiría en la 3.ª componente $1=k\cdot0$, imposible, y $u_1\neq0$). <b>Respuesta (a):</b> rango 2 y sistema libre generador $\{u_1,u_2\}$.</li>
+    <li><b>(b)</b> $(1,2,-1,3)=\alpha u_1+\beta u_2$: $\alpha+2\beta=1,\ \alpha+\beta=2,\ \beta=-1,\ 2\alpha+3\beta=3$. De la 3.ª, $\beta=-1$; de la 2.ª, $\alpha=3$; 1.ª: $3-2=1$ ✓; 4.ª: $6-3=3$ ✓. <b>Sí:</b> $(1,2,-1,3)=3u_1-u_2$.</li>
+    <li>Para $(1,2,-1,4)$ las tres primeras ecuaciones dan lo mismo ($\alpha=3,\beta=-1$), pero la 4.ª exigiría $2\alpha+3\beta=4$ y vale $3$. <b>No pertenece.</b></li>
+  </ol>
+  <div class="recipe"><b>Receta global del tema:</b> escalonar la matriz de coordenadas da a la vez el <b>rango</b>, <b>qué vectores sobran</b> (supresión) y, resolviendo $\sum\lambda_iu_i=w$, <b>si un vector pertenece</b> al subespacio generado.</div>
+</details>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="examenes"><span class="n">7</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Preguntas de exámenes de otros años que caen en este tema. Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>) y se señalan sus omisiones. Se ordenan de más fácil a más difícil.</p>
+
+<details class="sol" id="ex-feb18"><summary>Feb. 2018 (1.ª sem., tipo A), ejercicio 2 — ¿generador, base, libre? (verdadero/falso) <span class="src" data-l="X" data-ref="Feb. 2018 (1.ª sem., tipo A), ejercicio 2">X Feb. 2018 (1.ª, A)</span></summary>
+  <p class="enun">Si $\{\bar u=(1,2,-1);\ \bar v=(3,1,0);\ \bar w=(2,-1,1);\ \bar s=(2,1,0)\}$, razonar si son o no ciertas las siguientes afirmaciones: A) $\{\bar u,\bar v\}$ forman un sistema generador de $\mathbb R^3$; B) $\{\bar u,\bar v\}$ forman una base de $\mathbb R^3$; C) $\{\bar u,\bar v\}$ forman un sistema libre o linealmente independiente.</p>
+  <p>(Los vectores $\bar w$ y $\bar s$ no intervienen en ninguna afirmación: son distractores.)</p>
+  <ol class="steps">
+    <li><b>C) ¿es libre $\{\bar u,\bar v\}$?</b> Por la caracterización (U p.74), ver si $\lambda\bar u+\mu\bar v=0$ obliga a $\lambda=\mu=0$:
+      $$\lambda(1,2,-1)+\mu(3,1,0)=(0,0,0)\iff\begin{cases}\lambda+3\mu=0\\ 2\lambda+\mu=0\\ -\lambda=0\end{cases}$$
+      La 3.ª da $\lambda=0$; en la 1.ª, $3\mu=0$, o sea $\mu=0$. Solo la solución nula: <b>libre. C) es cierta.</b> <i>Atajo para dos vectores:</i> son ligados solo si uno es múltiplo del otro; $\bar v=c\bar u$ exigiría $0=-c$ (3.ª componente), $c=0$ y $\bar v=0$, falso.</li>
+    <li><b>A) ¿generan $\mathbb R^3$?</b> Habría que probar que <b>todo</b> vector de $\mathbb R^3$ es combinación suya; para refutarlo basta un contraejemplo. Con $e_3=(0,0,1)$:
+      $$\lambda(1,2,-1)+\mu(3,1,0)=(0,0,1)\iff\begin{cases}\lambda+3\mu=0\\ 2\lambda+\mu=0\\ -\lambda=1\end{cases}$$
+      De la 3.ª, $\lambda=-1$; de la 1.ª, $\mu=\frac13$; en la 2.ª: $2(-1)+\frac13=-\frac53\neq0$. Incompatible, luego $(0,0,1)\notin\langle\bar u,\bar v\rangle$. <b>A) es falsa.</b> <i>Razonamiento general:</i> $\{e_1,e_2,e_3\}$ es libre y genera $\mathbb R^3$; por la relación libres–generadores (U p.81) cualquier sistema generador de $\mathbb R^3$ tiene al menos 3 vectores.</li>
+    <li><b>B) ¿base?</b> Una base es un sistema libre <b>y</b> generador (se define en §2.3). Como falla «generador», <b>B) es falsa</b>.</li>
+  </ol>
+  <p><b>Resultado:</b> A) falsa, B) falsa, C) cierta. <i>(sympy: $\operatorname{rang}\{\bar u,\bar v\}=2$; $\det(\bar u,\bar v,e_3)=-5\neq0$.)</i></p>
+  <p><b>Variante</b> (X, Feb. 2018, 1.ª sem., tipo B, ej. 1): «comprobar que $S_2$ [$(1,1,-4),(1,5,6),(4,2,3),(-2,0,-2)$] es un sistema ligado de $\mathbb R^3$». Sin calcular nada: $\sum\lambda_iv_i=0$ es un sistema <b>homogéneo</b> de 3 ecuaciones con 4 incógnitas, rango $\le3\lt4$, luego compatible indeterminado (Rouché, U p.30) con soluciones no nulas: ligado. En general, <b>más de $n$ vectores de $\mathbb R^n$ son siempre ligados</b>.</p>
+  <div class="recipe"><b>Receta:</b> libre: plantea $\sum\lambda_iu_i=0$ y mira si solo sale la solución nula (o rango $=$ nº de vectores). Generador de $\mathbb R^n$: hacen falta al menos $n$ vectores; para refutarlo basta un vector concreto que dé sistema incompatible.</div>
+  <p><b>Error típico:</b> confundir «libre» con «generador». $\{\bar u,\bar v\}$ es libre pero no genera $\mathbb R^3$; $S_2$ genera $\mathbb R^3$ pero no es libre. Son propiedades independientes; la base exige las dos.</p>
+</details>
+
+<details class="sol" id="ex-feb22"><summary>Feb. 2022 (2.ª sem., tipo A), ejercicio 2 — un sistema que genere el subespacio dado por ecuaciones <span class="src" data-l="X" data-ref="Feb. 2022 (2.ª sem., tipo A), ejercicio 2">X Feb. 2022 (2.ª, A)</span></summary>
+  <p class="enun">Halle un sistema $S$ que genere el mismo subespacio que el definido por $U=\{(x,y,z)\in\mathbb R^3:\ x+y-z=0;\ x+2y=0\}$.</p>
+  <ol class="steps">
+    <li><b>Qué se pide.</b> Un $S$ con $\langle S\rangle=U$ (Def. 2.4): los vectores de $S$ han de estar en $U$ y todo vector de $U$ ha de ser combinación suya. Es pasar de <b>ecuaciones cartesianas a paramétricas</b>.</li>
+    <li><b>Resolver el sistema homogéneo.</b> La matriz $\begin{pmatrix}1&1&-1\\1&2&0\end{pmatrix}$ tiene rango 2 (el menor $\begin{vmatrix}1&1\\1&2\end{vmatrix}=1\neq0$) y hay 3 incógnitas: compatible indeterminado con $3-2=1$ parámetro (Rouché, U p.30).</li>
+    <li><b>Despejar.</b> De la 2.ª, $x=-2y$; en la 1.ª, $-2y+y-z=0\Rightarrow z=-y$. Con $y=\alpha$:
+      $$(x,y,z)=(-2\alpha,\ \alpha,\ -\alpha)=\alpha(-2,1,-1),\qquad\alpha\in\mathbb R.$$</li>
+    <li><b>Conclusión.</b> Todo vector de $U$ es múltiplo de $(-2,1,-1)$, y $(-2,1,-1)\in U$ ($-2+1-(-1)=0$ y $-2+2=0$ ✓). Luego $S=\{(-2,1,-1)\}$ y $U=\langle(-2,1,-1)\rangle$: $U$ es una recta (intersección de dos planos no paralelos).</li>
+    <li><b>No es la única respuesta.</b> Un subespacio tiene infinitos sistemas generadores (U p.72): valen $\{(2,-1,1)\}$ (lo que da sympy con <code>nullspace</code>), $\{(-2,1,-1),(4,-2,2)\}$ (el segundo sobra por supresión), etc. Todos son <b>equivalentes</b> (U p.73).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> subespacio dado por ecuaciones $\Rightarrow$ resuelve el sistema homogéneo, escribe la solución general como $\alpha_1v_1+\dots+\alpha_kv_k$ (un vector por parámetro): $\{v_1,\dots,v_k\}$ lo genera.</div>
+  <p><b>Error típico:</b> dar como generadores los vectores de <b>coeficientes</b> de las ecuaciones, $(1,1,-1)$ y $(1,2,0)$: no están en $U$ (p. ej. $1+1-(-1)=3\neq0$). No generan $U$ (de hecho son perpendiculares a $U$; se verá en el Tema 5).</p>
+</details>
+
+<details class="sol" id="ex-feb25"><summary>Feb. 2025 (1.ª sem.), pregunta 3 — parámetro para que un vector sea combinación lineal <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), pregunta 3">X Feb. 2025 (1.ª)</span></summary>
+  <p class="enun">Consideremos los siguientes vectores de $\mathbb R^4$: $v_1=(3,0,1,5)$, $v_2=(1,1,1,0)$, $v_3=(0,-4,0,t)$ y $w=(1,-14,-1,11)$. Encuentre el valor del parámetro $t\in\mathbb R$ para que el vector $w$ sea combinación lineal de los vectores $v_1$, $v_2$ y $v_3$.</p>
+  <ol class="steps">
+    <li><b>Traducir la definición</b> (Def. 2.3): existen $\alpha,\beta,\gamma$ con $\alpha(3,0,1,5)+\beta(1,1,1,0)+\gamma(0,-4,0,t)=(1,-14,-1,11)$.</li>
+    <li><b>Igualar componente a componente:</b>
+      $$\begin{cases}3\alpha+\beta=1&(1)\\ \beta-4\gamma=-14&(2)\\ \alpha+\beta=-1&(3)\\ 5\alpha+t\gamma=11&(4)\end{cases}$$</li>
+    <li><b>Estructura.</b> Las ecuaciones (1)-(3) no contienen $t$ y tienen 3 incógnitas: se resuelven primero; la (4) decide $t$.</li>
+    <li><b>(1) y (3).</b> Restando: $2\alpha=2\Rightarrow\alpha=1$; de (3), $\beta=-2$.</li>
+    <li><b>(2).</b> $-2-4\gamma=-14\Rightarrow\gamma=3$. Estos valores son los únicos que cumplen (1)-(3).</li>
+    <li><b>Imponer (4).</b> $5\cdot1+3t=11\Rightarrow t=2$. Si $t\neq2$ la única terna posible no cumple (4): $w\notin\langle v_1,v_2,v_3\rangle$.</li>
+    <li><b>Comprobación.</b> Con $t=2$: $(3,0,1,5)-2(1,1,1,0)+3(0,-4,0,2)=(3-2,\ -2-12,\ 1-2,\ 5+6)=(1,-14,-1,11)$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $t=2$, con $w=v_1-2v_2+3v_3$.</p>
+  <p><b>Otra vía (por determinantes).</b> $\{v_1,v_2,v_3\}$ es libre para todo $t$: el menor de las 3 primeras componentes $\begin{vmatrix}3&1&0\\0&1&-4\\1&1&0\end{vmatrix}=8\neq0$ (U p.27). Por el lema práctico, $w\in\langle v_1,v_2,v_3\rangle\iff\det(v_1,v_2,v_3,w)=0$; sympy da $-24(t-2)$, luego $t=2$.</p>
+  <div class="recipe"><b>Receta:</b> «$w$ combinación lineal de $v_1,\dots,v_p$» = «el sistema $\sum\lambda_iv_i=w$ es compatible». Si el parámetro aparece en una sola ecuación, resuelve las demás y sustituye en ella.</div>
+  <p><b>Error típico:</b> tratar $t\gamma$ como lineal e intentar Gauss con 4 incógnitas $(\alpha,\beta,\gamma,t)$: el sistema <b>no es lineal</b> en $t$. $t$ es un dato desconocido, no una incógnita del sistema; se discute <b>después</b>.</p>
+</details>
+
+<details class="sol" id="ex-sep23"><summary>Sept. 2023, pregunta 2 — parámetro con determinante (y la hipótesis que falta) <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 2">X Sept. 2023</span></summary>
+  <p class="enun">Determine el valor de $k\in\mathbb R$ para que el vector $(1,1,-2,k)$ sea combinación lineal de los vectores $(0,3,0,-2)$, $(1,2,-1,-5)$ y $(1,0,0,0)$.</p>
+  <p>Notación: $u_1=(0,3,0,-2)$, $u_2=(1,2,-1,-5)$, $u_3=(1,0,0,0)$, $w=(1,1,-2,k)$.</p>
+  <ol class="steps">
+    <li><b>Plan.</b> Por el lema práctico de §3: si $\{u_1,u_2,u_3\}$ es <b>libre</b>, $w\in\langle u_1,u_2,u_3\rangle\iff\{u_1,u_2,u_3,w\}$ es ligado $\iff$ la matriz $4\times4$ tiene $\det=0$ (U p.27).</li>
+    <li><b>Comprobar la hipótesis: $\{u_1,u_2,u_3\}$ libre.</b> Con las tres primeras componentes, desarrollando por la 3.ª fila (solo tiene un elemento no nulo, $-1$ en la posición $(3,2)$, signo $(-1)^{3+2}=-1$):
+      $$\begin{vmatrix}0&1&1\\3&2&0\\0&-1&0\end{vmatrix}=(-1)(-1)\begin{vmatrix}0&1\\3&0\end{vmatrix}=0-3=-3\neq0.$$
+      Rango 3 = nº de vectores: libre (Def. 2.7).</li>
+    <li><b>Determinante de los cuatro</b> (columnas $w,u_1,u_2,u_3$; el orden no afecta a que valga 0):
+      $$D=\begin{vmatrix}1&0&1&1\\1&3&2&0\\-2&0&-1&0\\k&-2&-5&0\end{vmatrix}=-\begin{vmatrix}1&3&2\\-2&0&-1\\k&-2&-5\end{vmatrix},$$
+      pues la 4.ª columna solo tiene un $1$ en la posición $(1,4)$, de signo $(-1)^{1+4}=-1$.</li>
+    <li><b>El $3\times3$</b> (por la 1.ª fila): $1\cdot(0\cdot(-5)-(-1)(-2))-3\cdot((-2)(-5)-(-1)k)+2\cdot((-2)(-2)-0\cdot k)=-2-3(10+k)+8=-3k-24$. Luego $D=3k+24$.</li>
+    <li><b>Imponer $D=0$:</b> $k=-8$. Para $k\neq-8$ los cuatro son libres y $w$ no es combinación lineal.</li>
+    <li><b>Comprobación.</b> $\lambda_1u_1+\lambda_2u_2+\lambda_3u_3=(1,1,-2,-8)$: 3.ª componente $-\lambda_2=-2\Rightarrow\lambda_2=2$; 2.ª, $3\lambda_1+4=1\Rightarrow\lambda_1=-1$; 1.ª, $\lambda_2+\lambda_3=1\Rightarrow\lambda_3=-1$; 4.ª: $-2(-1)-5\cdot2=-8$ ✓. Así $(1,1,-2,-8)=-u_1+2u_2-u_3$.</li>
+  </ol>
+  <p><b>Resultado:</b> $k=-8$.</p>
+  <div class="box warn"><span class="h">Omisión en la solución oficial</span><p>La solución publicada dice que para que los cuatro vectores sean linealmente dependientes se debe cumplir $3k+24=0$, por lo que $k=-8$, y <b>no comprueba</b> que $\{u_1,u_2,u_3\}$ sea libre. Sin esa comprobación el razonamiento no es completo: «los cuatro son ligados» no implica en general que <b>el cuarto</b> dependa de los otros tres. Aquí funciona porque el paso 2 da rango 3; en el examen hay que escribirlo.</p></div>
+  <div class="recipe"><b>Receta:</b> $n$ vectores de $\mathbb R^n$ con parámetro: (i) comprueba que los $n-1$ «fijos» son libres (un menor de orden $n-1$ no nulo); (ii) impón $\det=0$. Desarrolla por la fila/columna con más ceros.</div>
+  <p><b>Error típico:</b> aplicar «$\det=0$» sin comprobar (i). Si los tres fijos fueran $(1,0,0,0),(2,0,0,0),(0,1,0,0)$, el determinante con <b>cualquier</b> $w$ sería $0$, pero $w=(0,0,1,0)$ no es combinación lineal de ellos.</p>
+</details>
+
+<details class="sol" id="ex-feb24"><summary>Feb. 2024 (1.ª sem.), pregunta 2 — dependencia lineal en un espacio de matrices <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), pregunta 2">X Feb. 2024 (1.ª)</span></summary>
+  <p class="enun">Halle los valores de $x$ e $y$ para que las matrices $A=\begin{pmatrix}x&y\\5&-18\end{pmatrix}$, $B=\begin{pmatrix}1&2\\-1&3\end{pmatrix}$, $C=\begin{pmatrix}0&1\\2&-7\end{pmatrix}$ sean linealmente dependientes.</p>
+  <ol class="steps">
+    <li><b>El espacio.</b> $\mathcal M_{2\times2}$ es espacio vectorial (U §2.1): igualar dos matrices es igualar sus 4 entradas, así que todo se reduce a sistemas de 4 ecuaciones.</li>
+    <li><b>$\{B,C\}$ es libre.</b> Dos vectores son ligados si uno es múltiplo del otro. $C=cB$: la entrada $(1,1)$ da $0=c$, y $C$ sería nula, falso. $B=cC$: la entrada $(1,1)$ da $1=c\cdot0$, imposible. Libre.</li>
+    <li><b>Reducir a pertenencia.</b> Por el lema práctico de §3: $\{A,B,C\}$ ligado $\iff A=\alpha B+\beta C$ para ciertos $\alpha,\beta$. <i>(Este es el paso que la solución oficial resume en una línea.)</i></li>
+    <li><b>Plantear el sistema</b> entrada a entrada:
+      $$\begin{cases}x=\alpha&(1,1)\\ y=2\alpha+\beta&(1,2)\\ 5=-\alpha+2\beta&(2,1)\\ -18=3\alpha-7\beta&(2,2)\end{cases}$$</li>
+    <li><b>Las entradas sin $x,y$ fijan $\alpha,\beta$.</b> De $5=-\alpha+2\beta$: $\alpha=2\beta-5$; en la última, $-18=3(2\beta-5)-7\beta=-\beta-15\Rightarrow\beta=3$ y $\alpha=1$. (Determinante $\begin{vmatrix}-1&2\\3&-7\end{vmatrix}=1\neq0$: solución única.)</li>
+    <li><b>Obtener $x,y$:</b> $x=\alpha=1$, $y=2\cdot1+3=5$.</li>
+    <li><b>Comprobación.</b> $B+3C=\begin{pmatrix}1&2+3\\-1+6&3-21\end{pmatrix}=\begin{pmatrix}1&5\\5&-18\end{pmatrix}=A$ ✓. Así $A-B-3C=0$ es una combinación nula no trivial: ligado.</li>
+  </ol>
+  <p><b>Resultado:</b> $x=1$, $y=5$ (y son los únicos valores).</p>
+  <div class="recipe"><b>Receta:</b> en $\mathcal M_{m\times n}$ (o en polinomios) se trabaja igual que en $\mathbb R^{mn}$: cada matriz es la lista de sus entradas. Si el sistema fijo es libre, «ligado» = «el nuevo es combinación lineal de los fijos».</div>
+  <p><b>Error típico:</b> escribir $\det A=0$, $\det B=0$…: el determinante de <b>cada</b> matriz no tiene nada que ver con la dependencia lineal <b>entre</b> las matrices.</p>
+</details>
+
+<details class="sol" id="ex-feb17"><summary>Feb. 2017 (2.ª sem., tipo A), ejercicio 2 — dos parámetros: ¿cuándo es ligado? (test) <span class="src" data-l="X" data-ref="Feb. 2017 (2.ª sem., tipo A), ejercicio 2">X Feb. 2017 (2.ª, A)</span></summary>
+  <p class="enun">Los vectores $(1,1,0,a)$, $(3,-1,b,-1)$, $(-3,5,a,-4)$ son un sistema ligado si: A) $a=-2$ y $b=1$; B) $a=-2$ o $b=1$; C) Siempre; D) Ninguna de ellas.</p>
+  <ol class="steps">
+    <li><b>Criterio.</b> Son 3 vectores: ligado $\iff$ rango $\lt3$ (Def. 2.7). Se calcula escalonando la matriz con los vectores por filas (las operaciones de fila no cambian el rango, U p.22):
+      $$\begin{pmatrix}1&1&0&a\\3&-1&b&-1\\-3&5&a&-4\end{pmatrix}$$</li>
+    <li><b>Anular la 1.ª columna:</b> $F_2\to F_2-3F_1$ y $F_3\to F_3+3F_1$:
+      $$\begin{pmatrix}1&1&0&a\\0&-4&b&-1-3a\\0&8&a&-4+3a\end{pmatrix}$$</li>
+    <li><b>Anular la 2.ª columna bajo el pivote $-4$:</b> $F_3\to F_3+2F_2$ (porque $8+2(-4)=0$):
+      $$\begin{pmatrix}1&1&0&a\\0&-4&b&-1-3a\\0&0&a+2b&-6-3a\end{pmatrix}$$
+      (4.ª entrada de $F_3$: $(-4+3a)+2(-1-3a)=-6-3a$.)</li>
+    <li><b>Discutir.</b> Las dos primeras filas tienen pivotes $1$ y $-4$, independientes de los parámetros: el rango es al menos 2. Es exactamente 2 (ligado) $\iff$ la 3.ª fila es <b>nula</b>: $a+2b=0$ <b>y</b> $-6-3a=0$, es decir $a=-2,\ b=1$. En otro caso, rango 3 y libre.</li>
+    <li><b>Elegir opción.</b> A) cierta. B) falsa: con $a=-2$, $b=0$ la 3.ª fila es $(0,0,-2,0)\neq0$, libre. C) falsa (con $a=b=0$ rango 3). D) falsa porque A es cierta.</li>
+    <li><b>Comprobación.</b> Con $a=-2,\ b=1$: $(-3,5,-2,-4)=c_1(1,1,0,-2)+c_2(3,-1,1,-1)$; de la 3.ª componente $c_2=-2$, de la 1.ª $c_1=3$; 2.ª: $3+2=5$ ✓; 4.ª: $-6+2=-4$ ✓. Así $v_3=3v_1-2v_2$.</li>
+  </ol>
+  <p><b>Resultado:</b> opción <b>A</b> ($a=-2$ <b>y</b> $b=1$, y solo entonces).</p>
+  <div class="recipe"><b>Receta:</b> sistema con parámetros: escalona dejando los parámetros para el final; es ligado cuando alguna fila se anula <b>entera</b>, lo que da <b>varias condiciones simultáneas</b> («y», no «o»).</div>
+  <p><b>Error típico:</b> mirar solo una entrada de la última fila ($a+2b=0$) y concluir «ligado si $a=-2b$»: para que el rango baje tiene que anularse <b>toda</b> la fila. Con matrices no cuadradas no hay un único determinante que igualar a $0$: hay que anular <b>todos</b> los menores de orden 3 (o escalonar).</p>
+</details>
+
+<div class="box tip"><span class="h">Para practicar (otros ejercicios de examen del tema)</span>
+  <ul>
+    <li>X, Feb. 2023 (2.ª sem.), problema 7 (i): estudiar si $\{(1,3,1),(3,8,2),(2,9,5)\}$ es linealmente independiente (rango 2 $\Rightarrow$ ligado; $(2,9,5)=11(1,3,1)-3(3,8,2)$). Los apartados (ii)-(iv) son de §2.3 y Tema 5.</li>
+    <li>X, Feb. 2018 (1.ª sem., tipo B), ej. 1: además de $S_2$ (arriba), comprobar que $S_1$ es base de $\mathbb R^4$ ($\det=420\neq0$): es de §2.3.</li>
+    <li>X, Feb. 2020 (1.ª sem., tipo B), ej. 2: extraer de $\{(1,2,-1),(3,1,0),(2,-1,1),(2,1,0)\}$ una base de $\mathbb R^3$ (supresión de vectores, Teor. 2.1; frontera con §2.3).</li>
+  </ul>
+</div>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">8</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Combinación lineal (Def. 2.3)</td><td>$v=\lambda_1u_1+\dots+\lambda_pu_p$; $v$ es c.l. $\iff$ el sistema $\sum\lambda_iu_i=v$ es compatible $\iff\operatorname{rang}A=\operatorname{rang}(A\mid v)$</td><td>$u_i$ como columnas de $A$; $\lambda_i\in\mathbb R$</td></tr>
+  <tr><td>Sistema generador (Def. 2.4)</td><td>$U=\langle S\rangle$: todo vector de $U$ es c.l. de $S$. $\langle S\rangle$ es el subespacio más pequeño que contiene a $S$</td><td>Los vectores de $S$ deben estar en $U$</td></tr>
+  <tr><td>Ligado (Def. 2.5)</td><td>$\exists\lambda_i$ no todos nulos con $\sum\lambda_iu_i=0$ $\iff$ algún $u_i$ es c.l. de los otros</td><td>Con $0\in S$ siempre es ligado</td></tr>
+  <tr><td>Libre (Def. 2.6)</td><td>$\sum\lambda_iu_i=0\Rightarrow$ todos $\lambda_i=0$ $\iff\operatorname{rang}=p$</td><td>$p$ = nº de vectores</td></tr>
+  <tr><td>Rango (Def. 2.7)</td><td>nº máximo de vectores independientes $=\operatorname{rang}$ de la matriz de coordenadas $=\operatorname{Dim}\langle S\rangle$ (§2.3)</td><td>Escalonar por filas no lo cambia</td></tr>
+  <tr><td>Más vectores que $n$</td><td>Más de $n$ vectores en $\mathbb R^n$ $\Rightarrow$ ligados</td><td>—</td></tr>
+  <tr><td>$n$ vectores en $\mathbb R^n$</td><td>libre $\iff\det\neq0$</td><td>matriz cuadrada</td></tr>
+  <tr><td>Supresión (Teor. 2.1)</td><td>Si $G$ genera $V$ y $u_i$ es c.l. de los otros, $G\setminus\{u_i\}$ genera $V$</td><td>Quitar de <b>uno en uno</b></td></tr>
+  <tr><td>Sustitución (Teor. 2.2)</td><td>Se puede sustituir $u_i$ por una c.l. en la que $u_i$ tenga coeficiente $\neq0$</td><td>Coeficiente $0$: no vale</td></tr>
+  <tr><td>Libres vs. generadores</td><td>$\{v_1..v_h\}$ libre y generador, $\{u_1..u_p\}$ generador $\Rightarrow h\le p$</td><td>—</td></tr>
+  <tr><td>Lema «libre + 1»</td><td>$S$ libre: $w\in\langle S\rangle\iff S\cup\{w\}$ ligado</td><td><b>$S$ libre</b> (si no, falso)</td></tr>
+  <tr><td>Cartesianas → generadores</td><td>Resolver $AX=0$ y separar un vector por parámetro</td><td>Sistema homogéneo</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé plantear «$w$ es combinación lineal de $u_1,\dots,u_p$» como un sistema lineal, resolverlo y comprobar <b>todas</b> las ecuaciones.</li>
+  <li>Sé decir cuándo una combinación lineal es única y cuándo hay infinitas (y qué significa para el sistema).</li>
+  <li>Sé probar que $T$ genera un subespacio dado por ecuaciones (dos inclusiones) y hallar un sistema generador de un subespacio dado por cartesianas.</li>
+  <li>Sé decidir si un sistema es libre o ligado con la caracterización $\sum\lambda_iu_i=0$, con rango o con determinante, y sé usar los atajos (vector nulo, dos vectores proporcionales, más de $n$ vectores).</li>
+  <li>Sé calcular el rango de un sistema, incluso con parámetros, y decir qué vectores sobran.</li>
+  <li>Sé aplicar supresión y sustitución sin saltarme la condición (coeficiente $\neq0$, quitar de uno en uno).</li>
+  <li>Sé hallar el parámetro para que un vector pertenezca a $\langle S\rangle$, comprobando antes que $S$ es libre cuando uso el determinante.</li>
+  <li>Sé trabajar igual en matrices, polinomios y funciones (cada «vector» se descompone en entradas o se evalúa en puntos).</li>
+</ul>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li>Olvidar las ecuaciones que «no tienen incógnitas» (como $2=0$) o no comprobar las que no se usaron para hallar los coeficientes.</li>
+    <li>Suponer que los coeficientes de una combinación lineal son únicos.</li>
+    <li>Dar como generadores los coeficientes de las ecuaciones cartesianas, o generadores que no están en el subespacio.</li>
+    <li>Comprobar solo una inclusión al probar que $T$ genera $U$.</li>
+    <li>Confundir «libre» con «generador» (y «base» con cualquiera de las dos).</li>
+    <li>Sustituir con coeficiente $0$; o suprimir varios vectores a la vez usando entre sí los que se van a quitar.</li>
+    <li>Aplicar «$\det=0$» sin comprobar que los vectores «fijos» son libres, o con una matriz no cuadrada.</li>
+    <li>Con parámetros: anular una sola entrada de la fila (hay que anular la fila entera) o olvidar el caso degenerado (vector nulo, $a=b=0$).</li>
+    <li>Calcular el determinante de cada matriz para estudiar la dependencia entre matrices.</li>
+  </ol>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>
