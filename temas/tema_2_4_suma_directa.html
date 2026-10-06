@@ -63,7 +63,7 @@
   <tr><td>6 Suma directa</td><td>Def. 2.13, caracterización $U_1\cap U_2=\{0\}$ (Ej. U 2.39-2.42)</td><td>U p.96-97</td></tr>
   <tr><td>7 Suplementarios</td><td>Def. 2.14, cómo hallar uno, Teor. 2.9 (Ej. U 2.43)</td><td>U p.97-98</td></tr>
   <tr><td>8 Ejercicios del libro</td><td>E 2.31–2.37 (los siete) + 3 ejemplos propios</td><td>E pp.70-78</td></tr>
-  <tr><td>9 Ejemplos de examen</td><td>7 preguntas de convocatorias anteriores, resueltas</td><td>X</td></tr>
+  <tr><td>9 Ejemplos de examen</td><td>9 preguntas de convocatorias anteriores, resueltas</td><td>X</td></tr>
 </table>
 
 <div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
@@ -700,9 +700,27 @@
       Entonces $\operatorname{Dim}N_k=3+k$, $M\cap N_k=\langle e_1,e_2,e_3\rangle$ (dimensión 3) y $M+N_k=\langle e_1,\dots,e_{5+k}\rangle$. Se obtiene $\operatorname{Dim}N=3,4,5,6,7$.</li>
   </ol>
   <p><b>Resultado:</b> $\operatorname{Dim}N\in\{3,4,5,6,7\}$. <i>(Verificado con sympy para cada $k$.)</i></p>
-  <p><b>Sobre la solución oficial.</b> Da las dos cotas y concluye «3, 4, 5, 6 y 7»: falta el paso 4 (que cada valor se alcanza con un ejemplo) y la justificación de $\operatorname{Dim}(M+N)\le9$.</p>
+  <p><b>Sobre la solución oficial.</b> Da las dos cotas y concluye «3, 4, 5, 6 y 7»: falta el paso 4 (que cada valor se alcanza con un ejemplo) y afirma $\operatorname{Dim}(M+N)\le9$ sin justificarlo (H2).</p>
   <div class="recipe"><b>Receta:</b> «posibles dimensiones»: escribe Grassmann, despeja la incógnita en función de $\operatorname{Dim}(U_1+U_2)$ y acota ésta entre $\max(\operatorname{Dim}U_1,\operatorname{Dim}U_2)$ y $\operatorname{Dim}V$. Luego da un ejemplo con vectores canónicos para cada valor.</div>
   <p><b>Error típico:</b> escribir Grassmann con $\operatorname{Dim}V$ en lugar de $\operatorname{Dim}(M+N)$ (saldría solo $\operatorname{Dim}N=7$), o con $M\cup N$ en lugar de $M+N$.</p>
+</details>
+
+<details class="sol" id="ex-ene22"><summary>Ene. 2022 (tipo A), ejercicio 2 — $F+G$, $F\cup G$ y $F\cap G$ cuando $G\subset F$ (polinomios) <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A), ejercicio 2">X Ene. 2022 (A)</span></summary>
+  <p class="enun">Si $\{x^2,1\}$ y $\{x^2+1\}$ son sistemas generadores de dos subespacios $F$ y $G$, respectivamente, hallar $F+G$, $F\cup G$ y $F\cap G$.</p>
+  <p><i>Los vectores son polinomios; se trabaja en los polinomios de grado $\le2$, con base canónica $\{1,x,x^2\}$. Este ejercicio ilustra también la cuestión de la unión de subespacios del <a href="tema_2_1_espacios_vectoriales.html#s5">tema 2.1</a> (cuándo la unión sí es subespacio). El PDF de soluciones lleva la cabecera «Enero 2021», errata: el enunciado es de 2022.</i></p>
+  <ol class="steps">
+    <li><b>Qué son $F$ y $G$.</b> $F=\langle x^2,1\rangle=\{ax^2+b:\ a,b\in\mathbb R\}$ (polinomios sin término en $x$) y $G=\langle x^2+1\rangle=\{c(x^2+1):\ c\in\mathbb R\}$.</li>
+    <li><b>Dimensiones.</b> $\{x^2,1\}$ es libre: $ax^2+b\cdot1=0$ (polinomio nulo) obliga a $a=b=0$ (Def. 2.6, U p.74), luego $\operatorname{Dim}F=2$. $\{x^2+1\}$ es un vector no nulo: $\operatorname{Dim}G=1$.</li>
+    <li><b>Observación clave: $G\subset F$.</b> $x^2+1=1\cdot x^2+1\cdot1$ es combinación lineal de los generadores de $F$, así que está en $F$; y como $F$ es subespacio, $c(x^2+1)\in F$ para todo $c$. En coordenadas respecto de $\{1,x,x^2\}$: $(1,0,1)=(1,0,0)+(0,0,1)$.</li>
+    <li><b>Intersección.</b> Todo vector de $G$ está también en $F$, y $F\cap G\subset G$ siempre: $F\cap G=G=\langle x^2+1\rangle$, dimensión 1.</li>
+    <li><b>Suma</b> (Def. 2.12, U p.93). $F\subset F+G$ (tomando $g=0$). Recíprocamente, si $f\in F$ y $g\in G\subset F$, entonces $f+g\in F$ por ser $F$ subespacio. Luego $F+G=F=\langle x^2,1\rangle$, dimensión 2.</li>
+    <li><b>Comprobación con Grassmann</b> (U p.95): $\operatorname{Dim}(F+G)+\operatorname{Dim}(F\cap G)=2+1=3=\operatorname{Dim}F+\operatorname{Dim}G$ ✓.</li>
+    <li><b>Unión.</b> $F\cup G$ son los polinomios que están en $F$ o en $G$; como $G\subset F$, $F\cup G=F$. Aquí la unión <b>sí</b> es subespacio: es la excepción a «en general no» (U p.92), que ocurre justo cuando uno contiene al otro (véase la chuleta).</li>
+  </ol>
+  <p><b>Resultado:</b> $F\cap G=G=\langle x^2+1\rangle$; $F+G=F=\langle x^2,1\rangle$; $F\cup G=F$. <i>(Verificado con sympy en coordenadas: rango de $\{(0,0,1),(1,0,0)\}$ = rango con $(1,0,1)$ añadido = 2.)</i></p>
+  <p><b>Sobre la solución oficial.</b> Dice solo «la intersección es $G$, la suma es $F$ y la unión es $F$», sin justificar $G\subset F$ (paso 3), que es lo que hace funcionar todo; en el examen lo no justificado no se puntúa.</p>
+  <div class="recipe"><b>Receta:</b> antes de operar, <b>mira si uno está contenido en el otro</b> (basta que los generadores del pequeño sean combinación de los del grande). Si $G\subset F$: $F\cap G=G$, $F+G=F$, $F\cup G=F$.</div>
+  <p><b>Error típico:</b> decir «$F\cap G=\{0\}$ porque los generadores son distintos», o afirmar que la unión «nunca» es subespacio.</p>
 </details>
 
 <details class="sol" id="ex-sep22"><summary>Sept. 2022, problema b) — base, cartesianas y paramétricas de $F+G$ y un suplementario <span class="src" data-l="X" data-ref="Sept. 2022, problema b)">X Sept. 2022</span></summary>
@@ -755,23 +773,52 @@
       (Parametrizar uno e imponer las ecuaciones del otro es lo más rápido cuando uno viene por generadores y el otro por ecuaciones.)</li>
     <li><b>Suma: unir bases y quitar sobrantes.</b> $U_1+U_2=\langle(2,0,2,1),(0,3,1,0),(0,3,1,0),(0,0,0,1)\rangle=\langle(2,0,2,1),(0,3,1,0),(0,0,0,1)\rangle$ (el repetido se suprime, Teor. 2.1). Por Grassmann, $\operatorname{Dim}(U_1+U_2)=2+2-1=3$; los 3 generadores que quedan generan un subespacio de dimensión 3, luego son libres y <b>base</b>. Comprobación del rango: el menor de las columnas 1, 2 y 4 es $\begin{vmatrix}2&0&1\\0&3&0\\0&0&1\end{vmatrix}=6\neq0$. Base de $U_1+U_2$: $\{(2,0,2,1),(0,3,1,0),(0,0,0,1)\}$ (su cartesiana, no pedida, es $3x+y-3z=0$).</li>
   </ol>
-  <p><b>(c) La unión no es subespacio.</b></p>
-  <ol class="steps" start="5">
-    <li>Tomamos $u=(2,0,2,1)\in U_1$ y $w=(0,0,0,1)\in U_2$, ambos en $U_1\cup U_2$. Su suma es $u+w=(2,0,2,2)$. <i>No está en $U_2$:</i> su primera coordenada es $2\neq0$. <i>No está en $U_1$:</i> debería ser $(2a,3b,2a+b,a)$ y la 1.ª coordenada da $a=1$ mientras la 4.ª da $a=2$: contradicción.</li>
-    <li>Luego $u+w\notin U_1\cup U_2$ y <b>$U_1\cup U_2$ no es subespacio</b> (como en U Ej. 2.34, p.92-93).</li>
-  </ol>
+  <p><b>(c)</b> $U_1\cup U_2$ <b>no es subespacio</b>: con $u=(2,0,2,1)\in U_1$ y $w=(0,0,0,1)\in U_2$, $u+w=(2,0,2,2)\notin U_1\cup U_2$. Desarrollo completo en <a href="tema_2_1_espacios_vectoriales.html#ex-sep24">el tema 2.1</a>.</p>
   <p><b>Resultado:</b> base de $U_1+U_2$: $\{(2,0,2,1),(0,3,1,0),(0,0,0,1)\}$; base de $U_1\cap U_2$: $\{(0,3,1,0)\}$; la unión no es subespacio. <i>(Verificado con sympy.)</i></p>
-  <p><b>Sobre la solución oficial.</b> Para la intersección solo dice «$(2,0,2,1)\notin U_2$ (porque $2\neq0$) y, por tanto, $U_1\cap U_2=\langle(0,3,1,0)\rangle$» (el texto digital pierde el «$\neq$»). Es válido pero faltan pasos: hay que decir que $(0,3,1,0)$ está en los dos (en $U_1$ es generador; en $U_2$, $x=0$ y $3-3=0$), luego $1\le\operatorname{Dim}(U_1\cap U_2)$; y que $U_1\cap U_2\neq U_1$ (porque $(2,0,2,1)\notin U_2$), luego $\operatorname{Dim}(U_1\cap U_2)\lt2$ por (H2). Para la suma no justifica que los tres vectores sean libres.</p>
+  <p><b>Sobre la solución oficial.</b> Para la intersección solo dice «$(2,0,2,1)\notin U_2$ (porque $2\neq0$) y, por tanto, $U_1\cap U_2=\langle(0,3,1,0)\rangle$». Es válido pero faltan pasos: hay que decir que $(0,3,1,0)$ está en los dos (en $U_1$ es generador; en $U_2$, $x=0$ y $3-3=0$), luego $1\le\operatorname{Dim}(U_1\cap U_2)$; y que $U_1\cap U_2\neq U_1$ (porque $(2,0,2,1)\notin U_2$), luego $\operatorname{Dim}(U_1\cap U_2)\lt2$ por (H2). Para la suma no justifica que los tres vectores sean libres.</p>
   <div class="recipe"><b>Receta:</b> uno por generadores y otro por ecuaciones: <b>intersección</b> = vector genérico del primero + ecuaciones del segundo; <b>suma</b> = unión de bases, quitando repetidos/dependientes; comprueba con Grassmann. <b>Unión:</b> busca un vector de cada subespacio (que no esté en el otro) cuya suma no esté en ninguno.</div>
   <p><b>Error típico:</b> confundir suma con unión («$U_1+U_2=U_1\cup U_2$»): la suma es un subespacio, mucho más grande; la unión, en general, ni siquiera es subespacio.</p>
 </details>
 
-<div class="box tip"><span class="h">Para practicar (otros ejercicios de examen del tema)</span>
-  <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), problema 7; Ene. 2022 (tipo A), ejercicio 2; Feb. 2022 (tipo A), problema a)">X varios</span>
+<details class="sol" id="ex-feb24p7"><summary>Feb. 2024 (1.ª sem.), problema 7 — Grassmann en $\mathbb R^4$: dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), problema 7">X Feb. 2024 (1.ª) P7</span></summary>
+  <p class="enun">Sean $L_1$ y $L_2$ subespacios de $\mathbb R^4$: $L_1=\langle(3,-4,0,1),(2,2,0,-4),(1,-6,0,5)\rangle$, $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$. Calcule de manera razonada las dimensiones de $L_1$ (0.5 p.), $L_2$ (0.5 p.), $L_1\cap L_2$ (0.5 p.) y $L_1+L_2$ (0.5 p.).</p>
+  <p><i>Las dimensiones de $L_1$ y $L_2$ (pasos 1 y 2) se desarrollan con detalle en el <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb24p7">tema 2.3</a>; aquí se resumen y se desarrolla lo propio de este tema: intersección, suma y Grassmann.</i> Llamamos $v_1=(3,-4,0,1)$, $v_2=(2,2,0,-4)$, $v_3=(1,-6,0,5)$.</p>
+  <ol class="steps">
+    <li><b>$\operatorname{Dim}L_1$.</b> $v_1-v_2=(1,-6,0,5)=v_3$: $v_3$ es combinación de $v_1,v_2$ y, por supresión (Teor. 2.1, U p.79), $L_1=\langle v_1,v_2\rangle$. No son proporcionales (la 1.ª coordenada daría $\lambda=2/3$ y la 2.ª $\lambda=-1/2$): libres. $\operatorname{Dim}L_1=2$.</li>
+    <li><b>$\operatorname{Dim}L_2$.</b> Son tres vectores canónicos distintos: libres (la matriz que forman contiene la identidad $3\times3$, rango 3). $\operatorname{Dim}L_2=3$.</li>
+    <li><b>Cartesianas de $L_1$</b> (para poder cortar). Un vector de $L_1$ es $\alpha v_1+\beta v_2$: $x_1=3\alpha+2\beta$, $x_2=-4\alpha+2\beta$, $x_3=0$, $x_4=\alpha-4\beta$. Con $\operatorname{Dim}L_1=2$ en $\mathbb R^4$ hay $4-2=2$ ecuaciones independientes (H1). Una es $x_3=0$. Para la otra se eliminan $\alpha,\beta$: $x_1+x_2=-\alpha+4\beta=-x_4$, es decir $x_1+x_2+x_4=0$.
+      $$L_1:\ \begin{cases}x_3=0\\ x_1+x_2+x_4=0\end{cases}$$
+      Comprobación: $v_1$: $3-4+1=0$ ✓; $v_2$: $2+2-4=0$ ✓.</li>
+    <li><b>Cartesiana de $L_2$.</b> $\alpha e_1+\beta e_2+\gamma e_3=(\alpha,\beta,\gamma,0)$: la 4.ª coordenada siempre es 0 y las otras tres son libres. $L_2:\ x_4=0$ ($4-3=1$ ecuación).</li>
+    <li><b>Intersección: juntar todas las ecuaciones</b> (un vector de $L_1\cap L_2$ cumple las de ambos; U p.91, Ej. 2.33):
+      $$L_1\cap L_2:\ x_3=0,\quad x_1+x_2+x_4=0,\quad x_4=0\iff x_3=0,\ x_4=0,\ x_1+x_2=0.$$
+      Las tres ecuaciones son independientes (cada una tiene una incógnita que no aparece en las otras: $x_3$, $x_4$, $x_1$): rango 3 y $4-3=1$ parámetro. Con $x_1=\lambda$, $x_2=-\lambda$: $L_1\cap L_2=\langle(1,-1,0,0)\rangle$, $\operatorname{Dim}(L_1\cap L_2)=1$.
+      <br><i>Vía más corta:</i> un vector $\alpha v_1+\beta v_2$ de $L_1$ está en $L_2$ si su 4.ª coordenada es 0: $\alpha-4\beta=0\Rightarrow\alpha=4\beta$ y queda $\beta(4v_1+v_2)=\beta(14,-14,0,0)=14\beta(1,-1,0,0)$. Mismo resultado.</li>
+    <li><b>Suma: Grassmann</b> (U p.95) con las otras tres dimensiones ya calculadas:
+      $$\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)=2+3-1=4.$$
+      $L_1+L_2$ es un subespacio de $\mathbb R^4$ de dimensión 4: por (H2), es todo $\mathbb R^4$.</li>
+    <li><b>Comprobación independiente.</b> $L_1+L_2=\langle v_1,v_2,e_1,e_2,e_3\rangle$ (Def. 2.12: se unen los generadores). $\det(e_1,e_2,e_3,v_1)$, desarrollando por la 4.ª fila $(0,0,0,1)$, vale $1\neq0$: rango 4 ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Dim}L_1=2$, $\operatorname{Dim}L_2=3$, $\operatorname{Dim}(L_1\cap L_2)=1$ ($L_1\cap L_2=\langle(1,-1,0,0)\rangle$), $\operatorname{Dim}(L_1+L_2)=4$ ($L_1+L_2=\mathbb R^4$). <i>(Verificado con sympy: rangos 2, 3, 4; det $=1$.)</i></p>
+  <p><b>Sobre la solución oficial.</b> Es correcta, pero da las cartesianas de $L_1$ sin mostrar la eliminación de parámetros y no explica por qué $L_1\cap L_2$ tiene dimensión 1 (rango 3 del sistema conjunto).</p>
+  <div class="recipe"><b>Receta:</b> con dos subespacios por generadores: (i) dimensión de cada uno = rango de sus generadores (quita los dependientes); (ii) pasa a cartesianas y <b>júntalas</b> para la intersección (o: vector genérico de uno + ecuaciones del otro); (iii) dimensión de la suma por <b>Grassmann</b>; comprueba con el rango de la unión de generadores.</div>
+  <p><b>Fallo recurrente (señalado en el propio examen):</b> «confundir suma de subespacios con unión de subespacios», que en general no es un subespacio. <b>Error típico:</b> escribir $\operatorname{Dim}(L_1+L_2)=2+3=5$, imposible en $\mathbb R^4$: eso solo vale si la suma es directa, y aquí $L_1\cap L_2\neq\{0\}$.</p>
+</details>
+
+<div class="box tip"><span class="h">Para practicar (otros ejercicios de examen)</span>
+  <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A), problema a)">X Feb. 2022 (A)</span>
   <ul>
-    <li>X, Feb. 2024 (1.ª sem.), problema 7 (2 puntos) — Grassmann en $\mathbb R^4$: $L_1=\langle(3,-4,0,1),(2,2,0,-4),(1,-6,0,5)\rangle$, $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$; dimensiones de $L_1$, $L_2$, $L_1\cap L_2$, $L_1+L_2$. <i>Solución verificada:</i> $(1,-6,0,5)=v_1-v_2$, $\operatorname{Dim}L_1=2$, cartesianas $L_1:\ x_3=0,\ x_1+x_2+x_4=0$; $\operatorname{Dim}L_2=3$, $L_2:\ x_4=0$; $L_1\cap L_2:\ x_3=x_4=0,\ x_1+x_2=0$, es $\langle(1,-1,0,0)\rangle$, dimensión 1; Grassmann: $\operatorname{Dim}(L_1+L_2)=2+3-1=4$, luego $L_1+L_2=\mathbb R^4$. (Las dimensiones de $L_1$ y $L_2$ están en el tema 2.3.)</li>
-    <li>X, Ene. 2022 (tipo A), ejercicio 2 — «si $\{x^2,1\}$ y $\{x^2+1\}$ son sistemas generadores de $F$ y $G$, hallar $F+G$, $F\cup G$ y $F\cap G$». <i>Solución:</i> $x^2+1=1\cdot x^2+1\cdot1\in F$, luego $G\subset F$; como en el Ejemplo de examen 1, $F\cap G=G=\langle x^2+1\rangle$, $F+G=F=\langle x^2,1\rangle$ y $F\cup G=F$. Aquí la unión <b>sí</b> es subespacio, porque uno contiene al otro (la excepción a «en general no»). La solución oficial da los tres resultados sin justificar $G\subset F$.</li>
-    <li>X, Feb. 2022 (tipo A), problema a) (1,5 puntos), mixto con el tema 5: «encuentre un subespacio $V$ de $\mathbb R^3$ ortogonal al subespacio $U$ definido por $x+z=0;\ y=0$. Razone si $V$ es suplementario de $U$». <i>Solución:</i> $U=\langle(1,0,-1)\rangle$ (recta). El conjunto de <b>todos</b> los vectores ortogonales a $U$ es el plano $x-z=0$, que es suplementario de $U$ porque $(1,0,-1)$ no lo cumple ($1-(-1)=2\neq0$), así que la intersección es $\{0\}$ y $1+2=3$ (H3). Una recta ortogonal como $\langle(0,1,0)\rangle$ <b>no</b> es suplementaria ($1+1=2\lt3$). Ojo: la solución oficial intercambia los nombres $U$ y $V$.</li>
+    <li>X, Feb. 2022 (tipo A), problema a) (1,5 puntos): «encuentre un subespacio $V$ de $\mathbb R^3$ ortogonal al subespacio $U$ definido por $x+z=0;\ y=0$. Razone si $V$ es suplementario de $U$». Mezcla suplementarios (§7) con ortogonalidad: <b>se desarrolla en el tema 5.1</b>. Pista: $U=\langle(1,0,-1)\rangle$ y los vectores ortogonales a $U$ forman el plano $x-z=0$.</li>
+  </ul>
+</div>
+
+<div class="box tip"><span class="h">Para practicar (de otros temas)</span>
+  <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores, ejercicios fronterizos">X varios</span>
+  <ul>
+    <li>Sept. 2025, problema 7 (3.er apartado): dimensión de $\langle A,B,Y\rangle$ en $M_{2\times2}$ → <a href="tema_2_3_bases_dimension_coordenadas.html">tema 2.3</a>.</li>
+    <li>Feb. 2022 (tipo A), ejercicio 2: sistema generador de un subespacio dado por cartesianas → <a href="tema_2_2_sistemas_generadores.html#ex-feb22">tema 2.2</a>.</li>
+    <li>Sept. 2023, problema 7 (2.º apartado): subespacio propio de $\operatorname{Im}f$ en forma implícita → tema 3.2 (aún no existe).</li>
+    <li>Feb. 2018 (tipo A), problema a); Sept. 2019 (tipo A), problema b); Feb. 2017 (2.ª sem., tipo A), ejercicio 5; Feb. 2020 (1.ª sem., tipo B), ejercicio 5: subespacio ortogonal y suplementario ortogonal → tema 5.1 (aún no existe).</li>
   </ul>
 </div>
 

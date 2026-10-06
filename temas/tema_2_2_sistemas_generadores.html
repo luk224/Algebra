@@ -604,7 +604,7 @@
 
 <p>Preguntas de exámenes de otros años que caen en este tema. Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>) y se señalan sus omisiones. Se ordenan de más fácil a más difícil.</p>
 
-<details class="sol" id="ex-feb18"><summary>Feb. 2018 (tipo A), ejercicio 2 — ¿generador, base, libre? (verdadero/falso) <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), ejercicio 2">X Feb. 2018 (1.ª, A)</span></summary>
+<details class="sol" id="ex-feb18"><summary>Feb. 2018 (tipo A), ejercicio 2 — ¿generador, base, libre? (verdadero/falso) <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), ejercicio 2">X Feb. 2018 (A)</span></summary>
   <p class="enun">Si $\{\bar u=(1,2,-1);\ \bar v=(3,1,0);\ \bar w=(2,-1,1);\ \bar s=(2,1,0)\}$, razonar si son o no ciertas las siguientes afirmaciones: A) $\{\bar u,\bar v\}$ forman un sistema generador de $\mathbb R^3$; B) $\{\bar u,\bar v\}$ forman una base de $\mathbb R^3$; C) $\{\bar u,\bar v\}$ forman un sistema libre o linealmente independiente.</p>
   <p>(Los vectores $\bar w$ y $\bar s$ no intervienen en ninguna afirmación: son distractores.)</p>
   <ol class="steps">
@@ -617,7 +617,7 @@
     <li><b>B) ¿base?</b> Una base es un sistema libre <b>y</b> generador (se define en §2.3). Como falla «generador», <b>B) es falsa</b>.</li>
   </ol>
   <p><b>Resultado:</b> A) falsa, B) falsa, C) cierta. <i>(sympy: $\operatorname{rang}\{\bar u,\bar v\}=2$; $\det(\bar u,\bar v,e_3)=-5\neq0$.)</i></p>
-  <p><b>Variante</b> (X, Feb. 2018, tipo B, ej. 1): «comprobar que $S_2$ [$(1,1,-4),(1,5,6),(4,2,3),(-2,0,-2)$] es un sistema ligado de $\mathbb R^3$». Sin calcular nada: $\sum\lambda_iv_i=0$ es un sistema <b>homogéneo</b> de 3 ecuaciones con 4 incógnitas, rango $\le3\lt4$, luego compatible indeterminado (Rouché, U p.30) con soluciones no nulas: ligado. En general, <b>más de $n$ vectores de $\mathbb R^n$ son siempre ligados</b>.</p>
+  <p><b>Variante</b> (X, <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb18b">Feb. 2018 (tipo B), ejercicio 1</a>): «comprobar que $S_2$ [$(1,1,-4),(1,5,6),(4,2,3),(-2,0,-2)$] es un sistema ligado de $\mathbb R^3$». Sin calcular nada: $\sum\lambda_iv_i=0$ es un sistema <b>homogéneo</b> de 3 ecuaciones con 4 incógnitas, rango $\le3\lt4$, luego compatible indeterminado (Rouché, U p.30) con soluciones no nulas: ligado. En general, <b>más de $n$ vectores de $\mathbb R^n$ son siempre ligados</b>.</p>
   <div class="recipe"><b>Receta:</b> libre: plantea $\sum\lambda_iu_i=0$ y mira si solo sale la solución nula (o rango $=$ nº de vectores). Generador de $\mathbb R^n$: hacen falta al menos $n$ vectores; para refutarlo basta un vector concreto que dé sistema incompatible.</div>
   <p><b>Error típico:</b> confundir «libre» con «generador». $\{\bar u,\bar v\}$ es libre pero no genera $\mathbb R^3$; $S_2$ genera $\mathbb R^3$ pero no es libre. Son propiedades independientes; la base exige las dos.</p>
 </details>
@@ -711,11 +711,77 @@
   <p><b>Error típico:</b> mirar solo una entrada de la última fila ($a+2b=0$) y concluir «ligado si $a=-2b$»: para que el rango baje tiene que anularse <b>toda</b> la fila. Con matrices no cuadradas no hay un único determinante que igualar a $0$: hay que anular <b>todos</b> los menores de orden 3 (o escalonar).</p>
 </details>
 
-<div class="box tip"><span class="h">Para practicar (otros ejercicios de examen del tema)</span>
+<details class="sol" id="ex-sep22"><summary>Sept. 2022, ejercicio 2 — ecuaciones de un subespacio de dimensión 1 de $\mathbb R^2$ <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 2">X Sept. 2022</span></summary>
+  <p class="enun">Escribir las ecuaciones cartesianas o paramétricas de un subespacio vectorial de dimensión 1 del espacio $\mathbb R^2$.</p>
+  <ol class="steps">
+    <li><b>Qué objeto es.</b> «Dimensión 1» significa, a este nivel, generado por <b>un</b> vector no nulo: $U=\langle u\rangle=\{\lambda u:\lambda\in\mathbb R\}$ (Def. 2.4). Un solo vector no nulo es libre (Def. 2.5: $\lambda u=\bar0$ con $u\neq\bar0$ obliga a $\lambda=0$). Geométricamente es una <b>recta por el origen</b>. Hace falta $u\neq\bar0$: $\langle\bar0\rangle=\{\bar0\}$ no es una recta.</li>
+    <li><b>Paramétricas.</b> Elegimos $u=(1,-2)$: $(x_1,x_2)=\lambda(1,-2)$, es decir
+      $$U:\ \begin{cases}x_1=\lambda\\ x_2=-2\lambda\end{cases}\qquad\lambda\in\mathbb R.$$</li>
+    <li><b>Cartesianas.</b> Un generador libre en $\mathbb R^2$ deja $2-1=1$ ecuación. Por rango, $(x_1,x_2)\in U\iff\begin{vmatrix}1&x_1\\-2&x_2\end{vmatrix}=x_2+2x_1=0$. También se ve eliminando: $\lambda=x_1\Rightarrow x_2=-2x_1$. Luego $U:\ 2x_1+x_2=0$.</li>
+    <li><b>Comprobación.</b> $(1,-2)$ cumple $2-2=0$ ✓; y si $2x_1+x_2=0$, entonces $(x_1,x_2)=x_1(1,-2)\in U$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $U=\{(x_1,x_2):2x_1+x_2=0\}=\langle(1,-2)\rangle$. Vale cualquier $ax_1+bx_2=0$ con $(a,b)\neq(0,0)$.</p>
+  <div class="recipe"><b>Receta:</b> recta de $\mathbb R^2$ por el origen $=\langle(p,q)\rangle$ con $(p,q)\neq(0,0)$; paramétricas $x_1=p\lambda,\ x_2=q\lambda$; cartesiana $qx_1-px_2=0$ (el determinante $\begin{vmatrix}p&x_1\\q&x_2\end{vmatrix}=0$).</div>
+  <p><b>Error típico:</b> escribir una recta que <b>no</b> pasa por el origen ($x_1+x_2=1$, o $x_1=1+\lambda,\ x_2=\lambda$): no contiene a $\bar0$, luego no es subespacio (U §2.1). Otro: «$0x_1+0x_2=0$», que es todo $\mathbb R^2$ (dimensión 2).</p>
+</details>
+
+<details class="sol" id="ex-feb22b"><summary>Feb. 2022 (tipo A), ejercicio 1 — de paramétricas a cartesianas (versión breve) <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A), ejercicio 1">X Feb. 2022 (A)</span></summary>
+  <p class="enun">Escriba unas ecuaciones paramétricas de un sistema y halle las ecuaciones cartesianas de dicho sistema. Considere 3 incógnitas.</p>
+  <p>El enunciado es impreciso: se pide elegir un <b>subespacio de $\mathbb R^3$</b>, dar sus paramétricas y deducir sus cartesianas. Aquí una versión breve con un plano; el desarrollo completo (recta y plano) está en <a href="tema_1_4_sistemas_ecuaciones.html#ex-feb22e1">el tema 1.4</a>.</p>
+  <ol class="steps">
+    <li><b>Elegir el subespacio.</b> $U=\langle(1,0,2),(0,1,-1)\rangle$. Los dos generadores no son proporcionales: libres, rango 2.</li>
+    <li><b>Paramétricas.</b> $(x,y,z)=\alpha(1,0,2)+\beta(0,1,-1)$:
+      $$x=\alpha,\quad y=\beta,\quad z=2\alpha-\beta,\qquad\alpha,\beta\in\mathbb R.$$</li>
+    <li><b>Cuántas ecuaciones.</b> $n-r=3-2=1$.</li>
+    <li><b>Eliminar los parámetros.</b> Con $\alpha=x$ y $\beta=y$ la tercera da $z=2x-y$, es decir $2x-y-z=0$. Por determinante: $(x,y,z)\in U\iff\begin{vmatrix}1&0&x\\0&1&y\\2&-1&z\end{vmatrix}=0$; desarrollando por la 1.ª fila, $1\cdot(z+y)-0+x\cdot(0-2)=-2x+y+z=0$, la misma ecuación.</li>
+    <li><b>Comprobación.</b> $(1,0,2)$: $2-0-2=0$ ✓; $(0,1,-1)$: $0-1+1=0$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $U:\ 2x-y-z=0$.</p>
+  <div class="recipe"><b>Receta:</b> (1) rango $r$ de los generadores: saldrán $n-r$ ecuaciones; (2) elimina parámetros o impón $\operatorname{rang}(\text{generadores}\mid x)=r$; (3) comprueba los generadores en las ecuaciones.</div>
+  <p><b>Error típico:</b> dar menos ecuaciones de las necesarias (para una recta de $\mathbb R^3$, una sola ecuación es un plano) o con término independiente ($2x-y-z=1$): las cartesianas de un subespacio son <b>homogéneas</b>.</p>
+</details>
+
+<details class="sol" id="ex-feb23"><summary>Feb. 2023 (2.ª sem.), problema 7 (i)-(iii) — independencia, paramétricas e implícitas del subespacio generado <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), problema 7, apartados (i)-(iii)">X Feb. 2023 (2.ª)</span> <span class="src" data-l="U" data-ref="U §2.2 pp. 69-71 y 78-79">U</span></summary>
+  <p class="enun">En $V=\mathbb R^3$ con la base canónica $B$, sea $E=\{(1,3,1),(3,8,2),(2,9,5)\}$ y $U$ el subespacio generado por $E$. (i) Estudie si $E$ es linealmente independiente. (ii) Exprese $U$ mediante ecuaciones paramétricas respecto de $B$. (iii) Exprese $U$ mediante ecuaciones implícitas respecto de $B$. <i>(El apartado (iv), dimensión y base ortonormal, queda para 2.3 y el Tema 5.)</i></p>
+  <p>Notación: $w_1=(1,3,1)$, $w_2=(3,8,2)$, $w_3=(2,9,5)$. Como $B$ es la canónica, las coordenadas son las propias componentes.</p>
+  <ol class="steps">
+    <li><b>(i) Criterio.</b> Un sistema de $p$ vectores es libre $\iff$ su rango es $p$ (Def. 2.7). Aquí $p=3$.</li>
+    <li><b>Escalonar</b> con los vectores por filas (las operaciones de fila no cambian el rango):
+      $$\begin{pmatrix}1&3&1\\3&8&2\\2&9&5\end{pmatrix}\xrightarrow[F_3\to F_3-2F_1]{F_2\to F_2-3F_1}\begin{pmatrix}1&3&1\\0&-1&-1\\0&3&3\end{pmatrix}\xrightarrow{F_3\to F_3+3F_2}\begin{pmatrix}1&3&1\\0&-1&-1\\0&0&0\end{pmatrix}.$$
+      Cada operación anula lo que hay bajo un pivote. Dos filas no nulas: rango $2\lt3$, luego $E$ es <b>ligado</b>.</li>
+    <li><b>La dependencia explícita.</b> Buscamos $w_3=\lambda w_1+\mu w_2$: $\lambda+3\mu=2$, $3\lambda+8\mu=9$; restando 3 veces la 1.ª a la 2.ª, $-\mu=3$, $\mu=-3$, $\lambda=11$. Tercera componente: $11\cdot1-3\cdot2=5$ ✓. Así $w_3=11w_1-3w_2$, es decir $11w_1-3w_2-w_3=\bar0$ con coeficientes no todos nulos.</li>
+    <li><b>(ii) Suprimir lo que sobra.</b> Por el Teorema 2.1 (U p.79), como $w_3$ es c.l. de $w_1,w_2$: $U=\langle w_1,w_2\rangle$, y $\{w_1,w_2\}$ es libre (no proporcionales, $3/1\neq8/3$).</li>
+    <li><b>Paramétricas.</b> $(x_1,x_2,x_3)=\alpha(1,3,1)+\beta(3,8,2)$:
+      $$x_1=\alpha+3\beta,\quad x_2=3\alpha+8\beta,\quad x_3=\alpha+2\beta,\qquad\alpha,\beta\in\mathbb R.$$
+      (Con los tres vectores también serían paramétricas, pero con un parámetro redundante: lo esperado es usar un generador libre.)</li>
+    <li><b>(iii) Cuántas implícitas.</b> $n-r=3-2=1$ ecuación.</li>
+    <li><b>Imponer pertenencia.</b> $x\in U\iff\{w_1,w_2,x\}$ es ligado (lema «libre + 1» de §3, pues $\{w_1,w_2\}$ es libre) $\iff$
+      $$\begin{vmatrix}x_1&1&3\\x_2&3&8\\x_3&1&2\end{vmatrix}=x_1(6-8)-x_2(2-3)+x_3(8-9)=-2x_1+x_2-x_3=0.$$</li>
+    <li><b>Comprobación con los tres vectores de $E$:</b> $w_1$: $-2+3-1=0$ ✓; $w_2$: $-6+8-2=0$ ✓; $w_3$: $-4+9-5=0$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> (i) ligado, $w_3=11w_1-3w_2$; (ii) las paramétricas de arriba; (iii) $2x_1-x_2+x_3=0$ ($U$ es un plano). <i>(sympy: rango 2; $\det=-2x_1+x_2-x_3$.)</i></p>
+  <div class="recipe"><b>Receta:</b> sistema $\to$ rango (escalonar) $\to$ suprimir los dependientes (Teor. 2.1) $\to$ paramétricas con los que quedan $\to$ implícitas con $\det(\text{generadores libres}\mid x)=0$ (o menores orlados si hay más de una ecuación) $\to$ comprobar con <b>todos</b> los vectores originales.</div>
+  <p><b>Error típico:</b> (a) declarar «libre» porque ningún vector es múltiplo de otro: con 3 o más vectores no basta ($w_3$ no es múltiplo de $w_1$ ni de $w_2$, pero es combinación de los dos); (b) en (iii) meter los tres vectores ligados en el determinante: $\det(w_1,w_2,w_3)=0$ no da ninguna ecuación; (c) no comprobar $w_3$ en la ecuación.</p>
+  <p><i>Enlace:</i> la parte «rango 2, $\operatorname{Dim}U=2$, base extraída de $E$» se retoma en <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb23b">el tema 2.3</a>.</p>
+</details>
+
+<div class="box tip"><span class="h">Para practicar</span>
+  <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), problema 7 (iv)">X Feb. 2023 (2.ª)</span>
   <ul>
-    <li>X, Feb. 2023 (2.ª sem.), problema 7 (i): estudiar si $\{(1,3,1),(3,8,2),(2,9,5)\}$ es linealmente independiente (rango 2 $\Rightarrow$ ligado; $(2,9,5)=11(1,3,1)-3(3,8,2)$). Los apartados (ii)-(iv) son de §2.3 y Tema 5.</li>
-    <li>X, Feb. 2018 (tipo B), ej. 1: además de $S_2$ (arriba), comprobar que $S_1$ es base de $\mathbb R^4$ ($\det=420\neq0$): es de §2.3.</li>
-    <li>X, Feb. 2020 (1.ª sem., tipo B), ej. 2: extraer de $\{(1,2,-1),(3,1,0),(2,-1,1),(2,1,0)\}$ una base de $\mathbb R^3$ (supresión de vectores, Teor. 2.1; frontera con §2.3).</li>
+    <li>X, <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb23b">Feb. 2023 (2.ª sem.), problema 7 (iv)</a>: $\operatorname{Dim}U=2$ y «base ortonormal entre los elementos de $E$». Es de §2.3 y del Tema 5, y el enunciado es imposible tal cual: ningún par de $E$ es ortogonal ($w_1\cdot w_2=29$, $w_1\cdot w_3=34$, $w_2\cdot w_3=88$), así que no se puede <i>extraer</i> una base ortonormal de $E$; la solución oficial usa un vector fuera de $E$, $(-4,-1,7)\in U$ (ortogonal a $w_1$).</li>
+  </ul>
+</div>
+
+<div class="box tip"><span class="h">Para practicar (de otros temas, que usan lo de este)</span>
+  <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicios 1 y 2; Feb. 2020 (1.ª sem., tipo B), ejercicio 2; Sept. 2018 (tipo A), ejercicio 2; Feb. 2026 (1.ª sem.), pregunta 3; Sept. 2025, problema 7; Feb. 2019 (tipo B), ejercicio 2; Sept. 2019 (tipo A), ejercicio 2; Ene. 2022 (tipo A), ejercicio 2; Ene. 2020 (tipo A), problema a); Sept. 2022, problema b); Feb. 2024 (1.ª sem.), problema 7; Sept. 2024, problema 7; Feb. 2019 (tipo A), problema a); Feb. 2019 (tipo B), problema c); Feb. 2024 (1.ª sem.), pregunta 3; Feb. 2026 (2.ª sem.), pregunta 3; Feb. 2017 (2.ª sem., tipo A), problema a); Sept. 2022, problema a)">X varios</span>
+  <ul>
+    <li>§2.3: <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb18b">Feb. 2018 (tipo B), ejercicio 1</a> ($S_1$ base de $\mathbb R^4$, $\det=420\neq0$); <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb20">Feb. 2020 (1.ª sem., tipo B), ejercicio 2</a> (extraer una base de $\mathbb R^3$ de 4 vectores por supresión, Teor. 2.1); <a href="tema_2_3_bases_dimension_coordenadas.html#ex-sep18">Sept. 2018 (tipo A), ejercicio 2</a> ($\{x,x^3,x^2-2x,3x^3+2\}$ base de $\wp_3$, $\det=2$); <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb26">Feb. 2026 (1.ª sem.), pregunta 3</a> (¿base de $\mathcal M_{2\times2}$? no, es ligado); <a href="tema_2_3_bases_dimension_coordenadas.html#ex-sep25">Sept. 2025, problema 7</a> (ii)-(iii). Ver <a href="tema_2_3_bases_dimension_coordenadas.html">tema 2.3</a>.</li>
+    <li>§2.4: <a href="tema_2_4_suma_directa.html#ex-feb18b">Feb. 2018 (tipo B), ejercicio 2</a>; <a href="tema_2_4_suma_directa.html#ex-feb19b">Feb. 2019 (tipo B), ejercicio 2</a>; <a href="tema_2_4_suma_directa.html#ex-sep19a">Sept. 2019 (tipo A), ejercicio 2</a>; <a href="tema_2_4_suma_directa.html#ex-ene22">Ene. 2022 (tipo A), ejercicio 2</a>; <a href="tema_2_4_suma_directa.html#ex-feb20a">Ene. 2020 (tipo A), problema a)</a>; <a href="tema_2_4_suma_directa.html#ex-sep22">Sept. 2022, problema b)</a>; <a href="tema_2_4_suma_directa.html#ex-feb24p7">Feb. 2024 (1.ª sem.), problema 7</a>; <a href="tema_2_4_suma_directa.html#ex-sep24">Sept. 2024, problema 7</a> (suma e intersección: usan paramétricas y cartesianas como herramienta). Ver <a href="tema_2_4_suma_directa.html">tema 2.4</a>.</li>
+    <li>§3.2: Feb. 2019 (tipo A), problema a (cartesianas de núcleo e imagen de una matriz; la imagen sale con $\det\begin{pmatrix}x&y&z\\2&3&5\\1&0&1\end{pmatrix}=0\iff x+y-z=0$).</li>
+    <li>§3.1/3.2: Feb. 2024 (1.ª sem.), pregunta 3: $f(1,0)=(0,5,1)$, $f(0,1)=(-2,0,1)$; ¿$\operatorname{Im}f\subset\{5x-2y+10z=0\}$? Verdadero. <b>Fallo de la solución oficial:</b> exige probar que todo vector del plano es combinación de $f(1,0),f(0,1)$, que es la inclusión contraria. Para lo pedido basta que los dos generadores cumplan la ecuación ($0-10+10=0$, $-10+0+10=0$): $f(u,v)=uf(1,0)+vf(0,1)$ es combinación de ellos, y el plano es un subespacio.</li>
+    <li>§3.2: Feb. 2019 (tipo B), problema c: si $\operatorname{Nuc}f=\{\bar0\}$ y $\{v_1,v_2\}$ es libre, $\{f(v_1),f(v_2)\}$ es libre. <b>Fallo de la oficial:</b> supone $f(v_1)=\alpha f(v_2)$ y olvida el caso $f(v_2)=\bar0$; mejor partir de $\lambda f(v_1)+\mu f(v_2)=\bar0\Rightarrow f(\lambda v_1+\mu v_2)=\bar0\Rightarrow\lambda v_1+\mu v_2=\bar0\Rightarrow\lambda=\mu=0$.</li>
+    <li>§3.1: Feb. 2026 (2.ª sem.), p. 3 ($f$ sobre $\mathcal M_{2\times2}$ dada en 4 matrices; exige expresar una matriz como combinación de otras).</li>
+    <li>§1.2 (rango por Gauss): Feb. 2017 (2.ª sem., tipo A), problema a; Sept. 2022, problema a.</li>
   </ul>
 </div>
 
