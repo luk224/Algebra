@@ -32,6 +32,7 @@
     <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
     <span class="src" data-l="A" data-ref="Apuntes de tutoría ETSI (solo tema 1)">A</span> tutoría
     <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
@@ -64,6 +65,7 @@
   <tr><td>9 $LU$ permutada $PA=LU$</td><td>Cuándo hace falta permutar, usos de $LU$</td><td>U p.50-51</td></tr>
   <tr><td>10 Qué usar cuándo</td><td>Comparativa Gauss / Gauss-Jordan / $LU$</td><td>P</td></tr>
   <tr><td>11 Ejercicios</td><td>E <a href="#ej1-30">1.30</a>–1.44 + 3 ejemplos propios</td><td>E pp.30-44</td></tr>
+  <tr><td>12 <a href="#examenes">Ejemplos de examen</a></td><td>14 preguntas de convocatorias anteriores, resueltas</td><td>X</td></tr>
 </table>
 
 <div class="box tip"><span class="h">Qué se pide en los ejercicios</span>
@@ -712,8 +714,262 @@
   <div class="recipe"><b>Receta:</b> con parámetros «limpios» (uno igual a cada parámetro directamente), la eliminación por sustitución es más rápida que plantear rangos; cuenta primero cuántas ecuaciones cartesianas esperas ($n-$parámetros independientes) para saber cuándo parar.</div>
 </details>
 
+<!-- ============================ EXAMENES ============================ -->
+<h2 id="examenes"><span class="n">12</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Preguntas de exámenes de otros años que caen en este tema, agrupadas por método: (A) Rouché-Frobenius razonado, (B) sistemas equivalentes y paramétricas ↔ cartesianas, (C) sistemas con parámetro, (D) $LU$ y métodos numéricos. Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>). Dos errores recurrentes que los correctores señalan: <b>(1)</b> al anotar operaciones elementales hay que decir sobre qué fila se actúa: escribir $F_1\to F_1+F_2$, no «$F_1+F_2$» <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), pregunta 7 (comentario de la solución)">X Feb. 2026 (2.ª)</span>; <b>(2)</b> en las preguntas «resuelva», la solución debe darse <b>en función del parámetro</b>, no para un valor concreto <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), pregunta 8 (comentario de la solución)">X Feb. 2023 (2.ª)</span>.</p>
+
+<h3>A. Rouché-Frobenius razonado (V/F y clasificación)</h3>
+
+<details class="sol" id="ex-sep23p1"><summary>Sept. 2023, pregunta 1 — clasificar $AX=B$ con $A\in\mathcal M_{5\times6}$ y $\operatorname{rang}A=5$ <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 1">X Sept. 2023</span></summary>
+  <p class="enun">Considere el sistema matricial $AX=B$ siendo $A\in\mathcal M_{5\times6}$ la matriz de coeficientes, $X\in\mathcal M_{6\times1}$ la de incógnitas y $B\in\mathcal M_{5\times1}$ la de términos independientes. Clasifique el sistema sabiendo que $\operatorname{rang}(A)=5$.</p>
+  <ol class="steps">
+    <li><b>Datos.</b> $m=5$ ecuaciones y $n=6$ incógnitas; la ampliada $(A\mid B)$ es de orden $5\times7$ (U p.29).</li>
+    <li><b>Cota inferior.</b> $A$ es submatriz de $(A\mid B)$ (sus 6 primeras columnas), luego todo menor no nulo de $A$ lo es de $(A\mid B)$: $\operatorname{rang}(A\mid B)\ge\operatorname{rang}A=5$ (U p.27).</li>
+    <li><b>Cota superior.</b> El rango no supera el número de filas y $(A\mid B)$ tiene 5: $\operatorname{rang}(A\mid B)\le5$.</li>
+    <li><b>Compatibilidad.</b> $\operatorname{rang}A=\operatorname{rang}(A\mid B)=5$: por Rouché-Frobenius (U p.30) es <b>compatible</b>, para cualquier $B$.</li>
+    <li><b>Determinado o no.</b> El rango común, $5$, es menor que $n=6$: <b>compatible indeterminado</b> con $n-5=1$ parámetro.</li>
+  </ol>
+  <p><b>Resultado:</b> compatible indeterminado con un parámetro.</p>
+  <div class="recipe"><b>Receta:</b> si $\operatorname{rang}A=m$ (n.º de ecuaciones), el sistema es compatible para todo $B$ (la ampliada tiene $m$ filas y no puede subir de rango). Después se compara ese rango con $n$: igual, determinado; menor, indeterminado con $n-m$ parámetros.</div>
+  <p><b>Error típico:</b> afirmar «$\operatorname{rang}(A\mid B)=5$» sin dar las dos desigualdades (≥ porque contiene a $A$; ≤ porque solo tiene 5 filas).</p>
+</details>
+
+<details class="sol" id="ex-feb26p1"><summary>Feb. 2026 (2.ª sem.), pregunta 1 — 6 ecuaciones, 7 incógnitas, $\operatorname{rang}A=6$ <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), pregunta 1">X Feb. 2026 (2.ª)</span></summary>
+  <p class="enun">Clasifique el sistema $AX=B$, si es posible, de manera razonada, sabiendo que tiene 6 ecuaciones, 7 incógnitas y $\operatorname{rang}(A)=6$.</p>
+  <ol class="steps">
+    <li>$A\in\mathcal M_{6\times7}$ y $(A\mid B)\in\mathcal M_{6\times8}$.</li>
+    <li>$\operatorname{rang}(A\mid B)\ge\operatorname{rang}A=6$ (contiene a $A$) y $\operatorname{rang}(A\mid B)\le6$ (tiene 6 filas).</li>
+    <li>Luego $\operatorname{rang}A=\operatorname{rang}(A\mid B)=6\lt7=n$: por Rouché-Frobenius (U p.30), <b>compatible indeterminado</b> con $7-6=1$ parámetro.</li>
+  </ol>
+  <p><b>Sí es posible clasificarlo</b> sin conocer $B$, justo porque $\operatorname{rang}A$ ya es «máximo por filas».</p>
+  <div class="recipe"><b>Receta:</b> la misma del ejemplo anterior: $\operatorname{rang}A=m\Rightarrow$ siempre compatible; luego comparar con $n$.</div>
+  <p><b>Error típico:</b> responder «no se puede clasificar porque no se conoce $B$». $B$ solo importaría si $\operatorname{rang}A\lt m$.</p>
+</details>
+
+<details class="sol" id="ex-feb24p1"><summary>Feb. 2024 (1.ª sem.), pregunta 1 — V/F: $\operatorname{rang}A=4$ y existe solución $\Rightarrow$ compatible determinado <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), pregunta 1">X Feb. 2024 (1.ª)</span></summary>
+  <p class="enun">Sea $AX=B$ con $A\in\mathcal M_{7\times4}$, $X\in\mathcal M_{4\times1}$, $B\in\mathcal M_{7\times1}$. Justifique si es verdadera o falsa: «Si $\operatorname{rang}(A)=4$ y existe $X$ solución de $AX=B$, entonces el sistema es compatible determinado».</p>
+  <ol class="steps">
+    <li><b>Datos:</b> $m=7$ ecuaciones, $n=4$ incógnitas, $\operatorname{rang}A=4$. Aquí $\operatorname{rang}A$ <b>no</b> garantiza compatibilidad: $(A\mid B)$ es $7\times5$ y podría tener rango 5. Por eso se añade la hipótesis «existe solución».</li>
+    <li><b>Existe solución $\Rightarrow$ compatible</b> (definición, U p.30) $\Rightarrow\operatorname{rang}(A\mid B)=\operatorname{rang}A=4$.</li>
+    <li><b>Determinado:</b> el rango común es $4=n$: <b>compatible determinado</b>. <b>Respuesta: VERDADERO.</b></li>
+    <li><b>Comprobación sin Rouché.</b> Si $X_0,X_1$ son soluciones, $A(X_0-X_1)=0$; como $\operatorname{rang}A=n$, el homogéneo solo tiene la solución nula (U p.30), luego $X_0=X_1$.</li>
+  </ol>
+  <p><b>Ejemplo que muestra por qué hace falta la hipótesis:</b> $A=\begin{pmatrix}I_4\\0_{3\times4}\end{pmatrix}$. Con $B=(1,2,3,4,0,0,0)^t$ hay una única solución; con $B=(1,2,3,4,1,0,0)^t$, $\operatorname{rang}(A\mid B)=5$ y es incompatible.</p>
+  <div class="recipe"><b>Receta:</b> «determinado» depende solo de $\operatorname{rang}A$ frente a $n$; «compatible» depende de $\operatorname{rang}(A\mid B)$. Con solución y $\operatorname{rang}A=n$, la solución es única.</div>
+  <p><b>Error típico:</b> creer que $\operatorname{rang}A=n$ basta para tener solución cuando $m\gt n$: puede ser incompatible.</p>
+</details>
+
+<details class="sol" id="ex-feb22pb"><summary>Feb. 2022 (tipo A), problema, apartado b) — $A$ ortogonal $m\times n$ $\Rightarrow$ $AX=B$ es compatible determinado o incompatible <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A), problema, apartado b)">X Feb. 2022 (A)</span></summary>
+  <p class="enun">Compruebe que si $A$ es una matriz ortogonal de orden $m\times n$, cualquier sistema $AX=B$ es compatible determinado o bien incompatible.</p>
+  <p><b>Aclaración.</b> En U una matriz $A\in\mathcal M_{m\times n}$ es ortogonal si sus columnas forman un sistema ortonormal de $\mathbb R^m$ (Def. 5.13, U p.214), equivalente a $A^tA=I_n$ (Teorema 5.5, p.215); no tiene por qué ser cuadrada.</p>
+  <ol class="steps">
+    <li><b>Rango de $A$.</b> Un sistema ortonormal es linealmente independiente, luego las $n$ columnas de $A$ lo son y $\operatorname{rang}A=n$. (Con matrices: si $AX=0$, multiplicando por $A^t$ queda $A^tAX=X=0$; el homogéneo solo tiene la solución nula.)</li>
+    <li><b>Rouché-Frobenius</b> (U p.30) con $n$ incógnitas. Como $\operatorname{rang}(A\mid B)\ge n$: si $\operatorname{rang}(A\mid B)=n=\operatorname{rang}A$, el sistema es <b>compatible determinado</b>; si $\operatorname{rang}(A\mid B)\neq\operatorname{rang}A$ (solo puede ser $n+1$, y únicamente si $m\gt n$), es <b>incompatible</b>.</li>
+    <li><b>No hay tercera opción:</b> «compatible indeterminado» exigiría $\operatorname{rang}A\lt n$, imposible. ∎</li>
+  </ol>
+  <p><b>Bonus.</b> Si existe solución $X_0$, multiplicando $AX_0=B$ por $A^t$ se obtiene $X_0=A^tB$: es única y vale $A^tB$.</p>
+  <p><b>Ejemplo:</b> $A=\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$ ($A^tA=I_2$). Con $B=(1,2,0)^t$: $\operatorname{rang}A=\operatorname{rang}(A\mid B)=2$, $X=A^tB=(1,2)^t$. Con $B=(1,2,3)^t$: $\operatorname{rang}(A\mid B)=3$, incompatible.</p>
+  <div class="recipe"><b>Receta:</b> para probar que un sistema «nunca es indeterminado» basta probar $\operatorname{rang}A=n$ (columnas independientes, o $AX=0\Rightarrow X=0$); el resto lo da Rouché-Frobenius.</div>
+  <p><b>Error típico:</b> suponer $A$ cuadrada (entonces siempre sería determinado); con $m\gt n$ puede ser incompatible.</p>
+</details>
+
+<h3>B. Sistemas equivalentes y paramétricas ↔ cartesianas</h3>
+
+<details class="sol" id="ex-sep22e1"><summary>Sept. 2022, ejercicio 1 — V/F: escalonada reducida única y sistemas equivalentes <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 1">X Sept. 2022</span></summary>
+  <p class="enun">Razonar si son ciertas: A) La matriz escalonada reducida de una matriz $A$ no es única; B) Se puede obtener un sistema equivalente a uno dado mediante transformaciones elementales en las ecuaciones que definen el sistema inicial.</p>
+  <p><b>A) FALSA</b> (desarrollada en el <a href="tema_1_2_algebra_matricial.html#ex-sep22e1">tema 1.2</a>). Una escalonada equivalente a $A$ no es única (se pueden multiplicar filas por escalares), pero la <b>escalonada reducida sí lo es</b> (U p.21).</p>
+  <p><b>B) VERDADERA</b> (es el apartado de 1.4):</p>
+  <ol class="steps">
+    <li><b>Definición 1.7</b> (U p.31): dos sistemas son equivalentes si tienen <b>las mismas soluciones</b>.</li>
+    <li><b>Transformaciones elementales</b> con ecuaciones (U p.31-32): $E_i\leftrightarrow E_j$; $E_i\to\alpha E_i$ con $\alpha\neq0$; $E_i\to E_i+\alpha E_j$ ($j\neq i$). Cada una es una operación elemental por filas de $(A\mid B)$, es decir, multiplicar por una matriz elemental $E$ a la izquierda.</li>
+    <li><b>Teorema 1.5</b> (U p.32): si $(A'\mid B')=E_p\cdots E_1(A\mid B)$, entonces $AX=B$ y $A'X=B'$ son equivalentes. Porque las $E_i$ son regulares: $A'X_0=B'\iff E_p\cdots E_1AX_0=E_p\cdots E_1B\iff AX_0=B$.</li>
+    <li>Es el fundamento del método de Gauss (U p.38).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en V/F de teoría cita la definición (equivalente = mismas soluciones) y el teorema (1.5), y explica el porqué en una línea (las matrices elementales son invertibles).</div>
+  <p><b>Error típico:</b> olvidar la condición $\alpha\neq0$: multiplicar una ecuación por $0$ la elimina y cambia el conjunto de soluciones.</p>
+</details>
+
+<details class="sol" id="ex-sep18e1"><summary>Sept. 2018 (tipo A), ejercicio 1 — escribir dos sistemas equivalentes con ampliada $3\times4$ <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 1">X Sept. 2018</span></summary>
+  <p class="enun">Escribir dos sistemas de ecuaciones lineales equivalentes entre sí tales que las matrices ampliadas asociadas sean de dimensión $3\times4$, justificando la equivalencia.</p>
+  <div class="box warn"><span class="h">Error en la solución oficial</span>
+    <p>La solución oficial parte de $S:\ 2x_1+x_2-x_3=1,\ 2x_1-x_2+x_3=2,\ x_1-3x_2=3$ y da como segundo sistema uno con la fila $-5x_2+x_3=5$. Pero la operación correcta $F_3\to2F_3-F_1$ da $-7x_2+x_3=5$. Comprobado: la única solución de $S$ es $(\tfrac34,-\tfrac34,-\tfrac14)$, mientras que los sistemas de la solución oficial tienen por solución $(\tfrac34,-\tfrac98,-\tfrac58)$, que no cumple la 3.ª ecuación de $S$ ($\tfrac34+\tfrac{27}8=\tfrac{33}8\neq3$). Es decir, el ejemplo oficial <b>no</b> es un par de sistemas equivalentes. Abajo, la versión corregida.</p>
+  </div>
+  <ol class="steps">
+    <li><b>Sistema de partida</b> y su ampliada ($3\times4$: 3 ecuaciones, 3 incógnitas y la columna de términos independientes, U p.29):
+      $$S:\ \begin{cases}2x_1+x_2-x_3=1\\2x_1-x_2+x_3=2\\x_1-3x_2=3\end{cases}\qquad(A\mid B)=\left(\begin{array}{ccc|c}2&1&-1&1\\2&-1&1&2\\1&-3&0&3\end{array}\right).$$</li>
+    <li><b>Por qué basta con operaciones elementales.</b> Por el Teorema 1.5 (U p.32), toda matriz obtenida de $(A\mid B)$ por operaciones elementales por filas es la ampliada de un sistema equivalente (Def. 1.7, p.31).</li>
+    <li><b>Anular la columna 1 bajo el pivote $2$.</b>
+      <ul>
+        <li>$F_2\to F_2-F_1$: $(2-2,\,-1-1,\,1+1\mid2-1)=(0,-2,2\mid1)$.</li>
+        <li>$F_3\to2F_3-F_1$ (composición de $F_3\to2F_3$, tipo 2 con $\alpha=2\neq0$, y $F_3\to F_3-F_1$, tipo 3; se usa para evitar fracciones): $(2-2,\,-6-1,\,0+1\mid6-1)=(0,-7,1\mid5)$.</li>
+      </ul>
+      $$\left(\begin{array}{ccc|c}2&1&-1&1\\0&-2&2&1\\0&-7&1&5\end{array}\right).$$</li>
+    <li><b>Anular el $-7$ bajo el pivote $-2$:</b> $F_3\to2F_3-7F_2$: $(0,\,-14+14,\,2-14\mid10-7)=(0,0,-12\mid3)$.
+      $$S':\ \begin{cases}2x_1+x_2-x_3=1\\-2x_2+2x_3=1\\-12x_3=3\end{cases}\qquad(A'\mid B')=\left(\begin{array}{ccc|c}2&1&-1&1\\0&-2&2&1\\0&0&-12&3\end{array}\right).$$</li>
+    <li><b>Comprobación</b> (recomendable): de $S'$, $x_3=-\tfrac14$; $-2x_2-\tfrac12=1\Rightarrow x_2=-\tfrac34$; $2x_1-\tfrac34+\tfrac14=1\Rightarrow x_1=\tfrac34$. En $S$: $\tfrac32-\tfrac34+\tfrac14=1$ ✓, $\tfrac32+\tfrac34-\tfrac14=2$ ✓, $\tfrac34+\tfrac94=3$ ✓.</li>
+    <li><b>Conclusión:</b> $S$ y $S'$ son equivalentes (Teorema 1.5) y ambas ampliadas son $3\times4$.</li>
+  </ol>
+  <p><b>Respuesta mínima válida:</b> intercambiar dos ecuaciones ($E_1\leftrightarrow E_2$) ya da un sistema equivalente; basta citar el Teorema 1.5.</p>
+  <div class="recipe"><b>Receta:</b> para fabricar un sistema equivalente, aplica a la ampliada operaciones elementales anotando cada una («$F_3\to2F_3-F_1$») y cita el Teorema 1.5. Comprueba al final que la solución satisface el sistema original.</div>
+  <p><b>Error típico:</b> equivocarse en una operación (como la propia solución oficial) y no comprobarlo: sustituir la solución en el sistema original lo detecta en segundos.</p>
+</details>
+
+<details class="sol" id="ex-feb22e1"><summary>Feb. 2022 (tipo A), ejercicio 1 — unas paramétricas de «un sistema» y sus cartesianas <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A), ejercicio 1">X Feb. 2022 (A)</span></summary>
+  <p class="enun">Escriba unas ecuaciones paramétricas de un sistema y halle las ecuaciones cartesianas de dicho sistema. Considere 3 incógnitas.</p>
+  <p>La solución oficial es mínima ($x=\alpha,\ y=-\alpha,\ z=0\Rightarrow x+y=0,\ z=0$). Aquí, un ejemplo más completo, con dos parámetros y término independiente (U §1.4.2, Ej. 1.28, p.34-36).</p>
+  <ol class="steps">
+    <li><b>Elegimos paramétricas</b> (3 incógnitas, 2 parámetros): $x=1+\alpha+\beta,\ y=\alpha,\ z=2-\beta$, con $\alpha,\beta\in\mathbb R$.</li>
+    <li><b>Qué es «hallar las cartesianas».</b> Es eliminar los parámetros: un punto $(x,y,z)$ es de esa forma si y solo si el sistema en las incógnitas $\alpha,\beta$
+      $$\alpha+\beta=x-1,\qquad\alpha=y,\qquad-\beta=z-2$$
+      es <b>compatible</b>.</li>
+    <li><b>Igualdad de rangos (Rouché-Frobenius).</b> La matriz de coeficientes en $(\alpha,\beta)$ tiene rango 2 (el menor de las filas 2-3 es $\begin{vmatrix}1&0\\0&-1\end{vmatrix}=-1\neq0$). La ampliada
+      $$\left(\begin{array}{cc|c}1&1&x-1\\1&0&y\\0&-1&z-2\end{array}\right)$$
+      debe tener también rango 2; como es $3\times3$, equivale a que su determinante sea $0$ (U p.27):
+      $$\begin{vmatrix}1&1&x-1\\1&0&y\\0&-1&z-2\end{vmatrix}=y-(z-2)-(x-1)=-x+y-z+3=0.$$</li>
+    <li><b>Cartesiana:</b> $x-y+z=3$ (una ecuación: $3$ incógnitas $-\ 2$ parámetros $=1$).</li>
+    <li><b>Atajo</b> (U p.36): como $\alpha=y$, se despeja $\beta=2-z$ y se sustituye: $x=1+y+(2-z)$, es decir, $x-y+z=3$.</li>
+    <li><b>Comprobación:</b> $(1+\alpha+\beta)-\alpha+(2-\beta)=3$ ✓ para todo $\alpha,\beta$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> paramétricas $\to$ cartesianas: escribe el sistema en los parámetros con las $x_i$ como términos independientes y exige $\operatorname{rang}(\text{coef.})=\operatorname{rang}(\text{ampliada})$ (escalonando o con un determinante). N.º de cartesianas $=$ n.º de incógnitas $-$ n.º de parámetros independientes.</div>
+  <p><b>Error típico:</b> dar ecuaciones que cumplen solo algunos puntos (comprobar solo con $\alpha=\beta=0$) o dar demasiadas ecuaciones (describen un conjunto más pequeño).</p>
+</details>
+
+<details class="sol" id="ex-sep25p7"><summary>Sept. 2025, pregunta 7 (1.er apartado) — sistema con incógnitas matriciales: calcular $X+Y$ <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 7">X Sept. 2025</span></summary>
+  <p class="enun">Las matrices $X,Y\in\mathcal M_{2\times2}$ satisfacen $\begin{cases}2X+3Y=A\\X-Y=B\end{cases}$ con $A=\begin{pmatrix}5&1\\0&4\end{pmatrix}$, $B=\begin{pmatrix}1&-1\\2&0\end{pmatrix}$. Calcule $X+Y$. (Los otros dos apartados —base de $\mathcal M_{2\times2}$ y dimensión— son del tema 2.3.)</p>
+  <p><i>Desarrollado en el <a href="tema_1_2_algebra_matricial.html#ex-sep25">tema 1.2</a>.</i> Resumen: es un sistema $2\times2$ cuyas incógnitas son matrices; se resuelve por reducción/sustitución como uno numérico, sin multiplicar matrices. De $X=Y+B$: $5Y=A-2B=\begin{pmatrix}3&3\\-4&4\end{pmatrix}$, $Y=\tfrac15\begin{pmatrix}3&3\\-4&4\end{pmatrix}$, $X=Y+B$, y
+  $$X+Y=\frac{2A+B}{5}=\frac15\begin{pmatrix}11&1\\2&8\end{pmatrix}$$
+  (atajo: $\tfrac25(2X+3Y)+\tfrac15(X-Y)=X+Y$).</p>
+  <div class="recipe"><b>Receta:</b> sistemas con incógnitas matriciales: reducción o sustitución como con números; solo se divide por escalares; comprueba sustituyendo.</div>
+</details>
+
+<h3>C. Sistemas con parámetro</h3>
+
+<details class="sol" id="ex-feb20a"><summary>Ene. 2020 (tipo A), ejercicio 1 — soluciones de un sistema homogéneo según $m$ <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 1">X Ene. 2020 (A)</span></summary>
+  <p class="enun">Calcular las soluciones del sistema $\begin{cases}mx+y+z=0\\x+my+z=0\\x+y+mz=0\end{cases}$ para los distintos valores de $m\in\mathbb R$. (La solución oficial aclara: se piden <b>soluciones</b>, no la clasificación.)</p>
+  <ol class="steps">
+    <li><b>Es homogéneo</b>, luego siempre compatible: $(0,0,0)$ es solución (U p.30). La cuestión es cuándo hay <b>más</b>.</li>
+    <li><b>Criterio:</b> solo la solución nula $\iff\operatorname{rang}A=3\iff\det A\neq0$ (U p.22 y p.30).</li>
+    <li><b>Determinante</b> (las filas suman $m+2$): $C_1\to C_1+C_2+C_3$ no cambia $\det A$ (U §1.3), y luego $F_2\to F_2-F_1$, $F_3\to F_3-F_1$:
+      $$\det A=(m+2)\begin{vmatrix}1&1&1\\1&m&1\\1&1&m\end{vmatrix}=(m+2)\begin{vmatrix}1&1&1\\0&m-1&0\\0&0&m-1\end{vmatrix}=(m+2)(m-1)^2.$$</li>
+    <li><b>Caso $m\neq1$ y $m\neq-2$:</b> $\det A\neq0$, $\operatorname{rang}A=3=n$: compatible determinado, <b>única solución $x=y=z=0$</b>.</li>
+    <li><b>Caso $m=1$:</b> las tres ecuaciones son $x+y+z=0$; $\operatorname{rang}A=1$, $3-1=2$ parámetros (las incógnitas que no son pivote, U p.34):
+      $$x=\alpha,\quad y=\beta,\quad z=-\alpha-\beta,\qquad\alpha,\beta\in\mathbb R.$$</li>
+    <li><b>Caso $m=-2$:</b> se escalona (se intercambia para tener pivote 1):
+      $$\begin{pmatrix}-2&1&1\\1&-2&1\\1&1&-2\end{pmatrix}\xrightarrow{F_1\leftrightarrow F_2}\begin{pmatrix}1&-2&1\\-2&1&1\\1&1&-2\end{pmatrix}\xrightarrow[F_3\to F_3-F_1]{F_2\to F_2+2F_1}\begin{pmatrix}1&-2&1\\0&-3&3\\0&3&-3\end{pmatrix}\xrightarrow{F_3\to F_3+F_2}\begin{pmatrix}1&-2&1\\0&-3&3\\0&0&0\end{pmatrix}.$$
+      $\operatorname{rang}A=2$, un parámetro. De $-3y+3z=0$: $y=z$; con $z=\alpha$, $x=2y-z=\alpha$: $x=y=z=\alpha$.</li>
+    <li><b>Comprobación:</b> con $m=-2$: $-2\alpha+\alpha+\alpha=0$ ✓ (las tres ecuaciones). Con $m=1$: $\alpha+\beta-\alpha-\beta=0$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> homogéneo cuadrado con parámetro: (1) siempre compatible; (2) $\det A=0$ da los valores críticos; (3) fuera de ellos, solo la solución nula; (4) en cada valor crítico, escalona y escribe la solución con $n-\operatorname{rang}A$ parámetros.</div>
+  <p><b>Error típico:</b> quedarse en «compatible indeterminado» sin dar las soluciones, o dividir por $m-1$ al escalonar sin separar el caso $m=1$.</p>
+</details>
+
+<details class="sol" id="ex-feb23p8"><summary>Feb. 2023 (2.ª sem.), pregunta 8 — discutir y resolver con parámetro $a$ (problema, 2 puntos) <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), pregunta 8">X Feb. 2023 (2.ª)</span></summary>
+  <p class="enun">Sea $a\in\mathbb R$ y el sistema $\begin{cases}(1+a)x+y+z=1\\x+(1+a)y+z=a\\x+y+(1+a)z=a^2\end{cases}$. (i) Discútalo en función de $a$. (ii) Resuélvalo en los casos en que sea compatible.</p>
+  <p><b>(i) Discusión</b></p>
+  <ol class="steps">
+    <li><b>Ampliada</b> reordenada con $F_1\leftrightarrow F_3$, para que el primer pivote sea el número $1$ y no $1+a$ (que se anula si $a=-1$ y obligaría a separar casos). El intercambio da un sistema equivalente (Teorema 1.5):
+      $$\left(\begin{array}{ccc|c}1&1&1+a&a^2\\1&1+a&1&a\\1+a&1&1&1\end{array}\right).$$</li>
+    <li><b>Anular la columna 1:</b> $F_2\to F_2-F_1$ y $F_3\to F_3-(1+a)F_1$. Fila 2: $(0,\,a,\,-a\mid a-a^2)$. Fila 3: $(0,\,-a,\,-a^2-2a\mid1-a^2-a^3)$.
+      $$\left(\begin{array}{ccc|c}1&1&1+a&a^2\\0&a&-a&-a^2+a\\0&-a&-a^2-2a&-a^3-a^2+1\end{array}\right).$$</li>
+    <li><b>Anular la columna 2:</b> $F_3\to F_3+F_2$ (no divide por nada: vale para todo $a$):
+      $$\left(\begin{array}{ccc|c}1&1&1+a&a^2\\0&a&-a&-a^2+a\\0&0&-a(a+3)&-a^3-2a^2+a+1\end{array}\right).$$</li>
+    <li><b>Comprobación con el determinante:</b> $\det A=a^2(a+3)$ (sumando las tres columnas en la primera sale el factor $a+3$, como en el ejemplo anterior); se anula solo en $a=0$ y $a=-3$.</li>
+    <li><b>$a\neq0,\,-3$:</b> los pivotes $1,\ a,\ -a(a+3)$ son no nulos: $\operatorname{rang}A=\operatorname{rang}(A\mid B)=3=n$, <b>compatible determinado</b>.</li>
+    <li><b>$a=0$:</b> la matriz queda $\left(\begin{array}{ccc|c}1&1&1&0\\0&0&0&0\\0&0&0&1\end{array}\right)$: $\operatorname{rang}A=1\neq2=\operatorname{rang}(A\mid B)$, <b>incompatible</b> (el sistema es $x+y+z=1$ y $x+y+z=0$ a la vez).</li>
+    <li><b>$a=-3$:</b> fila 2 $=(0,-3,3\mid-12)$, fila 3 $=(0,0,0\mid27-18-3+1)=(0,0,0\mid7)$: $\operatorname{rang}A=2\neq3=\operatorname{rang}(A\mid B)$, <b>incompatible</b> ($0=7$).</li>
+  </ol>
+  <p><b>(ii) Resolución para $a\neq0,-3$</b> (sustitución hacia atrás, U p.39 PASO 6), <b>en función de $a$</b>:</p>
+  <ol class="steps" start="8">
+    <li>Fila 3: $-a(a+3)z=-a^3-2a^2+a+1\Rightarrow z=\dfrac{a^3+2a^2-a-1}{a(a+3)}$.</li>
+    <li>Fila 2 (se divide por $a\neq0$): $y-z=1-a\Rightarrow y=z+1-a=\dfrac{a^3+2a^2-a-1+(1-a)(a^2+3a)}{a(a+3)}=\dfrac{2a-1}{a(a+3)}$, pues $(1-a)(a^2+3a)=-a^3-2a^2+3a$.</li>
+    <li>Fila 1: $x=a^2-y-(1+a)z=\dfrac{a^3(a+3)-(2a-1)-(1+a)(a^3+2a^2-a-1)}{a(a+3)}=\dfrac{2-a^2}{a(a+3)}$, pues $(1+a)(a^3+2a^2-a-1)=a^4+3a^3+a^2-2a-1$.</li>
+  </ol>
+  $$\boxed{x=\frac{2-a^2}{a(a+3)},\qquad y=\frac{2a-1}{a(a+3)},\qquad z=\frac{a^3+2a^2-a-1}{a(a+3)}}\qquad(a\neq0,-3).$$
+  <p><b>Comprobación</b> con $a=1$: $(\tfrac14,\tfrac14,\tfrac14)$ cumple $2\cdot\tfrac14+\tfrac14+\tfrac14=1$ ✓, $\tfrac14+\tfrac12+\tfrac14=1=a$ ✓, $\tfrac14+\tfrac14+\tfrac12=1=a^2$ ✓. Con $a=2$ sale $(-\tfrac15,\tfrac3{10},\tfrac{13}{10})$. (Alternativa: regla de Cramer con $|A|=a^2(a+3)$, U p.33; mismo resultado con más cálculo.)</p>
+  <p><b>Resumen:</b> $a\neq0,-3$: compatible determinado; $a=0$ o $a=-3$: incompatible. Nunca es compatible indeterminado.</p>
+  <p><b>Fallo recurrente (comentario oficial):</b> en los casos compatibles determinados, resolver el sistema solo para un valor concreto de $a$; la solución debe darse <b>en función de $a$</b>.</p>
+  <div class="recipe"><b>Receta:</b> (1) escalona $(A\mid B)$ sin dividir por expresiones con el parámetro (pivotes numéricos, reordenando si hace falta); (2) los valores que anulan pivotes son los casos críticos (confírmalos con $\det A$ si es cuadrado); (3) caso general por Rouché-Frobenius; (4) sustituye cada valor crítico en la escalonada y compara rangos; (5) resuelve en función del parámetro y comprueba con un valor concreto.</div>
+  <p><b>Error típico:</b> dividir una fila por $a$ o por $1+a$ sin haber excluido antes $a=0$ o $a=-1$; olvidar estudiar aparte los valores críticos.</p>
+</details>
+
+<h3>D. Factorización $LU$ y métodos numéricos</h3>
+
+<details class="sol" id="ex-sep17e1"><summary>Sept. 2017 (tipo A), ejercicio 1 — test sobre la factorización $LU$ <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A), ejercicio 1">X Sept. 2017</span></summary>
+  <p class="enun">La factorización $LU$ de una matriz $A$ cuadrada de orden $n$: A) siempre es única; B) NO se puede utilizar para resolver $AX=B$; C) permite calcular el determinante de $A$ ya que coincide con el determinante de $U$; D) ninguna de las anteriores es cierta.</p>
+  <ol class="steps">
+    <li><b>Recordatorio</b> (U p.45-46): $A=LU$ con $L$ triangular inferior con <b>unos en la diagonal</b> y $U$ triangular superior obtenida por Gauss solo con reemplazos $F_i\to F_i+\lambda F_j$, sin normalizar pivotes. U garantiza la unicidad cuando $A$ es <b>regular</b> (p.46); si es singular puede no serlo.</li>
+    <li><b>A) Falsa.</b> Sin regularidad puede no ser única: $A=\begin{pmatrix}0&0\\0&1\end{pmatrix}=\begin{pmatrix}1&0\\ \ell&1\end{pmatrix}\begin{pmatrix}0&0\\0&1\end{pmatrix}$ para <b>todo</b> $\ell\in\mathbb R$. (Además puede no existir sin permutar filas: $\begin{pmatrix}0&1\\1&0\end{pmatrix}$ necesita $PA=LU$, U p.50.)</li>
+    <li><b>B) Falsa.</b> Es su uso principal: $AX=B\iff L(UX)=B$; se resuelve $LY=B$ (hacia delante) y luego $UX=Y$ (hacia atrás) (U p.49).</li>
+    <li><b>C) Verdadera.</b> $\det(LU)=\det L\det U$ (U p.26), y el determinante de una triangular es el producto de su diagonal, así que $\det L=1$ y $\det A=\det U$ (U p.51).</li>
+    <li><b>Respuesta: C.</b></li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en tests de $LU$, tres frases: única si $A$ es regular; sirve para resolver $AX=B$ con dos sistemas triangulares; $\det A=\det U$ porque $\det L=1$.</div>
+  <p><b>Error típico:</b> confundir «$L$ con unos en la diagonal» con «$U$ con unos en la diagonal»: en U no se normalizan los pivotes de $U$.</p>
+</details>
+
+<details class="sol" id="ex-feb20b"><summary>Feb. 2020 (1.ª sem., tipo B), ejercicio 1 — calcular la factorización $LU$ de una matriz $3\times3$ <span class="src" data-l="X" data-ref="Feb. 2020 (1.ª sem., tipo B), ejercicio 1">X Feb. 2020 (1.ª, B)</span></summary>
+  <p class="enun">Calcular la factorización $LU$ de $A=\begin{pmatrix}1&0&2\\4&3&5\\2&0&1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>¿Es única?</b> $\det A=-9\neq0$: $A$ es regular y, triangularizando solo con reemplazos, la factorización es única (U p.46).</li>
+    <li><b>PASO 1 (obtener $U$).</b> Pivote $a_{11}=1$; multiplicador $=$ elemento / pivote:
+      <ul>
+        <li>$F_2\to F_2-4F_1$: $(4-4,\ 3-0,\ 5-8)=(0,3,-3)$;</li>
+        <li>$F_3\to F_3-2F_1$: $(2-2,\ 0-0,\ 1-4)=(0,0,-3)$.</li>
+      </ul>
+      $$A\longrightarrow U=\begin{pmatrix}1&0&2\\0&3&-3\\0&0&-3\end{pmatrix}.$$
+      El elemento bajo el segundo pivote ya es $0$ (multiplicador $0$). No se ha permutado ni normalizado: es válido.</li>
+    <li><b>PASO 2 (obtener $L$).</b> $L=E^{-1}=E_1^{-1}E_2^{-1}$ (U p.46): las inversas de $F_2\to F_2-4F_1$ y $F_3\to F_3-2F_1$ son $F_2\to F_2+4F_1$ y $F_3\to F_3+2F_1$:
+      $$L=\begin{pmatrix}1&0&0\\4&1&0\\0&0&1\end{pmatrix}\begin{pmatrix}1&0&0\\0&1&0\\2&0&1\end{pmatrix}=\begin{pmatrix}1&0&0\\4&1&0\\2&0&1\end{pmatrix}.$$
+      Regla práctica: en la posición $(i,j)$ de $L$ va el multiplicador $\lambda$ de $F_i\to F_i-\lambda F_j$ ($\ell_{21}=4$, $\ell_{31}=2$, $\ell_{32}=0$).</li>
+    <li><b>Comprobación:</b> $LU=\begin{pmatrix}1&0&2\\4&3&8-3\\2&0&4-3\end{pmatrix}=\begin{pmatrix}1&0&2\\4&3&5\\2&0&1\end{pmatrix}=A$ ✓.</li>
+    <li><b>Usos:</b> $\det A=\det U=1\cdot3\cdot(-3)=-9$ ✓. Para $AX=(3,12,3)^t$: $LY=B$ da $y_1=3$, $y_2=12-12=0$, $y_3=3-6=-3$; $UX=Y$ da $x_3=1$, $3x_2-3=0\Rightarrow x_2=1$, $x_1+2=3\Rightarrow x_1=1$: $X=(1,1,1)^t$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $LU$: Gauss <b>sin</b> normalizar y <b>solo</b> con $F_i\to F_i-\lambda F_j$ ($i\gt j$) hasta $U$; $L$ = identidad con los multiplicadores $\lambda$ en su sitio; comprueba $LU=A$.</div>
+  <p><b>Error típico:</b> poner en $L$ los multiplicadores con el signo cambiado ($-4$, $-2$): eso sería $E$, no $L=E^{-1}$.</p>
+</details>
+
+<details class="sol" id="ex-feb18c"><summary>Feb. 2018 (tipo A), problema, apartado c) — explicar la factorización $LU$ y enunciar una aplicación <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), problema, apartado c)">X Feb. 2018 (A)</span></summary>
+  <p class="enun">Explicar la factorización $LU$ para matrices regulares (0,5 ptos.) y enunciar una aplicación (0,5 ptos.). (La solución oficial solo dice «teoría del primer tema».)</p>
+  <ol class="steps">
+    <li><b>Qué es</b> (U p.45-46). Si $A\in\mathcal M_n$ es regular y se puede llevar a triangular superior por Gauss <b>sin normalizar pivotes y solo con reemplazos</b> $F_i\to F_i+\lambda F_j$, entonces $A=LU$ de modo <b>único</b>, con $U$ la triangular superior obtenida y $L$ triangular inferior con unos en la diagonal que guarda las operaciones.</li>
+    <li><b>Por qué funciona.</b> Si $E_1,\dots,E_p$ son las matrices elementales usadas, $U=E_p\cdots E_1A=EA$ y $L=E^{-1}=E_1^{-1}\cdots E_p^{-1}$ (U p.46). Cada $E_k^{-1}$ es triangular inferior con unos en la diagonal, y el producto también.</li>
+    <li><b>Ejemplo</b> (propio). $A=\begin{pmatrix}1&1&1\\2&1&-1\\1&-1&1\end{pmatrix}$ ($\det A=-6\neq0$): $F_2\to F_2-2F_1$ da $(0,-1,-3)$; $F_3\to F_3-F_1$ da $(0,-2,0)$; $F_3\to F_3-2F_2$ da $(0,0,6)$.
+      $$U=\begin{pmatrix}1&1&1\\0&-1&-3\\0&0&6\end{pmatrix},\qquad L=\begin{pmatrix}1&0&0\\2&1&0\\1&2&1\end{pmatrix},\qquad LU=A.$$</li>
+    <li><b>Aplicación: resolver $AX=B$</b> (U p.49). Como $L(UX)=B$: se resuelve $LY=B$ (hacia delante) y $UX=Y$ (hacia atrás). Con $B=(6,1,2)^t$: $y_1=6$; $12+y_2=1\Rightarrow y_2=-11$; $6-22+y_3=2\Rightarrow y_3=18$. Luego $6z=18\Rightarrow z=3$; $-y-9=-11\Rightarrow y=2$; $x+2+3=6\Rightarrow x=1$. Solución $(1,2,3)$ ✓. Ventaja: con muchos $B$ distintos y la misma $A$, la factorización se hace una sola vez (U p.51).</li>
+    <li><b>Otras aplicaciones</b> (U p.51): $\det A=\det U$ (aquí $1\cdot(-1)\cdot6=-6$ ✓) y $A^{-1}=U^{-1}L^{-1}$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> pregunta de teoría de $LU$: definición (forma de $L$ y $U$ + hipótesis: regular y sin permutaciones), construcción ($U$ por Gauss con reemplazos, $L=E^{-1}$), unicidad y una aplicación con los dos sistemas triangulares. Un ejemplo $3\times3$ breve vale mucho.</div>
+  <p><b>Error típico:</b> escribir solo «$A=LU$» sin decir qué son $L$ y $U$ ni bajo qué hipótesis.</p>
+</details>
+
+<details class="sol" id="ex-feb19pb"><summary>Feb. 2019 (tipo A), problema, apartado b) — enunciar un método numérico y mostrar sus pasos <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), problema, apartado b)">X Feb. 2019 (A)</span></summary>
+  <p class="enun">Enunciar algún método numérico para resolver un sistema de ecuaciones lineales y mostrar sus pasos, es decir, cómo se aplica. (Solución oficial: «pueden explicarse método LU, QR…»). Modelo con el <b>método de Gauss</b> (U §1.4.3, p.38-39); también valdría $LU$.</p>
+  <ol class="steps">
+    <li><b>Idea.</b> Transformar $(A\mid B)$, con operaciones elementales por filas, en una matriz escalonada; el sistema obtenido es equivalente (Teorema 1.5, U p.32) y se resuelve por sustitución hacia atrás.</li>
+    <li><b>Pasos</b> (U p.39). PASO 1: localizar el pivote de la primera fila (si $a_{11}=0$, intercambiar con una fila con elemento no nulo en esa columna). PASO 2: normalizar el pivote si se desea y anular todo lo que hay debajo. PASOS 3-5: repetir con la fila siguiente hasta obtener una escalonada. PASO 6: sustitución hacia atrás. Comparando rangos en la escalonada se <b>clasifica</b> el sistema (Rouché-Frobenius).</li>
+    <li><b>Ejemplo</b> (propio): $x+2y+z=4$, $2x+5y+3z=10$, $x+3y+4z=8$.
+      $$\left(\begin{array}{ccc|c}1&2&1&4\\2&5&3&10\\1&3&4&8\end{array}\right)\xrightarrow[F_3\to F_3-F_1]{F_2\to F_2-2F_1}\left(\begin{array}{ccc|c}1&2&1&4\\0&1&1&2\\0&1&3&4\end{array}\right)\xrightarrow{F_3\to F_3-F_2}\left(\begin{array}{ccc|c}1&2&1&4\\0&1&1&2\\0&0&2&2\end{array}\right).$$
+      Por qué: el pivote $1$ de la fila 1 anula el $2$ y el $1$ de la columna 1; el pivote $1$ de la fila 2 anula el $1$ de la fila 3.</li>
+    <li><b>Clasificación:</b> $\operatorname{rang}A=\operatorname{rang}(A\mid B)=3=n$: compatible determinado.</li>
+    <li><b>Sustitución hacia atrás:</b> $2z=2\Rightarrow z=1$; $y+z=2\Rightarrow y=1$; $x+2y+z=4\Rightarrow x=1$. Comprobación: $1+2+1=4$, $2+5+3=10$, $1+3+4=8$ ✓.</li>
+    <li><b>Comentarios numéricos</b> (U p.41-42): Gauss cuesta del orden de $n^3/3$ operaciones; problemas: redondeo con pivotes pequeños (pivoteo parcial/total) y sistemas mal condicionados (Def. 1.8, Ej. 1.31). Gauss-Jordan (U p.43-44) sigue hasta la escalonada reducida y evita la sustitución, pero cuesta más ($\sim n^3/2$).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «enuncie un método»: nombre + idea (sistema equivalente más sencillo) + pasos numerados + un ejemplo $3\times3$ con cada operación anotada (con la fila sobre la que se actúa: $F_2\to F_2-2F_1$) + clasificación por rangos + comprobación.</div>
+  <p><b>Error típico:</b> usar una fila ya «usada» para hacer ceros bajo un pivote posterior: deshace los ceros conseguidos (U p.40, al margen).</p>
+</details>
+
+<div class="box tip"><span class="h">Para practicar (exámenes cuyo tema principal es otro, pero que se resuelven como un sistema)</span>
+  <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 3; Feb. 2025 (1.ª sem.), pregunta 3; Sept. 2023, pregunta 2; Feb. 2024 (1.ª sem.), preguntas 2 y 8; Sept. 2024, pregunta 2; Feb. 2022 (tipo A), ejercicio 2">X varios</span>
+  <ul>
+    <li>X, Sept. 2025, pregunta 3 (tema 3.2) — hallar $a,b$ con $(10,a,b)\in\operatorname{Nuc}f$, $M=\begin{pmatrix}1&2&1\\2&4&3\\3&6&4\end{pmatrix}$. Es un sistema de 3 ecuaciones con 2 incógnitas: $10+2a+b=0,\ 20+4a+3b=0,\ 30+6a+4b=0$. Con la ampliada $\left(\begin{array}{cc|c}2&1&-10\\4&3&-20\\6&4&-30\end{array}\right)$, $F_2\to F_2-2F_1$, $F_3\to F_3-3F_1$, $F_3\to F_3-F_2$ queda $\left(\begin{array}{cc|c}2&1&-10\\0&1&0\\0&0&0\end{array}\right)$: rangos $2=2=n$, compatible determinado, $b=0$, $a=-5$. Lección: con más ecuaciones que incógnitas hay que comprobar que la ecuación «sobrante» es compatible.</li>
+    <li>Combinaciones lineales y coordenadas (temas 2.2-2.3), que se reducen a plantear y discutir un sistema lineal: Feb. 2025 (1.ª sem.), pregunta 3; Sept. 2023, pregunta 2; Feb. 2024 (1.ª sem.), preguntas 2 y 8; Sept. 2024, pregunta 2; y Feb. 2022 (tipo A), ejercicio 2 (generadores de $U$ dado por cartesianas). Método: plantea el sistema, escalona y aplica Rouché-Frobenius.</li>
+    <li>Rango por Gauss y escalonada reducida (tema 1.2): <a href="tema_1_2_algebra_matricial.html#ex-feb17a2b">Feb. 2017 (2.ª sem., tipo A), problema, apartado a)</a>; <a href="tema_1_2_algebra_matricial.html#ex-sep22b">Sept. 2022, problema, apartado a)</a>; <a href="tema_1_2_algebra_matricial.html#ex-feb19a1">Feb. 2019 (tipo A), ejercicio 1</a>; Feb. 2026 (1.ª y 2.ª sem.): <a href="tema_1_2_algebra_matricial.html#ex-feb26a">pregunta 1</a> y <a href="tema_1_2_algebra_matricial.html#ex-feb26b">pregunta 7</a>. Sistemas matriciales por reducción, tipo Sept. 2025 p.7 (con $A^2-B^2$): <a href="tema_1_2_algebra_matricial.html#ex-feb18a">Feb. 2018 (tipo A), ejercicio 1</a> y <a href="tema_1_2_algebra_matricial.html#ex-sep24">Sept. 2024, pregunta 1</a> (tema 1.2).</li>
+  </ul>
+</div>
+
 <!-- ============================ CHULETA ============================ -->
-<h2 id="chuleta"><span class="n">12</span>Chuleta y lista de comprobación</h2>
+<h2 id="chuleta"><span class="n">13</span>Chuleta y lista de comprobación</h2>
 
 <table>
   <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
