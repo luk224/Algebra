@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 2.3 Bases. Dimensión. Coordenadas</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 2 · Espacios vectoriales · Tema 2.3</div>
+  <h1>Bases. Dimensión. Coordenadas</h1>
+  <p>Una <b>base</b> es el sistema de generadores «sin vectores sobrantes»: con ella cada vector se escribe de <b>una única</b> manera (sus <b>coordenadas</b>) y el número de vectores que tiene es una propiedad del espacio, su <b>dimensión</b>. Aprenderás a decidir si un sistema es base, a calcular coordenadas, a hallar la dimensión de un subespacio con un rango y a completar o reducir un sistema hasta una base.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §2.3 (pp. 81-89)</span><span>Ejercicios: E Ej. 2.23–2.30 (pp. 65-69)</span><span>⏱ ~8 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §2.3.1 Elementos didácticos (Introducción, Orientaciones), p. 81">U p.81</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>En el tema 2.2 viste que un subespacio puede tener muchos sistemas de generadores, algunos con vectores sobrantes. Una <b>base</b> es un sistema de generadores <b>sin nada que sobre</b>: es la «lista de ingredientes» mínima. Es como dar una dirección en una ciudad con calles en cuadrícula: «<i>3 manzanas al este y 2 al norte</i>» son dos datos que localizan el punto sin ambigüedad; con uno solo no bastaría y un tercero sería redundante. Las <b>coordenadas</b> de un vector respecto de una base son esos datos, y la <b>dimensión</b> es cuántos datos hacen falta (2 en el plano, 3 en $\mathbb R^3$…).</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del tema 2.2: combinación lineal, sistema generador $\langle S\rangle$, sistema <b>libre</b> y <b>ligado</b>, y el <b>rango de un sistema</b> (U p.73-78). Este tema consiste en juntar «libre» y «generador».</li>
+  <li>Del tema 2.1: $\mathbb R^n$, las matrices $\mathcal M_{m\times n}$ y los polinomios $\wp_n$ son espacios vectoriales; los subespacios de $\mathbb R^3$ son el origen, rectas y planos por el origen.</li>
+  <li>Del tema 1: rango de una matriz por Gauss (U p.22), $\det A\neq0\iff\operatorname{rang}A=n$ para $A$ cuadrada (U p.27) y el teorema de Rouché-Frobenius (U p.30).</li>
+  <li>Dos polinomios son iguales si y solo si coinciden los coeficientes de cada potencia de $x$; dos matrices, si coinciden todas sus entradas. Esa regla convierte una igualdad de polinomios o matrices en un sistema lineal.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde está en los libros</th></tr>
+  <tr><td>1 Bases</td><td>Def. 2.8 (espacio finito), Def. 2.9 (base), caracterización por la expresión única, Ej. 2.24-2.26 de U</td><td>U p.82-85 · L §4.3 p.208-210</td></tr>
+  <tr><td>2 Coordenadas</td><td>Def. 2.10, Ej. 2.27-2.28 de U, coordenadas y cambio de base (adelanto de §3.5)</td><td>U p.85-86 · L §4.4 p.216-217</td></tr>
+  <tr><td>3 Teoremas de la base y dimensión</td><td>Teor. 2.3 (existencia), Teor. 2.4 (de la dimensión), Def. 2.11, Ej. 2.29</td><td>U p.87 · L §4.5 p.225-227</td></tr>
+  <tr><td>4 Cómo calcular con bases</td><td>Teor. 2.5 ($\operatorname{rang}=\operatorname{Dim}$), Teor. 2.6 (basta uno de los dos), rango por coordenadas, Teor. 2.7 (base incompleta), Ej. 2.30</td><td>U p.88-89 · L §4.3 p.210-212, §4.5 p.227</td></tr>
+  <tr><td>5 Ejercicios del libro</td><td>E 2.23–2.30 (los ocho) + 3 ejemplos propios</td><td>E pp.65-69</td></tr>
+  <tr><td>6 Ejemplos de examen</td><td>6 preguntas de convocatorias anteriores, resueltas</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p>Cuatro preguntas que se repiten con distinto disfraz: <b>(a)</b> «¿es este sistema una base de $V$?» (contar vectores, determinante o rango de la matriz de coordenadas); <b>(b)</b> «calcula las coordenadas de $v$ respecto de la base $B$» (sistema lineal, también con polinomios y matrices); <b>(c)</b> «calcula la dimensión (y una base) del subespacio generado por…» (rango); <b>(d)</b> «completa a una base» o «extrae una base de…». Todo se reduce a <b>pasar a coordenadas</b>, <b>formar una matriz</b> y calcular un <b>rango o un determinante</b>.</p>
+</div>
+
+<div class="box warn"><span class="h">Aviso de numeración</span>
+  <p>El libro de teoría (U) numera sus ejemplos «Ejemplo 2.24, 2.25, …» y el de ejercicios (E) numera sus ejercicios «Ejercicio 2.23, 2.24, …»: son <b>cosas distintas</b> con números parecidos. Aquí se escribe «Ej. U 2.24» para el ejemplo de teoría y «Ejercicio 2.24» para el de E.</p>
+</div>
+
+<div class="box warn"><span class="h">Erratas de extracción y omisiones de los libros (para no despistarte)</span>
+  <ul>
+    <li><b>El símbolo $\neq$ se pierde</b> en el texto digital de los libros: los enunciados de U (Teor. 2.3, 2.4, 2.6, 2.7 y Def. 2.11) dicen «$V=\{e\}$» donde el PDF impreso lleva <b>$V\neq\{e\}$</b> (U llama $e$ al vector nulo; aquí se escribe $\{0\}$); en E aparece «$=6=0$» donde se lee $6\neq0$ (Ejercicio 2.24), «$V=\{0\}$» (Ejercicio 2.25) y «$a=0$» (Ejercicio 2.28, que dice $a\neq0$). Aquí se escribe siempre $\neq$ y $\{0\}$. También pierde los corchetes $\langle\ \rangle$: el Teor. 2.5 es $\operatorname{rang}(S)=\operatorname{Dim}\langle S\rangle$.</li>
+    <li><b>U no demuestra</b> el Teor. 2.3 (existencia de base), el Teor. 2.4 (de la dimensión) ni los Teor. 2.5-2.7: dice «se puede demostrar» y los enuncia. Lay sí demuestra los equivalentes (L p.210-211 y 225-228). En examen basta <b>citarlos</b> y comprobar sus hipótesis.</li>
+    <li><b>U dice «salvo el orden»</b> al hablar de la combinación lineal única de una base (p.82). Para las coordenadas el orden de la base <b>sí importa</b>: $(2,3)_B\neq(3,2)_B$ (ver §2). Lay lo indica en una nota a pie de página (L p.216).</li>
+    <li><b>Imprecisión en el Ej. 2.30 de U (p.89):</b> dice que se completa con «un vector que no pertenezca a $S$»; debe ser «<b>fuera de $\langle S\rangle$</b>» (un vector de $\langle S\rangle$ que no esté en $S$, como $x^2+1$, no sirve; ver el Ej. U 2.30 de §4).</li>
+    <li><b>E (soluciones oficiales)</b> es muy escueto: en 2.23 solo cuenta vectores sin decir qué propiedad falla; en 2.27 y 2.30 no comprueba que $B'$ y $B$ sean base. Aquí se completan esos huecos (en cada ejercicio, «Nota sobre el libro»).</li>
+  </ul>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Bases <span class="src" data-l="U" data-ref="U §2.3.2 Definiciones 2.8 y 2.9, caracterización de las bases y Ejemplos 2.24-2.26, p. 82-85">U p.82-85</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Piensa en un plano $\Pi$ (por el origen) en $\mathbb R^3$. Para fabricar todos sus puntos con «mezclas» necesitas al menos dos vectores del plano que no estén alineados: esos dos ya bastan, y cualquier vector extra del plano sobraría. Un sistema generador de $\Pi$ puede tener tres, cuatro o cien vectores (los extra son combinaciones de los otros: sistema <b>ligado</b>), pero el sistema generador «ajustado», con justo los necesarios, es <b>libre y generador</b> a la vez: una <b>base</b>. Dos vectores que no son uno múltiplo del otro y que están en $\Pi$ siempre forman base de $\Pi$; y hay <b>infinitas</b> bases distintas del mismo plano (cualquier par de vectores no alineados de $\Pi$).</p>
+</div>
+
+<div class="box def"><span class="h">Definición 2.8 — espacio vectorial finito</span>
+  <p>Un espacio vectorial es <b>finito</b> si está generado por un número finito de vectores. ($\mathbb R^n$, $\wp_n$ y $\mathcal M_{m\times n}$ son finitos; el espacio de <i>todos</i> los polinomios no lo es: L p.226, Ej. 1.)</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.8, p. 82">U p.82</span>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Ejemplo 1 (el espacio P de todos los polinomios es de dimensión infinita), p. 226">L p.226</span>
+</div>
+
+<div class="box def"><span class="h">Definición 2.9 — base</span>
+  <p>Un sistema $B=\{e_1,e_2,\dots,e_n\}$ de vectores de $V$ es una <b>base</b> de $V$ si
+  $$B\ \text{es un sistema libre}\quad\text{y}\quad B\ \text{genera }V\ (\langle B\rangle=V).$$
+  <b>Dos condiciones</b>, y hay que comprobar las dos (o usar el atajo del Teor. 2.6, §4). Cuando se habla de una base <i>de un subespacio</i> $W$, la condición «genera» significa $\langle B\rangle=W$, y por tanto los vectores de $B$ deben <b>estar en $W$</b>.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.9, p. 82">U p.82</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, definición de base (de un subespacio H), p. 209">L p.209</span>
+</div>
+
+<div class="box thm"><span class="h">Caracterización de las bases — «expresión única»</span>
+  <p>$B$ es base de $V$ $\iff$ <b>todo vector de $V$ se escribe de una única manera</b> como combinación lineal de los vectores de $B$.</p>
+  <p><i>Idea de la prueba</i> (es el Ej. U 2.24). Si $v$ tuviera dos expresiones, $v=\sum\lambda_ie_i=\sum\mu_ie_i$, al restarlas queda $0=\sum(\lambda_i-\mu_i)e_i$; como $B$ es <b>libre</b>, todos los $\lambda_i-\mu_i$ valen $0$, es decir $\lambda_i=\mu_i$. Recíprocamente, si la expresión es siempre única, $B$ genera $V$ (hay al menos una) y, como $0=0e_1+\dots+0e_n$ es <i>la</i> expresión de $0$, la única combinación nula es la trivial: $B$ es libre.</p>
+  <span class="src" data-l="U" data-ref="U caracterización de las bases y Ejemplo 2.24 (demostración), p. 82-83">U p.82-83</span>
+  <span class="src" data-l="L" data-ref="Lay §4.4, Teorema 7 (teorema de la representación única), p. 216">L p.216</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.25 — la base canónica de $\mathbb R^n$</span>
+  <p>$B=\{(1,0,\dots,0),(0,1,\dots,0),\dots,(0,0,\dots,1)\}$ es base de $\mathbb R^n$, la más sencilla de todas: la <b>base canónica</b>.</p>
+  <ul>
+    <li><b>Genera:</b> todo $x=(x_1,\dots,x_n)=x_1(1,0,\dots,0)+x_2(0,1,\dots,0)+\dots+x_n(0,0,\dots,1)$.</li>
+    <li><b>Libre:</b> $0=x_1e_1+\dots+x_ne_n=(x_1,\dots,x_n)$ obliga a $x_1=\dots=x_n=0$.</li>
+  </ul>
+  <p>En $\mathbb R^2$: $\{(1,0),(0,1)\}$; en $\mathbb R^3$: $\{(1,0,0),(0,1,0),(0,0,1)\}$ (Lay la llama «base estándar», $\{e_1,\dots,e_n\}$).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.25, p. 83-84">U p.83-84</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Ejemplo 4 (base estándar de R^n), p. 209">L p.209</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.26 — una base de polinomios, $\wp_2$</span>
+  <p>$\wp_2=\{ax^2+bx+c:\ a,b,c\in\mathbb R\}$ (polinomios de grado $\le2$). Se comprueba que $B=\{x^2,\ x^2+x,\ x+1\}$ es base:</p>
+  <ol class="steps">
+    <li><b>Libre.</b> $\alpha x^2+\beta(x^2+x)+\delta(x+1)=(\alpha+\beta)x^2+(\beta+\delta)x+\delta=0x^2+0x+0$ obliga a $\delta=0$, luego $\beta=0$ y $\alpha=0$.</li>
+    <li><b>Genera.</b> Para cualquier $ax^2+bx+c$ hay que encontrar $\alpha,\beta,\delta$ con $(\alpha+\beta)x^2+(\beta+\delta)x+\delta=ax^2+bx+c$, es decir $\alpha+\beta=a,\ \beta+\delta=b,\ \delta=c$. Resolviendo de abajo arriba: $\delta=c,\ \beta=b-c,\ \alpha=a-b+c$: existen para <b>todo</b> polinomio.</li>
+    <li><b>Conclusión.</b> $B$ es libre y generador: base de $\wp_2$. Análogamente $\{x^2,x,1\}$ es otra base, la <b>base canónica</b> de $\wp_2$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.26, p. 84-85">U p.84-85</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Ejemplo 6 (base estándar {1,t,...,t^n} de P_n), p. 209-210">L p.209-210</span>
+</div>
+
+<div class="box tip"><span class="h">Lo que sale gratis de la definición</span>
+  <ul>
+    <li><b>Un vector nunca es base si es $0$</b>: un sistema con el vector nulo es ligado (U p.74). Un solo vector $\{v\}$ es libre $\iff v\neq0$; por eso $\{1\}$ es base de $\mathbb R$ (Ejercicio 2.25).</li>
+    <li><b>Hay infinitas bases</b>: $\{(1,0),(0,1)\}$, $\{(1,1),(1,-1)\}$, $\{(2,0),(0,1)\}$… son bases de $\mathbb R^2$. No hay «la» base de un espacio, pero sí una más cómoda, la canónica.</li>
+    <li><b>Base de las columnas de una matriz</b>: las columnas de una matriz invertible $n\times n$ forman una base de $\mathbb R^n$ (L p.209, Ej. 3). Es la versión «matricial» del criterio del determinante (§4).</li>
+    <li><b>Libre y generador son propiedades independientes</b>: $\{(1,0),(2,0)\}$ no es libre; $\{(1,0)\}$ es libre pero no genera $\mathbb R^2$; $\{(1,0),(0,1),(1,1)\}$ genera pero no es libre. Solo si se cumplen <b>las dos</b> hay base.</li>
+  </ul>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Decir «es base» porque «genera» (o porque «es libre»). Con vectores de $\mathbb R^3$ en particular: dos vectores libres de $\mathbb R^3$ <b>no</b> son base de $\mathbb R^3$ (generan un plano), y cuatro vectores que generan $\mathbb R^3$ <b>no</b> son base (alguno sobra). Otro error: «es base de $\mathbb R^2$» para vectores que son ternas: la base de $\mathbb R^2$ debe estar formada por vectores <i>de</i> $\mathbb R^2$ (Ejercicio 2.24).</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Coordenadas respecto de una base <span class="src" data-l="U" data-ref="U §2.3.2 Definición 2.10 y Ejemplos 2.27-2.28, p. 85-86">U p.85-86</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una base impone un <b>sistema de coordenadas</b>: cada vector pasa a ser una lista de números que dice «cuánto hay que andar en cada dirección de la base». En el papel cuadriculado normal (base canónica) el punto $(1,6)$ está «1 a la derecha y 6 arriba». Si cambias la cuadrícula por una <b>inclinada</b>, adaptada a otra base $B$, el mismo punto se describe con otros números: por ejemplo «$-2$ pasos en la dirección $b_1$ y $3$ en la dirección $b_2$». Es el mismo vector con <b>distintas coordenadas</b>, igual que una misma ciudad tiene distinta dirección según el mapa que uses. Para que ese sistema sea fiable tiene que haber <b>una y solo una</b> lista para cada vector: eso es exactamente lo que garantiza que $B$ sea base.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 2.10 — coordenadas</span>
+  <p>Las <b>coordenadas</b> de $v\in V$ respecto de la base $B=\{e_1,\dots,e_n\}$ de $V$ son $(x_1,\dots,x_n)$ si
+  $$v=x_1e_1+x_2e_2+\dots+x_ne_n.$$
+  Se escribe $v=(x_1,x_2,\dots,x_n)_B$. Las coordenadas de $(x_1,\dots,x_n)\in\mathbb R^n$ respecto de la <b>base canónica</b> son esos mismos números, y se sobreentiende la base canónica si no se dice otra cosa. El <b>orden</b> de los vectores de la base importa: las coordenadas se dan en ese orden.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.10, p. 85">U p.85</span>
+  <span class="src" data-l="L" data-ref="Lay §4.4, definición de coordenadas respecto de la base B (B-coordenadas), p. 216">L p.216</span>
+</div>
+
+<div class="box tip"><span class="h">Las coordenadas de los vectores de la propia base</span>
+  <p>Las coordenadas de un vector $e_i$ de la base $B$ respecto de <b>esa misma</b> base son todas $0$ salvo un $1$ en el lugar $i$: $e_i=1\cdot e_i$, es decir, $e_i=(0,\dots,1,\dots,0)_B$. Por eso, en cualquier base, la matriz de coordenadas de la propia base es la identidad. Y recuerda: las coordenadas de un vector <b>dependen de la base elegida</b>.</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §2.3, recordatorio inicial, p. 64">E p.64</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.27 — el mismo vector, dos bases de $\mathbb R^2$</span>
+  <p>Respecto de la base canónica $B=\{(1,0),(0,1)\}$: $(2,3)=2(1,0)+3(0,1)$, luego $(2,3)=(2,3)_B$. Con otra base, $B'=\{(2,0),(0,1)\}$, el <b>mismo</b> vector se escribe $(2,3)=1\cdot(2,0)+3\cdot(0,1)$, y sus coordenadas son $(1,3)_{B'}$. Se verifica
+  $$(2,3)_B=(1,3)_{B'}.$$
+  Misma flecha, distintos números: las coordenadas dependen de la base.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.27, p. 86">U p.86</span>
+</div>
+
+<figure>
+  <div class="figpair">
+  <svg class="fig" viewBox="0 0 230 196" role="img" aria-label="Plano con la cuadrícula estándar: se marcan b1=(1,0)=e1, b2=(1,2) y x=(1,6)">
+      <clipPath id="clipL"><rect x="8" y="30" width="196" height="156"></rect></clipPath>
+      <g clip-path="url(#clipL)">
+      <line class="th" x1="10" y1="188" x2="10" y2="46"></line>
+      <line class="th" x1="30" y1="188" x2="30" y2="46"></line>
+      <line class="th" x1="50" y1="188" x2="50" y2="46"></line>
+      <line class="th" x1="70" y1="188" x2="70" y2="46"></line>
+      <line class="th" x1="90" y1="188" x2="90" y2="46"></line>
+      <line class="th" x1="110" y1="188" x2="110" y2="46"></line>
+      <line class="th" x1="130" y1="188" x2="130" y2="46"></line>
+      <line class="th" x1="150" y1="188" x2="150" y2="46"></line>
+      <line class="th" x1="170" y1="188" x2="170" y2="46"></line>
+      <line class="th" x1="190" y1="188" x2="190" y2="46"></line>
+      <line class="th" x1="6" y1="178" x2="198" y2="178"></line>
+      <line class="th" x1="6" y1="158" x2="198" y2="158"></line>
+      <line class="th" x1="6" y1="138" x2="198" y2="138"></line>
+      <line class="th" x1="6" y1="118" x2="198" y2="118"></line>
+      <line class="th" x1="6" y1="98" x2="198" y2="98"></line>
+      <line class="th" x1="6" y1="78" x2="198" y2="78"></line>
+      <line class="th" x1="6" y1="58" x2="198" y2="58"></line>
+      </g>
+      <line class="ax" x1="10" y1="178" x2="198" y2="178"></line>
+      <line class="ax" x1="70" y1="188" x2="70" y2="46"></line>
+      <line class="a" x1="70" y1="178" x2="90" y2="178"></line>
+      <line class="b" x1="70" y1="178" x2="90" y2="138"></line>
+      <line class="th" x1="70" y1="178" x2="90" y2="58" stroke-dasharray="5 4"></line>
+      <circle class="op" cx="70" cy="178" r="4"></circle>
+      <circle class="pt" cx="90" cy="178" r="4"></circle>
+      <circle class="pt" cx="90" cy="138" r="4"></circle>
+      <circle class="pt" cx="90" cy="58" r="4"></circle>
+      <text class="sm" x="58" y="192">0</text>
+      <text class="sm" x="96" y="192">b₁=(1,0)</text>
+      <text class="sm" x="97" y="142">b₂=(1,2)</text>
+      <text class="sm" x="98" y="62">x=(1,6)</text>
+      <text class="lg" x="108" y="18" text-anchor="middle">Cuadrícula estándar</text>
+    </svg>
+  <svg class="fig" viewBox="0 0 230 196" role="img" aria-label="Plano con la cuadrícula inclinada de la base B={b1,b2}: x se alcanza yendo −2 pasos en la dirección b1 y 3 pasos en la dirección b2, [x]_B=(−2,3)">
+      <clipPath id="clipR"><rect x="8" y="30" width="196" height="156"></rect></clipPath>
+      <g clip-path="url(#clipR)">
+      <line class="th" x1="-30" y1="178" x2="230" y2="178"></line>
+      <line class="th" x1="-10" y1="138" x2="250" y2="138"></line>
+      <line class="th" x1="10" y1="98" x2="270" y2="98"></line>
+      <line class="th" x1="30" y1="58" x2="290" y2="58"></line>
+      <line class="th" x1="-10" y1="178" x2="58" y2="42"></line>
+      <line class="th" x1="10" y1="178" x2="78" y2="42"></line>
+      <line class="th" x1="30" y1="178" x2="98" y2="42"></line>
+      <line class="th" x1="50" y1="178" x2="118" y2="42"></line>
+      <line class="th" x1="70" y1="178" x2="138" y2="42"></line>
+      <line class="th" x1="90" y1="178" x2="158" y2="42"></line>
+      <line class="th" x1="110" y1="178" x2="178" y2="42"></line>
+      <line class="th" x1="130" y1="178" x2="198" y2="42"></line>
+      <line class="th" x1="150" y1="178" x2="218" y2="42"></line>
+      <line class="th" x1="170" y1="178" x2="238" y2="42"></line>
+      </g>
+      <line class="a" x1="70" y1="178" x2="30" y2="178"></line>
+      <line class="b" x1="30" y1="178" x2="90" y2="58"></line>
+      <circle class="op" cx="70" cy="178" r="4"></circle>
+      <circle class="pt" cx="90" cy="178" r="4"></circle>
+      <circle class="pt" cx="90" cy="138" r="4"></circle>
+      <circle class="pt" cx="90" cy="58" r="4"></circle>
+      <text class="sm" x="58" y="192">0</text>
+      <text class="sm" x="96" y="192">b₁=(1,0)</text>
+      <text class="sm" x="97" y="142">b₂=(1,2)</text>
+      <text class="sm" x="98" y="62">x=(1,6)</text>
+      <text class="sm" x="30" y="192" text-anchor="middle">−2b₁</text>
+      <text class="sm" x="56" y="118" text-anchor="end">3b₂</text>
+      <text class="lg" x="108" y="18" text-anchor="middle">Cuadrícula de B</text>
+    </svg>
+  </div>
+  <figcaption>Una base es un «papel cuadriculado» a medida. Izquierda: cuadrícula estándar, con $b_1=e_1=(1,0)$, $b_2=(1,2)$ y $x=(1,6)$ (en discontinua, la flecha de $0$ a $x$). Derecha: la cuadrícula adaptada a $B=\{b_1,b_2\}$, en la que ese mismo $x$ está a $-2$ pasos de $b_1$ y $3$ de $b_2$: $[x]_B=(-2,3)$, porque $-2(1,0)+3(1,2)=(1,6)$. Figura propia, inspirada en el Ejemplo 1 y las Figuras 1-2 de Lay (§4.4 p.217). <span class="src" data-l="P" data-ref="Figura propia inspirada en Lay §4.4, Ejemplo 1 y Figuras 1-2, p. 217">P</span></figcaption>
+</figure>
+
+<div class="box ex"><span class="h">Ej. U 2.28 — coordenadas de un polinomio</span>
+  <p>Coordenadas de $5x^2+3x+1$ respecto de $B=\{x^2,\,x^2+x,\,x+1\}$ (la base del Ej. U 2.26). Con las relaciones obtenidas allí, $\alpha=a-b+c$, $\beta=b-c$, $\delta=c$ y $(a,b,c)=(5,3,1)$:
+  $$\alpha=5-3+1=3,\quad\beta=3-1=2,\quad\delta=1\ \Longrightarrow\ 5x^2+3x+1=3x^2+2(x^2+x)+1(x+1).$$
+  Así $5x^2+3x+1=(3,2,1)_B$. Respecto de la base canónica $\{x^2,x,1\}$ son $(5,3,1)$ (los coeficientes del polinomio). <b>Comprobación:</b> $3x^2+2x^2+2x+x+1=5x^2+3x+1$ ✓.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.28, p. 86">U p.86</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo propio — coordenadas en una base «inclinada» de $\mathbb R^2$</span>
+  <p>$B=\{(1,1),(1,-1)\}$ es base de $\mathbb R^2$ ($\det\begin{pmatrix}1&1\\1&-1\end{pmatrix}=-2\neq0$, §4). Coordenadas de $v=(5,1)$:</p>
+  <ol class="steps">
+    <li>Se plantea $(5,1)=\alpha(1,1)+\beta(1,-1)$, es decir $\alpha+\beta=5,\ \alpha-\beta=1$ (el sistema con los vectores de la base en <b>columnas</b>).</li>
+    <li>Sumando: $2\alpha=6$, $\alpha=3$; restando: $2\beta=4$, $\beta=2$.</li>
+    <li>Comprobación: $3(1,1)+2(1,-1)=(5,1)$ ✓. Luego $v=(3,2)_B$; y $(2,3)_B=2(1,1)+3(1,-1)=(5,-1)$, otro vector distinto: <b>el orden importa</b>.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio en R², verificado con sympy">P</span>
+</div>
+
+<div class="recipe"><b>Receta «coordenadas de $v$ respecto de $B=\{e_1,\dots,e_n\}$»:</b>
+  <ol>
+    <li>Plantea $v=x_1e_1+\dots+x_ne_n$ con $x_i$ incógnitas.</li>
+    <li>Pasa a un sistema lineal igualando <b>componente a componente</b>: en $\mathbb R^n$, las componentes; en $\wp_n$, los coeficientes de cada potencia de $x$; en $\mathcal M_{m\times n}$, las entradas. Con los vectores de la base en <b>columnas</b>: $(e_1\ \cdots\ e_n\mid v)$.</li>
+    <li>Resuelve (empieza por las ecuaciones con menos incógnitas; si los grados de los polinomios están «escalonados», sale un sistema triangular). El sistema es compatible <b>determinado</b> justo porque $B$ es base.</li>
+    <li>Comprueba sustituyendo, y escribe las coordenadas <b>en el orden de la base</b>.</li>
+  </ol>
+</div>
+
+<div class="box intu"><span class="h">Cambio de coordenadas: dónde se estudia</span>
+  <p>Si te dan dos bases $B$ y $B'$ de $\mathbb R^n$ (o de un espacio $V$) y las coordenadas de $v$ en una de ellas, pasar a las de la otra se hace con una <b>matriz de cambio de base</b>: sus columnas son las coordenadas de los vectores de una base respecto de la otra, y $X_B=P\,X_{B'}$. Eso se estudia formalmente en el <b>tema 3.5</b> (U p.131-137). Aquí solo hace falta el cálculo directo «sustituir y agrupar» del Ejercicio 2.27. Del mismo modo, los ejercicios de examen sobre «determinante de la matriz de cambio de coordenadas» son de §3.5, no de este tema.</p>
+  <span class="src" data-l="U" data-ref="U §3.5 Matriz inversa y cambios de base, p. 131-137 (se remite; no se desarrolla aquí)">U p.131-137</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Dar como coordenadas de $v$ respecto de $B$ las componentes de $v$ en la base canónica. Ejemplo: para $v=(5,1)$ y la base $B$ de arriba las coordenadas son $(3,2)_B$, no $(5,1)$. Otro: un vector de un subespacio de dimensión 2 tiene <b>2</b> coordenadas respecto de una base del subespacio, aunque tenga 3 componentes en $\mathbb R^3$ (ver el Ejemplo propio 1 de §5).</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Teoremas de la base y dimensión <span class="src" data-l="U" data-ref="U §2.3.3 Teoremas 2.3 y 2.4, Definición 2.11 y Ejemplo 2.29, p. 87">U p.87</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>¿Cuántos datos hacen falta para dar un punto de un plano? Siempre dos, uses la base que uses. Que el número de vectores de una base sea <b>el mismo en todas las bases</b> es lo que permite hablar de <b>«la» dimensión</b> del espacio: 1 para una recta, 2 para un plano, 3 para $\mathbb R^3$. La razón de fondo es la «relación libres–generadores» del tema 2.2: un sistema libre generador tiene como mucho tantos vectores como cualquier otro sistema generador (U p.81), y las bases son a la vez libres y generadoras.</p>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.3 (existencia de la base)</span>
+  <p>Todo espacio vectorial <b>finito</b> $V\neq\{0\}$ tiene base.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.3, p. 87">U p.87</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Teorema 5 (del conjunto generador, b): si H≠{0}, algún subconjunto de S es base de H, p. 210">L p.210</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.4 (de la dimensión) y Definición 2.11</span>
+  <p><b>Teorema 2.4.</b> Todas las bases de un espacio vectorial $V\neq\{0\}$ tienen el <b>mismo número de elementos</b>.</p>
+  <p><b>Definición 2.11.</b> La <b>dimensión</b> de $V\neq\{0\}$ finito, $\operatorname{Dim}V$, es el número de vectores de cualquiera de sus bases. Por convenio, $\operatorname{Dim}\{0\}=0$ (el vector $0$ no puede formar parte de ninguna base porque es ligado).</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.4 y Definición 2.11, p. 87">U p.87</span>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Teorema 10 y definición de dimensión finita, p. 226">L p.226</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.29 — dimensiones que conviene saberse</span>
+  <p>La base canónica de $\mathbb R^3$ tiene tres elementos; por el Teor. 2.4 toda base de $\mathbb R^3$ tiene tres y $\operatorname{Dim}\mathbb R^3=3$. En general <b>$\operatorname{Dim}\mathbb R^n=n$</b>. De la misma forma:</p>
+  <table>
+    <tr><th>Espacio</th><th>Base canónica</th><th>Dimensión</th></tr>
+    <tr><td>$\mathbb R^n$</td><td>$\{e_1,\dots,e_n\}$ (vectores con un $1$ y ceros)</td><td>$n$</td></tr>
+    <tr><td>$\wp_n$ (polinomios de grado $\le n$)</td><td>$\{x^n,\dots,x,1\}$ (o $\{1,x,\dots,x^n\}$)</td><td>$n+1$</td></tr>
+    <tr><td>$\mathcal M_{2\times2}$</td><td>$E_{11},E_{12},E_{21},E_{22}$ (un $1$ en una entrada)</td><td>$4$</td></tr>
+    <tr><td>$\mathcal M_{m\times n}$</td><td>las $mn$ matrices con un solo $1$</td><td>$mn$</td></tr>
+    <tr><td>$\{0\}$</td><td>no tiene base (U p.87)</td><td>$0$ por convenio</td></tr>
+  </table>
+  <p>La de $\mathbb R^n$ es del Ej. U 2.29 (p.87); la de $\wp_2$ y $\wp_3$ del Ej. U 2.26 y 2.30 (p.85 y p.89); la de $\mathcal M_{m\times n}$ se razona igual (cada matriz es $\sum a_{ij}E_{ij}$ y esa combinación es nula solo si todos los $a_{ij}=0$; <i>explicación propia</i>).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.29 y observación Dim R^n = n, p. 87">U p.87</span>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Ejemplo 1 (dim R^n = n, dim P_n = n+1), p. 226">L p.226</span>
+  <span class="src" data-l="P" data-ref="Base canónica de M_{mxn}: explicación propia, verificada; análoga a U Ejemplo 2.25 (p. 83-84)">P</span>
+</div>
+
+<div class="box thm"><span class="h">Consecuencias que se usan constantemente</span>
+  <p>Sea $\operatorname{Dim}V=n$.</p>
+  <ul>
+    <li><b>Más de $n$ vectores</b> de $V$ son siempre <b>ligados</b> (Lay, Teor. 9: en una base de $n$ vectores todo conjunto con más de $n$ es dependiente).</li>
+    <li><b>Menos de $n$ vectores</b> no pueden generar $V$ (si generaran, contendrían una base con menos de $n$ vectores, contra el Teor. 2.4).</li>
+    <li>Por tanto, una base tiene <b>exactamente $n$</b> vectores: contar es la primera comprobación, siempre (necesaria, pero <b>no suficiente</b>).</li>
+    <li>Un subespacio $W\subset V$ tiene $\operatorname{Dim}W\le\operatorname{Dim}V$ (Lay, Teor. 11).</li>
+  </ul>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Teorema 9, p. 225 y Teorema 11, p. 227">L p.225-227</span>
+  <span class="src" data-l="U" data-ref="U §2.2.3, relación entre los sistemas libres y los sistemas generadores, p. 81 (base de estas consecuencias)">U p.81</span>
+</div>
+
+<div class="box intu"><span class="h">Los subespacios de $\mathbb R^3$ por dimensión (Lay)</span>
+  <ul>
+    <li><b>Dimensión 0:</b> solo $\{0\}$ (el origen).</li>
+    <li><b>Dimensión 1:</b> los generados por un vector no nulo: <b>rectas</b> por el origen.</li>
+    <li><b>Dimensión 2:</b> los generados por dos vectores libres: <b>planos</b> por el origen.</li>
+    <li><b>Dimensión 3:</b> solo $\mathbb R^3$. Tres vectores libres cualesquiera de $\mathbb R^3$ lo generan.</li>
+  </ul>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Ejemplo 4 (subespacios de R^3 clasificados por dimensiones), p. 226-227">L p.226-227</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Contar mal la dimensión de $\wp_n$ (es $n+1$, no $n$: hay que contar el término independiente) o creer que «hay una sola base». Y confundir $\operatorname{Dim}$ <b>del espacio</b> con el número de generadores que te dan: la dimensión del subespacio $\langle S\rangle$ es el <b>rango</b> de $S$ (§4), no su número de vectores.</p>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Cómo calcular con bases: rango, criterios y base incompleta <span class="src" data-l="U" data-ref="U §2.3.3 Teoremas 2.5, 2.6 y 2.7 y Ejemplo 2.30, p. 88-89">U p.88-89</span></h2>
+
+<div class="box thm"><span class="h">Teorema 2.5 — rango = dimensión</span>
+  <p>El rango de $S=\{u_1,\dots,u_p\}$ es la dimensión del subespacio que genera:
+  $$\operatorname{rang}(S)=\operatorname{Dim}\langle S\rangle.$$
+  <b>Relación con matrices.</b> El rango de un sistema de vectores coincide con el <b>rango de la matriz</b> cuyas filas (o columnas) son las <b>coordenadas</b> de los vectores de $S$ (respecto de una base cualquiera). Así, el número de vectores independientes de $S$ y la dimensión de $\langle S\rangle$ se calculan <b>escalonando una matriz</b>.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.5 y relación entre el rango de un sistema y el de una matriz, p. 88">U p.88</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Ejemplos 8-9 (base de Col A por columnas pivote) y p.211: las columnas de A y B comparten relaciones de dependencia, p. 211-212">L p.211-212</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.6 — «basta con la mitad del trabajo»</span>
+  <p>Sea $\operatorname{Dim}V=n$. Entonces:</p>
+  <ul>
+    <li>todo conjunto <b>libre</b> de $n$ vectores de $V$ es base de $V$ (no hace falta probar que genera);</li>
+    <li>todo conjunto <b>generador</b> de $V$ con $n$ vectores es base de $V$ (no hace falta probar que es libre).</li>
+  </ul>
+  <p><b>Criterio con rangos:</b> un sistema de $n$ vectores de un espacio de dimensión $n$ es base $\iff$ su <b>rango es $n$</b>. Con coordenadas, es una matriz cuadrada $n\times n$ y equivale a $\det\neq0$ (U p.27).</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.6 y criterio «n vectores son base si y solo si su rango es n», p. 88">U p.88</span>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Teorema 12 (teorema de la base), p. 227">L p.227</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.7 (de la base incompleta)</span>
+  <p>Si $\operatorname{Dim}V=n$, todo sistema <b>libre</b> $\{v_1,\dots,v_p\}$ de $V$ con $p\lt n$ se puede <b>completar</b> con $n-p$ vectores de $V$ hasta formar una base.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.7 (de la base incompleta), p. 89">U p.89</span>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Teorema 11 (todo conjunto libre de H se expande a una base), p. 227">L p.227</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.30 — completar a una base de $\wp_3$</span>
+  <p>En $\wp_3$ (polinomios de grado $\le3$), $S=\{x^2,\,x^2+x,\,x+1\}$ es libre pero <b>no</b> es base: tiene 3 elementos y $\operatorname{Dim}\wp_3=4$ (la base canónica $\{x^3,x^2,x,1\}$ tiene 4). No genera porque ninguna combinación de $S$ da grado 3. Hay que añadir $4-3=1$ vector: por ejemplo $x^3$ ($\{x^3,x^2,x^2+x,x+1\}$ es libre y genera $\wp_3$), pero también valen $x^3-x^2$, $x^3-x^2+x$, … <b>No vale cualquiera</b>: hay que añadir un vector <b>fuera de $\langle S\rangle$</b>. Aquí $\langle S\rangle=\wp_2$ (esos tres polinomios son la base del Ej. U 2.26), así que cualquier polinomio de grado $\le2$ ya está en $\langle S\rangle$ y no sirve (por ejemplo $x^2+1=2x^2-(x^2+x)+(x+1)$); hay que añadir uno de grado 3.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.30, p. 89">U p.89</span>
+</div>
+
+<div class="box ex"><span class="h">Cómo se hace «a mano» la base incompleta (método sistemático)</span>
+  <p>Para completar un sistema libre $\{v_1,\dots,v_p\}\subset\mathbb R^n$: escalona la matriz con los $v_i$ <b>en filas</b>; añade los vectores canónicos $e_j$ correspondientes a las <b>columnas sin pivote</b>. Las filas no nulas de la escalonada, junto con esos $e_j$, forman (reordenando las filas) una matriz <b>escalonada con $n$ pivotes</b>, uno por columna; como las operaciones de fila no cambian el rango, la matriz $n\times n$ formada por los $v_i$ y los $e_j$ tiene rango $n$ (determinante $\neq0$), así que los $n$ vectores son libres y, por el Teor. 2.6, base. Lo verás aplicado en los Ejemplos propios 2 y 3 y en el Examen 4.</p>
+  <span class="src" data-l="P" data-ref="Método práctico para el Teorema 2.7 (U p.89); explicación propia, verificada con sympy">P</span>
+</div>
+
+<div class="recipe"><b>Receta «dimensión y base del subespacio generado por $S$» (la más usada):</b>
+  <ol>
+    <li>Escribe las coordenadas de los vectores de $S$ como <b>filas</b> de una matriz (en $\wp_n$: los coeficientes; en $\mathcal M_{m\times n}$: las entradas por filas).</li>
+    <li>Escalona por Gauss (sin permutar filas, para saber qué vector es cuál). Las operaciones de fila no cambian $\langle S\rangle$ ni el rango.</li>
+    <li><b>$\operatorname{Dim}\langle S\rangle=$ nº de filas no nulas</b> (Teor. 2.5). Una base: las filas no nulas de la escalonada, o los vectores <b>originales</b> cuya fila no se ha anulado, <b>pero esta segunda regla solo vale si se escalona sin permutar filas y restando a cada fila múltiplos de las filas anteriores</b> (con otras operaciones la fila que sobrevive ya no es el vector original).</li>
+    <li>Si los vectores están en <b>columnas</b>, las columnas pivote de la escalonada señalan <b>qué vectores originales</b> forman base de $\langle S\rangle$ (L p.211); cuidado: las columnas de la escalonada ya no son los vectores originales.</li>
+  </ol>
+</div>
+
+<div class="recipe"><b>Receta «¿es $S$ base de $V$?»:</b>
+  <ol>
+    <li>Calcula $n=\operatorname{Dim}V$. Si $S$ no tiene exactamente $n$ vectores: <b>no es base</b> (más de $n$: ligado; menos de $n$: no genera). Termina.</li>
+    <li>Si tiene $n$: forma la matriz $n\times n$ de sus coordenadas. $\det\neq0$ (o rango $n$) $\iff$ <b>base</b> (Teor. 2.6; basta una sola de las dos propiedades).</li>
+    <li>Con un parámetro: base $\iff\det\neq0$; en los valores que lo anulan calcula el rango aparte para saber la dimensión de $\langle S\rangle$.</li>
+    <li>Si tienes <b>más</b> vectores que $n$ y quieres <b>extraer</b> una base: busca $n$ de ellos con determinante $\neq0$ (o quita, de uno en uno, los que son combinación de los demás, Teor. 2.1).</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Dos formas de obtener una base de $\langle S\rangle$ (¡dan bases distintas, las dos valen!)</span>
+  <p>$S=\{u_1=(1,2,0,1),\,u_2=(2,4,1,1),\,u_3=(0,0,1,-1),\,u_4=(1,2,1,0)\}$ (es el sistema del Ejemplo propio 2). Por <b>filas</b> se obtiene $\operatorname{rang}=2$: las filas no nulas de la escalonada son $u_1$ y $(0,0,1,-1)$, y esta segunda fila resulta ser justamente $u_3$ (porque $u_3=u_2-2u_1$), así que una base es $\{u_1,u_3\}$; poniendo los vectores en <b>columnas</b> y escalonando, los pivotes caen en las columnas 1 y 2, y la base es $\{u_1,u_2\}$ (con $u_3=-2u_1+u_2$ y $u_4=-u_1+u_2$: comprobable). El subespacio es el mismo y su dimensión también (2): hay infinitas bases.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; método de columnas pivote en L p.211">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>(1) Concluir «es base» solo porque el número de vectores coincide con la dimensión (necesario, no suficiente). (2) Comprobar solo una propiedad (libre o generador) cuando el número de vectores <b>no es exactamente $\operatorname{Dim}V$</b>: el atajo del Teor. 2.6 exige exactamente $\operatorname{Dim}V$ vectores. (3) Calcular el determinante de cada matriz $S_i$ cuando los vectores son matrices: lo que importa es el determinante de la matriz de <b>coordenadas</b> de todos ellos. (4) Completar una base con un vector que ya estaba en el subespacio generado.</p>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="ejercicios"><span class="n">5</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §2.3, p. 65-69">E p.65-69</span></h2>
+
+<p>E tiene 8 ejercicios en esta sección (2.23 a 2.30, pp. 65-69) y se resuelven <b>todos</b>. Orden sugerido de fácil a difícil: 2.25 → 2.28 → 2.23 → 2.24 → 2.26 → 2.29 → 2.27 → 2.30. La idea común: <b>pasar a coordenadas, formar una matriz y mirar su rango o su determinante</b>. Los ejercicios 2.21-2.22 (p. 63) son todavía del tema 2.2, y el 2.31 (p. 71) ya es del 2.4.</p>
+
+<details class="sol" id="ej2-23"><summary>Ejercicio 2.23 — ¿son bases estos conjuntos de $V$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.23, p. 65">E p.65</span></summary>
+  <p class="enun">Si $B=\{e_1,e_2,e_3,e_4\}$ es una base de un espacio vectorial $V$, se pide comprobar si también son bases de $V$ los conjuntos: A) $B_1=\{e_1,\ e_1+e_2,\ e_1+e_2+e_3+e_4\}$. B) $B_2=\{e_1,\ e_1+e_2,\ e_1-e_2,\ e_1+e_3,\ e_4\}$. C) $B_3=\{e_1,\ e_1+e_2,\ e_1+e_2+e_3,\ e_1+e_2+e_3+e_4\}$.</p>
+  <ol class="steps">
+    <li><b>Dimensión de $V$.</b> $B$ es una base con 4 vectores; por el Teor. 2.4 (U p.87) toda base de $V$ tiene 4 vectores y $\operatorname{Dim}V=4$ (Def. 2.11).</li>
+    <li><b>A) Falso.</b> $B_1$ tiene 3 vectores y una base de $V$ debe tener exactamente 4. <i>Qué falla:</i> $B_1$ sí es libre, pero no genera $V$: por ejemplo, $e_3$ no se puede obtener, porque en $a\,e_1+b(e_1+e_2)+c(e_1+e_2+e_3+e_4)$ los coeficientes de $e_3$ y de $e_4$ son <b>ambos $c$</b>, y para $e_3$ harían falta $1$ y $0$. Con las coordenadas respecto de $B$ por columnas,
+      $$M_1=\begin{pmatrix}1&1&1\\0&1&1\\0&0&1\\0&0&1\end{pmatrix},\qquad\operatorname{rang}M_1=3\lt4,$$
+      así que $\operatorname{Dim}\langle B_1\rangle=3$ (Teor. 2.5, U p.88): es un «hiperplano» de $V$ (subespacio de dimensión $n-1=3$), no todo $V$.</li>
+    <li><b>B) Falso.</b> $B_2$ tiene 5 vectores y una base debe tener 4. <i>Qué falla:</i> la independencia. Concretamente $e_1-e_2=2e_1-(e_1+e_2)$, luego $B_2$ es ligado (Def. 2.5, U p.73). Observación que el libro no hace: $B_2$ <b>sí genera</b> $V$ (su matriz de coordenadas tiene rango 4): es un sistema generador al que le sobra un vector. Suprimiendo $e_1-e_2$ (Teor. 2.1, U p.79) queda $\{e_1,e_1+e_2,e_1+e_3,e_4\}$, que sí es base.</li>
+    <li><b>C) Verdadero.</b> $B_3$ tiene 4 vectores $=\operatorname{Dim}V$: por el Teor. 2.6 (U p.88) basta ver que son <b>libres</b>. Se plantea la combinación nula
+      $$0=\lambda e_1+\mu(e_1+e_2)+\alpha(e_1+e_2+e_3)+\beta(e_1+e_2+e_3+e_4),$$
+      y agrupando por los vectores de $B$:
+      $$0=(\lambda+\mu+\alpha+\beta)e_1+(\mu+\alpha+\beta)e_2+(\alpha+\beta)e_3+\beta e_4.$$</li>
+    <li><b>Por qué se pueden igualar los coeficientes a 0.</b> Como $B$ es base, la expresión de un vector (aquí el $0=0e_1+0e_2+0e_3+0e_4$) como combinación de $B$ es <b>única</b> (U p.82). Luego
+      $$\begin{cases}\lambda+\mu+\alpha+\beta=0\\ \mu+\alpha+\beta=0\\ \alpha+\beta=0\\ \beta=0\end{cases}$$
+      sistema triangular: de abajo arriba, $\beta=0\Rightarrow\alpha=0\Rightarrow\mu=0\Rightarrow\lambda=0$. Solo la solución trivial: $B_3$ es libre, y con 4 vectores en dimensión 4 es <b>base</b>.</li>
+    <li><b>Atajo con matrices.</b> Las coordenadas de $B_3$ respecto de $B$, en columnas,
+      $$M_3=\begin{pmatrix}1&1&1&1\\0&1&1&1\\0&0&1&1\\0&0&0&1\end{pmatrix},$$
+      son triangulares con diagonal $1,1,1,1$: $\det M_3=1\neq0$ (U p.27), rango 4, y «4 vectores en dimensión 4 son base $\iff$ rango 4» (U p.88).</li>
+  </ol>
+  <p><b>Resultado:</b> A falso, B falso, C verdadero. <i>(Verificado con sympy: rangos 3, 4 y 4, $\det M_3=1$.)</i></p>
+  <p><b>Nota sobre el libro.</b> E solo cuenta vectores en A y B (suficiente), pero no dice <i>qué</i> propiedad falla: en A falla «generar»; en B, «ser libre».</p>
+  <div class="recipe"><b>Receta:</b> (1) cuenta los vectores: si no son $n=\operatorname{Dim}V$, no es base; (2) si son $n$, escribe sus coordenadas respecto de una base conocida (como columnas) y comprueba $\det\neq0$ o rango $n$ (Teor. 2.6).</div>
+  <p><b>Error típico:</b> pensar que, como $V$ es abstracto, no se pueden usar matrices. Sí se puede: se trabaja con las <b>coordenadas</b> respecto de la base dada (U p.88).</p>
+  <p><b>Teoría:</b> Def. 2.9 y caracterización, U p.82 · Teor. 2.4, U p.87 · Teor. 2.5 y 2.6, U p.88</p>
+</details>
+
+<details class="sol" id="ej2-24"><summary>Ejercicio 2.24 — $S=\{(1,2,1),(2,1,0),(4,-1,-4)\}$: ¿base, generador, ligado? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.24, p. 66">E p.66</span></summary>
+  <p class="enun">El conjunto $S=\{(1,2,1),(2,1,0),(4,-1,-4)\}$ verifica: A) Es una base de $\mathbb R^2$. B) Todo vector de $\mathbb R^3$ es combinación lineal de los vectores de $S$. C) Es un sistema linealmente dependiente o ligado.</p>
+  <ol class="steps">
+    <li><b>A) Falso.</b> Una base de $\mathbb R^2$ está formada por vectores <b>de</b> $\mathbb R^2$ (pares) y tendría 2 ($\operatorname{Dim}\mathbb R^2=2$, U p.87). Los de $S$ son ternas, elementos de $\mathbb R^3$.</li>
+    <li><b>B) Estrategia.</b> «Todo vector de $\mathbb R^3$ es combinación lineal de $S$» significa que $S$ <b>genera</b> $\mathbb R^3$. Como $S$ tiene 3 vectores y $\operatorname{Dim}\mathbb R^3=3$, por el Teor. 2.6 (U p.88) basta ver que $S$ es libre, es decir, que la matriz de coordenadas tiene determinante no nulo (U p.27).</li>
+    <li><b>Determinante</b> (regla de Sarrus), con los vectores como filas:
+      $$\begin{vmatrix}1&2&1\\2&1&0\\4&-1&-4\end{vmatrix}=\big[1\cdot1\cdot(-4)+2\cdot0\cdot4+1\cdot2\cdot(-1)\big]-\big[1\cdot1\cdot4+1\cdot0\cdot(-1)+2\cdot2\cdot(-4)\big]=(-6)-(-12)=6\neq0.$$</li>
+    <li><b>Conclusión B.</b> $\det\neq0\Rightarrow$ rango 3 $\Rightarrow S$ libre (U p.78) $\Rightarrow$ base de $\mathbb R^3$ (Teor. 2.6) $\Rightarrow$ genera $\mathbb R^3$: <b>B verdadera</b>.</li>
+    <li><b>C) Falso</b>, porque acabamos de ver que $S$ es libre (libre $=$ no ligado, Def. 2.6, U p.74).</li>
+  </ol>
+  <p><b>Resultado:</b> solo B es verdadera. <i>(Verificado con sympy: $\det=6$.)</i> Aviso: el texto digital de E muestra «$=6=0$»; en el libro es $=6\neq0$.</p>
+  <div class="recipe"><b>Receta:</b> $n$ vectores de $\mathbb R^n$: calcula el determinante de la matriz que forman. $\det\neq0\iff$ base $\iff$ generan $\iff$ son libres.</div>
+  <p><b>Error típico:</b> escribir «es base de $\mathbb R^2$ porque…» sin mirar a qué espacio pertenecen los vectores; o deducir «genera» de «tiene 3 vectores» sin comprobar la independencia.</p>
+  <p><b>Teoría:</b> Def. 2.9, U p.82 · Teor. 2.6, U p.88 · determinante y rango, U p.27</p>
+</details>
+
+<details class="sol" id="ej2-25"><summary>Ejercicio 2.25 — ¿es $\{1\}$ base de $\mathbb R$? ¿bases que no existen? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.25, p. 66">E p.66</span></summary>
+  <p class="enun">Se pide elegir de las siguientes opciones, las verdaderas: A) El vector 1 es una base del espacio vectorial $\mathbb R$. B) Existen espacios vectoriales de dimensión finita, distintos del 0, que no tienen bases.</p>
+  <ol class="steps">
+    <li><b>Qué comprobar en A.</b> Por la Def. 2.9 (U p.82), $\{1\}$ es base de $\mathbb R$ si es libre y genera $\mathbb R$. Aquí $\mathbb R$ es un espacio vectorial sobre sí mismo: los «vectores» y los «escalares» son números reales.</li>
+    <li><b>Genera.</b> Todo $a\in\mathbb R$ es $a=a\cdot1$: combinación lineal de $1$ con coeficiente $a$.</li>
+    <li><b>Libre.</b> Si $\lambda\cdot1=0$ entonces $\lambda=0$: la única combinación nula es la trivial (también: $\{v\}$ es libre $\iff v\neq0$).</li>
+    <li><b>Conclusión A: verdadera.</b> $\{1\}$ es base y $\operatorname{Dim}\mathbb R=1$. (Lo mismo vale para $\{a\}$ con cualquier $a\neq0$; en cambio $\{0\}$ nunca es base: un sistema con el $0$ es ligado, U p.74.)</li>
+    <li><b>B.</b> «Distintos del 0» es «distintos del espacio nulo». El <b>Teor. 2.3 (existencia de base, U p.87)</b> dice exactamente que todo espacio vectorial finito $V\neq\{0\}$ tiene base, y un espacio de dimensión finita está generado por un número finito de vectores (Def. 2.8). <b>Conclusión B: falsa.</b></li>
+  </ol>
+  <p><b>Resultado:</b> solo A es verdadera. <i>Nota sobre el libro.</i> El texto digital de U/E pierde el símbolo $\neq$ («$V=\{0\}$»): debe leerse $V\neq\{0\}$. Y con rigor, la base es el <b>conjunto</b> $\{1\}$, no «el vector 1».</p>
+  <div class="recipe"><b>Receta:</b> para ver si $\{v\}$ es base de un espacio de dimensión 1, basta $v\neq0$. Para preguntas de «existencia de bases», cita el Teor. 2.3.</div>
+  <p><b>Error típico:</b> pensar que $\{0\}$ es base de $\{0\}$: el vector $0$ no puede formar parte de ninguna base (U p.87), así que $\{0\}$ <b>no tiene base</b>; su dimensión, $\operatorname{Dim}\{0\}=0$, es un <b>convenio</b>. (Otros libros dicen que su base es el conjunto vacío; U no lo usa.)</p>
+  <p><b>Teoría:</b> Def. 2.8 y 2.9, U p.82 · Teor. 2.3 y Def. 2.11, U p.87</p>
+</details>
+
+<details class="sol" id="ej2-26"><summary>Ejercicio 2.26 — base de $\mathbb R^3$ y coordenadas de $v=(3,2,1)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.26, p. 67">E p.67</span></summary>
+  <p class="enun">Si $B=\{(1,1,1),(1,1,0),(1,0,0)\}$ y $v=(3,2,1)$ está expresado respecto a la base canónica, se pide: A) Comprobar que $B$ es una base de $\mathbb R^3$. B) Calcular las coordenadas de $v$ respecto a $B$.</p>
+  <ol class="steps">
+    <li><b>A) Por qué basta un determinante.</b> $B$ tiene 3 vectores y $\operatorname{Dim}\mathbb R^3=3$; por el Teor. 2.6 (U p.88) $B$ es base $\iff$ es libre $\iff$ rango 3 $\iff$ determinante no nulo.</li>
+    <li><b>Determinante</b> (Sarrus): $\begin{vmatrix}1&1&1\\1&1&0\\1&0&0\end{vmatrix}=(0+0+0)-(1+0+0)=-1\neq0$. (También, desarrollando por la 3.ª fila: $1\cdot\begin{vmatrix}1&1\\1&0\end{vmatrix}=0-1=-1$.) Luego rango 3 y $B$ es base.</li>
+    <li><b>B) Qué son las coordenadas.</b> Por la Def. 2.10 (U p.85), son los $(\alpha,\beta,\gamma)$ con
+      $$\begin{pmatrix}3\\2\\1\end{pmatrix}=\alpha\begin{pmatrix}1\\1\\1\end{pmatrix}+\beta\begin{pmatrix}1\\1\\0\end{pmatrix}+\gamma\begin{pmatrix}1\\0\\0\end{pmatrix}.$$
+      Existen y son únicas porque $B$ es base (U p.82).</li>
+    <li><b>Sistema</b> (igualando componentes) y matriz ampliada:
+      $$\begin{cases}\alpha+\beta+\gamma=3\\ \alpha+\beta=2\\ \alpha=1\end{cases}\qquad\left(\begin{array}{ccc|c}1&1&1&3\\1&1&0&2\\1&0&0&1\end{array}\right).$$</li>
+    <li><b>Resolver de abajo arriba.</b> $\alpha=1$; de la 2.ª, $\beta=2-1=1$; de la 1.ª, $\gamma=3-1-1=1$.</li>
+    <li><b>Comprobación.</b> $(1,1,1)+(1,1,0)+(1,0,0)=(3,2,1)$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $v=(3,2,1)=(1,1,1)_B$. <i>(Verificado con sympy.)</i></p>
+  <div class="recipe"><b>Receta:</b> coordenadas de $v$ en una base $B$ de $\mathbb R^n$: resolver el sistema $(e_1\ e_2\ \cdots\ e_n\mid v)$ con los vectores de la base <b>en columnas</b>. Es compatible determinado precisamente porque $B$ es base.</div>
+  <p><b>Error típico:</b> poner los vectores de la base en <b>filas</b> al plantear el sistema de coordenadas (eso resuelve otro sistema). Para el determinante da igual filas o columnas ($\det A=\det A^{t}$); para el sistema, no.</p>
+  <p><b>Teoría:</b> Def. 2.10, U p.85 · caracterización de base, U p.82 · Teor. 2.6, U p.88</p>
+</details>
+
+<details class="sol" id="ej2-27"><summary>Ejercicio 2.27 — coordenadas de $v$ en $B$ conocidas las de $B'$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.27, p. 67">E p.67</span></summary>
+  <p class="enun">Si $B=\{e_1,e_2,e_3,e_4\}$ y $B'=\{e'_1,e'_2,e'_3,e'_4\}$ son dos bases de $\mathbb R^4$, tales que $e'_1=e_1+e_2+e_3$, $e'_2=e_2$, $e'_3=e_2-e_3$, $e'_4=e_2-4e_3-2e_4$, y las coordenadas de $v\in\mathbb R^4$ respecto a la base $B'$ son $(2,-1,0,1)$, se pide hallar las coordenadas de $v$ respecto a $B$.</p>
+  <ol class="steps">
+    <li><b>Traducir el dato.</b> Por la Def. 2.10, $v=(2,-1,0,1)_{B'}$ significa $v=2e'_1-e'_2+0\,e'_3+e'_4$.</li>
+    <li><b>Sustituir</b> cada $e'_i$ por su expresión en $B$: $v=2(e_1+e_2+e_3)-e_2+0\,(e_2-e_3)+(e_2-4e_3-2e_4)$.</li>
+    <li><b>Agrupar por los vectores de $B$:</b> $e_1$: $2$. $e_2$: $2-1+0+1=2$. $e_3$: $2+0-4=-2$. $e_4$: $-2$. Así $v=2e_1+2e_2-2e_3-2e_4$.</li>
+    <li><b>Leer las coordenadas.</b> Como $B$ es base, los coeficientes son únicos (U p.82), luego $v=(2,2,-2,-2)_B$.</li>
+    <li><b>Comprobación de la hipótesis</b> (el enunciado la da, pero conviene saberla): $B'$ es base si la matriz $P$ cuyas <b>columnas</b> son las coordenadas de $e'_j$ en $B$ tiene $\det\neq0$:
+      $$P=\begin{pmatrix}1&0&0&0\\1&1&1&1\\1&0&-1&-4\\0&0&0&-2\end{pmatrix},\qquad\det P=1\cdot\begin{vmatrix}1&1&1\\0&-1&-4\\0&0&-2\end{vmatrix}=1\cdot1\cdot(-1)\cdot(-2)=2\neq0.$$</li>
+    <li><b>Comprobación matricial.</b> Lo hecho equivale a $X_B=P\,X_{B'}$: $P\begin{pmatrix}2\\-1\\0\\1\end{pmatrix}=\begin{pmatrix}2\\2\\-2\\-2\end{pmatrix}$ ✓. (Esta fórmula de cambio de base se estudia en <b>U §3.5, p.131-137</b>; aquí basta el cálculo directo de los pasos 1-4.)</li>
+  </ol>
+  <p><b>Resultado:</b> $v=(2,-1,0,1)_{B'}=(2,2,-2,-2)_B$. <i>(Verificado con sympy: $\det P=2$.)</i></p>
+  <p><b>Nota sobre el libro.</b> E no comprueba que $B'$ sea base; lo da el enunciado.</p>
+  <div class="recipe"><b>Receta:</b> para pasar de coordenadas en $B'$ a coordenadas en $B$: escribe $v=\sum x'_je'_j$, sustituye cada $e'_j$ por su expresión en $B$ y agrupa. (Matricialmente: columnas de $P$ = coordenadas de los $e'_j$ en $B$; $X_B=PX_{B'}$.)</div>
+  <p><b>Error típico:</b> confundir el sentido: con estos datos (los $e'_j$ escritos en función de los $e_i$) el paso <b>directo</b> es $B'\to B$; para ir de $B$ a $B'$ habría que resolver un sistema o invertir $P$. Y poner las coordenadas de los $e'_j$ en <b>filas</b> en vez de en columnas.</p>
+  <p><b>Teoría:</b> Def. 2.10, U p.85 · caracterización de base, U p.82 · cambio de base: tema 3.5, U p.131-137</p>
+</details>
+
+<details class="sol" id="ej2-28"><summary>Ejercicio 2.28 — dimensión de $\langle(-a,a,-2a,3a)\rangle$ para $a\neq0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.28, p. 68">E p.68</span></summary>
+  <p class="enun">Si $a\neq0$ es un valor real determinado, se pide comprobar si la dimensión del subespacio vectorial generado por los vectores de la forma $(-a,a,-2a,3a)$ depende del valor de $a$.</p>
+  <ol class="steps">
+    <li><b>Sacar factor común.</b> $(-a,a,-2a,3a)=a\,(-1,1,-2,3)=a\,w$ con $w=(-1,1,-2,3)$.</li>
+    <li><b>El subespacio generado no depende de $a$.</b> $\langle aw\rangle=\{\lambda a\,w\}$; como $a\neq0$, cuando $\lambda$ recorre $\mathbb R$ también $\mu=\lambda a$ lo recorre, así que $\langle aw\rangle=\langle w\rangle$. (Es el Teor. 2.2 de sustitución, U p.79: se sustituye $w$ por $aw$, donde $w$ interviene con coeficiente $a\neq0$.)</li>
+    <li><b>$\{w\}$ es libre.</b> $w\neq0$ (su 1.ª componente es $-1$), luego $\lambda w=0\Rightarrow\lambda=0$ (U p.74).</li>
+    <li><b>Base y dimensión.</b> $\{w\}$ es libre y genera $\langle w\rangle$: es base y $\operatorname{Dim}\langle w\rangle=1$. Equivalentemente, por el Teor. 2.5 (U p.88): $\operatorname{Dim}\langle aw\rangle=\operatorname{rang}\{aw\}=\operatorname{rang}\begin{pmatrix}-a&a&-2a&3a\end{pmatrix}=1$, porque esa fila tiene un elemento no nulo.</li>
+  </ol>
+  <p><b>Resultado:</b> la dimensión es siempre $1$; <b>no depende de $a$</b> (mientras $a\neq0$). Si se permitiera $a=0$ el vector sería nulo, el subespacio $\{0\}$ y la dimensión $0$: por eso el enunciado exige $a\neq0$ (el texto digital de E lo muestra como «$a=0$», por la pérdida del símbolo).</p>
+  <div class="recipe"><b>Receta:</b> para $\operatorname{Dim}\langle S\rangle$, escribe las coordenadas de $S$ como filas y calcula su rango (Teor. 2.5). Sacar factores comunes no nulos no cambia el subespacio.</div>
+  <p><b>Error típico:</b> contestar «depende de $a$» porque el <i>vector</i> depende de $a$: los vectores cambian, pero la recta que generan es la misma.</p>
+  <p><b>Teoría:</b> Teor. 2.2, U p.79 · Teor. 2.5, U p.88 · Def. 2.11, U p.87</p>
+</details>
+
+<details class="sol" id="ej2-29"><summary>Ejercicio 2.29 — ¿es $\{x^2,\,x^2+x\}$ base de $\wp_2$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.29, p. 68">E p.68</span></summary>
+  <p class="enun">Si $\wp_2$ es el espacio vectorial de los polinomios reales de grado menor que 3 y una variable, se pide demostrar si $S=\{x^2,\ x^2+x\}$ es una base de dicho espacio.</p>
+  <ol class="steps">
+    <li><b>El espacio.</b> $\wp_2=\{ax^2+bx+c\}$ («grado menor que 3» $=$ grado $\le2$). Base canónica $\{x^2,x,1\}$ (U p.85), luego $\operatorname{Dim}\wp_2=3$.</li>
+    <li><b>Respuesta rápida.</b> $S$ tiene 2 vectores y toda base de $\wp_2$ tiene 3 (Teor. 2.4): <b>$S$ no es base</b>. Para saber <i>qué</i> falla se comprueban las dos condiciones de la Def. 2.9.</li>
+    <li><b>¿Genera?</b> Hay que ver si para <b>todo</b> $ax^2+bx+c$ existen $\alpha,\beta$ con $ax^2+bx+c=\alpha x^2+\beta(x^2+x)=(\alpha+\beta)x^2+\beta x+0$. Igualando coeficientes:
+      $$\alpha+\beta=a,\qquad\beta=b,\qquad0=c.$$
+      La 3.ª ecuación es imposible si $c\neq0$. Por ejemplo el polinomio $1$ ($a=b=0$, $c=1$) <b>no</b> es combinación lineal de $S$. Luego $S$ <b>no genera</b> $\wp_2$: solo los polinomios sin término independiente.</li>
+    <li><b>¿Es libre?</b> $\alpha x^2+\beta(x^2+x)=0\Rightarrow(\alpha+\beta)x^2+\beta x=0\Rightarrow\beta=0,\ \alpha=0$. Sí es libre. (Con coordenadas en $\{x^2,x,1\}$: $x^2\to(1,0,0)$, $x^2+x\to(1,1,0)$; la matriz $\begin{pmatrix}1&0&0\\1&1&0\end{pmatrix}$ tiene rango 2 = nº de vectores.)</li>
+    <li><b>Conclusión.</b> $S$ es libre pero no generador: <b>no es base</b>. Por el Teor. 2.7 se puede completar con $3-2=1$ vector; por ejemplo $\{x^2,x^2+x,1\}$ sí es base (matriz $\begin{pmatrix}1&0&0\\1&1&0\\0&0&1\end{pmatrix}$, $\det=1\neq0$).</li>
+  </ol>
+  <p><b>Resultado:</b> no es base (libre, no generador). <i>Nota sobre el libro.</i> E lo explica en una frase (solo genera vectores sin término independiente, $ax^2+bx$); aquí se añade un contraejemplo concreto (el polinomio $1$).</p>
+  <div class="recipe"><b>Receta:</b> en $\wp_n$, pasa cada polinomio a sus coordenadas en la base canónica y trabaja con la matriz: rango $=$ nº de vectores $\Rightarrow$ libre; rango $=n+1=\operatorname{Dim}\wp_n$ $\Rightarrow$ genera.</div>
+  <p><b>Error típico:</b> contar mal la dimensión de $\wp_n$: es $n+1$, no $n$ (hay que contar el término independiente).</p>
+  <p><b>Teoría:</b> Def. 2.9, U p.82 · Ej. U 2.26, U p.84-85 · Teor. 2.4, U p.87 · Teor. 2.7, U p.89</p>
+</details>
+
+<details class="sol" id="ej2-30"><summary>Ejercicio 2.30 — coordenadas de $Q(x)$ en la base $\{P,P',P'',P'''\}$ de $\wp_3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.30, p. 69">E p.69</span></summary>
+  <p class="enun">Si $B=\{P(x),P'(x),P''(x),P'''(x)\}$ es una base del espacio vectorial de polinomios reales de grado menor o igual que 3 y una variable, $\wp_3$, siendo $P(x)=x^3+x^2+x+1$, se pide calcular las coordenadas de $Q(x)=x^3+4x^2+9x+10$ respecto a la base $B$.</p>
+  <ol class="steps">
+    <li><b>Calcular la base.</b> $P'(x)=3x^2+2x+1$, $P''(x)=6x+2$, $P'''(x)=6$. Así $B=\{x^3+x^2+x+1,\ 3x^2+2x+1,\ 6x+2,\ 6\}$.</li>
+    <li><b>Comprobar que es base</b> (el libro no lo hace). En la base canónica $\{x^3,x^2,x,1\}$ ($\operatorname{Dim}\wp_3=4$, U p.89), las coordenadas en columnas son
+      $$M=\begin{pmatrix}1&0&0&0\\1&3&0&0\\1&2&6&0\\1&1&2&6\end{pmatrix},\qquad\det M=1\cdot3\cdot6\cdot6=108\neq0$$
+      (triangular inferior). 4 vectores libres en dimensión 4: base (Teor. 2.6). La razón de fondo: los grados son $3,2,1,0$, todos distintos.</li>
+    <li><b>Plantear las coordenadas</b> (Def. 2.10). Se buscan $\alpha,\beta,\delta,\gamma$ (en el orden de $B$) con
+      $$x^3+4x^2+9x+10=\alpha(x^3+x^2+x+1)+\beta(3x^2+2x+1)+\delta(6x+2)+\gamma\cdot6.$$</li>
+    <li><b>Agrupar por grados</b> el segundo miembro: $\alpha x^3+(\alpha+3\beta)x^2+(\alpha+2\beta+6\delta)x+(\alpha+\beta+2\delta+6\gamma)$.</li>
+    <li><b>Igualar coeficientes</b> (polinomios iguales $\iff$ mismos coeficientes; U p.82, p.86):
+      $$\left(\begin{array}{cccc|c}1&0&0&0&1\\1&3&0&0&4\\1&2&6&0&9\\1&1&2&6&10\end{array}\right)\iff\begin{cases}\alpha=1\\ \alpha+3\beta=4\\ \alpha+2\beta+6\delta=9\\ \alpha+\beta+2\delta+6\gamma=10\end{cases}$$</li>
+    <li><b>Resolver de arriba abajo</b> (triangular): $\alpha=1$; $3\beta=3\Rightarrow\beta=1$; $6\delta=9-1-2=6\Rightarrow\delta=1$; $6\gamma=10-1-1-2=6\Rightarrow\gamma=1$.</li>
+    <li><b>Comprobación.</b> $(x^3+x^2+x+1)+(3x^2+2x+1)+(6x+2)+6=x^3+4x^2+9x+10$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $Q=(1,1,1,1)_B$; respecto de la base canónica $\{x^3,x^2,x,1\}$, $Q=(1,4,9,10)$. <i>(Verificado con sympy.)</i></p>
+  <p><b>Notas sobre el libro.</b> (a) E llama $\delta$ al coeficiente de $P''$ y $\gamma$ al de $P'''$; las coordenadas se dan en el <b>orden de la base</b>. (b) No comprueba que $B$ sea base: en examen conviene justificarlo en una línea como en el paso 2. (c) E escribe «$(1,4,9,10)$» respecto de la base canónica <b>ordenada</b> $\{x^3,x^2,x,1\}$ (U usa $\{x^2,x,1\}$, también de mayor a menor grado).</p>
+  <div class="recipe"><b>Receta:</b> coordenadas en $\wp_n$: escribe la combinación lineal genérica, agrupa por potencias de $x$ e iguala coeficientes; si los grados de la base están escalonados, el sistema es triangular y se resuelve por sustitución.</div>
+  <p><b>Error típico:</b> olvidar que el coeficiente de $P'''=6$ aporta $6\gamma$ (no $\gamma$) al término independiente; o desordenar las coordenadas respecto del orden de la base.</p>
+  <p><b>Teoría:</b> Def. 2.10, U p.85 · Teor. 2.6, U p.88 · Ej. U 2.30, U p.89</p>
+</details>
+
+<h3>Ejemplos propios, de dificultad creciente</h3>
+
+<details class="sol"><summary>Ejemplo propio 1 (fácil) — base, dimensión y coordenadas de un subespacio dado por una ecuación <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Sea $W=\{(x_1,x_2,x_3)\in\mathbb R^3:\ x_1-2x_2+x_3=0\}$. Halla una base de $W$, su dimensión y las coordenadas de $v=(1,1,1)$ respecto de esa base. ¿Pertenece $(1,0,0)$ a $W$?</p>
+  <ol class="steps">
+    <li><b>Pasar a paramétricas</b> (cartesianas $\to$ paramétricas, U §1.4 p.33-34). Se despeja $x_1=2x_2-x_3$ y se dejan libres $x_2=\lambda$, $x_3=\mu$:
+      $$\begin{pmatrix}x_1\\x_2\\x_3\end{pmatrix}=\lambda\begin{pmatrix}2\\1\\0\end{pmatrix}+\mu\begin{pmatrix}-1\\0\\1\end{pmatrix}.$$</li>
+    <li><b>Generadores.</b> Todo vector de $W$ es combinación de $w_1=(2,1,0)$ y $w_2=(-1,0,1)$, y ambos cumplen la ecuación ($2-2+0=0$; $-1-0+1=0$): $W=\langle w_1,w_2\rangle$.</li>
+    <li><b>Libres.</b> $\lambda w_1+\mu w_2=(2\lambda-\mu,\lambda,\mu)=0\Rightarrow\lambda=\mu=0$. (Cada parámetro «vive solo» en una componente: los vectores obtenidos así siempre son libres.)</li>
+    <li><b>Base y dimensión.</b> $B_W=\{(2,1,0),(-1,0,1)\}$ es base de $W$ y $\operatorname{Dim}W=2$: es un plano por el origen. Regla: $\operatorname{Dim}W=n-\operatorname{rang}=3-1=2$, con $n$ el nº de incógnitas y rang el rango de la matriz de coeficientes (Rouché: la solución depende de $n-k$ parámetros, con $k=\operatorname{rang}$; U p.30).</li>
+    <li><b>Coordenadas de $v=(1,1,1)$.</b> Primero $v\in W$: $1-2+1=0$ ✓. Mirando las componentes 2.ª y 3.ª de $v=\lambda w_1+\mu w_2$: $\lambda=1$, $\mu=1$; y la 1.ª lo confirma ($2-1=1$). Luego $v=(1,1)_{B_W}$. <b>Ojo:</b> $v$ tiene <b>2</b> coordenadas respecto de $B_W$ aunque tenga 3 componentes.</li>
+    <li><b>$(1,0,0)$:</b> $1-0+0=1\neq0$, no cumple la ecuación: $(1,0,0)\notin W$ y no tiene coordenadas respecto de $B_W$ (el sistema da $\lambda=\mu=0$ y luego $0=1$: incompatible).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> cartesianas $\to$ despejar $\to$ paramétricas $\to$ los vectores que multiplican a cada parámetro forman una base. $\operatorname{Dim}=n-\operatorname{rang}(\text{matriz de coeficientes})$.</div>
+  <p><b>Error típico:</b> dar como «coordenadas de $v$ en $B_W$» sus tres componentes $(1,1,1)$: son las de la base canónica de $\mathbb R^3$.</p>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 2 (medio) — de un sistema generador a una base, ecuaciones y base incompleta <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">En $\mathbb R^4$ sea $S=\{u_1,u_2,u_3,u_4\}$ con $u_1=(1,2,0,1)$, $u_2=(2,4,1,1)$, $u_3=(0,0,1,-1)$, $u_4=(1,2,1,0)$. a) Calcula $\operatorname{Dim}\langle S\rangle$ y una base. b) Ecuaciones cartesianas de $\langle S\rangle$. c) Completa la base de a) hasta una base de $\mathbb R^4$.</p>
+  <p><b>a)</b></p>
+  <ol class="steps">
+    <li><b>Matriz con los vectores en filas</b> y escalonamiento (las operaciones de fila no cambian el subespacio generado ni el rango):
+      $$\begin{pmatrix}1&2&0&1\\2&4&1&1\\0&0&1&-1\\1&2&1&0\end{pmatrix}\xrightarrow[F_4-F_1]{F_2-2F_1}\begin{pmatrix}1&2&0&1\\0&0&1&-1\\0&0&1&-1\\0&0&1&-1\end{pmatrix}\xrightarrow[F_4-F_2]{F_3-F_2}\begin{pmatrix}1&2&0&1\\0&0&1&-1\\0&0&0&0\\0&0&0&0\end{pmatrix}.$$</li>
+    <li><b>Rango 2</b> (dos filas no nulas) $\Rightarrow\operatorname{Dim}\langle S\rangle=2$ (Teor. 2.5). $S$ es ligado (rango $2\lt4$). De los pasos se lee $u_3=u_2-2u_1$ y $u_4=u_1+u_3$.</li>
+    <li><b>Base.</b> Dos vectores libres de un subespacio de dimensión 2 son base (Teor. 2.6). Sirve $\{u_1,u_3\}=\{(1,2,0,1),(0,0,1,-1)\}$ (no son proporcionales).</li>
+  </ol>
+  <p><b>b)</b></p>
+  <ol class="steps" start="4">
+    <li>$x=(x_1,x_2,x_3,x_4)\in\langle S\rangle\iff\operatorname{rang}\{u_1,u_3,x\}=2$. Añadiendo $x$ como 3.ª fila: $F_3-x_1F_1$ da $(0,\ x_2-2x_1,\ x_3,\ x_4-x_1)$; luego $F_3-x_3F_2$ da $(0,\ x_2-2x_1,\ 0,\ x_4-x_1+x_3)$.</li>
+    <li>Para que el rango siga siendo 2 esa fila debe anularse:
+      $$\boxed{\ x_2-2x_1=0,\qquad x_1-x_3-x_4=0\ }$$
+      (Comprobación: $u_1$: $2-2=0$, $1-0-1=0$; $u_3$: $0$, $0-1+1=0$ ✓.) Son $4-2=2$ ecuaciones, coherente con $\operatorname{Dim}=2$.</li>
+  </ol>
+  <p><b>c)</b> (Teor. 2.7: hay que añadir $4-2=2$ vectores.)</p>
+  <ol class="steps" start="6">
+    <li><b>Método sistemático.</b> En la escalonada los pivotes están en las columnas 1 y 3. Se añaden los canónicos de las columnas <b>sin pivote</b>, $e_2=(0,1,0,0)$ y $e_4=(0,0,0,1)$:
+      $$\begin{vmatrix}1&2&0&1\\0&1&0&0\\0&0&1&-1\\0&0&0&1\end{vmatrix}=1\cdot1\cdot1\cdot1=1\neq0.$$
+      Rango 4: $\{u_1,u_3,e_2,e_4\}$ es base de $\mathbb R^4$ (Teor. 2.6).</li>
+    <li><b>No vale cualquier par.</b> $\{u_1,u_3,e_3,e_4\}$ es ligado ($u_3=e_3-e_4$); y añadir $u_2$ o $u_4$ tampoco sirve, porque ya están en $\langle S\rangle$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> generadores $\to$ matriz por filas $\to$ escalonar: rango $=$ dimensión, filas no nulas $=$ base. Para completar: añadir los $e_j$ de las columnas sin pivote.</div>
+  <p><b>Error típico:</b> tomar como base los 4 vectores de $S$ «porque generan»: generan $\langle S\rangle$, pero son ligados; una base exige además independencia.</p>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 3 (difícil) — base con parámetro y coordenadas en $\wp_2$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">En $\wp_2$ se considera $B_a=\{1+x,\ x+x^2,\ 1+ax^2\}$, $a\in\mathbb R$. a) ¿Para qué valores de $a$ es $B_a$ base de $\wp_2$? b) Para $a=1$, coordenadas de $q(x)=4+3x+3x^2$ respecto de $B_1$. c) Para el valor de $a$ en que no es base, halla $\operatorname{Dim}\langle B_a\rangle$ y complétalo a una base de $\wp_2$.</p>
+  <p><b>a)</b></p>
+  <ol class="steps">
+    <li><b>Coordenadas en la base canónica</b> $\{1,x,x^2\}$ (el orden es indiferente para el rango si se usa siempre el mismo): $1+x\to(1,1,0)$, $x+x^2\to(0,1,1)$, $1+ax^2\to(1,0,a)$.</li>
+    <li><b>Por qué basta un determinante.</b> 3 vectores en $\operatorname{Dim}\wp_2=3$: base $\iff$ rango 3 $\iff\det\neq0$. Con las coordenadas en columnas:
+      $$\det M_a=\begin{vmatrix}1&0&1\\1&1&0\\0&1&a\end{vmatrix}=(a+0+1)-(0+0+0)=a+1.$$</li>
+    <li><b>Conclusión.</b> $B_a$ es base $\iff a\neq-1$.</li>
+  </ol>
+  <p><b>b)</b> ($a=1$)</p>
+  <ol class="steps" start="4">
+    <li>Se buscan $\alpha,\beta,\gamma$ con $4+3x+3x^2=\alpha(1+x)+\beta(x+x^2)+\gamma(1+x^2)=(\alpha+\gamma)+(\alpha+\beta)x+(\beta+\gamma)x^2$:
+      $$\left(\begin{array}{ccc|c}1&0&1&4\\1&1&0&3\\0&1&1&3\end{array}\right)\xrightarrow{F_2-F_1}\left(\begin{array}{ccc|c}1&0&1&4\\0&1&-1&-1\\0&1&1&3\end{array}\right)\xrightarrow{F_3-F_2}\left(\begin{array}{ccc|c}1&0&1&4\\0&1&-1&-1\\0&0&2&4\end{array}\right).$$
+      ($F_2-F_1$ anula el 1 bajo el primer pivote; $F_3-F_2$ anula el 1 bajo el segundo.)</li>
+    <li>Sustitución hacia atrás: $\gamma=2$; $\beta=-1+\gamma=1$; $\alpha=4-\gamma=2$. Comprobación: $2(1+x)+(x+x^2)+2(1+x^2)=4+3x+3x^2$ ✓. Luego $q=(2,1,2)_{B_1}$.</li>
+  </ol>
+  <p><b>c)</b> ($a=-1$)</p>
+  <ol class="steps" start="6">
+    <li>$B_{-1}=\{1+x,\ x+x^2,\ 1-x^2\}$ es ligado: $(1+x)-(x+x^2)=1-x^2$. Los dos primeros no son proporcionales: $\operatorname{rang}=2$ y $\operatorname{Dim}\langle B_{-1}\rangle=2$ con base $\{1+x,\ x+x^2\}$ (Teor. 2.1: se suprime el vector dependiente).</li>
+    <li><b>Completar</b> (Teor. 2.7): añadir $x^2$. Las coordenadas en columnas $(1,1,0),(0,1,1),(0,0,1)$ forman una triangular con diagonal $1,1,1$, $\det=1\neq0$: $\{1+x,\ x+x^2,\ x^2\}$ es base de $\wp_2$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> con parámetro: determinante de la matriz de coordenadas como función del parámetro; base exactamente donde $\det\neq0$; en los valores que lo anulan, estudia el rango aparte.</div>
+  <p><b>Error típico:</b> concluir «no es base para $a=-1$» y quedarse ahí, cuando se pide también la dimensión: $\det=0$ solo dice que el rango es $\lt3$; hay que encontrar un menor de orden 2 no nulo (o dos vectores no proporcionales) para saber que es 2.</p>
+</details>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="examenes"><span class="n">6</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Preguntas de exámenes de otros años que caen en este tema. Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>) y se señalan sus omisiones. Se ordenan de más fácil a más difícil. Dos hechos que se usan en casi todas:</p>
+<ul>
+  <li><b>(H1) Pasar a coordenadas.</b> En $\wp_n$ o $\mathcal M_{m\times n}$ se trabaja como en $\mathbb R^k$ sustituyendo cada polinomio o matriz por sus coordenadas en la base canónica (coeficientes; entradas por filas), y el rango del sistema es el de la matriz de coordenadas (U p.88).</li>
+  <li><b>(H2) Criterio práctico.</b> Si $\operatorname{Dim}V=n$ y $S$ tiene exactamente $n$ vectores: base $\iff\operatorname{rang}S=n\iff\det\neq0$. Con menos de $n$ no genera; con más de $n$ es ligado.</li>
+</ul>
+
+<details class="sol" id="ex-sep18"><summary>Sept. 2018 (tipo A), ejercicio 2 — ¿es $\{x,x^3,x^2-2x,3x^3+2\}$ base de $\wp_3$? <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 2">X Sept. 2018 (A)</span></summary>
+  <p class="enun">Siendo $\wp_3(x)$ el espacio vectorial de los polinomios de grado menor o igual que 3 en la variable $x$, se pide razonar si el sistema $\{x,\ x^3,\ x^2-2x,\ 3x^3+2\}$ es o no una base suya.</p>
+  <ol class="steps">
+    <li><b>Cuántos vectores hacen falta.</b> La base canónica $\{x^3,x^2,x,1\}$ tiene 4 elementos: $\operatorname{Dim}\wp_3=4$ (U p.89). Toda base tiene 4 vectores (Teor. 2.4, U p.87). El sistema tiene 4: el número cuadra, condición necesaria pero no suficiente.</li>
+    <li><b>Reducir el trabajo (Teor. 2.6, U p.88).</b> Con exactamente $4=\operatorname{Dim}\wp_3$ vectores basta comprobar <b>una</b> condición: que son libres o que generan. Se hace de las dos formas.</li>
+    <li><b>Vía A — generan $\wp_3$.</b> Basta que cada vector de la base canónica sea combinación del sistema: $x$ y $x^3$ están en él; $x^2=(x^2-2x)+2\cdot x$; $1=\tfrac12\big((3x^3+2)-3\cdot x^3\big)$. Con 4 generadores en dimensión 4, por el Teor. 2.6 es <b>base</b>.</li>
+    <li><b>Vía B — determinante de coordenadas</b> (H1, H2). En $\{1,x,x^2,x^3\}$, por columnas: $x\to(0,1,0,0)$, $x^3\to(0,0,0,1)$, $x^2-2x\to(0,-2,1,0)$, $3x^3+2\to(2,0,0,3)$:
+      $$\det\begin{pmatrix}0&0&0&2\\1&0&-2&0\\0&0&1&0\\0&1&0&3\end{pmatrix}=-2\begin{vmatrix}1&0&-2\\0&0&1\\0&1&0\end{vmatrix}=-2\cdot\big(1\cdot(0\cdot0-1\cdot1)\big)=2\neq0.$$
+      (La 1.ª fila solo tiene un $2$ en la posición $(1,4)$, de signo $(-1)^{1+4}=-1$; el $3\times3$ se desarrolla por su 1.ª columna.) Rango 4: libres, luego base.</li>
+  </ol>
+  <p><b>Resultado:</b> <b>sí</b> es base de $\wp_3$. <i>(Verificado con sympy: $\det=2$.)</i></p>
+  <p><b>Omisión en la solución oficial.</b> Dice «es fácil comprobar que los cuatro vectores [de la base canónica] están… en el sistema dado… Por lo tanto, es base» sin escribir las combinaciones ni citar el Teor. 2.6 (4 generadores en dimensión 4). Remite al «Ejemplo 2.20 del libro», que en la 2.ª ed. de U es otro (funciones en $[0,2]$, U p.77); los parecidos son el Ej. U 2.26 ($\wp_2$) o el 2.30 ($\wp_3$). En el examen hay que escribir las combinaciones o el determinante.</p>
+  <p><b>Variante con parámetro (propia).</b> ¿Para qué $a$ es $\{x,\ x^3,\ x^2-2x,\ 3x^3+a\}$ base? El determinante vale ahora $a$: base $\iff a\neq0$ (si $a=0$ ningún polinomio tiene término independiente y no se genera el $1$).</p>
+  <div class="recipe"><b>Receta:</b> ¿base de un espacio de dimensión $n$? (1) cuenta: deben ser exactamente $n$; (2) comprueba <b>una sola</b> condición: el determinante de coordenadas $\neq0$ (libre) o que se obtiene la base canónica (generador).</div>
+  <p><b>Error típico:</b> concluir «es base» solo porque hay 4 polinomios y $\operatorname{Dim}\wp_3=4$: $\{x,x^3,x^2-2x,3x^3\}$ también tiene 4 y no es base.</p>
+</details>
+
+<details class="sol" id="ex-feb26"><summary>Feb. 2026 (1.ª sem.), pregunta 3 — ¿es base de $\mathcal M_{2\times2}$? (no lo es) <span class="src" data-l="X" data-ref="Feb. 2026 (1.ª sem.), pregunta 3">X Feb. 2026 (1.ª)</span></summary>
+  <p class="enun">Determine si el conjunto $S$ es base de $\mathcal M_{2\times2}$:
+  $$S=\left\{\begin{pmatrix}1&1\\0&0\end{pmatrix},\begin{pmatrix}0&1\\0&1\end{pmatrix},\begin{pmatrix}0&0\\1&1\end{pmatrix},\begin{pmatrix}1&0\\1&0\end{pmatrix}\right\}.$$</p>
+  <p>Llamemos $S_1,S_2,S_3,S_4$ a las cuatro matrices.</p>
+  <ol class="steps">
+    <li><b>Dimensión.</b> $\operatorname{Dim}\mathcal M_{2\times2}=4$ (H1; §3). $S$ tiene 4 elementos: por el Teor. 2.6 es base $\iff$ es libre $\iff$ rango 4.</li>
+    <li><b>Coordenadas</b> en $\{E_{11},E_{12},E_{21},E_{22}\}$ (las entradas por filas): $S_1\to(1,1,0,0)$, $S_2\to(0,1,0,1)$, $S_3\to(0,0,1,1)$, $S_4\to(1,0,1,0)$.</li>
+    <li><b>Rango por Gauss</b> (vectores por filas):
+      $$\begin{pmatrix}1&1&0&0\\0&1&0&1\\0&0&1&1\\1&0&1&0\end{pmatrix}\xrightarrow{F_4-F_1}\begin{pmatrix}1&1&0&0\\0&1&0&1\\0&0&1&1\\0&-1&1&0\end{pmatrix}\xrightarrow{F_4+F_2}\begin{pmatrix}1&1&0&0\\0&1&0&1\\0&0&1&1\\0&0&1&1\end{pmatrix}\xrightarrow{F_4-F_3}\begin{pmatrix}1&1&0&0\\0&1&0&1\\0&0&1&1\\0&0&0&0\end{pmatrix}.$$
+      Tres pivotes: rango $3\lt4$, $S$ es <b>ligado</b>: <b>no es base</b> (equivalentemente, el determinante es 0).</li>
+    <li><b>Dependencia explícita</b> (convence al corrector): $\lambda_1S_1+\dots+\lambda_4S_4=0$ entrada a entrada: $(1,1):\lambda_1+\lambda_4=0$; $(1,2):\lambda_1+\lambda_2=0$; $(2,1):\lambda_3+\lambda_4=0$; $(2,2):\lambda_2+\lambda_3=0$. Resulta $\lambda_4=-\lambda_1$, $\lambda_2=-\lambda_1$, $\lambda_3=\lambda_1$ y la cuarta se cumple sola. Con $\lambda_1=1$: $S_1-S_2+S_3-S_4=0$, es decir
+      $$\begin{pmatrix}1&1\\0&0\end{pmatrix}=\begin{pmatrix}0&1\\0&1\end{pmatrix}-\begin{pmatrix}0&0\\1&1\end{pmatrix}+\begin{pmatrix}1&0\\1&0\end{pmatrix}.$$</li>
+    <li><b>Qué genera $S$.</b> $\operatorname{Dim}\langle S\rangle=\operatorname{rang}S=3$ (Teor. 2.5): un subespacio de dimensión 3, no todo $\mathcal M_{2\times2}$. Por ejemplo $\{S_2,S_3,S_4\}$ es una base de $\langle S\rangle$ (supresión, Teor. 2.1).</li>
+  </ol>
+  <p><b>Resultado:</b> $S$ <b>no</b> es base ($\det=0$, rango 3, $S_1=S_2-S_3+S_4$). <i>(Verificado con sympy.)</i></p>
+  <p><b>Comentario sobre la solución oficial.</b> Es correcta, pero justifica el criterio con una «matriz de cambio de base», concepto de §3.5. En §2.3 basta: 4 vectores en dimensión 4, base $\iff$ rango 4 $\iff\det\neq0$ (U p.88 y p.27).</p>
+  <div class="recipe"><b>Receta:</b> matrices o polinomios: pasa a coordenadas en la base canónica, forma la matriz cuadrada y calcula determinante o rango. Si sale ligado, encuentra la combinación nula resolviendo el sistema homogéneo.</div>
+  <p><b>Error típico:</b> calcular el determinante de <b>cada</b> $S_i$ ($\det S_1=0$…) y deducir algo sobre la base. Lo que importa es el determinante de la matriz $4\times4$ formada por las <b>coordenadas</b> de las cuatro matrices.</p>
+</details>
+
+<details class="sol" id="ex-feb20"><summary>Feb. 2020 (1.ª sem., tipo B), ejercicio 2 — extraer una base de un sistema generador <span class="src" data-l="X" data-ref="Feb. 2020 (1.ª sem., tipo B), ejercicio 2">X Feb. 2020 (1.ª, B)</span></summary>
+  <p class="enun">Decidir si es posible extraer de $\{(1,2,-1),\ (3,1,0),\ (2,-1,1),\ (2,1,0)\}$ un sistema de vectores que formen una base de $\mathbb R^3$. En caso afirmativo, obténgase dicha base.</p>
+  <p>Llamemos $u=(1,2,-1)$, $v=(3,1,0)$, $w=(2,-1,1)$, $s=(2,1,0)$.</p>
+  <ol class="steps">
+    <li><b>Cuándo se puede.</b> $\operatorname{Dim}\mathbb R^3=3$. Se puede extraer una base de $\mathbb R^3$ $\iff$ hay 3 vectores libres entre los 4 $\iff\operatorname{rang}\{u,v,w,s\}=3$ (Def. 2.7, Teor. 2.6). El rango no pasa de 3: son vectores de $\mathbb R^3$.</li>
+    <li><b>Un primer intento que falla.</b> $\det(u,v,w)=\begin{vmatrix}1&2&-1\\3&1&0\\2&-1&1\end{vmatrix}=1(1-0)-2(3-0)+(-1)(-3-2)=1-6+5=0$: ligados ($w=v-u$). Esto <b>no</b> demuestra que no se pueda: solo que esa terna no sirve.</li>
+    <li><b>Segundo intento.</b> Por supresión (Teor. 2.1) se quita $w$ y se prueba $\{u,v,s\}$: $\det(u,v,s)=\begin{vmatrix}1&2&-1\\3&1&0\\2&1&0\end{vmatrix}=(-1)\cdot\begin{vmatrix}3&1\\2&1\end{vmatrix}=(-1)(3-2)=-1\neq0$ (la 3.ª columna solo tiene el $-1$, signo $(-1)^{1+3}=+1$). Rango 3: libres.</li>
+    <li><b>Conclusión.</b> 3 vectores libres en dimensión 3: base (Teor. 2.6). <b>Sí</b> se puede extraer: $B=\{(1,2,-1),(3,1,0),(2,1,0)\}$.</li>
+    <li><b>No es la única.</b> Las cuatro ternas dan $\det(u,v,w)=0$, $\det(u,v,s)=-1$, $\det(u,w,s)=-1$, $\det(v,w,s)=-1$: sirven todas menos $\{u,v,w\}$. La solución oficial elige $\{v,w,s\}$.</li>
+  </ol>
+  <p><b>Resultado:</b> sí; una base es $\{(1,2,-1),(3,1,0),(2,1,0)\}$ (oficial: $\{(3,1,0),(2,-1,1),(2,1,0)\}$). <i>(Verificado con sympy.)</i></p>
+  <p><b>Omisión en la solución oficial.</b> Dice «el sistema tiene rango 3 … buscamos un menor de orden 3 no nulo» sin calcular ni el rango ni el menor. En el examen hay que escribir el determinante y su valor, y citar por qué 3 libres de $\mathbb R^3$ son base (Teor. 2.6).</p>
+  <p><b>Variante: base incompleta (propia).</b> Si solo nos dieran $\{u,v\}$ (libres), el Teor. 2.7 garantiza completar con $3-2=1$ vector. $e_3=(0,0,1)$: $\det(u,v,e_3)=\begin{vmatrix}1&2\\3&1\end{vmatrix}=-5\neq0$, luego $\{u,v,e_3\}$ es base. (No vale $w$, porque $w=v-u\in\langle u,v\rangle$.)</p>
+  <div class="recipe"><b>Receta:</b> extraer base de $S$: (1) calcula el rango de $S$; si es $n=\operatorname{Dim}V$, se puede; (2) elige $n$ vectores con menor $n\times n$ no nulo (o quita uno a uno los que dependan de los demás). Completar a base: añade vectores canónicos y comprueba que el determinante no se anula.</div>
+  <p><b>Error típico:</b> calcular solo el primer determinante, ver que es 0 y responder «no se puede». Hay que mirar el <b>rango del sistema completo</b> (o probar otras ternas).</p>
+</details>
+
+<details class="sol" id="ex-feb24p7"><summary>Feb. 2024 (1.ª sem.), problema 7 (1.º y 2.º) — dimensión de un subespacio = rango <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), problema 7, apartados 1.º y 2.º">X Feb. 2024 (1.ª) P7</span></summary>
+  <p class="enun">Sean $L_1$ y $L_2$ subespacios de $\mathbb R^4$: $L_1=\langle(3,-4,0,1),\ (2,2,0,-4),\ (1,-6,0,5)\rangle$, $L_2=\langle(1,0,0,0),\ (0,1,0,0),\ (0,0,1,0)\rangle$. Calcule de manera razonada las dimensiones de $L_1$ y $L_2$.</p>
+  <p><i>Aclaración propia:</i> los apartados $L_1\cap L_2$ y $L_1+L_2$ son de §2.4 y no se tratan aquí.</p>
+  <ol class="steps">
+    <li><b>Herramienta.</b> $\operatorname{Dim}\langle S\rangle=\operatorname{rang}S$ (Teor. 2.5, U p.88) = rango de la matriz con los vectores por filas.</li>
+    <li><b>Rango de $L_1$.</b> Con $v_1=(3,-4,0,1)$, $v_2=(2,2,0,-4)$, $v_3=(1,-6,0,5)$:
+      $$\begin{pmatrix}3&-4&0&1\\2&2&0&-4\\1&-6&0&5\end{pmatrix}\xrightarrow[F_3\to3F_3-F_1]{F_2\to3F_2-2F_1}\begin{pmatrix}3&-4&0&1\\0&14&0&-14\\0&-14&0&14\end{pmatrix}\xrightarrow{F_3\to F_3+F_2}\begin{pmatrix}3&-4&0&1\\0&14&0&-14\\0&0&0&0\end{pmatrix}.$$
+      (Detalle: $3F_2-2F_1=(6-6,\ 6+8,\ 0,\ -12-2)$; $3F_3-F_1=(3-3,\ -18+4,\ 0,\ 15-1)$.) Multiplicar una fila por $3\neq0$ y sumarle un múltiplo de otra no cambia el rango. Dos pivotes: $\boxed{\operatorname{Dim}L_1=2}$.</li>
+    <li><b>En lenguaje de bases.</b> $v_1,v_2$ no son proporcionales (la 1.ª componente daría $v_2=\tfrac23v_1$ y la 2.ª, $2=-\tfrac83$: falso): libres. Y $v_3=v_1-v_2$. Por supresión $L_1=\langle v_1,v_2\rangle$ y $\{v_1,v_2\}$ es <b>base</b> de $L_1$ con 2 vectores.</li>
+    <li><b>$L_2$.</b> Sus generadores son $e_1,e_2,e_3$; la matriz tiene el menor $\begin{vmatrix}1&0&0\\0&1&0\\0&0&1\end{vmatrix}=1\neq0$: rango 3, libres, base de $L_2$: $\boxed{\operatorname{Dim}L_2=3}$ ($L_2$ es el hiperplano $x_4=0$, es decir, un subespacio de dimensión $n-1=3$ de $\mathbb R^4$).</li>
+    <li><b>Variante: completar la base de $L_1$ a una de $\mathbb R^4$ (propia).</b> $\{v_1,v_2\}$ es libre con $2\lt4$; se completa con $4-2=2$ vectores (Teor. 2.7). Todos los vectores de $L_1$ tienen 3.ª componente 0, así que $e_3$ es buen candidato; se prueba $\{v_1,v_2,e_3,e_4\}$: $\begin{vmatrix}3&-4&0&1\\2&2&0&-4\\0&0&1&0\\0&0&0&1\end{vmatrix}=\begin{vmatrix}3&-4\\2&2\end{vmatrix}=6+8=14\neq0$: base de $\mathbb R^4$.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Dim}L_1=2$ (base $\{v_1,v_2\}$), $\operatorname{Dim}L_2=3$. (La solución oficial obtiene además $\operatorname{Dim}(L_1\cap L_2)=1$ y $\operatorname{Dim}(L_1+L_2)=4$, tema 2.4.) <i>(Verificado con sympy.)</i></p>
+  <div class="recipe"><b>Receta:</b> $\operatorname{Dim}\langle v_1,\dots,v_p\rangle=$ rango de la matriz con los $v_i$ por filas (Gauss). Una base: las filas no nulas de la escalonada o los vectores originales correspondientes.</div>
+  <p><b>Error típico:</b> contestar «$\operatorname{Dim}L_1=3$ porque tiene 3 generadores». El número de generadores es solo una <b>cota superior</b>; la dimensión es el número de generadores <b>libres</b> (el rango).</p>
+</details>
+
+<details class="sol" id="ex-sep24"><summary>Sept. 2024, pregunta 2 — coordenadas de una matriz en una base de $\mathcal M_{2\times2}$ <span class="src" data-l="X" data-ref="Sept. 2024, pregunta 2">X Sept. 2024</span></summary>
+  <p class="enun">Calcule las coordenadas de la matriz
+  $$A=\begin{pmatrix}11&-2\\-7&1\end{pmatrix}$$
+  respecto de la base de $\mathcal M_{2\times2}$:
+  $$\mathcal B=\left\{\begin{pmatrix}1&0\\2&0\end{pmatrix},\begin{pmatrix}0&1\\1&1\end{pmatrix},\begin{pmatrix}5&2\\0&0\end{pmatrix},\begin{pmatrix}-3&1\\4&0\end{pmatrix}\right\}.$$</p>
+  <ol class="steps">
+    <li><b>Qué son las coordenadas.</b> Por la Def. 2.10, son los únicos $(x,y,z,t)$ con $A=xB_1+yB_2+zB_3+tB_4$ (únicos porque $\mathcal B$ es base).</li>
+    <li><b>Igualar entrada a entrada:</b>
+      $$\begin{pmatrix}11&-2\\-7&1\end{pmatrix}=\begin{pmatrix}x+5z-3t&y+2z+t\\2x+y+4t&y\end{pmatrix}\iff\begin{cases}x+5z-3t=11&(1,1)\\ y+2z+t=-2&(1,2)\\ 2x+y+4t=-7&(2,1)\\ y=1&(2,2)\end{cases}$$</li>
+    <li><b>Resolver, empezando por la ecuación más sencilla.</b> $(2,2)$: $y=1$. $(1,2)$: $2z+t=-3$ (a). $(2,1)$: $x=-4-2t$ (b). $(1,1)$ con (b): $-4-2t+5z-3t=11\Rightarrow z-t=3$ (c). Sumando (a) y (c): $3z=0\Rightarrow z=0$; de (c), $t=-3$; de (b), $x=2$.</li>
+    <li><b>Comprobación.</b> $2\begin{pmatrix}1&0\\2&0\end{pmatrix}+\begin{pmatrix}0&1\\1&1\end{pmatrix}+0-3\begin{pmatrix}-3&1\\4&0\end{pmatrix}=\begin{pmatrix}2+9&1-3\\4+1-12&1\end{pmatrix}=\begin{pmatrix}11&-2\\-7&1\end{pmatrix}$ ✓.</li>
+    <li><b>(Rigor) ¿Es realmente base?</b> El enunciado lo afirma; el propio cálculo lo confirma: cada paso fue un despeje forzado, el sistema es compatible determinado, así que la matriz $4\times4$ de coordenadas (columnas = coordenadas de $B_1,\dots,B_4$ en la base canónica) tiene rango 4 (Rouché, U p.30): 4 libres en dimensión 4, base (Teor. 2.6). <i>(sympy: $\det=30\neq0$.)</i></li>
+  </ol>
+  <p><b>Resultado:</b> $A=(2,1,0,-3)_{\mathcal B}$.</p>
+  <p><b>Comentario sobre la solución oficial.</b> Correcta; plantea el mismo sistema y da directamente $x=2,y=1,z=0,t=-3$ sin pasos intermedios. En el examen conviene escribir el orden de despeje y la comprobación.</p>
+  <div class="recipe"><b>Receta:</b> coordenadas de $v$ en una base: plantea $v=x_1e_1+\dots+x_ne_n$, iguala componente a componente (entradas, coeficientes) y resuelve; empieza por las ecuaciones con menos incógnitas; comprueba sustituyendo.</div>
+  <p><b>Error típico:</b> dar como coordenadas las entradas de $A$, $(11,-2,-7,1)$ (son las de la base <b>canónica</b>; Ej. U 2.27), o escribirlas en otro orden que el de $\mathcal B$.</p>
+</details>
+
+<details class="sol" id="ex-feb24p8"><summary>Feb. 2024 (1.ª sem.), problema 8 — coordenadas de un polinomio en una base de derivadas <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), problema 8">X Feb. 2024 (1.ª) P8</span></summary>
+  <p class="enun">Si $\mathcal B=\{P(x),P'(x),P''(x),P'''(x),P''''(x)\}$ es una base del espacio vectorial de los polinomios reales de una variable de grado menor o igual que 4, $\mathcal P_4$, siendo $P(x)=x^4+x^3+x^2+x+1$, calcule las coordenadas del polinomio $Q(x)=x^4+9x^3+19x^2+35x+59$ respecto a la base $\mathcal B$. ($P',P'',P''',P''''$ son las derivadas sucesivas de $P$.)</p>
+  <p><i>Notación:</i> $\mathcal P_4=\wp_4$ (la de U).</p>
+  <ol class="steps">
+    <li><b>Calcular la base.</b> $P'=4x^3+3x^2+2x+1$, $P''=12x^2+6x+2$, $P'''=24x+6$, $P''''=24$.</li>
+    <li><b>(Rigor) Comprobar que es base</b> (una línea). $\operatorname{Dim}\mathcal P_4=5$ y $\mathcal B$ tiene 5 polinomios. Con las coordenadas en $\{x^4,x^3,x^2,x,1\}$ por columnas:
+      $$M=\begin{pmatrix}1&0&0&0&0\\1&4&0&0&0\\1&3&12&0&0\\1&2&6&24&0\\1&1&2&6&24\end{pmatrix},\qquad\det M=1\cdot4\cdot12\cdot24\cdot24=27648\neq0.$$
+      Rango 5: libres, base (Teor. 2.6). Idea de fondo: grados $4,3,2,1,0$ distintos dan siempre una triangular con diagonal no nula.</li>
+    <li><b>Plantear la combinación</b> (Def. 2.10). $Q=a_1P+a_2P'+a_3P''+a_4P'''+a_5P''''$; agrupando por potencias:
+      $$a_1x^4+(a_1+4a_2)x^3+(a_1+3a_2+12a_3)x^2+(a_1+2a_2+6a_3+24a_4)x+(a_1+a_2+2a_3+6a_4+24a_5).$$</li>
+    <li><b>Igualar coeficientes:</b>
+      $$\begin{cases}a_1=1&(x^4)\\ a_1+4a_2=9&(x^3)\\ a_1+3a_2+12a_3=19&(x^2)\\ a_1+2a_2+6a_3+24a_4=35&(x)\\ a_1+a_2+2a_3+6a_4+24a_5=59&(1)\end{cases}$$</li>
+    <li><b>Resolver por sustitución hacia delante</b> (triangular): $a_1=1$; $1+4a_2=9\Rightarrow a_2=2$; $1+6+12a_3=19\Rightarrow a_3=1$; $1+4+6+24a_4=35\Rightarrow a_4=1$; $1+2+2+6+24a_5=59\Rightarrow a_5=2$.</li>
+    <li><b>Comprobación.</b> $P+2P'+P''+P'''+2P''''=(x^4+x^3+x^2+x+1)+(8x^3+6x^2+4x+2)+(12x^2+6x+2)+(24x+6)+48=x^4+9x^3+19x^2+35x+59$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $Q=(1,2,1,1,2)_{\mathcal B}$. <i>(Verificado con sympy: $\det M=27648$.)</i></p>
+  <p><b>Errata en la solución oficial.</b> En la primera línea del desarrollo escribe «$Q(x)=x^4+5x^3+2x^2-x+1=\dots$», que <b>no</b> es el $Q$ del enunciado (errata arrastrada de otro ejercicio); el sistema y el resultado sí usan los coeficientes correctos $1,9,19,35,59$. Tampoco justifica que $\mathcal B$ sea base.</p>
+  <div class="recipe"><b>Receta:</b> coordenadas de un polinomio en una base de polinomios: escribe la combinación, agrupa por potencias de $x$ e iguala coeficientes. Si los grados de la base son distintos, el sistema es triangular y se resuelve sin Gauss.</div>
+  <p><b>Error típico:</b> equivocarse en las derivadas (p. ej. $P''=12x^2+6x+1$, olvidando que la derivada de $2x$ es $2$) o igualar coeficientes en otro orden que el de las potencias. Ordena de mayor a menor grado y comprueba al final.</p>
+</details>
+
+<div class="box tip"><span class="h">Para practicar (otros ejercicios de examen del tema)</span>
+  <ul>
+    <li>X, Feb. 2018 (tipo B), ejercicio 1, sistema $S_1$: comprobar que las filas de $\begin{pmatrix}4&1&-3&-4\\2&4&-4&3\\2&3&1&3\\4&0&-1&2\end{pmatrix}$ son base de $\mathbb R^4$ (4 vectores en dimensión 4: basta $\det=420\neq0$). La parte de $S_2$ (ligado) está en el tema 2.2.</li>
+    <li>X, Sept. 2025, problema 7, apartados 2.º y 3.º: con $2X+3Y=A$, $X-Y=B$, $A=\begin{pmatrix}5&1\\0&4\end{pmatrix}$, $B=\begin{pmatrix}1&-1\\2&0\end{pmatrix}$, razonar si $\{A,B,X,Y\}$ es base de $\mathcal M_{2\times2}$ (no: $A=2X+3Y$ es combinación de $X,Y$, ligado) y hallar $\operatorname{Dim}\langle A,B,Y\rangle$ ($Y=\tfrac15(A-2B)$ y $A,B$ no proporcionales: dimensión 2).</li>
+    <li>X, Feb. 2023 (2.ª sem.), problema 7, (i), (ii) y la dimensión de (iv): $E=\{(1,3,1),(3,8,2),(2,9,5)\}$ tiene rango 2 ($(2,9,5)=11(1,3,1)-3(3,8,2)$), luego $\operatorname{Dim}U=2$ con base $\{(1,3,1),(3,8,2)\}$, paramétricas $x_1=\alpha+3\beta,\ x_2=3\alpha+8\beta,\ x_3=\alpha+2\beta$ e implícita $2x_1-x_2+x_3=0$. La base <b>ortonormal</b> es del Tema 5.</li>
+  </ul>
+  <p>Los ejercicios de «matriz de cambio de coordenadas» (p. ej. X, Feb. 2025, pregunta 2: $u_1=2v_1-v_2$, $u_2=5v_1-v_3$, $u_3=4v_2$) son del <b>tema 3.5</b>, no de este.</p>
+</div>
+
+<div class="box intu"><span class="h">Aviso final sobre los exámenes</span>
+  <p>En los exámenes disponibles (feb. 2017 – feb. 2026 y sept. 2017–2025) no hay ninguna pregunta que pida literalmente «completa a una base» o «halla los parámetros para que sea base». Por eso esas variantes aparecen aquí como <b>ejercicios propios</b> (Ejemplos propios 2 y 3, y las «variantes» de los exámenes). Aun así son pasos naturales del tema y conviene saberlos hacer.</p>
+</div>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">7</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Base (Def. 2.9)</td><td>$B$ libre <b>y</b> $\langle B\rangle=V$ $\iff$ todo $v$ se escribe de forma <b>única</b> como c.l. de $B$</td><td>Si es base de un subespacio, los vectores deben estar en él</td></tr>
+  <tr><td>Coordenadas (Def. 2.10)</td><td>$v=x_1e_1+\dots+x_ne_n\Rightarrow v=(x_1,\dots,x_n)_B$; sistema $(e_1\cdots e_n\mid v)$</td><td>$B$ <b>base</b> y <b>ordenada</b>; vectores de la base en columnas</td></tr>
+  <tr><td>Existencia (Teor. 2.3)</td><td>Todo espacio finito $V\neq\{0\}$ tiene base</td><td>$V\neq\{0\}$</td></tr>
+  <tr><td>Dimensión (Teor. 2.4, Def. 2.11)</td><td>Todas las bases tienen el mismo nº de elementos $=\operatorname{Dim}V$; $\operatorname{Dim}\{0\}=0$</td><td>$V\neq\{0\}$ finito</td></tr>
+  <tr><td>Dimensiones usuales</td><td>$\operatorname{Dim}\mathbb R^n=n$; $\operatorname{Dim}\wp_n=n+1$; $\operatorname{Dim}\mathcal M_{m\times n}=mn$</td><td>—</td></tr>
+  <tr><td>Contar</td><td>Más de $n$ vectores: ligados. Menos de $n$: no generan. Base $\Rightarrow$ exactamente $n$</td><td>$\operatorname{Dim}V=n$; <b>necesario, no suficiente</b></td></tr>
+  <tr><td>Teor. 2.5</td><td>$\operatorname{rang}(S)=\operatorname{Dim}\langle S\rangle$ = rango de la matriz de coordenadas (filas o columnas)</td><td>Coordenadas respecto de una base fija</td></tr>
+  <tr><td>Teor. 2.6</td><td>$n$ libres $\Rightarrow$ base; $n$ generadores $\Rightarrow$ base. Con rangos: base $\iff$ rango $n$ $\iff\det\neq0$</td><td>$\operatorname{Dim}V=n$ y <b>exactamente $n$ vectores</b></td></tr>
+  <tr><td>Teor. 2.7 (base incompleta)</td><td>$p\lt n$ libres se completan con $n-p$ vectores (fuera de $\langle S\rangle$) hasta base; práctico: añadir $e_j$ de las columnas sin pivote</td><td>Sistema <b>libre</b></td></tr>
+  <tr><td>Extraer base</td><td>De un generador: quitar los vectores que dependen de los demás (Teor. 2.1) o elegir $n$ con $\det\neq0$</td><td>Generador de $V$ de dimensión $n$</td></tr>
+  <tr><td>Subespacio dado por ecuaciones</td><td>Cartesianas $\to$ paramétricas $\to$ base; $\operatorname{Dim}W=n-\operatorname{rang}(\text{coeficientes})$ (Rouché: la solución depende de $n-k$ parámetros, U p.30)</td><td>Sistema homogéneo</td></tr>
+  <tr><td>Cambio de base (tema 3.5, no de este tema)</td><td>$X_B=P\,X_{B'}$ (columnas de $P$ = coordenadas de $B'$ en $B$); ver tema 3.5</td><td>$B,B'$ bases</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé decidir si un sistema es base de un espacio de dimensión conocida: cuento, formo la matriz de coordenadas y miro $\det$ o rango (con parámetros incluidos).</li>
+  <li>Sé decir <b>qué propiedad falla</b> cuando no es base: no genera (pocos vectores) o es ligado (sobran).</li>
+  <li>Sé calcular las coordenadas de un vector, un polinomio o una matriz respecto de una base, y comprobarlas sustituyendo.</li>
+  <li>Sé que las coordenadas dependen de la base y de su <b>orden</b>, y que el cambio de base se desarrolla en el tema 3.5.</li>
+  <li>Sé hallar la dimensión y una base de un subespacio generado por unos vectores (rango por filas) y de un subespacio dado por ecuaciones (paramétricas).</li>
+  <li>Sé completar un sistema libre hasta una base y extraer una base de un sistema generador.</li>
+  <li>Sé la dimensión de $\mathbb R^n$, $\wp_n$ y $\mathcal M_{m\times n}$ y escribo sus bases canónicas.</li>
+  <li>Sé citar los Teor. 2.3-2.7 y comprobar sus hipótesis (en particular, «exactamente $n$ vectores» en el 2.6) en una respuesta de examen.</li>
+</ul>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li>Decir «es base» porque tiene $n$ vectores (o porque genera, o porque es libre) sin comprobar lo que falta.</li>
+    <li>Aplicar el Teor. 2.6 sin tener exactamente $\operatorname{Dim}V$ vectores.</li>
+    <li>Contar mal las dimensiones: $\operatorname{Dim}\wp_n=n+1$, $\operatorname{Dim}\mathcal M_{m\times n}=mn$; o decir que un subespacio de $\mathbb R^3$ de dimensión 2 «tiene 3 coordenadas».</li>
+    <li>Dar como coordenadas respecto de $B$ las componentes en la base canónica, o desordenar las coordenadas.</li>
+    <li>Plantear el sistema de coordenadas con los vectores de la base en filas, y no en columnas.</li>
+    <li>Calcular el determinante de cada polinomio o matriz $S_i$, en lugar del de la matriz de <b>coordenadas</b> de todos ellos.</li>
+    <li>Responder «no se puede» a «extraer una base» tras ver un solo determinante nulo.</li>
+    <li>Completar a base con un vector que ya está en el subespacio generado, o concluir «no es base» con un parámetro sin estudiar el rango en los valores críticos.</li>
+    <li>No comprobar que $B$ es base cuando se calculan coordenadas (el enunciado suele darlo, pero en el examen cuesta una línea justificarlo).</li>
+  </ol>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>
