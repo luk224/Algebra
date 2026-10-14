@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 3.2 Imagen y núcleo</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 3 · Aplicaciones lineales y matrices · Tema 3.2</div>
+  <h1>Imagen y núcleo</h1>
+  <p>Toda aplicación lineal $f:V\to W$ lleva asociados dos subespacios: el <b>núcleo</b> (lo que $f$ aplasta en el cero, vive en $V$) y la <b>imagen</b> (lo que $f$ alcanza, vive en $W$). El <b>teorema de las dimensiones</b> los une: $\operatorname{Dim}\operatorname{Im}(f)+\operatorname{Dim}\operatorname{Nuc}(f)=\operatorname{Dim}V$.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §3.2 (pp. 104-112)</span><span>Ejercicios: E Ej. 3.16 y 3.20–3.29 (pp. 93-104)</span><span>⏱ ~7 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §3.2.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 104-105">U p.104-105</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>Una aplicación lineal es una «máquina» que transforma vectores de $V$ en vectores de $W$. Dos preguntas naturales: <b>(1)</b> ¿qué vectores de $V$ la máquina convierte en el vector cero? Es el <b>núcleo</b>. <b>(2)</b> ¿qué vectores de $W$ puede producir la máquina? Es la <b>imagen</b>. Lo bonito es que ambos conjuntos son <b>subespacios</b>, así que se les pueden calcular base, dimensión y ecuaciones con todo lo que ya sabes del tema 2, y que sus dimensiones están ligadas por una fórmula muy sencilla.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>: qué es una <b>aplicación lineal</b> ($f(v+\lambda u)=f(v)+\lambda f(u)$, Def. 3.1, U p.101) y sus propiedades: $f(0)=0$ y $f\big(\sum a_iv_i\big)=\sum a_if(v_i)$ (U p.103). Esta última es la que lo hace todo: <b>conocer $f$ en una base es conocer $f$ en todo el espacio</b>.</li>
+  <li>Del tema 2: <b>subespacio</b> (2.1), <b>sistema generador</b> y ecuaciones paramétricas/cartesianas (2.2), <b>base, dimensión y rango</b> de un sistema de vectores (2.3: $\operatorname{Dim}\langle S\rangle=\operatorname{rang}(S)$, Teor. 2.5; «$n$ vectores libres en dimensión $n$ son base», Teor. 2.6).</li>
+  <li>Del tema 1: resolver un sistema homogéneo por Gauss, rango de una matriz y Rouché-Frobenius (nº de parámetros libres $=$ incógnitas $-$ rango, U p.30).</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde está en los libros</th></tr>
+  <tr><td>1 La idea</td><td>Núcleo = «se aplasta en 0», imagen = «se alcanza»; dos ejemplos numéricos</td><td>U p.105 · L §4.2 p.204</td></tr>
+  <tr><td>2 Imagen</td><td>Def. 3.2, es subespacio de $W$; generada por las imágenes de una base; Ej. 3.8-3.11</td><td>U p.105-109</td></tr>
+  <tr><td>3 Núcleo</td><td>Def. 3.3, es subespacio de $V$; sistema homogéneo; Ej. 3.12-3.14</td><td>U p.109-111</td></tr>
+  <tr><td>4 Teorema de las dimensiones</td><td>Teor. 3.1 y Ej. 3.15; idea de la demostración</td><td>U p.111-112 · L §4.6 p.233</td></tr>
+  <tr><td>5 Inyectiva, sobreyectiva, isomorfismo</td><td>Vocabulario <b>que no es de U</b> pero cae en V/F</td><td>L §1.9 p.75-77</td></tr>
+  <tr><td>6 Método</td><td>Receta única: matriz → Gauss → rango, núcleo e imagen</td><td>propio</td></tr>
+  <tr><td>7 Ejercicios del libro</td><td>E 3.16 y 3.20–3.29 + 3 ejemplos propios</td><td>E pp.93-104</td></tr>
+  <tr><td>8 Ejemplos de examen</td><td>20 preguntas de convocatorias anteriores, resueltas</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p>Seis tareas que se repiten con distinto disfraz: <b>(a)</b> «halla una <b>base del núcleo</b>» (o sus ecuaciones, o su dimensión); <b>(b)</b> «halla la <b>imagen</b>: base, dimensión, ecuaciones cartesianas»; <b>(c)</b> «<b>¿pertenece</b> este vector al núcleo / a la imagen?» (o «halla $a,b$ para que pertenezca»); <b>(d)</b> usar el <b>teorema de las dimensiones</b> para sacar una dimensión que falta (rango de una matriz $3\times5$ sabiendo $\operatorname{Dim}\operatorname{Nuc}=3$, etc.); <b>(e)</b> lo mismo en <b>polinomios o matrices</b> (derivada, evaluación…); <b>(f)</b> «verdadero o falso» razonado. Todo se reduce a <b>una matriz y Gauss</b> (§6).</p>
+</div>
+
+<div class="box warn"><span class="h">Erratas, omisiones y avisos sobre los libros</span>
+  <ul>
+    <li><b>E trata 3.2 y 3.3 juntas</b> (E p.92: «los ejercicios de las secciones 3.2 y 3.3 se abordarán conjuntamente porque la matriz asociada es muy útil para analizar núcleo e imagen»). Por contenido, a este tema corresponden <b>E 3.16 y 3.20–3.29</b>; los ejercicios 3.15 y 3.17–3.19 solo piden la <b>matriz asociada</b> (tema 3.3, aún no existe) y 3.12 C / 3.13 D son de frontera con el <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>.</li>
+    <li><b>E 3.16:</b> escribe «$y_1=\delta$» (debe ser $y_1=\alpha+\beta$) y dice «ecuaciones cartesianas de $f$» donde quiere decir «de $\operatorname{Im}(f)$». <b>E 3.23:</b> E renombra a propósito las coordenadas de la imagen como $x_i$ (nota al margen de E p.100) y escribe «$x_2=x_1+x_3$»; aquí se mantienen $y_j$ para no mezclar los dos espacios: $y_2=y_1+y_3$. <b>E 3.24:</b> la demostración oficial de A es correcta pero incompleta (se completa abajo). <b>E 3.28 C</b> y <b>E 3.21 B</b> omiten una comprobación (se completan).</li>
+    <li><b>U no demuestra el Teorema 3.1</b> (solo lo enuncia y lo comprueba en el Ej. 3.15); aquí se da la idea de la demostración.</li>
+    <li><b>U no define «inyectiva», «sobreyectiva» ni «isomorfismo»</b> (no aparecen en todo el libro). Se explican en el §5 con la fuente de Lay, <b>marcado como vocabulario ajeno a U</b>, porque ayudan a razonar y aparecen en preguntas de verdadero/falso.</li>
+    <li><b>Maxima no entra en el examen</b>: los apartados de E que piden instrucciones de Maxima (3.20 D, 3.22 B) se mencionan solo por completitud.</li>
+  </ul>
+</div>
+
+<div class="box tip"><span class="h">Vocabulario: cada libro lo llama de una manera</span>
+  <p><b>Imagen</b> $\operatorname{Im}(f)$ = «rango de la aplicación» (U, nota 1, p.105; Lay dice «rango de $T$»). <b>Núcleo</b> $\operatorname{Nuc}(f)$ = «kernel» o «subespacio nulo» (U, nota 2, p.105; Lay dice «núcleo» o «espacio nulo»). <b>Cuidado:</b> el «rango de una matriz» $A$ es la <i>dimensión</i> de su espacio columna, un número; el «rango de una aplicación» (en Lay) es un <i>subespacio</i>. En este resumen siempre «imagen» (subespacio) y «rango» (número).</p>
+  <span class="src" data-l="U" data-ref="U §3.2.2, notas 1 y 2 al pie, p. 105">U p.105</span>
+  <span class="src" data-l="L" data-ref="Lay §4.2, núcleo y rango de una transformación lineal, p. 204">L §4.2 p.204</span>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>La idea: lo que se aplasta y lo que se alcanza <span class="src" data-l="P" data-ref="Explicación propia; introduce U Defs. 3.2 y 3.3, p. 106 y 109">propio</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Piensa en un <b>proyector de diapositivas</b> (o en una linterna que proyecta sombras): lleva puntos del espacio 3D a la pared 2D. <b>Núcleo</b> = los puntos que acaban exactamente en el origen de la pared (todo lo que está sobre «el rayo» que pasa por el origen se aplasta en un único punto). <b>Imagen</b> = todos los puntos de la pared que la sombra puede alcanzar. Una máquina que aplasta mucho (núcleo grande) alcanza poco (imagen pequeña), y al revés: eso es exactamente lo que dice el teorema de las dimensiones (§4).</p>
+</div>
+
+<table>
+  <tr><th>Lenguaje natural</th><th>Lenguaje de conjuntos</th><th>Lenguaje algebraico</th></tr>
+  <tr><td>$w$ es un valor que $f$ puede dar</td><td>$w\in\operatorname{Im}(f)\subset W$</td><td>existe $v\in V$ con $f(v)=w$ <i>(sistema $f(x)=w$ compatible)</i></td></tr>
+  <tr><td>$v$ es un vector que $f$ manda al cero</td><td>$v\in\operatorname{Nuc}(f)\subset V$</td><td>$f(v)=\bar0$ <i>(sistema homogéneo $Ax=0$)</i></td></tr>
+</table>
+<p class="note">U insiste en saber pasar de un lenguaje a otro (U p.105, «Orientaciones»).</p>
+
+<div class="box ex"><span class="h">Ejemplo guía 1 — de $\mathbb R^2$ a $\mathbb R^2$ (aplasta una dirección)</span>
+  <p>Sea $f:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(x+2y,\ 2x+4y)$. Fíjate en que la segunda coordenada es el doble de la primera:</p>
+  <ol class="steps">
+    <li><b>Qué alcanza (imagen).</b> Sacando factor común,
+    $$f(x,y)=(x+2y)\,(1,2).$$
+    Toda imagen es un múltiplo de $(1,2)$, y cualquier múltiplo $c\,(1,2)$ se alcanza (por ejemplo con $(x,y)=(c,0)$). Luego $\operatorname{Im}(f)=\langle(1,2)\rangle$: una <b>recta</b> de $\mathbb R^2$ (la de ecuación $y_2=2y_1$, escribiendo $(y_1,y_2)$ para el espacio de llegada). No se llega a todo el plano.</li>
+    <li><b>Qué se aplasta (núcleo).</b> $f(x,y)=(0,0)$ equivale a $x+2y=0$ (la segunda ecuación es la primera multiplicada por 2). Con $y=\lambda$ queda $x=-2\lambda$:
+    $$\operatorname{Nuc}(f)=\{\lambda\,(-2,1)\}=\langle(-2,1)\rangle,$$
+    otra <b>recta</b>. Comprobación: $f(-2,1)=(-2+2,\,-4+4)=(0,0)$ ✓.</li>
+    <li><b>Qué significa.</b> Los vectores $(1,0)$ y $(1,0)+(-2,1)=(-1,1)$ difieren en un vector del núcleo, y tienen <b>la misma imagen</b>: $f(1,0)=(1,2)$ y $f(-1,1)=(-1+2,\,-2+4)=(1,2)$. En general, <b>una recta paralela al núcleo entera se aplasta en un único punto</b>.</li>
+    <li><b>Dimensiones.</b> $\operatorname{Dim}\operatorname{Im}(f)=1$, $\operatorname{Dim}\operatorname{Nuc}(f)=1$ y $1+1=2=\operatorname{Dim}\mathbb R^2$ (anticipo del Teorema 3.1).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy (aplicación de matriz (1 2; 2 4), la misma del componente interactivo)">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo guía 2 — de $\mathbb R^3$ a $\mathbb R^2$ (la proyección: «sombra» sobre el suelo)</span>
+  <p>Sea $f:\mathbb R^3\to\mathbb R^2$, $f(x,y,z)=(x,\,y)$: «olvida la altura $z$».</p>
+  <ol class="steps">
+    <li><b>Imagen.</b> Dado cualquier $(a,b)\in\mathbb R^2$, el vector $(a,b,0)$ cumple $f(a,b,0)=(a,b)$. Se alcanza todo: $\operatorname{Im}(f)=\mathbb R^2$ (dimensión 2).</li>
+    <li><b>Núcleo.</b> $f(x,y,z)=(0,0)\iff x=0,\ y=0$, y $z$ queda <b>libre</b>. $\operatorname{Nuc}(f)=\{(0,0,z)\}=\langle(0,0,1)\rangle$: el <b>eje vertical</b>, dimensión 1. Es lo que se aplasta: todos los puntos de una misma vertical dan la misma sombra.</li>
+    <li><b>Dimensiones.</b> $2+1=3=\operatorname{Dim}\mathbb R^3$ ✓. Observa dónde vive cada uno: el núcleo es un subespacio de $\mathbb R^3$ (vectores de 3 coordenadas); la imagen, de $\mathbb R^2$ (2 coordenadas).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Confundir dónde vive cada subespacio.</b> $\operatorname{Nuc}(f)\subset V$ (espacio <b>inicial</b>), $\operatorname{Im}(f)\subset W$ (espacio <b>final</b>). Si $f:\mathbb R^4\to P_2$, una base del núcleo está formada por vectores de $\mathbb R^4$ (4 coordenadas) y una base de la imagen por polinomios de $P_2$ (3 coordenadas). Usa letras distintas para las coordenadas de uno y otro ($x_i$ en el inicial, $y_j$ en el final).</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>La imagen de una aplicación lineal <span class="src" data-l="U" data-ref="U §3.2.2 Imagen, Definición 3.2, Figura 3.1 y Ejemplos 3.8-3.11, p. 105-109">U p.105-109</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>La imagen son <b>todos los valores que $f$ puede tomar</b>: los vectores de $W$ que tienen «algún original» en $V$. Como $f$ respeta combinaciones lineales, si ya sabes lo que hace con los vectores de una base, <b>todos los demás valores son combinaciones de esos</b>. Por eso la imagen es el subespacio <b>generado por las imágenes de la base</b>: es lo que se calcula siempre.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 3.2 — imagen</span>
+  <p>Sea $f:V\to W$ lineal. La <b>imagen</b> de $f$ es
+  $$\operatorname{Im}(f)=\{\,w\in W\mid w=f(v)\ \text{para algún } v\in V\,\}.$$
+  <b>La imagen de $f$ es un subespacio de $W$.</b></p>
+  <span class="src" data-l="U" data-ref="U Definición 3.2, p. 106">U p.106</span>
+</div>
+
+<div class="box thm"><span class="h">¿Por qué es un subespacio? (demostración de U)</span>
+  <p>Basta ver (criterio de U p.66) que si $w_1,w_2\in\operatorname{Im}(f)$ y $\lambda\in\mathbb R$, entonces $w_1+\lambda w_2\in\operatorname{Im}(f)$. Como $w_1,w_2$ están en la imagen, existen $v_1,v_2\in V$ con $f(v_1)=w_1$ y $f(v_2)=w_2$. Por ser $f$ lineal,
+  $$w_1+\lambda w_2=f(v_1)+\lambda f(v_2)=f(v_1+\lambda v_2),$$
+  y $v_1+\lambda v_2\in V$ porque $V$ es espacio vectorial. Luego $w_1+\lambda w_2$ tiene un original en $V$, es decir, está en $\operatorname{Im}(f)$. (Además $\bar0=f(\bar0)\in\operatorname{Im}(f)$, así que no es vacío.)</p>
+  <span class="src" data-l="U" data-ref="U demostración de que la imagen es subespacio, p. 106">U p.106</span>
+</div>
+
+<figure class="bookfig">
+  <img src="../assets/img/fig_u_3_1.png" alt="Diagrama de flechas de U: varios vectores del espacio V se envían mediante f a vectores del espacio W; todos caen dentro de un óvalo rosa etiquetado Im(f), contenido en W" loading="lazy">
+  <figcaption>Figura 3.1 de U: la imagen de $f$ es la parte de $W$ a la que llegan las flechas; puede ser todo $W$ o solo un subespacio. <span class="src" data-l="U" data-ref="U Figura 3.1, Imagen de una aplicación lineal, p. 106">U p.106</span></figcaption>
+</figure>
+
+<div class="box thm"><span class="h">Cómo se calcula la imagen: generada por las imágenes de una base</span>
+  <p>Si $\{e_1,\dots,e_n\}$ es una base de $V$ (en $\mathbb R^n$, la canónica), entonces
+  $$\operatorname{Im}(f)=\langle f(e_1),\dots,f(e_n)\rangle.$$
+  <i>Por qué:</i> todo $v\in V$ es $v=x_1e_1+\dots+x_ne_n$ y, por linealidad (U p.103), $f(v)=x_1f(e_1)+\dots+x_nf(e_n)$: toda imagen es combinación de las $f(e_j)$ y recíprocamente cualquier combinación de ellas es la imagen del $v$ correspondiente. Después se <b>suprimen los dependientes</b> (Teor. 2.1, U p.79) y la <b>dimensión</b> es el <b>rango</b> de esos vectores (Teor. 2.5, U p.88). Si la aplicación está dada por una matriz $A$, estos generadores son sus <b>columnas</b>.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 3.9 y 3.10 (la imagen está generada por las imágenes de la base), p. 107-108; propiedad 3, p. 103">U p.107-108</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.8 (U) — una condición «a simple vista»</span>
+  <p>Sea $M$ el espacio de las matrices $\begin{pmatrix}a_{11}&a_{12}\\a_{21}&0\end{pmatrix}$ y $f:M\to\mathbb R^4$ la aplicación del Ej. 3.1, que lleva
+  $$f\begin{pmatrix}a_{11}&a_{12}\\a_{21}&0\end{pmatrix}=(a_{11}+a_{12},\ a_{12}-a_{11},\ a_{21},\ 0).$$</p>
+  <ol class="steps">
+    <li>Se ve a simple vista que la <b>última coordenada es siempre 0</b>: ningún vector de $\mathbb R^4$ con $x_4\neq0$ es imagen de una matriz de $M$.</li>
+    <li>Pero eso por sí solo <b>no prueba</b> que se alcancen todos los demás. Hay que comprobar que, dado $(x_1,x_2,x_3,x_4)$ con $x_4=0$, el sistema
+    $$\begin{cases}x_1=a_{11}+a_{12}\\x_2=a_{12}-a_{11}\\x_3=a_{21}\end{cases}$$
+    tiene solución en $a_{11},a_{12},a_{21}$: la matriz de coeficientes es $3\times3$ de determinante $\ne0$ (en las dos primeras ecuaciones, sumando y restando se despejan $a_{12}=\tfrac{x_1+x_2}2$, $a_{11}=\tfrac{x_1-x_2}2$).</li>
+    <li>Por tanto $\operatorname{Im}(f)=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4\mid x_4=0\}$: aquí la condición visible sí era suficiente (U lo avisa: no siempre lo es).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.8, p. 106-107">U p.106-107</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.9 (U) — imagen $=\mathbb R^3$</span>
+  <p>$f:\mathbb R^3\to\mathbb R^3$, $f(x_1,x_2,x_3)=(x_1+x_2,\ x_3,\ x_2)$.</p>
+  <ol class="steps">
+    <li><b>Separar por variables</b> (la linealidad permite sacar los escalares $x_i$):
+    $$f(x_1,x_2,x_3)=x_1\begin{pmatrix}1\\0\\0\end{pmatrix}+x_2\begin{pmatrix}1\\0\\1\end{pmatrix}+x_3\begin{pmatrix}0\\1\\0\end{pmatrix}.$$
+    Así $\{(1,0,0),(1,0,1),(0,1,0)\}$ es un <b>sistema generador</b> de $\operatorname{Im}(f)$.</li>
+    <li><b>¿Es libre?</b> El determinante de los tres vectores es
+    $$\begin{vmatrix}1&1&0\\0&0&1\\0&1&0\end{vmatrix}=1\cdot(0\cdot0-1\cdot1)=-1\neq0,$$
+    luego son independientes: forman una base y $\operatorname{Dim}\operatorname{Im}(f)=3$.</li>
+    <li><b>Conclusión.</b> $\operatorname{Im}(f)=\langle(1,0,0),(1,0,1),(0,1,0)\rangle=\mathbb R^3$: un subespacio de $\mathbb R^3$ de dimensión 3 es todo $\mathbb R^3$ (Teor. 2.6: sus 3 vectores de base son libres en $\mathbb R^3$ y, al ser $3=\operatorname{Dim}\mathbb R^3$, forman base de $\mathbb R^3$; luego el subespacio es $\mathbb R^3$).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.9, p. 107">U p.107</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.10 (U) — aplicación dada por las imágenes de la base canónica</span>
+  <p>$f:\mathbb R^3\to\mathbb R^2$ con $f(1,0,0)=(1,0)$, $f(0,1,0)=(1,1)$, $f(0,0,1)=(3,2)$.</p>
+  <ol class="steps">
+    <li><b>Fórmula de $f$.</b> Por linealidad,
+    $$f(x_1,x_2,x_3)=x_1\begin{pmatrix}1\\0\end{pmatrix}+x_2\begin{pmatrix}1\\1\end{pmatrix}+x_3\begin{pmatrix}3\\2\end{pmatrix}.$$</li>
+    <li><b>Generadores.</b> $\operatorname{Im}(f)=\langle(1,0),(1,1),(3,2)\rangle$. Son tres vectores, pero la <b>dimensión no es 3</b> (estamos en $\mathbb R^2$): es el rango. $(1,0)$ y $(1,1)$ no son proporcionales, luego el rango es 2 (se ve en $\begin{vmatrix}1&1\\0&1\end{vmatrix}=1\neq0$). Y $(3,2)=(1,0)+2\,(1,1)$ sobra.</li>
+    <li><b>Conclusión.</b> Dos vectores independientes en $\mathbb R^2$ son base de $\mathbb R^2$: $\operatorname{Im}(f)=\mathbb R^2$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.10, p. 108">U p.108</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.11 (U) — dimensión y ecuaciones cartesianas de la imagen</span>
+  <p>$f:\wp_2\to\mathbb R^3$, $f(a+bx+cx^2)=(a,\ b+c,\ 0)$, con $\wp_2$ los polinomios de grado $\le2$.</p>
+  <ol class="steps">
+    <li><b>Los elementos de la imagen</b> son los $(a,\,b+c,\,0)$ con $a,b,c\in\mathbb R$ cualesquiera. Separando,
+    $$\begin{pmatrix}a\\b+c\\0\end{pmatrix}=a\begin{pmatrix}1\\0\\0\end{pmatrix}+(b+c)\begin{pmatrix}0\\1\\0\end{pmatrix}.$$</li>
+    <li>Luego $\operatorname{Im}(f)=\langle(1,0,0),(0,1,0)\rangle$ (como $b+c$ toma cualquier valor, el segundo vector aparece con coeficiente libre) y <b>$\operatorname{Dim}\operatorname{Im}(f)=2$</b>.</li>
+    <li><b>Ecuación cartesiana.</b> La única coordenada que debe cumplir una condición es la tercera: <b>$x_3=0$</b> (U usa $x_3$; con nuestra notación para el espacio de llegada, $y_3=0$): un plano de $\mathbb R^3$, $3-2=1$ ecuación.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.11, p. 108-109">U p.108-109</span>
+</div>
+
+<div class="box tip"><span class="h">Ecuaciones cartesianas de la imagen (cuando se piden)</span>
+  <p>Con los generadores de $\operatorname{Im}(f)$ ya depurados (una base), un vector $(y_1,\dots,y_m)\in W$ está en la imagen <b>si y solo si añadirlo no sube el rango</b> (Rouché: el sistema $f(x)=y$ es compatible). Se anulan los menores orlados (o el determinante, si hay un solo menor que orlar). Habrá $m-\operatorname{Dim}\operatorname{Im}(f)$ ecuaciones. Si la imagen es todo $W$, <b>no hay ecuaciones cartesianas</b> (E 3.16). Se ven aplicadas en E 3.23 y en varios ejemplos de examen.</p>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U §2.2 p. 71 y Rouché, §1.4 p. 30">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que la dimensión de la imagen es el <b>número de generadores</b>: es el <b>rango</b>. En el Ej. 3.10 hay 3 generadores y la dimensión es 2. Y otro, igual de frecuente: tomar las <b>filas</b> de la matriz como generadores de la imagen; son las <b>columnas</b> (cada columna es $f(e_j)$).</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>El núcleo de una aplicación lineal <span class="src" data-l="U" data-ref="U §3.2.3 Núcleo, Definición 3.3, Figura 3.2 y Ejemplos 3.12-3.14, p. 109-111">U p.109-111</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>El núcleo es el conjunto de vectores que $f$ <b>borra</b>: los que manda al vector cero de $W$. Siempre contiene al $\bar0$ (porque $f(\bar0)=\bar0$). Si no contiene nada más, $f$ «no aplasta nada» y es lo más fiel posible; cuanto más grande es el núcleo, más información pierde $f$. Calcularlo es <b>resolver un sistema homogéneo</b>: «$f(x)=\bar0$».</p>
+</div>
+
+<div class="box def"><span class="h">Definición 3.3 — núcleo</span>
+  <p>Sea $f:V\to W$ lineal. El <b>núcleo</b> de $f$ es
+  $$\operatorname{Nuc}(f)=\{\,v\in V\mid f(v)=\bar0\in W\,\}=f^{-1}(\bar0).$$
+  <b>El núcleo de $f$ es un subespacio de $V$.</b></p>
+  <span class="src" data-l="U" data-ref="U Definición 3.3, p. 109">U p.109</span>
+</div>
+
+<div class="box thm"><span class="h">¿Por qué es un subespacio? (demostración de U)</span>
+  <p>Si $v_1,v_2\in\operatorname{Nuc}(f)$ y $\lambda\in\mathbb R$, por ser $f$ lineal
+  $$f(v_1+\lambda v_2)=f(v_1)+\lambda f(v_2)=\bar0+\lambda\,\bar0=\bar0,$$
+  luego $v_1+\lambda v_2\in\operatorname{Nuc}(f)$. Además $\bar0\in\operatorname{Nuc}(f)$ porque $f(\bar0)=\bar0$.</p>
+  <span class="src" data-l="U" data-ref="U demostración de que el núcleo es subespacio, p. 109">U p.109</span>
+</div>
+
+<figure class="bookfig">
+  <img src="../assets/img/fig_u_3_2.png" alt="Diagrama de flechas de U: los vectores de un óvalo azul Nuc(f), dentro del espacio V, se envían mediante f a un único punto, el vector cero, del espacio W" loading="lazy">
+  <figcaption>Figura 3.2 de U: todos los vectores del núcleo (óvalo azul, dentro de $V$) se envían al mismo punto, el $\bar0$ de $W$. <span class="src" data-l="U" data-ref="U Figura 3.2, Núcleo de una aplicación lineal, p. 110">U p.110</span></figcaption>
+</figure>
+
+<div class="box thm"><span class="h">Cómo se calcula el núcleo</span>
+  <ol>
+    <li>Escribe $f(x)=\bar0$ componente a componente: queda un <b>sistema homogéneo</b> en las coordenadas $x_i$ del espacio inicial (si $f$ viene dada por su matriz $A$: $AX=0$).</li>
+    <li>Resuélvelo (Gauss). El número de <b>parámetros libres</b> es la dimensión: $n-\operatorname{rang}(A)$ (Rouché, U p.30).</li>
+    <li>Escribe la solución general como $\lambda_1u_1+\dots+\lambda_ku_k$: los $u_i$ (uno por parámetro) son una <b>base</b> de $\operatorname{Nuc}(f)$. Las <b>ecuaciones</b> del núcleo son las del propio sistema (quitando las redundantes).</li>
+    <li>Si el único vector que cumple todo es el $\bar0$, entonces $\operatorname{Nuc}(f)=\{\bar0\}$, con $\operatorname{Dim}=0$ (convenio de U p.112) y base vacía.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 3.12-3.14 (resolver el sistema homogéneo), p. 110-111; convenio Dim{0}=0, p. 112">U p.110-112</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.12 (U) — núcleo $=\{0\}$ en un espacio de matrices</span>
+  <p>Para la $f:M\to\mathbb R^4$ del Ej. 3.1 (la del Ej. 3.8 de arriba). Una matriz de $M$ está en el núcleo si su imagen es $(0,0,0,0)$:</p>
+  <ol class="steps">
+    <li>Sistema:
+    $$\begin{cases}a_{11}+a_{12}=0\\a_{12}-a_{11}=0\\a_{21}=0\end{cases}$$</li>
+    <li>Sumando las dos primeras, $2a_{12}=0$, es decir $a_{12}=0$; llevado a la segunda, $a_{11}=0$; y $a_{21}=0$.</li>
+    <li>Por tanto $\operatorname{Nuc}(f)=f^{-1}(0,0,0,0)=\left\{\begin{pmatrix}0&0\\0&0\end{pmatrix}\right\}$: solo la matriz nula.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.12, p. 110">U p.110</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.13 (U) — núcleo $=\{0\}$ en $\mathbb R^3$</span>
+  <p>Núcleo de la $f$ del Ej. 3.9, $f(x_1,x_2,x_3)=(x_1+x_2,\,x_3,\,x_2)$:
+  $$\begin{cases}x_1+x_2=0\\x_3=0\\x_2=0\end{cases}\ \Longrightarrow\ x_2=0,\ x_3=0,\ x_1=0 .$$
+  Luego $\operatorname{Nuc}(f)=\{(0,0,0)\}$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.13, p. 110">U p.110</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.14 (U) — núcleo no trivial, en $\mathbb R^3$ y en polinomios</span>
+  <p><b>(a) La $f$ del Ej. 3.10</b> ($f(e_1)=(1,0)$, $f(e_2)=(1,1)$, $f(e_3)=(3,2)$).</p>
+  <ol class="steps">
+    <li>Por linealidad, $f(x_1,x_2,x_3)=x_1(1,0)+x_2(1,1)+x_3(3,2)=(x_1+x_2+3x_3,\ x_2+2x_3)$. Igualando a $(0,0)$:
+    $$\begin{cases}x_1+x_2+3x_3=0\\x_2+2x_3=0\end{cases}$$
+    (dos ecuaciones independientes en 3 incógnitas: $3-2=1$ parámetro).</li>
+    <li>Despejando de abajo arriba: $x_2=-2x_3$ y $x_1=-x_2-3x_3=2x_3-3x_3=-x_3$. Tomando como parámetro $x_3=-t$: $x_1=t,\ x_2=2t,\ x_3=-t$.</li>
+    <li>$\operatorname{Nuc}(f)=\langle(1,2,-1)\rangle$ (U lo escribe $\big\langle(\tfrac12,1,-\tfrac12)\big\rangle$: mismo subespacio), de <b>dimensión 1</b>. Comprobación: $f(1,2,-1)=(1+2-3,\ 2-2)=(0,0)$ ✓.</li>
+  </ol>
+  <p><b>(b) La $f$ del Ej. 3.11</b> ($f(a+bx+cx^2)=(a,\,b+c,\,0)$). Un polinomio está en el núcleo si $(a,\,b+c,\,0)=(0,0,0)$:
+  $$\begin{cases}a=0\\b+c=0\end{cases}\ \Longrightarrow\ a=0,\ b=-c\ \Longrightarrow\ p=-c\,x+c\,x^2=c\,(x^2-x).$$
+  Luego $\operatorname{Nuc}(f)=\langle x-x^2\rangle$, de dimensión 1. <i>(Con (b) y el Ej. 3.11: $2+1=3=\operatorname{Dim}\wp_2$.)</i></p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.14, p. 111">U p.111</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: núcleo e imagen de una aplicación de $\mathbb R^2$ en $\mathbb R^2$</span>
+  <p>Cambia los cuatro números de la matriz $A$ (es la aplicación $f(x)=Ax$) y mueve el vector $x$. Con la matriz inicial (rango 1) verás la <b>recta naranja</b> (núcleo, a la izquierda: lo que se aplasta en el origen) y la <b>recta azul</b> (imagen, a la derecha: lo que se alcanza), y que la recta verde discontinua $x+\operatorname{Nuc}$ se aplasta entera en un punto. Prueba «Isomorfismo» (núcleo $=\{0\}$, imagen $=\mathbb R^2$) y «Aplicación nula» (núcleo $=\mathbb R^2$) y comprueba siempre que <b>dim núcleo + dim imagen = 2</b>.</p>
+  <div class="anim-lineal" data-modo="nucimg" data-m="1,2,2,4"></div>
+  <p class="note">«Inyectiva» y «sobreyectiva», que aparecen en los mensajes del componente, son vocabulario de Lay (§5), no de U.</p>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>«El núcleo es el cero».</b> $\{\bar0\}$ es el núcleo solo si <i>nada más</i> se aplasta. En el Ej. 3.14 hay una recta entera. La derivada en polinomios (E 3.26) aplasta todas las constantes.</li>
+    <li><b>Dar como «base» el vector $\bar0$</b> o las ecuaciones: una base son <i>vectores</i> libres que generan; el $\bar0$ nunca está en una base (un sistema con el $\bar0$ es ligado). Si el núcleo es $\{\bar0\}$, la base es vacía y la dimensión 0.</li>
+    <li><b>Ignorar una variable libre:</b> si una variable no aparece en la fórmula de $f$ (como $z$ en $f(x,y,z)=(x,y)$), queda libre en el núcleo.</li>
+  </ul>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>El teorema de las dimensiones <span class="src" data-l="U" data-ref="U Teorema 3.1 y Ejemplo 3.15, p. 111-112">U p.111-112</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Cada dimensión del espacio inicial $V$ <b>o bien se pierde</b> (se aplasta en el núcleo) <b>o bien se conserva</b> (aparece en la imagen). Es un presupuesto: si $V$ tiene 3 dimensiones y el núcleo se «come» 1, a la imagen le quedan 2. Es la fórmula que justifica todos los ejemplos de arriba: $1+1=2$ en el Ejemplo guía 1, $2+1=3$ en la proyección.</p>
+</div>
+
+<div class="box thm"><span class="h">Teorema 3.1 (teorema de las dimensiones)</span>
+  <p>Si $f:V\to W$ es una aplicación lineal, entonces
+  $$\operatorname{Dim}\operatorname{Im}(f)+\operatorname{Dim}\operatorname{Nuc}(f)=\operatorname{Dim}V.$$
+  <b>$V$ es el espacio inicial</b> (no el final $W$).</p>
+  <span class="src" data-l="U" data-ref="U Teorema 3.1, p. 111">U p.111</span>
+  <span class="src" data-l="L" data-ref="Lay §4.6, Teorema 14 (teorema del rango, versión matricial: rango A + dim Nul A = n), p. 233">L §4.6 p.233</span>
+</div>
+
+<div class="box tip"><span class="h">Idea de la demostración (U no la incluye)</span>
+  <p>Sea $\operatorname{Dim}V=m$ y $\{u_1,\dots,u_k\}$ una base de $\operatorname{Nuc}(f)$ (dimensión $k$). Por la base incompleta (Teor. 2.7, U p.89) se completa hasta una base $\{u_1,\dots,u_k,v_1,\dots,v_r\}$ de $V$, con $k+r=m$. Se ve que <b>$\{f(v_1),\dots,f(v_r)\}$ es una base de $\operatorname{Im}(f)$</b>, y entonces $\operatorname{Dim}\operatorname{Im}(f)=r=m-k$:</p>
+  <ol class="steps">
+    <li><b>Generan la imagen.</b> $\operatorname{Im}(f)$ está generada por las imágenes de la base de $V$; pero $f(u_i)=\bar0$ no aportan nada (Teor. 2.1), quedan $f(v_1),\dots,f(v_r)$.</li>
+    <li><b>Son libres.</b> Si $\beta_1f(v_1)+\dots+\beta_rf(v_r)=\bar0$, por linealidad $f(\beta_1v_1+\dots+\beta_rv_r)=\bar0$, es decir, $\beta_1v_1+\dots+\beta_rv_r\in\operatorname{Nuc}(f)=\langle u_1,\dots,u_k\rangle$. Entonces $\beta_1v_1+\dots+\beta_rv_r=\alpha_1u_1+\dots+\alpha_ku_k$ para ciertos $\alpha_i$; como $\{u_1,\dots,u_k,v_1,\dots,v_r\}$ es libre, todos los $\beta_j$ (y los $\alpha_i$) son $0$.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Idea de la demostración propia (U enuncia el Teorema 3.1 sin demostrarlo, p. 111); usa Teor. 2.7, U p. 89">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.15 (U) — comprobación del teorema</span>
+  <p>En la $f:M\to\mathbb R^4$ del Ej. 3.1 (Ejs. 3.8 y 3.12):</p>
+  <ol class="steps">
+    <li><b>$\operatorname{Dim}M=3$:</b> las matrices $\begin{pmatrix}1&0\\0&0\end{pmatrix},\begin{pmatrix}0&1\\0&0\end{pmatrix},\begin{pmatrix}0&0\\1&0\end{pmatrix}$ generan $M$ y son libres.</li>
+    <li><b>$\operatorname{Dim}\operatorname{Im}(f)=3$:</b> $\operatorname{Im}(f)=\{(x_1,x_2,x_3,0)\}$ tiene por base $\{(1,0,0,0),(0,1,0,0),(0,0,1,0)\}$.</li>
+    <li><b>$\operatorname{Dim}\operatorname{Nuc}(f)=0$:</b> $\operatorname{Nuc}(f)=\{0\}$ y, por convenio, $\operatorname{Dim}\{0\}=0$.</li>
+    <li><b>Comprobación:</b> $\ 3+0=3$ ✓.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.15, p. 112">U p.112</span>
+</div>
+
+<div class="box thm"><span class="h">Consecuencias que se usan constantemente</span>
+  <p>Sea $f:V\to W$ con $\operatorname{Dim}V=m$, $\operatorname{Dim}W=n$ y matriz asociada $A$ de orden $n\times m$ (una <b>columna por cada vector de la base de $V$</b>: $m$ columnas; se define con detalle en el tema 3.3, U p.116). <i>E escribe $m\times n$ con $n=\operatorname{Dim}V$; lo que importa es: nº de columnas $=\operatorname{Dim}V$.</i></p>
+  <ul>
+    <li>$\operatorname{Dim}\operatorname{Im}(f)=\operatorname{rang}(A)$ (las columnas generan la imagen: Ej. 3.9 y Teor. 2.5, U p.88).</li>
+    <li>$\operatorname{Dim}\operatorname{Nuc}(f)=m-\operatorname{rang}(A)$ (nº de columnas menos rango).</li>
+    <li>Conociendo <b>dos</b> de las tres cantidades ($\operatorname{Dim}V$, $\operatorname{Dim}\operatorname{Im}$, $\operatorname{Dim}\operatorname{Nuc}$) sale la tercera; como $\operatorname{Dim}V$ suele conocerse, basta una de las otras dos. Además $\operatorname{Dim}\operatorname{Im}(f)\le\min(n,m)$.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Autoevaluación del capítulo 3, ítems 5-6 (V/F: Dim Im f = rang A; Dim Nuc f = m - rang A con m = Dim V), p. 138">U p.138</span>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.9 (columnas = generadores de la imagen), p. 107, y Teorema 2.5, p. 88">U p.107 y p.88</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Restar de la dimensión del espacio final.</b> La suma $\operatorname{Dim}\operatorname{Im}+\operatorname{Dim}\operatorname{Nuc}$ es la del <b>inicial</b> $V$. Si $f:\mathbb R^3\to\mathbb R^2$ y $\operatorname{Dim}\operatorname{Nuc}=2$, entonces $\operatorname{Dim}\operatorname{Im}=3-2=1$, no $2-2$. Y si $A$ es $3\times5$ con núcleo de dimensión 3, el rango es $5-3=2$ (5 columnas), no $3-3$ (<a href="#ex-feb20-1b3">X Feb. 2020 (1.ª, B), ejercicio 3</a>).</p>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Inyectiva, sobreyectiva, isomorfismo: el vocabulario de Lay <span class="src" data-l="L" data-ref="Lay §1.9, definiciones «sobre» y «uno a uno» (p. 75) y Teoremas 11 y 12 (p. 76-77); isomorfismo en §4.4, p. 220">L §1.9 p.75-77 · §4.4 p.220</span></h2>
+
+<div class="box warn"><span class="h">Aviso: esto NO es notación de U</span>
+  <p>El libro oficial (U) <b>no usa nunca</b> las palabras «inyectiva», «sobreyectiva» ni «isomorfismo» (ni en la teoría ni en E). Los exámenes tampoco las exigen como tales: preguntan por «núcleo de dimensión cero» o «imagen igual a todo el espacio». Se incluyen aquí, tomadas de <b>Lay §1.9</b> (que dice «uno a uno» y «sobre»), porque dan nombre a las <b>dos situaciones extremas</b> del teorema de las dimensiones y ayudan a razonar las preguntas de verdadero/falso. Si el enunciado no las usa, tradúcelas: <b>inyectiva = núcleo $\{0\}$</b>, <b>sobreyectiva = imagen igual al espacio final</b>.</p>
+</div>
+
+<div class="box def"><span class="h">Definiciones (Lay)</span>
+  <p>Sea $f:V\to W$ lineal.</p>
+  <ul>
+    <li><b>Inyectiva</b> (Lay: «uno a uno»): cada $w\in W$ es imagen de <b>a lo sumo un</b> $v\in V$. Es decir, $f(v)=f(v')\Rightarrow v=v'$ (<i>no hay dos vectores distintos con la misma imagen</i>).</li>
+    <li><b>Sobreyectiva</b> (Lay: «sobre»): cada $w\in W$ es imagen de <b>al menos un</b> $v\in V$. Es decir, $\operatorname{Im}(f)=W$ (<i>se alcanza todo</i>).</li>
+    <li><b>Isomorfismo</b> (Lay §4.4, p.220): aplicación lineal inyectiva <b>y</b> sobreyectiva (biyectiva). Dos espacios entre los que hay un isomorfismo son «el mismo espacio con otros nombres».</li>
+  </ul>
+  <span class="src" data-l="L" data-ref="Lay §1.9, definiciones de «sobre» y «uno a uno», p. 75" >L §1.9 p.75</span>
+  <span class="src" data-l="L" data-ref="Lay §4.4, isomorfismo, p. 220">L §4.4 p.220</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema (Lay 11): inyectiva $\iff$ núcleo trivial</span>
+  <p>$f$ es inyectiva $\iff$ $\operatorname{Nuc}(f)=\{\bar0\}$ $\iff$ $\operatorname{Dim}\operatorname{Nuc}(f)=0$.</p>
+  <p><i>Por qué.</i> ($\Rightarrow$) Si $f$ es inyectiva, el único vector con imagen $\bar0$ es $\bar0$ (porque $f(\bar0)=\bar0$). ($\Leftarrow$) Si $f(v)=f(v')$, entonces $f(v-v')=f(v)-f(v')=\bar0$, luego $v-v'\in\operatorname{Nuc}(f)=\{\bar0\}$ y $v=v'$.</p>
+  <span class="src" data-l="L" data-ref="Lay §1.9, Teorema 11 (T es uno a uno si y solo si T(x)=0 tiene únicamente la solución trivial), p. 76">L §1.9 p.76</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema (Lay 12): versión con la matriz</span>
+  <p>Si $f:\mathbb R^m\to\mathbb R^n$ tiene matriz $A$ ($n\times m$): $f$ es <b>sobreyectiva</b> $\iff$ las columnas de $A$ generan $\mathbb R^n$ $\iff\operatorname{rang}(A)=n$; $f$ es <b>inyectiva</b> $\iff$ las columnas de $A$ son linealmente independientes $\iff\operatorname{rang}(A)=m$.</p>
+  <span class="src" data-l="L" data-ref="Lay §1.9, Teorema 12, p. 77">L §1.9 p.77</span>
+</div>
+
+<div class="box thm"><span class="h">Consecuencias para las dimensiones (con el Teor. 3.1)</span>
+  <ul>
+    <li><b>Inyectiva</b> $\Rightarrow\operatorname{Dim}\operatorname{Im}(f)=\operatorname{Dim}V$, luego $\operatorname{Dim}V\le\operatorname{Dim}W$ (no se puede meter un espacio grande en uno pequeño sin aplastar).</li>
+    <li><b>Sobreyectiva</b> $\Rightarrow\operatorname{Dim}W=\operatorname{Dim}\operatorname{Im}(f)\le\operatorname{Dim}V$ (no se puede cubrir un espacio grande con uno pequeño).</li>
+    <li><b>Isomorfismo</b> $\Rightarrow\operatorname{Dim}V=\operatorname{Dim}W$.</li>
+    <li>Si $\operatorname{Dim}V=\operatorname{Dim}W$ (en particular en un <b>endomorfismo</b> $V=W$): <b>inyectiva $\iff$ sobreyectiva $\iff$ isomorfismo</b>. Porque $\operatorname{Nuc}=\{0\}\iff\operatorname{Dim}\operatorname{Im}=\operatorname{Dim}V=\operatorname{Dim}W\iff\operatorname{Im}=W$ (Teor. 2.6). Con matriz: $\det A\neq0$.</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Consecuencias propias del Teorema 3.1 (U p. 111) y del Teorema 2.6 (U p. 88)">propio</span>
+</div>
+
+<div class="box thm"><span class="h">Cómo se reparten las soluciones: «solución particular + núcleo»</span>
+  <p>Si $f(v_0)=w$, entonces <b>todas</b> las soluciones de $f(v)=w$ son $v=v_0+n$ con $n\in\operatorname{Nuc}(f)$. <i>Por qué:</i> $f(v)=f(v_0)\iff f(v-v_0)=\bar0\iff v-v_0\in\operatorname{Nuc}(f)$. Es lo mismo que en los sistemas lineales (tema 1.4): solución general $=$ particular $+$ solución del homogéneo. Si $\operatorname{Nuc}=\{0\}$ la solución, si existe, es única (inyectiva); si $\operatorname{Im}\neq W$, hay segundos miembros $w$ sin solución.</p>
+  <span class="src" data-l="P" data-ref="Propio; es la demostración del Teorema 11 de Lay (§1.9, p. 76) usada con una solución particular">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Clasificación de los ejemplos de este tema</span>
+  <table>
+    <tr><th>Aplicación</th><th>$\operatorname{Nuc}$</th><th>$\operatorname{Im}$</th><th>¿Iny.?</th><th>¿Sobre?</th></tr>
+    <tr><td>Ej. U 3.9: $\mathbb R^3\to\mathbb R^3$, $(x_1+x_2,\,x_3,\,x_2)$</td><td>$\{0\}$</td><td>$\mathbb R^3$</td><td>sí</td><td>sí → <b>isomorfismo</b></td></tr>
+    <tr><td>Ej. U 3.10: $\mathbb R^3\to\mathbb R^2$</td><td>recta</td><td>$\mathbb R^2$</td><td>no</td><td>sí</td></tr>
+    <tr><td>E 3.23: $\mathbb R^2\to\mathbb R^3$, $(2x_1,3x_1+x_2,x_1+x_2)$</td><td>$\{0\}$</td><td>plano</td><td>sí</td><td>no</td></tr>
+    <tr><td>E 3.25: derivada $P_3\to P_3$</td><td>constantes</td><td>$P_2$</td><td>no</td><td>no</td></tr>
+    <tr><td>X Feb. 2022 (A): $\mathbb R^2\to D_{2\times2}$, $(x,y)\mapsto\operatorname{diag}(x,x-y)$</td><td>$\{0\}$</td><td>$D_{2\times2}$</td><td>sí</td><td>sí → <b>isomorfismo</b></td></tr>
+    <tr><td>Lay Ej. 5: $T(x_1,x_2)=(3x_1+x_2,\,5x_1+7x_2,\,x_1+3x_2)$</td><td>$\{0\}$</td><td>plano de $\mathbb R^3$</td><td>sí</td><td>no (2 columnas no generan $\mathbb R^3$)</td></tr>
+  </table>
+  <span class="src" data-l="L" data-ref="Lay §1.9, Ejemplo 5, p. 77">L §1.9 p.77</span>
+  <span class="src" data-l="P" data-ref="Clasificación propia de ejemplos de U p. 107-108 y de E p. 100-101">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Decir «$f:\mathbb R^2\to\mathbb R^3$ es sobreyectiva porque no tiene núcleo». Sin núcleo es <b>inyectiva</b>; pero $\operatorname{Dim}\operatorname{Im}\le2\lt 3$ y por tanto <b>nunca</b> puede ser sobreyectiva (E 3.12 C, en el <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>). Y al revés: $\mathbb R^3\to\mathbb R^2$ nunca es inyectiva: el núcleo tiene dimensión $\ge1$.</p>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Método: una matriz, Gauss y todo sale <span class="src" data-l="P" data-ref="Síntesis propia de U Ejemplos 3.9-3.14, Teor. 3.1 y §1.4">propio</span></h2>
+
+<div class="box tip"><span class="h">Receta única para $f:\mathbb R^n\to\mathbb R^m$ (o a polinomios / matrices)</span>
+  <ol class="steps">
+    <li><b>Pasa $f$ a coordenadas.</b> Escribe $A$ ($n\times m$, con $m=\operatorname{Dim}V$) con las <b>columnas</b> $f(e_1),\dots,f(e_m)$ (coordenadas de cada imagen en la base del espacio final; si es $P_n$ o matrices, usa la base canónica y escribe los coeficientes). Si $f$ viene en fórmulas $y_j=\dots$, los coeficientes de cada $x_i$ forman la columna $i$.</li>
+    <li><b>Escalona $A$</b> por filas (Gauss). Cuenta los <b>pivotes</b>: $r=\operatorname{rang}(A)$.</li>
+    <li><b>Núcleo.</b> Resuelve $AX=0$ con la escalonada: las incógnitas <b>sin pivote</b> son los parámetros; un vector de la base por parámetro; $\operatorname{Dim}\operatorname{Nuc}=n-r$.</li>
+    <li><b>Imagen.</b> Las columnas de $A$ <b>con pivote</b> (¡columnas de la $A$ original, no de la escalonada!) son una base de $\operatorname{Im}(f)$; $\operatorname{Dim}\operatorname{Im}=r$. Para las cartesianas: $(y_1,\dots,y_m)$ no sube el rango; hay $m-r$ ecuaciones.</li>
+    <li><b>Comprueba:</b> $r+(n-r)=n$ ✓; el vector del núcleo cumple $A\cdot v=0$; las columnas de la base están en la imagen.</li>
+  </ol>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: rango por Gauss paso a paso (la matriz de E 3.20)</span>
+  <p>Observa cómo se escalona la matriz de E 3.20 (aplicación $\mathbb R^4\to P_2$, que se resuelve más abajo): el nº de filas no nulas es el rango (3), y por tanto el núcleo tiene $4-3=1$ parámetro libre. <b>Aviso:</b> la animación llega a la escalonada <b>reducida</b>, con fracciones; de ahí se lee el núcleo: $x_4=t$ y $(x_1,x_2,x_3)=-\tfrac t2\,(3,1,1)$, es decir $\langle(3,1,1,-2)\rangle$. Puedes cambiar los datos y comprobar el teorema de las dimensiones con otras matrices.</p>
+  <div class="anim-gauss" data-modo="rango" data-m="1,2,-1,2;0,-4,0,-2;-1,1,-2,-2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §3.2, Ejercicios 3.16 y 3.20-3.29, p. 93-104">E p.93-104</span></h2>
+
+<p>Los ejercicios de E para esta sección son <b>3.16 y 3.20–3.29</b> (E trata 3.2 y 3.3 conjuntamente, p.92; los que solo piden la matriz asociada, <b>3.15 y 3.17–3.19</b>, se desarrollan en el tema 3.3, aún no existe; los de frontera <b>3.12 C y 3.13 D</b> están en el <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>). Orden sugerido, de fácil a difícil: <b>3.16 → 3.22 → 3.23 → 3.20 → 3.21 → 3.25 → 3.26 → 3.27 → 3.29 → 3.24 → 3.28</b>. Aquí se presentan en el orden del libro; las soluciones están plegadas.</p>
+
+<details class="sol" id="ej3-16"><summary>Ejercicio 3.16 — ecuaciones paramétricas y cartesianas de la imagen, $\mathbb R^3\to\mathbb R^2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.16, p. 93">E p.93</span></summary>
+  <p class="enun">Si $f$ es la aplicación del Ejercicio 3.15, se piden ecuaciones paramétricas y ecuaciones cartesianas de $\operatorname{Im}(f)$. <i>(Ej. 3.15, E p.93: $f:\mathbb R^3\to\mathbb R^2$ lineal con $f(1,0,0)=(1,1)$, $f(0,1,0)=(1,1)$, $f(0,0,1)=(1,0)$.)</i></p>
+  <p><i>Idea.</i> La imagen está generada por las imágenes de los vectores de una base del espacio inicial (Ej. 3.10, U p.108). Basta escribir $f(x_1,x_2,x_3)$ como combinación lineal de esas imágenes.</p>
+  <ol class="steps">
+    <li><b>Imagen de un vector cualquiera.</b> Por linealidad (propiedad 3, U p.103):
+    $$\begin{aligned}f(x_1,x_2,x_3)&=x_1f(1,0,0)+x_2f(0,1,0)+x_3f(0,0,1)\\&=x_1\begin{pmatrix}1\\1\end{pmatrix}+x_2\begin{pmatrix}1\\1\end{pmatrix}+x_3\begin{pmatrix}1\\0\end{pmatrix}\\&=\begin{pmatrix}x_1+x_2+x_3\\x_1+x_2\end{pmatrix}.\end{aligned}$$
+    (Son las ecuaciones de $f$; la matriz es $A=\begin{pmatrix}1&1&1\\1&1&0\end{pmatrix}$.)</li>
+    <li><b>Sistema generador</b> (Def. 3.2, U p.106): $\operatorname{Im}(f)=\langle(1,1),(1,1),(1,0)\rangle$. El vector repetido sobra (Teor. 2.1, U p.79): $\operatorname{Im}(f)=\langle(1,1),(1,0)\rangle$, y agrupando, $f(x)=(x_1+x_2)(1,1)+x_3(1,0)$.</li>
+    <li><b>Ecuaciones paramétricas.</b> Llamando $\alpha=x_1+x_2$ y $\beta=x_3$ (que recorren todo $\mathbb R$ al variar $x$):
+    $$\begin{cases}y_1=\alpha+\beta\\y_2=\alpha\end{cases}\qquad\alpha,\beta\in\mathbb R.$$</li>
+    <li><b>Dimensión.</b> $\begin{vmatrix}1&1\\1&0\end{vmatrix}=1\cdot0-1\cdot1=-1\neq0$: rango 2 (Teor. 2.5, U p.88). Dos vectores libres en $\mathbb R^2$ son base (Teor. 2.6): <b>$\operatorname{Im}(f)=\mathbb R^2$</b>. Comprobación directa: dado $(y_1,y_2)$ basta tomar $\alpha=y_2$ y $\beta=y_1-y_2$.</li>
+    <li><b>Ecuaciones cartesianas.</b> Eliminando los parámetros no queda ninguna relación entre $y_1$ e $y_2$: <b>$\operatorname{Im}(f)$ no tiene ecuaciones cartesianas</b> (es todo $\mathbb R^2$; $m-\operatorname{Dim}=2-2=0$ ecuaciones).</li>
+    <li><b>Comprobación con el Teorema 3.1</b> (no pedida): $x_1+x_2+x_3=0$ y $x_1+x_2=0$ dan $x_3=0$, $x_2=-x_1$; $\operatorname{Nuc}(f)=\langle(1,-1,0)\rangle$, dimensión 1, y $2+1=3=\operatorname{Dim}\mathbb R^3$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Im}(f)=\mathbb R^2$ (paramétricas $y_1=\alpha+\beta,\ y_2=\alpha$; sin cartesianas). <i>(Verificado con sympy.)</i></p>
+  <p><b>Nota sobre el libro.</b> E escribe «$y_1=\delta$» en las paramétricas (errata: debe ser $y_1=\alpha+\beta$), dice «ecuaciones cartesianas <i>de $f$</i>» donde quiere decir «de $\operatorname{Im}(f)$», y concluye $\operatorname{Im}(f)=\mathbb R^2$ sin justificar que $(1,1)$ y $(1,0)$ son independientes (aquí, el determinante).</p>
+  <div class="recipe"><b>Receta:</b> $\operatorname{Im}(f)=\langle f(e_1),\dots,f(e_n)\rangle$ (las <b>columnas</b> de la matriz). Su dimensión es el rango. Si el rango es igual a la dimensión del espacio final, la imagen es todo el espacio final y <b>no hay cartesianas</b>.</div>
+  <p><b>Error típico:</b> pensar que, como hay 3 generadores, la imagen tiene dimensión 3 (imposible en $\mathbb R^2$): la dimensión es el <b>rango</b>.</p>
+  <p><b>Teoría:</b> Def. 3.2 y Ej. 3.10, U p.106-108 · Teor. 2.5-2.6, U p.88</p>
+</details>
+
+<details class="sol" id="ej3-20"><summary>Ejercicio 3.20 — matriz, núcleo y dimensión de la imagen, $\mathbb R^4\to P_2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.20, p. 97">E p.97</span></summary>
+  <p class="enun">Si las imágenes por una aplicación lineal $f$ de los vectores de la base canónica de $\mathbb R^4$ en $P_2$ son $(1,0,-1)$, $(2,-4,1)$, $(-1,0,-2)$, $(2,-2,-2)$, se pide: A) Matriz y ecuaciones de $f$ en las bases canónicas. B) Ecuaciones y una base de $\operatorname{Nuc}(f)$. C) Dimensión de $\operatorname{Im}(f)$. D) Instrucciones de MAXIMA que permiten encontrar una base y la dimensión del núcleo de $f$.</p>
+  <p><i>Interpretación.</i> $P_2$ (en U, $\wp_2$) son los polinomios de grado $\le2$, con base canónica $\{1,x,x^2\}$. Las ternas son <b>coordenadas</b> en esa base: $f(e_1)=1-x^2$, $f(e_2)=2-4x+x^2$, $f(e_3)=-1-2x^2$, $f(e_4)=2-2x-2x^2$.</p>
+  <ol class="steps">
+    <li><b>A) Matriz</b> (columna $j$ = coordenadas de $f(e_j)$, Def. 3.4, U p.116) y ecuaciones $Y=AX$ (U p.117):
+    $$A=\begin{pmatrix}1&2&-1&2\\0&-4&0&-2\\-1&1&-2&-2\end{pmatrix},$$
+    y las ecuaciones de $f$ son
+    $$\begin{cases}y_1=x_1+2x_2-x_3+2x_4\\y_2=-4x_2-2x_4\\y_3=-x_1+x_2-2x_3-2x_4\end{cases}$$
+    donde $(y_1,y_2,y_3)$ son las coordenadas de $f(x)=y_1+y_2x+y_3x^2$.</li>
+    <li><b>B) Ecuaciones del núcleo.</b> $x\in\operatorname{Nuc}(f)\iff f(x)$ es el polinomio nulo $\iff y_1=y_2=y_3=0$ (Def. 3.3, U p.109): el sistema $AX=0$.</li>
+    <li><b>Gauss.</b> Con $F_3\to F_3+F_1$ (para anular el $-1$ de la primera columna):
+    $$\begin{pmatrix}1&2&-1&2\\0&-4&0&-2\\0&3&-3&0\end{pmatrix}$$
+    que equivale al sistema
+    $$\begin{cases}x_1+2x_2-x_3+2x_4=0\\-4x_2-2x_4=0\ \Rightarrow\ x_4=-2x_2\\3x_2-3x_3=0\ \Rightarrow\ x_3=x_2\end{cases}$$
+    Hay tres pivotes (rango 3) y cuatro incógnitas: <b>un parámetro libre</b>, $x_2=\alpha$.</li>
+    <li><b>Resolver hacia arriba.</b> $x_3=\alpha$, $x_4=-2\alpha$ y, de la 1.ª ecuación,
+    $$\begin{aligned}x_1&=-2x_2+x_3-2x_4\\&=-2\alpha+\alpha+4\alpha=3\alpha.\end{aligned}$$
+    En forma vectorial: $(x_1,x_2,x_3,x_4)=\alpha\,(3,1,1,-2)$. <b>Base de $\operatorname{Nuc}(f)$: $\{(3,1,1,-2)\}$</b>, $\operatorname{Dim}\operatorname{Nuc}(f)=1$. Ecuaciones cartesianas reducidas: $x_1=3x_2,\ x_3=x_2,\ x_4=-2x_2$. Comprobación: $A\,(3,1,1,-2)^T=(3+2-1-4,\ -4+4,\ -3+1-2+4)=(0,0,0)$ ✓.</li>
+    <li><b>C) Dimensión de la imagen</b> (Teor. 3.1, U p.111): $\operatorname{Dim}\operatorname{Im}(f)=\operatorname{Dim}\mathbb R^4-\operatorname{Dim}\operatorname{Nuc}(f)=4-1=3$ (coincide con el rango de $A$). <b>Consecuencia que E no dice:</b> una base de $\operatorname{Im}(f)$ son 3 vectores libres de $P_2$, que tiene dimensión 3, luego (Teor. 2.6) <b>$\operatorname{Im}(f)=P_2$</b>.</li>
+    <li><b>D) Maxima</b> (fuera de examen): <code>nullspace(A)</code> (base del núcleo) y <code>nullity(A)</code> (dimensión). En sympy: <code>A.nullspace()</code>, <code>len(A.nullspace())</code>.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f)=\langle(3,1,1,-2)\rangle$, $\operatorname{Dim}\operatorname{Im}(f)=3$ e $\operatorname{Im}(f)=P_2$. <i>(Verificado con sympy: rango 3; el núcleo que da sympy, $(-\tfrac32,-\tfrac12,-\tfrac12,1)$, es $-\tfrac12(3,1,1,-2)$, el mismo subespacio.)</i></p>
+  <p><b>Nota sobre el libro.</b> Coincide. No concluye $\operatorname{Im}(f)=P_2$.</p>
+  <div class="recipe"><b>Receta:</b> núcleo = soluciones de $AX=0$: escalona, despeja en función de los parámetros libres y saca un vector por parámetro. $\operatorname{Dim}\operatorname{Im}=n-\operatorname{Dim}\operatorname{Nuc}=\operatorname{rang}A$; si coincide con la dimensión del espacio final, la imagen es todo ese espacio.</div>
+  <p><b>Error típico:</b> olvidar que la base del núcleo está en el espacio <b>inicial</b> ($\mathbb R^4$, 4 coordenadas), mientras que la imagen está en $P_2$ (3 coordenadas); o dar las 4 columnas como base de la imagen (son ligadas: el rango es 3).</p>
+  <p><b>Teoría:</b> Def. 3.3 y Teor. 3.1, U p.109-111 · Def. 3.4, U p.116</p>
+</details>
+
+<details class="sol" id="ej3-21"><summary>Ejercicio 3.21 — matriz, base de la imagen y núcleo, $\mathbb R^3\to\mathcal M_{2\times2}$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.21, p. 98">E p.98</span></summary>
+  <p class="enun">Si $f:\mathbb R^3\to\mathcal M_{2\times2}$ es la aplicación lineal tal que
+  $$f(1,0,0)=\begin{pmatrix}2&-1\\3&0\end{pmatrix};\quad f(0,1,0)=\begin{pmatrix}1&0\\4&2\end{pmatrix};\quad f(0,0,1)=\begin{pmatrix}5&1\\0&1\end{pmatrix},$$
+  se pide calcular: A) La matriz asociada a $f$. B) Base de $\operatorname{Im}(f)$. C) Núcleo de $f$.</p>
+  <ol class="steps">
+    <li><b>Coordenadas en $\mathcal M_{2\times2}$.</b> Con la base canónica $\{E_{11},E_{12},E_{21},E_{22}\}$, la matriz $\begin{pmatrix}a&b\\c&d\end{pmatrix}$ tiene coordenadas $(a,b,c,d)$ (Def. 2.10, U p.85).</li>
+    <li><b>A) Matriz asociada</b> ($4\times3$: 3 columnas porque $\operatorname{Dim}\mathbb R^3=3$, 4 filas porque $\operatorname{Dim}\mathcal M_{2\times2}=4$; Def. 3.4, U p.116):
+    $$A=\begin{pmatrix}2&1&5\\-1&0&1\\3&4&0\\0&2&1\end{pmatrix}.$$</li>
+    <li><b>Imagen de un vector cualquiera.</b> $f(x_1,x_2,x_3)=x_1f(e_1)+x_2f(e_2)+x_3f(e_3)=\begin{pmatrix}2x_1+x_2+5x_3&-x_1+x_3\\3x_1+4x_2&2x_2+x_3\end{pmatrix}$. Por tanto $\operatorname{Im}(f)=\langle f(e_1),f(e_2),f(e_3)\rangle$ (Def. 3.2, U p.106).</li>
+    <li><b>B) ¿Son independientes los tres generadores?</b> (Paso que E omite.) Su rango es el de $A$ (Teor. 2.5, U p.88). El menor de las tres primeras filas vale
+    $$\begin{vmatrix}2&1&5\\-1&0&1\\3&4&0\end{vmatrix}=2(0-4)-1(0-3)+5(-4-0)=-8+3-20=-25\neq0,$$
+    así que $\operatorname{rang}A=3$: los tres generadores son libres. <b>Base de $\operatorname{Im}(f)$: las tres matrices $f(e_1),f(e_2),f(e_3)$</b>, $\operatorname{Dim}\operatorname{Im}(f)=3$. ($\operatorname{Im}(f)\neq\mathcal M_{2\times2}$: le falta una dimensión.)</li>
+    <li><b>C) Núcleo.</b> $f(x)=\begin{pmatrix}0&0\\0&0\end{pmatrix}$ equivale a
+    $$2x_1+x_2+5x_3=0,\quad-x_1+x_3=0,\quad3x_1+4x_2=0,\quad2x_2+x_3=0.$$
+    De la 2.ª, $x_3=x_1$; de la 3.ª, $x_2=-\tfrac34x_1$; en la 4.ª: $-\tfrac32x_1+x_1=-\tfrac12x_1=0\Rightarrow x_1=0$, y entonces $x_2=x_3=0$. <b>$\operatorname{Nuc}(f)=\{(0,0,0)\}$.</b> (Alternativa: sistema homogéneo con $\operatorname{rang}A=3=$ nº de incógnitas $\Rightarrow$ solo la solución nula, U p.30.)</li>
+    <li><b>Coherencia (Teor. 3.1):</b> $3+0=3=\operatorname{Dim}\mathbb R^3$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $A$ como arriba; $\operatorname{Dim}\operatorname{Im}(f)=3$ con base $\{f(e_1),f(e_2),f(e_3)\}$; $\operatorname{Nuc}(f)=\{0\}$. <i>(Verificado con sympy: rango 3, núcleo vacío, menor $=-25$.)</i></p>
+  <p><b>Nota sobre el libro.</b> Coincide, pero E afirma $\operatorname{Dim}\operatorname{Im}(f)=3$ en B sin comprobar que los tres generadores son independientes (solo se deduce después, en C).</p>
+  <div class="recipe"><b>Receta:</b> si el espacio final son matrices (o polinomios), <b>pásalas a coordenadas</b> y trabaja con la matriz de columnas; al final traduce los vectores de vuelta a matrices. Para afirmar que unos generadores son base hay que <b>comprobar su independencia</b> (rango).</div>
+  <p><b>Error típico:</b> dar como base de la imagen los generadores sin comprobar que son libres; o mezclar el orden de las coordenadas $(a,b,c,d)$ (por filas) con $(a,c,b,d)$ (por columnas): vale cualquiera si se usa siempre el mismo.</p>
+  <p><b>Teoría:</b> Defs. 3.2-3.4, U p.106-116 · Teor. 2.5, U p.88 · Rouché, U p.30</p>
+</details>
+
+<details class="sol" id="ej3-22"><summary>Ejercicio 3.22 — verdadero/falso sobre las dimensiones de $\operatorname{Im}$ y $\operatorname{Nuc}$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.22, p. 99">E p.99</span></summary>
+  <p class="enun">Si $f:\mathbb R^3\to\mathbb R^2$ está definida por $f(x_1,x_2,x_3)=(x_1+x_2,\,0)$, se pide justificar si es cierta alguna de las afirmaciones: A) $\operatorname{Dim}\operatorname{Im}(f)+\operatorname{Dim}\operatorname{Nuc}(f)=\operatorname{Dim}\mathbb R^2$. B) Si $A$ es la matriz asociada, al ejecutar en MAXIMA <code>columnspace(A)</code> y <code>nullity(A)</code> se obtienen $\operatorname{Dim}\operatorname{Im}(f)$ y $\operatorname{Dim}\operatorname{Nuc}(f)$. C) Las dimensiones de $\operatorname{Nuc}(f)$ e $\operatorname{Im}(f)$ coinciden.</p>
+  <ol class="steps">
+    <li><b>Matriz asociada</b> (columnas $=f(e_j)$, Def. 3.4, U p.116): $f(1,0,0)=(1,0)$, $f(0,1,0)=(1,0)$, $f(0,0,1)=(0,0)$, luego $A=\begin{pmatrix}1&1&0\\0&0&0\end{pmatrix}$.</li>
+    <li><b>Imagen.</b> $\operatorname{Im}(f)=\langle(1,0),(1,0),(0,0)\rangle=\langle(1,0)\rangle$: $\operatorname{Dim}\operatorname{Im}(f)=1$, ecuación cartesiana $y_2=0$ (el eje $y_1$).</li>
+    <li><b>Núcleo.</b> $f(x)=(0,0)\iff x_1+x_2=0$ (la 2.ª componente es siempre 0): una sola ecuación en $\mathbb R^3$. Paramétricas $x_1=\alpha,\ x_2=-\alpha,\ x_3=\beta$, es decir $\operatorname{Nuc}(f)=\langle(1,-1,0),(0,0,1)\rangle$; los dos generadores no son proporcionales, luego $\operatorname{Dim}\operatorname{Nuc}(f)=2$.</li>
+    <li><b>A) Falsa.</b> El Teor. 3.1 (U p.111) relaciona las dimensiones con el espacio <b>inicial</b>: $1+2=3=\operatorname{Dim}\mathbb R^3\neq\operatorname{Dim}\mathbb R^2=2$.</li>
+    <li><b>B) Falsa</b> (cuestión de Maxima, fuera de examen). <code>columnspace(A)</code> devuelve una <b>base</b> del espacio columna, no su dimensión (esta se obtiene con <code>rank(A)</code>); <code>nullity(A)</code> sí da $\operatorname{Dim}\operatorname{Nuc}$.</li>
+    <li><b>C) Falsa:</b> $\operatorname{Dim}\operatorname{Nuc}(f)=2\neq1=\operatorname{Dim}\operatorname{Im}(f)$.</li>
+  </ol>
+  <p><b>Resultado:</b> A, B y C son falsas. <i>(Verificado con sympy: rango 1, núcleo $\langle(-1,1,0),(0,0,1)\rangle$.)</i></p>
+  <div class="recipe"><b>Receta:</b> primero el núcleo (resolver $AX=0$: la dimensión es el nº de parámetros libres $n-\operatorname{rang}A$), luego $\operatorname{Dim}\operatorname{Im}=\operatorname{rang}A$; comprueba que suman la dimensión del espacio <b>de partida</b> (el inicial).</div>
+  <p><b>Error típico:</b> aplicar el Teorema 3.1 con la dimensión del espacio de <b>llegada</b> (opción A).</p>
+  <p><b>Teoría:</b> Teor. 3.1, U p.111 · Def. 3.4, U p.116</p>
+</details>
+
+<details class="sol" id="ej3-23"><summary>Ejercicio 3.23 — ecuaciones y bases de $\operatorname{Im}$ y $\operatorname{Nuc}$, $\mathbb R^2\to\mathbb R^3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.23, p. 100">E p.100</span></summary>
+  <p class="enun">Si $f$ es la aplicación lineal del Ejercicio 3.2 ($f:\mathbb R^2\to\mathbb R^3$, $f(x_1,x_2)=(2x_1,\ 3x_1+x_2,\ x_1+x_2)$), se pide: A) Ecuaciones y base del subespacio $\operatorname{Im}(f)$. B) Ecuaciones y base del subespacio $\operatorname{Nuc}(f)$. C) Relación entre las dimensiones de $\operatorname{Im}(f)$ y $\operatorname{Nuc}(f)$.</p>
+  <ol class="steps">
+    <li><b>Generadores de la imagen.</b> Separando los coeficientes de $x_1$ y $x_2$:
+    $$f(x_1,x_2)=x_1\begin{pmatrix}2\\3\\1\end{pmatrix}+x_2\begin{pmatrix}0\\1\\1\end{pmatrix}.$$
+    Así $\operatorname{Im}(f)=\langle(2,3,1),(0,1,1)\rangle$ (Def. 3.2, U p.106; igual que el Ej. 3.9, U p.107).</li>
+    <li><b>Base y dimensión.</b> Los dos vectores son independientes: el menor $\begin{vmatrix}2&0\\3&1\end{vmatrix}=2\neq0$, luego el rango es 2 (Teor. 2.5, U p.88). <b>Base: $\{(2,3,1),(0,1,1)\}$, $\operatorname{Dim}\operatorname{Im}(f)=2$.</b></li>
+    <li><b>Ecuaciones paramétricas:</b> $y_1=2\alpha,\ y_2=3\alpha+\beta,\ y_3=\alpha+\beta$, con $\alpha,\beta\in\mathbb R$.</li>
+    <li><b>Ecuación cartesiana (por qué un determinante).</b> $(y_1,y_2,y_3)\in\operatorname{Im}(f)\iff$ existe $(x_1,x_2)$ con $f(x_1,x_2)=(y_1,y_2,y_3)\iff$ el sistema
+    $$\left(\begin{array}{cc|c}2&0&y_1\\3&1&y_2\\1&1&y_3\end{array}\right)$$
+    es <b>compatible</b>, es decir (Rouché-Frobenius, U p.30) la matriz de coeficientes y la ampliada tienen el mismo rango. La de coeficientes tiene rango 2, así que la ampliada ($3\times3$) debe tener rango 2: determinante nulo. Desarrollando por la 1.ª fila,
+    $$\begin{aligned}\begin{vmatrix}2&0&y_1\\3&1&y_2\\1&1&y_3\end{vmatrix}&=2\,(y_3-y_2)-0+y_1\,(3-1)\\&=2y_1-2y_2+2y_3\\&=0\iff\boxed{y_2=y_1+y_3}.\end{aligned}$$
+    Comprobación: $(2,3,1)$: $3=2+1$ ✓; $(0,1,1)$: $1=0+1$ ✓. Hay $3-2=1$ ecuación, como corresponde a un plano por el origen en $\mathbb R^3$.</li>
+    <li><b>Núcleo.</b> Por la Def. 3.3 (U p.109), $f(x_1,x_2)=(0,0,0)$:
+    $$2x_1=0,\qquad3x_1+x_2=0,\qquad x_1+x_2=0.$$
+    De la 1.ª, $x_1=0$; en la 2.ª, $x_2=0$ (la 3.ª se cumple). <b>$\operatorname{Nuc}(f)=\{(0,0)\}$</b>, ecuaciones $x_1=0,\ x_2=0$, y <b>no tiene base</b> (o: base vacía) con $\operatorname{Dim}=0$, por convenio (U p.112): el vector $\bar0$ no puede estar en una base.</li>
+    <li><b>C) Relación.</b> Teor. 3.1 (U p.111): $\operatorname{Dim}\operatorname{Im}(f)+\operatorname{Dim}\operatorname{Nuc}(f)=\operatorname{Dim}\mathbb R^2$: $2+0=2$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Im}(f)=\{y_2=y_1+y_3\}$, base $\{(2,3,1),(0,1,1)\}$; $\operatorname{Nuc}(f)=\{0\}$; $2+0=2$. <i>(Verificado con sympy: rango 2, núcleo vacío, determinante $=2y_1-2y_2+2y_3$.)</i></p>
+  <p><b>Nota sobre el libro.</b> E renombra a propósito las coordenadas de la imagen como $x_i$ (nota al margen de E p.100) y escribe «$x_2=x_1+x_3$»; aquí se mantienen las $y_j$ para no mezclar las coordenadas del espacio inicial y del final. Lo demás coincide.</p>
+  <div class="recipe"><b>Receta (ecuación cartesiana de la imagen):</b> coloca los generadores de $\operatorname{Im}(f)$ como columnas, añade la columna $(y_1,\dots,y_n)$ y exige que el rango <b>no aumente</b>: anula los menores orlados (o escalona y pide que las filas que se anulan a la izquierda tengan ceros a la derecha). Nº de ecuaciones $=n-\operatorname{Dim}\operatorname{Im}(f)$.</div>
+  <p><b>Error típico:</b> escribir las ecuaciones de $f$ ($y_1=2x_1,\dots$) como si fueran las cartesianas de la imagen: estas no deben contener las $x_i$, solo relaciones entre las $y_j$. Otro: decir que la base del núcleo es $\{(0,0)\}$.</p>
+  <p><b>Teoría:</b> Defs. 3.2-3.3 y Teor. 3.1, U p.106-111 · Rouché, U p.30</p>
+</details>
+
+<details class="sol" id="ej3-24"><summary>Ejercicio 3.24 — el núcleo de $\lambda f$ (V/F) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.24, p. 101">E p.101</span></summary>
+  <p class="enun">Si $f$ es una aplicación lineal entre los espacios vectoriales $V$ y $W$, y $\lambda$ cualquier número real no nulo, se pide elegir las correctas: A) $\operatorname{Nuc}(\lambda f)=\lambda\operatorname{Nuc}(f)$. B) $\operatorname{Dim}\operatorname{Nuc}(\lambda f)\gt \operatorname{Dim}\operatorname{Nuc}(f)$ cuando $\lambda\gt 1$. C) $\operatorname{Dim}\operatorname{Nuc}(\lambda f)\lt \operatorname{Dim}\operatorname{Nuc}(f)$ cuando $\lambda\lt 1$.</p>
+  <p><i>Notación.</i> $(\lambda f)(v)=\lambda f(v)$ (Def. 3.8, U p.120); $\lambda\operatorname{Nuc}(f)=\{\lambda v: v\in\operatorname{Nuc}(f)\}$.</p>
+  <ol class="steps">
+    <li><b>$\operatorname{Nuc}(\lambda f)=\operatorname{Nuc}(f)$.</b> Para $v\in V$:
+    $$v\in\operatorname{Nuc}(\lambda f)\iff(\lambda f)(v)=\bar0\iff\lambda f(v)=\bar0\iff f(v)=\bar0\iff v\in\operatorname{Nuc}(f).$$
+    El paso central usa $\lambda\neq0$: multiplicando por $\tfrac1\lambda$, $\lambda f(v)=\bar0\Rightarrow f(v)=\bar0$ (el recíproco es obvio).</li>
+    <li><b>$\lambda\operatorname{Nuc}(f)=\operatorname{Nuc}(f)$.</b> «$\subseteq$»: $\operatorname{Nuc}(f)$ es subespacio (Def. 3.3, U p.109), luego es cerrado para el producto por escalares: $v\in\operatorname{Nuc}(f)\Rightarrow\lambda v\in\operatorname{Nuc}(f)$. «$\supseteq$»: si $u\in\operatorname{Nuc}(f)$, entonces $u=\lambda\cdot\big(\tfrac1\lambda u\big)$ con $\tfrac1\lambda u\in\operatorname{Nuc}(f)$.</li>
+    <li><b>A) Cierta</b>, por 1 y 2: $\operatorname{Nuc}(\lambda f)=\operatorname{Nuc}(f)=\lambda\operatorname{Nuc}(f)$.</li>
+    <li><b>B) y C) Falsas</b>, porque por el paso 1, $\operatorname{Dim}\operatorname{Nuc}(\lambda f)=\operatorname{Dim}\operatorname{Nuc}(f)$ para todo $\lambda\neq0$: nunca es mayor ni menor. Contraejemplo concreto: $f(x_1,x_2)=(x_1,0)$ y $\lambda=2$: $\operatorname{Nuc}(f)=\operatorname{Nuc}(2f)=\langle(0,1)\rangle$, ambos de dimensión 1.</li>
+  </ol>
+  <p><b>Resultado:</b> solo A es correcta. <i>(Verificado: $\operatorname{Nuc}(2f)=\operatorname{Nuc}(f)$ en el contraejemplo.)</i></p>
+  <p><b>Nota sobre el libro.</b> La conclusión (A cierta, B y C falsas) coincide y la demostración oficial es correcta pero incompleta: encadena «$f(v)=0\Leftrightarrow\lambda f(v)=f(\lambda v)=0\Leftrightarrow\lambda v\in\operatorname{Nuc}(\lambda f)$» sin justificar el último paso, que es cierto solo porque $\lambda\neq0$ (pues $(\lambda f)(\lambda v)=\lambda^2f(v)=0\iff f(v)=0$). Tampoco explica por qué A implica que las dimensiones coinciden: $v\mapsto\lambda v$ es lineal y biyectiva, así que lleva una base de $\operatorname{Nuc}(f)$ a una base de $\lambda\operatorname{Nuc}(f)$; de ahí que B y C sean falsas (aquí, mejor, por $\operatorname{Nuc}(\lambda f)=\operatorname{Nuc}(f)$).</p>
+  <div class="recipe"><b>Receta:</b> para igualdades entre conjuntos (núcleos, imágenes), demuestra la doble pertenencia «$v\in X\iff v\in Y$» partiendo de la <b>definición</b> y señalando dónde se usa cada hipótesis ($\lambda\neq0$, ser subespacio…).</div>
+  <p><b>Error típico:</b> creer que multiplicar la aplicación por un número «agranda» o «encoge» el núcleo: el núcleo depende de <b>dónde</b> se anula $f$, y $\lambda f$ se anula exactamente en los mismos vectores.</p>
+  <p><b>Teoría:</b> Def. 3.3, U p.109 · Def. 3.8, U p.120</p>
+</details>
+
+<details class="sol" id="ej3-25"><summary>Ejercicio 3.25 — matriz de la derivada en $P_3$ e imagen <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.25, p. 101">E p.101</span></summary>
+  <p class="enun">Si $P_3(x)$ es el espacio vectorial de los polinomios reales de una variable y grado $\le3$, y $f$ es el endomorfismo de $P_3(x)$ que asigna a cada polinomio su primera derivada, se pide: matriz de la aplicación, una base y dimensión de $\operatorname{Im}(f)$.</p>
+  <ol class="steps">
+    <li><b>¿Es lineal?</b> (E lo da por supuesto.) $(p+\lambda q)'=p'+\lambda q'$: cumple la Def. 3.1 (U p.101). Además la derivada de un polinomio de grado $\le3$ tiene grado $\le2$, luego está en $P_3(x)$: es un endomorfismo.</li>
+    <li><b>Imágenes de la base canónica $\{1,x,x^2,x^3\}$:</b> $f(1)=0$, $f(x)=1$, $f(x^2)=2x$, $f(x^3)=3x^2$. En coordenadas: $(0,0,0,0)$, $(1,0,0,0)$, $(0,2,0,0)$, $(0,0,3,0)$.</li>
+    <li><b>Matriz</b> (esas coordenadas en <b>columnas</b>, Def. 3.4, U p.116):
+    $$D=\begin{pmatrix}0&1&0&0\\0&0&2&0\\0&0&0&3\\0&0&0&0\end{pmatrix}.$$
+    Comprobación: $p=a+bx+cx^2+dx^3\mapsto D(a,b,c,d)^T=(b,2c,3d,0)$, que son las coordenadas de $b+2cx+3dx^2=p'$ ✓.</li>
+    <li><b>Imagen.</b> $\operatorname{Im}(f)=\langle f(1),f(x),f(x^2),f(x^3)\rangle=\langle0,\,1,\,2x,\,3x^2\rangle=\langle1,x,x^2\rangle$ (se suprime el $0$ y se dividen los generadores por $2$ y $3$, lo que no cambia el subespacio generado: Teor. 2.1-2.2, U p.79).</li>
+    <li><b>Base y dimensión.</b> $\{1,x,x^2\}$ es libre (parte de la base canónica: $\alpha+\beta x+\gamma x^2=0$ para todo $x$ implica $\alpha=\beta=\gamma=0$). <b>Base: $\{1,x,x^2\}$; $\operatorname{Dim}\operatorname{Im}(f)=3$; $\operatorname{Im}(f)=P_2(x)$.</b> (Sentido: todo polinomio de grado $\le2$ es la derivada de alguno de grado $\le3$, su primitiva.)</li>
+  </ol>
+  <p><b>Resultado:</b> matriz $D$ como arriba; $\operatorname{Im}(f)=P_2(x)$, base $\{1,x,x^2\}$, dimensión 3. <i>(Verificado con sympy: rango 3.)</i></p>
+  <div class="recipe"><b>Receta:</b> en espacios de polinomios, calcula la imagen de cada elemento de la base canónica, escribe sus coordenadas en <b>columna</b> (matriz) y trata la imagen como en $\mathbb R^n$; al final, vuelve a escribir los vectores como polinomios.</div>
+  <p><b>Error típico:</b> poner las coordenadas en <b>filas</b> (sale la traspuesta, que es la matriz de otra aplicación); o decir que $\operatorname{Im}(f)=P_3$ porque «es un endomorfismo».</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · Def. 3.2 y Ej. 3.11, U p.106-109</p>
+</details>
+
+<details class="sol" id="ej3-26"><summary>Ejercicio 3.26 — núcleo de la derivada en $P_3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.26, p. 102">E p.102</span></summary>
+  <p class="enun">Si $f$ es el endomorfismo de $P_3(x)$ del Ejercicio 3.25, se pide: A) Subespacio $\operatorname{Nuc}(f)$. B) Una base de $\operatorname{Nuc}(f)$. C) Dimensión de $\operatorname{Nuc}(f)$.</p>
+  <ol class="steps">
+    <li><b>A)</b> Por la Def. 3.3 (U p.109): $p=a+bx+cx^2+dx^3\in\operatorname{Nuc}(f)\iff p'=b+2cx+3dx^2$ es el polinomio nulo $\iff b=0,\ 2c=0,\ 3d=0$ (un polinomio es nulo si y solo si todos sus coeficientes son 0) $\iff p=a$. <b>$\operatorname{Nuc}(f)=\{a: a\in\mathbb R\}=P_0(x)$</b>, los polinomios constantes. (Matricialmente $D(a,b,c,d)^T=(b,2c,3d,0)^T=0$.)</li>
+    <li><b>B)</b> Todo elemento es $a\cdot1$ y $\{1\}$ es libre ($1\neq0$): <b>base $\{1\}$</b>.</li>
+    <li><b>C)</b> <b>$\operatorname{Dim}\operatorname{Nuc}(f)=1$.</b> Comprobación con el Teor. 3.1 (U p.111) y el Ej. 3.25: $3+1=4=\operatorname{Dim}P_3(x)$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f)=P_0(x)$ (constantes), base $\{1\}$, dimensión 1. <i>(Verificado con sympy: <code>D.nullspace()=[(1,0,0,0)]</code>.)</i></p>
+  <div class="recipe"><b>Receta:</b> núcleo de una aplicación entre polinomios: iguala la imagen al polinomio nulo, es decir, <b>cada coeficiente a 0</b>, y resuelve el sistema en los coeficientes del original.</div>
+  <p><b>Error típico:</b> responder $\operatorname{Nuc}(f)=\{0\}$ confundiendo «derivada nula» con «polinomio nulo»: las constantes no nulas también tienen derivada 0.</p>
+  <p><b>Teoría:</b> Def. 3.3, U p.109 · Teor. 3.1, U p.111</p>
+</details>
+
+<details class="sol" id="ej3-27"><summary>Ejercicio 3.27 — imagen y núcleo de la derivada segunda <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.27, p. 102">E p.102</span></summary>
+  <p class="enun">Si $f$ es el endomorfismo de $P_3(x)$ del Ejercicio 3.25, se pide: A) Subespacio $\operatorname{Im}(f\circ f)$. B) Subespacio $\operatorname{Nuc}(f\circ f)$. C) Relación entre las dimensiones de los subespacios anteriores.</p>
+  <ol class="steps">
+    <li><b>Qué es $f\circ f$.</b> Por la Def. 3.11 (U p.124, tema 3.4), $(f\circ f)(p)=f(f(p))=(p')'=p''$: la derivada segunda. Es lineal ($(p+\lambda q)''=p''+\lambda q''$). Para $p=a+bx+cx^2+dx^3$: $p'=b+2cx+3dx^2$ y $p''=2c+6dx$.</li>
+    <li><b>A) Imagen.</b> $\operatorname{Im}(f\circ f)=\{2c+6dx: c,d\in\mathbb R\}=\langle2,6x\rangle=\langle1,x\rangle$. Como $c,d$ son arbitrarios, $2c$ y $6d$ toman cualquier valor: <b>$\operatorname{Im}(f\circ f)=P_1(x)$</b>, base $\{1,x\}$, dimensión 2.</li>
+    <li><b>B) Núcleo.</b> $p''=0\iff2c=0$ y $6d=0\iff c=d=0\iff p=a+bx$. <b>$\operatorname{Nuc}(f\circ f)=P_1(x)$</b>, base $\{1,x\}$, dimensión 2.</li>
+    <li><b>C)</b> $\operatorname{Dim}\operatorname{Im}(f\circ f)+\operatorname{Dim}\operatorname{Nuc}(f\circ f)=2+2=4=\operatorname{Dim}P_3(x)$ (Teor. 3.1, U p.111) ✓. Curiosidad: aquí <b>imagen y núcleo coinciden</b> ($=P_1$); nada lo impide, porque en un endomorfismo ambos son subespacios del mismo espacio.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Im}(f\circ f)=\operatorname{Nuc}(f\circ f)=P_1(x)$, ambos de dimensión 2. <i>(Verificado con sympy: $D^2$ tiene rango 2, núcleo $\langle(1,0,0,0),(0,1,0,0)\rangle$.)</i></p>
+  <div class="recipe"><b>Receta:</b> para $f\circ f$ calcula primero la fórmula de la composición (o la matriz $A^2$, tema 3.4) y luego aplica el método habitual de imagen y núcleo.</div>
+  <p><b>Error típico:</b> pensar que imagen y núcleo son siempre «complementarios» (sin vectores no nulos en común): el Teorema 3.1 solo habla de <b>dimensiones</b>.</p>
+  <p><b>Teoría:</b> Def. 3.11, U p.124 · Defs. 3.2-3.3 y Teor. 3.1, U §3.2</p>
+</details>
+
+<details class="sol" id="ej3-28"><summary>Ejercicio 3.28 — base del núcleo, base incompleta y matriz «si es posible» <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.28, p. 103">E p.103</span></summary>
+  <p class="enun">Si $f$ es una aplicación lineal de $P_3(x)$ en $\mathbb R^4$ cuyo núcleo es $\operatorname{Nuc}(f)=\{ax+bx^2\}$, se pide: A) Una base de $\operatorname{Nuc}(f)$. B) Completar la base elegida para el núcleo hasta obtener una base de $P_3(x)$. C) Matriz asociada a $f$, si es posible.</p>
+  <ol class="steps">
+    <li><b>A) Base del núcleo.</b> Todo elemento es $ax+bx^2=a\cdot x+b\cdot x^2$, luego $\{x,x^2\}$ genera $\operatorname{Nuc}(f)$ (Def. 2.4, U p.71). Es libre: $ax+bx^2=0$ (polinomio nulo) $\Rightarrow a=b=0$. <b>Base: $\{x,x^2\}$</b>, $\operatorname{Dim}\operatorname{Nuc}(f)=2$.</li>
+    <li><b>B) Completar.</b> Por la base incompleta (Teor. 2.7, U p.89) se pueden añadir vectores hasta una base de $P_3(x)$ ($\operatorname{Dim}=4$). Añadiendo $\{1,x^3\}$ se obtiene $\{1,x,x^2,x^3\}$, la base canónica: libre y con 4 elementos, luego base (Teor. 2.6, U p.88). Cualquier otra elección de 2 vectores que deje el conjunto libre también vale.</li>
+    <li><b>C) No es posible determinar la matriz.</b> En las bases canónicas sus columnas son las coordenadas de $f(1),f(x),f(x^2),f(x^3)$ (Def. 3.4, U p.116). Sabemos $f(x)=f(x^2)=\bar0$ (están en el núcleo): columnas 2.ª y 3.ª nulas. Pero <b>$f(1)$ y $f(x^3)$ no están determinadas</b> por los datos (una aplicación lineal se fija con las imágenes de <b>todos</b> los vectores de una base, Teor. 3.2, U p.114).</li>
+    <li><b>Lo que sí se sabe</b> (E no lo dice). Por el Teor. 3.1, $\operatorname{Dim}\operatorname{Im}(f)=4-2=2$. Además, $f(1)$ y $f(x^3)$ son <b>linealmente independientes</b>: si $\alpha f(1)+\beta f(x^3)=\bar0$, entonces $f(\alpha+\beta x^3)=\bar0$, es decir $\alpha+\beta x^3\in\operatorname{Nuc}(f)=\langle x,x^2\rangle$, lo que solo ocurre si $\alpha=\beta=0$. Luego la matriz tiene la forma
+    $$A=\begin{pmatrix}u_1&0&0&w_1\\u_2&0&0&w_2\\u_3&0&0&w_3\\u_4&0&0&w_4\end{pmatrix}\quad\text{con }u=f(1),\ w=f(x^3)\text{ independientes en }\mathbb R^4,$$
+    y hay <b>infinitas</b> posibilidades.</li>
+  </ol>
+  <p><b>Resultado:</b> base del núcleo $\{x,x^2\}$; completada $\{1,x,x^2,x^3\}$; la matriz no queda determinada (solo su forma). <i>(Verificado: con $u,w$ independientes, el rango es 2 y el núcleo $\langle x,x^2\rangle$.)</i></p>
+  <p><b>Nota sobre el libro.</b> Coincide en A y B; en C omite que $f(1)$ y $f(x^3)$ deben ser independientes.</p>
+  <div class="recipe"><b>Receta:</b> una aplicación lineal queda determinada por las imágenes de <b>todos</b> los vectores de una base. Conocer el núcleo solo fija las columnas correspondientes a los vectores del núcleo (nulas) y obliga a que las restantes sean independientes.</div>
+  <p><b>Error típico:</b> poner ceros en las columnas desconocidas (daría una aplicación cuyo núcleo es todo $P_3$, contradiciendo el dato).</p>
+  <p><b>Teoría:</b> Defs. 2.4, 2.9 · Teor. 2.6-2.7, U p.88-89 · Teor. 3.1-3.2 y Def. 3.4, U p.111-116</p>
+</details>
+
+<details class="sol" id="ej3-29"><summary>Ejercicio 3.29 — $f\circ f$ (derivada segunda) en $P_4$: matriz, imagen y núcleo <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.29, p. 104">E p.104</span></summary>
+  <p class="enun">El endomorfismo $f$ de $P_4$ que asigna a cada polinomio su derivada verifica: A) Las filas de la matriz asociada a $f\circ f$ en la base canónica son $(0,0,2,0,0)$, $(0,0,0,6,0)$, $(0,0,0,0,12)$, $(0,0,0,0,0)$, $(0,0,0,0,0)$. B) $\operatorname{Im}(f\circ f)=P_2$. C) $\operatorname{Nuc}(f\circ f)=P_1$. D) $\operatorname{Nuc}(f\circ f)\subset\operatorname{Im}(f\circ f)$.</p>
+  <p>Base canónica de $P_4$: $\{1,x,x^2,x^3,x^4\}$ ($\operatorname{Dim}P_4=5$). $f\circ f$ es la derivada segunda (Def. 3.11, U p.124).</p>
+  <ol class="steps">
+    <li><b>A) Cierta.</b> Imágenes por $f\circ f$: $1\mapsto0$, $x\mapsto0$, $x^2\mapsto2$, $x^3\mapsto6x$, $x^4\mapsto12x^2$; coordenadas $(0,0,0,0,0)$, $(0,0,0,0,0)$, $(2,0,0,0,0)$, $(0,6,0,0,0)$, $(0,0,12,0,0)$. Puestas <b>en columnas</b> (Def. 3.4, U p.116):
+    $$C=\begin{pmatrix}0&0&2&0&0\\0&0&0&6&0\\0&0&0&0&12\\0&0&0&0&0\\0&0&0&0&0\end{pmatrix},$$
+    cuyas filas son exactamente las del enunciado.</li>
+    <li><b>B) Cierta.</b> $C(a,b,c,d,e)^T=(2c,6d,12e,0,0)^T$, es decir $(f\circ f)(p)=2c+6dx+12ex^2$. Como $c,d,e$ son libres se obtiene cualquier polinomio de grado $\le2$: $\operatorname{Im}(f\circ f)=\langle2,6x,12x^2\rangle=\langle1,x,x^2\rangle=P_2$, dimensión 3.</li>
+    <li><b>C) Cierta.</b> $C(a,b,c,d,e)^T=0\iff2c=6d=12e=0\iff c=d=e=0$; los elementos del núcleo son $a+bx$: $\operatorname{Nuc}(f\circ f)=\langle1,x\rangle=P_1$, dimensión 2. Comprobación (Teor. 3.1): $3+2=5$ ✓.</li>
+    <li><b>D) Cierta.</b> La inclusión tiene sentido porque ambos subespacios están en el mismo espacio ($f\circ f$ es endomorfismo de $P_4$), y $P_1\subset P_2$: todo polinomio de grado $\le1$ tiene grado $\le2$.</li>
+  </ol>
+  <p><b>Resultado:</b> A, B, C y D son ciertas. <i>(Verificado con sympy: $D^2=C$, rango 3, núcleo $\langle(1,0,0,0,0),(0,1,0,0,0)\rangle$.)</i></p>
+  <p><b>Nota sobre el libro.</b> E escribe en B «$c(2,0,0,0,0)+d(0,6,0,0,0)x+e(0,0,12,0,0)x^2$», mezclando coordenadas y potencias de $x$: debe leerse $c\cdot2+d\cdot6x+e\cdot12x^2$.</p>
+  <div class="recipe"><b>Receta:</b> matriz de un operador en polinomios: «imagen de cada $x^k$ $\to$ coordenadas $\to$ <b>columna</b> $k$». Imagen: los generadores no nulos que salen; núcleo: anular los coeficientes de la imagen.</div>
+  <p><b>Error típico:</b> escribir las imágenes como filas y concluir que A es falsa (o al revés); fíjate en si el enunciado habla de <b>filas</b> o de <b>columnas</b>.</p>
+  <p><b>Teoría:</b> Defs. 3.2-3.4 y 3.11 · Teor. 3.1 (U p.106-124)</p>
+</details>
+
+<div class="box tip"><span class="h">Para practicar (ejercicios de E de otros temas)</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ejs. 3.12, 3.13, 3.15, 3.17-3.19, p. 89-96">E p.89-96</span>
+  <ul>
+    <li><b>E 3.15, 3.17, 3.18, 3.19</b> (solo piden la matriz asociada o las ecuaciones de $f$): tema 3.3 (aún no existe). El 3.15 es la aplicación del Ej. 3.16 de arriba.</li>
+    <li><b>E 3.12 C</b> («$\operatorname{Im}(f)$ es $\mathbb R^3$» con $f:\mathbb R^2\to\mathbb R^3$) y <b>E 3.13 D</b> («$f(S)$ es subespacio»): <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>. Con lo de este tema, 3.12 C es falsa siempre: $\operatorname{Dim}\operatorname{Im}(f)\le\operatorname{Dim}\mathbb R^2=2\lt 3$.</li>
+  </ul>
+</div>
+
+<h3>Ejemplos propios, de dificultad creciente</h3>
+
+<details class="sol"><summary>Ejemplo propio 1 (fácil) — de $\mathbb R^3$ a $\mathbb R^2$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Sea $f:\mathbb R^3\to\mathbb R^2$, $f(x,y,z)=(x-y,\ y-z)$. Halla $\operatorname{Nuc}(f)$ e $\operatorname{Im}(f)$ con bases y dimensiones.</p>
+  <ol class="steps">
+    <li><b>Matriz</b> (columnas $f(1,0,0)=(1,0)$, $f(0,1,0)=(-1,1)$, $f(0,0,1)=(0,-1)$): $A=\begin{pmatrix}1&-1&0\\0&1&-1\end{pmatrix}$.</li>
+    <li><b>Núcleo:</b> $x-y=0,\ y-z=0\Rightarrow x=y=z=\alpha$. $\operatorname{Nuc}(f)=\langle(1,1,1)\rangle$, dimensión 1 (una recta por el origen).</li>
+    <li><b>Imagen:</b> por el Teorema 3.1, $\operatorname{Dim}\operatorname{Im}(f)=3-1=2=\operatorname{Dim}\mathbb R^2$, luego $\operatorname{Im}(f)=\mathbb R^2$ (Teor. 2.6). Base, por ejemplo, $\{(1,0),(-1,1)\}$ (menor $\begin{vmatrix}1&-1\\0&1\end{vmatrix}=1\neq0$). Sin ecuaciones cartesianas.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> el núcleo da la dimensión que falta; si $\operatorname{Dim}\operatorname{Im}=\operatorname{Dim}W$, no hace falta calcular la imagen a mano.</div>
+  <p><b>Error típico:</b> buscar el núcleo con una sola ecuación: hay dos ecuaciones independientes en 3 incógnitas, un parámetro.</p>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 2 (medio, con parámetro) — endomorfismo de $\mathbb R^3$ según $a$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Sea $f_a:\mathbb R^3\to\mathbb R^3$ con matriz $A=\begin{pmatrix}1&1&0\\0&1&a\\1&2&1\end{pmatrix}$ en la base canónica. Estudia $\operatorname{Nuc}(f_a)$ e $\operatorname{Im}(f_a)$ según $a$; para el valor especial, da una base del núcleo y la ecuación cartesiana de la imagen.</p>
+  <ol class="steps">
+    <li><b>Determinante</b> (por la 1.ª fila): $\det A=1\cdot(1-2a)-1\cdot(0-a)+0=1-a$.</li>
+    <li><b>Si $a\neq1$:</b> $\operatorname{rang}A=3$, el sistema homogéneo $AX=0$ solo tiene la solución nula (U p.30): $\operatorname{Nuc}(f_a)=\{\bar0\}$ y, por el Teor. 3.1, $\operatorname{Dim}\operatorname{Im}=3$: $\operatorname{Im}(f_a)=\mathbb R^3$ (es un isomorfismo).</li>
+    <li><b>Si $a=1$:</b> $\det A=0$ y el menor $\begin{vmatrix}1&1\\0&1\end{vmatrix}=1\neq0$, luego $\operatorname{rang}A=2$.
+      <ul>
+        <li><b>Núcleo:</b> $x+y=0,\ y+z=0$ (la 3.ª fila $(1,2,1)$ es la suma de las dos primeras: sobra). Con $y=-\alpha$: $x=\alpha$, $z=\alpha$. $\operatorname{Nuc}(f_1)=\langle(1,-1,1)\rangle$, dimensión 1. Comprobación: $A(1,-1,1)^T=(0,0,0)^T$ ✓.</li>
+        <li><b>Imagen:</b> generada por las columnas $(1,0,1)$, $(1,1,2)$, $(0,1,1)$; la tercera es $(1,1,2)-(1,0,1)$, así que $\operatorname{Im}(f_1)=\langle(1,0,1),(1,1,2)\rangle$, dimensión 2 ($=3-1$ ✓).</li>
+        <li><b>Ecuación cartesiana:</b>
+        $$\begin{aligned}\begin{vmatrix}1&1&y_1\\0&1&y_2\\1&2&y_3\end{vmatrix}&=1\cdot(y_3-2y_2)-1\cdot(0-y_2)+y_1\,(0-1)\\&=-y_1-y_2+y_3\\&=0,\end{aligned}$$
+        es decir, <b>$y_3=y_1+y_2$</b>.</li>
+      </ul></li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> con parámetro, calcula $\det A$ (o el rango por Gauss) para separar casos; $\det\neq0$ $\Rightarrow$ núcleo $\{0\}$, imagen todo; si no, trabaja en el valor especial.</div>
+  <p><b>Error típico:</b> estudiar solo $a=1$ y olvidar decir qué pasa para $a\neq1$.</p>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 3 (tipo examen) — polinomios evaluados en puntos <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Sea $f:\wp_2\to\mathbb R^2$, $f(p)=\big(p(0),\,p(1)\big)$. (a) Comprueba que $f$ es lineal. (b) Halla $\operatorname{Nuc}(f)$ con una base. (c) ¿Es $f$ sobre todo $\mathbb R^2$? Encuentra un polinomio $p$ con $f(p)=(1,3)$. ¿Es único?</p>
+  <ol class="steps">
+    <li><b>(a) Linealidad</b> (Def. 3.1, U p.101): los polinomios se suman y multiplican por escalares punto a punto, así que $(p+\lambda q)(0)=p(0)+\lambda q(0)$ y lo mismo en 1: $f(p+\lambda q)=f(p)+\lambda f(q)$.</li>
+    <li><b>Ecuaciones.</b> Para $p=a+bx+cx^2$: $p(0)=a$, $p(1)=a+b+c$. Matriz (imágenes $f(1)=(1,1)$, $f(x)=(0,1)$, $f(x^2)=(0,1)$): $A=\begin{pmatrix}1&0&0\\1&1&1\end{pmatrix}$.</li>
+    <li><b>(b) Núcleo:</b> $a=0$ y $a+b+c=0\Rightarrow a=0,\ b=-c$: $p=c\,(x^2-x)$. $\operatorname{Nuc}(f)=\langle x-x^2\rangle$ (los polinomios de grado $\le2$ que se anulan en 0 y en 1), dimensión 1.</li>
+    <li><b>(c) Imagen:</b> $\operatorname{Dim}\operatorname{Im}(f)=3-1=2=\operatorname{Dim}\mathbb R^2$ (Teor. 3.1), luego $\operatorname{Im}(f)=\mathbb R^2$: <b>sí es sobre</b>. Para $(1,3)$: $a=1$ y $1+b+c=3\Rightarrow b+c=2$; por ejemplo $c=0,\ b=2$: $p=1+2x$ (comprobación: $p(0)=1$, $p(1)=3$ ✓).</li>
+    <li><b>No es único.</b> Si $f(p)=f(q)$, entonces $f(p-q)=\bar0$, es decir $p-q\in\operatorname{Nuc}(f)$. Todas las soluciones son $p=1+2x+t\,(x-x^2)$, $t\in\mathbb R$ (una solución particular más el núcleo, como en los sistemas lineales: ver §5).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «solución general $=$ solución particular $+$ núcleo»; si el núcleo no es $\{0\}$, la preimagen de un vector no es única.</div>
+  <p><b>Error típico:</b> concluir que $p$ es único «porque $f$ es sobre»: sobreyectiva no dice nada de la unicidad; eso lo da el núcleo.</p>
+</details>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="examenes"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Veinte preguntas de exámenes de otros años que caen en este tema, agrupadas por método: <b>A</b> núcleo como sistema homogéneo; <b>B</b> núcleo e imagen a la vez en $\mathbb R^n$; <b>C</b> en polinomios o matrices; <b>D</b> teorema de las dimensiones y rango; <b>E</b> núcleo trivial (demostración). Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>) y se señalan sus omisiones y errores. Todos los cálculos se han verificado con sympy.</p>
+
+<!-- ------------------ Método A ------------------ -->
+<h3 id="metodoA">Método A — el núcleo es la solución de un sistema homogéneo</h3>
+<p><b>Idea común.</b> Por la Def. 3.3 (U p.109), $v\in\operatorname{Nuc}(f)\iff f(v)=\bar0$. Si $f$ viene dada por fórmulas (o por su matriz $A$), eso es el sistema homogéneo $AX=0$. Se escalona, se cuentan las incógnitas libres ($=\operatorname{Dim}V-\operatorname{rang}A$, Rouché) y se escribe la solución general como combinación lineal de vectores fijos: esos vectores son una base del núcleo.</p>
+
+<details class="sol" id="ex-feb18a-3"><summary>Feb. 2018 (tipo A), ejercicio 3 — base del núcleo de $f(x,y,z)=(x,\,y-z,\,0)$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), ejercicio 3">X Feb. 2018 (A)</span></summary>
+  <p class="enun">Halle una base del subespacio núcleo de la aplicación lineal $f:\mathbb R^3\to\mathbb R^3$ definida por $f(x,y,z)=(x,\ y-z,\ 0)$.</p>
+  <ol class="steps">
+    <li><b>Plantear la definición.</b> $(x,y,z)\in\operatorname{Nuc}(f)\iff f(x,y,z)=(0,0,0)$ (Def. 3.3, U p.109): igualar componente a componente,
+    $$x=0,\qquad y-z=0,\qquad0=0.$$
+    La tercera ecuación se cumple siempre: no impone nada.</li>
+    <li><b>Contar libertad.</b> Quedan 2 ecuaciones independientes (cada una contiene una incógnita que no está en la otra) en 3 incógnitas: $3-2=1$ parámetro. El núcleo es una recta.</li>
+    <li><b>Resolver.</b> Con $z=\lambda$ libre: $y=\lambda$, $x=0$, es decir $(x,y,z)=\lambda\,(0,1,1)$.</li>
+    <li><b>Base.</b> $\operatorname{Nuc}(f)=\langle(0,1,1)\rangle$; un único vector no nulo es libre (Def. 2.6, U p.74), luego <b>$\{(0,1,1)\}$ es base</b> y $\operatorname{Dim}\operatorname{Nuc}(f)=1$.</li>
+    <li><b>Comprobación.</b> $f(0,1,1)=(0,\,1-1,\,0)=(0,0,0)$ ✓. Y con el Teor. 3.1: $\operatorname{Im}(f)=\{(x,y-z,0)\}=\langle(1,0,0),(0,1,0)\rangle$ tiene dimensión 2, y $1+2=3$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> base $\{(0,1,1)\}$. <i>(Verificado con sympy: rango 2, núcleo $\langle(0,1,1)\rangle$.)</i> <b>Sobre la oficial:</b> correcta y breve.</p>
+  <div class="recipe"><b>Receta:</b> núcleo = «imagen igual a cero»: iguala cada componente de $f$ a $0$, resuelve el sistema homogéneo y escribe la solución como $\lambda_1u_1+\dots$; los $u_i$ son base.</div>
+  <p><b>Error típico:</b> dar como «base» el vector $(0,0,0)$ o las ecuaciones $x=0,\ y=z$ (eso son cartesianas, no una base); o descartar la ecuación $0=0$ sin darse cuenta de que deja $z$ libre.</p>
+</details>
+
+<details class="sol" id="ex-sep19a-3"><summary>Sept. 2019 (tipo A), ejercicio 3 — base del núcleo de $f:\mathbb R^4\to\mathbb R^4$ <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), ejercicio 3">X Sept. 2019 (A)</span></summary>
+  <p class="enun">Dada la aplicación lineal $f:\mathbb R^4\to\mathbb R^4$ definida por $f(x,y,z,t)=(2x,\ x-y+z+t,\ 2y-z,\ x+y+t)$, se pide hallar una base del núcleo.</p>
+  <ol class="steps">
+    <li><b>Sistema del núcleo</b> (Def. 3.3):
+    $$2x=0,\qquad x-y+z+t=0,\qquad2y-z=0,\qquad x+y+t=0.$$</li>
+    <li><b>Resolver por sustitución</b> (las ecuaciones son sencillas): de la 1.ª, $x=0$. De la 3.ª, $z=2y$. De la 4.ª (con $x=0$), $t=-y$.</li>
+    <li><b>Comprobar la ecuación que queda.</b> La 2.ª: $0-y+2y-y=0$, que se cumple para todo $y$. Es <b>redundante</b> (combinación de las otras): el rango del sistema es 3, no 4, y hay $4-3=1$ parámetro.</li>
+    <li><b>Solución general.</b> Con $y=\lambda$: $(x,y,z,t)=(0,\lambda,2\lambda,-\lambda)=\lambda\,(0,1,2,-1)$.</li>
+    <li><b>Base:</b> $\{(0,1,2,-1)\}$, $\operatorname{Dim}\operatorname{Nuc}(f)=1$. Comprobación: $f(0,1,2,-1)=(0,\ 0-1+2-1,\ 2-2,\ 0+1-1)=(0,0,0,0)$ ✓. Por el Teor. 3.1, $\operatorname{Dim}\operatorname{Im}(f)=4-1=3$.</li>
+  </ol>
+  <p><b>Resultado:</b> base $\{(0,1,2,-1)\}$. <i>(Verificado con sympy: rango 3, núcleo $\langle(0,-1,-2,1)\rangle$, proporcional.)</i> <b>Sobre la oficial:</b> correcta (da $(0,\lambda,2\lambda,-\lambda)$; conviene escribir explícitamente la base, que es lo pedido).</p>
+  <div class="recipe"><b>Receta:</b> si alguna ecuación da directamente una incógnita, sustituye en cascada; la ecuación que «sobra» hay que <b>comprobarla</b> (si se cumple siempre, es redundante y por eso aparece un parámetro).</div>
+  <p><b>Error típico:</b> contar 4 ecuaciones y concluir «núcleo $\{0\}$» sin mirar el rango.</p>
+</details>
+
+<details class="sol" id="ex-feb26-2p7"><summary>Feb. 2026 (2.ª sem.), problema 7 (3.er apartado) — base del núcleo con la escalonada reducida <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), problema 7">X Feb. 2026 (2.ª) P7</span></summary>
+  <p class="enun">Sea $f(x,y,z,t)=(x+2y-z+3t,\ 2x+4y+6t,\ -x-2y+z-3t)$ una aplicación lineal de $\mathbb R^4$ en $\mathbb R^3$. Halle la matriz $A$ asociada a $f$ (0.5 puntos). Halle la forma escalonada reducida de $A$ (1 punto). Calcule una base de $\operatorname{Nuc}(f)$ (0.5 puntos).</p>
+  <p><i>(Los dos primeros apartados son del tema 3.3 y 1.2; se dan como datos.)</i> $A=\begin{pmatrix}1&2&-1&3\\2&4&0&6\\-1&-2&1&-3\end{pmatrix}$ y, con $F_2\to F_2-2F_1$, $F_3\to F_3+F_1$, $F_2\to\tfrac12F_2$, $F_1\to F_1+F_2$:
+  $$A_e=\begin{pmatrix}1&2&0&3\\0&0&1&0\\0&0&0&0\end{pmatrix}.$$</p>
+  <ol class="steps">
+    <li><b>Por qué sirve la escalonada.</b> $\operatorname{Nuc}(f)=\{v: Av=0\}$ y las operaciones elementales por filas no cambian las soluciones de un sistema (U §1.4), así que $Av=0\iff A_ev=0$:
+    $$x+2y+3t=0,\qquad z=0.$$</li>
+    <li><b>Incógnitas libres.</b> Las columnas con pivote son la 1.ª ($x$) y la 3.ª ($z$); las otras, $y$ y $t$, son libres: $4-\operatorname{rang}A=4-2=2$ parámetros.</li>
+    <li><b>Solución general.</b> $y=\lambda$, $t=\beta$; entonces $z=0$ y $x=-2\lambda-3\beta$:
+    $$(x,y,z,t)=\lambda\,(-2,1,0,0)+\beta\,(-3,0,0,1).$$</li>
+    <li><b>Base.</b> Los dos vectores generan el núcleo y son libres (en la 2.ª coordenada uno tiene 1 y el otro 0; en la 4.ª al revés): <b>$\{(-2,1,0,0),(-3,0,0,1)\}$</b>, $\operatorname{Dim}\operatorname{Nuc}(f)=2$.</li>
+    <li><b>Comprobación.</b> $f(-2,1,0,0)=(-2+2,\,-4+4,\,2-2)=\bar0$ ✓; $f(-3,0,0,1)=(-3+3,\,-6+6,\,3-3)=\bar0$ ✓. Teor. 3.1: $\operatorname{Dim}\operatorname{Im}(f)=4-2=2=\operatorname{rang}A$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\{(-2,1,0,0),(-3,0,0,1)\}$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> resultado correcto, pero con <b>errata</b>: escribe «haciendo $y=\lambda$, $z=\beta$ … obtenemos $x=-2\lambda-3\beta$, $z=0$» (contradictorio): el segundo parámetro es $t=\beta$.</p>
+  <div class="recipe"><b>Receta:</b> con la escalonada reducida, las incógnitas <b>sin pivote</b> son los parámetros; despeja las de pivote y separa la solución por parámetros: cada parámetro da un vector de la base.</div>
+  <p><b>Error típico:</b> tomar como parámetro una incógnita con pivote (aquí $z$, que vale 0 obligatoriamente).</p>
+</details>
+
+<details class="sol" id="ex-sep25-p3"><summary>Sept. 2025, pregunta 3 — hallar $a,b$ para que $(10,a,b)\in\operatorname{Nuc}(f)$ <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 3">X Sept. 2025</span></summary>
+  <p class="enun">Sea $f:\mathbb R^3\to\mathbb R^3$ una aplicación lineal cuya matriz asociada es $M=\begin{pmatrix}1&2&1\\2&4&3\\3&6&4\end{pmatrix}$. Halle $a,b\in\mathbb R$ de manera que el vector $(10,a,b)$ pertenezca al núcleo de $f$.</p>
+  <ol class="steps">
+    <li><b>Condición de pertenencia</b> (Def. 3.3): $(10,a,b)\in\operatorname{Nuc}(f)\iff M\,(10,a,b)^T=0$, es decir
+    $$10+2a+b=0,\qquad20+4a+3b=0,\qquad30+6a+4b=0.$$
+    Son 3 ecuaciones con 2 incógnitas ($a,b$): no hay garantía de solución, hay que comprobar las tres.</li>
+    <li><b>Resolver.</b> 2.ª $-\,2\cdot$ 1.ª: $b=0$. Entonces $a=-5$.</li>
+    <li><b>Comprobar la 3.ª.</b> $30+6(-5)+4\cdot0=0$ ✓. Solución única: <b>$a=-5,\ b=0$</b>.</li>
+    <li><b>Vía alternativa (más «3.2»).</b> $M$ tiene rango 2 ($F_3=F_1+F_2$), así que $\operatorname{Dim}\operatorname{Nuc}(f)=3-2=1$; de $x+2y+z=0$ y $2x+4y+3z=0$ sale $z=0$, $x=-2y$: $\operatorname{Nuc}(f)=\langle(-2,1,0)\rangle$. Entonces $(10,a,b)=\mu\,(-2,1,0)$ obliga a $\mu=-5$, $a=-5$, $b=0$.</li>
+  </ol>
+  <p><b>Resultado:</b> $a=-5,\ b=0$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> correcta (no comenta que la 3.ª ecuación hay que comprobarla).</p>
+  <div class="recipe"><b>Receta:</b> «¿para qué parámetros está $v$ en el núcleo?» $\to$ impón $Av=0$ y resuelve; o halla una base del núcleo y exige que $v$ sea combinación de ella.</div>
+  <p><b>Error típico:</b> resolver solo dos ecuaciones y no comprobar la tercera.</p>
+</details>
+
+<details class="sol" id="ex-sep17a-pb"><summary>Sept. 2017 (tipo A), problema b) — cartesianas del núcleo y dimensión de la imagen, $\mathbb R^2\to\mathbb R^3$ <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A), problema b)">X Sept. 2017 (A)</span></summary>
+  <p class="enun">Estudie si la aplicación lineal $f:\mathbb R^2\to\mathbb R^3$ definida por las ecuaciones $y_1=x_1+2x_2,\ y_2=x_1-x_2,\ y_3=5x_1+4x_2$ es diagonalizable (1 punto). Escriba las ecuaciones cartesianas del subespacio núcleo (0.5 puntos) y halle la dimensión del subespacio imagen (0.5 puntos).</p>
+  <ol class="steps">
+    <li><b>¿Diagonalizable?</b> (tema 4) Solo tiene sentido para endomorfismos ($V=W$, matriz cuadrada). Aquí $f:\mathbb R^2\to\mathbb R^3$, con matriz $3\times2$: <b>la pregunta no tiene sentido; no es diagonalizable</b>.</li>
+    <li><b>Núcleo</b> (Def. 3.3): $(x_1,x_2)\in\operatorname{Nuc}(f)\iff$
+    $$x_1+2x_2=0,\qquad x_1-x_2=0,\qquad5x_1+4x_2=0.$$
+    Restando las dos primeras, $3x_2=0\Rightarrow x_2=0\Rightarrow x_1=0$; la 3.ª se cumple. El único vector es $(0,0)$: $\operatorname{Nuc}(f)=\{0\}$, $\operatorname{Dim}=0$ (convenio de U p.112). Cartesianas (simplificadas): <b>$x_1=0,\ x_2=0$</b> (equivalentes a las tres de arriba).</li>
+    <li><b>Dimensión de la imagen</b> (Teor. 3.1): $\operatorname{Dim}\operatorname{Im}(f)=\operatorname{Dim}\mathbb R^2-\operatorname{Dim}\operatorname{Nuc}(f)=2-0=\mathbf 2$.</li>
+    <li><b>Comprobación directa</b> (Ej. 3.9, U p.107): $f(x_1,x_2)=x_1(1,1,5)+x_2(2,-1,4)$, luego $\operatorname{Im}(f)=\langle(1,1,5),(2,-1,4)\rangle$, dos vectores no proporcionales $\Rightarrow$ dimensión 2 ✓. (Su cartesiana es $3y_1+2y_2-y_3=0$.)</li>
+  </ol>
+  <p><b>Resultado:</b> no diagonalizable (no es endomorfismo); $\operatorname{Nuc}(f)=\{0\}$; $\operatorname{Dim}\operatorname{Im}(f)=2$. <i>(Verificado con sympy: rango 2, núcleo vacío, cartesiana $(-3,-2,1)$.)</i> <b>Sobre la oficial:</b> correcta en dimensión y en la observación «no es endomorfismo», pero con <b>errata</b>: la primera cartesiana del núcleo aparece como $x_1+x_2=0$ (debe ser $x_1+2x_2=0$), y no concluye que el núcleo es $\{0\}$.</p>
+  <div class="recipe"><b>Receta:</b> si te piden la dimensión de la imagen y ya tienes el núcleo, usa $\operatorname{Dim}\operatorname{Im}=\operatorname{Dim}V-\operatorname{Dim}\operatorname{Nuc}$ (¡$V$ = espacio <b>inicial</b>!).</div>
+  <p><b>Error típico:</b> restar de $\operatorname{Dim}W=3$ (espacio final) en lugar de $\operatorname{Dim}V=2$; contestar «diagonalizable» sin notar que no es un endomorfismo.</p>
+</details>
+
+<!-- ------------------ Método B ------------------ -->
+<h3 id="metodoB">Método B — núcleo e imagen a la vez en $\mathbb R^n$</h3>
+<p><b>Idea común.</b> (i) Núcleo: método A. (ii) Imagen: por linealidad $f(x_1,\dots,x_m)=x_1f(e_1)+\dots+x_mf(e_m)$ (propiedad 3, U p.103; Ej. 3.9, U p.107): <b>las columnas de la matriz generan la imagen</b>; se suprimen las dependientes (Teor. 2.1, U p.79) y su número es la dimensión (Teor. 2.5, U p.88). (iii) Cartesianas de la imagen: eliminar parámetros o imponer que el vector genérico no suba el rango. (iv) Control: $\operatorname{Dim}\operatorname{Nuc}+\operatorname{Dim}\operatorname{Im}=\operatorname{Dim}V$.</p>
+
+<details class="sol" id="ex-feb23-2p3"><summary>Feb. 2023 (2.ª sem.), pregunta 3 — núcleo e imagen de $f(x,y)=(5x+3y,\,5x+3y)$ <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), pregunta 3">X Feb. 2023 (2.ª)</span></summary>
+  <p class="enun">Describa los subespacios núcleo e imagen de la aplicación lineal $f:\mathbb R^2\to\mathbb R^2$, definida por $f(x,y)=(5x+3y,\ 5x+3y)$.</p>
+  <ol class="steps">
+    <li><b>Núcleo.</b> $f(x,y)=(0,0)\iff5x+3y=0$ (las dos componentes dan la misma ecuación). Una ecuación en $\mathbb R^2$: recta. Con $x=3\lambda$: $y=-5\lambda$. $\operatorname{Nuc}(f)=\{5x+3y=0\}=\langle(3,-5)\rangle$, dimensión 1.</li>
+    <li><b>Imagen.</b> $f(x,y)=(5x+3y)\,(1,1)$: toda imagen es múltiplo de $(1,1)$, y todo múltiplo $c\,(1,1)$ es imagen (por ejemplo de $(c/5,0)$). $\operatorname{Im}(f)=\langle(1,1)\rangle=\{(u,v):u=v\}$, dimensión 1.</li>
+    <li><b>Control</b> (Teor. 3.1): $1+1=2=\operatorname{Dim}\mathbb R^2$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f)=\langle(3,-5)\rangle$, $\operatorname{Im}(f)=\langle(1,1)\rangle$. <i>(Verificado con sympy: rango 1; núcleo $\langle(-\tfrac35,1)\rangle$; imagen $\langle(5,5)\rangle$.)</i> <b>Sobre la oficial:</b> correcta ($\langle(1,-5/3)\rangle$ es el mismo núcleo).</p>
+  <div class="recipe"><b>Receta:</b> si todas las componentes de $f$ son la misma expresión (o múltiplos), saca factor común: $f(v)=(\text{escalar})\cdot w\Rightarrow\operatorname{Im}(f)=\langle w\rangle$.</div>
+  <p><b>Error típico:</b> llamar con las mismas letras $x,y$ a las coordenadas del espacio inicial (núcleo) y del final (imagen) y mezclarlas: el núcleo vive en el inicial, la imagen en el final.</p>
+</details>
+
+<details class="sol" id="ex-sep22-3"><summary>Sept. 2022, ejercicio 3 — imagen y dimensión del núcleo de $f(x_1,x_2)=(2x_1,-x_1)$ <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 3">X Sept. 2022</span></summary>
+  <p class="enun">Si $f:\mathbb R^2\to\mathbb R^2$ es un endomorfismo de $\mathbb R^2$ definido como $f(x_1,x_2)=(2x_1,-x_1)$, hallar el subespacio imagen y la dimensión del subespacio núcleo.</p>
+  <ol class="steps">
+    <li><b>Núcleo.</b> $2x_1=0,\ -x_1=0\iff x_1=0$ ($x_2$ libre): $\operatorname{Nuc}(f)=\{x_1=0\}=\langle(0,1)\rangle$, <b>$\operatorname{Dim}\operatorname{Nuc}(f)=1$</b>.</li>
+    <li><b>Imagen.</b> $f(x_1,x_2)=x_1\,(2,-1)+x_2\,(0,0)$, luego $\operatorname{Im}(f)=\langle(2,-1)\rangle$ (dimensión 1). Cartesiana: un vector $(y_1,y_2)=\alpha\,(2,-1)$ cumple $y_1=-2y_2$, es decir <b>$y_1+2y_2=0$</b>.</li>
+    <li><b>Control.</b> $1+1=2$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Im}(f)=\langle(2,-1)\rangle$ ($y_1+2y_2=0$), $\operatorname{Dim}\operatorname{Nuc}(f)=1$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> correcta; escribe «$x_1(2,-1)=\langle(2,-1)\rangle$» (un vector igualado a un subespacio: abuso de notación; lo correcto es $\operatorname{Im}(f)=\{x_1(2,-1)\}=\langle(2,-1)\rangle$).</p>
+  <div class="recipe"><b>Receta:</b> la imagen está generada por los vectores que multiplican a cada variable; las columnas nulas no aportan.</div>
+  <p><b>Error típico:</b> concluir que el núcleo es $\{0\}$ porque «$x_1=0$»: falta ver que $x_2$ queda libre.</p>
+</details>
+
+<details class="sol" id="ex-feb25-1p7"><summary>Feb. 2025 (1.ª sem.), problema 7 (2.º apartado) — núcleo e imagen de $g:\mathbb R^3\to\mathbb R^2$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), problema 7">X Feb. 2025 (1.ª) P7</span></summary>
+  <p class="enun">Consideremos las aplicaciones $f:\mathbb R\to\mathbb R^5$, $g:\mathbb R^3\to\mathbb R^2$ y $h:\mathbb R^2\to\mathbb R^4$ definidas por $f(x)=(x,2+x,3x,4x,5x)$, $g(x,y,z)=(x+y+z,\ -5x-5y-5z)$ y $h(x,y)=(4x-5y,\ y,\ x,\ -3x+7y)$. Indique de manera razonada si $f$ es aplicación lineal (1 punto). <b>Calcule los subespacios núcleo e imagen asociados a $g$ e indique la dimensión de dichos subespacios (1 punto).</b> Calcule la matriz asociada a la aplicación lineal $h\circ g$ (1 punto).</p>
+  <p><i>(El 1.er apartado es del tema 3.1 — $f(0)=(0,2,0,0,0)\neq\bar0$, luego no es lineal — y el 3.er del tema 3.4.)</i></p>
+  <ol class="steps">
+    <li><b>Imagen.</b> $g(x,y,z)=(x+y+z)\,(1,-5)$. Las columnas de la matriz $\begin{pmatrix}1&1&1\\-5&-5&-5\end{pmatrix}$ son las tres $(1,-5)$: por supresión (Teor. 2.1), $\operatorname{Im}(g)=\langle(1,-5)\rangle$, <b>dimensión 1</b>. Cartesiana: $(u,v)=\alpha(1,-5)\Rightarrow v=-5u$, es decir $5u+v=0$.</li>
+    <li><b>Núcleo.</b> $x+y+z=0$ y $-5(x+y+z)=0$: es una sola ecuación (la 2.ª es $-5$ veces la 1.ª). Plano de $\mathbb R^3$: $3-1=2$ parámetros. Con $x=\alpha$, $y=\beta$: $z=-\alpha-\beta$, $(x,y,z)=\alpha\,(1,0,-1)+\beta\,(0,1,-1)$. Base $\{(1,0,-1),(0,1,-1)\}$, <b>dimensión 2</b>.</li>
+    <li><b>Control.</b> $2+1=3=\operatorname{Dim}\mathbb R^3$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Im}(g)=\langle(1,-5)\rangle$ (dim 1); $\operatorname{Nuc}(g)=\{x+y+z=0\}$ (dim 2). <i>(Verificado con sympy: rango 1; núcleo $\langle(-1,1,0),(-1,0,1)\rangle$, el mismo plano.)</i> <b>Sobre la oficial:</b> correcta.</p>
+  <div class="recipe"><b>Receta:</b> si las filas de la matriz son proporcionales, el núcleo lo da <b>una</b> ecuación y la imagen es una recta.</div>
+  <p><b>Error típico:</b> contar dos ecuaciones para el núcleo y decir que es una recta.</p>
+</details>
+
+<details class="sol" id="ex-sep23-p7"><summary>Sept. 2023, problema 7 — núcleo, imagen y un subespacio propio de la imagen (implícitas) <span class="src" data-l="X" data-ref="Sept. 2023, problema 7">X Sept. 2023</span></summary>
+  <p class="enun">Consideremos la aplicación lineal $f:\mathbb R^3\to\mathbb R^3$ definida por $f(x,y,z)=(5z,\ x+2y,\ 3x+6y)$. Calcule los subespacios núcleo e imagen asociados a $f$ e indique la dimensión de dichos subespacios (1 punto). Calcule un subespacio propio de la imagen de $f$ y expréselo en forma implícita (1 punto).</p>
+  <ol class="steps">
+    <li><b>Matriz</b> (columnas $=f(e_1),f(e_2),f(e_3)$): $A=\begin{pmatrix}0&0&5\\1&2&0\\3&6&0\end{pmatrix}$.</li>
+    <li><b>Núcleo.</b> $5z=0,\ x+2y=0,\ 3x+6y=0$ (la 3.ª es $3\cdot$ la 2.ª). Rango 2 $\Rightarrow$ 1 parámetro: $z=0$, $x=-2y$; con $y=\lambda$: $\operatorname{Nuc}(f)=\langle(-2,1,0)\rangle$, <b>dimensión 1</b>.</li>
+    <li><b>Imagen.</b> Columnas $(0,1,3)$, $(0,2,6)=2(0,1,3)$, $(5,0,0)$. Suprimiendo la 2.ª (Teor. 2.1): $\operatorname{Im}(f)=\langle(0,1,3),(5,0,0)\rangle$, libres (no proporcionales) $\Rightarrow$ <b>dimensión 2</b>. Control: $1+2=3$ ✓.</li>
+    <li><b>Cartesiana de la imagen</b> (útil para el apartado 2). $(x,y,z)\in\operatorname{Im}(f)\iff\operatorname{rang}\{(x,y,z),(0,1,3),(5,0,0)\}=2\iff$
+    $$\begin{vmatrix}x&y&z\\0&1&3\\5&0&0\end{vmatrix}=15y-5z=0\iff3y-z=0.$$</li>
+    <li><b>Subespacio propio de $\operatorname{Im}(f)$.</b> En U (§2.1 p.63) un subespacio <b>propio</b> es uno distinto de $\{0\}$ y del total. Como $\operatorname{Dim}\operatorname{Im}(f)=2$, los propios son los de dimensión 1: rectas contenidas en el plano $3y-z=0$. Por ejemplo $L=\langle(1,0,0)\rangle$ ($=\langle(5,0,0)\rangle$), que está en $\operatorname{Im}(f)$ porque $(5,0,0)$ es un generador. <b>Forma implícita:</b> una recta de $\mathbb R^3$ necesita $3-1=2$ ecuaciones: $L:\ y=0,\ z=0$. (Otro válido: $\langle(0,1,3)\rangle:\ x=0,\ z-3y=0$.)</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f)=\langle(-2,1,0)\rangle$ (dim 1); $\operatorname{Im}(f)=\langle(0,1,3),(5,0,0)\rangle=\{3y-z=0\}$ (dim 2); subespacio propio, p. ej., $\{y=0,z=0\}$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> correcta; no da la cartesiana de $\operatorname{Im}(f)$ ni comprueba que la recta elegida está contenida (es inmediato porque $(5,0,0)$ es generador).</p>
+  <div class="recipe"><b>Receta:</b> para un subespacio dentro de la imagen, toma uno (o parte) de sus generadores y pásalo a implícitas: en $\mathbb R^n$ un subespacio de dimensión $k$ lleva $n-k$ ecuaciones independientes.</div>
+  <p><b>Error típico:</b> (a) confundir «subespacio propio» (U p.63) con «subespacio propio asociado a un valor propio» (U Def. 4.8, p.152), que es otra cosa (tema 4); (b) dar una recta de $\mathbb R^3$ con una sola ecuación (eso es un plano).</p>
+</details>
+
+<details class="sol" id="ex-feb19a-pa"><summary>Feb. 2019 (tipo A), problema a) — cartesianas y dimensiones de núcleo e imagen dada la matriz <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), problema a)">X Feb. 2019 (A)</span></summary>
+  <p class="enun">Si $\begin{pmatrix}1&2&1\\4&3&0\\5&5&1\end{pmatrix}$ es la matriz asociada a un endomorfismo, calcular las ecuaciones cartesianas y dimensiones de los subespacios núcleo e imagen.</p>
+  <ol class="steps">
+    <li><b>Rango.</b> $F_3=F_1+F_2$ ($1+4=5$, $2+3=5$, $1+0=1$) y $F_1,F_2$ no son proporcionales $\Rightarrow\operatorname{rang}A=2$.</li>
+    <li><b>Dimensiones.</b> $\operatorname{Dim}\operatorname{Im}(f)=\operatorname{rang}A=2$ (las columnas generan la imagen: Ej. 3.9 + Teor. 2.5) y, por el Teor. 3.1, $\operatorname{Dim}\operatorname{Nuc}(f)=3-2=1$.</li>
+    <li><b>Cartesianas del núcleo.</b> $AX=0$; quitando la ecuación redundante ($F_3$):
+    $$\operatorname{Nuc}(f):\ \begin{cases}x+2y+z=0\\4x+3y=0\end{cases}$$
+    (dos ecuaciones independientes en $\mathbb R^3$ $\Rightarrow$ recta, coherente con dimensión 1). Resolviendo: $y=-\tfrac43x$; con $x=3\lambda$, $y=-4\lambda$, $z=-x-2y=5\lambda$: $\operatorname{Nuc}(f)=\langle(3,-4,5)\rangle$.</li>
+    <li><b>Cartesiana de la imagen.</b> Columnas $(1,4,5),(2,3,5),(1,0,1)$, de rango 2; $(2,3,5)$ y $(1,0,1)$ son libres $\Rightarrow$ base. $(x,y,z)\in\operatorname{Im}(f)\iff$
+    $$\begin{aligned}\begin{vmatrix}x&y&z\\2&3&5\\1&0&1\end{vmatrix}&=x\cdot3-y\,(2-5)+z\,(0-3)\\&=3x+3y-3z\\&=0\iff x+y-z=0.\end{aligned}$$
+    Comprobación: $(1,4,5)$: $1+4-5=0$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f):\ x+2y+z=0,\ 4x+3y=0$ (dim 1, $=\langle(3,-4,5)\rangle$); $\operatorname{Im}(f):\ x+y-z=0$ (dim 2). <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> correcta en dimensiones y en la cartesiana de la imagen; para el núcleo solo dice «se deducen de $AX=0$» sin eliminar la ecuación dependiente ni dar el generador.</p>
+  <div class="recipe"><b>Receta:</b> rango $\to$ las dos dimensiones. Núcleo: las filas independientes de $A$ <b>son</b> sus cartesianas. Imagen: base de columnas + determinante con el vector genérico.</div>
+  <p><b>Error típico:</b> dar las tres ecuaciones del núcleo sin quitar la redundante y concluir «núcleo $\{0\}$».</p>
+</details>
+
+<details class="sol" id="ex-feb24-1p3"><summary>Feb. 2024 (1.ª sem.), pregunta 3 — V/F: $\operatorname{Im}(f)\subset$ plano $5x-2y+10z=0$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), pregunta 3">X Feb. 2024 (1.ª)</span></summary>
+  <p class="enun">Sea $f:\mathbb R^2\to\mathbb R^3$ una aplicación lineal que verifica $f(1,0)=(0,5,1)$ y $f(0,1)=(-2,0,1)$. Justifique de manera razonada si la siguiente afirmación es verdadera o falsa: la imagen por $f$ de cualquier vector de $\mathbb R^2$ pertenece al plano $5x-2y+10z=0$.</p>
+  <ol class="steps">
+    <li><b>Qué se pregunta.</b> Si $\operatorname{Im}(f)\subset\Pi$, con $\Pi=\{5x-2y+10z=0\}$.</li>
+    <li><b>Forma de las imágenes.</b> Por linealidad (propiedad 3, U p.103):
+    $$\begin{aligned}f(u,v)&=u\,f(1,0)+v\,f(0,1)\\&=u\,(0,5,1)+v\,(-2,0,1).\end{aligned}$$
+    Así $\operatorname{Im}(f)=\langle(0,5,1),(-2,0,1)\rangle$ (Ej. 3.10, U p.108).</li>
+    <li><b>Los generadores están en $\Pi$.</b> $(0,5,1)$: $0-10+10=0$ ✓. $(-2,0,1)$: $-10-0+10=0$ ✓.</li>
+    <li><b>Conclusión.</b> $\Pi$ es un subespacio (ecuación homogénea), luego contiene toda combinación lineal de vectores suyos; por el paso 2, toda imagen es combinación de esos dos: <b>Verdadero</b>.</li>
+    <li><b>Algo más (no pedido).</b> Como los dos generadores son libres, $\operatorname{Dim}\operatorname{Im}(f)=2=\operatorname{Dim}\Pi$, así que de hecho $\operatorname{Im}(f)=\Pi$ (Teor. 2.6). Eliminando parámetros en $x=-2\beta,\ y=5\alpha,\ z=\alpha+\beta$: $\alpha=y/5$, $\beta=-x/2$, $z=y/5-x/2\iff5x-2y+10z=0$.</li>
+  </ol>
+  <p><b>Resultado:</b> Verdadero (y de hecho $\operatorname{Im}(f)=\Pi$). <i>(Verificado con sympy: cartesiana de la imagen $\propto(5,-2,10)$.)</i> <b>Sobre la oficial:</b> correcta (halla la cartesiana de la imagen). Su «fallo recurrente» («no basta comprobar que $(0,5,1)$ y $(-2,0,1)$ pertenecen al plano… hay que justificar que cualquier vector del plano es combinación lineal de ellos») es engañoso: eso prueba $\Pi\subset\operatorname{Im}(f)$, que no se pregunta; lo que falta en la respuesta del alumno típico es el argumento del paso 4.</p>
+  <div class="recipe"><b>Receta:</b> «¿$\operatorname{Im}(f)\subset S$?» (con $S$ subespacio): basta comprobar que las imágenes de una base de $V$ están en $S$.</div>
+  <p><b>Error típico:</b> comprobar solo los dos vectores y no decir <b>por qué</b> basta (linealidad + $S$ subespacio).</p>
+</details>
+
+<!-- ------------------ Método C ------------------ -->
+<h3 id="metodoC">Método C — núcleo e imagen en espacios de polinomios o de matrices</h3>
+<p><b>Idea común.</b> Igual que en $\mathbb R^n$, pero trabajando con los coeficientes (coordenadas en la base canónica $\{1,x,x^2,\dots\}$ o en la de matrices elementales). El núcleo se obtiene igualando a <b>cero el polinomio/matriz nulo</b> (todos los coeficientes a 0); la imagen, escribiendo $f(v)$ como combinación lineal de polinomios/matrices fijos (Ej. 3.11, U p.108-109; Ej. 3.8 y 3.12, U p.106-110).</p>
+
+<details class="sol" id="ex-feb17-2pc"><summary>Feb. 2017 (2.ª sem., tipo A), problema c) — núcleo e imagen de la derivada en $\wp_2$ <span class="src" data-l="X" data-ref="Feb. 2017 (2.ª sem., tipo A), problema c)">X Feb. 2017 (2.ª, A)</span></summary>
+  <p class="enun">Hallar las ecuaciones del subespacio $\operatorname{Im}(f)$ (1 punto) y del subespacio $\operatorname{Nuc}(f)$ (1 punto) del endomorfismo $f$ de $\wp_2(x)$ (polinomios reales de grado $\le2$) definido por la derivada, es decir, $f(a+bx+cx^2)=b+2cx$.</p>
+  <p>Coordenadas en la base $\{1,x,x^2\}$: $a+bx+cx^2\leftrightarrow(a,b,c)$.</p>
+  <ol class="steps">
+    <li><b>Núcleo.</b> $f(p)=0$ (polinomio nulo) $\iff b+2cx=0+0x\iff b=0,\ 2c=0$. Ecuaciones: <b>$b=0,\ c=0$</b>; $a$ libre. $\operatorname{Nuc}(f)=\{a: a\in\mathbb R\}=\langle1\rangle$ (los constantes), dimensión 1.</li>
+    <li><b>Imagen.</b> $f(a+bx+cx^2)=b\cdot1+c\cdot(2x)$: generada por $\{1,2x\}$, libres $\Rightarrow\operatorname{Im}(f)=\langle1,x\rangle=\wp_1$, dimensión 2. Como subespacio de $\wp_2$ (espacio final) un polinomio $a'+b'x+c'x^2$ está en la imagen $\iff$ <b>$c'=0$</b> (ecuación cartesiana).</li>
+    <li><b>Control.</b> $1+2=3=\operatorname{Dim}\wp_2$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f):\ b=0,\ c=0$; $\operatorname{Im}(f):\ c'=0$. <i>(Verificado con sympy con la matriz $\begin{pmatrix}0&1&0\\0&0&2\\0&0&0\end{pmatrix}$: rango 2, núcleo $\langle(1,0,0)\rangle$, cartesiana $(0,0,1)$.)</i> <b>Sobre la oficial:</b> correcta y muy breve (no justifica). <i>Los vectores propios de esta misma aplicación aparecen en Feb. 2018 (tipo B), problema a) → tema 4.2.</i></p>
+  <div class="recipe"><b>Receta:</b> en polinomios, «$=0$» significa <b>todos los coeficientes cero</b>; la imagen es el espacio generado por los polinomios que multiplican a cada parámetro.</div>
+  <p><b>Error típico:</b> decir que el núcleo de la derivada es $\{0\}$ (la derivada de una constante es 0) o que la imagen es todo $\wp_2$ (nunca sale $x^2$).</p>
+</details>
+
+<details class="sol" id="ex-feb23-1p7"><summary>Feb. 2023 (1.ª sem.), problema 7 (i) — núcleo e imagen de la derivada tercera $\wp_4\to\wp_1$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª sem.), problema 7 (i)">X Feb. 2023 (1.ª) P7</span></summary>
+  <p class="enun">Consideremos la aplicación lineal $f:\wp_4\to\wp_1$, definida por $f(p)=p'''$ (derivada tercera) y consideremos en $\wp_n$ la base $(p_0,p_1,\dots,p_n)$, con $p_0(x)=1$, $p_1(x)=x$, …, $p_n(x)=x^n$. (Si $p(x)=7+3x^2+2x^3+x^4$, entonces $p'''(x)=12+24x$.) (i) Describa los subespacios núcleo e imagen de la aplicación lineal $f$ (1 punto). (ii) Dé la expresión matricial de $f$ (1 punto).</p>
+  <p><i>(El (ii) es del tema 3.3: la matriz $2\times5$ $\begin{pmatrix}0&0&0&6&0\\0&0&0&0&24\end{pmatrix}$.)</i></p>
+  <ol class="steps">
+    <li><b>Fórmula de $f$.</b> Para $p=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4$: $p'=a_1+2a_2x+3a_3x^2+4a_4x^3$, $p''=2a_2+6a_3x+12a_4x^2$, $p'''=6a_3+24a_4x$.</li>
+    <li><b>Núcleo.</b> $6a_3+24a_4x=0\iff a_3=0,\ a_4=0$; $a_0,a_1,a_2$ libres. $\operatorname{Nuc}(f)=\{a_0+a_1x+a_2x^2\}=\wp_2=\langle1,x,x^2\rangle$, dimensión 3.</li>
+    <li><b>Imagen.</b> $f(p)=a_3\cdot6+a_4\cdot24x$: generada por $\{6,24x\}$, libres $\Rightarrow\operatorname{Im}(f)=\langle1,x\rangle=\wp_1$, dimensión 2: <b>es todo el espacio final</b>.</li>
+    <li><b>Control.</b> $3+2=5=\operatorname{Dim}\wp_4$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f)=\wp_2$ (dim 3); $\operatorname{Im}(f)=\wp_1$ (dim 2). <i>(Verificado con sympy: matriz $2\times5$ de rango 2; núcleo $\langle e_1,e_2,e_3\rangle$.)</i> <b>Sobre la oficial:</b> correcta (justifica la imagen «integrando tres veces», que también vale).</p>
+  <div class="recipe"><b>Receta:</b> escribe $f$ sobre el polinomio genérico con coeficientes $a_i$; núcleo = coeficientes de $f(p)$ igualados a 0; imagen = generada por los polinomios que acompañan a cada $a_i$.</div>
+  <p><b>Error típico:</b> dar la matriz $5\times5$ (el espacio final es $\wp_1$, de dimensión 2); o calcular $\operatorname{Dim}\operatorname{Im}=5-3$ con $V$ y $W$ cambiados.</p>
+</details>
+
+<details class="sol" id="ex-feb22a-3"><summary>Feb. 2022 (tipo A), ejercicio 3 — núcleo e imagen de $f:\mathbb R^2\to D_{2\times2}$ <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A), ejercicio 3">X Feb. 2022 (A)</span></summary>
+  <p class="enun">Sea $D_{2\times2}$ el conjunto de matrices diagonales de orden 2 y $f:\mathbb R^2\to D_{2\times2}$ una aplicación tal que $f(x,y)=\begin{pmatrix}x&0\\0&x-y\end{pmatrix}$. Calcule los subespacios núcleo e imagen de $f$.</p>
+  <p><i>(La linealidad de $f$ se comprueba en el tema 3.1; aquí solo núcleo e imagen.)</i></p>
+  <ol class="steps">
+    <li><b>Espacio final.</b> $D_{2\times2}=\left\{\begin{pmatrix}d_1&0\\0&d_2\end{pmatrix}\right\}=\left\langle\begin{pmatrix}1&0\\0&0\end{pmatrix},\begin{pmatrix}0&0\\0&1\end{pmatrix}\right\rangle$, base de 2 elementos $\Rightarrow\operatorname{Dim}D_{2\times2}=2$.</li>
+    <li><b>Núcleo.</b> $f(x,y)=\begin{pmatrix}0&0\\0&0\end{pmatrix}\iff x=0,\ x-y=0\iff x=y=0$. $\operatorname{Nuc}(f)=\{(0,0)\}$, dimensión 0.</li>
+    <li><b>Imagen.</b> Teor. 3.1: $\operatorname{Dim}\operatorname{Im}(f)=2-0=2=\operatorname{Dim}D_{2\times2}$, y un subespacio con la dimensión del total es el total (Teor. 2.6, U p.88): <b>$\operatorname{Im}(f)=D_{2\times2}$</b>.</li>
+    <li><b>Comprobación directa.</b> $f(x,y)=x\begin{pmatrix}1&0\\0&1\end{pmatrix}+y\begin{pmatrix}0&0\\0&-1\end{pmatrix}$; las dos matrices son libres y diagonales $\Rightarrow$ generan un subespacio de dimensión 2 de $D_{2\times2}$, que es todo ✓. (También: dada $\operatorname{diag}(d_1,d_2)$, se toma $(x,y)=(d_1,d_1-d_2)$.)</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Nuc}(f)=\{0\}$; $\operatorname{Im}(f)=D_{2\times2}$ (en este caso $f$ es un isomorfismo, §5). <i>(Verificado con sympy en coordenadas $(d_1,d_2)$: matriz $\begin{pmatrix}1&0\\1&-1\end{pmatrix}$, rango 2.)</i> <b>Sobre la oficial:</b> correcta; añade la comprobación de linealidad (no pedida).</p>
+  <div class="recipe"><b>Receta:</b> si el núcleo es $\{0\}$ y $\operatorname{Dim}V=\operatorname{Dim}W$, la imagen es todo $W$.</div>
+  <p><b>Error típico:</b> comparar con $\operatorname{Dim}\mathcal M_{2\times2}=4$ en vez de $\operatorname{Dim}D_{2\times2}=2$.</p>
+</details>
+
+<details class="sol" id="ex-sep18a-pb"><summary>Sept. 2018 (tipo A), problema b) — paramétricas del núcleo y dimensión de la imagen, $\mathbb R^3\to\mathcal M_{2\times2}$ <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), problema b)">X Sept. 2018 (A)</span></summary>
+  <p class="enun">La aplicación lineal $f:\mathbb R^3\to V$, donde $V$ es el espacio vectorial de matrices reales cuadradas de orden 2, está definida por $f(x,y,z)=\begin{pmatrix}x&0\\y&x-y\end{pmatrix}$. Hallar unas ecuaciones paramétricas del subespacio núcleo (0.5 puntos) y calcule la dimensión del subespacio imagen (0.5 puntos).</p>
+  <ol class="steps">
+    <li><b>Núcleo.</b> $f(x,y,z)=\begin{pmatrix}0&0\\0&0\end{pmatrix}\iff x=0,\ y=0,\ x-y=0$ (la 3.ª es consecuencia de las dos primeras); $z$ no aparece $\Rightarrow$ es libre. Paramétricas: <b>$x=0,\ y=0,\ z=\lambda$, $\lambda\in\mathbb R$</b>. $\operatorname{Nuc}(f)=\langle(0,0,1)\rangle$, dimensión 1.</li>
+    <li><b>Imagen.</b> Teor. 3.1: $\operatorname{Dim}\operatorname{Im}(f)=3-1=\mathbf2$.</li>
+    <li><b>Comprobación directa.</b> $f(x,y,z)=x\begin{pmatrix}1&0\\0&1\end{pmatrix}+y\begin{pmatrix}0&0\\1&-1\end{pmatrix}+z\begin{pmatrix}0&0\\0&0\end{pmatrix}$: dos matrices libres $\Rightarrow$ dimensión 2 ✓. (Cartesianas de la imagen en coordenadas $(a_{11},a_{12},a_{21},a_{22})$: $a_{12}=0,\ a_{22}=a_{11}-a_{21}$.)</li>
+  </ol>
+  <p><b>Resultado:</b> paramétricas $x=0,\ y=0,\ z=\lambda$; $\operatorname{Dim}\operatorname{Im}(f)=2$. <i>(Verificado con sympy: matriz en canónicas $\begin{pmatrix}1&0&0\\0&0&0\\0&1&0\\1&-1&0\end{pmatrix}$, rango 2, núcleo $\langle(0,0,1)\rangle$.)</i> <b>Sobre la oficial:</b> dimensión y base correctas, pero <b>las paramétricas que da ($x=0,\ y=0,\ z=1$) están mal</b>: describen un único punto; deben llevar un parámetro: $z=\lambda$.</p>
+  <div class="recipe"><b>Receta:</b> una variable que no aparece en la fórmula de $f$ queda libre en el núcleo.</div>
+  <p><b>Error típico:</b> olvidar $z$ y decir que el núcleo es $\{0\}$ $\Rightarrow\operatorname{Dim}\operatorname{Im}=3$.</p>
+</details>
+
+<!-- ------------------ Método D ------------------ -->
+<h3 id="metodoD">Método D — teorema de las dimensiones y rango</h3>
+<p><b>Idea común.</b> Teor. 3.1 (U p.111): $\operatorname{Dim}\operatorname{Im}(f)+\operatorname{Dim}\operatorname{Nuc}(f)=\operatorname{Dim}V$ ($V$ = espacio <b>inicial</b>). Con la matriz $A$ de orden $n\times m$ ($m=\operatorname{Dim}V$): $\operatorname{Dim}\operatorname{Im}(f)=\operatorname{rang}A$ (Ej. 3.9 + Teor. 2.5, U p.88) y $\operatorname{Dim}\operatorname{Nuc}(f)=m-\operatorname{rang}A$ (autoevaluación 5-6, ítems V/F, U p.138). Conocidas <b>dos</b> de las tres cantidades ($\operatorname{Dim}V$, $\operatorname{Dim}\operatorname{Im}$, $\operatorname{Dim}\operatorname{Nuc}$), sale la tercera.</p>
+
+<details class="sol" id="ex-feb20-1b3"><summary>Feb. 2020 (1.ª sem., tipo B), ejercicio 3 — rango de $A_{3\times5}$ sabiendo $\operatorname{Dim}\operatorname{Nuc}=3$ <span class="src" data-l="X" data-ref="Feb. 2020 (1.ª sem., tipo B), ejercicio 3">X Feb. 2020 (1.ª, B)</span></summary>
+  <p class="enun">Si $A$ es la matriz asociada a una aplicación lineal de orden $3\times5$ y la dimensión del núcleo es 3, se pide calcular el rango de $A$.</p>
+  <ol class="steps">
+    <li><b>Leer el tamaño.</b> En U la matriz de $f:V\to W$ tiene una <b>columna por cada vector de la base de $V$</b> (coordenadas de su imagen en la base de $W$). $3\times5$ $\Rightarrow$ 5 columnas $\Rightarrow\operatorname{Dim}V=5$; 3 filas $\Rightarrow\operatorname{Dim}W=3$.</li>
+    <li><b>Rango = dimensión de la imagen.</b> Las columnas generan $\operatorname{Im}(f)$ (Ej. 3.9) y el rango de un sistema generador es la dimensión (Teor. 2.5): $\operatorname{rang}A=\operatorname{Dim}\operatorname{Im}(f)$.</li>
+    <li><b>Teorema de las dimensiones.</b> $\operatorname{Dim}\operatorname{Im}(f)=\operatorname{Dim}V-\operatorname{Dim}\operatorname{Nuc}(f)=5-3=2$. Luego <b>$\operatorname{rang}A=2$</b>.</li>
+    <li><b>Coherencia.</b> $2\le\min(3,5)$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{rang}A=2$. <b>Sobre la oficial:</b> correcta (dice «subespacio final» por «espacio final»; detalle de redacción).</p>
+  <div class="recipe"><b>Receta:</b> $\operatorname{rang}A=(\text{número de columnas})-\operatorname{Dim}\operatorname{Nuc}(f)$.</div>
+  <p><b>Error típico:</b> restar del número de filas: $3-3=0$ (confundiría $V$ con $W$).</p>
+</details>
+
+<details class="sol" id="ex-sep25-p2"><summary>Sept. 2025, pregunta 2 — dimensión de la imagen de un endomorfismo de $\wp_3$ <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 2">X Sept. 2025</span></summary>
+  <p class="enun">Considere la aplicación lineal $f:\wp_3\to\wp_3$, definida por $f(ax^3+bx^2+cx+d)=(a+b)x^3+(b+c)x^2+(c+d)x+(a-d)$. Calcule de manera razonada la dimensión de la imagen de $f$.</p>
+  <ol class="steps">
+    <li><b>Estrategia.</b> Es más corto hallar el núcleo y aplicar el Teor. 3.1.</li>
+    <li><b>Núcleo.</b> $f(p)=0\iff a+b=0,\ b+c=0,\ c+d=0,\ a-d=0$. De las tres primeras: $b=-a$, $c=-b=a$, $d=-c=-a$. Sustituyendo en la 4.ª: $a-(-a)=2a=0\Rightarrow a=0$, y entonces $b=c=d=0$. $\operatorname{Nuc}(f)=\{0\}$, dimensión 0.</li>
+    <li><b>Teorema de las dimensiones.</b> $\operatorname{Dim}\operatorname{Im}(f)=\operatorname{Dim}\wp_3-0=\mathbf4$ (así $\operatorname{Im}(f)=\wp_3$).</li>
+    <li><b>Comprobación alternativa.</b> Matriz en coordenadas $(a,b,c,d)$: $\begin{pmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\\1&0&0&-1\end{pmatrix}$, $\det=-2\neq0$ $\Rightarrow$ rango 4 ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Dim}\operatorname{Im}(f)=4$. <i>(Verificado con sympy: $\det=-2$, rango 4, núcleo vacío.)</i> <b>Sobre la oficial:</b> correcta.</p>
+  <div class="recipe"><b>Receta:</b> para un endomorfismo: núcleo $\{0\}\iff\det A\neq0\iff$ imagen $=$ todo el espacio.</div>
+  <p><b>Error típico:</b> pensar que $\operatorname{Dim}\wp_3=3$ (son 4 coeficientes: $\{1,x,x^2,x^3\}$).</p>
+</details>
+
+<details class="sol" id="ex-feb26-1p7"><summary>Feb. 2026 (1.ª sem.), problema 7 — $\operatorname{Im}(g)$, $\operatorname{Nuc}(g\circ f)$ y teorema de las dimensiones <span class="src" data-l="X" data-ref="Feb. 2026 (1.ª sem.), problema 7">X Feb. 2026 (1.ª) P7</span></summary>
+  <p class="enun">Consideremos las aplicaciones lineales $f,g:\mathbb R^3\to\mathbb R^3$ definidas por $f(x,y,z)=(x+2y,\ -y+z,\ x-z)$, $g(x,y,z)=(x+y,\ y+z,\ x+y)$. (a) Calcule el subespacio imagen asociado a $g$ e indique la dimensión (0.5 puntos). (b) Calcule el subespacio $\operatorname{Nuc}(g\circ f)$ e indique la dimensión (1 punto). (c) Justifique si es cierta la afirmación (0.5 puntos): $\dim(\operatorname{Im}(g\circ f))+\dim(\operatorname{Nuc}(g\circ f))=3$.</p>
+  <ol class="steps">
+    <li><b>(a) Imagen de $g$.</b> $g(x,y,z)=x\,(1,0,1)+y\,(1,1,1)+z\,(0,1,0)$, luego $\operatorname{Im}(g)=\langle(1,0,1),(1,1,1),(0,1,0)\rangle$ (Ej. 3.9). Como $(1,1,1)=(1,0,1)+(0,1,0)$, se suprime (Teor. 2.1): $\operatorname{Im}(g)=\langle(1,0,1),(0,1,0)\rangle$, libres $\Rightarrow$ <b>$\operatorname{Dim}\operatorname{Im}(g)=2$</b> (equivalentemente $\langle(1,0,1),(1,1,1)\rangle$, como la oficial). Cartesiana: $x=z$.</li>
+    <li><b>(b) La composición</b> (herramienta del tema 3.4: se sustituye $f$ dentro de $g$). Con $(u,v,w)=f(x,y,z)=(x+2y,\,-y+z,\,x-z)$:
+    $$\begin{aligned}(g\circ f)(x,y,z)&=g(u,v,w)\\&=(u+v,\ v+w,\ u+v)\\&=(x+y+z,\ x-y,\ x+y+z).\end{aligned}$$
+    (Coincide con $A_gA_f=\begin{pmatrix}1&1&1\\1&-1&0\\1&1&1\end{pmatrix}$.)</li>
+    <li><b>Núcleo de $g\circ f$.</b> $x+y+z=0$, $x-y=0$ (la 3.ª repite la 1.ª). Rango 2 $\Rightarrow$ 1 parámetro: $y=x$, $z=-2x$; con $x=\lambda$: $\operatorname{Nuc}(g\circ f)=\langle(1,1,-2)\rangle$, <b>dimensión 1</b>. Comprobación: $(g\circ f)(1,1,-2)=(0,0,0)$ ✓.</li>
+    <li><b>(c) Cierta.</b> $g\circ f$ es lineal (composición de lineales, tema 3.4) y va de $\mathbb R^3$ en $\mathbb R^3$; el Teor. 3.1 con $V=\mathbb R^3$ da exactamente esa igualdad. Comprobación: $\operatorname{Im}(g\circ f)=\langle(1,1,1),(1,-1,1)\rangle$ (la 3.ª columna $(1,0,1)$ es su semisuma), dimensión 2, y $2+1=3$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> (a) $\operatorname{Im}(g)=\langle(1,0,1),(0,1,0)\rangle$, dim 2; (b) $\operatorname{Nuc}(g\circ f)=\langle(1,1,-2)\rangle$, dim 1; (c) cierta. <i>(Verificado con sympy: $\operatorname{rang}A_g=2$; $A_gA_f$ como arriba; núcleo $\propto(1,1,-2)$; rango de $A_gA_f$ = 2.)</i> <b>Sobre la oficial:</b> correcta. Escribe literalmente «$\operatorname{Nuc}(g\circ f)=\{(1,1,-2)\}$»: un conjunto de un solo vector, que no es subespacio; debe ser $\langle(1,1,-2)\rangle$.</p>
+  <div class="recipe"><b>Receta:</b> núcleo de una composición: primero la fórmula (o la matriz producto, <b>en el orden</b> $A_gA_f$ para $g\circ f$), después el método A. El Teor. 3.1 vale para <b>cualquier</b> aplicación lineal, también para composiciones.</div>
+  <p><b>Error típico:</b> calcular $A_fA_g$ (orden equivocado) o hacer (b)-(c) con $g$ en lugar de $g\circ f$.</p>
+</details>
+
+<details class="sol" id="ex-feb24-2p7"><summary>Feb. 2024 (2.ª sem.), problema 7 — $\operatorname{Im}(f)$, $\operatorname{Nuc}(f\circ f)$ y teorema de las dimensiones <span class="src" data-l="X" data-ref="Feb. 2024 (2.ª sem.), problema 7">X Feb. 2024 (2.ª) P7</span></summary>
+  <p class="enun">Consideremos la aplicación lineal $f:\mathbb R^3\to\mathbb R^3$ definida por $f(x,y,z)=(x+3y,\ -x,\ y-z)$. Calcule el subespacio imagen asociado a $f$ e indique la dimensión (0.5 puntos). Calcule el subespacio $\operatorname{Nuc}(f\circ f)$ e indique la dimensión (1 punto). Justifique si es cierta la afirmación (0.5 puntos): $\dim(\operatorname{Im}(f\circ f))+\dim(\operatorname{Nuc}(f\circ f))=3$.</p>
+  <ol class="steps">
+    <li><b>Imagen de $f$.</b> Matriz $A=\begin{pmatrix}1&3&0\\-1&0&0\\0&1&-1\end{pmatrix}$. Desarrollando $\det A$ por la 3.ª columna: $-1\cdot\begin{vmatrix}1&3\\-1&0\end{vmatrix}=-1\cdot3=-3\neq0$ $\Rightarrow$ rango 3 $\Rightarrow$ <b>$\operatorname{Im}(f)=\mathbb R^3$, dimensión 3</b> (Teor. 2.6). Por el Teor. 3.1, $\operatorname{Nuc}(f)=\{0\}$.</li>
+    <li><b>$f\circ f$.</b> Sustituyendo $(u,v,w)=f(x,y,z)=(x+3y,-x,y-z)$ en $f$:
+    $$\begin{aligned}(f\circ f)(x,y,z)&=(u+3v,\ -u,\ v-w)\\&=(-2x+3y,\ -x-3y,\ -x-y+z)\\&\qquad(=A^2).\end{aligned}$$</li>
+    <li><b>Núcleo de $f\circ f$.</b> $-2x+3y=0$, $-x-3y=0$, $-x-y+z=0$. Sumando las dos primeras: $-3x=0\Rightarrow x=0$; entonces $y=0$ y $z=0$. <b>$\operatorname{Nuc}(f\circ f)=\{0\}$, dimensión 0.</b></li>
+    <li><b>Atajo sin calcular $f\circ f$</b> (solo con la Def. 3.3): si $f(f(v))=0$, entonces $f(v)\in\operatorname{Nuc}(f)=\{0\}$, es decir $f(v)=0$, y otra vez $v\in\operatorname{Nuc}(f)=\{0\}$. Luego $\operatorname{Nuc}(f\circ f)=\{0\}$.</li>
+    <li><b>(c) Cierta</b>, por el Teor. 3.1 aplicado a la aplicación lineal $f\circ f:\mathbb R^3\to\mathbb R^3$: $3+0=3$ ($\det A^2=(\det A)^2=9\neq0$, imagen de dimensión 3).</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{Im}(f)=\mathbb R^3$ (dim 3); $\operatorname{Nuc}(f\circ f)=\{0\}$ (dim 0); (c) cierta. <i>(Verificado con sympy: $\det A=-3$, $A^2=\begin{pmatrix}-2&3&0\\-1&-3&0\\-1&-1&1\end{pmatrix}$, $\det A^2=9$.)</i> <b>Sobre la oficial:</b> correcta, pero <b>no escribe la dimensión del núcleo</b> ($0$, por el convenio $\operatorname{Dim}\{0\}=0$, U p.112), que el enunciado pide explícitamente; tampoco justifica la independencia de las columnas (basta el determinante).</p>
+  <div class="recipe"><b>Receta:</b> si $\operatorname{Nuc}(f)=\{0\}$, también $\operatorname{Nuc}(f\circ f)=\{0\}$ (y en general $\operatorname{Nuc}(f)\subset\operatorname{Nuc}(g\circ f)$).</div>
+  <p><b>Error típico:</b> hacer (b) y (c) con $f$ en vez de $f\circ f$.</p>
+</details>
+
+<!-- ------------------ Método E ------------------ -->
+<h3 id="metodoE">Método E — núcleo trivial: demostración</h3>
+
+<details class="sol" id="ex-feb19b-pc"><summary>Feb. 2019 (tipo B), problema c) — si $\operatorname{Nuc}(f)=\{0\}$, $f$ conserva sistemas libres <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), problema c)">X Feb. 2019 (B)</span></summary>
+  <p class="enun">Si $f$ es una aplicación lineal, tal que el subespacio núcleo asociado tiene dimensión cero, probar que: si $\{v_1,v_2\}$ es un sistema libre o linealmente independiente, entonces también lo es $\{f(v_1),f(v_2)\}$.</p>
+  <ol class="steps">
+    <li><b>Traducir la hipótesis.</b> $\operatorname{Dim}\operatorname{Nuc}(f)=0\iff\operatorname{Nuc}(f)=\{\bar0\}$ (el único subespacio de dimensión 0; convenio U p.112).</li>
+    <li><b>Qué hay que probar</b> (Def. 2.6, U p.74): si $\lambda f(v_1)+\mu f(v_2)=\bar0$, entonces $\lambda=\mu=0$.</li>
+    <li><b>Usar la linealidad</b> (Def. 3.1 / propiedad 3, U p.103): $\lambda f(v_1)+\mu f(v_2)=f(\lambda v_1+\mu v_2)$. Así que $f(\lambda v_1+\mu v_2)=\bar0$.</li>
+    <li><b>Usar el núcleo</b> (Def. 3.3): eso dice que $\lambda v_1+\mu v_2\in\operatorname{Nuc}(f)=\{\bar0\}$, es decir, $\lambda v_1+\mu v_2=\bar0$.</li>
+    <li><b>Usar la hipótesis de libertad:</b> como $\{v_1,v_2\}$ es libre, $\lambda=\mu=0$. Por tanto $\{f(v_1),f(v_2)\}$ es libre. ∎</li>
+    <li><b>Por qué hace falta la hipótesis.</b> U p.103, propiedad 5 (y Ej. 3.6, p.104): en general una aplicación lineal <b>puede</b> convertir un sistema libre en ligado (p. ej. $f(x_1,x_2)=x_1$ manda $\{(2,1),(1,3)\}$ a $\{2,1\}$, ligado). Lo que lo impide es precisamente que el núcleo sea $\{\bar0\}$ (en el lenguaje del §5: que $f$ sea inyectiva). La misma prueba vale para $k$ vectores.</li>
+  </ol>
+  <p><b>Sobre la oficial.</b> La idea es correcta, pero supone que, si $\{f(v_1),f(v_2)\}$ es ligado, existe $\alpha$ con $f(v_1)=\alpha f(v_2)$: <b>olvida el caso $f(v_2)=\bar0$</b> (que también lleva a contradicción, porque daría $v_2\in\operatorname{Nuc}(f)$, $v_2=\bar0$, imposible en un sistema libre). La prueba con $\lambda,\mu$ de arriba evita el problema.</p>
+  <div class="recipe"><b>Receta:</b> demostraciones con núcleo trivial: parte de una combinación lineal de imágenes igual a $\bar0$, métela dentro de $f$ por linealidad y usa $\operatorname{Nuc}(f)=\{\bar0\}$ para «quitar» la $f$.</div>
+  <p><b>Error típico:</b> escribir «ligado $\Rightarrow f(v_1)=\alpha f(v_2)$» sin más: si $f(v_2)=\bar0$ y $f(v_1)\neq\bar0$ el sistema es ligado pero $f(v_1)$ no es múltiplo de $f(v_2)$.</p>
+</details>
+
+<div class="box tip"><span class="h">Para practicar (otros ejercicios de examen, de este tema por tangencia)</span>
+  <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores, ejercicios fronterizos">X varios</span>
+  <ul>
+    <li>X Feb. 2026 (1.ª sem.), pregunta 2: rango de la matriz asociada sabiendo $f(u_3)=0$ (de paso: $\operatorname{rang}=1=\operatorname{Dim}\operatorname{Im}(f)$ y $\operatorname{Dim}\operatorname{Nuc}(f)=2$) → tema 3.3 (aún no existe).</li>
+    <li>X Feb. 2018 (tipo B), problema a): vectores propios de la derivada en $\wp_2$ (los de $\lambda=0$ son el núcleo del ejercicio de Feb. 2017 de arriba); X Feb. 2020 (1.ª sem., tipo B), ejercicio 4: endomorfismo cuyo subespacio propio de $\lambda=0$ es el plano $x+y-2z=0$ (equivale a «$\operatorname{Nuc}(f)=$ ese plano»); X Sept. 2017 (tipo A), ejercicio 4 (opción «rango 3» falsa porque $\operatorname{rang}=\operatorname{Dim}\operatorname{Im}\le2$) y X Sept. 2019 (tipo A), problema a) → tema 4.2/4.3 (aún no existen).</li>
+  </ul>
+</div>
+
+<div class="box tip"><span class="h">Para practicar (de otros temas)</span>
+  <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores, ejercicios fronterizos">X varios</span>
+  <ul>
+    <li><b>Linealidad y valor de $f$ en un vector</b> → <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>: Feb. 2019 (tipo B), ejercicio 3 ($f(1,2),f(2,1)$ dados → $f(1,1)$); Feb. 2024 (2.ª sem.), pregunta 3 ($f(1,3),f(-4,2)$ → $f(0,42)$); Feb. 2025 (2.ª sem.), pregunta 3 ($f(-7,0)$ en $\mathcal M_{2\times2}$); Feb. 2026 (2.ª sem.), pregunta 3; Feb. 2025 (1.ª sem.), problema 7, 1.er apartado ($f(x)=(x,2+x,3x,4x,5x)$ no es lineal porque $f(0)\neq0$); la comprobación de linealidad del ejercicio de Feb. 2022 (A) de arriba.</li>
+    <li><b>Matriz asociada</b> → tema 3.3 (aún no existe): Feb. 2018 (tipo B), ejercicio 3; Feb. 2019 (tipo A), ejercicio 3 (bases no canónicas); Ene. 2022 (tipo A), ejercicio 3; Feb. 2026 (2.ª sem.), problema 7, apartados 1 y 2; Feb. 2023 (1.ª sem.), problema 7 (ii); Sept. 2017 (tipo A), ejercicio 3 (V/F sobre matrices y cambios de base, 3.3/3.5).</li>
+    <li><b>Composición y combinación lineal de aplicaciones</b> → tema 3.4 (aún no existe): Ene. 2020 (tipo A), ejercicio 3; Sept. 2018 (tipo A), ejercicio 3; Feb. 2023 (1.ª sem.), pregunta 3; Sept. 2024, pregunta 3; Sept. 2023, pregunta 3 ($3g-5h$); Feb. 2025 (1.ª sem.), problema 7, 3.er apartado ($h\circ g$).</li>
+    <li><b>Matriz en otra base y diagonalización</b> → tema 3.5 / 4.3 (aún no existen): Feb. 2026 (2.ª sem.), problema 8.</li>
+    <li><b>Subespacio propio de $\operatorname{Im}(f)$ en implícitas</b>: ya resuelto arriba (Sept. 2023); también se menciona en el <a href="tema_2_4_suma_directa.html">tema 2.4</a>.</li>
+  </ul>
+</div>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Imagen (Def. 3.2)</td><td>$\operatorname{Im}(f)=\{f(v):v\in V\}\subset W$, subespacio; $=\langle f(e_1),\dots,f(e_n)\rangle$ (columnas de $A$)</td><td>$f$ lineal; $\{e_j\}$ base de $V$</td></tr>
+  <tr><td>Núcleo (Def. 3.3)</td><td>$\operatorname{Nuc}(f)=\{v:f(v)=\bar0\}\subset V$, subespacio; se halla resolviendo $AX=0$</td><td>$f$ lineal</td></tr>
+  <tr><td>Dimensión de la imagen</td><td>$\operatorname{Dim}\operatorname{Im}(f)=\operatorname{rang}(A)$ (nº de generadores independientes)</td><td>no es el nº de columnas</td></tr>
+  <tr><td>Dimensión del núcleo</td><td>$\operatorname{Dim}\operatorname{Nuc}(f)=m-\operatorname{rang}(A)$ = nº de parámetros libres</td><td>$m=\operatorname{Dim}V$ = nº de columnas</td></tr>
+  <tr><td>Teor. 3.1</td><td>$\operatorname{Dim}\operatorname{Im}(f)+\operatorname{Dim}\operatorname{Nuc}(f)=\operatorname{Dim}V$</td><td>$V$ = espacio <b>inicial</b>; dimensión finita</td></tr>
+  <tr><td>Cartesianas de $\operatorname{Im}$</td><td>$y\in\operatorname{Im}(f)\iff$ el rango no sube al añadir $y$; hay $n-\operatorname{rang}A$ ecuaciones</td><td>$n=\operatorname{Dim}W$; si $\operatorname{Im}=W$ no hay ecuaciones</td></tr>
+  <tr><td>Dim. del núcleo cero</td><td>$\operatorname{Nuc}(f)=\{\bar0\}$, base vacía, $\operatorname{Dim}=0$ (convenio U p.112)</td><td>—</td></tr>
+  <tr><td>Inyectiva (Lay)</td><td>$\iff\operatorname{Nuc}(f)=\{\bar0\}\iff\operatorname{rang}A=m$; exige $\operatorname{Dim}V\le\operatorname{Dim}W$</td><td>vocabulario de Lay, no de U</td></tr>
+  <tr><td>Sobreyectiva (Lay)</td><td>$\iff\operatorname{Im}(f)=W\iff\operatorname{rang}A=n$; exige $\operatorname{Dim}V\ge\operatorname{Dim}W$</td><td>vocabulario de Lay, no de U</td></tr>
+  <tr><td>Endomorfismo</td><td>inyectiva $\iff$ sobreyectiva $\iff\det A\neq0$</td><td>$V=W$ (o $\operatorname{Dim}V=\operatorname{Dim}W$)</td></tr>
+  <tr><td>Soluciones de $f(v)=w$</td><td>$v_0+\operatorname{Nuc}(f)$ (una particular más el núcleo)</td><td>existe una particular, $w\in\operatorname{Im}(f)$</td></tr>
+  <tr><td>Núcleo de $\lambda f$</td><td>$\operatorname{Nuc}(\lambda f)=\operatorname{Nuc}(f)$</td><td>$\lambda\neq0$ (E 3.24)</td></tr>
+  <tr><td>Núcleo de $g\circ f$</td><td>$\operatorname{Nuc}(f)\subset\operatorname{Nuc}(g\circ f)$; si $\operatorname{Nuc}(f)=\operatorname{Nuc}(g)=\{0\}$, también $\operatorname{Nuc}(g\circ f)=\{0\}$</td><td>composición definida</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé enunciar con mis palabras qué es el <b>núcleo</b> (se aplasta en 0, vive en $V$) y la <b>imagen</b> (se alcanza, vive en $W$) y por qué son subespacios.</li>
+  <li>Sé hallar una <b>base y la dimensión del núcleo</b> resolviendo $AX=0$ (parámetros libres, ecuación redundante, núcleo $\{0\}$).</li>
+  <li>Sé hallar una <b>base, la dimensión y las ecuaciones cartesianas de la imagen</b> a partir de las columnas, quitando los generadores sobrantes.</li>
+  <li>Sé aplicar el <b>teorema de las dimensiones</b> con el espacio inicial, y sacar un rango o una dimensión que falta (matriz $3\times5$ con núcleo de dimensión 3).</li>
+  <li>Sé decidir si un vector <b>pertenece</b> al núcleo ($f(v)=0$) o a la imagen (el sistema $f(x)=w$ es compatible), y hallar parámetros para que pertenezca.</li>
+  <li>Sé trabajar en <b>polinomios y matrices</b> pasando a coordenadas (derivada, evaluación, matrices diagonales) y traduciendo de vuelta.</li>
+  <li>Sé el significado de <b>inyectiva / sobreyectiva / isomorfismo</b> en términos de núcleo e imagen, y las condiciones de dimensiones que imponen.</li>
+  <li>Sé escribir el resultado como lo pide el examen: con el proceso, el criterio usado (p. ej. «por el Teor. 3.1, U p.111») y la comprobación.</li>
+</ul>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li>Restar dimensiones del espacio <b>final</b> en el Teorema 3.1 (es $\operatorname{Dim}V$, el inicial). Ej. 3.22 A, ex. Sept. 2017, Feb. 2020.</li>
+    <li>Confundir dónde vive cada subespacio: $\operatorname{Nuc}(f)\subset V$, $\operatorname{Im}(f)\subset W$; mezclar sus coordenadas (Feb. 2023, 2.ª sem.).</li>
+    <li>No eliminar ecuaciones redundantes y concluir «núcleo $\{0\}$» (Sept. 2019, Feb. 2019 A, Feb. 2025).</li>
+    <li>Paramétricas sin parámetro (un punto) o una recta de $\mathbb R^3$ con una sola ecuación (Sept. 2018, Sept. 2023).</li>
+    <li>Tomar la imagen como generada por las <b>filas</b> de la matriz (son las <b>columnas</b>); poner las coordenadas de las imágenes en filas al construir la matriz (E 3.25, 3.29).</li>
+    <li>Dar como dimensión de la imagen el número de generadores en vez del rango (Ej. 3.10).</li>
+    <li>En polinomios/matrices: equivocarse en la dimensión del espacio ($\operatorname{Dim}\wp_n=n+1$, $\operatorname{Dim}D_{2\times2}=2$); decir que el núcleo de la derivada es $\{0\}$ (E 3.26).</li>
+    <li>Dar $\bar0$ (o las ecuaciones) como «base» del núcleo.</li>
+    <li>«Subespacio propio» (U p.63, $\neq\{0\}$ y $\neq$ total) frente a «subespacio propio de un valor propio» (U p.152) (Sept. 2023).</li>
+    <li>Decir que $f:\mathbb R^2\to\mathbb R^3$ es sobreyectiva o que $\mathbb R^3\to\mathbb R^2$ es inyectiva: las dimensiones lo impiden.</li>
+  </ol>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>

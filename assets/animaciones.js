@@ -121,7 +121,7 @@
           var old = M[i2][c];
           for (var j3 = 0; j3 < tot; j3++) M[i2][j3] = sub(M[i2][j3], mul(f, M[r][j3]));
           var signo = f.n < 0 ? '+ ' + ftxt(neg(f)) : MINUS + ' ' + ftxt(f);
-          steps.push({ M: cloneM(M), txt: 'Hacemos 0 el <b>' + ftxt(old) + '</b> de la fila ' + (i2 + 1) + ' (columna ' + (c + 1) + '): <b>F' + (i2 + 1) + ' → F' + (i2 + 1) + ' ' + signo + '·F' + (r + 1) + '</b>. Se resta a la fila ' + (i2 + 1) + ' un múltiplo de la fila del pivote.', hi: { pivot: [r, c], rows: [i2], zero: [i2, c] }, op: 'F' + (i2 + 1) + ' → F' + (i2 + 1) + ' ' + signo + '·F' + (r + 1) });
+          steps.push({ M: cloneM(M), txt: 'Hacemos 0 el <b>' + ftxt(old) + '</b> de la fila ' + (i2 + 1) + ' (columna ' + (c + 1) + '): <b>F' + (i2 + 1) + ' → F' + (i2 + 1) + ' ' + signo + '·F' + (r + 1) + '</b>. Se ' + (f.n < 0 ? 'suma' : 'resta') + ' a la fila ' + (i2 + 1) + ' un múltiplo de la fila del pivote.', hi: { pivot: [r, c], rows: [i2], zero: [i2, c] }, op: 'F' + (i2 + 1) + ' → F' + (i2 + 1) + ' ' + signo + '·F' + (r + 1) });
         }
         r++;
       }
@@ -640,8 +640,8 @@
     var pair = el('div', 'an-pair');
     var P1 = plane(root, 300, 300, 5), P2 = plane(root, 300, 300, 5);
     var c1 = el('div', 'an-pcol'), c2 = el('div', 'an-pcol');
-    c1.appendChild(el('b', '', modo === 'lineal' ? 'Espacio de partida V = ℝ²' : 'Partida V = ℝ² (núcleo)')); c1.appendChild(P1.svg);
-    c2.appendChild(el('b', '', modo === 'lineal' ? 'Espacio de llegada W = ℝ²' : 'Llegada W = ℝ² (imagen)')); c2.appendChild(P2.svg);
+    c1.appendChild(el('b', '', modo === 'lineal' ? 'Espacio de partida V = ℝ²' : 'Partida V = ℝ² (núcleo Nuc f)')); c1.appendChild(P1.svg);
+    c2.appendChild(el('b', '', modo === 'lineal' ? 'Espacio de llegada W = ℝ²' : 'Llegada W = ℝ² (imagen Im f)')); c2.appendChild(P2.svg);
     pair.appendChild(c1); pair.appendChild(c2);
     var text = el('p', 'sar-text'), res = el('div', 'sar-res');
     var ctrl = el('div', 'an-sliders');
@@ -708,17 +708,17 @@
         arrow(P1, 0, 0, x, y, 'w', 'x');
         arrow(P2, 0, 0, a, c, 'down dash', 'f(e₁)'); arrow(P2, 0, 0, b, d, 'up dash', 'f(e₂)'); arrow(P2, 0, 0, fw[0], fw[1], 'w', 'f(x)');
         var kn = 2 - r;
-        var t = 'rango(A) = <b>' + r + '</b> = dim Im f &nbsp;·&nbsp; dim Ker f = 2 − ' + r + ' = <b>' + kn + '</b>. ' +
-          (r === 2 ? '<b>Ker f = {0}</b> (solo el origen va al origen) e <b>Im f = ℝ²</b> (todo el plano).' :
-            r === 1 ? '<b>Ker f</b> es la <b>recta naranja</b> de la izquierda (todo lo que se aplasta sobre 0) e <b>Im f</b> es la <b>recta azul</b> de la derecha. Todos los puntos de la recta verde discontinua x + Ker f tienen la <b>misma</b> imagen f(x).' :
-              '<b>Ker f = ℝ²</b> (todo va a 0) e <b>Im f = {0}</b>.');
+        var t = 'rango(A) = <b>' + r + '</b> = dim Im f &nbsp;·&nbsp; dim Nuc f = 2 − ' + r + ' = <b>' + kn + '</b>. ' +
+          (r === 2 ? '<b>Nuc f = {0}</b> (solo el origen va al origen) e <b>Im f = ℝ²</b> (todo el plano).' :
+            r === 1 ? '<b>Nuc f</b> es la <b>recta naranja</b> de la izquierda (todo lo que se aplasta sobre 0) e <b>Im f</b> es la <b>recta azul</b> de la derecha. Todos los puntos de la recta verde discontinua x + Nuc f tienen la <b>misma</b> imagen f(x).' :
+              '<b>Nuc f = ℝ²</b> (todo va a 0) e <b>Im f = {0}</b>.');
         html(text, t);
         res.textContent = '';
         var fin = el('div', 'sar-final');
-        fin.textContent = 'dim V = dim Ker f + dim Im f :   2 = ' + kn + ' + ' + r;
+        fin.textContent = 'dim V = dim Nuc f + dim Im f :   2 = ' + kn + ' + ' + r;
         res.appendChild(fin);
         var nt = el('p', 'sar-hint');
-        nt.textContent = (r === 2 ? 'Inyectiva (Ker = {0}) y sobreyectiva (Im = W): es un isomorfismo.' : (r === 1 ? 'No es inyectiva (Ker ≠ {0}) ni sobreyectiva (Im ≠ W).' : 'No es inyectiva ni sobreyectiva.'));
+        nt.textContent = (r === 2 ? 'Inyectiva (Nuc = {0}) y sobreyectiva (Im = W): es un isomorfismo.' : (r === 1 ? 'No es inyectiva (Nuc ≠ {0}) ni sobreyectiva (Im ≠ W).' : 'No es inyectiva ni sobreyectiva.'));
         res.appendChild(nt);
       };
       [sx, sy].concat(mi).forEach(function (s) { s.addEventListener('input', draw); });
