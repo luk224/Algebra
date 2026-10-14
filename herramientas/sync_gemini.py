@@ -15,11 +15,12 @@ out = R / '.gemini' / 'agents'; out.mkdir(parents=True, exist_ok=True)
 for f in sorted((R / '.claude' / 'agents').glob('*.md')):
     t = f.read_text(encoding='utf8').replace('\r\n', '\n')
     m = re.match(r'---\n(.*?)\n---\n(.*)', t, re.S)
+    body = re.sub(r'<!-- CLAUDE-ONLY -->.*?<!-- /CLAUDE-ONLY -->\s*', '', m.group(2), flags=re.S)
     fm = dict(l.split(':', 1) for l in m.group(1).split('\n') if ':' in l)
     fm = {k.strip(): v.strip() for k, v in fm.items()}
     tools = [TOOLS[x.strip()] for x in fm.get('tools', '').split(',') if x.strip() in TOOLS]
     head = ['---', 'name: ' + fm['name'], 'description: ' + fm['description'], 'kind: local', 'tools:']
     head += ['  - ' + x for x in tools]
     head += ['model: ' + MODELO.get(fm.get('model', 'sonnet'), 'gemini-2.5-pro'), 'temperature: 0.3', 'max_turns: 60', 'timeout_mins: 30', '---', '']
-    (out / f.name).write_text('\n'.join(head) + NOTA.format(n=fm['name']) + m.group(2).lstrip('\n'), encoding='utf8')
+    (out / f.name).write_text('\n'.join(head) + NOTA.format(n=fm['name']) + body.lstrip('\n'), encoding='utf8')
     print('ok', f.name, '->', MODELO.get(fm.get('model')), tools)
