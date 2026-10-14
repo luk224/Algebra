@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 3.3 Ecuaciones y matriz asociada</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 3 · Aplicaciones lineales y matrices · Tema 3.3</div>
+  <h1>Ecuaciones y matriz asociada</h1>
+  <p>Una aplicación lineal queda <b>totalmente determinada</b> por lo que hace con los vectores de una base. Esa información se guarda en una tabla de números, la <b>matriz asociada</b>: cada columna son las coordenadas de la imagen de un vector de la base. Con ella, calcular $f(x)$ se reduce a multiplicar una matriz por una columna: $Y=AX$.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §3.3 (pp. 113-117)</span><span>Ejercicios: E Ej. 3.15, 3.17, 3.18, 3.19 (pp. 93-96)</span><span>⏱ ~5 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §3.3.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 113">U p.113</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>Para conocer una aplicación lineal <b>no hace falta una fórmula</b> ni saber qué hace con todos los vectores: basta saber en qué se convierten los vectores de <b>una base</b>. Esas imágenes, escritas como columnas (en coordenadas), forman la <b>matriz asociada</b> $A$. A partir de ella, $f(x)$ sale de multiplicar $A$ por las coordenadas de $x$, y todo lo que ya sabías de matrices (rango, escalonar, resolver $AX=0$) pasa a hablar de $f$.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>: qué es una aplicación lineal ($f(v+\lambda u)=f(v)+\lambda f(u)$, Def. 3.1, U p.101) y, sobre todo, la propiedad 3: $f\big(\sum a_iv_i\big)=\sum a_if(v_i)$ (U p.103). Esa propiedad es el motor de todo el tema.</li>
+  <li>Del tema 2: <b>base</b> y <b>coordenadas</b> de un vector respecto de una base (Def. 2.9-2.10, U p.82-85), y las <b>bases canónicas</b> de $\mathbb R^n$, de $\wp_n$ ($\{1,x,\dots,x^n\}$) y de $\mathcal M_{2\times2}$ ($\{E_{11},E_{12},E_{21},E_{22}\}$). Si dudas de cómo se calculan unas coordenadas, repasa el <a href="tema_2_3_bases_dimension_coordenadas.html">tema 2.3</a>.</li>
+  <li>Del tema 1: <b>producto de una matriz por una columna</b> (1.2) y <b>resolver sistemas por Gauss</b> (1.4): saldrán varias veces.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde</th></tr>
+  <tr><td>1 La idea</td><td>Las columnas son «lo que $f$ hace con cada vector de la base»</td><td>propio · U p.114</td></tr>
+  <tr><td>2 Determinación</td><td>Teor. 3.2, Ej. 3.16-3.17: $f$ queda fijada por una base; cuándo faltan o sobran datos</td><td>U p.114-115</td></tr>
+  <tr><td>3 Matriz asociada</td><td>Teor. 3.3, Def. 3.4, Ej. 3.18; coordenadas; tamaño $n\times m$</td><td>U p.115-116 · L §5.4 p.289</td></tr>
+  <tr><td>4 Ecuaciones</td><td>$Y=AX$, Ej. 3.19; la matriz <b>depende de las bases</b></td><td>U p.117 · L §5.4 p.289-290</td></tr>
+  <tr><td>5 Tres situaciones</td><td>Bases canónicas · imágenes de una base no canónica · matriz respecto de dos bases cualesquiera</td><td>propio (con X)</td></tr>
+  <tr><td>6 Qué se lee de $A$</td><td>Rango $=\operatorname{Dim}\operatorname{Im}$, núcleo $=\{AX=0\}$ (enlace con 3.2)</td><td>propio</td></tr>
+  <tr><td>7 Ejercicios del libro</td><td>E 3.15, 3.17, 3.18, 3.19 + 3 ejemplos propios (y enlaces a 3.20, 3.21, 3.25, 3.28)</td><td>E pp.93-104</td></tr>
+  <tr><td>8 Ejemplos de examen</td><td>8 preguntas de convocatorias anteriores + 4 ejemplos propios, resueltos</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p>Cuatro tareas que se repiten con distinto disfraz: <b>(a)</b> «escribe la matriz de $f$» a partir de la <b>fórmula</b> o de las <b>imágenes de la base canónica</b> (la mayoría de los casos); <b>(b)</b> «escribe la matriz canónica» a partir de las imágenes de una <b>base no canónica</b> (se usa la linealidad); <b>(c)</b> «matriz respecto de las bases $B$ y $S$» (hay que expresar las imágenes en coordenadas de $S$); <b>(d)</b> usar la matriz: ecuaciones $Y=AX$, imagen de un vector, rango, y verdadero/falso («¿hay datos suficientes?», «¿depende de las bases?»).</p>
+</div>
+
+<div class="box warn"><span class="h">Erratas, omisiones y avisos sobre los libros</span>
+  <ul>
+    <li><b>Páginas de U.</b> La sección 3.3 ocupa U p.113-117; el Ej. 3.19 y la expresión matricial $Y=AX$ están en la p.117, que lleva la cabecera de 3.4.</li>
+    <li><b>E trata 3.2 y 3.3 conjuntamente</b> (E p.92). Por contenido, a este tema le corresponden <b>E 3.15, 3.17, 3.18 y 3.19</b>. Los mixtos 3.20, 3.21, 3.25 y 3.28 (parte de matriz asociada) están desarrollados completos en el <a href="tema_3_2_nucleo_imagen.html">tema 3.2</a> y aquí solo se enlazan (§7).</li>
+    <li><b>E 3.15</b> solo apunta el tamaño (tres columnas y dos filas; margen: «imágenes en $\mathbb R^2$») sin descartar A) y B) explícitamente; <b>E 3.17</b> dice «como es evidente» el tamaño $4\times3$ (sale de la Def. 3.4); <b>E 3.18</b> no justifica que la derivada sea lineal ni qué aplicación representan A) y B); <b>E 3.19</b> escribe «$P_2$ (polinomios reales de grado 2)»: debe ser grado $\le2$, y «$f(x)=2$» significa que <i>la imagen del polinomio $x$ es el polinomio constante $2$</i>. Los detalles, en cada ejercicio.</li>
+    <li><b>Lay</b> numera sus páginas con un desfase distinto en cada capítulo; las citas de este tema (§1.9 p.71, §4.4 p.216-217, §5.4 p.289-290) se han tomado de la cabecera de cada página. Lay trata la matriz respecto de <b>bases arbitrarias</b> en §5.4 (no en §1.9, que solo ve la «matriz estándar»).</li>
+    <li>Varias <b>soluciones oficiales de examen</b> tienen erratas leves (Feb. 2018 B, Ene. 2022 A, Feb. 2023 1.ª, Feb. 2026 1.ª); se señalan en cada ejercicio.</li>
+  </ul>
+</div>
+
+<div class="box tip"><span class="h">Notación de este resumen</span>
+  <p>U <b>no</b> usa un símbolo especial: dice «$A$ es la matriz asociada a $f$ respecto de las bases $B\subset V$ y $S\subset W$» (Def. 3.4). Cuando hay que distinguir varias matrices de la misma $f$ escribiré $M(f;B,S)$ (primero la base del espacio <b>inicial</b>, luego la del <b>final</b>): es una <b>abreviatura propia</b>, no de U. «Bases canónicas» sin más significa $\{e_1,\dots,e_n\}$ en $\mathbb R^n$; $\{1,x,\dots,x^n\}$ en $\wp_n$ (U escribe $\wp_n$, E escribe $P_n$); $\{E_{11},E_{12},E_{21},E_{22}\}$ en $\mathcal M_{2\times2}$. Las coordenadas se escriben <b>en columna</b> ($X$, $Y$), como en U p.117.</p>
+  <span class="src" data-l="P" data-ref="Notación propia M(f;B,S); U Def. 3.4, p. 116, no introduce símbolo">propio</span>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>La idea: las columnas son lo que $f$ hace con la base <span class="src" data-l="U" data-ref="U §3.3.1 Introducción, p. 113, y Teorema 3.2, p. 114">U p.113-114</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Piensa en <b>una receta</b>. Si te digo «un paso a la derecha me lleva al punto $P$ y un paso hacia arriba me lleva al punto $Q$», y sé que el movimiento es lineal, entonces ya sé adónde me lleva <i>cualquier</i> trayecto: «3 pasos a la derecha y 2 hacia abajo» me lleva a $3P-2Q$. Los dos «pasos» son los vectores de la <b>base</b>; $P$ y $Q$ son sus <b>imágenes</b>. La matriz asociada no es más que $P$ y $Q$ apilados en columnas: <b>una columna por cada vector de la base de partida</b>.</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo guía — de $\mathbb R^2$ a $\mathbb R^3$ (Ej. 3.16 y 3.18 de U)</span>
+  <p>Sea $f:\mathbb R^2\to\mathbb R^3$ lineal con $f(1,0)=(1,2,1)$ y $f(0,1)=(1,1,0)$. ¿Cuánto vale $f(3,-2)$?</p>
+  <ol class="steps">
+    <li><b>Descomponer el vector en la base.</b> $(3,-2)=3\,(1,0)-2\,(0,1)$: sus coordenadas en la base canónica son $(3,-2)$.</li>
+    <li><b>Aplicar la linealidad</b> (propiedad 3, U p.103): $f(3,-2)=3f(1,0)-2f(0,1)=3\,(1,2,1)-2\,(1,1,0)=(1,\,4,\,3)$.</li>
+    <li><b>Lo mismo con una matriz.</b> Ponemos las dos imágenes en <b>columnas</b>:
+    $$A=\begin{pmatrix}1&1\cr2&1\cr1&0\end{pmatrix}\qquad\Longrightarrow\qquad A\begin{pmatrix}3\cr-2\end{pmatrix}=\begin{pmatrix}3-2\cr6-2\cr3\end{pmatrix}=\begin{pmatrix}1\cr4\cr3\end{pmatrix}.$$
+    El producto «matriz por columna» hace exactamente la combinación $3\cdot(\text{col.}\ 1)-2\cdot(\text{col.}\ 2)$ del paso 2: por eso las imágenes van en columnas.</li>
+    <li><b>Tamaño.</b> Dos columnas (la base de $\mathbb R^2$ tiene 2 vectores) y tres filas (cada imagen tiene 3 coordenadas): $A$ es $3\times2$ = (dim. de llegada) × (dim. de partida).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 3.16 y 3.18, p. 114-116 (la misma aplicación; el valor en (3,-2) es propio)">U p.114-116</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Poner las imágenes en filas.</b> Saldría la matriz $2\times3$ $\begin{pmatrix}1&2&1\cr1&1&0\end{pmatrix}$ (la traspuesta), que ni siquiera se puede multiplicar por una columna de $\mathbb R^2$. Regla de seguridad: el número de <b>columnas</b> es la dimensión del espacio de <b>partida</b>.</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Una aplicación lineal se determina por una base <span class="src" data-l="U" data-ref="U §3.3.2 Determinación de una aplicación lineal, Teorema 3.2 y Ejemplos 3.16-3.17, p. 114-115">U p.114-115</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una aplicación cualquiera es «una ley que a cada vector le asigna otro»: en principio habría que dar infinitas imágenes. Si la aplicación es <b>lineal</b>, no: como todo vector es una combinación de los de la base y $f$ respeta combinaciones, <b>basta dar las imágenes de la base</b>. El resto del espacio queda fijado «a la fuerza».</p>
+</div>
+
+<div class="box thm"><span class="h">Teorema 3.2 (determinación de una aplicación lineal)</span>
+  <p>Si $f:V\to W$ es lineal y $B=\{e_1,\dots,e_m\}$ es una base de $V$, entonces la imagen de <b>cualquier</b> vector $v\in V$ está determinada por las imágenes $f(e_1),\dots,f(e_m)$ de los vectores de la base. Concretamente, si $v=(v_1,\dots,v_m)_B$,
+  $$f(v)=v_1f(e_1)+v_2f(e_2)+\dots+v_mf(e_m).$$</p>
+  <p><i>Por qué.</i> $v=v_1e_1+\dots+v_me_m$ (coordenadas en $B$) y $f$ es lineal (propiedad 3, U p.103): se «saca» la $f$ a cada sumando.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 3.2 y su demostración, p. 114">U p.114</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: la matriz se construye con las imágenes de la base</span>
+  <p>Aquí se ve el Teorema 3.2 en acción: las dos <b>columnas</b> de $A$ son las imágenes $f(e_1)$ y $f(e_2)$, y $f(x)=A\,x$ es la combinación de esas columnas con los coeficientes $x_1,x_2$ (las coordenadas de $x$). Cambia los datos y comprueba que, conocidas las imágenes de la base, queda fijada la imagen de cualquier vector.</p>
+  <div class="anim-matriz" data-f1="1,2" data-f2="3,-1" data-x="2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.16 (U) — las ecuaciones de $f$ a partir de la base canónica</span>
+  <p>$f:\mathbb R^2\to\mathbb R^3$ lineal con $f(1,0)=(1,2,1)$ y $f(0,1)=(1,1,0)$. U <b>obtiene unas ecuaciones de $f$</b>:</p>
+  <ol class="steps">
+    <li>Todo $x=(x_1,x_2)$ se escribe $x=x_1(1,0)+x_2(0,1)$.</li>
+    <li>Por linealidad, $f(x)=x_1(1,2,1)+x_2(1,1,0)=(x_1+x_2,\ 2x_1+x_2,\ x_1)$.</li>
+    <li>Llamando $(y_1,y_2,y_3)=f(x)$ a las coordenadas de la imagen:
+    $$\begin{cases}y_1=x_1+x_2\cr y_2=2x_1+x_2\cr y_3=x_1\end{cases}$$
+    Son las <b>ecuaciones de $f$</b>: cada $y_j$ es una combinación lineal de las $x_i$, sin términos independientes.</li>
+  </ol>
+  <p class="note">Nota de U: $B=\{(1,0),(0,1)\}$ es base de $\mathbb R^2$, pero $\{(1,2,1),(1,1,0)\}$ es un subconjunto de $\mathbb R^3$ que <b>no es base</b> (son dos vectores en un espacio de dimensión 3): lo que tiene que ser base es el conjunto de vectores de <b>partida</b> cuyas imágenes se dan; sus imágenes no tienen por qué serlo.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.16, p. 114-115">U p.114-115</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.17 (U) — a veces los datos no son posibles</span>
+  <p>«No puede haber una aplicación lineal $f:\mathbb R^2\to\mathbb R^2$ tal que $f(2,3)=(0,1)$ y $f(-2,-3)=(1,0)$.»</p>
+  <ol class="steps">
+    <li>Como $(-2,-3)=-1\cdot(2,3)$, la linealidad obliga a que $f(-2,-3)=-f(2,3)=-(0,1)=(0,-1)$.</li>
+    <li>Pero el enunciado dice $f(-2,-3)=(1,0)\neq(0,-1)$: <b>contradicción</b>. Los dos vectores son proporcionales (dependientes), así que <b>no forman base</b> y sus imágenes no se pueden elegir libremente.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.17, p. 115">U p.115</span>
+</div>
+
+<div class="box thm"><span class="h">Tres situaciones al «dar datos» de una aplicación lineal</span>
+  <table>
+    <tr><th>Datos</th><th>Qué ocurre</th></tr>
+    <tr><td>Imágenes de <b>todos</b> los vectores de una base de $V$</td><td>$f$ existe y es <b>única</b> (Ej. 3.16; E 3.19).</td></tr>
+    <tr><td>Imágenes de <b>solo algunos</b> vectores de la base</td><td>$f$ <b>no queda determinada</b> (faltan columnas). Ej.: con solo $f(1,0)=(1,2)$ en $\mathbb R^2\to\mathbb R^2$, $f(0,1)$ es libre (E 3.28 C).</td></tr>
+    <tr><td>Imágenes de vectores <b>dependientes</b></td><td>Hay que <b>comprobar la coherencia</b>. Si se contradicen, $f$ no existe (Ej. 3.17); si son coherentes, sobra algún dato, y $f$ solo queda determinada si entre esos vectores hay una base (si no, hay datos coherentes pero insuficientes). Ej.: $f(1,0)=(1,1)$, $f(0,1)=(0,1)$, $f(1,1)=(1,2)$ es coherente (sobra el tercero); con $f(1,1)=(5,5)$ no existiría.</td></tr>
+  </table>
+  <span class="src" data-l="P" data-ref="Resumen propio de U Teorema 3.2 y Ejemplo 3.17, p. 114-115, y de E Ej. 3.28 C, p. 103">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Creer que bastan «algunas» imágenes</b> o, al revés, que «cualquier» lista de imágenes define una aplicación lineal. Para fijar $f$ hacen falta las imágenes de una <b>base entera</b>, y los vectores a los que se las das deben ser <b>independientes</b> (si no, hay que comprobar que los datos no se contradicen).</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>La matriz asociada <span class="src" data-l="U" data-ref="U §3.3.3 Matriz asociada a una aplicación lineal, Teorema 3.3, Definición 3.4 y Ejemplo 3.18, p. 115-116">U p.115-116</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una aplicación lineal es una «máquina» entre espacios que pueden ser muy distintos (polinomios, matrices…). Para operar con números hay que <b>traducir</b>: elegimos una base en $V$ y otra en $W$ y reemplazamos cada vector por su <b>columna de coordenadas</b>. En ese idioma de coordenadas, la máquina $f$ pasa a ser «multiplicar por una matriz». Esa matriz depende de <b>qué bases elijas</b>, igual que el nombre de una calle depende del idioma del mapa.</p>
+</div>
+
+<div class="box tip"><span class="h">Recordatorio: coordenadas respecto de una base</span>
+  <p>Si $S=\{u_1,\dots,u_n\}$ es una base de $W$ y $w\in W$, las <b>coordenadas</b> de $w$ en $S$ son los únicos escalares $(w_1,\dots,w_n)$ con $w=w_1u_1+\dots+w_nu_n$ (Def. 2.10, U p.85; Lay: «$[w]_S$», §4.4 p.216-217). Ejemplo: en la base $S=\{(1,1),(1,2)\}$ de $\mathbb R^2$, el vector $(5,3)$ tiene coordenadas $(7,-2)_S$, porque $7\,(1,1)-2\,(1,2)=(5,3)$. <b>Las entradas de la matriz asociada son coordenadas, no vectores «en bruto»</b>: solo en la base canónica coinciden con las componentes.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.10, coordenadas, p. 85">U p.85</span>
+  <span class="src" data-l="L" data-ref="Lay §4.4, coordenadas respecto de una base y teorema de la representación única, p. 216-217">L §4.4 p.216-217</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 3.3</span>
+  <p>Si $f:V\to W$ es lineal, $B=\{e_1,\dots,e_m\}$ es base de $V$ y $S=\{u_1,\dots,u_n\}$ es base de $W$, entonces $f$ determina una <b>matriz única</b> asociada a $f$ en las bases $B$ y $S$.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 3.3, p. 115">U p.115</span>
+</div>
+
+<div class="box def"><span class="h">Definición 3.4 — matriz asociada</span>
+  <p>$A=(a_{ij})$ es la <b>matriz asociada</b> a $f:V\to W$ respecto de las bases $B=\{e_1,\dots,e_m\}\subset V$ y $S=\{u_1,\dots,u_n\}\subset W$ si
+  $$\begin{aligned}f(e_1)&=a_{11}u_1+\dots+a_{n1}u_n\cr f(e_2)&=a_{12}u_1+\dots+a_{n2}u_n\cr&\ \ \vdots\cr f(e_m)&=a_{1m}u_1+\dots+a_{nm}u_n\end{aligned}$$
+  Es decir: <b>la columna $j$ de $A$ son las coordenadas, en la base $S$, de $f(e_j)$</b>. $A$ tiene <b>$n$ filas</b> ($n=\operatorname{Dim}W$) y <b>$m$ columnas</b> ($m=\operatorname{Dim}V$): es de orden $n\times m$.</p>
+  <span class="src" data-l="U" data-ref="U Definición 3.4, p. 116">U p.116</span>
+</div>
+
+<figure style="margin:1em 0">
+<svg class="fig" viewBox="0 0 460 220" role="img" aria-label="Cuadrado de flechas: arriba, f lleva V (con base B) a W (con base S); abajo, la matriz A lleva las coordenadas X en R^m a las coordenadas Y en R^n; las flechas verticales son tomar coordenadas">
+  <text x="60" y="52" class="bd lg" text-anchor="middle">V</text>
+  <text x="60" y="70" class="sm" text-anchor="middle">base B</text>
+  <text x="400" y="52" class="bd lg" text-anchor="middle">W</text>
+  <text x="400" y="70" class="sm" text-anchor="middle">base S</text>
+  <text x="60" y="176" class="bd lg" text-anchor="middle">ℝ<tspan font-size="11" dy="-6">m</tspan></text>
+  <text x="400" y="176" class="bd lg" text-anchor="middle">ℝ<tspan font-size="11" dy="-6">n</tspan></text>
+  <line x1="95" y1="45" x2="350" y2="45" class="a"/>
+  <polygon points="348,38 364,45 348,52" class="pt"/>
+  <text x="230" y="36" class="bd lg" text-anchor="middle">f</text>
+  <line x1="95" y1="170" x2="350" y2="170" class="b"/>
+  <polygon points="348,163 364,170 348,177" class="pb"/>
+  <text x="230" y="161" class="bd" text-anchor="middle">X ↦ Y = A·X</text>
+  <text x="230" y="194" class="sm" text-anchor="middle">matriz asociada</text>
+  <line x1="60" y1="82" x2="60" y2="138" class="th"/>
+  <polygon points="53,136 60,150 67,136" style="fill:var(--mut)"/>
+  <text x="70" y="114" class="sm">coordenadas en B</text>
+  <line x1="400" y1="82" x2="400" y2="138" class="th"/>
+  <polygon points="393,136 400,150 407,136" style="fill:var(--mut)"/>
+  <text x="390" y="114" class="sm" text-anchor="end">coordenadas en S</text>
+</svg>
+<figcaption>Esquema propio: arriba, $f$ actúa sobre vectores; abajo, $A$ actúa sobre sus columnas de coordenadas. Ir por arriba y luego tomar coordenadas en $S$ equivale a tomar coordenadas en $B$ y multiplicar por $A$. <span class="src" data-l="P" data-ref="Figura propia (no hay figura en U §3.3)">propio</span></figcaption>
+</figure>
+
+<div class="box ex"><span class="h">Ejemplo 3.18 (U) — la matriz de la aplicación del Ej. 3.16</span>
+  <ol class="steps">
+    <li><b>Tamaño.</b> La base $B=\{(1,0),(0,1)\}$ de $\mathbb R^2$ tiene 2 vectores: <b>2 columnas</b>. Cada imagen es un vector de $\mathbb R^3$: <b>3 filas</b>.</li>
+    <li><b>Coordenadas de las imágenes.</b> La base de llegada es la canónica de $\mathbb R^3$, así que las coordenadas coinciden con las componentes: $f(1,0)=(1,2,1)$ y $f(0,1)=(1,1,0)$.</li>
+    <li><b>Matriz</b> (esas coordenadas en columna):
+    $$A=\begin{pmatrix}1&1\cr2&1\cr1&0\end{pmatrix}.$$</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.18, p. 116">U p.116</span>
+</div>
+
+<div class="box tip"><span class="h">Cómo se lee en Lay (más claro para empezar)</span>
+  <p><b>Bases canónicas (Lay §1.9).</b> Si $T:\mathbb R^n\to\mathbb R^m$ es lineal, existe una única matriz $A$ con $T(x)=Ax$, y es la matriz cuya $j$-ésima columna es $T(e_j)$: $A=[\,T(e_1)\ \cdots\ T(e_n)\,]$ (Teorema 10, «matriz estándar»). Es lo que U llama matriz asociada en las bases canónicas.</p>
+  <p><b>Bases cualesquiera (Lay §5.4, «La matriz de una transformación lineal»).</b> Con bases ordenadas $B$ en $V$ y $C$ en $W$ (en U, $B$ y $S$): $[T(x)]_C=M\,[x]_B$, con $M=\big[\,[T(b_1)]_C\ \ [T(b_2)]_C\ \cdots\ [T(b_n)]_C\,\big]$. Es exactamente la Def. 3.4 y la expresión $Y=AX$ de la p.117 de U. Si $V=W$ y $B=C$, Lay la llama la «$B$-matriz» $[T]_B$.</p>
+  <span class="src" data-l="L" data-ref="Lay §1.9, Teorema 10 (matriz estándar de una transformación lineal), p. 71">L §1.9 p.71</span>
+  <span class="src" data-l="L" data-ref="Lay §5.4, La matriz de una transformación lineal, ecuaciones (3) y (4), p. 289">L §5.4 p.289</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: construir la matriz asociada</span>
+  <ol class="steps">
+    <li><b>Fija las bases</b> $B=\{e_1,\dots,e_m\}$ de $V$ y $S$ de $W$ (si el enunciado no dice nada: las canónicas) y <b>respeta el orden</b>: cambiarlo cambia la matriz.</li>
+    <li><b>Tamaño:</b> $(\operatorname{Dim}W)\times(\operatorname{Dim}V)$.</li>
+    <li>Para cada $j=1,\dots,m$: calcula $f(e_j)$ y escribe sus <b>coordenadas en $S$</b>; es la <b>columna $j$</b>.</li>
+    <li><b>Comprueba</b> con un vector: $A\cdot(\text{coordenadas de }v)$ debe dar las coordenadas de $f(v)$.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U Definición 3.4, p. 116">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>Imágenes en filas</b> (matriz traspuesta) o <b>tamaño al revés</b> ($m\times n$ en vez de $n\times m$).</li>
+    <li><b>Imágenes sin pasar a coordenadas</b> cuando la base de llegada no es la canónica (§5): los $a_{ij}$ son los coeficientes de los $u_i$, no las componentes del vector.</li>
+    <li><b>Orden de la base.</b> En polinomios, $\{1,x,x^2\}$ y $\{x^2,x,1\}$ dan matrices distintas; en $\mathcal M_{2\times2}$, coordenadas por filas $(a,b,c,d)$ o por columnas $(a,c,b,d)$: vale cualquiera <b>si se usa siempre el mismo</b>.</li>
+  </ul>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Ecuaciones de $f$ y expresión matricial $Y=AX$ <span class="src" data-l="U" data-ref="U §3.3.3, Expresión matricial y Ejemplo 3.19, p. 117">U p.117</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Cada <b>fila</b> de $A$ es una «ecuación»: la fila $i$ dice cómo se fabrica la coordenada $y_i$ de la imagen a partir de las coordenadas $x_1,\dots,x_m$ del vector de partida. El conjunto de esas $n$ ecuaciones (sin términos independientes) es la forma <b>cartesiana</b> de $f$, y su forma compacta es el producto $Y=AX$.</p>
+</div>
+
+<div class="box thm"><span class="h">Expresión matricial</span>
+  <p>Si $f(x_1,\dots,x_m)=(y_1,\dots,y_n)$ y $A$ es la matriz asociada a $f$ respecto de $B\subset V$ y $S\subset W$, entonces
+  $$Y=AX,\qquad\text{es decir}\qquad\begin{pmatrix}y_1\cr\vdots\cr y_n\end{pmatrix}=\begin{pmatrix}a_{11}&\cdots&a_{1m}\cr\vdots&&\vdots\cr a_{n1}&\cdots&a_{nm}\end{pmatrix}\begin{pmatrix}x_1\cr\vdots\cr x_m\end{pmatrix},$$
+  donde $X$ es la columna de coordenadas de $x$ <b>en $B$</b> e $Y$ la columna de coordenadas de $f(x)$ <b>en $S$</b>. Desarrollado, $y_i=a_{i1}x_1+\dots+a_{im}x_m$.</p>
+  <span class="src" data-l="U" data-ref="U Expresión matricial Y = AX, p. 117">U p.117</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.19 (U) — ecuaciones matricial y cartesiana</span>
+  <p>Para la aplicación del Ej. 3.16 (matriz $A$ del Ej. 3.18):</p>
+  $$\begin{pmatrix}y_1\cr y_2\cr y_3\end{pmatrix}=\begin{pmatrix}1&1\cr2&1\cr1&0\end{pmatrix}\begin{pmatrix}x_1\cr x_2\end{pmatrix}\iff\begin{cases}y_1=x_1+x_2\cr y_2=2x_1+x_2\cr y_3=x_1\end{cases}$$
+  <p>Son las mismas ecuaciones del Ej. 3.16: <b>fórmula de $f$ $\iff$ ecuaciones cartesianas $\iff$ matriz</b> son tres formas de decir lo mismo.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.19, p. 117">U p.117</span>
+</div>
+
+<div class="box tip"><span class="h">Cuidado: $X$ e $Y$ son coordenadas, no siempre componentes</span>
+  <p>Si $V$ o $W$ son espacios de polinomios o matrices, $X$ e $Y$ son las coordenadas en la base elegida, y para obtener el <b>vector</b> imagen hay que «deshacer» las coordenadas. Ejemplo (E p.95, derivada en $\wp_3$ con base $\{1,x,x^2,x^3\}$): $P(x)=2x^3+5x^2-1$ tiene coordenadas $(-1,0,5,2)$ (el término independiente va primero) y $D\,(-1,0,5,2)^T=(0,10,6,0)^T$, que son las coordenadas de $10x+6x^2=P'(x)$ (E 3.18).</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, ejemplo del recuadro de la solución del Ej. 3.18, p. 95-96">E p.95</span>
+  <span class="src" data-l="L" data-ref="Lay §5.4, Ejemplo 2 (derivada en el espacio de polinomios, B-matriz), p. 290">L §5.4 p.290</span>
+</div>
+
+<div class="box ex"><span class="h">La matriz <i>depende</i> de las bases (y el rango no)</span>
+  <p>Sea $f(x_1,x_2)=(-7x_1+6x_2,\ -9x_1+8x_2)$. En la base canónica su matriz es $A=\begin{pmatrix}-7&6\cr-9&8\end{pmatrix}$ (coeficientes de cada componente por filas). En la base $B=\{(1,-1),(1,1)\}$ (en salida y en llegada), la matriz de la <b>misma</b> $f$ es $M(f;B,B)=\begin{pmatrix}2&0\cr-15&-1\end{pmatrix}$ (se calcula en <a href="#ex-feb26-2p8">X Feb. 2026 (2.ª), problema 8</a>). Dos matrices distintas, una sola aplicación. Lo que <b>no</b> cambia es el rango (aquí 2), que es $\operatorname{Dim}\operatorname{Im}(f)$.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio sobre el ejercicio X Feb. 2026 (2.ª sem.), problema 8; U Teorema 3.3, p. 115 (matriz única para las bases elegidas)">propio</span>
+  <span class="src" data-l="U" data-ref="U Teorema 3.3, p. 115: la matriz es única para las bases elegidas">U p.115</span>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Tres situaciones que debes saber resolver <span class="src" data-l="P" data-ref="Síntesis propia de U Teorema 3.2 y Def. 3.4, p. 114-117, y de los ejercicios de examen de la sección 8 (X)">propio</span></h2>
+
+<p>Casi todos los ejercicios de matriz asociada caen en una de tres situaciones, según <b>qué te dan</b> y <b>en qué bases</b> te piden la matriz. Identifícala antes de calcular.</p>
+
+<table>
+  <tr><th>Situación</th><th>Qué te dan</th><th>Columnas de la matriz</th></tr>
+  <tr><td><b>A</b> — canónicas</td><td>fórmula de $f$, o $f(e_j)$ de la base canónica</td><td>$f(e_j)$ (coordenadas = componentes)</td></tr>
+  <tr><td><b>B</b> — datos sobre una base no canónica</td><td>$f(b_j)$ con $\{b_j\}$ base cualquiera; piden la matriz <b>canónica</b></td><td>$f(e_j)$, que hay que <b>deducir</b> por linealidad</td></tr>
+  <tr><td><b>C</b> — bases $B$, $S$ no canónicas</td><td>fórmula de $f$; piden $M(f;B,S)$</td><td>coordenadas <b>en $S$</b> de $f(b_j)$</td></tr>
+</table>
+
+<h3 id="s5a">Situación A — bases canónicas</h3>
+<div class="box tip"><span class="h">Método</span>
+  <p>La columna $j$ es $f(e_j)$: sustituye en la fórmula $x_j=1$ y las demás $x_i=0$. Equivalentemente, la <b>fila $i$</b> de $A$ son los coeficientes de $x_1,\dots,x_m$ en la componente $i$ de $f$ (con un $0$ donde falte una variable). Si el espacio de llegada son polinomios o matrices, pasa cada imagen a coordenadas en la base canónica (E 3.17, 3.18, 3.19; X Feb. 2023). Ejemplos: <a href="#ej3-15">E 3.15</a>, <a href="#ej3-17">3.17</a>, <a href="#ej3-18">3.18</a>, <a href="#ej3-19">3.19</a>, <a href="#ex-feb26-2p7a">X Feb. 2026</a>, <a href="#ex-feb23-1p7b">X Feb. 2023</a>.</p>
+</div>
+
+<h3 id="s5b">Situación B — imágenes de una base no canónica, matriz canónica</h3>
+<div class="box tip"><span class="h">Método (dos caminos equivalentes)</span>
+  <p><b>Camino 1: escribir los $e_j$ con la base dada.</b> Si $\{b_1,\dots,b_m\}$ es la base dada, expresa cada $e_j=\sum c_ib_i$ (un sistema) y aplica la linealidad: $f(e_j)=\sum c_if(b_i)$.</p>
+  <p><b>Camino 2: escribir los $b_i$ con la canónica.</b> Los $b_i$ ya vienen con sus componentes, así que cada $b_i=\sum_k(b_i)_k\,e_k$ y $f(b_i)=\sum_k(b_i)_kf(e_k)$. Queda un <b>sistema lineal cuyas incógnitas son los vectores $f(e_1),\dots,f(e_m)$</b>; se resuelve por Gauss como un sistema normal.</p>
+  <p><b>Camino 3 (por filas, si te gustan los sistemas con números).</b> Si $P$ es la matriz de columnas $b_i$ y $F$ la de columnas $f(b_i)$, se cumple $AP=F$. La fila $r$ de $A$ es la solución del sistema $P^T\,(\text{fila}_r)^T=(\text{fila}_r\text{ de }F)^T$. La animación de abajo lo hace para la primera fila de $A$ en un ejemplo.</p>
+  <p>En cualquier caso, <b>comprueba</b> multiplicando $A$ por los vectores $b_i$: deben salir los $f(b_i)$.</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo — de los datos $f(1,1)=(2,3)$, $f(1,2)=(1,1)$ a la matriz canónica</span>
+  <ol class="steps">
+    <li><b>¿Datos suficientes?</b> $\begin{vmatrix}1&1\cr1&2\end{vmatrix}=1\neq0$: $\{(1,1),(1,2)\}$ es base de $\mathbb R^2$, luego $f$ queda determinada (Teor. 3.2).</li>
+    <li><b>Camino 1.</b> $e_2=(0,1)=(1,2)-(1,1)$ y $e_1=(1,1)-e_2=2(1,1)-(1,2)$. Por linealidad: $f(e_2)=f(1,2)-f(1,1)=(1,1)-(2,3)=(-1,-2)$ y $f(e_1)=2f(1,1)-f(1,2)=2(2,3)-(1,1)=(3,5)$.</li>
+    <li><b>Matriz:</b> $A=\begin{pmatrix}3&-1\cr5&-2\end{pmatrix}$. Comprobación: $A\binom11=\binom23$ ✓ y $A\binom12=\binom11$ ✓.</li>
+    <li><b>Camino 3 para la 1.ª fila</b> $(a,b)$ de $A$: $a\cdot1+b\cdot1=2$ (primera componente de $f(1,1)$) y $a\cdot1+b\cdot2=1$ (primera componente de $f(1,2)$). Es el sistema de la animación: resultado $a=3$, $b=-1$ ✓.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio (X «P2» del dossier de exámenes 3.3), verificado con sympy">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: resolver el sistema de la primera fila de $A$</span>
+  <p>Matriz ampliada del sistema $a+b=2,\ a+2b=1$ (incógnitas $a,b$ = primera fila de $A$). Pulsa «siguiente» para ver cada operación por filas; con «✎ Cambiar la matriz» puedes probar otros datos.</p>
+  <div class="anim-gauss" data-modo="gj" data-n="2" data-m="1,1,2;1,2,1" data-vars="a,b"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<h3 id="s5c">Situación C — matriz respecto de bases $B$ y $S$ no canónicas</h3>
+<div class="box tip"><span class="h">Método (Def. 3.4 «a pelo»)</span>
+  <ol class="steps">
+    <li><b>Imagen</b> de cada vector $b_j$ de la base de <b>salida</b> $B$ (sustituye en la fórmula).</li>
+    <li><b>Coordenadas en $S$</b> de cada imagen: resuelve $f(b_j)=a_{1j}u_1+\dots+a_{nj}u_n$. Truco: resuelve <b>una sola vez</b> para un vector genérico $(p,q,\dots)$ y sustituye después.</li>
+    <li>Pon esas coordenadas en <b>columna</b>, en el orden de $B$.</li>
+    <li>Si $f$ es un endomorfismo y dicen «la matriz en la base $B$», usa $B$ <b>a la vez</b> en salida y llegada.</li>
+  </ol>
+  <p>(La fórmula $A'=P^{-1}AQ$ de cambio de base da lo mismo, pero es materia de 3.5; en 3.3 basta el método directo.)</p>
+  <span class="src" data-l="U" data-ref="U Definición 3.4, p. 116; fórmula de cambio de base, Def. 3.15, p. 136 (tema 3.5)">U p.116</span>
+</div>
+
+<div class="box warn"><span class="h">Los dos errores más caros de la situación C</span>
+  <ul>
+    <li>Dejar las imágenes $f(b_j)$ <b>en componentes canónicas</b> (equivale a usar la canónica en la llegada): <i>es otra matriz</i>.</li>
+    <li>Calcular las coordenadas <b>de los $b_j$</b> en lugar de las de sus <b>imágenes</b> $f(b_j)$, o aplicar la matriz a un vector dado en componentes canónicas cuando $X$ debe estar en coordenadas de $B$.</li>
+  </ul>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Qué se lee de la matriz: rango, núcleo e imagen <span class="src" data-l="P" data-ref="Síntesis propia de U Ejemplo 3.9, p. 107; Teor. 2.5, p. 88; Teor. 3.1, p. 111; autoevaluación del cap. 3, ítems 5-6, p. 138">propio</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>La matriz asociada <b>contiene toda la información</b> de $f$ en las bases elegidas, así que núcleo e imagen se calculan con ella (por eso E trata 3.2 y 3.3 a la vez):</p>
+</div>
+<ul>
+  <li><b>Imagen:</b> las columnas de $A$ son los generadores de $\operatorname{Im}(f)$ (en coordenadas de $S$): $\operatorname{Dim}\operatorname{Im}(f)=\operatorname{rang}(A)$.</li>
+  <li><b>Núcleo:</b> $v\in\operatorname{Nuc}(f)\iff AX=0$ con $X$ las coordenadas de $v$ en $B$; $\operatorname{Dim}\operatorname{Nuc}(f)=m-\operatorname{rang}(A)$ (Teor. 3.1, $m$ = nº de columnas).</li>
+  <li><b>Cuidado con las bases:</b> si $B$ no es la canónica, las soluciones de $AX=0$ son <b>coordenadas</b>; hay que reconstruir el vector con $v=x_1b_1+\dots+x_mb_m$ (ejemplo: <a href="#ex-feb26-1p2">X Feb. 2026 (1.ª), pregunta 2</a>).</li>
+  <li>El <b>rango</b> no depende de las bases, pero la <b>matriz</b> sí.</li>
+</ul>
+<p class="note">Los métodos completos (base del núcleo, cartesianas de la imagen, teorema de las dimensiones) están en el <a href="tema_3_2_nucleo_imagen.html">tema 3.2</a>.</p>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §3.3, Ejercicios 3.15, 3.17, 3.18 y 3.19, p. 93-96">E p.93-96</span></h2>
+
+<p>Los ejercicios de E que son <b>solo</b> de matriz asociada son <b>3.15, 3.17, 3.18 y 3.19</b> (E pp.93-96); van de más fácil a más difícil en el orden del libro. Los mixtos (3.20, 3.21, 3.25, 3.28) tienen una parte de matriz asociada y están resueltos completos en el tema 3.2 (ver el recuadro de enlaces tras 3.19). Los demás (3.16, 3.22–3.24, 3.26, 3.27, 3.29) son de núcleo e imagen (tema 3.2) y 3.30–3.31 son del tema 3.4. Las soluciones están plegadas.</p>
+
+<details class="sol" id="ej3-15"><summary>Ejercicio 3.15 — matriz de $f:\mathbb R^3\to\mathbb R^2$ (opción múltiple sobre las <i>filas</i>) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.15, p. 93">E p.93</span></summary>
+  <p class="enun">Si $f:\mathbb R^3\to\mathbb R^2$ es una aplicación lineal, tal que $f(1,0,0)=(1,1)$, $f(0,1,0)=(1,1)$ y $f(0,0,1)=(1,0)$, entonces las <b>filas</b> de la matriz asociada a $f$ en las bases canónicas son: A) $(1,1),(1,0),(0,1)$. B) $(1,1),(0,1),(1,1)$. C) $(1,1,1),(1,1,0)$.</p>
+  <p><b>Qué se pide.</b> Construir la matriz en bases canónicas y leerla <b>por filas</b>, que es lo que comparan las opciones.</p>
+  <ol class="steps">
+    <li><b>Tamaño</b> (Def. 3.4, U p.116): columnas $=\operatorname{Dim}\mathbb R^3=3$; filas $=\operatorname{Dim}\mathbb R^2=2$. La matriz es <b>$2\times3$</b>: 2 filas de 3 elementos. Esto ya <b>descarta A) y B)</b>, que dan 3 filas de 2 elementos (matrices $3\times2$, es decir, la de una aplicación $\mathbb R^2\to\mathbb R^3$).</li>
+    <li><b>Columnas.</b> Las bases son canónicas, así que las coordenadas de cada imagen son sus componentes y las columnas son directamente $f(e_1),f(e_2),f(e_3)$:
+    $$A=\big(\,f(e_1)\ \big|\ f(e_2)\ \big|\ f(e_3)\,\big)=\begin{pmatrix}1&1&1\cr1&1&0\end{pmatrix}.$$</li>
+    <li><b>Filas.</b> Leída por filas, $A$ tiene $(1,1,1)$ y $(1,1,0)$: <b>solo C) es correcta</b>.</li>
+    <li><b>Ecuaciones</b> ($Y=AX$, U p.117):
+    $$\begin{pmatrix}y_1\cr y_2\end{pmatrix}=\begin{pmatrix}1&1&1\cr1&1&0\end{pmatrix}\begin{pmatrix}x_1\cr x_2\cr x_3\end{pmatrix}\iff\begin{cases}y_1=x_1+x_2+x_3\cr y_2=x_1+x_2\end{cases}$$
+    Comprobación con el Teor. 3.2: $f(x_1,x_2,x_3)=x_1(1,1)+x_2(1,1)+x_3(1,0)=(x_1+x_2+x_3,\ x_1+x_2)$ ✓. Por ejemplo $f(2,-1,3)=(4,1)$.</li>
+  </ol>
+  <p><b>Resultado:</b> $A=\begin{pmatrix}1&1&1\cr1&1&0\end{pmatrix}$; correcta: C. <i>(Verificado con sympy.)</i></p>
+  <p><b>Nota sobre el libro.</b> E solo apunta el tamaño (tres columnas y dos filas; margen: «imágenes en $\mathbb R^2$») y da la opción C; el argumento que descarta A y B ($3\times2$ frente a $2\times3$) se desarrolla aquí. Las ecuaciones de la imagen de este mismo $f$ están en <a href="tema_3_2_nucleo_imagen.html#ej3-16">E 3.16</a> (tema 3.2).</p>
+  <div class="recipe"><b>Receta:</b> en bases canónicas, matriz = imágenes de la base canónica <b>en columna</b>. Antes de calcular, comprueba el tamaño: $\operatorname{Dim}(\text{llegada})\times\operatorname{Dim}(\text{partida})$.</div>
+  <p><b>Error típico:</b> poner las imágenes en filas (sale la traspuesta, $3\times2$, que no puede multiplicar a un vector de $\mathbb R^3$), o confundir «filas» con «columnas» al leer las opciones.</p>
+  <p><b>Teoría:</b> Teor. 3.2, U p.114 · Def. 3.4, U p.116 · $Y=AX$, U p.117</p>
+</details>
+
+<details class="sol" id="ej3-17"><summary>Ejercicio 3.17 — matriz de $f:\mathbb R^3\to\mathcal M_{2\times2}$ (hay que pasar a coordenadas) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.17, p. 94">E p.94</span></summary>
+  <p class="enun">Si $f:\mathbb R^3\to\mathcal M_{2\times2}$ es una aplicación lineal, tal que $f(1,0,0)$, $f(0,1,0)$, $f(0,0,1)$ son, respectivamente, las matrices de filas $\{(3,1),(2,4)\}$, $\{(1,-1),(-5,5)\}$ y $\{(2,-2),(-1,4)\}$, se pide calcular la matriz asociada a $f$.</p>
+  <p><b>Qué se pide.</b> Aquí el espacio de llegada <b>no es $\mathbb R^n$</b>: las imágenes son matrices $2\times2$. Una matriz asociada no admite «matrices dentro de matrices»: hay que pasar cada imagen a <b>coordenadas</b>.</p>
+  <ol class="steps">
+    <li><b>Elegir bases.</b> El enunciado no las da: se toman las canónicas, $\{e_1,e_2,e_3\}$ en $\mathbb R^3$ y, en $\mathcal M_{2\times2}$,
+    $$\begin{gathered}E_{11}=\begin{pmatrix}1&0\cr0&0\end{pmatrix},\ E_{12}=\begin{pmatrix}0&1\cr0&0\end{pmatrix},\cr E_{21}=\begin{pmatrix}0&0\cr1&0\end{pmatrix},\ E_{22}=\begin{pmatrix}0&0\cr0&1\end{pmatrix},\end{gathered}$$
+    y $S=\{E_{11},E_{12},E_{21},E_{22}\}$ (en este orden). Como $\begin{pmatrix}a&b\cr c&d\end{pmatrix}=aE_{11}+bE_{12}+cE_{21}+dE_{22}$, sus coordenadas en $S$ son $(a,b,c,d)$: <b>las entradas leídas por filas</b> (Def. 2.10, U p.85).</li>
+    <li><b>Tamaño.</b> $\operatorname{Dim}\mathbb R^3=3$ columnas y $\operatorname{Dim}\mathcal M_{2\times2}=4$ filas: <b>$4\times3$</b> (Def. 3.4). Es lo que E llama «evidente».</li>
+    <li><b>Coordenadas de cada imagen</b> ($f(e_1),f(e_2),f(e_3)$, una por línea):
+    $$\begin{gathered}\begin{pmatrix}3&1\cr2&4\end{pmatrix}\to(3,1,2,4),\cr \begin{pmatrix}1&-1\cr-5&5\end{pmatrix}\to(1,-1,-5,5),\cr \begin{pmatrix}2&-2\cr-1&4\end{pmatrix}\to(2,-2,-1,4).\end{gathered}$$</li>
+    <li><b>Matriz</b> (esas coordenadas en columna):
+    $$A=\begin{pmatrix}3&1&2\cr1&-1&-2\cr2&-5&-1\cr4&5&4\end{pmatrix}.$$</li>
+    <li><b>Ecuaciones y comprobación.</b> $Y=AX$ da
+    $$\begin{cases}y_1=3x_1+x_2+2x_3\cr y_2=x_1-x_2-2x_3\cr y_3=2x_1-5x_2-x_3\cr y_4=4x_1+5x_2+4x_3\end{cases}$$
+    y $f(x_1,x_2,x_3)=\begin{pmatrix}y_1&y_2\cr y_3&y_4\end{pmatrix}$.
+    Con un vector: $f(1,1,1)=f(e_1)+f(e_2)+f(e_3)=\begin{pmatrix}6&-2\cr-4&13\end{pmatrix}$ (propiedad 3, U p.103), y $A\,(1,1,1)^T=(6,-2,-4,13)^T$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $A$ de arriba, $4\times3$. <i>(Verificado con sympy; también $A\,(2,0,-1)^T=(4,4,5,4)^T=2f(e_1)-f(e_3)$.)</i></p>
+  <p><b>Nota sobre el libro.</b> Coincide; solo dice «como es evidente» el tamaño $4\times3$, que sale de la Def. 3.4.</p>
+  <div class="recipe"><b>Receta:</b> si el espacio de llegada son matrices (o polinomios), <b>traduce cada imagen a coordenadas</b> en la base elegida y pon esas coordenadas en columna. El nº de filas es la <b>dimensión</b> del espacio de llegada (4), no el tamaño de las matrices imagen.</div>
+  <p><b>Error típico:</b> «pegar» las tres matrices en una $2\times6$; o leer las entradas por filas $(a,b,c,d)$ en una columna y por columnas $(a,c,b,d)$ en otra: el orden lo fija la base y debe ser el mismo en todas las columnas.</p>
+  <p><b>Teoría:</b> Def. 2.10, U p.85 · Def. 3.4, U p.116 · $Y=AX$, U p.117</p>
+</details>
+
+<details class="sol" id="ej3-18"><summary>Ejercicio 3.18 — matriz de la derivada en $P_3$ (opción múltiple) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.18, p. 95">E p.95</span></summary>
+  <p class="enun">El endomorfismo de $P_3$ que asigna a cada polinomio de grado $\le3$ su derivada tiene por matriz asociada en la base canónica:</p>
+  <p>A) $\begin{pmatrix}1&0&0&0\cr1&1&0&0\cr1&1&1&0\cr1&1&1&1\end{pmatrix}$</p>
+  <p>B) $\begin{pmatrix}1&0&0&0\cr0&1&0&0\cr0&0&1&0\cr0&0&0&1\end{pmatrix}$</p>
+  <p>C) $\begin{pmatrix}0&0&0&0\cr3&0&0&0\cr0&1&0&0\cr0&0&2&0\end{pmatrix}$</p>
+  <p>D) Ninguna de las anteriores.</p>
+  <p><b>Qué se pide.</b> La matriz de $f(p)=p'$ respecto de $\{1,x,x^2,x^3\}$ (la misma en partida y en llegada, por ser endomorfismo), y compararla con las opciones.</p>
+  <ol class="steps">
+    <li><b>$f$ es un endomorfismo lineal</b> (endomorfismo = aplicación lineal de un espacio en sí mismo, $V=W$; E lo da por supuesto): $(p+\lambda q)'=p'+\lambda q'$ (Def. 3.1, U p.101), y si $\operatorname{gr}p\le3$ entonces $\operatorname{gr}p'\le2\le3$: $f:P_3\to P_3$.</li>
+    <li><b>Base y coordenadas.</b> $B=\{1,x,x^2,x^3\}$: $a+bx+cx^2+dx^3$ tiene coordenadas $(a,b,c,d)$ (<b>el orden es el de la base</b>: término independiente primero). $\operatorname{Dim}P_3=4$: matriz $4\times4$.</li>
+    <li><b>Imágenes de la base y sus coordenadas:</b>
+    $$f(1)=0\to(0,0,0,0),\quad f(x)=1\to(1,0,0,0),\quad f(x^2)=2x\to(0,2,0,0),\quad f(x^3)=3x^2\to(0,0,3,0).$$</li>
+    <li><b>Matriz</b> (en columna, Def. 3.4):
+    $$D=\begin{pmatrix}0&1&0&0\cr0&0&2&0\cr0&0&0&3\cr0&0&0&0\end{pmatrix}.$$</li>
+    <li><b>Comparación.</b> Basta mirar una columna: la columna $j$ debe ser $f$ del $j$-ésimo vector de la base.
+      <ul>
+        <li>A) tiene 1.ª columna $(1,1,1,1)$: diría $f(1)=1+x+x^2+x^3$, pero $f(1)=0$. Falsa.</li>
+        <li>B) es la identidad: es la matriz de $p\mapsto p$, no de la derivada ($f(x)=1\neq x$). Falsa.</li>
+        <li>C) su 1.ª columna $(0,3,0,0)$ diría $f(1)=3x$, pero $f(1)=0$; falsa (su 2.ª columna $(0,0,1,0)$ diría $f(x)=x^2\neq1$). Tampoco es la traspuesta de $D$.</li>
+      </ul>
+      <b>Respuesta: D).</b></li>
+    <li><b>Uso de la matriz</b> (ejemplo del propio E). $P(x)=2x^3+5x^2-1$ tiene coordenadas $(-1,0,5,2)$ y
+    $$D\begin{pmatrix}-1\cr0\cr5\cr2\end{pmatrix}=\begin{pmatrix}0\cr10\cr6\cr0\end{pmatrix}\ \to\ 10x+6x^2=P'(x)\ ✓$$
+    En general $D\,(a,b,c,d)^T=(b,2c,3d,0)^T$, las coordenadas de $b+2cx+3dx^2$.</li>
+  </ol>
+  <p><b>Resultado:</b> $D$ como arriba; <b>respuesta D)</b>. <i>(Verificado con sympy.)</i></p>
+  <p><b>Nota sobre el libro.</b> E dice «las opciones A, B y C no son correctas» sin indicar qué aplicación representan (A es la matriz de otra aplicación, B la de la identidad) ni justificar que la derivada sea lineal y endomorfismo.</p>
+  <div class="recipe"><b>Receta:</b> en polinomios, aplica $f$ a cada elemento de la base canónica <b>en orden</b> ($1,x,x^2,\dots$), escribe las coordenadas de cada resultado y colócalas en columna. Para descartar opciones, comprueba <b>una columna</b>.</div>
+  <p><b>Error típico:</b> ordenar la base al revés sin decirlo, o escribir $2x^3+5x^2-1$ como $(2,5,0,-1)$; poner $f(1)=1$ (la derivada de una constante es $0$).</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · Def. 3.4, U p.116 · $Y=AX$, U p.117 · Lay §5.4 Ej. 2, p.290. Este endomorfismo reaparece en E 3.25-3.27 y 3.29 (tema 3.2).</p>
+</details>
+
+<details class="sol" id="ej3-19"><summary>Ejercicio 3.19 — matriz, ecuaciones e imagen de $x+3$ en un endomorfismo de $P_2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.19, p. 96">E p.96</span></summary>
+  <p class="enun">Si $f(1)=3+2x+x^2$, $f(x)=2$ y $f(x^2)=2x^2$ en el endomorfismo $f$ de $P_2$ (polinomios reales de grado 2), es cierto que: A) No hay datos suficientes para escribir la matriz de $f$. B) No se pueden escribir las ecuaciones de $f$. C) No hay datos suficientes para encontrar la imagen de $x+3$. D) Las coordenadas de $f(x+3)$ respecto a la base canónica son $(11,6,3)$.</p>
+  <p><b>Lectura del enunciado.</b> $P_2$ son los polinomios de grado <b>$\le2$</b> (los de grado exactamente 2 no forman espacio vectorial: $x^2+(-x^2)=0$). Y «$f(x)=2$» quiere decir: <i>la imagen del polinomio $x$ es el polinomio constante $2$</i>, no «$f$ evaluada en $x$».</p>
+  <p><b>Qué se pide.</b> Decidir si las imágenes de $1,x,x^2$ bastan para conocer $f$ (matriz, ecuaciones, imagen de cualquier polinomio) y calcular $f(x+3)$.</p>
+  <ol class="steps">
+    <li><b>¿Datos suficientes? (A falsa).</b> $\{1,x,x^2\}$ es una <b>base</b> de $P_2$. Por el Teor. 3.2 (U p.114), conocer las imágenes de todos los vectores de una base determina $f$, y por el Teor. 3.3 y la Def. 3.4 (U p.115-116) la matriz queda determinada y es única. <b>A) es falsa.</b></li>
+    <li><b>Matriz.</b> Coordenadas en $\{1,x,x^2\}$: $f(1)=3+2x+x^2\to(3,2,1)$; $f(x)=2=2+0x+0x^2\to(2,0,0)$; $f(x^2)=2x^2\to(0,0,2)$. En columna:
+    $$A=\begin{pmatrix}3&2&0\cr2&0&0\cr1&0&2\end{pmatrix}.$$</li>
+    <li><b>Ecuaciones (B falsa).</b> Si $p=x_1+x_2x+x_3x^2$ y $f(p)=y_1+y_2x+y_3x^2$, entonces $Y=AX$:
+    $$\begin{cases}y_1=3x_1+2x_2\cr y_2=2x_1\cr y_3=x_1+2x_3\end{cases}$$
+    Se pueden escribir: <b>B) es falsa</b>.</li>
+    <li><b>Imagen de $x+3$ (C falsa, D cierta).</b> $x+3=3\cdot1+1\cdot x+0\cdot x^2$ tiene coordenadas $(3,1,0)$ (¡el término independiente primero!).
+      <ul>
+        <li><i>Con la matriz:</i> $A\begin{pmatrix}3\cr1\cr0\end{pmatrix}=\begin{pmatrix}9+2\cr6\cr3\end{pmatrix}=\begin{pmatrix}11\cr6\cr3\end{pmatrix}$.</li>
+        <li><i>Sin la matriz (Teor. 3.2):</i> $f(3+x)=3f(1)+f(x)=3(3+2x+x^2)+2=11+6x+3x^2\to(11,6,3)$.</li>
+      </ul>
+      Se puede calcular: <b>C) es falsa</b> y <b>D) es la única cierta</b>.</li>
+  </ol>
+  <p><b>Resultado:</b> $A$ como arriba; única cierta: D). <i>(Verificado con sympy; además $\det A=-8\neq0$: $f$ es biyectiva, dato no pedido.)</i></p>
+  <p><b>Nota sobre el libro.</b> E escribe «$P_2$ (polinomios reales de grado 2)»: debe ser grado $\le2$ (el margen de E p.96 lo aclara, aunque escribe «$P_3$» donde quiere decir $P_2$: otra errata).</p>
+  <div class="recipe"><b>Receta:</b> si conoces las imágenes de <b>todos</b> los vectores de una base, conoces $f$ entera: matriz = coordenadas de esas imágenes en columna; ecuaciones = $Y=AX$; imagen de un vector = $A\cdot$(sus coordenadas) o la combinación lineal de las imágenes de la base.</div>
+  <p><b>Error típico:</b> leer $f(x)=2$ como «$f$ vale 2 en el punto $x$» y no saber qué columna poner (es $(2,0,0)$); escribir las coordenadas de $x+3$ como $(1,3,0)$.</p>
+  <p><b>Teoría:</b> Teor. 3.2-3.3, U p.114-115 · Def. 3.4, U p.116 · $Y=AX$, U p.117</p>
+</details>
+
+<div class="box tip"><span class="h">Ejercicios mixtos de E (parte de matriz asociada), resueltos en el tema 3.2</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.20, 3.21, 3.25 y 3.28, p. 97, 98, 101 y 103">E p.97-103</span>
+  <ul>
+    <li><a href="tema_3_2_nucleo_imagen.html#ej3-20"><b>E 3.20</b></a> ($\mathbb R^4\to P_2$), apartado A: las ternas dadas son <b>coordenadas</b> en $\{1,x,x^2\}$ (el enunciado no lo dice; el libro lo supone) y dan $A=\begin{pmatrix}1&2&-1&2\cr0&-4&0&-2\cr-1&1&-2&-2\end{pmatrix}$ ($3\times4$), con $y_1=x_1+2x_2-x_3+2x_4$, $y_2=-4x_2-2x_4$, $y_3=-x_1+x_2-2x_3-2x_4$.</li>
+    <li><a href="tema_3_2_nucleo_imagen.html#ej3-21"><b>E 3.21</b></a> ($\mathbb R^3\to\mathcal M_{2\times2}$), apartado A: mismo método que 3.17, $A=\begin{pmatrix}2&1&5\cr-1&0&1\cr3&4&0\cr0&2&1\end{pmatrix}$ ($4\times3$).</li>
+    <li><a href="tema_3_2_nucleo_imagen.html#ej3-25"><b>E 3.25</b></a>: matriz de la derivada en $P_3$, la misma $D$ que en 3.18.</li>
+    <li><a href="tema_3_2_nucleo_imagen.html#ej3-28"><b>E 3.28</b></a>, apartado C, «matriz asociada, si es posible»: <b>no es posible</b>. Del núcleo $\{ax+bx^2\}$ solo se deduce $f(x)=f(x^2)=0$ (dos columnas nulas); faltan $f(1)$ y $f(x^3)$. Contraste con 3.19, donde sí se dan las imágenes de <b>toda</b> la base (Teor. 3.2).</li>
+  </ul>
+</div>
+
+<h3 id="propios">Ejemplos propios (de más fácil a más difícil)</h3>
+
+<details class="sol" id="ej-propio-1"><summary>Ejemplo propio 1 (fácil) — de la matriz a las ecuaciones y a $f(x)$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">Sea $f$ la aplicación lineal cuya matriz en las bases canónicas es $A=\begin{pmatrix}1&0&2\cr-1&1&0\end{pmatrix}$. (a) ¿Entre qué espacios va $f$? (b) Escribe sus ecuaciones y $f(x_1,x_2,x_3)$. (c) Calcula $f(2,-1,1)$ y $f(-2,-2,1)$. (d) Da $f(e_1),f(e_2),f(e_3)$.</p>
+  <ol class="steps">
+    <li><b>(a) Espacios.</b> $A$ es $2\times3$: 3 columnas $\Rightarrow\operatorname{Dim}V=3$; 2 filas $\Rightarrow\operatorname{Dim}W=2$ (Def. 3.4). Con bases canónicas, $f:\mathbb R^3\to\mathbb R^2$.</li>
+    <li><b>(b) Ecuaciones</b> ($Y=AX$): $y_1=x_1+2x_3$, $y_2=-x_1+x_2$; es decir, $f(x_1,x_2,x_3)=(x_1+2x_3,\ -x_1+x_2)$.</li>
+    <li><b>(c)</b> $f(2,-1,1)=(2+2,\ -2-1)=(4,-3)$ y $f(-2,-2,1)=(-2+2,\ 2-2)=(0,0)$ (este vector está en el <i>núcleo</i>: ver tema 3.2).</li>
+    <li><b>(d)</b> Las imágenes de la base canónica son las <b>columnas</b>: $f(e_1)=(1,-1)$, $f(e_2)=(0,1)$, $f(e_3)=(2,0)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> tamaño de $A$ $\Rightarrow$ dimensiones (columnas = partida, filas = llegada); cada <b>fila</b> da una ecuación $y_i=\dots$; cada <b>columna</b> es la imagen de un vector de la base.</div>
+</details>
+
+<details class="sol" id="ej-propio-2"><summary>Ejemplo propio 2 (medio) — obtener $f$ a partir de las imágenes de una base no canónica <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">Sea $f:\mathbb R^2\to\mathbb R^3$ lineal con $f(1,1)=(1,0,2)$ y $f(1,2)=(2,1,3)$. (a) Justifica que $f$ queda determinada. (b) Escribe la matriz de $f$ respecto de $B=\{(1,1),(1,2)\}$ y la canónica $C_3$ de $\mathbb R^3$. (c) Halla la matriz en bases canónicas y $f(x,y)$.</p>
+  <ol class="steps">
+    <li><b>(a)</b> $u_1=(1,1)$, $u_2=(1,2)$ son independientes ($\begin{vmatrix}1&1\cr1&2\end{vmatrix}=1\neq0$): dos vectores libres en un espacio de dimensión 2 son base (Teor. 2.6, U p.88). Por el Teor. 3.2, las imágenes de una base determinan $f$.</li>
+    <li><b>(b) $M(f;B,C_3)$.</b> Columnas = coordenadas canónicas de $f(u_1)$ y $f(u_2)$:
+    $$M(f;B,C_3)=\begin{pmatrix}1&2\cr0&1\cr2&3\end{pmatrix}.$$
+    Ojo: esta matriz multiplica a las coordenadas <b>en $B$</b>, no a $(x,y)$.</li>
+    <li><b>(c) Expresar la canónica en función de $B$.</b> $e_1=\alpha u_1+\beta u_2$: $(1,0)=(\alpha+\beta,\ \alpha+2\beta)\Rightarrow\beta=-1$, $\alpha=2$, luego $e_1=2u_1-u_2$. Análogamente $e_2=-u_1+u_2$.</li>
+    <li><b>Imágenes de la canónica</b> (propiedad 3, U p.103): $f(e_1)=2f(u_1)-f(u_2)=2(1,0,2)-(2,1,3)=(0,-1,1)$ y $f(e_2)=-f(u_1)+f(u_2)=(1,1,1)$.</li>
+    <li><b>Matriz canónica y fórmula:</b>
+    $$A=\begin{pmatrix}0&1\cr-1&1\cr1&1\end{pmatrix},\qquad f(x,y)=(y,\ -x+y,\ x+y).$$
+    Comprobación: $f(1,1)=(1,0,2)$ ✓ y $f(1,2)=(2,1,3)$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> imágenes de una base no canónica: (1) comprueba que es base; (2) escribe cada $e_i$ como combinación de esa base; (3) aplica la linealidad; (4) pon los $f(e_i)$ en columna.</div>
+  <p><b>Error típico:</b> poner $f(1,1)$ y $f(1,2)$ como columnas y creer que es la matriz en bases canónicas (lo es respecto de $B$ en la partida, no de $C_2$): con ella, $A\,(1,0)^T$ daría $(1,0,2)=f(1,1)$, no $f(1,0)$.</p>
+</details>
+
+<details class="sol" id="ej-propio-3"><summary>Ejemplo propio 3 (tipo examen) — matriz respecto de bases no canónicas en partida y llegada <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">Sea $f:\mathbb R^3\to\mathbb R^2$, $f(x,y,z)=(x+y,\ y+z)$. Halla la matriz de $f$ respecto de $B=\{(1,0,0),(1,1,0),(1,1,1)\}$ en $\mathbb R^3$ y $S=\{(1,1),(1,2)\}$ en $\mathbb R^2$. Úsala para calcular, en coordenadas de $S$, la imagen del vector cuyas coordenadas en $B$ son $(1,1,1)$, y compruébalo.</p>
+  <ol class="steps">
+    <li><b>Son bases.</b> $\begin{vmatrix}1&1&1\cr0&1&1\cr0&0&1\end{vmatrix}=1\neq0$ y $\begin{vmatrix}1&1\cr1&2\end{vmatrix}=1\neq0$. Tamaño de la matriz: $2\times3$.</li>
+    <li><b>Imágenes de los vectores de $B$:</b> $f(1,0,0)=(1,0)$, $f(1,1,0)=(2,1)$, $f(1,1,1)=(2,2)$.</li>
+    <li><b>Coordenadas en $S$ de un vector genérico $(p,q)$:</b> $(p,q)=a(1,1)+b(1,2)\Rightarrow a+b=p,\ a+2b=q\Rightarrow b=q-p,\ a=2p-q$. Entonces $(1,0)=(2,-1)_S$, $(2,1)=(3,-1)_S$, $(2,2)=(2,0)_S$ (comprueba, p. ej., $3(1,1)-(1,2)=(2,1)$).</li>
+    <li><b>Matriz</b> (columna $j$ = coordenadas en $S$ de $f(b_j)$):
+    $$M(f;B,S)=\begin{pmatrix}2&3&2\cr-1&-1&0\end{pmatrix}.$$</li>
+    <li><b>Imagen del vector $(1,1,1)_B$:</b>
+    $$\begin{pmatrix}2&3&2\cr-1&-1&0\end{pmatrix}\begin{pmatrix}1\cr1\cr1\end{pmatrix}=\begin{pmatrix}7\cr-2\end{pmatrix}_S .$$</li>
+    <li><b>Comprobación por otro camino.</b> $(1,1,1)_B=(1,0,0)+(1,1,0)+(1,1,1)=(3,2,1)$ en canónicas; $f(3,2,1)=(5,3)$; y $7(1,1)-2(1,2)=(5,3)$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> matriz respecto de $B$ (partida) y $S$ (llegada): calcula $f$ de cada vector de $B$, <b>expresa cada resultado en coordenadas de $S$</b> (resolviendo un sistema) y ponlas en columna. La matriz transforma coordenadas en $B$ en coordenadas en $S$.</div>
+  <p><b>Error típico:</b> poner como columnas las imágenes $f(b_j)$ en coordenadas canónicas, $(1,0),(2,1),(2,2)$: eso es $M(f;B,C_2)$, no $M(f;B,S)$. O aplicar la matriz a $(1,1,1)$ pensando que son coordenadas canónicas.</p>
+</details>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="examenes"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Ocho preguntas de exámenes de otros años cuyo contenido principal es la matriz asociada, agrupadas por método: <b>A</b> de la fórmula a la matriz; <b>B</b> imágenes de una base no canónica y matriz canónica; <b>C</b> matriz respecto de bases no canónicas; <b>D</b> leer la matriz e interpretar (rango, dependencia de las bases). Después, cuatro ejemplos propios y la lista de preguntas «mixtas» que ya están resueltas en otros temas. Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>) y se señalan sus erratas. Todos los cálculos se han verificado con sympy.</p>
+
+<!-- ------------------ Método A ------------------ -->
+<h3 id="metodoA">Método A — de la fórmula a la matriz: «columnas = imágenes de la base de partida»</h3>
+<p><b>Idea común.</b> Por la Def. 3.4 (U p.116), la columna $j$ son las coordenadas de $f(e_j)$ en la base de llegada. Con bases canónicas, las coordenadas son las componentes y $f(e_j)$ se obtiene poniendo $x_j=1$ y las demás variables a $0$; en la práctica, <b>la fila $i$ de $A$ son los coeficientes de $x_1,\dots,x_m$ en la componente $i$ de $f$</b>. Tamaño: $n\times m$. Con polinomios, se trabaja con las coordenadas en la base dada.</p>
+
+<details class="sol" id="ex-feb26-2p7a"><summary>Feb. 2026 (2.ª sem.), problema 7, 1.er apartado — matriz de $f:\mathbb R^4\to\mathbb R^3$ dada por fórmula <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), problema 7 (1.er apartado)">X Feb. 2026 (2.ª) P7</span></summary>
+  <p class="enun">Sea $f(x,y,z,t)=(x+2y-z+3t,\ 2x+4y+6t,\ -x-2y+z-3t)$ una aplicación lineal de $\mathbb R^4$ en $\mathbb R^3$. Halle la matriz $A$ asociada a $f$ (0.5 puntos). <i>(Siguen: <a href="tema_1_2_algebra_matricial.html#ex-feb26b">escalonada reducida de $A$</a>, tema 1.2, y base de $\operatorname{Nuc}f$, tema 3.2.)</i></p>
+  <p><b>Qué se pide.</b> No se dan bases: se entienden las canónicas de $\mathbb R^4$ (partida) y $\mathbb R^3$ (llegada). Hay que escribir $A$ con $f(v)=Av$.</p>
+  <ol class="steps">
+    <li><b>Tamaño</b> (Def. 3.4): $m=4$ columnas y $n=3$ filas: $A$ es $3\times4$.</li>
+    <li><b>Imágenes de la base canónica</b>, sustituyendo en la fórmula: $f(e_1)=(1,2,-1)$, $f(e_2)=(2,4,-2)$, $f(e_3)=(-1,0,1)$, $f(e_4)=(3,6,-3)$.</li>
+    <li><b>Matriz</b> (esas componentes en columna):
+    $$A=\begin{pmatrix}1&2&-1&3\cr2&4&0&6\cr-1&-2&1&-3\end{pmatrix}.$$ En la 2.ª fila falta la variable $z$: va un <b>0</b>.</li>
+    <li><b>Comprobación</b> ($Y=AX$, U p.117): $A\,(x,y,z,t)^T$ reproduce las tres componentes de la fórmula ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> la matriz de arriba. <i>(Verificado con sympy: rango 2.)</i> <b>Sobre la oficial:</b> correcta, sin justificación; en el examen conviene una línea: «la columna $j$ es $f(e_j)$».</p>
+  <div class="recipe"><b>Receta:</b> escribe cada componente de $f$ como una fila de coeficientes, respetando el orden de las variables y poniendo $0$ donde falte alguna.</div>
+  <p><b>Error típico:</b> poner las imágenes en <b>filas</b> (sale una $4\times3$ que no multiplica a $X\in\mathbb R^4$); olvidar el $0$ de una variable ausente.</p>
+</details>
+
+<details class="sol" id="ex-feb23-1p7b"><summary>Feb. 2023 (1.ª sem.), problema 7 (ii) — expresión matricial de la derivada tercera $\wp_4\to\wp_1$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª sem.), problema 7 (ii)">X Feb. 2023 (1.ª) P7</span></summary>
+  <p class="enun">Sea $f:\wp_4\to\wp_1$, $f(p)=p'''$ (derivada tercera), con la base $(p_0,p_1,\dots,p_n)$ de $\wp_n$, $p_k(x)=x^k$. <i>Nota: si $p(x)=7+3x^2+2x^3+x^4$, entonces $(f(p))(x)=12+24x$.</i> (i) Describa núcleo e imagen <i>(tema 3.2)</i>. (ii) Dé la expresión matricial de $f$ (1 punto).</p>
+  <p><b>Qué se pide.</b> La «expresión matricial» es $Y=AX$ (U p.117), con $X$ las coordenadas de $p$ en $(1,x,x^2,x^3,x^4)$ e $Y$ las de $f(p)$ en $(1,x)$.</p>
+  <ol class="steps">
+    <li><b>Tamaño.</b> $\operatorname{Dim}\wp_4=5$ columnas y $\operatorname{Dim}\wp_1=2$ filas: $A$ es <b>$2\times5$</b>.</li>
+    <li><b>Imagen de cada vector de la base de partida</b> (derivar tres veces): $f(1)=f(x)=f(x^2)=0$, $f(x^3)=6$, $f(x^4)=24x$.</li>
+    <li><b>Coordenadas en $(1,x)$</b> (los coeficientes, en el orden de la base): $0\to(0,0)$, $6=6\cdot1+0\cdot x\to(6,0)$, $24x\to(0,24)$.</li>
+    <li><b>Matriz</b> (en columna):
+    $$A=\begin{pmatrix}0&0&0&6&0\cr0&0&0&0&24\end{pmatrix}.$$</li>
+    <li><b>Expresión matricial.</b> Con $p=a_0+a_1x+\dots+a_4x^4$ y $f(p)=b_0+b_1x$:
+    $$\begin{pmatrix}b_0\cr b_1\end{pmatrix}=\begin{pmatrix}0&0&0&6&0\cr0&0&0&0&24\end{pmatrix}\begin{pmatrix}a_0\cr a_1\cr a_2\cr a_3\cr a_4\end{pmatrix}\iff\begin{cases}b_0=6a_3\cr b_1=24a_4\end{cases}$$</li>
+    <li><b>Comprobación con la nota.</b> $p=7+3x^2+2x^3+x^4$ tiene coordenadas $(7,0,3,2,1)$ y $A\,(7,0,3,2,1)^T=(12,24)^T$, es decir, $f(p)=12+24x$ ✓.</li>
+    <li><b>De paso</b> (tema 3.2): $\operatorname{rang}A=2=\operatorname{Dim}\operatorname{Im}f$, luego $\operatorname{Im}f=\wp_1$ y $\operatorname{Dim}\operatorname{Nuc}f=5-2=3$.</li>
+  </ol>
+  <p><b>Resultado:</b> $b_0=6a_3$, $b_1=24a_4$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> la matriz es correcta, pero iguala «$f(p)$» a un producto matriz-columna (hay que igualar la <b>columna de coordenadas</b> de $f(p)$), y escribe «$a_0+\dots+a_4x^4=6a_3+24a_4x$» olvidando el $f(\cdot)$.</p>
+  <div class="recipe"><b>Receta:</b> en polinomios, aplica $f$ a cada polinomio de la base de partida, escribe el resultado en coordenadas de la base de llegada (sus coeficientes, en orden) y ponlo como columna.</div>
+  <p><b>Error típico:</b> una matriz $5\times5$ (sería la derivada tercera como endomorfismo de $\wp_4$, no $\wp_4\to\wp_1$); usar el orden $x^2,x,1$ cuando el enunciado fija $1,x,x^2,\dots$.</p>
+</details>
+
+<!-- ------------------ Método B ------------------ -->
+<h3 id="metodoB">Método B — imágenes de una base no canónica $\Rightarrow$ matriz canónica</h3>
+<p><b>Idea común.</b> Por el Teor. 3.2 (U p.114) las imágenes de una base determinan $f$, pero la matriz canónica pide las imágenes de la <b>canónica</b>. Se plantea la linealidad (propiedad 3, U p.103) y se obtienen $f(e_1),\dots,f(e_m)$, ya sea escribiendo cada $e_j$ con la base dada o resolviendo un sistema cuyas incógnitas son los vectores $f(e_j)$. Forma compacta de comprobar: $AP=F$ ($P$ = vectores dados en columna, $F$ = sus imágenes), luego $A=FP^{-1}$.</p>
+
+<details class="sol" id="ex-feb18b-3"><summary>Feb. 2018 (tipo B), ejercicio 3 — matriz canónica sabiendo $f(1,2)=(2,3)$ y $f(2,0)=(4,0)$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicio 3">X Feb. 2018 (B)</span></summary>
+  <p class="enun">Se pide escribir la matriz de la aplicación lineal definida por $f(1,2)=(2,3)$ y $f(2,0)=(4,0)$ respecto de las bases canónicas.</p>
+  <p><b>Qué se pide.</b> $f:\mathbb R^2\to\mathbb R^2$: matriz $2\times2$ cuyas columnas son $f(1,0)$ y $f(0,1)$, que <b>no</b> se dan.</p>
+  <ol class="steps">
+    <li><b>¿Está bien definida?</b> $\det\begin{pmatrix}1&2\cr2&0\end{pmatrix}=-4\neq0$: $\{(1,2),(2,0)\}$ es base y, por el Teor. 3.2, $f$ queda determinada.</li>
+    <li><b>Primera columna.</b> $(2,0)=2\,(1,0)$, así que por linealidad $f(2,0)=2f(1,0)$ y
+    $$f(1,0)=\tfrac12(4,0)=(2,0).$$</li>
+    <li><b>Segunda columna.</b> $(1,2)=(1,0)+2\,(0,1)$, luego $f(1,2)=f(1,0)+2f(0,1)$ y
+    $$f(0,1)=\tfrac12\big[f(1,2)-f(1,0)\big]=\tfrac12\big[(2,3)-(2,0)\big]=\left(0,\tfrac32\right).$$</li>
+    <li><b>Matriz:</b> $A=\begin{pmatrix}2&0\cr0&\tfrac32\end{pmatrix}$. <b>Comprobación:</b> $A\binom12=\binom23$ ✓ y $A\binom20=\binom40$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $A=\begin{pmatrix}2&0\cr0&3/2\end{pmatrix}$. <i>(Verificado con sympy: $FP^{-1}$.)</i> <b>Sobre la oficial:</b> correcta, con una errata («se trata de hallar $f(0,1)$ y $f(0,1)$»: el primero es $f(1,0)$) y otra al escribir «$f(2,0))$».</p>
+  <div class="recipe"><b>Receta:</b> busca relaciones sencillas entre los vectores dados y los canónicos (aquí $(2,0)=2e_1$), despeja $f(e_1)$ y $f(e_2)$ por linealidad y colócalos en columna; comprueba multiplicando $A$ por los vectores originales.</div>
+  <p><b>Error típico:</b> poner como columnas $f(1,2)$ y $f(2,0)$: es la matriz respecto de la base $\{(1,2),(2,0)\}$ en la partida, no la canónica.</p>
+</details>
+
+<details class="sol" id="ex-ene22a-3"><summary>Ene. 2022 (tipo A), ejercicio 3 — matriz canónica de un endomorfismo de $\mathbb R^3$ <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A), ejercicio 3">X Ene. 2022 (A)</span></summary>
+  <p class="enun">Si $B=\{(1,1,0),(2,3,1),(0,-2,1)\}$ es una base de $\mathbb R^3$ y $f$ es un endomorfismo de $\mathbb R^3$ tal que, en la base canónica, $f(1,1,0)=(3,2,0)$, $f(2,3,1)=(1,-2,1)$, $f(0,-2,1)=(4,0,1)$, se pide encontrar su matriz asociada (referida a la base canónica de $\mathbb R^3$).</p>
+  <p><b>Qué se pide.</b> Matriz $3\times3$ en la canónica: columnas $f(e_1),f(e_2),f(e_3)$.</p>
+  <ol class="steps">
+    <li><b>$B$ es base</b> (el enunciado lo afirma; conviene verlo): $\det\begin{pmatrix}1&2&0\cr1&3&-2\cr0&1&1\end{pmatrix}=3\neq0$.</li>
+    <li><b>Plantear con incógnitas vectoriales</b> $u=f(e_1)$, $v=f(e_2)$, $w=f(e_3)$. Como $(1,1,0)=e_1+e_2$, $(2,3,1)=2e_1+3e_2+e_3$ y $(0,-2,1)=-2e_2+e_3$, la propiedad 3 da
+    $$\begin{cases}u+v=(3,2,0)\cr2u+3v+w=(1,-2,1)\cr-2v+w=(4,0,1)\end{cases}$$</li>
+    <li><b>Gauss con vectores.</b> Los coeficientes forman la matriz $3\times3$ de la izquierda y cada <b>fila del segundo miembro es un vector</b> de $\mathbb R^3$. Matriz ampliada de partida:
+    $$\left(\begin{array}{ccc|ccc}1&1&0&3&2&0\cr2&3&1&1&-2&1\cr0&-2&1&4&0&1\end{array}\right)$$
+    Con $F_2\to F_2-2F_1$ (anula el 2 de la 1.ª columna; los vectores se restan componente a componente: $(1,-2,1)-2(3,2,0)=(-5,-6,1)$):
+    $$\left(\begin{array}{ccc|ccc}1&1&0&3&2&0\cr0&1&1&-5&-6&1\cr0&-2&1&4&0&1\end{array}\right)$$
+    Con $F_3\to F_3+2F_2$ (anula el $-2$ de la 2.ª columna):
+    $$\left(\begin{array}{ccc|ccc}1&1&0&3&2&0\cr0&1&1&-5&-6&1\cr0&0&3&-6&-12&3\end{array}\right)$$</li>
+    <li><b>Despejar hacia arriba.</b> $F_3/3$: $w=(-2,-4,1)$. De la fila 2, $v=(-5,-6,1)-w=(-3,-2,0)$. De la fila 1, $u=(3,2,0)-v=(6,4,0)$.</li>
+    <li><b>Matriz</b> (columnas $u,v,w$):
+    $$A=\begin{pmatrix}6&-3&-2\cr4&-2&-4\cr0&0&1\end{pmatrix}.$$</li>
+    <li><b>Comprobación</b> (lo más seguro): $A\,(1,1,0)^T=(3,2,0)^T$ ✓; $A\,(2,3,1)^T=(12-9-2,\ 8-6-4,\ 1)=(1,-2,1)$ ✓; $A\,(0,-2,1)^T=(6-2,\ 4-4,\ 1)=(4,0,1)$ ✓.</li>
+    <li><b>Vía compacta.</b> Con $P$ (vectores de $B$ en columna) y $F$ (sus imágenes en columna), $AP=F\Rightarrow A=FP^{-1}$; es la fórmula de cambio de base del tema 3.5 (Def. 3.15, U p.136). Sin calculadora, el sistema de arriba suele ser más corto.</li>
+  </ol>
+  <p><b>Resultado:</b> $A$ como arriba. <i>(Verificado con sympy: $\det P=3$, $A=FP^{-1}$, $AP=F$.)</i> <b>Sobre la oficial:</b> resultado correcto; plantea el sistema pero no muestra cómo lo resuelve, y la cabecera de las soluciones dice «ENERO 2021» (errata: el examen es de 2022).</p>
+  <div class="recipe"><b>Receta:</b> «imágenes de una base cualquiera $\to$ matriz canónica»: escribe cada vector dado como combinación de los canónicos (se lee de sus componentes), aplica linealidad y resuelve el sistema cuyas incógnitas son $f(e_1),\dots,f(e_m)$. Comprueba siempre $A\cdot(\text{vector dado})=\text{imagen dada}$.</div>
+  <p><b>Error típico:</b> poner directamente $(3,2,0),(1,-2,1),(4,0,1)$ como columnas: es la matriz de $f$ respecto de $B$ (partida) y la canónica (llegada), no la pedida. Y equivocarse en un signo al despejar sin comprobar.</p>
+</details>
+
+<!-- ------------------ Método C ------------------ -->
+<h3 id="metodoC">Método C — matriz respecto de bases no canónicas (Def. 3.4 directamente)</h3>
+<p><b>Idea común.</b> Para cada vector $e_j$ de la base de <b>partida</b> se calcula $f(e_j)$ y se expresan sus <b>coordenadas en la base de llegada</b> $S$ (resolver $f(e_j)=a_{1j}u_1+\dots+a_{nj}u_n$); esos $a_{ij}$ forman la columna $j$. Si $f$ es un endomorfismo y dicen «la matriz en la base $B$», se usa $B$ <b>a la vez</b> en partida y llegada.</p>
+
+<details class="sol" id="ex-feb19a-3"><summary>Feb. 2019 (tipo A), ejercicio 3 — matriz en las bases $\{(1,0,1),(1,0,0),(1,1,0)\}$ y $\{(0,1),(1,0)\}$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), ejercicio 3">X Feb. 2019 (A)</span></summary>
+  <p class="enun">Hallar la matriz asociada, en las bases $\{(1,0,1),(1,0,0),(1,1,0)\}$ y $\{(0,1),(1,0)\}$, de la aplicación lineal $f:\mathbb R^3\to\mathbb R^2$ definida por $f(x,y,z)=(x-y-z,\ z)$.</p>
+  <p><b>Qué se pide.</b> $B=\{(1,0,1),(1,0,0),(1,1,0)\}$ es la base de partida ($\mathbb R^3$, 3 columnas) y $S=\{(0,1),(1,0)\}$ la de llegada ($\mathbb R^2$, 2 filas): matriz $2\times3$.</p>
+  <ol class="steps">
+    <li><b>Son bases.</b> $\det\begin{pmatrix}1&1&1\cr0&0&1\cr1&0&0\end{pmatrix}=1\neq0$; $S$ es la canónica con el orden cambiado.</li>
+    <li><b>Imágenes de los vectores de $B$:</b> $f(1,0,1)=(0,1)$, $f(1,0,0)=(1,0)$, $f(1,1,0)=(0,0)$.</li>
+    <li><b>Coordenadas en $S=\{u_1=(0,1),u_2=(1,0)\}$.</b> $(a,b)=\alpha(0,1)+\beta(1,0)=(\beta,\alpha)$, luego las coordenadas son $(b,a)$ (se intercambian). Así $(0,1)=(1,0)_S$, $(1,0)=(0,1)_S$, $(0,0)=(0,0)_S$.</li>
+    <li><b>Matriz</b> (coordenadas en columna, en el orden de $B$):
+    $$A=\begin{pmatrix}1&0&0\cr0&1&0\end{pmatrix}.$$</li>
+    <li><b>Comprobación.</b> $v=(2,1,1)$: $v=\alpha(1,0,1)+\beta(1,0,0)+\gamma(1,1,0)$ da $\gamma=1$ (2.ª comp.), $\alpha=1$ (3.ª), $\beta=0$, así que $v=(1,0,1)_B$. Entonces $A\,(1,0,1)^T=(1,0)^T$, que en $S$ es $1\cdot(0,1)+0\cdot(1,0)=(0,1)$; directamente, $f(2,1,1)=(0,1)$ ✓.</li>
+    <li><b>Contraste.</b> En las bases canónicas la matriz sería $\begin{pmatrix}1&-1&-1\cr0&0&1\end{pmatrix}$: <b>otra matriz para la misma $f$</b> (el Teor. 3.3 dice «única <i>para las bases elegidas</i>»).</li>
+  </ol>
+  <p><b>Resultado:</b> $A=\begin{pmatrix}1&0&0\cr0&1&0\end{pmatrix}$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> correcta y bien explicada.</p>
+  <div class="recipe"><b>Receta:</b> (1) imagen de cada vector de la base de <b>partida</b>; (2) coordenadas de cada imagen en la base de <b>llegada</b>; (3) en columna. Si la llegada es la canónica desordenada, las coordenadas son las componentes reordenadas.</div>
+  <p><b>Error típico:</b> dejar las imágenes $(0,1),(1,0),(0,0)$ tal cual como columnas (usar la canónica en la llegada: sale $\begin{pmatrix}0&1&0\cr1&0&0\end{pmatrix}$, incorrecta), o calcular las coordenadas de los vectores de $B$ en lugar de las de sus imágenes.</p>
+</details>
+
+<details class="sol" id="ex-feb26-2p8"><summary>Feb. 2026 (2.ª sem.), problema 8, 1.er apartado — matriz de un endomorfismo de $\mathbb R^2$ en la base $B=\{(1,-1),(1,1)\}$ <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), problema 8 (1.er apartado)">X Feb. 2026 (2.ª) P8</span></summary>
+  <p class="enun">Sea $f(x_1,x_2)=(-7x_1+6x_2,\ -9x_1+8x_2)$ una aplicación lineal de $\mathbb R^2$ en $\mathbb R^2$ respecto a la base canónica. Halle la matriz asociada a $f$ con respecto a la base $B=\{(1,-1),(1,1)\}$ (1 punto). <i>(El 2.º apartado, diagonalizar, es del tema 4.3.)</i></p>
+  <p><b>Qué se pide.</b> Es un endomorfismo: «respecto a la base $B$» significa $B$ en la partida <b>y</b> en la llegada. Columna $j$ = coordenadas en $B$ de $f(b_j)$.</p>
+  <ol class="steps">
+    <li><b>$B$ es base:</b> $\det\begin{pmatrix}1&1\cr-1&1\end{pmatrix}=2\neq0$.</li>
+    <li><b>Imágenes de los vectores de $B$:</b> $f(1,-1)=(-7-6,\ -9-8)=(-13,-17)$ y $f(1,1)=(-7+6,\ -9+8)=(-1,-1)$.</li>
+    <li><b>Coordenadas en $B$ de un vector genérico</b> (se hace una sola vez): $(p,q)=a(1,-1)+b(1,1)=(a+b,\,-a+b)$; sumando, $2b=p+q$; restando, $2a=p-q$. Luego $a=\frac{p-q}2$, $b=\frac{p+q}2$.</li>
+    <li><b>Aplicarlo:</b> $(-13,-17)$: $a=\frac{-13+17}2=2$, $b=\frac{-30}2=-15$, es decir $(2,-15)_B$. $(-1,-1)$: $a=0$, $b=-1$, es decir $(0,-1)_B$.</li>
+    <li><b>Matriz:</b> $A_B=M(f;B,B)=\begin{pmatrix}2&0\cr-15&-1\end{pmatrix}$.</li>
+    <li><b>Comprobación:</b> $2(1,-1)-15(1,1)=(-13,-17)$ ✓; $0(1,-1)-1(1,1)=(-1,-1)$ ✓. <i>Control extra</i> (se justificará en 4.1): traza ($1$) y determinante ($-2$) coinciden con los de $\begin{pmatrix}-7&6\cr-9&8\end{pmatrix}$ ($-7+8=1$; $-56+54=-2$) ✓.</li>
+    <li><b>Vía alternativa (tema 3.5).</b> $A_B=P^{-1}AP$ con $P=\begin{pmatrix}1&1\cr-1&1\end{pmatrix}$ (vectores de $B$ en columna). Da lo mismo.</li>
+  </ol>
+  <p><b>Resultado:</b> $A_B=\begin{pmatrix}2&0\cr-15&-1\end{pmatrix}$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> correcta; en la vía alternativa llama $B$ tanto a la base como a la matriz de paso (conviene llamarla $P$).</p>
+  <div class="recipe"><b>Receta:</b> endomorfismo «en la base $B$»: imagen de cada $b_j$, coordenadas en la <b>misma</b> $B$, en columnas. Resolver una vez las coordenadas de un vector genérico $(p,q)$ ahorra sistemas.</div>
+  <p><b>Error típico:</b> dejar las imágenes en canónicas (columnas $(-13,-17)$ y $(-1,-1)$): es la matriz de $B$ a la canónica, no la pedida. O calcular $PAP^{-1}$ (orden inverso).</p>
+</details>
+
+<!-- ------------------ Método D ------------------ -->
+<h3 id="metodoD">Método D — leer la matriz e interpretar</h3>
+<p><b>Idea común.</b> La matriz guarda toda la información de $f$ en las bases elegidas: sus columnas generan la imagen, luego $\operatorname{rang}A=\operatorname{Dim}\operatorname{Im}f$ (Teor. 2.5, U p.88; autoevaluación, ítem 5, p.138) y $\operatorname{Dim}\operatorname{Nuc}f=m-\operatorname{rang}A$ (ítem 6). Pero la matriz concreta <b>cambia con las bases</b> (ítems 3, 4, 10).</p>
+
+<details class="sol" id="ex-feb26-1p2"><summary>Feb. 2026 (1.ª sem.), pregunta 2 — rango de la matriz asociada dada por $f(u_i)$ en bases abstractas <span class="src" data-l="X" data-ref="Feb. 2026 (1.ª sem.), pregunta 2">X Feb. 2026 (1.ª) P2</span></summary>
+  <p class="enun">Consideremos en $\mathbb R^3$ la base $B=\{u_1,u_2,u_3\}$ y en $\mathbb R^4$ la base $B'=\{v_1,v_2,v_3,v_4\}$. Determine de manera razonada el rango de la matriz asociada a la aplicación lineal $f:\mathbb R^3\to\mathbb R^4$ definida por $f(u_1)=-v_1+v_2+v_3$, $f(u_2)=v_1-v_2-v_3$ y $f(u_3)=(0,0,0,0)$.</p>
+  <p><b>Qué se pide.</b> Construir la matriz respecto de $B$ y $B'$ y calcular su rango. No hace falta saber quiénes son los $u_i$, $v_j$: basta con las coordenadas.</p>
+  <ol class="steps">
+    <li><b>Tamaño:</b> $4\times3$ (4 filas = $\operatorname{Dim}\mathbb R^4$; 3 columnas = $\operatorname{Dim}\mathbb R^3$).</li>
+    <li><b>Coordenadas en $B'$ de cada imagen</b> (los coeficientes de $v_1,\dots,v_4$): $f(u_1)=(-1,1,1,0)_{B'}$, $f(u_2)=(1,-1,-1,0)_{B'}$ y $f(u_3)=\bar0=(0,0,0,0)_{B'}$ (el vector nulo tiene coordenadas nulas en cualquier base).</li>
+    <li><b>Matriz</b> (en columna):
+    $$A=\begin{pmatrix}-1&1&0\cr1&-1&0\cr1&-1&0\cr0&0&0\end{pmatrix}.$$</li>
+    <li><b>Rango.</b> La 3.ª columna es nula; la 2.ª es $-1$ por la 1.ª; la 1.ª no es nula. Las columnas generan $\langle C_1\rangle$, de dimensión 1: $\operatorname{rang}A=1$ (Teor. 2.5).</li>
+    <li><b>Interpretación.</b> $\operatorname{Dim}\operatorname{Im}f=1$ y $\operatorname{Dim}\operatorname{Nuc}f=3-1=2$ (Teor. 3.1, U p.111). De hecho, $\operatorname{Nuc}f=\langle u_1+u_2,\ u_3\rangle$, porque $f(u_1+u_2)=f(u_1)+f(u_2)=\bar0$: las soluciones de $AX=0$ son <b>coordenadas en $B$</b> ($X=(1,1,0)$ y $X=(0,0,1)$) y se traducen de vuelta a vectores.</li>
+  </ol>
+  <p><b>Resultado:</b> $\operatorname{rang}A=1$. <i>(Verificado con sympy.)</i> <b>Sobre la oficial:</b> resultado correcto, pero dice que las columnas son «las coordenadas de la base $B$ respecto de $B'$» (deben ser las de las <b>imágenes</b> $f(u_j)$) y «como la 1.ª y la 2.ª son dependientes, el rango es 1» necesita añadir que la 3.ª es nula y la 1.ª no.</p>
+  <div class="recipe"><b>Receta:</b> bases abstractas: las columnas son los <b>coeficientes</b> de cada $f(u_j)$ en la base de llegada; el rango se calcula como siempre y no depende de las bases.</div>
+  <p><b>Error típico:</b> escribir las coordenadas en <b>filas</b> (traspuesta); creer que, como $f(u_3)=\bar0$, la matriz «no tiene 3.ª columna» (tiene una columna de ceros); concluir rango 2 al ver dos columnas no nulas sin notar que son proporcionales.</p>
+</details>
+
+<details class="sol" id="ex-sep17a-3"><summary>Sept. 2017 (tipo A), ejercicio 3 — test: matriz asociada, cambios de base y endomorfismos <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A), ejercicio 3">X Sept. 2017 (A)</span></summary>
+  <p class="enun">Es cierto: A) Las matrices de cambio de base son singulares. B) La matriz asociada a una aplicación lineal depende de las bases fijadas. C) Todas las aplicaciones lineales son endomorfismos. D) Ninguna de las anteriores.</p>
+  <p><b>Qué se pide.</b> Elegir la afirmación verdadera <b>justificando</b> por qué las otras fallan (son los ítems 8, 10 y 7 de la autoevaluación del cap. 3, U p.138).</p>
+  <ol class="steps">
+    <li><b>B) Verdadera.</b> La Def. 3.4 (U p.116) usa las coordenadas de $f(e_j)$ <b>en la base $S$</b>, con los $e_j$ <b>de la base $B$</b>: si cambia $B$ o $S$, cambian las columnas. El Teor. 3.3 (U p.115) dice que la matriz es única <b>para las bases elegidas</b>. Ejemplo: la $f$ de Feb. 2026 (ejercicio anterior) tiene $\begin{pmatrix}-7&6\cr-9&8\end{pmatrix}$ en la canónica y $\begin{pmatrix}2&0\cr-15&-1\end{pmatrix}$ en $B=\{(1,-1),(1,1)\}$.</li>
+    <li><b>A) Falsa.</b> Las matrices de cambio de base son <b>regulares</b> (U §3.5, p.135): sus columnas son coordenadas de los vectores de una base, que son independientes, así que su rango es máximo y tienen inversa. «Singular» significaría determinante $0$.</li>
+    <li><b>C) Falsa.</b> Un <b>endomorfismo</b> es una aplicación lineal de un espacio en sí mismo ($V=W$; E p.95 (margen); U §4.1.3 p.148). Contraejemplo: $f:\mathbb R^2\to\mathbb R^3$, $f(x_1,x_2)=(x_1,x_2,0)$, lineal pero con matriz $3\times2$ (ni cuadrada).</li>
+    <li><b>D) Falsa</b>, porque B es cierta. <b>Respuesta: B.</b></li>
+  </ol>
+  <p><b>Resultado:</b> B. <b>Sobre la oficial:</b> correcta pero sin justificar («véase la teoría»).</p>
+  <div class="recipe"><b>Receta:</b> matriz asociada = (aplicación) + (base de partida) + (base de llegada): cambiar cualquiera de los tres cambia la matriz. Lo que <b>no</b> cambia es el rango ($=\operatorname{Dim}\operatorname{Im}f$).</div>
+  <p><b>Error típico:</b> elegir A confundiendo «matriz de cambio de base» con «matriz asociada a una aplicación no invertible», o creer que la matriz «es» la aplicación.</p>
+</details>
+
+<h3 id="propios2">Ejemplos propios de examen (de más fácil a más difícil)</h3>
+
+<details class="sol" id="ej-propio-4"><summary>Ejemplo propio 4 (fácil, método A) — matriz, ecuaciones y $f(1,1,1)$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">Sea $f:\mathbb R^3\to\mathbb R^3$, $f(x,y,z)=(x-2y,\ 3z,\ x+y+z)$. Escribe su matriz en la base canónica, sus ecuaciones y calcula $f(1,1,1)$ con la matriz.</p>
+  <p><b>Qué se pide.</b> Matriz canónica de una $f$ dada por fórmula, sus ecuaciones y una imagen calculada con la matriz.</p>
+  <ol class="steps">
+    <li><b>Columnas:</b> $f(e_1)=(1,0,1)$, $f(e_2)=(-2,0,1)$, $f(e_3)=(0,3,1)$. Matriz $A=\begin{pmatrix}1&-2&0\cr0&0&3\cr1&1&1\end{pmatrix}$ (fila $i$ = coeficientes de la componente $i$; ojo a los ceros).</li>
+    <li><b>Ecuaciones:</b> $y_1=x_1-2x_2$, $y_2=3x_3$, $y_3=x_1+x_2+x_3$.</li>
+    <li>$A\,(1,1,1)^T=(-1,3,3)^T$; directamente, $f(1,1,1)=(1-2,\,3,\,3)$ ✓. (Además $\det A=-9\neq0$: $\operatorname{Im}f=\mathbb R^3$.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> columnas $=f(e_j)$ (o fila $i$ = coeficientes de la componente $i$), con $0$ donde falte una variable. <i>Error típico:</i> poner imágenes en filas.</div>
+</details>
+
+<details class="sol" id="ej-propio-5"><summary>Ejemplo propio 5 (medio, método B en $\mathbb R^3$) — matriz canónica y $f(1,2,-1)$ a partir de las imágenes de una base no canónica <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">$f:\mathbb R^3\to\mathbb R^3$ lineal con $f(1,2,1)=(3,1,5)$, $f(0,1,1)=(2,0,1)$ y $f(0,0,1)=(2,-1,0)$. Halla su matriz canónica y $f(1,2,-1)$.</p>
+  <p><b>Qué se pide.</b> Las imágenes se dan sobre una base <b>no canónica</b>; hay que deducir $f(e_1),f(e_2),f(e_3)$ por linealidad.</p>
+  <ol class="steps">
+    <li><b>¿Base?</b> $\begin{vmatrix}1&0&0\cr2&1&0\cr1&1&1\end{vmatrix}=1\neq0$ (triangular): $b_1=(1,2,1)$, $b_2=(0,1,1)$, $b_3=(0,0,1)$ forman base y $f$ queda determinada.</li>
+    <li><b>Los $e_j$ con la base dada</b> (de abajo arriba, porque $b_3=e_3$ y $b_2$ solo tiene $e_2,e_3$): $e_3=b_3$; $e_2=b_2-b_3$; y como $b_1=e_1+2e_2+e_3$, $e_1=b_1-2e_2-e_3=b_1-2b_2+b_3$. Comprobación: $(1,2,1)-2(0,1,1)+(0,0,1)=(1,0,0)$ ✓.</li>
+    <li><b>Linealidad:</b> $f(e_3)=f(b_3)=(2,-1,0)$; $f(e_2)=f(b_2)-f(b_3)=(2,0,1)-(2,-1,0)=(0,1,1)$; y
+    $$f(e_1)=f(b_1)-2f(b_2)+f(b_3)$$
+    $$=(3,1,5)-(4,0,2)+(2,-1,0)=(1,0,3).$$</li>
+    <li><b>Matriz</b> (columnas $f(e_1),f(e_2),f(e_3)$): $A=\begin{pmatrix}1&0&2\cr0&1&-1\cr3&1&0\end{pmatrix}$. Comprobación: $A\,(1,2,1)^T=(3,1,5)^T$ ✓, $A\,(0,1,1)^T=(2,0,1)^T$ ✓, $A\,(0,0,1)^T=(2,-1,0)^T$ ✓.</li>
+    <li><b>Imagen pedida:</b> $f(1,2,-1)=A\,(1,2,-1)^T=(1-2,\ 2+1,\ 3+2)=(-1,3,5)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> escribe cada $e_j$ como combinación de la base dada (empezando por el vector con más ceros), aplica la linealidad y comprueba $A\cdot b_i=f(b_i)$. <i>Error típico:</i> poner $f(b_1),f(b_2),f(b_3)$ como columnas y creer que es la matriz canónica.</div>
+</details>
+
+<details class="sol" id="ej-propio-6"><summary>Ejemplo propio 6 (medio-alto, método A con polinomios) — $f(p)(x)=p(x+1)$ en $\wp_2$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">Sea $f:\wp_2\to\wp_2$, $f(p)(x)=p(x+1)$. Halla su matriz en la base $\{1,x,x^2\}$ y úsala para calcular $f(2-x+3x^2)$.</p>
+  <p><b>Qué se pide.</b> La matriz de un endomorfismo de polinomios, pasando cada imagen a coordenadas en $\{1,x,x^2\}$.</p>
+  <ol class="steps">
+    <li><b>Es lineal:</b> $(p+\lambda q)(x+1)=p(x+1)+\lambda q(x+1)$.</li>
+    <li><b>Imágenes de la base:</b> $f(1)=1$, $f(x)=1+x$, $f(x^2)=(x+1)^2=1+2x+x^2$; coordenadas $(1,0,0)$, $(1,1,0)$, $(1,2,1)$.</li>
+    <li><b>Matriz</b> ($\operatorname{Dim}\wp_2=3$): $A=\begin{pmatrix}1&1&1\cr0&1&2\cr0&0&1\end{pmatrix}$.</li>
+    <li>$p=2-x+3x^2$ tiene coordenadas $(2,-1,3)$ y $A\,(2,-1,3)^T=(4,5,3)^T$, es decir, $f(p)=4+5x+3x^2$. Comprobación directa: $2-(x+1)+3(x+1)^2=2-x-1+3x^2+6x+3=4+5x+3x^2$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> aplica $f$ a $1,x,x^2$ en orden, escribe los coeficientes de cada resultado y colócalos en columna. <i>Error típico:</i> olvidar que $f(x^2)=(x+1)^2$ tiene tres términos.</div>
+</details>
+
+<details class="sol" id="ej-propio-7"><summary>Ejemplo propio 7 (examen, método C) — $f(x,y,z)=(x+y,\ y-z)$ en bases $B$ y $S$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">$f:\mathbb R^3\to\mathbb R^2$, $f(x,y,z)=(x+y,\ y-z)$. Halla su matriz respecto de $B=\{(1,1,0),(0,1,1),(1,0,1)\}$ y $S=\{(1,0),(1,1)\}$ y compruébala con $v=(1,2,1)$.</p>
+  <p><b>Qué se pide.</b> Matriz respecto de bases no canónicas $B$ (partida) y $S$ (llegada) y su comprobación con un vector dado en coordenadas de $B$.</p>
+  <ol class="steps">
+    <li><b>Bases:</b> el determinante de $B$ (en columnas) vale $2\neq0$ y $\begin{vmatrix}1&1\cr0&1\end{vmatrix}=1\neq0$.</li>
+    <li><b>Imágenes:</b> $f(1,1,0)=(2,1)$, $f(0,1,1)=(1,0)$, $f(1,0,1)=(1,-1)$.</li>
+    <li><b>Coordenadas en $S$:</b> $(p,q)=a(1,0)+b(1,1)=(a+b,\,b)\Rightarrow b=q,\ a=p-q$. Así $(2,1)=(1,1)_S$, $(1,0)=(1,0)_S$, $(1,-1)=(2,-1)_S$.</li>
+    <li><b>Matriz:</b> $M(f;B,S)=\begin{pmatrix}1&1&2\cr1&0&-1\end{pmatrix}$.</li>
+    <li><b>Comprobación.</b> $v=(1,2,1)=(1,1,0)+(0,1,1)$, es decir $v=(1,1,0)_B$. $A\,(1,1,0)^T=(2,1)^T_S\Rightarrow f(v)=2(1,0)+1(1,1)=(3,1)$. Directamente, $f(1,2,1)=(3,\,1)$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $f(b_j)$, luego coordenadas en $S$, en columna. <i>Error típico:</i> dejar las imágenes en canónicas.</div>
+</details>
+
+<div class="box tip"><span class="h">Preguntas de examen «mixtas» ya resueltas en otros temas (no se repiten aquí)</span>
+  <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores, ejercicios resueltos en los temas 3.1 y 3.2">X varios</span>
+  <ul>
+    <li><b>Apartados de núcleo e imagen</b> (tema 3.2): <a href="tema_3_2_nucleo_imagen.html#ex-feb26-2p7">Feb. 2026 (2.ª), problema 7, 3.er apartado</a> (base del núcleo desde la escalonada de la matriz de arriba; el 2.º apartado, <a href="tema_1_2_algebra_matricial.html#ex-feb26b">escalonada reducida</a>, es del tema 1.2); <a href="tema_3_2_nucleo_imagen.html#ex-feb23-1p7">Feb. 2023 (1.ª), problema 7 (i)</a> (núcleo e imagen de la derivada tercera); <a href="tema_3_2_nucleo_imagen.html#ex-feb19a-pa">Feb. 2019 (A), problema a)</a> (cartesianas y dimensiones dada la matriz); <a href="tema_3_2_nucleo_imagen.html#ex-sep25-p3">Sept. 2025, pregunta 3</a> ($(10,a,b)\in\operatorname{Nuc}f$ dada la matriz); <a href="tema_3_2_nucleo_imagen.html#ex-sep17a-pb">Sept. 2017 (A), problema b)</a> (matriz $3\times2$ leída de las ecuaciones); <a href="tema_3_2_nucleo_imagen.html#ex-sep18a-pb">Sept. 2018 (A), problema b)</a> ($\mathbb R^3\to\mathcal M_{2\times2}$ en canónicas); <a href="tema_3_2_nucleo_imagen.html#ex-feb20-1b3">Feb. 2020 (1.ª, B), ejercicio 3</a> (rango de una matriz $3\times5$ con núcleo de dimensión 3).</li>
+    <li><b>Imagen de un vector con la linealidad</b> (tema 3.1 y 3.2): <a href="tema_3_1_conceptos_propiedades.html#ex-feb19b">Feb. 2019 (B), ejercicio 3</a>, <a href="tema_3_1_conceptos_propiedades.html#ex-feb24b-p3">Feb. 2024 (2.ª), pregunta 3</a>, <a href="tema_3_1_conceptos_propiedades.html#ex-feb25b-p3">Feb. 2025 (2.ª), pregunta 3</a>, <a href="tema_3_1_conceptos_propiedades.html#ex-feb26b-p3">Feb. 2026 (2.ª), pregunta 3</a> (Teor. 3.2 en acción sin pedir la matriz) y <a href="tema_3_2_nucleo_imagen.html#ex-feb24-1p3">Feb. 2024 (1.ª), pregunta 3</a>.</li>
+  </ul>
+</div>
+
+<div class="box tip"><span class="h">Para practicar (de otros temas)</span>
+  <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores, ejercicios fronterizos">X varios</span>
+  <ul>
+    <li><b>Composición y combinación lineal de aplicaciones</b> (matriz del producto o de $3g-5h$) → tema 3.4: Ene. 2020 (A), ejercicio 3; Sept. 2018 (A), ejercicio 3; Feb. 2023 (1.ª), pregunta 3; Sept. 2024, pregunta 3; Sept. 2023, pregunta 3; Feb. 2025 (1.ª), problema 7, 3.er apartado; Feb. 2024 (2.ª) y Feb. 2026 (1.ª), problema 7 (matriz de $f\circ f$ o $g\circ f$ y su núcleo).</li>
+    <li><b>Matriz de cambio de base</b> → tema 3.5: Feb. 2017 (2.ª, A), ejercicio 3 (determinante de la matriz de cambio de base) y la vía $A_B=P^{-1}AP$ de Feb. 2026 (2.ª), problema 8.</li>
+    <li><b>Matrices asociadas a un endomorfismo diagonalizable</b> (semejanza) y diagonalización → tema 4.1 / 4.3: Feb. 2018 (A), ejercicio 4; Feb. 2026 (2.ª), problema 8, 2.º apartado; Sept. 2017 (A), ejercicio 4 (la opción «cualquier matriz asociada tiene rango 3» es falsa porque $f:\mathbb R^2\to\mathbb R^2$ tiene matrices $2\times2$).</li>
+  </ul>
+</div>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Determinación (Teor. 3.2, U p.114)</td><td>$f(v)=v_1f(e_1)+\dots+v_mf(e_m)$ si $v=(v_1,\dots,v_m)_B$ <i>($\{e_j\}$ <b>base</b> de $V$ y se dan las $m$ imágenes)</i></td></tr>
+  <tr><td>Matriz asociada (Def. 3.4, U p.116)</td><td>columna $j$ = coordenadas en $S$ de $f(e_j)$ <i>(bases $B$ de $V$, $S$ de $W$, <b>ordenadas</b>)</i></td></tr>
+  <tr><td>Tamaño</td><td>$(\operatorname{Dim}W)\times(\operatorname{Dim}V)$: filas = llegada, columnas = partida</td></tr>
+  <tr><td>Unicidad (Teor. 3.3, U p.115)</td><td>una matriz por cada par de bases <i>(la matriz <b>depende</b> de $B$ y $S$)</i></td></tr>
+  <tr><td>Ecuaciones (U p.117)</td><td>$Y=AX$; $y_i=a_{i1}x_1+\dots+a_{im}x_m$ <i>($X$ en $B$, $Y$ en $S$)</i></td></tr>
+  <tr><td>Bases canónicas</td><td>columna $j$ = $f(e_j)$; fila $i$ = coeficientes de la componente $i$ de $f$ <i>(coordenadas = componentes)</i></td></tr>
+  <tr><td>Datos en base no canónica</td><td>despeja $f(e_j)$ por linealidad (o $A=FP^{-1}$) <i>(la base dada debe ser base)</i></td></tr>
+  <tr><td>Matriz en $B$, $S$ no canónicas</td><td>$f(b_j)$ y luego sus coordenadas en $S$ (sistema) <i>(no dejar las imágenes en canónicas)</i></td></tr>
+  <tr><td>Lo que no cambia con las bases</td><td>$\operatorname{rang}A=\operatorname{Dim}\operatorname{Im}f$; $\operatorname{Dim}\operatorname{Nuc}f=m-\operatorname{rang}A$ <i>($m$ = nº de columnas)</i></td></tr>
+  <tr><td>Polinomios y matrices</td><td>base canónica en orden: $1,x,x^2,\dots$ / $E_{11},E_{12},E_{21},E_{22}$; coordenadas = coeficientes / entradas por filas <i>(mismo orden en todas las columnas)</i></td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé explicar con mis palabras por qué <b>basta conocer $f$ en una base</b> (Teor. 3.2) y cuándo los datos son insuficientes o contradictorios.</li>
+  <li>Sé construir la <b>matriz asociada en bases canónicas</b> a partir de la fórmula o de las imágenes de la base, comprobando antes el tamaño $n\times m$.</li>
+  <li>Sé pasar a <b>coordenadas</b> las imágenes cuando el espacio de llegada son polinomios o matrices (3.17, 3.19, X Feb. 2023).</li>
+  <li>Sé obtener la <b>matriz canónica</b> a partir de las imágenes de una base no canónica (X Feb. 2018 B, Ene. 2022).</li>
+  <li>Sé calcular la matriz respecto de <b>bases no canónicas</b> (coordenadas de $f(b_j)$ en la base de llegada) (X Feb. 2019 A, Feb. 2026).</li>
+  <li>Sé escribir las <b>ecuaciones $Y=AX$</b>, calcular la imagen de un vector con la matriz y <b>comprobar</b> el resultado.</li>
+  <li>Sé leer en $A$ el <b>rango</b> y las dimensiones de núcleo e imagen, y sé que la matriz <b>depende de las bases</b> pero el rango no.</li>
+  <li>Sé responder con proceso: «columna $j$ = coordenadas en $S$ de $f(e_j)$ (Def. 3.4, U p.116)», y comprobar con un vector.</li>
+</ul>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li>Poner las imágenes en <b>filas</b> (traspuesta) o el tamaño al revés ($m\times n$): E 3.15, X Feb. 2026 (2.ª) P7, X Feb. 2026 (1.ª) P2.</li>
+    <li>Usar como columnas las imágenes de una base <b>no canónica</b> y creer que es la matriz canónica (X Feb. 2018 B, Ene. 2022).</li>
+    <li>En bases no canónicas, <b>olvidar pasar las imágenes a coordenadas</b> de la base de llegada (X Feb. 2019 A, Feb. 2026 2.ª P8).</li>
+    <li>Mezclar el <b>orden de la base</b> de polinomios ($1,x,x^2$ frente a $x^2,x,1$) o dar una matriz cuadrada cuando los espacios tienen dimensiones distintas (X Feb. 2023 1.ª P7, E 3.18).</li>
+    <li>Escribir las coordenadas de un polinomio al revés: $2x^3+5x^2-1$ es $(-1,0,5,2)$, no $(2,5,0,-1)$ (E 3.18).</li>
+    <li>Leer «$f(x)=2$» como evaluación en lugar de «la imagen del polinomio $x$ es el polinomio $2$» (E 3.19).</li>
+    <li>Pensar que la matriz <b>no depende</b> de las bases (X Sept. 2017 ej. 3): sí depende; su <b>rango</b> no.</li>
+    <li>Creer que bastan <b>algunas</b> imágenes para determinar $f$ (E 3.28 C) o que cualquier lista de imágenes define una aplicación lineal (U Ej. 3.17).</li>
+    <li>Aplicar $A$ a un vector dado en componentes canónicas cuando $X$ debe estar en <b>coordenadas de $B$</b>.</li>
+  </ol>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>

@@ -9,6 +9,7 @@
    .anim-union   data-d1="1,0" data-d2="0,1"
    .anim-oper    data-op="0|1|2|3"
    .anim-lineal  data-modo="lineal|nucimg" data-u="2,1" data-v="-1,2" data-m="1,2,2,4"   (aplicaciones lineales R2->R2)
+   .anim-matriz  data-f1="1,2" data-f2="3,-1" data-x="2,1"   (matriz asociada: columnas = f(e1), f(e2); f(x) = x f(e1) + y f(e2))
 */
 (function () {
   'use strict';
@@ -729,7 +730,49 @@
     }
   }
 
-  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal]];
+  /* =====================================================================
+     Matriz asociada: las columnas son las imágenes de la base
+     ===================================================================== */
+  function buildMatriz(root) {
+    var f1 = (root.getAttribute('data-f1') || '1,2').split(',').map(Number), f2 = (root.getAttribute('data-f2') || '3,-1').split(',').map(Number);
+    var x0 = (root.getAttribute('data-x') || '2,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var pair = el('div', 'an-pair');
+    var P1 = plane(root, 300, 300, 5), P2 = plane(root, 300, 300, 5);
+    var c1 = el('div', 'an-pcol'), c2 = el('div', 'an-pcol');
+    c1.appendChild(el('b', '', 'Partida: base canónica e₁, e₂ y el vector x')); c1.appendChild(P1.svg);
+    c2.appendChild(el('b', '', 'Llegada: f(e₁), f(e₂) y f(x)')); c2.appendChild(P2.svg);
+    pair.appendChild(c1); pair.appendChild(c2);
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); ctrl.appendChild(r); }
+    var mi = [f1[0], f2[0], f1[1], f2[1]].map(function (x) { return numInput(x, 1, '3.2em'); });
+    var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+    er.appendChild(el('span', '', 'A = (')); [0, 1].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ' ; ')); [2, 3].forEach(function (i) { er.appendChild(mi[i]); });
+    er.appendChild(el('span', '', ')   columna 1 = f(e₁), columna 2 = f(e₂)')); eq.appendChild(er);
+    var sx = slider(-3, 3, 0.5, x0[0]), sy = slider(-3, 3, 0.5, x0[1]), lx = el('b'), ly = el('b');
+    row('x ', sx, lx); row('y ', sy, ly);
+    var pre = btnRow(['Ejemplo', 'Giro 90°', 'Simetría y = x', 'Proyección sobre OX'], function (i) { var p = [[f1[0], f2[0], f1[1], f2[1]], [0, -1, 1, 0], [0, 1, 1, 0], [1, 0, 0, 0]][i]; mi.forEach(function (q, j) { q.value = p[j]; }); draw(); });
+    function draw() {
+      var a = parseFloat(mi[0].value) || 0, b = parseFloat(mi[1].value) || 0, c = parseFloat(mi[2].value) || 0, d = parseFloat(mi[3].value) || 0;
+      var x = parseFloat(sx.value), y = parseFloat(sy.value); lx.textContent = num(x); ly.textContent = num(y);
+      P1.clear(); P2.clear();
+      arrow(P1, 0, 0, 1, 0, 'down', 'e₁'); arrow(P1, 0, 0, 0, 1, 'up', 'e₂'); arrow(P1, 0, 0, x, y, 'w', 'x');
+      arrow(P2, 0, 0, a, c, 'down', 'f(e₁)'); arrow(P2, 0, 0, b, d, 'up', 'f(e₂)');
+      arrow(P2, 0, 0, x * a, x * c, 'down dash', ''); arrow(P2, x * a, x * c, x * a + y * b, x * c + y * d, 'up dash', '');
+      arrow(P2, 0, 0, x * a + y * b, x * c + y * d, 'w', 'f(x)');
+      var fx = [a * x + b * y, c * x + d * y];
+      html(text, 'Como x = ' + num(x) + '·e₁ + ' + num(y) + '·e₂ y f es lineal: <b>f(x) = ' + num(x) + '·f(e₁) + ' + num(y) + '·f(e₂)</b> = ' + num(x) + '·(' + num(a) + ', ' + num(c) + ') + ' + num(y) + '·(' + num(b) + ', ' + num(d) + ') = <b>(' + num(fx[0]) + ', ' + num(fx[1]) + ')</b>. ' +
+        'Es lo mismo que el producto A·x: la primera componente es ' + num(a) + '·' + num(x) + ' + ' + num(b) + '·' + num(y) + ' y la segunda ' + num(c) + '·' + num(x) + ' + ' + num(d) + '·' + num(y) + '. Las flechas discontinuas son los dos sumandos x·f(e₁) e y·f(e₂).');
+      res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = 'f(x) = A·x = (' + num(fx[0]) + ', ' + num(fx[1]) + ')'; res.appendChild(fin);
+    }
+    [sx, sy].concat(mi).forEach(function (s) { s.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'La matriz asociada de f: ℝ² → ℝ² en las bases canónicas se construye poniendo en columnas las imágenes f(e₁) y f(e₂). Cambia las entradas de A (o pulsa un caso) y mueve x: la flecha verde f(x) es siempre x·f(e₁) + y·f(e₂).'));
+    root.appendChild(eq); root.appendChild(pair); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    draw();
+  }
+
+  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
