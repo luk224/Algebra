@@ -248,15 +248,18 @@
   <ol class="steps">
     <li><b>¿La operación es interna?</b> Si $x_1>0$ e $y_1>0$, entonces $x_1y_1>0$; y $x_2+y_2\in\mathbb R$. El resultado está en $V$. <i>Por qué:</i> sin cierre no hay estructura que estudiar.</li>
     <li><b>Asociativa (S1).</b> Con $u=(x_1,x_2)$, $v=(y_1,y_2)$, $w=(z_1,z_2)$:
-      $$(u\ast v)\ast w=(x_1y_1,\,x_2+y_2)\ast(z_1,z_2)=\big((x_1y_1)z_1,\ (x_2+y_2)+z_2\big),$$
-      $$u\ast(v\ast w)=(x_1,x_2)\ast(y_1z_1,\,y_2+z_2)=\big(x_1(y_1z_1),\ x_2+(y_2+z_2)\big).$$
+      $$\begin{aligned}(u\ast v)\ast w\\&=(x_1y_1,\,x_2+y_2)\\&\quad\ast(z_1,z_2)\\&=\big((x_1y_1)z_1,\\&\quad (x_2+y_2)+z_2\big),\end{aligned}$$
+      $$\begin{aligned}u\ast(v\ast w)\\&=(x_1,x_2)\\&\quad\ast(y_1z_1,\,y_2+z_2)\\&=\big(x_1(y_1z_1),\\&\quad x_2+(y_2+z_2)\big).\end{aligned}$$
       Coinciden componente a componente por la asociatividad del producto y de la suma en $\mathbb R$. <b>Se cumple.</b></li>
     <li><b>Neutro (S2).</b> Se <b>despeja</b> $e=(e_1,e_2)$ de $u\ast e=u$:
-      $$(x_1e_1,\ x_2+e_2)=(x_1,x_2)\iff\begin{cases}x_1e_1=x_1\Rightarrow e_1=1\ \ (\text{se divide entre }x_1>0)\\ x_2+e_2=x_2\Rightarrow e_2=0.\end{cases}$$
+      $$(x_1e_1,\ x_2+e_2)=(x_1,x_2)$$
+      <b>Se igualan las coordenadas, una a una</b> (en la primera se divide entre $x_1>0$):
+      $$\begin{cases}x_1e_1=x_1\ \Rightarrow\ e_1=1\\[2pt] x_2+e_2=x_2\ \Rightarrow\ e_2=0.\end{cases}$$
       El candidato $e=(1,0)$ <b>no depende de $u$</b>, <b>está en $V$</b> ($1>0$) y <b>vale por la izquierda</b>: $(1,0)\ast(x_1,x_2)=(1\cdot x_1,\,0+x_2)=(x_1,x_2)$. <b>Se cumple, con $e=(1,0)$.</b></li>
     <li><b>Simétrico (S3; solo Sept. 2017).</b> Con el neutro ya hallado se resuelve $u\ast u'=e$:
-      $$(x_1x_1',\ x_2+x_2')=(1,0)\iff x_1'=\frac1{x_1},\quad x_2'=-x_2.$$
-      <b>Hay que comprobar que $u'\in V$:</b> $\frac1{x_1}>0$ ✓ (esto es lo que obliga a que $x_1>0$). Por el otro lado, $u'\ast u=(\frac1{x_1}x_1,\,-x_2+x_2)=(1,0)$ ✓. <b>Se cumple:</b> el simétrico de $(x_1,x_2)$ es $\big(\tfrac1{x_1},\,-x_2\big)$. Comprobación numérica: el simétrico de $(2,3)$ es $(\frac12,-3)$ y $(2,3)\ast(\frac12,-3)=(1,0)$ ✓.</li>
+      $$(x_1x_1',\ x_2+x_2')=(1,0)$$
+      $$\begin{cases}x_1x_1'=1\ \Rightarrow\ x_1'=\dfrac1{x_1}\\[4pt] x_2+x_2'=0\ \Rightarrow\ x_2'=-x_2.\end{cases}$$
+      <b>Hay que comprobar que $u'\in V$:</b> $\frac1{x_1}>0$ ✓ (esto es lo que obliga a que $x_1>0$). Por el otro lado, $u'\ast u=(\frac1{x_1}x_1,\,-x_2+x_2)=(1,0)$ ✓. <b>Se cumple:</b> el simétrico de $(x_1,x_2)$ es $\big(\frac1{x_1},\,-x_2\big)$. Comprobación numérica: el simétrico de $(2,3)$ es $(\frac12,-3)$ y $(2,3)\ast(\frac12,-3)=(1,0)$ ✓.</li>
     <li><b>Conmutativa (S4).</b> $(x_1,x_2)\ast(y_1,y_2)=(x_1y_1,\,x_2+y_2)=(y_1x_1,\,y_2+x_2)=(y_1,y_2)\ast(x_1,x_2)$ por la conmutatividad del producto y de la suma en $\mathbb R$. <b>Se cumple.</b></li>
   </ol>
   <p><b>Resultado:</b> se cumplen las cuatro propiedades: $(V,\ast)$ es un <b>grupo conmutativo</b>. (En Feb. 2019 bastan los pasos 1, 2, 3 y 5.) <i>(Verificado con sympy.)</i></p>
@@ -274,8 +277,8 @@
   <ol class="steps">
     <li><b>Conmutativa (S4).</b> Se calcula la diferencia $a\diamond b-b\diamond a=(ab-b+a)-(ba-a+b)=2a-2b$. Solo es $0$ si $a=b$. <b>Contraejemplo:</b> $2\diamond3=2\cdot3-3+2=5$, pero $3\diamond2=3\cdot2-2+3=7$. $5\neq7$. <b>No se cumple.</b></li>
     <li><b>Asociativa (S1).</b> Se desarrollan los dos miembros por separado:
-      $$(a\diamond b)\diamond c=(ab-b+a)\diamond c=(ab-b+a)c-c+(ab-b+a)=abc-bc+ac-c+ab-b+a,$$
-      $$a\diamond(b\diamond c)=a\diamond(bc-c+b)=a(bc-c+b)-(bc-c+b)+a=abc-ac+ab-bc+c-b+a.$$
+      $$\begin{aligned}(a\diamond b)\diamond c\\&=(ab-b+a)\diamond c\\&=(ab-b+a)\,c-c\\&\quad +(ab-b+a)\\&=abc-bc+ac\\&\quad -c+ab-b+a,\end{aligned}$$
+      $$\begin{aligned}a\diamond(b\diamond c)\\&=a\diamond(bc-c+b)\\&=a(bc-c+b)\\&\quad -(bc-c+b)+a\\&=abc-ac+ab\\&\quad -bc+c-b+a.\end{aligned}$$
       Su diferencia es $(a\diamond b)\diamond c-a\diamond(b\diamond c)=2ac-2c=2c(a-1)$, distinta de $0$ en general. <b>Contraejemplo:</b> $a=b=c=2$: $2\diamond2=4-2+2=4$; $(2\diamond2)\diamond2=4\diamond2=8-2+4=10$; y $2\diamond(2\diamond2)=2\diamond4=8-4+2=6$. $10\neq6$. <b>No se cumple.</b></li>
     <li><b>Elemento neutro (S2).</b> Un neutro $e$ debe cumplir <b>las dos</b> igualdades $a\diamond e=a$ y $e\diamond a=a$ para todo $a$.
       <ul>
