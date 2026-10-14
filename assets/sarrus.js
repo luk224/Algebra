@@ -79,7 +79,7 @@
     btn('↺ Reiniciar', function () { stop(); go(0); });
     var prog = el('div', 'sar-prog'); var bar = el('i'); prog.appendChild(bar);
 
-    root.appendChild(board); root.appendChild(text); root.appendChild(res); root.appendChild(prog); root.appendChild(ctrl);
+    root.appendChild(ctrl); root.appendChild(prog); root.appendChild(board); root.appendChild(text); root.appendChild(res);
     root.appendChild(el('p', 'sar-hint', 'Puedes escribir tus propios números en la matriz (las filas grises se copian solas) y volver a pulsar «Reproducir».'));
 
     function prods(list) { return list.map(function (cs) { var v = cs.map(function (p) { return m[p[0] % 3][p[1]]; }); return { v: v, p: v[0] * v[1] * v[2] }; }); }

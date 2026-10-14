@@ -61,9 +61,10 @@
     }
     st.go = go; st.stop = stop; st.text = text; st.setN = function (n) { st.N = n; };
     st.mount = function (parent, before) {
+      var first = parent.firstChild;                       // botones y barra ARRIBA: no se mueven al crecer el contenido
+      if (first) { parent.insertBefore(ctrl, first); parent.insertBefore(prog, first); } else { parent.appendChild(ctrl); parent.appendChild(prog); }
       parent.appendChild(text);
       if (before) parent.appendChild(before);
-      parent.appendChild(prog); parent.appendChild(ctrl);
       if (hint) parent.appendChild(el('p', 'sar-hint', hint));
     };
     return st;
