@@ -165,10 +165,21 @@
 <div class="box ex"><span class="h">Ejemplo A · en $\mathbb R$ con $a\ast b=a+b+ab$ (casi un grupo)</span>
   <ol class="steps">
     <li><b>Qué se pide:</b> decidir S1–S4 en $\mathbb R$. Es interna: el resultado es un real.</li>
-    <li><b>Conmutativa:</b> $a\ast b=a+b+ab=b+a+ba=b\ast a$ (suma y producto de reales son conmutativos). <b>Sí.</b></li>
-    <li><b>Asociativa:</b> $(a\ast b)\ast c=(a+b+ab)+c+(a+b+ab)c=a+b+c+ab+ac+bc+abc$ y $a\ast(b\ast c)=a+(b+c+bc)+a(b+c+bc)=a+b+c+ab+ac+bc+abc$. Coinciden. <b>Sí.</b></li>
-    <li><b>Neutro:</b> $a\ast e=a\iff a+e+ae=a\iff e(1+a)=0$ para todo $a$ $\iff e=0$ (que no depende de $a$ y está en $\mathbb R$). Por la izquierda vale por la conmutatividad. <b>Sí, $e=0$.</b></li>
-    <li><b>Simétrico:</b> $a\ast a'=0\iff a+a'+aa'=0\iff a'(1+a)=-a\iff a'=\dfrac{-a}{1+a}$, <b>solo si $a\neq-1$</b>. Contraejemplo: $a=-1$ no tiene simétrico, porque $(-1)\ast a'=-1+a'-a'=-1\neq0$ para cualquier $a'$. <b>No se cumple en todo $\mathbb R$.</b></li>
+    <li><b>Conmutativa:</b> se comparan los dos órdenes (suma y producto de reales son conmutativos):
+      $$a\ast b=a+b+ab\qquad b\ast a=b+a+ba$$
+      Son iguales. <b>Sí.</b></li>
+    <li><b>Asociativa:</b> se desarrollan los dos miembros por separado:
+      $$\begin{aligned}(a\ast b)\ast c&=(a+b+ab)\ast c\\&=(a+b+ab)+c\\&\quad+(a+b+ab)\,c\\&=a+b+c+ab\\&\quad+ac+bc+abc,\end{aligned}$$
+      $$\begin{aligned}a\ast(b\ast c)&=a\ast(b+c+bc)\\&=a+(b+c+bc)\\&\quad+a(b+c+bc)\\&=a+b+c+ab\\&\quad+ac+bc+abc.\end{aligned}$$
+      Coinciden. <b>Sí.</b></li>
+    <li><b>Neutro:</b> se despeja $e$ de $a\ast e=a$:
+      $$\begin{aligned}a+e+ae&=a\\e+ae&=0\\e\,(1+a)&=0\end{aligned}$$
+      Para que valga para <b>todo</b> $a$ hace falta $e=0$ (no depende de $a$ y está en $\mathbb R$). Por la izquierda vale por la conmutatividad. <b>Sí, $e=0$.</b></li>
+    <li><b>Simétrico:</b> se despeja $a'$ de $a\ast a'=0$ (el neutro):
+      $$\begin{aligned}a+a'+aa'&=0\\a'\,(1+a)&=-a\\a'&=\frac{-a}{1+a}\end{aligned}$$
+      Esto solo es posible si <b>$a\neq-1$</b>. <b>Contraejemplo:</b> $a=-1$ no tiene simétrico, porque
+      $$(-1)\ast a'=-1+a'-a'=-1\neq0\quad\text{para cualquier }a'.$$
+      <b>No se cumple en todo $\mathbb R$.</b></li>
   </ol>
   <p><b>Resultado:</b> cumple S1, S2, S4 pero no S3: $(\mathbb R,\ast)$ <b>no</b> es grupo. Si quitamos el elemento problemático, $(\mathbb R\setminus\{-1\},\ast)$ <b>sí</b> es grupo conmutativo (hay que ver que sigue siendo cerrado: $a\ast b=(a+1)(b+1)-1$, que solo vale $-1$ si $a=-1$ o $b=-1$).</p>
   <p><b>Moraleja:</b> el simétrico es la propiedad que falla «en un solo punto». <i>(Verificado con sympy.)</i></p>
@@ -229,7 +240,9 @@
   <ol class="steps">
     <li><b>Quién es $U$.</b> Los pares con alguna coordenada nula: los dos ejes coordenados (la «cruz»).</li>
     <li><b>Comprobación del neutro (no basta, pero conviene):</b> $(0,0)\in U$, pues $0\cdot0=0$. Es condición <b>necesaria</b>, no suficiente.</li>
-    <li><b>Cierre.</b> Si $(x_1,x_2),(y_1,y_2)\in U$ (es decir $x_1x_2=0$ y $y_1y_2=0$), la suma es $(x_1+y_1,\,x_2+y_2)$ y $(x_1+y_1)(x_2+y_2)=x_1x_2+x_1y_2+y_1x_2+y_1y_2=x_1y_2+y_1x_2$, que no tiene por qué ser $0$.</li>
+    <li><b>Cierre.</b> Si $(x_1,x_2),(y_1,y_2)\in U$ (es decir $x_1x_2=0$ y $y_1y_2=0$), la suma es $(x_1+y_1,\,x_2+y_2)$ y su producto de coordenadas es
+      $$\begin{aligned}(x_1+y_1)(x_2+y_2)&=x_1x_2+x_1y_2\\&\quad+y_1x_2+y_1y_2\\&=x_1y_2+y_1x_2,\end{aligned}$$
+      que no tiene por qué ser $0$.</li>
     <li><b>Contraejemplo.</b> $(1,0)\in U$ ($1\cdot0=0$) y $(0,2)\in U$ ($0\cdot2=0$), pero su suma $(1,2)\notin U$ porque $1\cdot2=2\neq0$. Luego la suma no es una operación interna de $U$.</li>
   </ol>
   <p><b>Conclusión:</b> $(U,+)$ no es subgrupo (ni, por tanto, subespacio) de $(\mathbb R^2,+)$.</p>
@@ -248,8 +261,8 @@
   <ol class="steps">
     <li><b>¿La operación es interna?</b> Si $x_1>0$ e $y_1>0$, entonces $x_1y_1>0$; y $x_2+y_2\in\mathbb R$. El resultado está en $V$. <i>Por qué:</i> sin cierre no hay estructura que estudiar.</li>
     <li><b>Asociativa (S1).</b> Con $u=(x_1,x_2)$, $v=(y_1,y_2)$, $w=(z_1,z_2)$:
-      $$\begin{aligned}(u\ast v)\ast w\\&=(x_1y_1,\,x_2+y_2)\\&\quad\ast(z_1,z_2)\\&=\big((x_1y_1)z_1,\\&\quad (x_2+y_2)+z_2\big),\end{aligned}$$
-      $$\begin{aligned}u\ast(v\ast w)\\&=(x_1,x_2)\\&\quad\ast(y_1z_1,\,y_2+z_2)\\&=\big(x_1(y_1z_1),\\&\quad x_2+(y_2+z_2)\big).\end{aligned}$$
+      $$\begin{aligned}(u\ast v)\ast w&=(x_1y_1,\,x_2+y_2)\\&\quad\ast(z_1,z_2)\\&=\big((x_1y_1)z_1,\\&\quad (x_2+y_2)+z_2\big),\end{aligned}$$
+      $$\begin{aligned}u\ast(v\ast w)&=(x_1,x_2)\\&\quad\ast(y_1z_1,\,y_2+z_2)\\&=\big(x_1(y_1z_1),\\&\quad x_2+(y_2+z_2)\big).\end{aligned}$$
       Coinciden componente a componente por la asociatividad del producto y de la suma en $\mathbb R$. <b>Se cumple.</b></li>
     <li><b>Neutro (S2).</b> Se <b>despeja</b> $e=(e_1,e_2)$ de $u\ast e=u$:
       $$(x_1e_1,\ x_2+e_2)=(x_1,x_2)$$
@@ -260,7 +273,9 @@
       $$(x_1x_1',\ x_2+x_2')=(1,0)$$
       $$\begin{cases}x_1x_1'=1\ \Rightarrow\ x_1'=\dfrac1{x_1}\\[4pt] x_2+x_2'=0\ \Rightarrow\ x_2'=-x_2.\end{cases}$$
       <b>Hay que comprobar que $u'\in V$:</b> $\frac1{x_1}>0$ ✓ (esto es lo que obliga a que $x_1>0$). Por el otro lado, $u'\ast u=(\frac1{x_1}x_1,\,-x_2+x_2)=(1,0)$ ✓. <b>Se cumple:</b> el simétrico de $(x_1,x_2)$ es $\big(\frac1{x_1},\,-x_2\big)$. Comprobación numérica: el simétrico de $(2,3)$ es $(\frac12,-3)$ y $(2,3)\ast(\frac12,-3)=(1,0)$ ✓.</li>
-    <li><b>Conmutativa (S4).</b> $(x_1,x_2)\ast(y_1,y_2)=(x_1y_1,\,x_2+y_2)=(y_1x_1,\,y_2+x_2)=(y_1,y_2)\ast(x_1,x_2)$ por la conmutatividad del producto y de la suma en $\mathbb R$. <b>Se cumple.</b></li>
+    <li><b>Conmutativa (S4).</b> Se desarrollan los dos órdenes:
+      $$\begin{aligned}(x_1,x_2)\ast(y_1,y_2)&=(x_1y_1,\,x_2+y_2)\\(y_1,y_2)\ast(x_1,x_2)&=(y_1x_1,\,y_2+x_2)\end{aligned}$$
+      Coinciden por la conmutatividad del producto y de la suma en $\mathbb R$. <b>Se cumple.</b></li>
   </ol>
   <p><b>Resultado:</b> se cumplen las cuatro propiedades: $(V,\ast)$ es un <b>grupo conmutativo</b>. (En Feb. 2019 bastan los pasos 1, 2, 3 y 5.) <i>(Verificado con sympy.)</i></p>
   <div class="box intu" style="margin-top:.6em"><span class="h">Por qué sale todo tan limpio</span><p>La función $(x_1,x_2)\mapsto(\ln x_1,\,x_2)$ convierte esta operación en la suma ordinaria de $\mathbb R^2$ (el logaritmo transforma productos en sumas). Por eso el neutro es «el cero de esa suma» ($\ln1=0$) y el simétrico es «el opuesto» ($-\ln x_1=\ln\frac1{x_1}$). Si $V$ incluyera $x_1\le0$ fallarían el cierre o el simétrico.</p></div>
@@ -275,11 +290,19 @@
     <p>El conjunto es $\mathbb R$ (sin restricciones, así que el cierre es evidente: el resultado es un real). La «operación» es: multiplica $a$ por $b$, resta $b$ y suma $a$. Hay que decidir cuatro propiedades <b>razonando</b> cada una: si se cumple, demostración general; si no, contraejemplo con números. Orientación numérica: $2\diamond3=6-3+2=5$.</p></div>
   <p><b>Estrategia:</b> esta operación <b>no se parece a una operación «buena»</b> (no es simétrica en $a$ y $b$), así que lo normal es que fallen las propiedades que dependen del orden. Se comprueba cada una con cuidado.</p>
   <ol class="steps">
-    <li><b>Conmutativa (S4).</b> Se calcula la diferencia $a\diamond b-b\diamond a=(ab-b+a)-(ba-a+b)=2a-2b$. Solo es $0$ si $a=b$. <b>Contraejemplo:</b> $2\diamond3=2\cdot3-3+2=5$, pero $3\diamond2=3\cdot2-2+3=7$. $5\neq7$. <b>No se cumple.</b></li>
+    <li><b>Conmutativa (S4).</b> Se calcula la diferencia entre los dos órdenes:
+      $$a\diamond b-b\diamond a=(ab-b+a)-(ba-a+b)=2a-2b.$$
+      Solo es $0$ si $a=b$. <b>Contraejemplo</b> (con $a=2$, $b=3$):
+      $$\begin{aligned}2\diamond3&=2\cdot3-3+2=5\\3\diamond2&=3\cdot2-2+3=7\end{aligned}$$
+      Como $5\neq7$, <b>no se cumple.</b></li>
     <li><b>Asociativa (S1).</b> Se desarrollan los dos miembros por separado:
-      $$\begin{aligned}(a\diamond b)\diamond c\\&=(ab-b+a)\diamond c\\&=(ab-b+a)\,c-c\\&\quad +(ab-b+a)\\&=abc-bc+ac\\&\quad -c+ab-b+a,\end{aligned}$$
-      $$\begin{aligned}a\diamond(b\diamond c)\\&=a\diamond(bc-c+b)\\&=a(bc-c+b)\\&\quad -(bc-c+b)+a\\&=abc-ac+ab\\&\quad -bc+c-b+a.\end{aligned}$$
-      Su diferencia es $(a\diamond b)\diamond c-a\diamond(b\diamond c)=2ac-2c=2c(a-1)$, distinta de $0$ en general. <b>Contraejemplo:</b> $a=b=c=2$: $2\diamond2=4-2+2=4$; $(2\diamond2)\diamond2=4\diamond2=8-2+4=10$; y $2\diamond(2\diamond2)=2\diamond4=8-4+2=6$. $10\neq6$. <b>No se cumple.</b></li>
+      $$\begin{aligned}(a\diamond b)\diamond c&=(ab-b+a)\diamond c\\&=(ab-b+a)\,c-c\\&\quad +(ab-b+a)\\&=abc-bc+ac\\&\quad -c+ab-b+a,\end{aligned}$$
+      $$\begin{aligned}a\diamond(b\diamond c)&=a\diamond(bc-c+b)\\&=a(bc-c+b)\\&\quad -(bc-c+b)+a\\&=abc-ac+ab\\&\quad -bc+c-b+a.\end{aligned}$$
+      Su diferencia es
+      $$(a\diamond b)\diamond c-a\diamond(b\diamond c)=2ac-2c=2c\,(a-1),$$
+      distinta de $0$ en general. <b>Contraejemplo</b> con $a=b=c=2$:
+      $$\begin{aligned}2\diamond2&=4-2+2=4\\(2\diamond2)\diamond2&=4\diamond2=8-2+4=10\\2\diamond(2\diamond2)&=2\diamond4=8-4+2=6\end{aligned}$$
+      Como $10\neq6$, <b>no se cumple.</b></li>
     <li><b>Elemento neutro (S2).</b> Un neutro $e$ debe cumplir <b>las dos</b> igualdades $a\diamond e=a$ y $e\diamond a=a$ para todo $a$.
       <ul>
         <li><i>Por la derecha:</i> $a\diamond e=ae-e+a=a\iff e(a-1)=0$. Para que valga para <b>todo</b> $a$ hace falta $e=0$. Y en efecto $a\diamond0=0-0+a=a$ ✓. Luego $e=0$ <b>es neutro por la derecha</b>.</li>
