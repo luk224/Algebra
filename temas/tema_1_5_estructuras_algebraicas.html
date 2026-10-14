@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 1.5 Estructuras algebraicas</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 1 · Herramientas · Tema 1.5 (apartado añadido: no figura en el cronograma)</div>
+  <h1>Estructuras algebraicas: operaciones, grupos y sus propiedades</h1>
+  <p>Una <b>operación</b> es una regla que combina dos elementos de un conjunto para dar otro. ¿Es <b>asociativa</b>? ¿<b>Conmutativa</b>? ¿Tiene <b>elemento neutro</b>? ¿Cada elemento tiene <b>simétrico</b>? Saber contestar estas cuatro preguntas con orden y con demostración es una pregunta casi fija del examen, y es la base de la definición de espacio vectorial (tema 2.1).</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §2.1, Def. 2.1 (pp. 57-58)</span><span>Ejercicios: E Ej. 2.1, 2.3, 2.4, 2.5 (pp. 46-50)</span><span>Examen: 3 ejercicios (2017-2020)</span><span>⏱ ~3 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §2.1.2 Definición 2.1 (propiedades S1-S4) y definición de grupo, p. 57-58">U p.57-58</span></h2>
+
+<div class="box warn"><span class="h">Por qué este tema no está en el cronograma</span>
+  <p>El libro de teoría <b>no tiene un apartado dedicado</b> a estructuras algebraicas: solo las usa como herramienta al definir espacio vectorial (U p.57-58: las propiedades S1–S4 y la palabra «grupo»). Sin embargo, el <b>libro de ejercicios</b> sí propone ejercicios de este tipo (E 2.1, 2.3, 2.4, 2.5) y los <b>exámenes</b> los piden con frecuencia, con enunciados del tipo «estudiar si la operación $\diamond$ verifica las propiedades asociativa, conmutativa, elemento neutro y elemento simétrico». Por eso se ha creado este apartado: reúne la teoría mínima (que en U está repartida y casi sin explicar) y <b>todos</b> los ejercicios de examen de este estilo.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Aritmética de los números reales: asociativa, conmutativa y distributiva de $+$ y $\cdot$; $\mathbb R^+=\{x\in\mathbb R: x>0\}$; $\mathbb R^2=\{(x_1,x_2)\}$ (pares ordenados).</li>
+  <li>Álgebra elemental: desarrollar productos, agrupar términos y <b>despejar una incógnita</b> de una ecuación.</li>
+  <li>Qué es «$\forall$» (para todo) y «$\exists$» (existe): la diferencia entre <i>«para todo $a$ se cumple»</i> (hay que demostrar en general) y <i>«no se cumple»</i> (basta <b>un</b> contraejemplo).</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde está en los libros</th></tr>
+  <tr><td>1 Operación interna</td><td>Qué es y cuándo es «cerrada»</td><td>U p.57 · E Ej. 2.3 (p.48)</td></tr>
+  <tr><td>2 Las cuatro propiedades</td><td>Asociativa, neutro, simétrico, conmutativa: cómo se demuestran y cómo se refutan</td><td>U p.58 (S1–S4)</td></tr>
+  <tr><td>3 Grupo y subgrupo</td><td>Grupo, grupo conmutativo, conexión con espacio vectorial</td><td>U p.58 · E Ej. 2.5 (p.50)</td></tr>
+  <tr><td>4 Ejemplos propios</td><td>Tres operaciones sencillas, de más fácil a más trampa</td><td>P</td></tr>
+  <tr><td>5 Ejercicios del libro</td><td>E 2.1, 2.3, 2.4, 2.5</td><td>E pp.46-50</td></tr>
+  <tr><td>6 Ejemplos de examen</td><td>3 ejercicios de convocatorias anteriores, resueltos</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p>Siempre lo mismo: te dan un <b>conjunto</b> ($\mathbb R$, $\mathbb Z$, $\mathbb R^+\times\mathbb R$…) y una <b>fórmula para combinar dos elementos</b> ($a\diamond b=ab-b+a$, $(x_1,x_2)\ast(y_1,y_2)=(x_1y_1,x_2+y_2)$…), y te preguntan cuáles de las cuatro propiedades se cumplen. <b>No basta con dar «sí» o «no»</b>: el examen puntúa el proceso (<i>«lo que no se justifica no se puntúa»</i>). Si la propiedad se cumple, hay que demostrarla <b>en general</b>; si no se cumple, hay que dar un <b>contraejemplo con números</b>.</p>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Operación interna <span class="src" data-l="U" data-ref="U §2.1.2 Definición 2.1: «Está definida la operación interna ∗ entre sus elementos», p. 57">U p.57</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una operación es una «máquina» con dos entradas y una salida: metes dos elementos del conjunto, $a$ y $b$, y sale uno solo, $a\ast b$. La suma de números es una máquina así: entran $3$ y $4$, sale $7$. Pero <b>cuidado con la salida</b>: para que sea una operación <i>del conjunto</i>, lo que sale tiene que seguir <b>dentro del conjunto</b>. Con los números naturales y la resta, $3-5=-2$ ya no es natural: la máquina «se sale del conjunto».</p>
+</div>
+
+<div class="box def"><span class="h">Definición (operación interna)</span>
+  <p>Una <b>operación interna</b> en un conjunto $V$ es una regla que a cada par $(a,b)$ de elementos de $V$ le asigna <b>un único elemento</b> $a\ast b$ <b>de $V$</b>. A la condición «$a\ast b\in V$ siempre» se le llama <b>cierre</b> («la operación es cerrada en $V$»).</p>
+  <span class="src" data-l="U" data-ref="U §2.1.2 Definición 2.1, p. 57">U p.57</span></div>
+
+<div class="box ex"><span class="h">Ejemplo resuelto: ¿es interna?</span>
+  <p>(a) En $\mathbb N$ con $a\ast b=a-b$: <b>no</b>, $3\ast5=-2\notin\mathbb N$ (un contraejemplo basta). (b) En $V=\{(x_1,x_2):x_1>0\}$ con $(x_1,x_2)\ast(y_1,y_2)=(x_1y_1,\,x_2+y_2)$: <b>sí</b>, porque si $x_1>0$ e $y_1>0$ entonces $x_1y_1>0$, y $x_2+y_2$ es un real cualquiera: el resultado tiene la primera coordenada positiva, luego está en $V$.</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.3 («la operación ∗ es cerrada en V»), p. 48">E p.48</span></div>
+
+<div class="box tip"><span class="h">Truco de examen</span>
+  <p>En los enunciados de examen te suelen decir ya «operación interna», pero <b>escribe siempre una línea comprobando el cierre</b> cuando el conjunto no es todo $\mathbb R$ (p. ej. $\mathbb R^+$, un intervalo, matrices con una condición): es lo primero que se pierde, y es donde fallan el neutro y el simétrico (que deben estar <b>dentro</b> de $V$).</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Las cuatro propiedades S1–S4 <span class="src" data-l="U" data-ref="U §2.1.2 cuadro «Propiedades que debe tener la operación interna ∗» S1-S4, p. 58">U p.58</span></h2>
+
+<p>Sea $\ast$ una operación interna en $V$ y $a,b,c$ elementos <b>cualesquiera</b> de $V$. U las numera así (<b>S1–S4</b>, p.58); en el examen se nombran por su nombre:</p>
+
+<div class="box def"><span class="h">S1 · Asociativa</span>
+  <p>$(a\ast b)\ast c=a\ast(b\ast c)$ para todos $a,b,c\in V$.</p>
+  <p><b>Qué significa:</b> da igual con qué pareja empiezas cuando combinas <b>tres</b> elementos seguidos.</p>
+  <span class="src" data-l="U" data-ref="U §2.1.2 S1, p. 58">U p.58</span></div>
+
+<div class="box def"><span class="h">S2 · Elemento neutro</span>
+  <p>Existe $e\in V$ tal que $a\ast e=e\ast a=a$ para <b>todo</b> $a\in V$.</p>
+  <p><b>Qué significa:</b> un elemento «que no hace nada» al combinarse con cualquiera (el $0$ en la suma, el $1$ en el producto). Es <b>uno solo para todo el conjunto</b>: no puede depender de $a$.</p>
+  <span class="src" data-l="U" data-ref="U §2.1.2 S2, p. 58">U p.58</span></div>
+
+<div class="box def"><span class="h">S3 · Elemento simétrico</span>
+  <p>Para cada $a\in V$ existe $a'\in V$ tal que $a\ast a'=a'\ast a=e$ (el neutro de <b>esa</b> operación).</p>
+  <p><b>Qué significa:</b> cada elemento tiene un «deshacedor» que lo anula y deja el neutro (el opuesto $-a$ en la suma, el inverso $1/a$ en el producto). U lo llama también <i>opuesto</i> o <i>inverso</i>.</p>
+  <span class="src" data-l="U" data-ref="U §2.1.2 S3 y nota «El elemento simétrico también se llama opuesto o inverso», p. 58">U p.58</span></div>
+
+<div class="box def"><span class="h">S4 · Conmutativa</span>
+  <p>$a\ast b=b\ast a$ para todos $a,b\in V$.</p>
+  <p><b>Qué significa:</b> el orden de los dos elementos no importa.</p>
+  <span class="src" data-l="U" data-ref="U §2.1.2 S4, p. 58">U p.58</span></div>
+
+<div class="box warn"><span class="h">La palabra «todos» manda</span>
+  <p>Cada propiedad exige que se cumpla <b>para todos</b> los elementos. Por eso:</p>
+  <ul>
+    <li><b>Para demostrar que se cumple</b> hay que usar letras ($a,b,c$ genéricos) y una cuenta <b>general</b>. Probar con unos números <b>no demuestra nada</b>.</li>
+    <li><b>Para demostrar que NO se cumple</b> basta <b>un solo contraejemplo</b> con números concretos (y se debe escribir la cuenta numérica completa). Es lo más rápido y lo más claro.</li>
+  </ul>
+</div>
+
+<h3>Cómo se comprueba cada una (el método)</h3>
+
+<table>
+  <tr><th>Propiedad</th><th>Para demostrar que SÍ se cumple</th><th>Para demostrar que NO se cumple</th></tr>
+  <tr><td><b>Asociativa</b></td><td>Desarrolla <b>por separado</b> $(a\ast b)\ast c$ y $a\ast(b\ast c)$ (sustituyendo la fórmula dos veces) y comprueba que dan la misma expresión.</td><td>Unos $a,b,c$ concretos con $(a\ast b)\ast c\neq a\ast(b\ast c)$. (Para encontrarlos: resta los dos desarrollos y busca valores que no la anulen.)</td></tr>
+  <tr><td><b>Conmutativa</b></td><td>Desarrolla $a\ast b$ y $b\ast a$ y comprueba que coinciden (usando que $+$ y $\cdot$ de reales son conmutativas).</td><td>Unos $a,b$ concretos con $a\ast b\neq b\ast a$.</td></tr>
+  <tr><td><b>Neutro</b></td><td><b>Despeja</b> $e$ de $a\ast e=a$. Comprueba: (i) que no depende de $a$; (ii) que $e\in V$; (iii) que también vale por la izquierda, $e\ast a=a$.</td><td>Una de las tres falla: la ecuación $a\ast e=a$ no tiene solución, o la solución <b>depende de $a$</b>, o <b>no está en $V$</b>, o vale solo por un lado.</td></tr>
+  <tr><td><b>Simétrico</b></td><td>(Solo si hay neutro $e$.) <b>Despeja</b> $a'$ de $a\ast a'=e$. Comprueba que $a'\in V$ para <b>todo</b> $a$ y que también $a'\ast a=e$.</td><td>No hay neutro (entonces ni se plantea), o hay un $a$ <b>concreto</b> sin simétrico (o cuyo simétrico queda fuera de $V$).</td></tr>
+</table>
+
+<div class="box warn"><span class="h">Orden de comprobación y dependencias</span>
+  <p>El simétrico <b>se define a partir del neutro</b> ($a\ast a'=e$): <b>sin neutro no se puede hablar de simétrico</b>. Por eso, en un ejercicio, se estudia el neutro antes que el simétrico, y si el neutro no existe la respuesta a S3 es «no» (o «no tiene sentido»). La asociativa y la conmutativa son independientes de las demás: una operación puede tener neutro y no ser asociativa, etc. (los ejemplos de abajo lo muestran).</p>
+</div>
+
+<div class="box intu"><span class="h">¿Y si el neutro solo funciona por un lado?</span>
+  <p>Puede pasar (ejemplo B de §4 y el examen de Ene. 2020): existe un $e$ con $a\ast e=a$ para todo $a$ («neutro por la derecha») pero $e\ast a\neq a$. <b>Eso no es un elemento neutro</b>: S2 exige las <b>dos</b> igualdades. Si la operación no es conmutativa hay que comprobar siempre los dos lados; si es conmutativa, basta uno (el otro sale solo).</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Grupo, grupo conmutativo y subgrupo <span class="src" data-l="U" data-ref="U §2.1.2 «Si en V se verifican las propiedades S1, S2, S3 el par (V,∗) se llama grupo. Si, además, se verifica S4 ... grupo conmutativo», p. 58">U p.58</span></h2>
+
+<div class="box def"><span class="h">Definición (grupo)</span>
+  <p>Si $\ast$ es una operación interna en $V$ que verifica <b>S1, S2 y S3</b> (asociativa, neutro y simétrico), el par $(V,\ast)$ se llama <b>grupo</b>. Si además verifica <b>S4</b> (conmutativa), es un <b>grupo conmutativo</b> (o <i>abeliano</i>). Esto es lo que se llama una <b>estructura algebraica</b>: un conjunto con una operación que cumple ciertas propiedades.</p>
+  <span class="src" data-l="U" data-ref="U §2.1.2, p. 58">U p.58</span></div>
+
+<div class="box ex"><span class="h">Ejemplos de grupos (y de «no grupos»)</span>
+  <ul>
+    <li>$(\mathbb R,+)$ es grupo conmutativo: neutro $0$, simétrico de $a$ es $-a$ (U p.58). También $(\mathbb R^2,+)$ (U p.58, Ej. 2.3).</li>
+    <li>$(\mathbb R,\cdot)$ <b>no</b> es grupo: el $0$ no tiene inverso. En cambio $(\mathbb R\setminus\{0\},\cdot)$ <b>sí</b> es grupo conmutativo, y $(\mathbb R^+,\cdot)$ también.</li>
+    <li>$(\mathbb N,+)$ <b>no</b> es grupo: sin opuestos (y sin $0$ si $\mathbb N$ empieza en 1). $(\mathbb Z,+)$ sí lo es.</li>
+    <li>Las matrices $n\times n$ con el producto <b>no</b> son un grupo conmutativo: $AB\neq BA$ en general (tema 1.2); y no son grupo, porque las matrices singulares no tienen inversa.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §2.1.2, p. 58 (ejemplo de grupo conmutativo: R con la suma estándar); resto, ejemplos propios" >U p.58 + P</span></div>
+
+<div class="box thm"><span class="h">Conexión con el resto del curso</span>
+  <p>Un <b>espacio vectorial</b> $(V,\ast,\bullet,\mathbb R)$ es, por definición, un <b>grupo conmutativo</b> $(V,\ast)$ (propiedades S1–S4) <b>más</b> una operación externa con escalares que cumple E1–E4. Es decir, «las cuatro propiedades de este tema» son la mitad de la definición de espacio vectorial (tema 2.1). Y como un subespacio es un espacio vectorial, <b>en particular $(U,+)$ es un grupo conmutativo</b> (U p.63 y p.65).</p>
+  <span class="src" data-l="U" data-ref="U §2.1.2 Definición 2.1 y esquema «(V,∗) es Grupo Conmutativo / (V,∗,•R) es espacio vectorial», p. 58; p. 63 y 65 (un subespacio es grupo)" >U p.58, 63, 65</span></div>
+
+<div class="box def"><span class="h">Subgrupo</span>
+  <p>Un subconjunto $U\subset V$ es un <b>subgrupo</b> de $(V,\ast)$ si, con la misma operación, $(U,\ast)$ es un grupo. En la práctica se comprueba: (i) $U$ contiene al neutro de $V$; (ii) la operación es <b>cerrada en $U$</b> ($a,b\in U\Rightarrow a\ast b\in U$); (iii) el simétrico de cada elemento de $U$ está en $U$.</p>
+  <p>E lo usa en el Ej. 2.5: «no basta que el elemento neutro pertenezca al subconjunto: es condición necesaria, no suficiente».</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.5 (nota al margen sobre el elemento neutro de un subgrupo), p. 50" >E p.50</span></div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Tres ejemplos propios, de menos a más trampa <span class="src" data-l="P" data-ref="Ejemplos propios verificados con sympy; sin página en los libros">P</span></h2>
+
+<div class="box ex"><span class="h">Ejemplo A · en $\mathbb R$ con $a\ast b=a+b+ab$ (casi un grupo)</span>
+  <ol class="steps">
+    <li><b>Qué se pide:</b> decidir S1–S4 en $\mathbb R$. Es interna: el resultado es un real.</li>
+    <li><b>Conmutativa:</b> $a\ast b=a+b+ab=b+a+ba=b\ast a$ (suma y producto de reales son conmutativos). <b>Sí.</b></li>
+    <li><b>Asociativa:</b> $(a\ast b)\ast c=(a+b+ab)+c+(a+b+ab)c=a+b+c+ab+ac+bc+abc$ y $a\ast(b\ast c)=a+(b+c+bc)+a(b+c+bc)=a+b+c+ab+ac+bc+abc$. Coinciden. <b>Sí.</b></li>
+    <li><b>Neutro:</b> $a\ast e=a\iff a+e+ae=a\iff e(1+a)=0$ para todo $a$ $\iff e=0$ (que no depende de $a$ y está en $\mathbb R$). Por la izquierda vale por la conmutatividad. <b>Sí, $e=0$.</b></li>
+    <li><b>Simétrico:</b> $a\ast a'=0\iff a+a'+aa'=0\iff a'(1+a)=-a\iff a'=\dfrac{-a}{1+a}$, <b>solo si $a\neq-1$</b>. Contraejemplo: $a=-1$ no tiene simétrico, porque $(-1)\ast a'=-1+a'-a'=-1\neq0$ para cualquier $a'$. <b>No se cumple en todo $\mathbb R$.</b></li>
+  </ol>
+  <p><b>Resultado:</b> cumple S1, S2, S4 pero no S3: $(\mathbb R,\ast)$ <b>no</b> es grupo. Si quitamos el elemento problemático, $(\mathbb R\setminus\{-1\},\ast)$ <b>sí</b> es grupo conmutativo (hay que ver que sigue siendo cerrado: $a\ast b=(a+1)(b+1)-1$, que solo vale $-1$ si $a=-1$ o $b=-1$).</p>
+  <p><b>Moraleja:</b> el simétrico es la propiedad que falla «en un solo punto». <i>(Verificado con sympy.)</i></p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo B · en $\mathbb R$ con $a\ast b=a$ (neutro por un solo lado)</span>
+  <ol class="steps">
+    <li><b>Asociativa:</b> $(a\ast b)\ast c=a\ast c=a$ y $a\ast(b\ast c)=a\ast(b)=a$. Coinciden. <b>Sí.</b></li>
+    <li><b>Conmutativa:</b> $a\ast b=a$ pero $b\ast a=b$. Contraejemplo: $1\ast2=1$ y $2\ast1=2$. <b>No.</b></li>
+    <li><b>Neutro:</b> por la derecha, $a\ast e=a$ se cumple <b>para cualquier $e$</b>. Por la izquierda, $e\ast a=e$, que debería valer $a$ para <b>todo</b> $a$: imposible (con $e=3$, $a=5$: $3\ast5=3\neq5$). <b>No hay neutro.</b></li>
+    <li><b>Simétrico:</b> sin neutro, no tiene sentido. <b>No.</b></li>
+  </ol>
+  <p><b>Resultado:</b> solo cumple la asociativa. Ilustra que «neutro por la derecha» $\neq$ «neutro».</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo C · en $\mathbb R^+$ con $a\ast b=\sqrt{ab}$ (¿asociativa?)</span>
+  <p>Es interna ($\sqrt{ab}>0$) y conmutativa ($\sqrt{ab}=\sqrt{ba}$). <b>Asociativa:</b> $(a\ast b)\ast c=\sqrt{\sqrt{ab}\,c}$ y $a\ast(b\ast c)=\sqrt{a\sqrt{bc}}$. Contraejemplo con $a=1,\ b=1,\ c=16$: $(1\ast1)\ast16=\sqrt{1\cdot16}=4$; $1\ast(1\ast16)=1\ast4=\sqrt{4}=2$. $4\neq2$: <b>no es asociativa</b>. (Lección: parecerse a «un producto» no garantiza nada; hay que hacer las cuentas.)</p>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="ejercicios"><span class="n">5</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ejercicios 2.1, 2.3, 2.4 y 2.5, pp. 46-50">E p.46-50</span></h2>
+
+<p>Son ejercicios del capítulo 2 de E, pero tratan solo estructuras algebraicas (el libro los coloca en §2.1 porque ahí aparece la definición de espacio vectorial). Se resuelven aquí con más detalle.</p>
+
+<details class="sol" id="ej2-1"><summary>Ejercicio 2.1 — el neutro de $(a,b)\ast(c,d)=(ac,\,b+d)$ en $\{(a,b):a>0\}$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.1, p. 46">E p.46</span></summary>
+  <p class="enun">Si $V=\{(a,b)\in\mathbb R^2\mid a>0\}$ y $(a,b)\ast(c,d)=(ac,\,b+d)$, el elemento neutro de $(V,\ast)$ verifica: A) Es $(0,0)$. B) Existe y pertenece a $V$. C) No existe.</p>
+  <div class="box intu"><span class="h">Qué se pide</span><p>Averiguar <b>cuál</b> es el neutro de <b>esta</b> operación (no el de la suma de siempre) y comprobar si está dentro de $V$.</p></div>
+  <ol class="steps">
+    <li><b>Planteo.</b> Un neutro $(c,d)$ debe cumplir $(a,b)\ast(c,d)=(a,b)$ para <b>todo</b> $(a,b)\in V$. Por la definición, $(a,b)\ast(c,d)=(ac,\,b+d)$.</li>
+    <li><b>Se iguala componente a componente:</b> $ac=a$ y $b+d=b$. Como $a>0$ se puede dividir entre $a$: $c=1$; y $d=0$.</li>
+    <li><b>Candidato:</b> $(1,0)$. No depende de $(a,b)$ ✓ y está en $V$ porque $1>0$ ✓.</li>
+    <li><b>Por el otro lado:</b> $(1,0)\ast(a,b)=(1\cdot a,\,0+b)=(a,b)$ ✓.</li>
+    <li><b>A) Falsa:</b> $(0,0)\notin V$ (su primera coordenada no es $>0$) y además $(a,b)\ast(0,0)=(0,b)\neq(a,b)$. <b>B) Verdadera:</b> el neutro es $(1,0)\in V$. <b>C) Falsa</b> (existe).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> para hallar el neutro, escribe $a\ast e=a$ con $e$ desconocido, <b>despeja</b> $e$ componente a componente, y comprueba (i) que no depende de $a$, (ii) que está en el conjunto, (iii) que vale por el otro lado.</div>
+</details>
+
+<details class="sol" id="ej2-3"><summary>Ejercicio 2.3 — $(x_1y_1,\,x_2+y_2)$ en $\mathbb R^+\times\mathbb R$: asociativa, neutro, simétrico, grupo conmutativo <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.3, p. 48">E p.48</span></summary>
+  <p class="enun">El conjunto $V=\{(x_1,x_2)\mid x_1\in\mathbb R^+,\ x_2\in\mathbb R\}$ con la operación $(x_1,x_2)\ast(y_1,y_2)=(x_1y_1,\,x_2+y_2)$ verifica: A) Es asociativo. B) Existe elemento neutro. C) Todo elemento tiene un simétrico. D) Es grupo conmutativo.</p>
+  <p>Es <b>exactamente la misma operación</b> que en los exámenes de Feb. 2019 y Sept. 2017. Se resuelve completa, con todos los pasos, en <a href="#ex-prodsuma">§6 (Feb. 2019 y Sept. 2017)</a>; el resultado es: <b>A, B, C y D son verdaderas</b>, con neutro $(1,0)$ y simétrico de $(x_1,x_2)$ igual a $(1/x_1,\,-x_2)$.</p>
+</details>
+
+<details class="sol" id="ej2-4"><summary>Ejercicio 2.4 — $x\ast y=xy+1$ en $\mathbb Z$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.4, p. 49">E p.49</span></summary>
+  <p class="enun">Se pide comprobar si la operación $x\ast y=xy+1$ en el conjunto de los números enteros $\mathbb Z$ verifica alguna de las propiedades: A) Asociativa. B) Existe elemento neutro. C) Conmutativa. D) Se puede definir en MAXIMA… (D, sobre Maxima, queda fuera de examen; se omite).</p>
+  <div class="box intu"><span class="h">Qué se pide</span><p>Para cada propiedad, decir si se cumple <b>siempre</b> (con demostración) o si falla (con contraejemplo). La operación es interna: $xy+1$ es entero si $x,y$ lo son.</p></div>
+  <ol class="steps">
+    <li><b>A) Asociativa.</b> Se desarrollan los dos miembros por separado: $(x\ast y)\ast z=(xy+1)\ast z=(xy+1)z+1=xyz+z+1$ y $x\ast(y\ast z)=x\ast(yz+1)=x(yz+1)+1=xyz+x+1$. Difieren en $z-x$: no coinciden en general. <b>Contraejemplo:</b> $x=y=0,\ z=1$: $(0\ast0)\ast1=1\ast1=2$ pero $0\ast(0\ast1)=0\ast1=1$. <b>Falsa.</b></li>
+    <li><b>B) Neutro.</b> Se despeja $e$ de $x\ast e=x$: $xe+1=x\iff e=\dfrac{x-1}{x}$. <b>Depende de $x$</b> (para $x=2$ sale $\frac12$, que ni siquiera es entero; para $x=0$ no hay solución, pues $0\cdot e+1=1\neq0$). No existe un $e$ válido para todos. <b>Falsa.</b></li>
+    <li><b>C) Conmutativa.</b> $x\ast y=xy+1=yx+1=y\ast x$ por la conmutatividad del producto en $\mathbb Z$. <b>Verdadera.</b></li>
+  </ol>
+  <p><b>Resultado:</b> solo es conmutativa. Como no es asociativa ni tiene neutro, tampoco es grupo.</p>
+  <div class="recipe"><b>Receta:</b> asociativa → desarrolla los dos miembros y resta; si la diferencia no es $0$ en general, busca valores que no la anulen (aquí $z-x\neq0$). Neutro → despeja $e$; si queda en función de $x$, no hay neutro.</div>
+</details>
+
+<details class="sol" id="ej2-5"><summary>Ejercicio 2.5 — $(U,+)$ con $x_1x_2=0$ no es subgrupo de $(\mathbb R^2,+)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.5, p. 50">E p.50</span></summary>
+  <p class="enun">Demostrar que $(U,+)$ no es subgrupo de $(\mathbb R^2,+)$ si $U=\{(x_1,x_2)\mid x_1x_2=0\}\subset\mathbb R^2$.</p>
+  <div class="box intu"><span class="h">Qué se pide</span><p>Subgrupo = subconjunto que, con la misma suma, vuelve a ser grupo. Para <b>negar</b> que lo es basta con que <b>falle una</b> condición: aquí fallará el cierre (la suma de dos elementos de $U$ se sale de $U$).</p></div>
+  <ol class="steps">
+    <li><b>Quién es $U$.</b> Los pares con alguna coordenada nula: los dos ejes coordenados (la «cruz»).</li>
+    <li><b>Comprobación del neutro (no basta, pero conviene):</b> $(0,0)\in U$, pues $0\cdot0=0$. Es condición <b>necesaria</b>, no suficiente.</li>
+    <li><b>Cierre.</b> Si $(x_1,x_2),(y_1,y_2)\in U$ (es decir $x_1x_2=0$ y $y_1y_2=0$), la suma es $(x_1+y_1,\,x_2+y_2)$ y $(x_1+y_1)(x_2+y_2)=x_1x_2+x_1y_2+y_1x_2+y_1y_2=x_1y_2+y_1x_2$, que no tiene por qué ser $0$.</li>
+    <li><b>Contraejemplo.</b> $(1,0)\in U$ ($1\cdot0=0$) y $(0,2)\in U$ ($0\cdot2=0$), pero su suma $(1,2)\notin U$ porque $1\cdot2=2\neq0$. Luego la suma no es una operación interna de $U$.</li>
+  </ol>
+  <p><b>Conclusión:</b> $(U,+)$ no es subgrupo (ni, por tanto, subespacio) de $(\mathbb R^2,+)$.</p>
+  <div class="recipe"><b>Receta:</b> para refutar que un subconjunto sea subgrupo, busca <b>un</b> par de elementos del subconjunto cuya suma se salga (cierre), o un elemento sin simétrico dentro, o que no contenga al neutro.</div>
+</details>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="examenes"><span class="n">6</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Los <b>tres</b> ejercicios de este tipo que han caído en los 24 exámenes disponibles (feb. 2017 – feb. 2026, y sept. 2017 – 2025), de menos a más difícil. Las soluciones oficiales son muy breves (dos de ellas solo remiten al libro) y una tiene errores; aquí se desarrolla el razonamiento completo, que es lo que puntúa.</p>
+
+<details class="sol" id="ex-prodsuma"><summary>Feb. 2019 (tipo A), ejercicio 2 · Sept. 2017 (tipo A), problema a) — la operación $(x_1y_1,\ x_2+y_2)$ en $\mathbb R^+\times\mathbb R$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), ejercicio 2">X Feb. 2019 (A)</span> <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A), problema a)">X Sept. 2017 (A)</span></summary>
+  <p class="enun"><b>Feb. 2019:</b> En el conjunto $V=\{(x_1,x_2)\mid x_1\in\mathbb R^+,\ x_2\in\mathbb R\}$ y considerando la operación interna definida por $(x_1,x_2)\ast(y_1,y_2)=(x_1y_1,\ x_2+y_2)$, razonar si se cumplen o no las propiedades: asociativa, elemento neutro y conmutativa. <b>Sept. 2017</b> (2 puntos): lo mismo, pidiendo además el <b>elemento simétrico</b>.</p>
+  <div class="box intu"><span class="h">Qué se pide</span>
+    <p>Un conjunto de pares $(x_1,x_2)$ en el que la primera coordenada es positiva, y una operación que <b>multiplica</b> las primeras coordenadas y <b>suma</b> las segundas. Hay que decidir S1 (asociativa), S2 (neutro), S3 (simétrico, solo en Sept. 2017) y S4 (conmutativa), <b>razonando cada una</b>. Prueba numérica para orientarte: $(2,3)\ast(4,5)=(8,8)$.</p></div>
+  <ol class="steps">
+    <li><b>¿La operación es interna?</b> Si $x_1>0$ e $y_1>0$, entonces $x_1y_1>0$; y $x_2+y_2\in\mathbb R$. El resultado está en $V$. <i>Por qué:</i> sin cierre no hay estructura que estudiar.</li>
+    <li><b>Asociativa (S1).</b> Con $u=(x_1,x_2)$, $v=(y_1,y_2)$, $w=(z_1,z_2)$:
+      $$(u\ast v)\ast w=(x_1y_1,\,x_2+y_2)\ast(z_1,z_2)=\big((x_1y_1)z_1,\ (x_2+y_2)+z_2\big),$$
+      $$u\ast(v\ast w)=(x_1,x_2)\ast(y_1z_1,\,y_2+z_2)=\big(x_1(y_1z_1),\ x_2+(y_2+z_2)\big).$$
+      Coinciden componente a componente por la asociatividad del producto y de la suma en $\mathbb R$. <b>Se cumple.</b></li>
+    <li><b>Neutro (S2).</b> Se <b>despeja</b> $e=(e_1,e_2)$ de $u\ast e=u$:
+      $$(x_1e_1,\ x_2+e_2)=(x_1,x_2)\iff\begin{cases}x_1e_1=x_1\Rightarrow e_1=1\ \ (\text{se divide entre }x_1>0)\\ x_2+e_2=x_2\Rightarrow e_2=0.\end{cases}$$
+      El candidato $e=(1,0)$ <b>no depende de $u$</b>, <b>está en $V$</b> ($1>0$) y <b>vale por la izquierda</b>: $(1,0)\ast(x_1,x_2)=(1\cdot x_1,\,0+x_2)=(x_1,x_2)$. <b>Se cumple, con $e=(1,0)$.</b></li>
+    <li><b>Simétrico (S3; solo Sept. 2017).</b> Con el neutro ya hallado se resuelve $u\ast u'=e$:
+      $$(x_1x_1',\ x_2+x_2')=(1,0)\iff x_1'=\frac1{x_1},\quad x_2'=-x_2.$$
+      <b>Hay que comprobar que $u'\in V$:</b> $\frac1{x_1}>0$ ✓ (esto es lo que obliga a que $x_1>0$). Por el otro lado, $u'\ast u=(\frac1{x_1}x_1,\,-x_2+x_2)=(1,0)$ ✓. <b>Se cumple:</b> el simétrico de $(x_1,x_2)$ es $\big(\tfrac1{x_1},\,-x_2\big)$. Comprobación numérica: el simétrico de $(2,3)$ es $(\frac12,-3)$ y $(2,3)\ast(\frac12,-3)=(1,0)$ ✓.</li>
+    <li><b>Conmutativa (S4).</b> $(x_1,x_2)\ast(y_1,y_2)=(x_1y_1,\,x_2+y_2)=(y_1x_1,\,y_2+x_2)=(y_1,y_2)\ast(x_1,x_2)$ por la conmutatividad del producto y de la suma en $\mathbb R$. <b>Se cumple.</b></li>
+  </ol>
+  <p><b>Resultado:</b> se cumplen las cuatro propiedades: $(V,\ast)$ es un <b>grupo conmutativo</b>. (En Feb. 2019 bastan los pasos 1, 2, 3 y 5.) <i>(Verificado con sympy.)</i></p>
+  <div class="box intu" style="margin-top:.6em"><span class="h">Por qué sale todo tan limpio</span><p>La función $(x_1,x_2)\mapsto(\ln x_1,\,x_2)$ convierte esta operación en la suma ordinaria de $\mathbb R^2$ (el logaritmo transforma productos en sumas). Por eso el neutro es «el cero de esa suma» ($\ln1=0$) y el simétrico es «el opuesto» ($-\ln x_1=\ln\frac1{x_1}$). Si $V$ incluyera $x_1\le0$ fallarían el cierre o el simétrico.</p></div>
+  <div class="recipe"><b>Receta (orden recomendado):</b> (1) cierre; (2) asociativa: desarrolla los dos miembros por separado; (3) neutro: despeja $e$ de $u\ast e=u$ y comprueba que no depende de $u$, que está en $V$ y que vale por la izquierda; (4) simétrico: resuelve $u\ast u'=e$ con <b>ese</b> $e$ y comprueba $u'\in V$; (5) conmutativa: compara $u\ast v$ y $v\ast u$.</div>
+  <p><b>Error típico:</b> dar $(0,0)$ como neutro «porque el neutro es el cero» ($(0,0)\notin V$ y $(x_1,x_2)\ast(0,0)=(0,x_2)\neq(x_1,x_2)$), o $(-x_1,-x_2)$ como simétrico ($-x_1<0$ no está en $V$ y $(x_1,x_2)\ast(-x_1,-x_2)=(-x_1^2,0)\neq(1,0)$); y olvidar comprobar que $1/x_1>0$.</p>
+  <p><b>Sobre la solución oficial.</b> En ambos exámenes solo dice «Véase la solución en el Ejercicio 2.3 del libro de Ejercicios resueltos»; en Feb. 2019 añade que «la conmutativa es trivial por ser la suma y el producto en $\mathbb R$ conmutativos». En el examen eso no basta: hay que escribir el desarrollo (pasos 2-5).</p>
+</details>
+
+<details class="sol" id="ex-feb20a"><summary>Ene. 2020 (tipo A), ejercicio 2 — la operación $a\diamond b=ab-b+a$ en $\mathbb R$ <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 2">X Ene. 2020 (A)</span></summary>
+  <p class="enun">Estudiar si la operación $\diamond$ definida en el conjunto de los números reales $\mathbb R$, mediante $a\diamond b=a\cdot b-b+a$, verifica las propiedades: asociativa, conmutativa, elemento neutro y elemento simétrico.</p>
+  <div class="box intu"><span class="h">Qué se pide</span>
+    <p>El conjunto es $\mathbb R$ (sin restricciones, así que el cierre es evidente: el resultado es un real). La «operación» es: multiplica $a$ por $b$, resta $b$ y suma $a$. Hay que decidir cuatro propiedades <b>razonando</b> cada una: si se cumple, demostración general; si no, contraejemplo con números. Orientación numérica: $2\diamond3=6-3+2=5$.</p></div>
+  <p><b>Estrategia:</b> esta operación <b>no se parece a una operación «buena»</b> (no es simétrica en $a$ y $b$), así que lo normal es que fallen las propiedades que dependen del orden. Se comprueba cada una con cuidado.</p>
+  <ol class="steps">
+    <li><b>Conmutativa (S4).</b> Se calcula la diferencia $a\diamond b-b\diamond a=(ab-b+a)-(ba-a+b)=2a-2b$. Solo es $0$ si $a=b$. <b>Contraejemplo:</b> $2\diamond3=2\cdot3-3+2=5$, pero $3\diamond2=3\cdot2-2+3=7$. $5\neq7$. <b>No se cumple.</b></li>
+    <li><b>Asociativa (S1).</b> Se desarrollan los dos miembros por separado:
+      $$(a\diamond b)\diamond c=(ab-b+a)\diamond c=(ab-b+a)c-c+(ab-b+a)=abc-bc+ac-c+ab-b+a,$$
+      $$a\diamond(b\diamond c)=a\diamond(bc-c+b)=a(bc-c+b)-(bc-c+b)+a=abc-ac+ab-bc+c-b+a.$$
+      Su diferencia es $(a\diamond b)\diamond c-a\diamond(b\diamond c)=2ac-2c=2c(a-1)$, distinta de $0$ en general. <b>Contraejemplo:</b> $a=b=c=2$: $2\diamond2=4-2+2=4$; $(2\diamond2)\diamond2=4\diamond2=8-2+4=10$; y $2\diamond(2\diamond2)=2\diamond4=8-4+2=6$. $10\neq6$. <b>No se cumple.</b></li>
+    <li><b>Elemento neutro (S2).</b> Un neutro $e$ debe cumplir <b>las dos</b> igualdades $a\diamond e=a$ y $e\diamond a=a$ para todo $a$.
+      <ul>
+        <li><i>Por la derecha:</i> $a\diamond e=ae-e+a=a\iff e(a-1)=0$. Para que valga para <b>todo</b> $a$ hace falta $e=0$. Y en efecto $a\diamond0=0-0+a=a$ ✓. Luego $e=0$ <b>es neutro por la derecha</b>.</li>
+        <li><i>Por la izquierda:</i> con ese $e=0$: $0\diamond a=0-a+0=-a$, que es $\neq a$ salvo si $a=0$. Contraejemplo: $0\diamond1=-1\neq1$. (En general, $e\diamond a=a\iff ea-a+e=a\iff e=\frac{2a}{a+1}$, que <b>depende de $a$</b>: no hay un $e$ común.)</li>
+      </ul>
+      Como no se cumplen las dos igualdades a la vez, <b>no existe elemento neutro</b> (solo hay neutro por la derecha).</li>
+    <li><b>Elemento simétrico (S3).</b> Se define como $a\diamond a'=a'\diamond a=e$, siendo $e$ el neutro. <b>Como no existe neutro, no existe elemento simétrico</b> (la propiedad ni siquiera tiene sentido). <b>No se cumple.</b></li>
+  </ol>
+  <p><b>Resultado:</b> la operación <b>no verifica ninguna</b> de las cuatro propiedades. <i>(Verificado con sympy.)</i></p>
+  <div class="recipe"><b>Receta:</b> conmutativa → calcula $a\diamond b-b\diamond a$; asociativa → desarrolla los dos miembros, resta y da un contraejemplo numérico; neutro → resuelve <b>las dos</b> ecuaciones ($a\diamond e=a$ y $e\diamond a=a$) y exige una solución común, independiente de $a$; simétrico → solo si hay neutro. Toda negación, con números concretos y la cuenta escrita.</div>
+  <p><b>Error típico:</b> comprobar solo $a\diamond e=a$, encontrar $e=0$ y declarar que «$0$ es el neutro». En una operación <b>no conmutativa</b> hay que mirar los dos lados.</p>
+  <div class="box warn" style="margin-top:.6em"><span class="h">Errores de la solución oficial</span>
+    <p>(i) Escribe $(a\diamond b)\diamond c=abc-c+a\cdot b-b+a$: al multiplicar $(ab-b+a)\cdot c$ olvida los términos $-bc+ac$ (la conclusión «no asociativa» es correcta, pero el desarrollo escrito no). (ii) Dice que $a\cdot e-e+a=e\cdot a-a+e=a$ «no tiene solución para ningún valor de $e$»: es falso para la primera igualdad, que sí tiene la solución $e=0$; lo que ocurre es que <b>no hay una solución común a las dos</b>. La conclusión final (no hay neutro, luego no hay simétrico) sí es correcta.</p>
+  </div>
+</details>
+
+<div class="box tip"><span class="h">Resumen de los tres ejercicios</span>
+  <table>
+    <tr><th>Examen</th><th>Operación</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th></tr>
+    <tr><td>Feb. 2019 (A) ej. 2 / Sept. 2017 (A) prob. a)</td><td>$(x_1y_1,\,x_2+y_2)$ en $\mathbb R^+\times\mathbb R$</td><td>sí</td><td>sí, $(1,0)$</td><td>sí, $(1/x_1,-x_2)$</td><td>sí</td></tr>
+    <tr><td>Ene. 2020 (A) ej. 2</td><td>$ab-b+a$ en $\mathbb R$</td><td>no</td><td>no (solo por la dcha., $e=0$)</td><td>no (sin neutro)</td><td>no</td></tr>
+  </table>
+</div>
+
+<div class="box tip"><span class="h">Para practicar (otros temas)</span>
+  <ul>
+    <li>No hay más ejercicios de examen sobre operaciones o estructuras algebraicas en los 24 exámenes disponibles. Los de espacios vectoriales (<a href="tema_2_1_espacios_vectoriales.html">tema 2.1</a>) usan S1–S4 al comprobar si un conjunto con operaciones raras es espacio vectorial o subespacio.</li>
+  </ul>
+</div>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">7</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<table>
+  <tr><th>Propiedad</th><th>Qué hay que demostrar</th><th>Método</th><th>Hipótesis / cuidado</th></tr>
+  <tr><td>Cierre</td><td>$a,b\in V\Rightarrow a\ast b\in V$</td><td>Una línea con la condición de $V$</td><td>Se pierde con $\mathbb R^+$, intervalos, matrices con condición</td></tr>
+  <tr><td>S1 Asociativa</td><td>$(a\ast b)\ast c=a\ast(b\ast c)$</td><td>Desarrollar los dos miembros y comparar</td><td>Para refutar: contraejemplo con números</td></tr>
+  <tr><td>S2 Neutro</td><td>$\exists e\in V:\ a\ast e=e\ast a=a\ \forall a$</td><td>Despejar $e$ de $a\ast e=a$; comprobar independencia de $a$, $e\in V$, y el otro lado</td><td>No existe si $e$ depende de $a$, queda fuera de $V$ o solo vale por un lado</td></tr>
+  <tr><td>S3 Simétrico</td><td>$\forall a\ \exists a'\in V:\ a\ast a'=a'\ast a=e$</td><td>Despejar $a'$ de $a\ast a'=e$; comprobar $a'\in V$</td><td><b>Requiere neutro.</b> Un elemento sin simétrico basta para que falle</td></tr>
+  <tr><td>S4 Conmutativa</td><td>$a\ast b=b\ast a$</td><td>Comparar $a\ast b$ y $b\ast a$</td><td>Si no es conmutativa, mirar los dos lados en S2 y S3</td></tr>
+  <tr><td>Grupo</td><td>S1 + S2 + S3</td><td>—</td><td>«Conmutativo» o «abeliano» si además S4</td></tr>
+  <tr><td>Espacio vectorial</td><td>$(V,\ast)$ grupo conmutativo $+$ E1–E4</td><td>tema 2.1</td><td>U p.58</td></tr>
+  <tr><td>Subgrupo</td><td>Contiene $e$, cerrado, con simétricos</td><td>Un fallo basta para refutar</td><td>E Ej. 2.5</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé decir, con mis palabras, qué significa cada una de S1–S4 y dar un ejemplo y un contraejemplo de cada una.</li>
+  <li>Sé comprobar el <b>cierre</b> de una operación en un conjunto como $\mathbb R^+\times\mathbb R$.</li>
+  <li>Sé <b>demostrar</b> la asociativa y la conmutativa desarrollando los dos miembros, y <b>refutarlas</b> con un contraejemplo numérico.</li>
+  <li>Sé <b>despejar</b> el neutro, comprobar que no depende de $a$, que está en $V$ y que vale por los dos lados.</li>
+  <li>Sé <b>despejar</b> el simétrico con el neutro de <b>esa</b> operación y comprobar que pertenece a $V$.</li>
+  <li>Sé que <b>sin neutro no hay simétrico</b> y que el orden de resolución es: cierre, asociativa, neutro, simétrico, conmutativa.</li>
+  <li>Sé qué es un grupo, un grupo conmutativo y un subgrupo, y cómo se conecta todo con la definición de espacio vectorial.</li>
+  <li>Sé escribir la respuesta como la pide el examen: cada propiedad con su razonamiento y su conclusión («se cumple» / «no se cumple»), nunca «sí» o «no» a secas.</li>
+</ul>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li>Suponer que el neutro es $0$ y el simétrico $-a$ «como siempre»: dependen de la operación (en $\mathbb R^+\times\mathbb R$ el neutro es $(1,0)$).</li>
+    <li>Comprobar el neutro por un solo lado en una operación no conmutativa (Ene. 2020: $e=0$ funciona por la derecha, pero no por la izquierda).</li>
+    <li>Dar un neutro o un simétrico que <b>no pertenecen al conjunto</b> $V$.</li>
+    <li>Declarar «se cumple» tras probar con unos números: eso no demuestra una propiedad universal. Y declarar «no se cumple» sin contraejemplo numérico.</li>
+    <li>Estudiar el simétrico cuando no hay neutro, o con un neutro equivocado.</li>
+    <li>En la asociativa, desarrollar mal un doble producto y <b>perder términos</b> (el error de la solución oficial de Ene. 2020): desarrolla los dos miembros por separado y revisa término a término.</li>
+    <li>Confundir «tiene neutro» con «el neutro depende del elemento»: $e=\frac{x-1}{x}$ (E 2.4) no es un neutro, es un neutro «por elemento», que no existe.</li>
+    <li>Olvidar que la comprobación es «para todo»: basta un elemento sin simétrico (p. ej. $a=-1$ en el ejemplo A) para que S3 falle.</li>
+  </ol>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>
