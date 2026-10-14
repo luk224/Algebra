@@ -4,7 +4,7 @@ Uso: python herramientas/sync_gemini.py   (ejecutar tras editar un agente de .cl
 """
 import pathlib, re
 R = pathlib.Path(__file__).resolve().parent.parent
-MODELO = {'opus': 'gemini-2.5-pro', 'sonnet': 'gemini-2.5-pro', 'haiku': 'gemini-2.5-flash'}
+MODELO = {'opus': 'gemini-3.1-pro-preview', 'sonnet': 'gemini-3.1-pro-preview', 'haiku': 'gemini-3.8-flash'}
 TOOLS = {'Read': 'read_file', 'Write': 'write_file', 'Edit': 'replace', 'Grep': 'grep_search',
          'Glob': 'glob', 'Bash': 'run_shell_command', 'Skill': 'activate_skill'}
 NOTA = ("> **Nota para Gemini CLI.** Este agente es una copia generada de `.claude/agents/{n}.md` "

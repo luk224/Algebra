@@ -7,7 +7,7 @@ tools:
   - grep_search
   - glob
   - run_shell_command
-model: gemini-2.5-flash
+model: gemini-3.8-flash
 temperature: 0.3
 max_turns: 60
 timeout_mins: 30

@@ -10,7 +10,7 @@ tools:
   - glob
   - run_shell_command
   - activate_skill
-model: gemini-2.5-pro
+model: gemini-3.1-pro-preview
 temperature: 0.3
 max_turns: 60
 timeout_mins: 30
