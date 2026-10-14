@@ -10,6 +10,7 @@
    .anim-oper    data-op="0|1|2|3"
    .anim-lineal  data-modo="lineal|nucimg" data-u="2,1" data-v="-1,2" data-m="1,2,2,4"   (aplicaciones lineales R2->R2)
    .anim-matriz  data-f1="1,2" data-f2="3,-1" data-x="2,1"   (matriz asociada: columnas = f(e1), f(e2); f(x) = x f(e1) + y f(e2))
+   .anim-cambio  data-u="1,1" data-v="-1,1" data-x="3,1"   (cambio de base en R2: columnas de Q = base nueva; x_B = Q x_B′; rejilla de la base nueva)
 */
 (function () {
   'use strict';
@@ -772,7 +773,56 @@
     draw();
   }
 
-  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz]];
+
+  /* =====================================================================
+     Cambio de base en R2: un mismo vector, dos nombres
+     ===================================================================== */
+  function buildCambio(root) {
+    var u0 = (root.getAttribute('data-u') || '1,1').split(',').map(Number), v0 = (root.getAttribute('data-v') || '-1,1').split(',').map(Number);
+    var x0 = (root.getAttribute('data-x') || '3,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 340, 340, 5);
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); ctrl.appendChild(r); }
+    var mi = [u0[0], v0[0], u0[1], v0[1]].map(function (x) { return numInput(x, 1, '3.2em'); });
+    var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+    er.appendChild(el('span', '', 'Q = (')); [0, 1].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ' ; ')); [2, 3].forEach(function (i) { er.appendChild(mi[i]); });
+    er.appendChild(el('span', '', ')   columnas = vectores u, v de la base nueva B′ escritos en la canónica')); eq.appendChild(er);
+    var sx = slider(-4, 4, 1, x0[0]), sy = slider(-4, 4, 1, x0[1]), lx = el('b'), ly = el('b');
+    row('x₁ ', sx, lx); row('x₂ ', sy, ly);
+    var pre = btnRow(['Ejemplo', 'Base canónica', 'Base girada', 'Base no ortogonal', 'Base singular (u ∥ v)'], function (i) { var p = [[u0[0], v0[0], u0[1], v0[1]], [1, 0, 0, 1], [0, -1, 1, 0], [2, 1, 0, 1], [1, 2, 1, 2]][i]; mi.forEach(function (q, j) { q.value = p[j]; }); draw(); });
+    function draw() {
+      var a = parseInt(mi[0].value, 10) || 0, b = parseInt(mi[1].value, 10) || 0, c = parseInt(mi[2].value, 10) || 0, d = parseInt(mi[3].value, 10) || 0;
+      var x = parseInt(sx.value, 10), y = parseInt(sy.value, 10); lx.textContent = x; ly.textContent = y;
+      P.clear();
+      var det = a * d - b * c;
+      if (det !== 0) { // rejilla de la base nueva
+        for (var k = -14; k <= 14; k++) {
+          [[k * a, k * c, b, d], [k * b, k * d, a, c]].forEach(function (s) {
+            P.layer.appendChild(sv('line', { x1: P.X(s[0] - 14 * s[2]), y1: P.Y(s[1] - 14 * s[3]), x2: P.X(s[0] + 14 * s[2]), y2: P.Y(s[1] + 14 * s[3]), stroke: '#c0842b', 'stroke-width': k === 0 ? 1.6 : 0.8, opacity: k === 0 ? 0.8 : 0.4 }));
+          });
+        }
+      }
+      arrow(P, 0, 0, 1, 0, 'down', 'e₁'); arrow(P, 0, 0, 0, 1, 'down', 'e₂');
+      arrow(P, 0, 0, a, c, 'up', 'u'); arrow(P, 0, 0, b, d, 'up', 'v');
+      arrow(P, 0, 0, x, y, 'w', 'x');
+      res.textContent = '';
+      if (det === 0) {
+        html(text, 'Con estas columnas <b>det Q = 0</b>: u y v están alineados, no son una base de ℝ² y no hay matriz de cambio de base. Una matriz de cambio de base siempre es <b>regular</b> (det ≠ 0).');
+        return;
+      }
+      var c1 = F(d * x - b * y, det), c2 = F(-c * x + a * y, det);
+      html(text, 'En la base canónica x = (<b>' + x + ', ' + y + '</b>). Para escribirlo en B′ buscamos α, β con x = α·u + β·v, es decir Q·(α, β)ᵗ = (' + x + ', ' + y + ')ᵗ. Se resuelve con Q⁻¹ (det Q = ' + det + '): ' +
+        '<b>(α, β) = (' + ftxt(c1) + ', ' + ftxt(c2) + ')</b>. Comprobación: ' + ftxt(c1) + '·(' + a + ', ' + c + ') + ' + ftxt(c2) + '·(' + b + ', ' + d + ') = (' + x + ', ' + y + '). ' +
+        'Las rectas naranjas son la rejilla de B′: el mismo vector x, pero contado en pasos de u y de v en vez de e₁ y e₂.');
+      var fin = el('div', 'sar-final'); fin.textContent = 'x_B = (' + x + ', ' + y + ')   ⇄   x_B′ = Q⁻¹·x_B = (' + ftxt(c1) + ', ' + ftxt(c2) + ')'; res.appendChild(fin);
+    }
+    [sx, sy].concat(mi).forEach(function (s) { s.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Un vector es el mismo aunque cambie la base con la que lo describimos. Elige una base nueva B′ = {u, v} (columnas de Q) y mueve x: las coordenadas en B′ son x_B′ = Q⁻¹·x_B, y x_B = Q·x_B′.'));
+    root.appendChild(eq); root.appendChild(P.svg); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    draw();
+  }
+  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
