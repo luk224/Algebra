@@ -24,7 +24,7 @@ Los `.txt` están generados con `pdftotext -layout -enc UTF-8` (las páginas se 
 ### Numeración de páginas (citar SIEMPRE la página **impresa**, comprobada contra el índice de cada libro)
 - **U**: página impresa = página PDF **− 6** (p. ej. §1.2 empieza en impresa p.9 = PDF p.15; comprobado en el índice, PDF p.11 → impresa "5").
 - **E**: impresa = PDF **− 4** (comprobado: PDF p.9 → impresa "5", Ejercicio 1.1).
-- **L** (Lay): impresa = PDF **− 18** en el cap. 1 (comprobado: PDF p.20 → impresa "2", §1.1), pero **el desfase cambia entre capítulos**: en el cap. 4 es PDF **− 90** (PDF p.280 → impresa "190", §4.1). Comprobar siempre la cabecera de la página antes de citar.
+- **L** (Lay): impresa = PDF **− 18** en el cap. 1 (comprobado: PDF p.20 → impresa "2", §1.1), pero **el desfase cambia entre capítulos e incluso dentro del cap. 1** (comprobado: PDF 20→impresa 2, PDF 60→34, PDF 80→48, PDF 106→63, es decir −18, −26, −32 y −43 según el punto del capítulo; §1.8 empieza en impresa p.63 = PDF 106): en el cap. 4 es PDF **− 90** (PDF p.280 → impresa "190", §4.1). Comprobar siempre la cabecera de la página antes de citar.
 - **A** (diapositivas ETSI): sin numeración de página fiable — citar con `data-l="A"` y `data-ref` = título de la diapositiva/apartado (según el índice del PDF, ej. «Determinantes de orden tres»).
 - El índice que devuelve NotebookLM es poco fiable: confirmar siempre contra el texto extraído.
 

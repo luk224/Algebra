@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 3.1 Aplicaciones lineales: conceptos y propiedades</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 3 · Aplicaciones lineales y matrices · Tema 3.1</div>
+  <h1>Aplicaciones lineales: conceptos y propiedades</h1>
+  <p>Una <b>aplicación lineal</b> es una función entre espacios vectoriales que «respeta» las dos operaciones que definen un espacio vectorial: la suma y el producto por escalares. En este tema aprenderás a <b>reconocerlas</b> (¿es lineal o no?), a usar sus <b>propiedades</b> básicas ($f(0)=0$, imágenes de combinaciones lineales, qué pasa con libres y ligados) y a <b>calcular la imagen de cualquier vector</b> conociendo solo las imágenes de unos pocos.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §3.1 (pp. 101-104)</span><span>Ejercicios: E Ej. 3.1–3.14 (pp. 80-91)</span><span>⏱ ~5 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §3.1.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 101">U p.101</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>En el módulo 2 estudiaste <b>espacios</b> vectoriales (conjuntos donde se puede sumar y multiplicar por números). Ahora estudias las <b>funciones entre ellos</b> que se llevan bien con esas dos operaciones. Piensa en una fotocopiadora que amplía al 200 %: si fotocopias «dos dibujos pegados» obtienes «las dos copias pegadas», y si amplías «un dibujo tres veces más grande» obtienes «la copia tres veces más grande». Una aplicación lineal es exactamente eso: <b>transformar primero y sumar después, o sumar primero y transformar después, da lo mismo</b>; y lo mismo con los múltiplos. En cambio, una máquina que además «añade 1» (como una fotocopiadora que siempre imprime una marca) rompe esa propiedad.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del tema 2.1: qué es un <b>espacio vectorial</b> y un <b>subespacio</b> (con la caracterización $u+\lambda v\in U$, U p.66); que en cualquier espacio vectorial $0\cdot v=0$ y $\lambda\cdot0=0$ (U p.74) y que $(-1)v$ es el opuesto de $v$ (se deduce de los axiomas E2 y E4, U p.58; ver la demostración de P2 en §3). El tema 1.5 recoge las propiedades de las operaciones en las que se apoya.</li>
+  <li>Del tema 2.2: <b>combinación lineal</b>, sistema <b>libre</b> y <b>ligado</b> (Def. 2.5 y 2.6, U p.73-74): $\lambda_1u_1+\dots+\lambda_pu_p=0$ solo con todos los $\lambda_i=0$ significa «libre».</li>
+  <li>Del tema 2.3: <b>base</b> y <b>coordenadas</b> (Def. 2.9 y 2.10, U p.82-85): todo vector se escribe de forma <b>única</b> como combinación lineal de los vectores de una base; «dos vectores libres en $\mathbb R^2$ son base» (Teor. 2.6, U p.88).</li>
+  <li>Del tema 1: resolver sistemas $2\times2$ y $3\times3$ y calcular un determinante para ver si es distinto de cero.</li>
+  <li>Notación de funciones: $f:V\to W$ (espacio <b>inicial</b> o de partida $V$, espacio <b>final</b> o de llegada $W$). U recomienda repasar el módulo <i>Conjuntos</i> del «Curso 0» (U p.101). <b>Notación:</b> Lay dice «transformación $T$», «dominio», «codominio» y «rango» donde U dice «aplicación $f$», «espacio inicial», «espacio final» e «imagen»; usamos la de U.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde está en los libros</th></tr>
+  <tr><td>1 Definición</td><td>Def. 3.1, «conserva la suma y el producto por escalares», endomorfismo (Ej. U 3.1-3.2)</td><td>U p.101-103 · L §1.8 p.65 y §4.2 p.204</td></tr>
+  <tr><td>2 Ejemplos y no ejemplos</td><td>Constantes, traslaciones, cuadrados, productos… (Ej. U 3.3, 3.7)</td><td>U p.103-104 · L §1.8 p.66</td></tr>
+  <tr><td>3 Propiedades</td><td>P1-P5 y sus demostraciones (Ej. U 3.4-3.7)</td><td>U p.103-104 · L §1.8 p.66</td></tr>
+  <tr><td>4 Imagen de una combinación lineal</td><td>Calcular $f(w)$ escribiendo $w$ como combinación de vectores cuya imagen se conoce; imagen de libres y ligados</td><td>U p.103 (P3) · adelanto de U p.114</td></tr>
+  <tr><td>5 Ejercicios del libro</td><td>E 3.1–3.14 (los catorce) + 3 ejemplos propios</td><td>E pp.79-91</td></tr>
+  <tr><td>6 Ejemplos de examen</td><td>6 preguntas de convocatorias anteriores + 2 ejemplos propios, resueltos</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p>Cuatro tareas que se repiten con distinto disfraz: <b>(a)</b> «¿es lineal esta aplicación?» (si sí, demostrarlo con la definición; si no, dar un <b>contraejemplo</b>, casi siempre $f(0)\neq0$); <b>(b)</b> «¿es endomorfismo?» (lineal <b>y</b> mismo espacio inicial y final); <b>(c)</b> «verdadero o falso» sobre las propiedades (neutro, opuestos, libres y ligados, imagen de un subespacio); y, la más frecuente en examen, <b>(d)</b> «sabiendo que $f$ es lineal y que $f(a)=\dots$, $f(b)=\dots$, calcula $f(w)$»: se escribe $w$ como combinación lineal de $a,b,\dots$ y se aplica la linealidad. Los resultados sin justificar «no podrán ser valorados»: hay que escribir el proceso.</p>
+</div>
+
+<div class="box warn"><span class="h">Erratas y omisiones de los libros (para no despistarte)</span>
+  <ul>
+    <li><b>Símbolos perdidos en el texto digital.</b> En las versiones de texto de E y de U se pierden varios $\neq$, que aparecen como «$=$»: E 3.1 B, 3.3 (p.83: la frase sobre «$f(x)+\lambda f(y)=f(x+\lambda y)$» es en realidad $\neq$), 3.5, 3.6, 3.7, 3.9 A y C; U Ej. 3.5 y 3.7. En E 3.7 B, «Si $\lambda=1$» debe ser «<b>si $\lambda\neq1$</b>». En E 3.9 C el enunciado es «puede ocurrir $f(0)\neq0$». El sentido lógico lo exige y así se escribe aquí.</li>
+    <li><b>U no define «endomorfismo» en §3.1</b>: la palabra aparece por primera vez en la autoevaluación del tema (U p.138) y se usa desde el capítulo 4 (U p.147). La definición operativa la da E en la solución del Ej. 3.1 C (p.80): <b>$f$ es endomorfismo si es lineal y el espacio inicial coincide con el final</b> ($f:V\to V$).</li>
+    <li><b>U no numera las propiedades como «Teorema»</b>: las cinco propiedades de la p.103 se citan aquí como P1-P5; los Ejemplos 3.4-3.7 (p.104) son sus demostraciones o contraejemplos.</li>
+    <li><b>E es escueto</b>: en 3.1 B no dice que basta un caso concreto; en 3.8 escribe «es evidente»; en 3.11 no justifica que $\{(1,1),(2,-1)\}$ sea base; en 3.13 D no explica por qué $x+\lambda y\in S$. Se completa en cada ejercicio («Nota sobre el libro»). En 3.2 C hay además una errata tipográfica (una cuarta componente repetida).</li>
+    <li><b>Maxima</b> (E 3.9 D y nota al margen de U p.104) <b>no entra en examen</b>: se menciona y no se desarrolla.</li>
+  </ul>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Qué es una aplicación lineal <span class="src" data-l="U" data-ref="U §3.1.2 Definición 3.1 y Ejemplos 3.1-3.2, p. 101-103">U p.101-103</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: «respeta sumas y múltiplos»</span>
+  <p>Una <b>aplicación</b> $f:V\to W$ asigna a cada vector $v$ de $V$ <b>un único</b> vector $f(v)$ de $W$. Ahora bien, $V$ y $W$ no son simples conjuntos: tienen suma y producto por escalares. Una aplicación es <b>lineal</b> si lleva esas operaciones de $V$ a las de $W$ sin estropearlas:</p>
+  <ul>
+    <li><b>conserva la suma:</b> la imagen de una suma es la suma de las imágenes, $f(u+v)=f(u)+f(v)$;</li>
+    <li><b>conserva el producto por escalares:</b> la imagen de un múltiplo es el múltiplo de la imagen, $f(\lambda u)=\lambda f(u)$.</li>
+  </ul>
+  <p>Analogía: pasar de euros a dólares con un cambio fijo. Si pagas 3 € + 5 € y conviertes, es igual que convertir 3 €, convertir 5 € y sumar; y convertir «el doble» es «el doble de lo convertido». Ahora bien, si el banco te cobra además una comisión fija de $1$ por operación, ya no se cumple (convertir 0 € te cuesta $1$): la conversión pasa de ser lineal a ser <b>afín</b>.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 3.1 — aplicación lineal</span>
+  <p>Sean $V$ y $W$ espacios vectoriales (sobre $\mathbb R$). Una aplicación $f:V\to W$ es <b>lineal</b> si para todo $v,u\in V$ y todo escalar $\lambda\in\mathbb R$:
+  $$f(v+\lambda u)=f(v)+\lambda f(u).$$
+  A las aplicaciones lineales también se las llama <b>transformaciones lineales</b>. Si además $V=W$ (el mismo espacio de partida y de llegada) se dice que $f$ es un <b>endomorfismo</b> (definición operativa de E, p.80; ver «Erratas»).</p>
+  <span class="src" data-l="U" data-ref="U Definición 3.1, p. 101">U p.101</span>
+  <span class="src" data-l="U" data-ref="U p. 103: «las aplicaciones que conservan las operaciones… reciben el nombre de aplicaciones lineales o transformaciones lineales»">U p.103</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, solución del Ej. 3.1 C (definición de endomorfismo), p. 80">E p.80</span>
+</div>
+
+<div class="box thm"><span class="h">La definición equivale a dos condiciones por separado</span>
+  <p>$f$ es lineal $\iff$ se cumplen a la vez:</p>
+  <p>(i) $f(u+v)=f(u)+f(v)$ (conserva la suma) &nbsp;&nbsp; y &nbsp;&nbsp; (ii) $f(\lambda u)=\lambda f(u)$ (conserva el producto por escalares).</p>
+  <p><i>Por qué.</i> ($\Rightarrow$) Con $\lambda=1$ en la Def. 3.1 sale (i). Para (ii): tomando el primer vector igual a $0$, $f(0+\lambda u)=f(0)+\lambda f(u)$, y como $f(0)=0$ (P1, §3), $f(\lambda u)=\lambda f(u)$. ($\Leftarrow$) $f(v+\lambda u)=f(v)+f(\lambda u)=f(v)+\lambda f(u)$ usando primero (i) y luego (ii). Por eso E y Lay comprueban (i) y (ii) por separado, y U las junta en una sola igualdad: es lo mismo.</p>
+  <span class="src" data-l="U" data-ref="U p. 103: «Conserva la suma: f(A+B)=f(A)+f(B). Conserva el producto por escalares f(λA)=λf(A)»">U p.103</span>
+  <span class="src" data-l="L" data-ref="Lay §1.8, Definición de transformación lineal (i. T(u+v)=T(u)+T(v); ii. T(cu)=cT(u)), p. 65">L §1.8 p.65</span>
+  <span class="src" data-l="L" data-ref="Lay §4.2, Definición de transformación lineal entre espacios vectoriales V y W, p. 204">L §4.2 p.204</span>
+</div>
+
+<div class="box ex"><span class="h">Primer ejemplo numérico en $\mathbb R^2$</span>
+  <p>Sea $f:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(x+y,\ 2x-y)$. Tomemos $u=(1,2)$, $v=(3,-1)$ y $\lambda=2$ y comprobemos la igualdad de la Def. 3.1 <b>con números</b> (no es una demostración, solo «ver» qué afirma):</p>
+  <ol class="steps">
+    <li><b>Primer miembro.</b> $u+\lambda v=(1,2)+2(3,-1)=(7,0)$, y
+      $$f(7,0)=(7+0,\ 2\cdot7-0)=(7,14).$$</li>
+    <li><b>Segundo miembro.</b> $f(u)=(3,0)$, $f(v)=(2,7)$, luego
+      $$f(u)+\lambda f(v)=(3,0)+2(2,7)=(7,14).$$</li>
+    <li><b>Coinciden.</b> Transformar la combinación o combinar las transformadas da lo mismo. (Para <i>demostrar</i> que $f$ es lineal hay que hacerlo con $u,v,\lambda$ <b>genéricos</b>, como en los Ejemplos U 3.1-3.2 de abajo.)</li>
+  </ol>
+  <p><b>Y una aplicación que no lo cumple:</b> $g(x,y)=(x+1,\ y)$ (una <b>traslación</b>). Con los mismos $u,v,\lambda$: $g(u+\lambda v)=g(7,0)=(8,0)$, pero $g(u)+\lambda g(v)=(2,2)+2(4,-1)=(10,0)$. Distintos: $g$ <b>no</b> es lineal. (Un solo caso que falle basta para negar la linealidad; un solo caso que cuadre no la prueba.)</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: «transformar la combinación» frente a «combinar las transformadas»</span>
+  <p>Elige una aplicación del desplegable y mueve $\alpha$ y $\beta$: a la izquierda ves $w=\alpha u+\beta v$ en el espacio de partida; a la derecha, $f(w)$ (flecha verde) y $\alpha f(u)+\beta f(v)$ (flecha morada discontinua). En una aplicación lineal las dos flechas <b>siempre coinciden</b>; en las no lineales (traslación, cuadrados, productos) se separan para casi todos los valores de $\alpha,\beta$. Ojo: en la traslación $g(x,y)=(x+1,y)$ las flechas <b>sí coinciden cuando $\alpha+\beta=1$</b> (p. ej. $\alpha=\beta=0{,}5$); por eso un caso que cuadra <b>no demuestra</b> la linealidad.</p>
+  <div class="anim-lineal" data-modo="lineal" data-u="2,1" data-v="-1,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<figure>
+  <svg class="fig" viewBox="0 0 520 215" role="img" aria-label="Una aplicación lineal f lleva los vectores u, v y u+v del espacio V a f(u), f(v) y f(u)+f(v) del espacio W: el paralelogramo de la izquierda se transforma en el paralelogramo de la derecha">
+    <rect x="10" y="28" width="225" height="170" rx="8" fill="none" stroke="currentColor" stroke-opacity=".35"></rect>
+    <rect x="285" y="28" width="225" height="170" rx="8" fill="none" stroke="currentColor" stroke-opacity=".35"></rect>
+    <line class="a" x1="60" y1="170" x2="140" y2="130"></line>
+    <line class="b" x1="60" y1="170" x2="90" y2="100"></line>
+    <line class="ax" x1="60" y1="170" x2="170" y2="60"></line>
+    <line class="th" x1="140" y1="130" x2="170" y2="60" stroke-dasharray="5 4"></line>
+    <line class="th" x1="90" y1="100" x2="170" y2="60" stroke-dasharray="5 4"></line>
+    <circle class="op" cx="60" cy="170" r="4"></circle>
+    <line class="a" x1="340" y1="170" x2="440" y2="160"></line>
+    <line class="b" x1="340" y1="170" x2="360" y2="90"></line>
+    <line class="ax" x1="340" y1="170" x2="460" y2="80"></line>
+    <line class="th" x1="440" y1="160" x2="460" y2="80" stroke-dasharray="5 4"></line>
+    <line class="th" x1="360" y1="90" x2="460" y2="80" stroke-dasharray="5 4"></line>
+    <circle class="op" cx="340" cy="170" r="4"></circle>
+    <text class="sm" x="18" y="46">V (espacio inicial)</text>
+    <text class="sm" x="293" y="46">W (espacio final)</text>
+    <text class="sm" x="112" y="156">u</text>
+    <text class="sm" x="62" y="118">v</text>
+    <text class="sm" x="176" y="58">u+v</text>
+    <text class="sm" x="395" y="184">f(u)</text>
+    <text class="sm" x="336" y="116" text-anchor="end">f(v)</text>
+    <text class="sm" x="506" y="68" text-anchor="end">f(u)+f(v) = f(u+v)</text>
+    <text class="lg" x="260" y="108" text-anchor="middle">f ⟶</text>
+    <text class="lg" x="260" y="16" text-anchor="middle">f lleva paralelogramos en paralelogramos</text>
+  </svg>
+  <figcaption>Una aplicación lineal respeta la suma: el paralelogramo que forman $u$, $v$ y $u+v$ se transforma en el que forman $f(u)$, $f(v)$ y $f(u)+f(v)$, y la diagonal $u+v$ va a la diagonal $f(u+v)=f(u)+f(v)$. Que ambos sean paralelogramos es lo que significa «conservar la suma». Figura propia (ejemplo ilustrativo; $f$ no es una aplicación concreta del texto). <span class="src" data-l="P" data-ref="Figura propia, ilustra la Definición 3.1 de U p. 101 y L §1.8 p. 65">P</span></figcaption>
+</figure>
+
+<div class="box ex"><span class="h">Ej. U 3.1-3.2 — una aplicación lineal entre matrices y vectores</span>
+  <p>$M$ es el espacio de las matrices cuadradas de orden 2 con $a_{22}=0$; $f:M\to\mathbb R^4$ se define como
+  $$f\begin{pmatrix}a_{11}&a_{12}\cr a_{21}&0\end{pmatrix}=(a_{11}+a_{12},\ a_{12}-a_{11},\ a_{21},\ 0).$$
+  Intervienen tres cosas (U p.101-102): el espacio inicial $M$, el espacio final $\mathbb R^4$ y la regla $f$. Para comprobar que es lineal (U p.102: «una técnica es desarrollar independientemente los dos miembros y compararlos») se toman $v=\begin{pmatrix}a_{11}&a_{12}\cr a_{21}&0\end{pmatrix}$, $w=\begin{pmatrix}b_{11}&b_{12}\cr b_{21}&0\end{pmatrix}$ y $\lambda\in\mathbb R$:</p>
+  <ol class="steps">
+    <li><b>Primer miembro.</b> $v+\lambda w$ tiene entradas $a_{11}+\lambda b_{11}$, $a_{12}+\lambda b_{12}$, $a_{21}+\lambda b_{21}$ y $0$, luego
+      $$\begin{gathered}f(v+\lambda w)=\big(\cr{}a_{11}+\lambda b_{11}+a_{12}+\lambda b_{12},\cr{}a_{12}+\lambda b_{12}-a_{11}-\lambda b_{11},\cr{}a_{21}+\lambda b_{21},\ 0\big).\end{gathered}$$</li>
+    <li><b>Segundo miembro.</b>
+      $$\begin{gathered}f(v)+\lambda f(w)=\big(\cr{}a_{11}+a_{12}+\lambda(b_{11}+b_{12}),\cr{}a_{12}-a_{11}+\lambda(b_{12}-b_{11}),\cr{}a_{21}+\lambda b_{21},\ 0\big).\end{gathered}$$</li>
+    <li><b>Conclusión.</b> Ambos miembros son idénticos, luego $f$ es lineal. (La imagen de una suma es la suma de imágenes y la de un múltiplo, el múltiplo de la imagen: U p.103.)</li>
+  </ol>
+  <p><i>Nota:</i> en el texto digital de U los miembros del Ej. 3.2 salen entremezclados por la extracción; aquí están reconstruidos a partir de la fórmula del Ej. 3.1.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 3.1 y 3.2, p. 101-102">U p.101-102</span>
+</div>
+
+<div class="box tip"><span class="h">Cómo demostrar que una aplicación <b>es</b> lineal (receta)</span>
+  <ol>
+    <li>Escribe los vectores <b>genéricos</b> $v=(x_1,\dots)$, $u=(y_1,\dots)$ y el escalar $\lambda$, y calcula $v+\lambda u$ componente a componente.</li>
+    <li>Desarrolla <b>por separado</b> el primer miembro $f(v+\lambda u)$ (aplicando la fórmula de $f$ a $v+\lambda u$) y el segundo $f(v)+\lambda f(u)$.</li>
+    <li>Compara: si son iguales para todo $v,u,\lambda$, $f$ es lineal. <b>Señal rápida:</b> si cada componente de $f(x)$ es una combinación $a_1x_1+\dots+a_nx_n$ <b>sin término independiente ni productos, potencias, valores absolutos…</b>, la igualdad saldrá siempre.</li>
+  </ol>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Escribir como primer paso «$f(v+\lambda u)=f(v)+\lambda f(u)$» y seguir: eso es lo que hay que <b>demostrar</b>, no puede darse por supuesto. Y confundir «lineal» con «endomorfismo»: $f:\mathbb R^2\to\mathbb R^3$ puede ser perfectamente lineal y, sin embargo, <b>no</b> es endomorfismo porque $\mathbb R^2\neq\mathbb R^3$ (ver Ej. 3.2 y la autoevaluación de U p.138).</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Ejemplos y no ejemplos <span class="src" data-l="U" data-ref="U §3.1.2 Ejemplos 3.3 y 3.7, p. 103-104">U p.103-104</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una aplicación lineal «de verdad» es la que aparece al escribir cada componente de la imagen como <b>suma de las coordenadas multiplicadas por números fijos</b>: $(x,y)\mapsto(3x-y,\ 2y)$. Todo lo que meta una <b>constante suelta</b> (traslación), una <b>potencia</b> ($x^2$), un <b>producto de coordenadas</b> ($xy$), un <b>valor absoluto</b> o una <b>función como $\sin x$</b> rompe la linealidad. En el plano, lo que hace una aplicación lineal es estirar, girar, reflejar, proyectar o inclinar, <b>siempre dejando el origen quieto</b> y llevando rectas a rectas.</p>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 3.3 — una aplicación constante no nula no es lineal</span>
+  <p>$f:\mathbb R\to\mathbb R$, $f(x)=k$ con $k\neq0$ fijo. Primer miembro: $f(x+\lambda y)=k$. Segundo: $f(x)+\lambda f(y)=k+\lambda k$. Como $k\neq k+\lambda k$ en cuanto $\lambda k\neq0$ (p. ej. $\lambda=1$: $k\neq2k$), no hay igualdad: <b>no es lineal</b>. (La aplicación constante $f(x)=0$ sí es lineal: es la aplicación nula.)</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.3, p. 103">U p.103</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, introducción §3.1, «cualquier aplicación constante no nula, no es aplicación lineal», p. 79">E p.79</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 3.7 — un atajo: basta $f(0)\neq0$</span>
+  <p>Para el Ej. 3.3 hay un camino más corto: $f(0)=k\neq0$, y como toda aplicación lineal cumple $f(0)=0$ (P1, §3), no puede ser lineal. U lo dice así: «a veces es más cómodo utilizar alguna de las propiedades anteriores que la definición para comprobar que una aplicación no es lineal» y, al margen, «para comprobar que una afirmación es falsa es suficiente que lo sea en algún caso, llamado contraejemplo».</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.7 y notas al margen, p. 104">U p.104</span>
+</div>
+
+<h3>Catálogo de «sí» y «no» (todos en $\mathbb R^2$ o $\mathbb R$)</h3>
+<table>
+  <tr><th>Aplicación</th><th>¿Lineal?</th><th>Por qué (contraejemplo o razón)</th></tr>
+  <tr><td>$f(x,y)=(x+y,\ 2x-y)$</td><td><b>Sí</b></td><td>Cada componente es combinación de $x,y$ sin término independiente</td></tr>
+  <tr><td>$f(x)=rx$ (contracción/dilatación)</td><td><b>Sí</b></td><td>$f(x+\lambda y)=r(x+\lambda y)=rx+\lambda ry$ (L §1.8 Ej. 4, p.66)</td></tr>
+  <tr><td>$f(x,y)=(x+1,\ y)$ (traslación)</td><td>No</td><td>$f(0,0)=(1,0)\neq0$ (el origen se mueve)</td></tr>
+  <tr><td>$f(x)=k\neq0$ (constante)</td><td>No</td><td>$f(0)=k\neq0$ (Ej. U 3.3)</td></tr>
+  <tr><td>$f(x)=x^2$</td><td>No</td><td>$f(1+1)=4\neq f(1)+f(1)=2$</td></tr>
+  <tr><td>$f(x,y)=(xy,\ x)$</td><td>No</td><td>$f(0,0)=0$ <b>pero</b> $f(2,2)=(4,2)\neq2f(1,1)=(2,2)$: el producto $xy$ crece como $\lambda^2$</td></tr>
+  <tr><td>$f(x)=|x|$</td><td>No</td><td>$f(1+(-1))=0\neq f(1)+f(-1)=2$</td></tr>
+  <tr><td>$f(x)=\sin x$</td><td>No</td><td>$f(\pi/2+\pi/2)=0\neq1+1$</td></tr>
+  <tr><td>$\det:\mathcal M_{2\times2}\to\mathbb R$</td><td>No</td><td>$\det(2I)=4\neq2\det I=2$</td></tr>
+  <tr><td>$A\mapsto A^t$ (traspuesta)</td><td><b>Sí</b></td><td>$(A+\lambda B)^t=A^t+\lambda B^t$</td></tr>
+  <tr><td>$A\mapsto a_{11}+a_{22}$ (traza)</td><td><b>Sí</b></td><td>La diagonal de $A+\lambda B$ es la suma de diagonales</td></tr>
+</table>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>(a)</b> «Es de primer grado, luego es lineal»: $f(x)=x+1$ es de primer grado y <b>no</b> es lineal en Álgebra (es <b>afín</b>); lo que cuenta es que no haya término independiente. <b>(b)</b> El error recíproco: comprobar $f(0)=0$ y concluir «es lineal». P1 es <b>condición necesaria, no suficiente</b>: $f(x,y)=(xy,x)$ y $\det$ cumplen $f(0)=0$ y no son lineales. <b>(c)</b> Probar con un solo ejemplo numérico que sí se cumple y «demostrar» con ello la linealidad: un ejemplo <b>confirma</b>, solo un <b>contraejemplo</b> refuta.</p>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen: el orden de ataque</span>
+  <ol>
+    <li>Calcula $f(0)$. Si $\neq0$, <b>no es lineal</b> (una línea, citando P1 y Ej. U 3.7).</li>
+    <li>Si $f(0)=0$ y la fórmula es «de combinaciones de coordenadas», <b>demuéstralo</b> con la Def. 3.1 (receta de §1).</li>
+    <li>Si $f(0)=0$ pero hay productos, potencias, valores absolutos…, busca un contraejemplo con números pequeños: $f(2v)$ frente a $2f(v)$, o $f(u+v)$ frente a $f(u)+f(v)$.</li>
+  </ol>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Propiedades de las aplicaciones lineales <span class="src" data-l="U" data-ref="U §3.1.2 «Propiedades de las aplicaciones lineales» y Ejemplos 3.4-3.7, p. 103-104">U p.103-104</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>La definición es muy poca cosa, pero tiene consecuencias inmediatas que usarás todo el tiempo: la aplicación deja <b>quieto el origen</b>, respeta <b>opuestos</b>, respeta <b>combinaciones lineales completas</b> (esta es la más potente) y, como una máquina que puede «aplastar» información, <b>conserva la dependencia pero no necesariamente la independencia</b>. Piensa en una sombra: si dos objetos estaban alineados (dependientes), sus sombras también lo están; pero dos objetos independientes pueden proyectarse sobre la misma recta y sus sombras ser dependientes.</p>
+</div>
+
+<div class="box thm"><span class="h">Propiedades de las aplicaciones lineales</span>
+  <p>Si $f:V\to W$ es una aplicación lineal:</p>
+  <ol>
+    <li><b>P1.</b> $f(0_V)=0_W$ (el neutro de $V$ va al neutro de $W$).</li>
+    <li><b>P2.</b> $f(-v)=-f(v)$.</li>
+    <li><b>P3.</b> $f(a_1v_1+a_2v_2+\dots+a_nv_n)=a_1f(v_1)+a_2f(v_2)+\dots+a_nf(v_n)$, con $a_i\in\mathbb R$ y $v_i\in V$.</li>
+    <li><b>P4.</b> Si $v,u\in V$ son linealmente <b>dependientes</b>, sus imágenes $f(v),f(u)$ también lo son.</li>
+    <li><b>P5.</b> Aunque $v,u\in V$ sean linealmente <b>independientes</b>, sus imágenes $f(v)$ y $f(u)$ <b>pueden no serlo</b>.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U «Propiedades de las aplicaciones lineales» (lista de cinco propiedades), p. 103">U p.103</span>
+  <span class="src" data-l="L" data-ref="Lay §1.8, ecuaciones (3), (4) y (5): T(0)=0, T(cu+dv)=cT(u)+dT(v), principio de superposición, p. 66">L §1.8 p.66</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, introducción §3.1, «Es importante recordar», p. 79">E p.79</span>
+</div>
+
+<h3>Demostraciones cortas</h3>
+
+<div class="box ex"><span class="h">P1 (Ej. U 3.4): $f(0)=0$</span>
+  <ol class="steps">
+    <li>El neutro es suma de sí mismo: $0=0+0$.</li>
+    <li>Aplicando que $f$ conserva la suma: $f(0)=f(0+0)=f(0)+f(0)$.</li>
+    <li>Sumando a ambos lados el opuesto $-f(0)$ (existe en $W$, que es espacio vectorial): $f(0)-f(0)=f(0)+f(0)-f(0)$, es decir $0_W=f(0)$. ∎</li>
+  </ol>
+  <p><i>Otra prueba:</i> $f(0_V)=f(0\cdot v)=0\cdot f(v)=0_W$, usando $0\cdot v=0$ (U p.74, al margen) y que $f$ conserva el producto por escalares. (En lo que sigue, como hace U, se escribe $0$ para los dos neutros si no hay confusión.)</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.4 (demostración de P1), p. 104">U p.104</span>
+</div>
+
+<div class="box ex"><span class="h">P2: $f(-v)=-f(v)$</span>
+  <p>Primero, en cualquier espacio vectorial $-v=(-1)v$: en efecto, $v+(-1)v=(1+(-1))v=0\cdot v=0$ (axiomas E2 y E4, U p.58, y $0\cdot v=0$, U p.74), así que $(-1)v$ es el opuesto de $v$. Entonces $f(-v)=f((-1)v)=(-1)f(v)=-f(v)$, usando que $f$ conserva el producto por escalares. ∎</p>
+  <span class="src" data-l="P" data-ref="Demostración propia (U la enuncia sin demostrarla), consecuencia directa de la Def. 3.1, U p. 101 y 103">P</span>
+</div>
+
+<div class="box ex"><span class="h">P3: la imagen de una combinación lineal es la combinación de las imágenes</span>
+  <p>Se aplica la definición de forma repetida: $f(a_1v_1+a_2v_2)=f(a_1v_1)+f(a_2v_2)=a_1f(v_1)+a_2f(v_2)$, y con tres o más sumandos se repite (inducción en $n$): se «abre» el primer sumando, luego el segundo, etc. ∎ Es <b>la propiedad más utilizada del tema</b>: permite calcular $f$ en <b>cualquier</b> vector conociendo $f$ solo en unos pocos (§4). Lay la llama <i>principio de superposición</i>.</p>
+  <span class="src" data-l="U" data-ref="U propiedad 3, p. 103">U p.103</span>
+  <span class="src" data-l="L" data-ref="Lay §1.8, ecuación (5), principio de superposición, p. 66">L §1.8 p.66</span>
+</div>
+
+<div class="box ex"><span class="h">P4 (Ej. U 3.5): dependientes van a dependientes</span>
+  <p>Si $v,u$ son ligados, existe una relación $\lambda v+\mu u=0$ con $\lambda\neq0$ o $\mu\neq0$ (Def. 2.5, U p.73). Aplicando $f$ y P3, P1:
+  $$\lambda f(v)+\mu f(u)=f(\lambda v+\mu u)=f(0)=0.$$
+  Es una relación entre $f(v)$ y $f(u)$ con <b>los mismos coeficientes</b>, no todos nulos: $f(v),f(u)$ son ligados. ∎ (La misma prueba vale para $n$ vectores.)</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.5 (demostración de P4), p. 104">U p.104</span>
+</div>
+
+<div class="box ex"><span class="h">P5 (Ej. U 3.6): independientes pueden ir a dependientes</span>
+  <p>Basta un contraejemplo. $f:\mathbb R^2\to\mathbb R$, $f(x_1,x_2)=x_1$ (es lineal). El sistema $S=\{(2,1),(1,3)\}$ es <b>libre</b> (no son proporcionales: $\begin{vmatrix}2&1\cr1&3\end{vmatrix}=5\neq0$). Sus imágenes son $f(2,1)=2$ y $f(1,3)=1$, y $\{2,1\}$ es <b>ligado</b> en $\mathbb R$ porque $2=2\cdot1$ (dos vectores en un espacio de dimensión 1 siempre son ligados).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.6 (contraejemplo de P5), p. 104">U p.104</span>
+</div>
+
+<div class="box thm"><span class="h">La contrarrecíproca de P4 (muy útil)</span>
+  <p>«$x,y$ ligados $\Rightarrow f(x),f(y)$ ligados» equivale a su contrarrecíproca:
+  $$\{f(x),f(y)\}\ \text{libre}\ \Longrightarrow\ \{x,y\}\ \text{libre}.$$
+  <b>Si las imágenes son independientes, los originales también lo eran.</b> <i>Prueba directa:</i> si $\lambda x+\mu y=0$, aplicando $f$: $\lambda f(x)+\mu f(y)=f(0)=0$, y como $\{f(x),f(y)\}$ es libre, $\lambda=\mu=0$. Cuidado: la <b>recíproca</b> de P4 («$f(x),f(y)$ ligados $\Rightarrow x,y$ ligados») es <b>falsa</b> (es justo P5); se ve en E 3.14.</p>
+  <span class="src" data-l="P" data-ref="Contrarrecíproca de U propiedad 4, p. 103; se usa en E Ej. 3.14 C, p. 91">P</span>
+</div>
+
+<h3>¿Cuándo uso cada propiedad?</h3>
+<table>
+  <tr><th>Propiedad</th><th>Se usa para…</th><th>Aparece en</th></tr>
+  <tr><td>P1 $f(0)=0$</td><td><b>Refutar</b> la linealidad ($f(0)\neq0\Rightarrow$ no lineal); nunca para probarla</td><td>E 3.1, 3.3, 3.4 A, 3.6, 3.7, 3.9, 3.11 B, 3.13 A</td></tr>
+  <tr><td>P2 $f(-v)=-f(v)$ y $f(x-y)=f(x)-f(y)$</td><td>Simplificar diferencias; «si $f(x)=f(y)$ entonces $f(x-y)=0$»</td><td>E 3.13</td></tr>
+  <tr><td>P3 combinación lineal</td><td><b>Calcular</b> $f(w)$ conociendo $f$ en otros vectores; probar que las imágenes cumplen una ecuación</td><td>E 3.4, 3.10, 3.11, 3.12; examen (método A)</td></tr>
+  <tr><td>P4 / contrarrecíproca</td><td>«Ligados $\to$ ligados»; «imágenes libres $\Rightarrow$ originales libres»</td><td>E 3.14</td></tr>
+  <tr><td>P5 contraejemplo</td><td>Responder «falso» a «libres $\to$ libres»</td><td>E 3.14 A y B; <a href="#ex-propio-a45">ejemplo propio de tipo examen (c)</a></td></tr>
+</table>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que una aplicación lineal siempre <b>conserva la independencia</b>. Lo que sí es cierto: $f$ lleva <b>todo</b> sistema libre a uno libre $\iff$ $f$ es inyectiva ($\operatorname{Nuc}f=\{0\}$, tema 3.2); si no lo es, unos sistemas libres se conservan y otros no (E 3.14 lo ilustra). Y confundir «imagen de dependientes» (P4, siempre cierto) con su recíproca (falsa).</p>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>La imagen de una combinación lineal: calcular $f(w)$ con pocos datos <span class="src" data-l="U" data-ref="U p. 103 (propiedad 3) y adelanto del Teorema 3.2, p. 114">U p.103 y p.114</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una aplicación lineal es una «máquina» que, por ser tan rígida, queda <b>totalmente determinada</b> por lo que hace a unos pocos vectores: <b>los de una base</b>. Es como un decorado montado sobre unos cuantos postes: si sabes dónde caen los postes y que la tela entre ellos es «elástica y proporcional», sabes dónde cae cualquier punto. Matemáticamente: todo $w$ es $w=a_1e_1+\dots+a_ne_n$ (de forma única, Def. 2.10), y por P3 $f(w)=a_1f(e_1)+\dots+a_nf(e_n)$. Los $a_i$ se calculan en el <b>espacio inicial</b> y se reutilizan <b>tal cual</b> en el final.</p>
+</div>
+
+<div class="box tip"><span class="h">Receta: hallar $f(w)$ conociendo $f(v_1),\dots,f(v_k)$</span>
+  <ol>
+    <li><b>Plantea</b> $w=a_1v_1+\dots+a_kv_k$ con los vectores del <b>espacio inicial</b> cuya imagen conoces; igualando coordenadas sale un sistema para $a_1,\dots,a_k$.</li>
+    <li><b>Resuelve y comprueba</b> la combinación (sustituyendo): ¡es el paso donde más se falla!</li>
+    <li><b>Aplica P3:</b> $f(w)=a_1f(v_1)+\dots+a_kf(v_k)$ con <b>esos mismos</b> coeficientes y las <b>imágenes</b> dadas.</li>
+  </ol>
+  <p><b>Casos.</b> (a) Si los $v_i$ forman una <b>base</b>, la combinación <b>existe y es única</b> (una base es generadora y libre, Def. 2.9-2.10, U p.82-85) y $f(w)$ queda determinada: es el contenido del Teorema 3.2 de U p.114 (§3.3), que solo afirma que la imagen de cualquier vector está determinada por las imágenes de una base. (Que para <i>cualesquiera</i> imágenes de la base exista una aplicación lineal que las tome es cierto, pero U no lo enuncia aquí; es una observación propia.) (b) Si los $v_i$ <b>generan pero son ligados</b>: la combinación existe, <b>no es única</b>, y $f(w)$ solo está bien definida si los datos son <b>compatibles</b> (cualquier combinación debe dar el mismo resultado; ver «Datos incompatibles» abajo). (c) Si no generan, puede no haber combinación y entonces los datos no determinan $f(w)$.</p>
+  <span class="src" data-l="U" data-ref="U propiedad 3 (p. 103); Teorema 3.2: la imagen de cualquier vector está determinada por las imágenes de una base (adelanto, §3.3.2, p. 114)">U p.103 y p.114</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo con la base canónica</span>
+  <p>$f:\mathbb R^2\to\mathbb R^2$ lineal con $f(1,0)=(2,1)$ y $f(0,1)=(-1,3)$. Calcula $f(4,-3)$.</p>
+  <ol class="steps">
+    <li>$(4,-3)=4(1,0)-3(0,1)$ (las coordenadas en la base canónica son las componentes).</li>
+    <li>Por P3: $f(4,-3)=4f(1,0)-3f(0,1)=4(2,1)-3(-1,3)=(8,4)+(3,-9)=(11,-5)$.</li>
+    <li>En general, $f(a,b)=a(2,1)+b(-1,3)=(2a-b,\ a+3b)$: <b>las imágenes de la base canónica son las «columnas» de la fórmula</b> (esto se formaliza en 3.3).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo con una base <i>no</i> canónica</span>
+  <p>$f:\mathbb R^2\to\mathbb R^2$ lineal con $f(1,1)=(3,0)$ y $f(1,-1)=(1,2)$. Calcula $f(5,1)$.</p>
+  <ol class="steps">
+    <li><b>¿Es base $\{(1,1),(1,-1)\}$?</b> $\begin{vmatrix}1&1\cr1&-1\end{vmatrix}=-2\neq0$: son libres y, siendo 2 vectores en $\mathbb R^2$, base (Teor. 2.6). Así que la combinación existe y es única.</li>
+    <li><b>Coordenadas de $(5,1)$.</b> $a(1,1)+b(1,-1)=(5,1)$ da
+      $$\begin{aligned}a+b&=5\cr a-b&=1\end{aligned}\quad\Rightarrow\quad a=3,\ b=2.$$
+      Comprobación: $3(1,1)+2(1,-1)=(5,1)$ ✓.</li>
+    <li><b>P3 con esos coeficientes:</b> $f(5,1)=3f(1,1)+2f(1,-1)=3(3,0)+2(1,2)=(9,0)+(2,4)=(11,4)$.</li>
+  </ol>
+  <p><b>Error típico:</b> usar las componentes $(5,1)$ como coeficientes: $5f(1,1)+1\cdot f(1,-1)$ <b>está mal</b> (eso sería si la base fuera la canónica). Primero hay que pasar a coordenadas <b>en la base dada</b>.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box warn"><span class="h">Datos incompatibles: no se pueden dar imágenes libremente sobre vectores ligados</span>
+  <p>¿Existe una aplicación lineal $f:\mathbb R^2\to\mathbb R^2$ con $f(1,2)=(1,0)$ y $f(2,4)=(3,1)$? <b>No.</b> Como $(2,4)=2(1,2)$ son ligados, por P3 tendría que ser $f(2,4)=2f(1,2)=(2,0)\neq(3,1)$. Las imágenes solo se pueden dar <b>libremente</b> sobre los vectores de una <b>base</b> (o de un sistema libre); sobre vectores ligados, la linealidad las fija (P3, P4).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<h3>Imagen de un sistema libre o ligado</h3>
+
+<div class="box ex"><span class="h">Los ligados conservan <i>la misma relación</i></span>
+  <p>$g:\mathbb R^3\to\mathbb R^3$, $g(x,y,z)=(x+y,\ 2x+2y,\ z)$ (lineal: sin términos independientes). El sistema $S=\{a,b,c\}$ con $a=(1,0,0)$, $b=(0,1,0)$, $c=(1,1,0)$ es <b>ligado</b>: $c=a+b$, es decir $a+b-c=0$. Sus imágenes son $g(a)=(1,2,0)$, $g(b)=(1,2,0)$, $g(c)=(2,4,0)$, y se cumple <b>la misma relación</b>: $g(a)+g(b)-g(c)=(1,2,0)+(1,2,0)-(2,4,0)=0$. Es P4: la relación se conserva con los mismos coeficientes, así que sigue siendo ligado.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; ilustra U propiedad 4, p. 103">P</span>
+</div>
+
+<div class="box ex"><span class="h">Los libres pueden perder la independencia</span>
+  <p>Con el mismo $g$: $\{a,b\}=\{(1,0,0),(0,1,0)\}$ es <b>libre</b>, pero $\{g(a),g(b)\}=\{(1,2,0),(1,2,0)\}$ es ligado (son iguales). La aplicación «aplasta» todo el plano $z=0$ sobre una recta (U Ej. 3.6 hace lo mismo con $f(x_1,x_2)=x_1$: $\{(2,1),(1,3)\}\mapsto\{2,1\}$). Es P5.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio; ilustra U propiedad 5 y Ejemplo 3.6, p. 103-104">P</span>
+</div>
+
+<table>
+  <tr><th>Pregunta</th><th>Respuesta</th><th>Propiedad</th></tr>
+  <tr><td>Originales ligados $\Rightarrow$ imágenes…</td><td>ligadas (siempre)</td><td>P4</td></tr>
+  <tr><td>Originales libres $\Rightarrow$ imágenes…</td><td>pueden ser ligadas (no siempre libres)</td><td>P5</td></tr>
+  <tr><td>Imágenes libres $\Rightarrow$ originales…</td><td>libres (siempre)</td><td>contrarrecíproca de P4</td></tr>
+  <tr><td>Imágenes ligadas $\Rightarrow$ originales…</td><td>pueden ser libres (no siempre ligados)</td><td>P5</td></tr>
+</table>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="ejercicios"><span class="n">5</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §3.1, Ejercicios 3.1-3.14, p. 79-91">E p.79-91</span></h2>
+
+<p>Los catorce ejercicios de E para esta sección (3.1–3.14; el 3.15, p.93, ya es de §3.2-3.3). Cada uno enseña un método reutilizable (recuadro «Receta»). Orden de estudio sugerido, de fácil a difícil: <b>3.2 → 3.8 → 3.1 → 3.3 → 3.7 → 3.9 → 3.4 → 3.5 → 3.6 → 3.13 → 3.10 → 3.11 → 3.12 → 3.14</b>. Aquí se presentan en el orden del libro; las soluciones están plegadas, pulsa «Mostrar soluciones» o el ejercicio. Todos los cálculos están comprobados con sympy.</p>
+
+<details class="sol" id="ej3-1"><summary>Ejercicio 3.1 — $f(x_1,x_2)=x_1-x_2+1$: imágenes, ¿lineal?, ¿endomorfismo? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.1, p. 80">E p.80</span></summary>
+  <p class="enun">Si $f:\mathbb R^2\to\mathbb R$ es la aplicación definida por $f(x_1,x_2)=x_1-x_2+1$, se pide: A) Calcular las imágenes de algunos vectores de $\mathbb R^2$. B) Comprobar si la aplicación dada, $f$, es lineal. C) Justificar si $f$ es un endomorfismo.</p>
+  <ol class="steps">
+    <li><b>A) Imágenes.</b> Se sustituye en $x_1-x_2+1$: $f(5,2)=4$; $f(0,0)=1$; $f(-3,-2)=-3+2+1=0$; $f(4,-2)=4+2+1=7$; $f(-2,1)=-2-1+1=-2$; $f(-7,-3)=-7+3+1=-3$.</li>
+    <li><b>B) Atajo con el neutro.</b> Toda aplicación lineal cumple $f(0)=0$ (P1). Aquí $f(0,0)=1\neq0$, luego <b>$f$ no es lineal</b> (Ej. U 3.7: basta $f(0)\neq0$).</li>
+    <li><b>B) Por la definición</b> (lo que hace E). Con $x=(x_1,x_2)$, $y=(y_1,y_2)$:
+      $$\begin{aligned}f(x+\lambda y)&=x_1+\lambda y_1\cr&\quad-x_2-\lambda y_2+1,\cr f(x)+\lambda f(y)&=(x_1-x_2+1)\cr&\quad+\lambda(y_1-y_2+1)\cr&=x_1-x_2+1\cr&\quad+\lambda y_1-\lambda y_2+\lambda.\end{aligned}$$
+      La diferencia es $\lambda$, que no es $0$ si $\lambda\neq0$. <i>Omisión de E:</i> para concluir hay que decir que la igualdad falla para algún caso concreto, p. ej. $x=y=(0,0)$, $\lambda=1$: $f(0,0)=1$ pero $f(0,0)+1\cdot f(0,0)=2$. (La definición exige la igualdad <b>para todos</b>; un caso que falle basta.)</li>
+    <li><b>C)</b> Endomorfismo = lineal <b>y</b> espacio inicial = final (E p.80). Aquí fallan las dos: no es lineal y $\mathbb R^2\neq\mathbb R$. No es endomorfismo.</li>
+  </ol>
+  <p><b>Resultado:</b> B) no lineal; C) no endomorfismo.</p>
+  <p><b>Nota sobre el libro.</b> El resultado coincide; en B concluye sin indicar el caso concreto y en el texto digital el «$\neq$» se pierde.</p>
+  <div class="recipe"><b>Receta:</b> antes de nada calcula $f(0)$: si no es el vector nulo, «no es lineal» en una línea. Si $f(0)=0$ el atajo <b>no decide</b> y hay que ir a la definición.</div>
+  <p><b>Error típico:</b> pensar que es lineal «porque es de grado 1»; el $+1$ la hace afín. Y al revés, deducir «es lineal» de $f(0)=0$.</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · P1, U p.103 · Ej. U 3.4 y 3.7, U p.104</p>
+</details>
+
+<details class="sol" id="ej3-2"><summary>Ejercicio 3.2 — $f(x_1,x_2)=(2x_1,\,3x_1+x_2,\,x_1+x_2)$: describir, definición simbólica, lineal, endomorfismo <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.2, p. 81">E p.81</span></summary>
+  <p class="enun">Si $f:\mathbb R^2\to\mathbb R^3$ es la aplicación definida por $f(x_1,x_2)=(2x_1,3x_1+x_2,x_1+x_2)$, se pide: A) Describir en qué consiste la aplicación dada. B) Escribir con lenguaje simbólico la definición de aplicación lineal entre los espacios vectoriales $V$ y $W$. C) Comprobar si la aplicación dada, $f$, es lineal. D) Justificar si $f$ es un endomorfismo.</p>
+  <ol class="steps">
+    <li><b>A) Leer la aplicación.</b> El espacio inicial es $\mathbb R^2$ (pares) y el final $\mathbb R^3$ (ternas). A cada par $(x_1,x_2)$ le asocia la terna cuya 1.ª componente es el doble de $x_1$, la 2.ª es $3x_1+x_2$ y la 3.ª es $x_1+x_2$. Por ejemplo $f(1,0)=(2,3,1)$ y $f(0,1)=(0,1,1)$. Es una <b>aplicación</b> porque cada par tiene una única imagen (U p.103).</li>
+    <li><b>B) Definición simbólica.</b> $f:V\to W$ es lineal si
+      $$f(x+\lambda y)=f(x)+\lambda f(y)\qquad\forall x,y\in V,\ \forall\lambda\in\mathbb R$$
+      (Def. 3.1, U p.101), o, por separado, $f(x+y)=f(x)+f(y)$ y $f(\lambda x)=\lambda f(x)$.</li>
+    <li><b>C) Vectores genéricos.</b> $x=(x_1,x_2)$, $y=(y_1,y_2)$, $\lambda\in\mathbb R$; $x+\lambda y=(x_1+\lambda y_1,\ x_2+\lambda y_2)$.</li>
+    <li><b>Primer miembro</b> (se aplica la fórmula a las componentes de $x+\lambda y$):
+      $$f(x+\lambda y)=\begin{pmatrix}2(x_1+\lambda y_1)\cr3(x_1+\lambda y_1)+(x_2+\lambda y_2)\cr(x_1+\lambda y_1)+(x_2+\lambda y_2)\end{pmatrix}.$$</li>
+    <li><b>Segundo miembro:</b>
+      $$\begin{gathered}f(x)+\lambda f(y)=\cr\begin{pmatrix}2x_1\cr3x_1+x_2\cr{}x_1+x_2\end{pmatrix}\cr+\lambda\begin{pmatrix}2y_1\cr3y_1+y_2\cr{}y_1+y_2\end{pmatrix}\cr=\cr\begin{pmatrix}2x_1+2\lambda y_1\cr3x_1+x_2+3\lambda y_1+\lambda y_2\cr{}x_1+x_2+\lambda y_1+\lambda y_2\end{pmatrix}.\end{gathered}$$
+      Al desarrollar los paréntesis del primer miembro (propiedad distributiva) sale <b>exactamente</b> lo mismo componente a componente. Por la Def. 3.1, <b>$f$ es lineal</b>. (Técnica del Ej. U 3.2: desarrollar por separado los dos miembros.)</li>
+    <li><b>Alternativa por separado</b> (como hace E). <i>Suma:</i> $f(x+y)=\big(2(x_1+y_1),\,3(x_1+y_1)+x_2+y_2,\,x_1+y_1+x_2+y_2\big)=f(x)+f(y)$. <i>Escalares:</i> $f(\lambda x)=(2\lambda x_1,\,3\lambda x_1+\lambda x_2,\,\lambda x_1+\lambda x_2)=\lambda f(x)$.</li>
+    <li><b>D)</b> $f$ es lineal, pero el espacio inicial $\mathbb R^2$ no coincide con el final $\mathbb R^3$: <b>no es endomorfismo</b>.</li>
+  </ol>
+  <p><b>Resultado:</b> $f$ es lineal y no es endomorfismo.</p>
+  <p><b>Nota sobre el libro.</b> En C, E escribe la imagen de $x+y$ con <b>cuatro</b> componentes (la tercera repetida): errata tipográfica; debe tener tres.</p>
+  <div class="recipe"><b>Receta:</b> ¿es lineal? Escribe $x+\lambda y$ en componentes, calcula $f(x+\lambda y)$ y $f(x)+\lambda f(y)$ <b>por separado</b>, desarrolla y compara.</div>
+  <p><b>Error típico:</b> escribir directamente $f(x+\lambda y)=f(x)+\lambda f(y)$ como primer paso, y confundir «lineal» con «endomorfismo».</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · Ej. U 3.2, U p.102</p>
+</details>
+
+<details class="sol" id="ej3-3"><summary>Ejercicio 3.3 — $f(x_1,x_2,x_3,x_4)=(x_1,1,x_3,1)$ no es endomorfismo <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.3, p. 83">E p.83</span></summary>
+  <p class="enun">Compruébese que no es endomorfismo la aplicación $f(x_1,x_2,x_3,x_4)=(x_1,1,x_3,1)$.</p>
+  <ol class="steps">
+    <li><b>Espacios.</b> Se sobreentiende $f:\mathbb R^4\to\mathbb R^4$ (el enunciado no lo dice). Como coinciden, la única forma de que no sea endomorfismo es que <b>no sea lineal</b>.</li>
+    <li><b>Atajo.</b> $f(0,0,0,0)=(0,1,0,1)\neq(0,0,0,0)$. Por P1 una aplicación lineal lleva el neutro al neutro: $f$ <b>no es lineal</b> (Ej. U 3.7).</li>
+    <li><b>Por la definición</b> (como E):
+      $$\begin{gathered}f(x+\lambda y)=\cr\begin{pmatrix}x_1+\lambda y_1\cr1\cr{}x_3+\lambda y_3\cr1\end{pmatrix},\cr{}f(x)+\lambda f(y)=\cr\begin{pmatrix}x_1+\lambda y_1\cr1+\lambda\cr{}x_3+\lambda y_3\cr1+\lambda\end{pmatrix}.\end{gathered}$$
+      Las componentes 2.ª y 4.ª difieren en $\lambda$; con $\lambda=1$ no coinciden.</li>
+    <li><b>Conclusión.</b> Al no ser lineal, no es endomorfismo.</li>
+  </ol>
+  <p><b>Resultado:</b> $f$ no es lineal, luego no es endomorfismo.</p>
+  <p><b>Nota sobre el libro.</b> El enunciado no indica los espacios y la solución del libro tiene un paréntesis de más («$1))$»), errata tipográfica. Además se pierde un «$\neq$»: la frase que describe lo que no se verifica, «$f(x)+\lambda f(y)=f(x+\lambda y)$», debe leerse con $\neq$.</p>
+  <div class="recipe"><b>Receta:</b> «no es endomorfismo» se demuestra viendo que falla <b>una</b> de las dos condiciones: la linealidad o $V=W$.</div>
+  <p><b>Error típico:</b> creer que como $x_2$ y $x_4$ «desaparecen» es una proyección lineal: las componentes constantes $1$ la estropean.</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · P1, U p.103 · Ej. U 3.7, U p.104</p>
+</details>
+
+<details class="sol" id="ej3-4"><summary>Ejercicio 3.4 — $f(0)=0$ y qué igualdades con $5f(3,2)$ son ciertas <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.4, p. 83">E p.83</span></summary>
+  <p class="enun">Siendo $f$ cualquier aplicación lineal de $\mathbb R^2$ en $\mathbb R^3$, se pide: A) Demostrar que $f(0,0)=(0,0,0)$. B) Comprobar si es cierta alguna de las igualdades: $5f(3,2)=f(15,2)$; $5f(3,2)=f(3,10)$; $5f(3,2)=f(15,10)$.</p>
+  <ol class="steps">
+    <li><b>A) Idea.</b> Solo sabemos que $f$ es lineal (no su fórmula), así que hay que usar la definición. Truco: el neutro es suma de sí mismo, $(0,0)=(0,0)+(0,0)$.</li>
+    <li><b>Aplicar la linealidad</b> ($\lambda=1$): $f(0,0)=f\big((0,0)+(0,0)\big)=f(0,0)+f(0,0)$.</li>
+    <li><b>Despejar.</b> Sumando a ambos lados el opuesto $-f(0,0)\in\mathbb R^3$:
+      $$f(0,0)-f(0,0)=f(0,0)+f(0,0)-f(0,0)\ \Rightarrow\ (0,0,0)=f(0,0).$$
+      (Es la demostración del Ej. U 3.4.) <i>Alternativa:</i> $f(0,0)=f(0\cdot(1,1))=0\cdot f(1,1)=(0,0,0)$.</li>
+    <li><b>B) Qué dice la linealidad.</b> $f(\lambda y)=\lambda f(y)$, así que $5f(3,2)=f\big(5\cdot(3,2)\big)=f(15,10)$: <b>la tercera igualdad es siempre cierta</b>.</li>
+    <li><b>Las otras dos.</b> $5(3,2)=(15,10)$ es distinto de $(15,2)$ y de $(3,10)$; la linealidad no obliga a que $f(15,2)$ o $f(3,10)$ valgan $5f(3,2)$. No son ciertas <b>en general</b> (el Ej. 3.5 da un $f$ concreto en que fallan). Matiz: para alguna $f$ particular (la nula) podrían cumplirse.</li>
+  </ol>
+  <p><b>Resultado:</b> $f(0,0)=(0,0,0)$; solo $5f(3,2)=f(15,10)$ es cierta en general.</p>
+  <div class="recipe"><b>Receta:</b> un escalar «sale fuera» multiplicando <b>todas</b> las componentes del vector: $\lambda f(a,b)=f(\lambda a,\lambda b)$, nunca $f(\lambda a,b)$.</div>
+  <p><b>Error típico:</b> multiplicar por el escalar solo una componente del vector original, como si $f$ fuera «lineal en cada variable por separado».</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · P1, U p.103 · Ej. U 3.4, U p.104 · opuesto (S3), U p.58</p>
+</details>
+
+<details class="sol" id="ej3-5"><summary>Ejercicio 3.5 — comprobar el 3.4 con la aplicación del 3.2 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.5, p. 84">E p.84</span></summary>
+  <p class="enun">Si $f$ es la aplicación lineal definida en el Ejercicio 3.2, se pide: comprobar que se verifican las respuestas dadas en el Ejercicio 3.4.</p>
+  <p>$f(x_1,x_2)=(2x_1,\,3x_1+x_2,\,x_1+x_2)$, lineal por el Ejercicio 3.2.</p>
+  <ol class="steps">
+    <li><b>(A)</b> $f(0,0)=(0,0,0)$ ✓ (concuerda con P1).</li>
+    <li><b>(B)</b> $f(3,2)=(6,\ 9+2,\ 3+2)=(6,11,5)$, luego $5f(3,2)=(30,55,25)$.</li>
+    <li>$f(15,2)=(30,\ 45+2,\ 17)=(30,47,17)\neq(30,55,25)$.</li>
+    <li>$f(3,10)=(6,\ 9+10,\ 13)=(6,19,13)\neq(30,55,25)$.</li>
+    <li>$f(15,10)=(30,\ 45+10,\ 25)=(30,55,25)=5f(3,2)$ ✓. Solo la tercera, como se predijo.</li>
+  </ol>
+  <p><b>Resultado:</b> se confirma lo del Ej. 3.4.</p>
+  <p><b>Nota sobre el libro.</b> En el texto digital de E los «$\neq$» de los pasos 3 y 4 aparecen como «$=$» (símbolo perdido); la frase del libro («No es cierto») confirma que son desigualdades.</p>
+  <div class="recipe"><b>Receta:</b> para comprobar una propiedad general en un caso concreto, calcula los dos miembros por separado con la fórmula y compáralos componente a componente.</div>
+  <p><b>Error típico:</b> un solo caso numérico que cumple la igualdad no demuestra linealidad: un ejemplo <b>confirma</b>, solo un contraejemplo <b>refuta</b>.</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · P1, U p.103</p>
+</details>
+
+<details class="sol" id="ej3-6"><summary>Ejercicio 3.6 — verdadero/falso con la aplicación no lineal del 3.3 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.6, p. 84">E p.84</span></summary>
+  <p class="enun">Si $f$ es la aplicación del Ejercicio 3.3, se pide responder verdadero o falso a las siguientes cuestiones: A) Se tiene que verificar $f(0,0,0,0)=(0,0,0,0)$. B) Se tiene que verificar $f(5(2,3,1,0))=5f(2,3,1,0)$. C) Se tiene que verificar $f(2,3,1,0)=f(1,2,1,0)+f(1,1,0,0)$.</p>
+  <p>Aquí $f(x_1,x_2,x_3,x_4)=(x_1,1,x_3,1)$, que <b>no es lineal</b> (Ej. 3.3). Por tanto ninguna propiedad «tiene que verificarse»: se comprueba calculando.</p>
+  <ol class="steps">
+    <li><b>(A) Falsa.</b> $f(0,0,0,0)=(0,1,0,1)\neq(0,0,0,0)$.</li>
+    <li><b>(B) Falsa.</b> $f(5(2,3,1,0))=f(10,15,5,0)=(10,1,5,1)$, mientras que $5f(2,3,1,0)=5(2,1,1,1)=(10,5,5,5)$. Distintos.</li>
+    <li><b>(C) Falsa.</b> $(2,3,1,0)=(1,2,1,0)+(1,1,0,0)$, pero $f(2,3,1,0)=(2,1,1,1)$ y $f(1,2,1,0)+f(1,1,0,0)=(1,1,1,1)+(1,1,0,1)=(2,2,1,2)$. Distintos.</li>
+    <li><b>Lectura.</b> Son las tres propiedades de una lineal (P1, conserva escalares, conserva sumas) y las tres fallan: cualquiera de ellas, por sí sola, demuestra que $f$ no es lineal.</li>
+  </ol>
+  <p><b>Resultado:</b> A, B y C son falsas.</p>
+  <p><b>Nota sobre el libro.</b> Mismo problema de «$\neq$» perdido en la extracción del texto.</p>
+  <div class="recipe"><b>Receta:</b> si $f$ no es lineal, ninguna propiedad de U p.103 está garantizada: hay que calcular con la fórmula.</div>
+  <p><b>Error típico:</b> responder «verdadero» por reflejo porque «las aplicaciones cumplen $f(0)=0$»: eso solo vale para las <b>lineales</b>.</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · P1, U p.103</p>
+</details>
+
+<details class="sol" id="ej3-7"><summary>Ejercicio 3.7 — $f(x)=(x,1,-x)$: suma, escalares, neutro, lineal <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.7, p. 85">E p.85</span></summary>
+  <p class="enun">Si $f:\mathbb R\to\mathbb R^3$ es la aplicación $f(x)=(x,1,-x)$, se pide comprobar si $f$ verifica: A) Conserva la suma de vectores. B) Conserva el producto de escalar por vector. C) Transforma el neutro de $(\mathbb R,+)$ en el neutro de $(\mathbb R^3,+)$. D) Es una aplicación lineal. E) Ninguna de las anteriores.</p>
+  <ol class="steps">
+    <li><b>(A) Suma.</b> $f(x+y)=(x+y,\,1,\,-x-y)$, pero $f(x)+f(y)=(x,1,-x)+(y,1,-y)=(x+y,\,2,\,-x-y)$. La 2.ª componente es $1$ frente a $2$: <b>no conserva la suma</b> (para ningún par $x,y$).</li>
+    <li><b>(B) Escalares.</b> $f(\lambda x)=(\lambda x,\,1,\,-\lambda x)$ y $\lambda f(x)=(\lambda x,\,\lambda,\,-\lambda x)$. Coinciden solo si $\lambda=1$; <b>si $\lambda\neq1$</b> (p. ej. $\lambda=2$) son distintos: <b>no conserva el producto</b>.</li>
+    <li><b>(C) Neutro.</b> $f(0)=(0,1,0)\neq(0,0,0)$: <b>no</b> lleva el neutro al neutro.</li>
+    <li><b>(D)</b> Una aplicación lineal cumple las tres anteriores (suma: $\lambda=1$ en la definición; neutro: P1). Como fallan, <b>no es lineal</b>; bastaría una cualquiera (por ejemplo C, Ej. U 3.7).</li>
+    <li><b>(E)</b> Como A, B, C y D son falsas, <b>la correcta es E</b>.</li>
+  </ol>
+  <p><b>Resultado:</b> la respuesta es E.</p>
+  <p><b>Nota sobre el libro.</b> En el texto digital la frase «Si $\lambda=1\Rightarrow\lambda f(x)=f(\lambda x)$» contradice lo que sigue: es «si $\lambda\neq1$»; el «$\neq$» se perdió, igual que en A y C.</p>
+  <div class="recipe"><b>Receta:</b> en los test de «¿qué verifica $f$?», comprueba cada propiedad por separado con la fórmula; recuerda que lineal $\Rightarrow$ suma + escalares + neutro, así que fallar una basta para negar «lineal».</div>
+  <p><b>Error típico:</b> comprobar el producto por escalares solo con $\lambda=1$ y concluir que sí se conserva: hay que mirar <b>todos</b> los $\lambda$.</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101 · conserva suma y escalares, U p.103 · P1, U p.103 · Ej. U 3.7, U p.104</p>
+</details>
+
+<details class="sol" id="ej3-8"><summary>Ejercicio 3.8 — $f(x)=(x,0,-x)$ es lineal <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.8, p. 86">E p.86</span></summary>
+  <p class="enun">Compruébese que la aplicación $f:\mathbb R\to\mathbb R^3$, tal que $f(x)=(x,0,-x)$, es lineal.</p>
+  <ol class="steps">
+    <li><b>Datos genéricos.</b> $x,y\in\mathbb R$ (los vectores del espacio inicial son números reales) y $\lambda\in\mathbb R$.</li>
+    <li><b>Primer miembro.</b> $f(x+\lambda y)=\big(x+\lambda y,\ 0,\ -(x+\lambda y)\big)=(x+\lambda y,\ 0,\ -x-\lambda y)$.</li>
+    <li><b>Segundo miembro.</b>
+      $$\begin{gathered}f(x)+\lambda f(y)=(x,0,-x)\cr+\lambda(y,0,-y)\cr=(x+\lambda y,\ 0+\lambda\cdot0,\cr-x-\lambda y)\cr=(x+\lambda y,\ 0,\ -x-\lambda y).\end{gathered}$$
+      Clave: la 2.ª componente es $0+\lambda\cdot0=0$.</li>
+    <li><b>Comparación.</b> Coinciden para todo $x,y,\lambda$: por la Def. 3.1, <b>$f$ es lineal</b>.</li>
+  </ol>
+  <p><b>Resultado:</b> $f$ es lineal.</p>
+  <p><b>Nota sobre el libro.</b> E dice «es evidente» y omite el paso 3; en el examen hay que escribirlo.</p>
+  <div class="recipe"><b>Receta:</b> un $0$ fijo en una componente no estropea la linealidad ($\lambda\cdot0=0$); una constante <b>no nula</b> sí (compárese con el Ej. 3.7).</div>
+  <p><b>Error típico:</b> despachar con «es evidente»: en el examen «los resultados que no estén debidamente justificados no podrán ser valorados».</p>
+  <p><b>Teoría:</b> Def. 3.1, U p.101</p>
+</details>
+
+<details class="sol" id="ej3-9"><summary>Ejercicio 3.9 — verdadero/falso «sin hacer operaciones» (traslación, endomorfismo, $f(0)$) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.9, p. 86">E p.86</span></summary>
+  <p class="enun">Sin hacer operaciones, se pide responder verdadero o falso a las siguientes afirmaciones: A) La aplicación $f:\mathbb R^2\to\mathbb R^2$, tal que $f(x_1,x_2)=(x_1+2,x_2)$, es lineal. B) $f$ es un endomorfismo de $\mathbb R^2$. C) En algún endomorfismo de $\mathbb R^2$ puede ocurrir $f(0)\neq0$. D) Con MAXIMA se puede saber si una aplicación dada es lineal.</p>
+  <ol class="steps">
+    <li><b>(A) Falsa.</b> $f(0,0)=(2,0)\neq(0,0)$; por P1 y el Ej. U 3.7, $f$ no es lineal. Es una <b>traslación</b> de vector $(2,0)$: mueve el origen.</li>
+    <li><b>(B) Falsa.</b> Aunque $V=W=\mathbb R^2$, un endomorfismo debe ser lineal, y por A no lo es.</li>
+    <li><b>(C) Falsa.</b> Un endomorfismo es, en particular, lineal, y <b>toda</b> aplicación lineal cumple $f(0)=0$ (P1). En ningún endomorfismo ocurre $f(0)\neq0$.</li>
+    <li><b>(D)</b> Trata de Maxima, que <b>no entra en examen</b>: E la da por cierta (encadenando varias instrucciones) y U p.104 dice al margen que Maxima «no tiene ninguna instrucción que determine si una aplicación es lineal»; no se contradicen (no hay <i>una</i> instrucción específica). No se desarrolla.</li>
+  </ol>
+  <p><b>Resultado:</b> A falsa, B falsa, C falsa (D, fuera de examen).</p>
+  <p><b>Nota sobre el libro.</b> En el texto digital A y C pierden el «$\neq$» (aparecen como «$f(0,0)=(2,0)=(0,0)$» y «$f(0)=(0)$»).</p>
+  <div class="recipe"><b>Receta:</b> «sin hacer operaciones» = usa las propiedades: $f(0)\neq0\Rightarrow$ no lineal $\Rightarrow$ no endomorfismo; y en un endomorfismo siempre $f(0)=0$.</div>
+  <p><b>Error típico:</b> pensar que una traslación $x\mapsto x+c$ es lineal porque «conserva la forma» de las figuras: no conserva el origen.</p>
+  <p><b>Teoría:</b> P1, U p.103 · Ej. U 3.7 y nota de Maxima, U p.104</p>
+</details>
+
+<details class="sol" id="ej3-10"><summary>Ejercicio 3.10 — $f$ fijada por $f(1,0)$ y $f(0,1)$: imágenes y plano que las contiene <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.10, p. 87">E p.87</span></summary>
+  <p class="enun">Si $f:\mathbb R^2\to\mathbb R^3$ es una aplicación lineal que verifica $f(1,0)=(1,2,0)$ y $f(0,1)=(0,3,1)$, se pide comprobar si es cierto que: A) $f(5,7)=(5,31,7)$. B) $f(1,1)=(1,0,1)$. C) Las imágenes de todos los vectores de $\mathbb R^2$ están en el plano de ecuación $2x_1-x_2+3x_3=0$. D) Ninguna de las anteriores.</p>
+  <ol class="steps">
+    <li><b>Base conocida.</b> $\{(1,0),(0,1)\}$ es la base canónica de $\mathbb R^2$ y conocemos las imágenes de sus dos vectores.</li>
+    <li><b>(A)</b> $(5,7)=5(1,0)+7(0,1)$. Por P3:
+      $$f(5,7)=5(1,2,0)+7(0,3,1)=(5,\ 10+21,\ 7)=(5,31,7).\quad\textbf{Cierta.}$$</li>
+    <li><b>(B)</b> $(1,1)=1(1,0)+1(0,1)$, luego $f(1,1)=(1,2,0)+(0,3,1)=(1,5,1)\neq(1,0,1)$. <b>Falsa.</b></li>
+    <li><b>(C) Fórmula general.</b> Para $(a,b)\in\mathbb R^2$: $f(a,b)=a(1,2,0)+b(0,3,1)=(a,\ 2a+3b,\ b)$. Llamando $(x_1,x_2,x_3)$ a la imagen: $x_1=a$, $x_2=2a+3b$, $x_3=b$.</li>
+    <li><b>Sustituir en el plano:</b>
+      $$2x_1-x_2+3x_3=2a-(2a+3b)+3b=0\quad\text{para todos }a,b.$$
+      Luego toda imagen está en el plano: <b>Cierta.</b></li>
+    <li><b>(D) Falsa</b>, porque A y C son ciertas.</li>
+  </ol>
+  <p><b>Resultado:</b> son ciertas A y C.</p>
+  <div class="recipe"><b>Receta:</b> conocidas las imágenes de la base canónica, $f(a,b)=a\,f(1,0)+b\,f(0,1)$: escribe esa fórmula general y úsala para todo (imágenes concretas y ecuaciones que cumplen las imágenes).</div>
+  <p><b>Error típico:</b> en C, comprobar solo con uno o dos vectores: hay que verificarlo para el vector genérico $(a,b)$. (C es un anticipo de la <i>imagen</i>, tema 3.2.)</p>
+  <p><b>Teoría:</b> P3, U p.103 · base canónica y coordenadas, U p.82-85 (Def. 2.9, 2.10) · Teor. 3.2, U p.114</p>
+</details>
+
+<details class="sol" id="ej3-11"><summary>Ejercicio 3.11 — endomorfismo de $\mathbb R^2$ dado en una base no canónica: $f(3,-1)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.11, p. 88">E p.88</span></summary>
+  <p class="enun">Si $f$ es un endomorfismo de $\mathbb R^2$, tal que $f(1,1)=(1,4)$ y $f(2,-1)=(-2,3)$, se pide: A) Calcular la imagen de $(3,-1)$. B) Comprobar que $f(0,0)=(0,0)$.</p>
+  <ol class="steps">
+    <li><b>¿Es $B=\{(1,1),(2,-1)\}$ base de $\mathbb R^2$?</b> (E lo afirma sin justificar.) Son 2 vectores en un espacio de dimensión 2: basta que sean libres (Teor. 2.6). Si $\alpha(1,1)+\beta(2,-1)=(0,0)$: $\alpha+2\beta=0$, $\alpha-\beta=0\Rightarrow\beta=0,\ \alpha=0$. Libres, luego base. Equivalente: $\begin{vmatrix}1&2\cr1&-1\end{vmatrix}=-3\neq0$.</li>
+    <li><b>Coordenadas de $(3,-1)$ en $B$.</b> Buscamos $\alpha,\beta$ con $(3,-1)=\alpha(1,1)+\beta(2,-1)$:
+      $$\begin{aligned}\alpha+2\beta&=3\cr\alpha-\beta&=-1\end{aligned}$$
+      Restando la 2.ª a la 1.ª: $3\beta=4\Rightarrow\beta=\tfrac43$; entonces $\alpha=\beta-1=\tfrac13$. Comprobación: $\tfrac13+\tfrac83=3$ ✓ y $\tfrac13-\tfrac43=-1$ ✓.</li>
+    <li><b>Aplicar P3:</b>
+      $$\begin{aligned}f(3,-1)&=\tfrac13f(1,1)+\tfrac43f(2,-1)\cr&=\tfrac13(1,4)+\tfrac43(-2,3)\cr&=\left(\tfrac13-\tfrac83,\ \tfrac43+4\right)\cr&=\left(-\tfrac73,\ \tfrac{16}3\right).\end{aligned}$$
+      <i>Comprobación independiente:</i> de la misma forma $f(1,0)=\left(-\tfrac13,\tfrac73\right)$ y $f(0,1)=\left(\tfrac43,\tfrac53\right)$, y $3f(1,0)-f(0,1)=\left(-\tfrac73,\ \tfrac{16}3\right)$ ✓.</li>
+    <li><b>B)</b> $f$ es lineal (es endomorfismo), luego por P1 $f(0,0)=(0,0)$. Directamente: $(0,0)=0\cdot(1,1)$, así que $f(0,0)=0\cdot f(1,1)=(0,0)$.</li>
+  </ol>
+  <p><b>Resultado:</b> $f(3,-1)=\left(-\tfrac73,\tfrac{16}3\right)$ y $f(0,0)=(0,0)$.</p>
+  <p><b>Nota sobre el libro.</b> E no justifica que $B$ sea base, y en B usa $f(1,0)$ y $f(0,1)$, que el enunciado no da (vale porque van multiplicados por 0, pero es más limpio usar un vector cuya imagen se conoce).</p>
+  <div class="recipe"><b>Receta:</b> si conoces las imágenes de una base <b>no canónica</b>: (1) comprueba que es base; (2) halla las coordenadas del vector en esa base resolviendo un sistema; (3) $f(v)=\sum(\text{coordenada})\cdot f(\text{vector de la base})$.</div>
+  <p><b>Error típico:</b> usar las componentes $3,-1$ como coeficientes: $3f(1,1)-f(2,-1)$ <b>está mal</b>. Primero hay que pasar a coordenadas en $B$.</p>
+  <p><b>Teoría:</b> P1, P3, U p.103 · independencia, U p.74 · Teor. 2.6, U p.88 · Def. 2.10 (coordenadas), U p.85</p>
+</details>
+
+<details class="sol" id="ej3-12"><summary>Ejercicio 3.12 — $f$ conocida en una base: ¿se conoce todo?, ¿es $\operatorname{Im}f=\mathbb R^3$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.12, p. 89">E p.89</span></summary>
+  <p class="enun">Si $f:\mathbb R^2\to\mathbb R^3$ es una aplicación lineal en la que se conocen las imágenes de los elementos de una base de $\mathbb R^2$, se pide analizar si es correcta alguna de las afirmaciones siguientes: A) Es posible obtener la imagen de cualquier vector de $\mathbb R^2$. B) Cualquier vector de $\mathbb R^3$ tiene un original en $\mathbb R^2$. C) $\operatorname{Im}(f)$ es $\mathbb R^3$. D) Ninguna de las anteriores.</p>
+  <ol class="steps">
+    <li><b>(A) Correcta.</b> Sea $\{e_1,e_2\}$ la base cuyas imágenes conocemos. Todo $v\in\mathbb R^2$ se escribe $v=a_1e_1+a_2e_2$ (la base es generadora; las coordenadas son únicas, Def. 2.9-2.10). Por P3, $f(v)=a_1f(e_1)+a_2f(e_2)$: calculable con los datos. Vale para <b>cualquier</b> base (el Ej. 3.11 lo hace con una no canónica).</li>
+    <li><b>(B) Falsa.</b> Por el paso anterior, toda imagen es combinación lineal de <b>dos</b> vectores $f(e_1),f(e_2)$ de $\mathbb R^3$. El conjunto de esas combinaciones tiene dimensión $\le2$ (Teor. 2.5), y $\mathbb R^3$ tiene dimensión 3: <b>siempre</b> hay vectores de $\mathbb R^3$ sin original. Contraejemplo concreto (el de E): la aplicación nula $f(x_1,x_2)=(0,0,0)$, que es lineal y en la que solo $(0,0,0)$ tiene original.</li>
+    <li><b>(C) Falsa.</b> $\operatorname{Im}(f)=\{w\in\mathbb R^3: w=f(v)\text{ para algún }v\}$ (Def. 3.2, U p.106, tema 3.2). Decir $\operatorname{Im}f=\mathbb R^3$ es lo mismo que B. <i>Matiz que E omite:</i> la afirmación falla <b>para toda</b> $f:\mathbb R^2\to\mathbb R^3$ lineal, no solo para la nula.</li>
+    <li><b>(D) Falsa</b>, porque A es correcta.</li>
+  </ol>
+  <p><b>Resultado:</b> solo A es correcta.</p>
+  <div class="recipe"><b>Receta:</b> una aplicación lineal queda <b>totalmente</b> determinada por las imágenes de una base. La imagen es el conjunto de combinaciones de esas imágenes y no puede tener más dimensión que el espacio inicial.</div>
+  <p><b>Error típico:</b> confundir «conocer $f$ en todo $V$» (A, cierto) con «$f$ llega a todo $W$» (B/C): son cosas distintas.</p>
+  <p><b>Teoría:</b> P3, U p.103 · Def. 2.9-2.10, U p.82-85 · Teor. 2.5, U p.88 · (adelanto) Def. 3.2, U p.106 y Teor. 3.2, U p.114</p>
+</details>
+
+<details class="sol" id="ej3-13"><summary>Ejercicio 3.13 — $f(0)=0$, $f(-x)=-f(x)$, $f(x-y)$ y $f(S)$ subespacio <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.13, p. 90">E p.90</span></summary>
+  <p class="enun">Si $f$ es un endomorfismo de $V$, se pide justificar si son ciertas o falsas las afirmaciones siguientes: A) Es falso que $f(0)=0$, con $0\in V$. B) Es falso que $f(-x)=-f(x)$, con $x\in V$. C) Es falso que $f(x)=f(y)\Rightarrow f(x-y)=0$, con $x,y,0\in V$. D) Si $S$ es subespacio de $V$, entonces $f(S)$ es subespacio de $V$.</p>
+  <p><b>Ojo con la lógica:</b> A, B y C afirman «<b>es falso que</b> …». Si lo de dentro es cierto, la afirmación es <b>falsa</b> (negación de una verdad).</p>
+  <ol class="steps">
+    <li><b>(A) Falsa</b>, porque $f(0)=0$ <b>es cierto</b>: $f(0)=f(0\cdot x)=0\cdot f(x)=0$ (P1).</li>
+    <li><b>(B) Falsa</b>, porque $f(-x)=-f(x)$ <b>es cierto</b>: $f(-x)=f((-1)x)=(-1)f(x)=-f(x)$ (P2). Se usa que $(-1)x$ es el opuesto de $x$: $x+(-1)x=(1+(-1))x=0\cdot x=0$ (E2 y E4, U p.58; $0\cdot x=0$, U p.74).</li>
+    <li><b>(C) Falsa</b>, porque la implicación <b>es cierta</b>: $x-y=x+(-1)y$ y, por la Def. 3.1 con $\lambda=-1$, $f(x-y)=f(x)-f(y)$. Si $f(x)=f(y)$, esto vale $0$.</li>
+    <li><b>(D) Cierta.</b> Por definición $f(S)=\{f(s): s\in S\}$ (el conjunto de las imágenes) y, como $f:V\to V$, $f(S)\subseteq V$. Usamos la caracterización de subespacio (2.2, U p.66): no vacío y cerrado para $w_1+\lambda w_2$.
+      <ul>
+        <li><b>No vacío:</b> $0\in S$ (todo subespacio contiene al neutro), luego $f(0)=0\in f(S)$.</li>
+        <li><b>Cerrado:</b> sean $w_1,w_2\in f(S)$ y $\lambda\in\mathbb R$. Por definición de $f(S)$ existen $x,y\in S$ con $w_1=f(x)$, $w_2=f(y)$. Entonces
+          $$w_1+\lambda w_2=f(x)+\lambda f(y)=f(x+\lambda y),$$
+          y $x+\lambda y\in S$ <b>porque $S$ es subespacio</b>. Luego $w_1+\lambda w_2$ es la imagen de un vector de $S$: está en $f(S)$.</li>
+      </ul>
+      Por tanto $f(S)$ es subespacio.</li>
+  </ol>
+  <p><b>Resultado:</b> A, B y C falsas; D cierta.</p>
+  <p><b>Nota sobre el libro.</b> En D, E escribe solo «$f(x+\lambda y)=f(x)+\lambda f(y)\in f(S)$» sin decir que $x+\lambda y\in S$ ni comprobar que $f(S)\neq\emptyset$.</p>
+  <div class="recipe"><b>Receta:</b> P1, P2 y $f(x-y)=f(x)-f(y)$ salen de la definición eligiendo bien el escalar ($0$, $-1$). Para «$f(S)$ es subespacio»: escribe los vectores de $f(S)$ como $f(x),f(y)$ con $x,y\in S$ y usa que $S$ es cerrado.</div>
+  <p><b>Error típico:</b> contestar «verdadero» a «es falso que $f(0)=0$» por leer solo la fórmula; y, en D, olvidar decir que $x+\lambda y\in S$: es justo ahí donde se usa que $S$ es subespacio.</p>
+  <p><b>Teoría:</b> P1, P2, U p.103 · Def. 2.2 y caracterización (2.2), U p.62 y p.66 · $0\cdot v=0$, U p.74 · (anticipo: imagen de un subespacio, tema 3.2)</p>
+</details>
+
+<details class="sol" id="ej3-14"><summary>Ejercicio 3.14 — proyección $f(x_1,x_2,x_3)=(x_1,x_2)$: ¿se conserva la independencia? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.14, p. 91">E p.91</span></summary>
+  <p class="enun">Si $f$ es la aplicación lineal $f(x_1,x_2,x_3)=(x_1,x_2)$, se pide decir si son ciertas o falsas las implicaciones siguientes: A) $\{x,y\}$ libre $\Rightarrow\{f(x),f(y)\}$ libre. B) $\{f(x),f(y)\}$ ligado $\Rightarrow\{x,y\}$ ligado. C) $\{f(x),f(y)\}$ libre $\Rightarrow\{x,y\}$ libre. D) Ninguna de las anteriores.</p>
+  <p>($f$ es la proyección de $\mathbb R^3$ sobre el plano $x_1x_2$: «olvida» la tercera coordenada.)</p>
+  <ol class="steps">
+    <li><b>(A) Falsa.</b> Contraejemplo: $x=(0,1,0)$, $y=(0,1,1)$. Son libres: $\lambda x+\mu y=(0,\ \lambda+\mu,\ \mu)=0\Rightarrow\mu=0,\ \lambda=0$. Sus imágenes $f(x)=(0,1)$ y $f(y)=(0,1)$ son <b>iguales</b>, luego ligadas ($1\cdot f(x)-1\cdot f(y)=0$). Es P5 (como el Ej. U 3.6).</li>
+    <li><b>(B) Falsa.</b> El mismo ejemplo: $\{f(x),f(y)\}$ ligado y $\{x,y\}$ libre. B es la <b>recíproca</b> de P4, y la recíproca de una implicación cierta no tiene por qué serlo.</li>
+    <li><b>(C) Cierta, para cualquier aplicación lineal.</b> C es la <b>contrarrecíproca</b> de P4 (apartado «La contrarrecíproca de P4» de §3). Prueba directa: supongamos $\{f(x),f(y)\}$ libre y sea $\lambda x+\mu y=0$. Aplicando $f$ y usando la linealidad y P1:
+      $$\lambda f(x)+\mu f(y)=f(\lambda x+\mu y)=f(0)=0.$$
+      Como $\{f(x),f(y)\}$ es libre, $\lambda=\mu=0$: $\{x,y\}$ es libre. (E lo hace con coordenadas; este argumento es más general y no depende de la fórmula de $f$.)</li>
+    <li><b>(D) Falsa</b>, porque C es cierta.</li>
+  </ol>
+  <p><b>Resultado:</b> solo C es cierta.</p>
+  <div class="recipe"><b>Receta:</b> ligado $\to$ ligado siempre (P4) y, equivalente, imágenes libres $\Rightarrow$ originales libres. Pero libre $\to$ libre puede fallar (P5): busca dos vectores que solo difieran en lo que $f$ «olvida».</div>
+  <p><b>Error típico:</b> creer que una aplicación lineal conserva la independencia (solo si $f$ es inyectiva, $\operatorname{Nuc}f=\{0\}$, tema 3.2; si no, unos libres se conservan y otros no, como se ve en A y B), y confundir la recíproca (B) con la contrarrecíproca (C) de P4.</p>
+  <p><b>Teoría:</b> P1, P4, P5, U p.103 · Ej. U 3.5-3.6, U p.104 · Def. 2.5-2.6, U p.73-74</p>
+</details>
+
+<h3>Ejemplos propios, de dificultad creciente</h3>
+
+<details class="sol"><summary>Ejemplo propio 1 (fácil) — ¿lineal o no? $g(x,y)=(x+y,\,2x-y)$ y $h(x,y)=(x+y,\,xy)$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">¿Son lineales $g,h:\mathbb R^2\to\mathbb R^2$, $g(x,y)=(x+y,\ 2x-y)$ y $h(x,y)=(x+y,\ xy)$?</p>
+  <ol class="steps">
+    <li><b>$g$.</b> Con $u=(x,y)$, $v=(x',y')$:
+      $$\begin{gathered}g(u+\lambda v)=\cr\begin{pmatrix}x+y+\lambda(x'+y')\cr2x-y+\lambda(2x'-y')\end{pmatrix},\cr{}g(u)+\lambda g(v)=\cr\begin{pmatrix}x+y\cr2x-y\end{pmatrix}+\lambda\begin{pmatrix}x'+y'\cr2x'-y'\end{pmatrix}\cr=\cr\begin{pmatrix}x+y+\lambda(x'+y')\cr2x-y+\lambda(2x'-y')\end{pmatrix}.\end{gathered}$$
+      Las dos componentes coinciden: <b>lineal</b> (Def. 3.1) y además endomorfismo ($\mathbb R^2\to\mathbb R^2$).</li>
+    <li><b>$h$.</b> $h(0,0)=(0,0)$: el atajo de P1 <b>no decide</b>. Probamos escalares con $\lambda=2$, $u=(1,1)$: $h(2,2)=(4,4)$, pero $2h(1,1)=2(2,1)=(4,2)$. Distintos: <b>no lineal</b>. El culpable es el producto $xy$ (al multiplicar por $\lambda$ sale $\lambda^2xy$).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $f(0)=0$ no basta; con productos o potencias busca un contraejemplo con $\lambda=2$.</div>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 2 (medio) — determinar $f$ por una base no canónica: $f(x,y)$ y $f(2,4)$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">$f:\mathbb R^2\to\mathbb R^3$ es lineal con $f(1,1)=(2,0,2)$ y $f(1,-1)=(0,2,4)$. Halla $f(x,y)$ y $f(2,4)$.</p>
+  <ol class="steps">
+    <li><b>Base.</b> $\begin{vmatrix}1&1\cr1&-1\end{vmatrix}=-2\neq0$: libre y, al ser 2 vectores en $\mathbb R^2$, base (Teor. 2.6).</li>
+    <li><b>Coordenadas.</b> $(x,y)=a(1,1)+b(1,-1)$: $a+b=x$, $a-b=y\Rightarrow a=\tfrac{x+y}2$, $b=\tfrac{x-y}2$.</li>
+    <li><b>P3.</b>
+      $$\begin{aligned}f(x,y)&=\tfrac{x+y}2(2,0,2)\cr&\quad+\tfrac{x-y}2(0,2,4)\cr&=\big(x+y,\ x-y,\cr&\qquad(x+y)+2(x-y)\big)\cr&=(x+y,\ x-y,\ 3x-y).\end{aligned}$$</li>
+    <li><b>Comprobación.</b> $f(1,1)=(2,0,2)$ ✓, $f(1,-1)=(0,2,4)$ ✓. Y $f(2,4)=(6,-2,2)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> coordenadas genéricas $(x,y)$ en la base dada $\Rightarrow$ fórmula completa de $f$.</div>
+</details>
+
+<details class="sol"><summary>Ejemplo propio 3 (tipo examen) — traza, determinante y datos incompatibles <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">(a) ¿Son lineales $t,d:\mathcal M_{2\times2}\to\mathbb R$, $t(A)=a_{11}+a_{22}$ (traza) y $d(A)=\det A$? (b) ¿Existe una aplicación lineal $f:\mathbb R^2\to\mathbb R^2$ con $f(1,2)=(1,0)$ y $f(2,4)=(3,1)$?</p>
+  <ol class="steps">
+    <li><b>(a) Traza: sí.</b> $\mathcal M_{2\times2}$ es espacio vectorial (U p.62). La diagonal de $A+\lambda B$ es $a_{11}+\lambda b_{11}$, $a_{22}+\lambda b_{22}$, luego $t(A+\lambda B)=(a_{11}+a_{22})+\lambda(b_{11}+b_{22})=t(A)+\lambda t(B)$. <b>Lineal.</b></li>
+    <li><b>(a) Determinante: no.</b> $d(0)=0$, así que P1 no decide. Escalares: $d(2I_2)=\begin{vmatrix}2&0\cr0&2\end{vmatrix}=4$, pero $2\,d(I_2)=2$. <b>No lineal</b> (en orden 2, $\det(\lambda A)=\lambda^2\det A$).</li>
+    <li><b>(b) No existe.</b> $(2,4)=2(1,2)$: los dos vectores son ligados. Si $f$ fuera lineal, $f(2,4)=2f(1,2)=(2,0)\neq(3,1)$. Los datos son incompatibles con la linealidad.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> las imágenes solo se pueden elegir libremente sobre una <b>base</b>; sobre vectores ligados la linealidad las fija (P3, P4).</div>
+</details>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="examenes"><span class="n">6</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Preguntas de exámenes de otros años que caen en este tema (los 24 exámenes disponibles han sido revisados). Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>) y se señalan sus omisiones. Se agrupan por método: <b>A</b> (imagen de un vector conocida la de otros: es <b>la pregunta estrella</b>, cae casi todos los años) y <b>B</b> (¿es lineal?). La pregunta de Feb. 2024 (1.ª sem.), p.3 («¿la imagen de todo vector está en un plano?», que se resuelve con la misma P3) se desarrolla en el <a href="tema_3_2_nucleo_imagen.html#ex-feb24-1p3">tema 3.2</a>.</p>
+
+<h3>Método A — escribir el vector como combinación lineal de aquellos cuya imagen se conoce</h3>
+
+<details class="sol" id="ex-feb19b"><summary>Feb. 2019 (tipo B), ejercicio 3 — $f(1,2)=(2,3)$, $f(2,1)=(1,1)$: calcular $f(1,1)$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), ejercicio 3">X Feb. 2019 (B)</span></summary>
+  <p class="enun">Si $f$ es una aplicación lineal tal que $f(1,2)=(2,3)$ y $f(2,1)=(1,1)$, calcular el valor de $f(1,1)$.</p>
+  <ol class="steps">
+    <li><b>Qué sabemos y qué no.</b> Solo conocemos la imagen de dos vectores; no tenemos fórmula de $f$. Lo único utilizable es que $f$ es lineal (Def. 3.1) y su consecuencia P3 (U p.103).</li>
+    <li><b>Combinación lineal.</b> Buscamos $\alpha,\beta$ con $\alpha(1,2)+\beta(2,1)=(1,1)$:
+      $$\begin{aligned}\alpha+2\beta&=1\cr2\alpha+\beta&=1\end{aligned}$$
+      Restando la 2.ª a la 1.ª: $-\alpha+\beta=0\Rightarrow\alpha=\beta$; sustituyendo, $3\alpha=1$, así que $\alpha=\beta=\tfrac13$. Comprobación: $\tfrac13(1,2)+\tfrac13(2,1)=\tfrac13(3,3)=(1,1)$ ✓. (Hay solución porque $\begin{vmatrix}1&2\cr2&1\end{vmatrix}=-3\neq0$: son base de $\mathbb R^2$.)</li>
+    <li><b>Linealidad</b> (P3 con $n=2$):
+      $$\begin{aligned}f(1,1)&=f\!\left(\tfrac13(1,2)+\tfrac13(2,1)\right)\cr&=\tfrac13f(1,2)+\tfrac13f(2,1)\cr&=\tfrac13(2,3)+\tfrac13(1,1)\cr&=\tfrac13(3,4)=\left(1,\tfrac43\right).\end{aligned}$$</li>
+  </ol>
+  <p><b>Resultado:</b> $f(1,1)=\left(1,\tfrac43\right)$.</p>
+  <p><b>Sobre la solución oficial.</b> Correcta, sin errata; solo que no muestra de dónde salen los coeficientes $\tfrac13$.</p>
+  <div class="recipe"><b>Receta (método A):</b> (1) plantear $w=\sum a_iv_i$ con los vectores cuya imagen se conoce y resolver el sistema (probando antes coeficientes sencillos); (2) comprobar la combinación; (3) $f(w)=\sum a_if(v_i)$ (P3). Si los $v_i$ son base, la combinación existe y es única (Def. 2.9-2.10, U p.82-85) y $f(w)$ está determinada (Teor. 3.2, U p.114); si solo generan y son ligados, la combinación no es única y los datos deben ser compatibles.</div>
+  <p><b>Error típico:</b> «sumar los datos» sin más: $f(1,2)+f(2,1)=(3,4)$ es $f(3,3)$, <b>no</b> $f(1,1)$. Otro: creer que hace falta la fórmula de $f$ (o la matriz); no hace falta.</p>
+</details>
+
+<details class="sol" id="ex-feb24b-p3"><summary>Feb. 2024 (2.ª sem.), pregunta 3 — $f:\mathbb R^2\to\mathbb R^4$, calcular $f(0,42)$ <span class="src" data-l="X" data-ref="Feb. 2024 (2.ª sem.), pregunta 3">X Feb. 2024 (2.ª) P3</span></summary>
+  <p class="enun">Sea $f:\mathbb R^2\to\mathbb R^4$ una aplicación lineal tal que $f(1,3)=(4,-6,0,7)$ y $f(-4,2)=(1,-1,0,2)$. Halle $f(0,42)$.</p>
+  <ol class="steps">
+    <li><b>Combinación lineal.</b> Buscamos $\alpha,\beta$ con $\alpha(1,3)+\beta(-4,2)=(0,42)$:
+      $$\begin{aligned}\alpha-4\beta&=0\cr3\alpha+2\beta&=42\end{aligned}$$
+      De la 1.ª, $\alpha=4\beta$; en la 2.ª, $12\beta+2\beta=14\beta=42\Rightarrow\beta=3$ y $\alpha=12$. Comprobación: $12(1,3)+3(-4,2)=(12-12,\ 36+6)=(0,42)$ ✓.</li>
+    <li><b>Linealidad</b> (P3): $f(0,42)=12f(1,3)+3f(-4,2)$, es decir,
+      $$12(4,-6,0,7)+3(1,-1,0,2)=(48+3,\ -72-3,\ 0,\ 84+6).$$</li>
+  </ol>
+  <p><b>Resultado:</b> $f(0,42)=(51,-75,0,90)$.</p>
+  <p><b>Sobre la solución oficial.</b> Correcta; da directamente los coeficientes $12$ y $3$ sin el sistema que los produce (en el examen hay que escribirlo: «lo que no se justifica no se puntúa»).</p>
+  <div class="recipe"><b>Receta:</b> método A (ver Feb. 2019 B).</div>
+  <p><b>Error típico:</b> intentar «dividir»: $(0,42)$ no es múltiplo de ninguno de los dos vectores dados; hay que combinar los dos. Y equivocarse de orden: los coeficientes salen de los <b>originales</b> $(1,3)$, $(-4,2)$ y se aplican a las <b>imágenes</b>.</p>
+</details>
+
+<details class="sol" id="ex-feb25b-p3"><summary>Feb. 2025 (2.ª sem.), pregunta 3 — $f:\mathbb R^2\to\mathcal M_{2\times2}$, calcular $f(-7,0)$ <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª sem.), pregunta 3">X Feb. 2025 (2.ª) P3</span></summary>
+  <p class="enun">Sea $f:\mathbb R^2\to\mathcal M_{2\times2}$ una aplicación lineal tal que $f(5,1)=\begin{pmatrix}1&3\cr-2&4\end{pmatrix}$ y $f(3,2)=\begin{pmatrix}0&1\cr7&-2\end{pmatrix}$. Halle $f(-7,0)$.</p>
+  <ol class="steps">
+    <li><b>Los «vectores» de llegada son matrices</b>, pero no cambia nada: $\mathcal M_{2\times2}$ es un espacio vectorial (U §2.1) y P3 vale para cualquier $W$.</li>
+    <li><b>Combinación lineal en $\mathbb R^2$.</b> $\alpha(5,1)+\beta(3,2)=(-7,0)$:
+      $$\begin{aligned}5\alpha+3\beta&=-7\cr\alpha+2\beta&=0\end{aligned}$$
+      De la 2.ª, $\alpha=-2\beta$; en la 1.ª, $-10\beta+3\beta=-7\beta=-7\Rightarrow\beta=1$, $\alpha=-2$. Comprobación: $-2(5,1)+(3,2)=(-7,0)$ ✓.</li>
+    <li><b>Linealidad</b> (P3), con suma de matrices y producto por escalar entrada a entrada:
+      $$\begin{aligned}f(-7,0)&=-2\begin{pmatrix}1&3\cr-2&4\end{pmatrix}\cr&\quad+\begin{pmatrix}0&1\cr7&-2\end{pmatrix}\cr&=\begin{pmatrix}-2&-6\cr4&-8\end{pmatrix}\cr&\quad+\begin{pmatrix}0&1\cr7&-2\end{pmatrix}\cr&=\begin{pmatrix}-2&-5\cr11&-10\end{pmatrix}.\end{aligned}$$</li>
+  </ol>
+  <p><b>Resultado:</b> $f(-7,0)=\begin{pmatrix}-2&-5\cr11&-10\end{pmatrix}$.</p>
+  <p><b>Sobre la solución oficial.</b> Correcta; como en el ejercicio anterior, no muestra cómo se obtienen $-2$ y $1$.</p>
+  <div class="recipe"><b>Receta:</b> método A; el espacio de llegada puede ser de matrices, polinomios… y se opera con sus propias operaciones.</div>
+  <p><b>Error típico:</b> multiplicar matrices (producto matricial) en lugar de combinarlas linealmente; o aplicar el $-2$ solo a una fila.</p>
+</details>
+
+<details class="sol" id="ex-feb26b-p3"><summary>Feb. 2026 (2.ª sem.), pregunta 3 — $f:\mathcal M_{2\times2}\to\mathbb R^3$ dada en cuatro matrices <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), pregunta 3">X Feb. 2026 (2.ª) P3</span></summary>
+  <p class="enun">Sea $f:\mathcal M_{2\times2}\to\mathbb R^3$ una aplicación lineal tal que
+  $f\begin{pmatrix}1&2\cr0&-1\end{pmatrix}=(1,2,3)$, $f\begin{pmatrix}3&1\cr-2&4\end{pmatrix}=(2,3,4)$, $f\begin{pmatrix}-1&0\cr5&2\end{pmatrix}=(3,4,5)$, $f\begin{pmatrix}2&-3\cr1&1\end{pmatrix}=(4,5,6)$. Halle $f\begin{pmatrix}5&0\cr4&6\end{pmatrix}$.</p>
+  <p>Llamamos $M_1,M_2,M_3,M_4$ a las cuatro matrices dadas y $N=\begin{pmatrix}5&0\cr4&6\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Planteamiento.</b> Buscamos $a,b,c,d$ con $aM_1+bM_2+cM_3+dM_4=N$. Igualando entrada a entrada (posiciones 11, 12, 21, 22):
+      $$\begin{cases}a+3b-c+2d=5\cr2a+b-3d=0\cr-2b+5c+d=4\cr-a+4b+2c+d=6\end{cases}$$</li>
+    <li><b>Probar primero los coeficientes más sencillos.</b> Es un sistema $4\times4$; antes de escalonar conviene probar $a=b=c=d=1$ (la suma de las cuatro): $1+3-1+2=5$ ✓, $2+1+0-3=0$ ✓, $0-2+5+1=4$ ✓, $-1+4+2+1=6$ ✓. Luego $N=M_1+M_2+M_3+M_4$. (Si no se ve, se resuelve por Gauss; la solución es única porque el determinante de la matriz del sistema vale $215\neq0$, es decir, $\{M_1,\dots,M_4\}$ es base de $\mathcal M_{2\times2}$. Para calcular $f(N)$ basta <b>una</b> combinación cualquiera.)</li>
+    <li><b>Linealidad</b> (P3):
+      $$\begin{aligned}f(N)&=f(M_1)+f(M_2)\cr&\quad+f(M_3)+f(M_4)\cr&=(1,2,3)+(2,3,4)\cr&\quad+(3,4,5)+(4,5,6)\cr&=(10,14,18).\end{aligned}$$</li>
+  </ol>
+  <p><b>Resultado:</b> $f\begin{pmatrix}5&0\cr4&6\end{pmatrix}=(10,14,18)$.</p>
+  <p><b>Sobre la solución oficial.</b> Correcta, pero da la descomposición $N=M_1+M_2+M_3+M_4$ sin decir cómo se encuentra ni comprobarla entrada a entrada; en el examen hay que escribir esa comprobación.</p>
+  <div class="recipe"><b>Receta (método A):</b> (1) plantear $w=\sum a_iv_i$ y resolver el sistema (probando antes coeficientes sencillos: $\pm1$, sumas); (2) comprobar la combinación; (3) $f(w)=\sum a_if(v_i)$. Con espacio inicial de matrices, «coordenadas» = coeficientes entrada a entrada.</div>
+  <p><b>Error típico:</b> aplicar $f$ entrada a entrada, o «sumar las matrices dadas» y olvidar comprobar que la suma es exactamente $N$.</p>
+</details>
+
+<h3>Método B — ¿es lineal esta aplicación?</h3>
+
+<details class="sol" id="ex-feb25a-p7"><summary>Feb. 2025 (1.ª sem.), problema 7, 1.er apartado — ¿es lineal $f(x)=(x,\,2+x,\,3x,\,4x,\,5x)$? <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), problema 7 (1.er apartado)">X Feb. 2025 (1.ª) P7</span></summary>
+  <p class="enun">Consideremos las aplicaciones $f:\mathbb R\to\mathbb R^5$, $g:\mathbb R^3\to\mathbb R^2$ y $h:\mathbb R^2\to\mathbb R^4$ definidas por $f(x)=(x,2+x,3x,4x,5x)$, $g(x,y,z)=(x+y+z,-5x-5y-5z)$ y $h(x,y)=(4x-5y,y,x,-3x+7y)$. Indique de manera razonada si $f$ es aplicación lineal (1 punto). <i>(Los otros dos apartados —núcleo e imagen de $g$, matriz de $h\circ g$— son de los temas 3.2 y 3.4.)</i></p>
+  <ol class="steps">
+    <li><b>Recordar P1</b> (U p.103, demostrada en el Ej. U 3.4): toda aplicación lineal cumple $f(0_V)=0_W$. Leída al revés: si $f(0_V)\neq0_W$, $f$ <b>no</b> puede ser lineal.</li>
+    <li><b>Calcular $f(0)$.</b> Aquí $0_V=0\in\mathbb R$ y $0_W=(0,0,0,0,0)\in\mathbb R^5$: $f(0)=(0,\ 2+0,\ 0,\ 0,\ 0)=(0,2,0,0,0)\neq(0,0,0,0,0)$.</li>
+    <li><b>Conclusión.</b> $f$ no es lineal. El culpable es el término independiente «$2+$» de la 2.ª componente.</li>
+    <li><i>Comprobación alternativa con la Def. 3.1</i> (contraejemplo directo): con $v=u=1$, $\lambda=1$: $f(1+1)=f(2)=(2,4,6,8,10)$, mientras que $f(1)+f(1)=2(1,3,3,4,5)=(2,6,6,8,10)$. No coinciden.</li>
+  </ol>
+  <p><b>Resultado:</b> $f$ <b>no</b> es lineal porque $f(0)=(0,2,0,0,0)\neq0$.</p>
+  <p><b>Comentario sobre $g$ y $h$</b> (para los otros apartados): el enunciado no dice que sean lineales, pero lo son: cada componente es una combinación sin término independiente, es decir $g(v)=A_gv$ y $h(v)=A_hv$ con $A_g=\begin{pmatrix}1&1&1\cr-5&-5&-5\end{pmatrix}$ y $A_h=\begin{pmatrix}4&-5\cr0&1\cr1&0\cr-3&7\end{pmatrix}$, y $A(v+\lambda u)=Av+\lambda Au$ por la distributividad del producto de matrices (tema 1.2).</p>
+  <p><b>Sobre la solución oficial.</b> Correcta y suficiente («$f$ no es lineal porque $f(0)=(0,2,0,0,0)$»); en el examen conviene citar la propiedad que se usa ($f$ lineal $\Rightarrow f(0)=0$).</p>
+  <div class="recipe"><b>Receta (método B):</b> ¿lineal? Mira primero $f(0)$: si $\neq0$, <b>no</b> (P1). Si $f(0)=0$, sospecha de productos, potencias, valores absolutos, $\det$…: prueba un contraejemplo con números ($f(2v)$ frente a $2f(v)$). Si todo es «combinación de coordenadas sin término independiente», demuestra la Def. 3.1 con vectores genéricos.</div>
+  <p><b>Error típico:</b> ver que cada componente «es de primer grado» y concluir que es lineal: $2+x$ lo es, pero <b>no</b> en el sentido del álgebra lineal (es afín). Y el error recíproco: comprobar $f(0)=0$ y concluir que sí es lineal.</p>
+</details>
+
+<details class="sol" id="ex-feb22a-e3"><summary>Feb. 2022 (tipo A), ejercicio 3 (parte de linealidad) — $f(x,y)=\begin{pmatrix}x&0\cr0&x-y\end{pmatrix}$ es lineal <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A), ejercicio 3">X Feb. 2022 (A) E3</span></summary>
+  <p class="enun">Sea $D_{2\times2}$ el conjunto de matrices diagonales de orden 2 y $f:\mathbb R^2\to D_{2\times2}$ una aplicación tal que $f(x,y)=\begin{pmatrix}x&0\cr0&x-y\end{pmatrix}$. Calcule los subespacios núcleo e imagen de $f$.</p>
+  <p><b>Por qué se incluye aquí.</b> El enunciado dice «una aplicación», no «una aplicación lineal»; hablar de <i>subespacios</i> núcleo e imagen solo tiene sentido si $f$ es lineal (U §3.2), así que lo primero es comprobarlo. La solución oficial lo hace en una nota. Es el único ejercicio de examen en que se <b>demuestra</b> que una aplicación sí es lineal: modelo del método B en sentido positivo. (Los apartados de núcleo e imagen se desarrollan en el <a href="tema_3_2_nucleo_imagen.html">tema 3.2</a>; aquí solo se demuestra la linealidad.)</p>
+  <ol class="steps">
+    <li><b>Vectores genéricos.</b> $v=(x_1,y_1)$, $u=(x_2,y_2)$, $\lambda\in\mathbb R$; $v+\lambda u=(x_1+\lambda x_2,\ y_1+\lambda y_2)$.</li>
+    <li><b>Primer miembro.</b>
+      $$\begin{gathered}f(v+\lambda u)=\cr\begin{pmatrix}x_1+\lambda x_2&0\cr0&c\end{pmatrix},\cr{}c=(x_1+\lambda x_2)-(y_1+\lambda y_2).\end{gathered}$$</li>
+    <li><b>Segundo miembro.</b>
+      $$\begin{gathered}f(v)+\lambda f(u)=\cr\begin{pmatrix}x_1&0\cr0&x_1-y_1\end{pmatrix}\cr+\lambda\begin{pmatrix}x_2&0\cr0&x_2-y_2\end{pmatrix}\cr=\begin{pmatrix}x_1+\lambda x_2&0\cr0&c_2\end{pmatrix},\cr{}c_2=x_1-y_1+\lambda x_2-\lambda y_2.\end{gathered}$$</li>
+    <li><b>Comparar.</b> La entrada $(2,2)$ del primer miembro, reordenada, es $x_1-y_1+\lambda x_2-\lambda y_2$: ambos miembros coinciden para todo $v,u,\lambda$. Además $f(x,y)$ es diagonal, así que $f$ va de verdad a $D_{2\times2}$ (subespacio de $\mathcal M_{2\times2}$). Por tanto <b>$f$ es lineal</b>.</li>
+  </ol>
+  <p><b>Resultado:</b> $f$ es lineal. <i>(Resto del ejercicio, con resultado oficial verificado: $\operatorname{Nuc}f=\{(0,0)\}$ y $\operatorname{Im}f=D_{2\times2}$, de dimensión 2; se razona en el tema 3.2.)</i></p>
+  <p><b>Sobre la solución oficial.</b> Correcta. Comprueba por separado $f(v)+f(u)=f(v+u)$ y $\lambda f(v)=f(\lambda v)$, lo que equivale a la Def. 3.1 de U (que lo junta en una sola condición).</p>
+  <div class="recipe"><b>Receta (método B, positivo):</b> vectores genéricos, desarrolla los dos miembros por separado y compara; comprueba además que la imagen cae en el espacio de llegada.</div>
+</details>
+
+<h3>Ejemplos propios de tipo examen</h3>
+
+<details class="sol"><summary>Ejemplo propio — polinomios: $f(p)=(p(0),\,p'(1))$ es lineal <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Sea $f:\wp_2\to\mathbb R^2$, $f(p)=(p(0),\ p'(1))$. Pruebe que es lineal y calcule $f(1+x+x^2)$.</p>
+  <ol class="steps">
+    <li><b>Linealidad.</b> Para $p,q\in\wp_2$ y $\lambda\in\mathbb R$: $(p+\lambda q)(0)=p(0)+\lambda q(0)$ (evaluar respeta sumas y escalares) y $(p+\lambda q)'(1)=p'(1)+\lambda q'(1)$ (la derivada es lineal). Luego $f(p+\lambda q)=f(p)+\lambda f(q)$: <b>lineal</b>.</li>
+    <li><b>Imagen.</b> $p=1+x+x^2$: $p(0)=1$, $p'(x)=1+2x$, $p'(1)=3$, así que $f(p)=(1,3)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en espacios de polinomios, funciones o matrices, la linealidad se prueba con las propiedades de la operación (evaluar, derivar, trasponer…) sin necesidad de coordenadas.</div>
+</details>
+
+<details class="sol" id="ex-propio-a45"><summary>Ejemplo propio — método A más propiedades 4 y 5: $f(3,1)$, $f(0,1)$ y V/F sobre libres <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
+  <p class="enun">Sea $f:\mathbb R^2\to\mathbb R^3$ lineal con $f(1,1)=(1,0,2)$ y $f(1,-1)=(3,2,0)$. (a) Halle $f(3,1)$. (b) Halle $f(0,1)$. (c) Verdadero o falso: «si $\{v_1,v_2\}$ es libre, $\{f(v_1),f(v_2)\}$ también lo es, para cualquier aplicación lineal».</p>
+  <ol class="steps">
+    <li><b>(a)</b> $\alpha(1,1)+\beta(1,-1)=(3,1)$: $\alpha+\beta=3$, $\alpha-\beta=1\Rightarrow\alpha=2$, $\beta=1$. $f(3,1)=2(1,0,2)+(3,2,0)=(5,2,4)$.</li>
+    <li><b>(b)</b> $(0,1)=\tfrac12(1,1)-\tfrac12(1,-1)$, luego $f(0,1)=\tfrac12\big[(1,0,2)-(3,2,0)\big]=(-1,-1,1)$.</li>
+    <li><b>(c) Falso</b> (P5; Ej. U 3.6). Contraejemplo: $g:\mathbb R^3\to\mathbb R^2$, $g(x,y,z)=(x+y,\ x+y)$ es lineal (cada componente es combinación de coordenadas sin término independiente); $\{(1,0,0),(0,1,0)\}$ es libre y sus imágenes son $(1,1)$ y $(1,1)$, ligadas. Lo que sí es siempre cierto es lo contrario: imágenes de vectores <b>dependientes</b> son dependientes (P4). Para que lo libre se conserve hace falta $\operatorname{Nuc}f=\{0\}$ (tema 3.2).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «sabiendo que $f$ es lineal y…» $\Rightarrow$ método A; «¿se conserva la independencia?» $\Rightarrow$ P4 sí, P5 no.</div>
+</details>
+
+<div class="box tip"><span class="h">Para practicar (de otros temas)</span>
+  <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores, ejercicios fronterizos">X varios</span>
+  <p>Los siguientes ejercicios de examen usan aplicaciones lineales pero su contenido principal es de otro tema; se desarrollan allí (no se duplican aquí).</p>
+  <ul>
+    <li><b>Imagen de todo vector en un plano</b> → <a href="tema_3_2_nucleo_imagen.html#ex-feb24-1p3">tema 3.2</a>: Feb. 2024 (1.ª sem.), pregunta 3 (con $f(1,0)=(0,5,1)$, $f(0,1)=(-2,0,1)$: se escribe $f(u,v)=u\,f(1,0)+v\,f(0,1)$ por P3 y se sustituye en la ecuación del plano).</li>
+    <li><b>Núcleo, imagen y dimensiones</b> → <a href="tema_3_2_nucleo_imagen.html">tema 3.2</a>: Feb. 2019 (tipo B), problema c) (<i>$\operatorname{Dim}\operatorname{Nuc}f=0\Rightarrow$ imágenes de un sistema libre son libres</i>; la solución oficial tiene un hueco: de «ligado» deduce «existe $\alpha$ con $f(v_1)=\alpha f(v_2)$», que falla si $f(v_2)=0$); Feb. 2022 (tipo A), ejercicio 3 (núcleo e imagen); Feb. 2025 (1.ª sem.), problema 7, 2.º apartado; Feb. 2018 (tipo A), ej. 3; Sept. 2019 (tipo A), ej. 3; Feb. 2023 (2.ª sem.), p.3; Sept. 2022, ej. 3; Feb. 2020 (1.ª sem., tipo B), ej. 3; Sept. 2025, p.2 y p.3; Feb. 2026 (2.ª sem.), problema 7 (base del núcleo); Feb. 2023 (1.ª sem.), problema 7 (i); Feb. 2017 (2.ª sem., tipo A), problema c); Sept. 2018 (tipo A), problema b); Sept. 2017 (tipo A), problema b); Feb. 2019 (tipo A), problema a); Sept. 2023, problema 7; Feb. 2026 (1.ª sem.), problema 7 (a).</li>
+    <li><b>Matriz asociada</b> → tema 3.3 (aún no existe): Feb. 2018 (tipo B), ejercicio 3 (matriz canónica de $f$ con $f(1,2)=(2,3)$, $f(2,0)=(4,0)$; errata oficial: «hallar $f(0,1)$ y $f(0,1)$», el primero es $f(1,0)$); Ene. 2022 (tipo A), ejercicio 3; Feb. 2019 (tipo A), ejercicio 3 (bases no canónicas); Feb. 2026 (1.ª sem.), pregunta 2; Feb. 2023 (1.ª sem.), problema 7 (ii) (derivada tercera $\wp_4\to\wp_1$); Sept. 2017 (tipo A), ejercicio 3 (test del tema 3: «todas las lineales son endomorfismos» es falso, como se vio en este tema); Feb. 2026 (2.ª sem.), problema 7 (apartados de matriz y forma escalonada; el de la base del núcleo va a 3.2) y problema 8 (la matriz en las bases dadas va aquí, en 3.3; el cambio de base, en 3.5).</li>
+    <li><b>Composición y combinación de aplicaciones</b> → tema 3.4 (aún no existe): Ene. 2020 (tipo A), ej. 3; Feb. 2023 (1.ª sem.), p.3; Sept. 2018 (tipo A), ej. 3; Sept. 2024, p.3; Sept. 2023, p.3 ($3g-5h$); Feb. 2024 (2.ª sem.), problema 7; Feb. 2026 (1.ª sem.), problema 7 (b)-(c) ($f\circ f$, $g\circ f$); Feb. 2025 (1.ª sem.), problema 7, 3.er apartado ($h\circ g$).</li>
+    <li><b>Cambio de base</b> → tema 3.5 (aún no existe): Sept. 2017 (tipo A), ejercicio 3, opción A; Feb. 2026 (2.ª sem.), problema 8 (solo el apartado de cambio de base; la matriz en las bases dadas va a 3.3).</li>
+    <li><b>Diagonalización de aplicaciones lineales</b> → tema 4.x (aún no existe): Sept. 2017 (tipo A), ej. 4; Feb. 2018 (tipo B), problema a) (vectores propios de la derivada).</li>
+  </ul>
+</div>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">7</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Def. 3.1</td><td>$f(v+\lambda u)=f(v)+\lambda f(u)$ $\iff$ $f(u+v)=f(u)+f(v)$ <b>y</b> $f(\lambda u)=\lambda f(u)$</td><td>$V,W$ espacios vectoriales sobre $\mathbb R$; para <b>todos</b> $v,u,\lambda$</td></tr>
+  <tr><td>Endomorfismo</td><td>$f$ lineal con $V=W$ (E p.80)</td><td>Hay que verificar las <b>dos</b> condiciones</td></tr>
+  <tr><td>P1</td><td>$f(0)=0$. <b>Si $f(0)\neq0$, no es lineal</b></td><td>Condición <b>necesaria</b>, no suficiente: $f(0)=0$ no prueba linealidad</td></tr>
+  <tr><td>P2</td><td>$f(-v)=-f(v)$; $f(x-y)=f(x)-f(y)$</td><td>$f$ lineal</td></tr>
+  <tr><td>P3</td><td>$f(\sum a_iv_i)=\sum a_if(v_i)$ → calcular $f(w)$ si $w=\sum a_iv_i$</td><td>Los $a_i$ se calculan en el espacio <b>inicial</b>; con una <b>base</b> siempre se puede</td></tr>
+  <tr><td>P4</td><td>$v,u$ ligados $\Rightarrow$ $f(v),f(u)$ ligados (con la misma relación). Contrarrecíproca: imágenes libres $\Rightarrow$ originales libres</td><td>$f$ lineal</td></tr>
+  <tr><td>P5</td><td>Libres pueden ir a ligados (p. ej. proyecciones)</td><td>$f$ lleva todo libre a libre $\iff$ $f$ inyectiva ($\operatorname{Nuc}f=\{0\}$, 3.2); si no, unos libres se conservan y otros no</td></tr>
+  <tr><td>No lineales típicas</td><td>constante $\neq0$, traslación $x+c$, $x^2$, $xy$, $|x|$, $\sin x$, $\det$</td><td>Un solo contraejemplo basta</td></tr>
+  <tr><td>$f$ determinada por una base</td><td>Dadas $f(e_1),\dots,f(e_n)$ ($e_i$ base) $f(w)=\sum a_if(e_i)$ queda determinada (Teor. 3.2, U p.114); que exista una $f$ lineal para cualesquiera imágenes de la base es observación propia (P)</td><td>Los $e_i$ deben ser <b>base</b> (libres): sobre ligados las imágenes no son libres de elegir</td></tr>
+  <tr><td>$f(S)$</td><td>Si $S$ es subespacio, $f(S)$ es subespacio (E 3.13 D)</td><td>$f$ lineal</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé enunciar la <b>Def. 3.1</b> y expresarla como «conserva la suma y el producto por escalares».</li>
+  <li>Sé <b>demostrar</b> que una aplicación es lineal desarrollando por separado los dos miembros con vectores genéricos.</li>
+  <li>Sé <b>refutar</b> la linealidad con un contraejemplo y empiezo siempre por $f(0)$; sé que $f(0)=0$ no basta.</li>
+  <li>Distingo <b>lineal</b> de <b>endomorfismo</b> y de «de primer grado».</li>
+  <li>Sé demostrar P1, P2, P3 y P4 y dar el contraejemplo de P5.</li>
+  <li>Sé calcular $f(w)$ conociendo $f$ en otros vectores: planteo $w=\sum a_iv_i$, resuelvo, <b>compruebo</b> y aplico P3 (con base canónica y con base no canónica).</li>
+  <li>Sé decidir si unos datos de imágenes son <b>compatibles</b> con una aplicación lineal (vectores ligados).</li>
+  <li>Sé responder V/F sobre libres y ligados y sobre la imagen de un subespacio, distinguiendo recíproca y contrarrecíproca.</li>
+  <li>Escribo cada resultado como pide el examen: con el proceso, la propiedad citada (p. ej. «por P3, U p.103») y la comprobación.</li>
+</ul>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li>Demostrar linealidad comprobando un par de ejemplos numéricos, o escribir como primer paso lo que hay que demostrar.</li>
+    <li>Concluir «es lineal» porque $f(0)=0$ o porque las componentes son «de primer grado».</li>
+    <li>Olvidar que un término independiente ($x+1$, $2+x$), un producto $xy$ o una potencia rompen la linealidad.</li>
+    <li>Confundir «lineal» con «endomorfismo» (exige además $V=W$).</li>
+    <li>Calcular $f(w)$ usando como coeficientes las <b>componentes</b> de $w$ cuando los datos están dados en una base que no es la canónica.</li>
+    <li>«Sumar los datos» sin comprobar que la combinación da exactamente el vector pedido ($f(1,2)+f(2,1)$ no es $f(1,1)$).</li>
+    <li>Asignar imágenes arbitrarias a vectores ligados: no existe tal aplicación lineal.</li>
+    <li>Afirmar que la linealidad conserva la independencia (falso: P5) o tomar la recíproca de P4 por cierta.</li>
+    <li>Responder «verdadero» a «es falso que $f(0)=0$» sin leer la negación; leer mal el «$\neq$» perdido en el texto digital de E.</li>
+  </ol>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>

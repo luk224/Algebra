@@ -8,6 +8,7 @@
    .anim-combo   data-modo="combo|coord" data-u="2,1" data-v="-1,2"
    .anim-union   data-d1="1,0" data-d2="0,1"
    .anim-oper    data-op="0|1|2|3"
+   .anim-lineal  data-modo="lineal|nucimg" data-u="2,1" data-v="-1,2" data-m="1,2,2,4"   (aplicaciones lineales R2->R2)
 */
 (function () {
   'use strict';
@@ -376,7 +377,7 @@
     var dx = ax - bx, dy = ay - by, len = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / len, uy = dy / len;
     L.appendChild(sv('line', { x1: bx, y1: by, x2: ax - ux * 2, y2: ay - uy * 2, 'class': 'an-vec ' + cls }));
     if (len > 6) L.appendChild(sv('polygon', { points: ax + ',' + ay + ' ' + (ax - ux * 11 - uy * 5) + ',' + (ay - uy * 11 + ux * 5) + ' ' + (ax - ux * 11 + uy * 5) + ',' + (ay - uy * 11 - ux * 5), 'class': 'an-head ' + cls }));
-    if (label) { var tx = sv('text', { x: ax + (ux >= 0 ? 8 : -8), y: ay - (uy >= 0 ? -14 : 8), 'class': 'an-lb ' + cls, 'text-anchor': ux >= 0 ? 'start' : 'end' }); tx.textContent = label; L.appendChild(tx); }
+    if (label) { var lx = ax + (ux >= 0 ? 8 : -8), anc = ux >= 0 ? 'start' : 'end', ly = ay - (uy >= 0 ? -14 : 8), w0 = label.length * 9; if (anc === 'start' && lx + w0 > P.W - 4) { lx = ax - 8; anc = 'end'; } if (anc === 'end' && lx - w0 < 4) { lx = ax + 8; anc = 'start'; } if (ly < 14) ly = 14; if (ly > P.H - 6) ly = P.H - 6; var tx = sv('text', { x: lx, y: ly, 'class': 'an-lb ' + cls, 'text-anchor': anc }); tx.textContent = label; L.appendChild(tx); }
   }
   function numInput(val, step, w) { var i = el('input', 'an-in'); i.type = 'number'; i.value = val; i.step = step || 1; if (w) i.style.width = w; return i; }
   function slider(min, max, step, val) { var s = el('input', 'an-sl'); s.type = 'range'; s.min = min; s.max = max; s.step = step; s.value = val; return s; }
@@ -622,7 +623,112 @@
     draw();
   }
 
-  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper]];
+
+  /* =====================================================================
+     9. APLICACIONES LINEALES  R2 -> R2   (modo lineal / modo nucimg)
+     ===================================================================== */
+  var FUNS = [
+    { n: 'f(x, y) = (x + y, x − y)   → lineal', f: function (x, y) { return [x + y, x - y]; } },
+    { n: 'f(x, y) = (2x − y, x)   → lineal', f: function (x, y) { return [2 * x - y, x]; } },
+    { n: 'g(x, y) = (x + 1, y)   → traslación, NO lineal', f: function (x, y) { return [x + 1, y]; } },
+    { n: 'h(x, y) = (x², y)   → NO lineal', f: function (x, y) { return [x * x, y]; } },
+    { n: 'k(x, y) = (x · y, y)   → NO lineal', f: function (x, y) { return [x * y, y]; } }
+  ];
+  function buildLineal(root) {
+    var modo = root.getAttribute('data-modo') || 'lineal';
+    root.textContent = ''; root.classList.add('sarrus');
+    var pair = el('div', 'an-pair');
+    var P1 = plane(root, 300, 300, 5), P2 = plane(root, 300, 300, 5);
+    var c1 = el('div', 'an-pcol'), c2 = el('div', 'an-pcol');
+    c1.appendChild(el('b', '', modo === 'lineal' ? 'Espacio de partida V = ℝ²' : 'Partida V = ℝ² (núcleo)')); c1.appendChild(P1.svg);
+    c2.appendChild(el('b', '', modo === 'lineal' ? 'Espacio de llegada W = ℝ²' : 'Llegada W = ℝ² (imagen)')); c2.appendChild(P2.svg);
+    pair.appendChild(c1); pair.appendChild(c2);
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res');
+    var ctrl = el('div', 'an-sliders');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); ctrl.appendChild(r); }
+    function fill(P, cls) { P.layer.appendChild(sv('rect', { x: 0, y: 0, width: P.W, height: P.H, 'class': 'an-fill ' + cls })); }
+    function fullLine(P, d, cls) { var k = 9 / Math.max(Math.abs(d[0]), Math.abs(d[1])); P.layer.appendChild(sv('line', { x1: P.X(-k * d[0]), y1: P.Y(-k * d[1]), x2: P.X(k * d[0]), y2: P.Y(k * d[1]), 'class': 'an-ln ' + cls })); }
+
+    if (modo === 'lineal') {
+      var u = (root.getAttribute('data-u') || '2,1').split(',').map(Number), v = (root.getAttribute('data-v') || '-1,2').split(',').map(Number);
+      var sel = el('select'); FUNS.forEach(function (o, i) { var op = el('option', '', o.n); op.value = i; sel.appendChild(op); });
+      var top = el('div', 'adj-sel'); top.appendChild(el('span', '', 'Aplicación: ')); top.appendChild(sel);
+      var sa = slider(-2, 2, 0.5, 1), sb = slider(-2, 2, 0.5, 1), la = el('b'), lb = el('b');
+      row('α ', sa, la); row('β ', sb, lb);
+      var draw = function () {
+        var f = FUNS[parseInt(sel.value, 10)].f, a = parseFloat(sa.value), b = parseFloat(sb.value);
+        la.textContent = num(a); lb.textContent = num(b);
+        P1.clear(); P2.clear();
+        var w = [a * u[0] + b * v[0], a * u[1] + b * v[1]];
+        var fu = f(u[0], u[1]), fv = f(v[0], v[1]), fw = f(w[0], w[1]), comb = [a * fu[0] + b * fv[0], a * fu[1] + b * fv[1]];
+        arrow(P1, 0, 0, u[0], u[1], 'down', 'u'); arrow(P1, 0, 0, v[0], v[1], 'up', 'v'); arrow(P1, 0, 0, w[0], w[1], 'w', 'w');
+        arrow(P2, 0, 0, fu[0], fu[1], 'down', 'f(u)'); arrow(P2, 0, 0, fv[0], fv[1], 'up', 'f(v)');
+        arrow(P2, 0, 0, comb[0], comb[1], 'pur dash', ''); arrow(P2, 0, 0, fw[0], fw[1], 'w', 'f(w)');
+        var f0 = f(0, 0), ok = Math.abs(fw[0] - comb[0]) < 1e-9 && Math.abs(fw[1] - comb[1]) < 1e-9;
+        html(text, 'w = αu + βv = ' + num(a) + '·(' + num(u[0]) + ', ' + num(u[1]) + ') + ' + num(b) + '·(' + num(v[0]) + ', ' + num(v[1]) + ') = <b>(' + num(w[0]) + ', ' + num(w[1]) + ')</b>.<br>' +
+          '<span style="color:#2e9e5b"><b>f(w) = f(αu + βv) = (' + num(fw[0]) + ', ' + num(fw[1]) + ')</b></span> &nbsp;·&nbsp; <span style="color:#8e44ad"><b>αf(u) + βf(v) = (' + num(comb[0]) + ', ' + num(comb[1]) + ')</b></span> (flecha morada discontinua).');
+        res.textContent = '';
+        var fin = el('div', 'sar-final');
+        fin.textContent = ok ? '✓ f(αu + βv) = αf(u) + βf(v) con estos valores' : '✗ f(αu + βv) ≠ αf(u) + βf(v)  ⇒  f NO es lineal';
+        fin.style.color = ok ? '#1f8a4c' : '#c0392b'; res.appendChild(fin);
+        var nt = el('p', 'sar-hint');
+        nt.textContent = 'f(0) = (' + num(f0[0]) + ', ' + num(f0[1]) + ')' + ((Math.abs(f0[0]) + Math.abs(f0[1]) > 1e-9) ? '  ≠ 0: una aplicación lineal siempre cumple f(0) = 0, así que esta no puede ser lineal.' : '  (f(0) = 0 es necesario, pero no suficiente para ser lineal).') + (ok ? ' Si cambias α y β, una aplicación lineal cumple SIEMPRE la igualdad; si hay una pareja que falla, ya no es lineal.' : '');
+        res.appendChild(nt);
+      };
+      [sa, sb].forEach(function (s) { s.addEventListener('input', draw); }); sel.addEventListener('change', draw);
+      root.appendChild(el('p', 'sar-text an-title', 'Una aplicación es lineal si respeta las combinaciones lineales: f(αu + βv) = αf(u) + βf(v). Elige una aplicación y mueve α y β: la flecha verde (aplicar f a la combinación) y la morada (combinar las imágenes) deben coincidir.'));
+      root.appendChild(top); root.appendChild(pair); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res);
+      draw();
+    } else {
+      var m0 = (root.getAttribute('data-m') || '1,2,2,4').split(',').map(Number);
+      var mi = m0.map(function (x) { return numInput(x, 1, '3.2em'); });
+      var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+      er.appendChild(el('span', '', 'A = (')); [0, 1].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ' ; ')); [2, 3].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ')   f(x) = A·x'));
+      eq.appendChild(er);
+      var sx = slider(-4, 4, 0.5, 2), sy = slider(-4, 4, 0.5, 1), lx = el('b'), ly = el('b');
+      row('x ', sx, lx); row('y ', sy, ly);
+      var pre = btnRow(['Isomorfismo (det ≠ 0)', 'Rango 1', 'Aplicación nula'], function (i) { var p = [[1, 1, 0, 1], [1, 2, 2, 4], [0, 0, 0, 0]][i]; mi.forEach(function (x, j) { x.value = p[j]; }); draw(); });
+      var draw = function () {
+        var a = parseFloat(mi[0].value) || 0, b = parseFloat(mi[1].value) || 0, c = parseFloat(mi[2].value) || 0, d = parseFloat(mi[3].value) || 0;
+        var x = parseFloat(sx.value), y = parseFloat(sy.value); lx.textContent = num(x); ly.textContent = num(y);
+        P1.clear(); P2.clear();
+        var det = a * d - b * c, nz = function (t) { return Math.abs(t) > 1e-9; };
+        var r = nz(det) ? 2 : ((nz(a) || nz(b) || nz(c) || nz(d)) ? 1 : 0);
+        var fw = [a * x + b * y, c * x + d * y], kdir = null, idir = null;
+        if (r === 1) {
+          var rowv = (nz(a) || nz(b)) ? [a, b] : [c, d]; kdir = [-rowv[1], rowv[0]];
+          idir = (nz(a) || nz(c)) ? [a, c] : [b, d];
+        }
+        if (r === 0) fill(P1, 'ker'); else if (r === 1) fullLine(P1, kdir, 'up'); else P1.layer.appendChild(sv('circle', { cx: P1.X(0), cy: P1.Y(0), r: 6, 'class': 'an-dot ker' }));
+        if (r === 2) fill(P2, 'im'); else if (r === 1) fullLine(P2, idir, 'down'); else P2.layer.appendChild(sv('circle', { cx: P2.X(0), cy: P2.Y(0), r: 6, 'class': 'an-dot' }));
+        if (r === 1) { // fibra w + Ker
+          var k = 9 / Math.max(Math.abs(kdir[0]), Math.abs(kdir[1]));
+          P1.layer.appendChild(sv('line', { x1: P1.X(x - k * kdir[0]), y1: P1.Y(y - k * kdir[1]), x2: P1.X(x + k * kdir[0]), y2: P1.Y(y + k * kdir[1]), 'class': 'an-ln w dashl' }));
+        }
+        arrow(P1, 0, 0, x, y, 'w', 'x');
+        arrow(P2, 0, 0, a, c, 'down dash', 'f(e₁)'); arrow(P2, 0, 0, b, d, 'up dash', 'f(e₂)'); arrow(P2, 0, 0, fw[0], fw[1], 'w', 'f(x)');
+        var kn = 2 - r;
+        var t = 'rango(A) = <b>' + r + '</b> = dim Im f &nbsp;·&nbsp; dim Ker f = 2 − ' + r + ' = <b>' + kn + '</b>. ' +
+          (r === 2 ? '<b>Ker f = {0}</b> (solo el origen va al origen) e <b>Im f = ℝ²</b> (todo el plano).' :
+            r === 1 ? '<b>Ker f</b> es la <b>recta naranja</b> de la izquierda (todo lo que se aplasta sobre 0) e <b>Im f</b> es la <b>recta azul</b> de la derecha. Todos los puntos de la recta verde discontinua x + Ker f tienen la <b>misma</b> imagen f(x).' :
+              '<b>Ker f = ℝ²</b> (todo va a 0) e <b>Im f = {0}</b>.');
+        html(text, t);
+        res.textContent = '';
+        var fin = el('div', 'sar-final');
+        fin.textContent = 'dim V = dim Ker f + dim Im f :   2 = ' + kn + ' + ' + r;
+        res.appendChild(fin);
+        var nt = el('p', 'sar-hint');
+        nt.textContent = (r === 2 ? 'Inyectiva (Ker = {0}) y sobreyectiva (Im = W): es un isomorfismo.' : (r === 1 ? 'No es inyectiva (Ker ≠ {0}) ni sobreyectiva (Im ≠ W).' : 'No es inyectiva ni sobreyectiva.'));
+        res.appendChild(nt);
+      };
+      [sx, sy].concat(mi).forEach(function (s) { s.addEventListener('input', draw); });
+      root.appendChild(el('p', 'sar-text an-title', 'Para f(x) = A·x: el núcleo son los x que f aplasta en el origen y la imagen son todos los valores que f alcanza. Cambia la matriz y mueve el vector x.'));
+      root.appendChild(eq); root.appendChild(pair); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+      draw();
+    }
+  }
+
+  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
