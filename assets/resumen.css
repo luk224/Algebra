@@ -223,3 +223,45 @@ figure.bookfig img{max-width:100%;height:auto;background:#fff;border-radius:8px;
   html.print-color figcaption{color:var(--mut)}
 }
 .katex .base{width:auto}
+
+/* ---- Animación de la regla de Sarrus (assets/sarrus.js) ---- */
+.sarrus{margin:1.2em 0;padding:16px 14px 12px;border:1px solid var(--bd);border-radius:14px;background:var(--card);font-family:var(--sans)}
+.sar-board{position:relative;margin:0 auto}
+.sar-svg{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.sar-br{fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sar-sep{fill:none;stroke:var(--mut);stroke-width:1.5;stroke-dasharray:4 4;opacity:0;transition:opacity .5s}
+.sar-sep.show{opacity:1}
+.sar-line{stroke-width:4;stroke-linecap:round;opacity:.95;transition:stroke-dashoffset .9s ease,opacity .4s}
+.sar-line.down{stroke:var(--acc)}
+.sar-line.up{stroke:var(--sec)}
+.sar-line.done{opacity:.28}
+.sar-line.hide{opacity:0}
+.sar-cell{position:absolute;z-index:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font:600 20px var(--serif);color:var(--fg);transition:background .35s,box-shadow .35s,opacity .5s,transform .5s}
+.sar-cell input{width:100%;height:100%;box-sizing:border-box;border:1px dashed transparent;border-radius:10px;background:transparent;color:inherit;font:inherit;text-align:center;padding:0;-moz-appearance:textfield}
+.sar-cell input::-webkit-outer-spin-button,.sar-cell input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.sar-cell input:hover,.sar-cell input:focus{border-color:var(--mut);outline:none;background:color-mix(in srgb,var(--fg) 5%,transparent)}
+.sar-cell.copy{color:var(--mut);background:color-mix(in srgb,var(--fg) 7%,transparent);opacity:0;transform:translateX(-18px) scale(.9)}
+.sar-cell.copy.show{opacity:1;transform:none}
+.sar-cell.hp{background:color-mix(in srgb,var(--acc) 22%,var(--card));box-shadow:0 0 0 2px var(--acc)}
+.sar-cell.hn{background:color-mix(in srgb,var(--sec) 24%,var(--card));box-shadow:0 0 0 2px var(--sec)}
+.sar-text{min-height:3.4em;margin:14px 2px 6px;font:500 15.5px/1.5 var(--sans)}
+.sar-res{display:flex;flex-direction:column;gap:7px;min-height:1em;margin:4px 0 8px}
+.sar-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sar-tag{font:700 12px var(--sans);padding:3px 9px;border-radius:99px;color:var(--bg)}
+.sar-tag.down,.sar-sum.down{background:var(--acc)}.sar-tag.up,.sar-sum.up{background:var(--sec)}
+.sar-chip{font:500 14px var(--sans);padding:3px 9px;border-radius:8px;border:1px solid currentColor;animation:sarpop .4s ease}
+.sar-chip.down{color:var(--acc)}.sar-chip.up{color:var(--sec)}
+.sar-chip.now{font-weight:700;background:color-mix(in srgb,currentColor 12%,transparent)}
+.sar-chip b{font-weight:800}
+.sar-sum{font:700 14px var(--sans);padding:3px 10px;border-radius:8px;color:var(--bg);animation:sarpop .4s ease}
+.sar-final{font:700 17px var(--sans);padding:9px 12px;border-radius:10px;border:2px solid var(--fg);text-align:center;animation:sarpop .4s ease}
+.sar-prog{height:5px;border-radius:9px;background:color-mix(in srgb,var(--fg) 12%,transparent);overflow:hidden;margin:6px 0 10px}
+.sar-prog i{display:block;height:100%;background:var(--acc);transition:width .5s}
+.sar-ctrl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.sar-ctrl button{font:600 13.5px var(--sans);padding:7px 13px;border-radius:9px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);cursor:pointer}
+.sar-ctrl button.play{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.sar-ctrl button:disabled{opacity:.4;cursor:default}
+.sar-hint{margin:10px 0 0;font:13px/1.4 var(--sans);color:var(--mut);text-align:center}
+@keyframes sarpop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.sar-line,.sar-cell,.sar-chip,.sar-sum,.sar-final,.sar-sep,.sar-prog i{transition:none;animation:none}}
+@media print{.sar-ctrl,.sar-prog,.sar-hint{display:none}.sarrus{border:.7pt solid #000;break-inside:avoid}.sar-cell.copy{opacity:1;transform:none}}
