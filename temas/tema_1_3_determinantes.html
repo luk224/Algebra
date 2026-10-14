@@ -10,6 +10,7 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
 <script defer src="../assets/sarrus.js"></script>
 </head>
 <body>
@@ -84,6 +85,13 @@
   <span class="src" data-l="A" data-ref="Determinantes de orden dos / Determinantes de orden tres">A</span>
 </div>
 
+<div class="box ex"><span class="h">Interactivo: el determinante $2\times2$ es un área con signo</span>
+  <p>Las columnas de $A$ son dos vectores $u$ y $v$. El determinante $ad-bc$ es el <b>área del paralelogramo</b> que forman, con signo según la orientación. Mueve los deslizadores: verás que $\det=0$ justo cuando $u$ y $v$ quedan alineados (matriz no invertible).</p>
+  <div class="anim-area" data-v="2,1,0,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
 <div class="box ex"><span class="h">Ejemplo 1.16 de U</span>
   <p>$$\begin{vmatrix}2&3\\4&1\end{vmatrix}=2\cdot1-3\cdot4=-10.$$
   $$\begin{vmatrix}1&2&0\\3&2&2\\5&4&3\end{vmatrix}=1\cdot2\cdot3+3\cdot4\cdot0+2\cdot2\cdot5-0\cdot2\cdot5-2\cdot4\cdot1-3\cdot2\cdot3=6+0+20-0-8-18=0.$$</p>
@@ -101,6 +109,13 @@
   <p>Sarrus solo funciona para $3\times3$. Para calcular un determinante de cualquier orden $n$, se «baja» el problema a $n$ determinantes de orden $n-1$: se elige una fila (o columna), y por cada elemento de esa fila se calcula el determinante que queda al tachar su fila y su columna (el <b>menor complementario</b>), con un signo que alterna en tablero de ajedrez. Lay llama a esta idea «desarrollo por cofactores»; U la llama «desarrollo por adjuntos»: son <b>el mismo concepto</b> con distinto nombre, pero <b>ojo</b>: Lay usa la letra $A_{ij}$ para otra cosa (ver el aviso justo debajo).</p>
   <span class="src" data-l="L" data-ref="Lay §3.1, desarrollo por cofactores, definición recursiva, p. 165-166">L p.165-166</span>
 </div>
+
+<div class="box ex"><span class="h">Animación: desarrollo por adjuntos paso a paso</span>
+  <p>Se elige una fila o columna; para cada elemento se tacha su fila y su columna (gris), se calcula el determinante $2\times2$ que queda (el <b>menor</b>, en azul) y se multiplica por el signo del «tablero de ajedrez». Prueba con distintas líneas: el resultado no cambia, pero con una línea con ceros hay menos trabajo.</p>
+  <div class="anim-adj" data-m="2,1,3;0,-1,4;1,2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
 
 <div class="box def"><span class="h">Menor complementario y adjunto (cofactor)</span>
   <p>Dada $A=(a_{ij})$ de orden $n$, el <b>menor complementario</b> $M_{ij}$ es el determinante de orden $n-1$ que resulta de eliminar la fila $i$ y la columna $j$ de $A$ (U lo denota $\alpha_{ij}$ en el texto). El <b>adjunto</b> (o cofactor) es
@@ -196,12 +211,12 @@
 <h2 id="s4"><span class="n">4</span>Regla de Sarrus <span class="src" data-l="U" data-ref="U §1.3, p. 26">U p.26</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
-  <p>Sarrus es un atajo visual para no tener que pensar en las 6 permutaciones de $S_3$: se repiten las dos primeras columnas a la derecha (o las dos primeras filas debajo) y se suman los productos de las tres «diagonales» que bajan (con $+$) y se restan los de las tres que suben (con $-$).</p>
+  <p>Sarrus es un atajo visual para no tener que pensar en las 6 permutaciones de $S_3$: se repiten las dos primeras <b>filas debajo</b> de la matriz (también vale copiar las dos primeras columnas a la derecha: salen los mismos seis productos) y se suman los productos de las tres «diagonales» que bajan (con $+$) y se restan los de las tres que suben (con $-$).</p>
 </div>
 
 <div class="box ex"><span class="h">Cómo funciona, paso a paso (animación)</span>
-  <p>Pulsa <b>Reproducir</b> o avanza con <b>Siguiente</b>. Verás cómo se copian las dos primeras columnas, cómo se trazan las tres diagonales que bajan (azul, suman) y las tres que suben (naranja, restan), y cómo se obtiene el determinante. <b>Puedes cambiar los números de la matriz</b> para practicar con otros.</p>
-  <noscript><p><i>(Esta animación necesita JavaScript. Texto equivalente: se copian las columnas 1 y 2 a la derecha; se suman los productos de las tres diagonales descendentes y se restan los de las tres ascendentes.)</i></p></noscript>
+  <p>Pulsa <b>Reproducir</b> o avanza con <b>Siguiente</b>. Verás cómo se copian debajo las dos primeras filas, cómo se trazan las tres diagonales que bajan (azul, suman) y las tres que suben (naranja, restan), y cómo se obtiene el determinante. <b>Puedes cambiar los números de la matriz</b> para practicar con otros.</p>
+  <noscript><p><i>(Esta animación necesita JavaScript. Texto equivalente: se copian las filas 1 y 2 debajo de la matriz; se suman los productos de las tres diagonales descendentes y se restan los de las tres ascendentes.)</i></p></noscript>
   <div class="sarrus-demo" data-m="2,1,3,0,-1,4,1,2,1"></div>
   <span class="src" data-l="P" data-ref="Animación propia de la regla de Sarrus (con la matriz del Ejemplo propio 1); la regla es la de U §1.3, p. 26">P</span>
 </div>

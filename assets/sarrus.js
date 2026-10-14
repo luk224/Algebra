@@ -3,8 +3,8 @@
 (function () {
   'use strict';
   var S = 56, X0 = 26, Y0 = 14, NS = 'http://www.w3.org/2000/svg';
-  var DOWN = [[[0,0],[1,1],[2,2]], [[0,1],[1,2],[2,3]], [[0,2],[1,3],[2,4]]];   // ↘ (signo +): [fila, columna ampliada]
-  var UP   = [[[2,0],[1,1],[0,2]], [[2,1],[1,2],[0,3]], [[2,2],[1,3],[0,4]]];   // ↗ (signo −)
+  var DOWN = [[[0,0],[1,1],[2,2]], [[1,0],[2,1],[3,2]], [[2,0],[3,1],[4,2]]];   // ↘ (signo +): [fila ampliada, columna]
+  var UP   = [[[2,0],[1,1],[0,2]], [[3,0],[2,1],[1,2]], [[4,0],[3,1],[2,2]]];   // ↗ (signo −)
 
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
   function sv(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
@@ -19,9 +19,9 @@
     root.textContent = '';
     root.classList.add('sarrus');
     var board = el('div', 'sar-board');
-    board.style.width = (X0 + 5 * S + 14) + 'px';
-    board.style.height = (3 * S + 2 * Y0) + 'px';
-    var svg = sv('svg', { 'class': 'sar-svg', width: X0 + 5 * S + 14, height: 3 * S + 2 * Y0, 'aria-hidden': 'true' });
+    board.style.width = (X0 + 3 * S + 14) + 'px';
+    board.style.height = (5 * S + 2 * Y0) + 'px';
+    var svg = sv('svg', { 'class': 'sar-svg', width: X0 + 3 * S + 14, height: 5 * S + 2 * Y0, 'aria-hidden': 'true' });
     board.appendChild(svg);
 
     // corchetes y separador de copias
@@ -29,7 +29,7 @@
     var top = Y0 + 2, bot = Y0 + 3 * S - 2, L = X0 - 6, R = X0 + 3 * S + 6;
     path('M' + (L + 8) + ' ' + top + 'H' + L + 'V' + bot + 'H' + (L + 8), 'sar-br');
     path('M' + (R - 8) + ' ' + top + 'H' + R + 'V' + bot + 'H' + (R - 8), 'sar-br');
-    var sep = path('M' + (R + 6) + ' ' + (top - 4) + 'V' + (bot + 4), 'sar-sep');
+    var sep = path('M' + (L - 4) + ' ' + (bot + 8) + 'H' + (R + 4), 'sar-sep');
 
     // líneas de diagonales
     function center(rc) { return [X0 + rc[1] * S + S / 2, Y0 + rc[0] * S + S / 2]; }
@@ -48,11 +48,11 @@
 
     // celdas
     var cells = [];
-    for (var r = 0; r < 3; r++) {
+    for (var r = 0; r < 5; r++) {
       cells[r] = [];
-      for (var c = 0; c < 5; c++) {
+      for (var c = 0; c < 3; c++) {
         var box;
-        if (c < 3) {
+        if (r < 3) {
           box = el('div', 'sar-cell');
           var inp = el('input'); inp.type = 'number'; inp.value = m[r][c]; inp.step = 1;
           inp.setAttribute('aria-label', 'fila ' + (r + 1) + ', columna ' + (c + 1));
@@ -60,14 +60,14 @@
             var v = parseInt(ii.value, 10); m[rr][cc] = isNaN(v) ? 0 : v; sync(); render(); }); })(r, c, inp);
           box.appendChild(inp);
         } else {
-          box = el('div', 'sar-cell copy'); box.textContent = m[r][c - 3];
+          box = el('div', 'sar-cell copy'); box.textContent = m[r - 3][c];
         }
         box.style.left = (X0 + c * S + 4) + 'px'; box.style.top = (Y0 + r * S + 4) + 'px';
         box.style.width = (S - 8) + 'px'; box.style.height = (S - 8) + 'px';
         board.appendChild(box); cells[r][c] = box;
       }
     }
-    function sync() { for (var r2 = 0; r2 < 3; r2++) for (var c2 = 3; c2 < 5; c2++) cells[r2][c2].textContent = m[r2][c2 - 3]; }
+    function sync() { for (var r2 = 3; r2 < 5; r2++) for (var c2 = 0; c2 < 3; c2++) cells[r2][c2].textContent = m[r2 - 3][c2]; }
 
     var text = el('p', 'sar-text'); text.setAttribute('aria-live', 'polite');
     var res = el('div', 'sar-res');
@@ -80,9 +80,9 @@
     var prog = el('div', 'sar-prog'); var bar = el('i'); prog.appendChild(bar);
 
     root.appendChild(board); root.appendChild(text); root.appendChild(res); root.appendChild(prog); root.appendChild(ctrl);
-    root.appendChild(el('p', 'sar-hint', 'Puedes escribir tus propios números en la matriz (las columnas grises se copian solas) y volver a pulsar «Reproducir».'));
+    root.appendChild(el('p', 'sar-hint', 'Puedes escribir tus propios números en la matriz (las filas grises se copian solas) y volver a pulsar «Reproducir».'));
 
-    function prods(list) { return list.map(function (cs) { var v = cs.map(function (p) { return m[p[0]][p[1] % 3]; }); return { v: v, p: v[0] * v[1] * v[2] }; }); }
+    function prods(list) { return list.map(function (cs) { var v = cs.map(function (p) { return m[p[0] % 3][p[1]]; }); return { v: v, p: v[0] * v[1] * v[2] }; }); }
 
     function chip(o, kind) {
       var s = el('span', 'sar-chip ' + kind);
@@ -99,7 +99,7 @@
       if (step >= 2 && step <= 4) dI = step - 2;
       if (step >= 6 && step <= 8) uI = step - 6;
       var copied = step >= 1;
-      cells.forEach(function (row) { row.forEach(function (cl, c) { cl.classList.remove('hp', 'hn'); if (c >= 3) cl.classList.toggle('show', copied); }); });
+      cells.forEach(function (row, r) { row.forEach(function (cl) { cl.classList.remove('hp', 'hn'); if (r >= 3) cl.classList.toggle('show', copied); }); });
       sep.classList.toggle('show', copied);
 
       lines.down.forEach(function (l, i) {
@@ -117,7 +117,7 @@
       if (step === 9) UP.forEach(function (d) { d.forEach(function (p) { cells[p[0]][p[1]].classList.add('hn'); }); });
 
       if (step === 0) msg = 'Partimos de una matriz de orden 3. Sarrus solo sirve para matrices 3×3. Pulsa «Siguiente» (o «Reproducir») para ver el procedimiento.';
-      else if (step === 1) msg = 'Paso 1 · Copia a la derecha las dos primeras columnas (en gris). Así las diagonales no tienen que «dar la vuelta» por el borde de la matriz.';
+      else if (step === 1) msg = 'Paso 1 · Copia debajo de la matriz las dos primeras filas (en gris). Así las diagonales no tienen que «dar la vuelta» por el borde de la matriz.';
       else if (step <= 4) msg = 'Paso 2 · Diagonal descendente ↘ n.º ' + (step - 1) + ' de 3: se multiplican los tres números que toca la línea azul. Las tres diagonales ↘ llevan signo +.';
       else if (step === 5) msg = 'Suma de las tres diagonales \u2198 (signo +): P = ' + D.map(function (o) { return fmt(o.p); }).join(' + ') + ' = ' + sgn(P) + '.';
       else if (step <= 8) msg = 'Paso 3 · Diagonal ascendente ↗ n.º ' + (step - 5) + ' de 3: se multiplican los tres números que toca la línea naranja. Estas tres llevan signo −: se calculan igual, pero después se restan.';

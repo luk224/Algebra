@@ -10,6 +10,7 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -120,6 +121,13 @@
   <p>Para multiplicar $A$ por $B$, cada elemento del resultado es «fila de $A$ punto columna de $B$»: se recorren a la vez, se multiplican término a término y se suman. Por eso hace falta que la fila de $A$ y la columna de $B$ tengan <b>la misma longitud</b>: el número de columnas de $A$ debe coincidir con el número de filas de $B$.</p>
   <span class="src" data-l="L" data-ref="Lay §2.1, producto fila por columna, p. 96-97">L p.96-97</span>
 </div>
+
+<div class="box ex"><span class="h">Animación: el producto fila × columna</span>
+  <p>Pulsa <b>Siguiente</b>: en cada paso se resalta una <span style="color:var(--acc)"><b>fila de A</b></span> y una <span style="color:var(--sec)"><b>columna de B</b></span>; se multiplican elemento a elemento y se suman para dar <b>un</b> elemento de C. Observa por qué las dimensiones tienen que encajar.</p>
+  <div class="anim-prod" data-a="1,2,0;-1,3,1" data-b="2,1;0,-1;3,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
 
 <div class="box def"><span class="h">Definición</span>
   <p>Si $A\in\mathcal M_{m\times n}$ y $B\in\mathcal M_{n\times r}$, existe la matriz producto $P=AB\in\mathcal M_{m\times r}$ y
@@ -259,6 +267,13 @@
   <span class="src" data-l="U" data-ref="U Teorema 1.1, p. 18">U p.18</span>
 </div>
 
+<div class="box ex"><span class="h">Animación: el algoritmo de la inversa $(A\mid I)\to(I\mid A^{-1})$</span>
+  <p>Cada paso es una operación elemental por filas aplicada a <b>toda</b> la matriz ampliada. Se marca el pivote (azul), la fila que cambia (naranja) y el elemento que se anula. Al terminar, la mitad derecha es la inversa. Puedes cambiar la matriz (si no es invertible, el algoritmo lo detecta).</p>
+  <div class="anim-gauss" data-modo="inversa" data-m="2,1;5,3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
 <div class="box thm"><span class="h">Algoritmo para calcular la inversa</span>
   <p>Si $A$ es cuadrada de orden $n$ y regular, y $(A\mid I_n)\xrightarrow{\text{op. por filas}}(I_n\mid E)$, entonces por el Teorema 1.1, $I_n=EA$, luego $E=A^{-1}$. Si en algún paso aparece una fila nula en la parte izquierda, $A$ <b>no</b> es regular y es imposible llegar a $I_n$: se para el proceso.</p>
   <span class="src" data-l="U" data-ref="U p. 18-19 · L §2.2, algoritmo [A|I]→[I|A⁻¹], pp. 106-108">U p.18-19</span>
@@ -382,6 +397,13 @@
   <p>$A\in\mathcal M_{n\times n}$ es regular $\iff$ su escalonada reducida es $I_n$ $\iff$ cualquiera de sus escalonadas es triangular superior sin ceros en la diagonal.</p>
   <span class="src" data-l="U" data-ref="U p. 22">U p.22</span>
 </div>
+
+<div class="box ex"><span class="h">Animación: escalonar para calcular el rango</span>
+  <p>El <b>rango</b> es el número de filas no nulas de una escalonada. Fíjate en que en la columna 2 no aparece pivote (al anular la columna 1 todo lo de abajo queda en 0), y el pivote «salta» a la columna 3.</p>
+  <div class="anim-gauss" data-modo="rango" data-m="1,2,3;2,4,7;3,6,10"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
 
 <div class="box def"><span class="h">Definición 1.5 (rango)</span>
   <p>El <b>rango</b> de $A\in\mathcal M_{m\times n}$, denotado $\operatorname{rang}(A)$, es el número de filas no nulas de <b>cualquier</b> matriz escalonada de $A$ (el número no depende de cuál se elija).</p>

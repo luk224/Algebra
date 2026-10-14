@@ -10,6 +10,7 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -108,6 +109,13 @@
   Como hay infinitos pares $(\alpha,\beta)$ con $\alpha+\beta=1$ (por ejemplo $\alpha=t,\ \beta=1-t$ para cualquier $t\in\mathbb R$), hay infinitas soluciones. Geométricamente, $X_\alpha$ recorre la <b>recta</b> que pasa por $X_0$ y $X_1$.</p>
   <span class="src" data-l="U" data-ref="U Teorema 1.4, p. 30">U p.30</span>
 </div>
+
+<div class="box ex"><span class="h">Interactivo: un sistema $2\times2$ son dos rectas</span>
+  <p>Cada ecuación $ax+by=c$ es una recta del plano; las soluciones del sistema son los puntos comunes. Mira cómo los rangos de $A$ y $(A\mid b)$ deciden el caso: rectas que se cortan (determinado), paralelas (incompatible) o la misma recta (indeterminado).</p>
+  <div class="anim-rectas" data-v="1,1,3,1,-1,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
 
 <div class="box thm"><span class="h">Clasificación por rangos (Rouché-Frobenius)</span>
   <p>U llama <b>solución</b> de $AX=B$ a cualquier $X$ que cumpla la igualdad, y <b>sistema cuadrado</b> al caso $m=n$ (mismo número de ecuaciones que de incógnitas). Sea $AX=B$ con $A\in\mathcal M_{m\times n}$:</p>
@@ -269,6 +277,13 @@
   <p>Gauss es exactamente el escalonamiento del Tema 1.2, pero <b>normalizando cada pivote a 1</b> a medida que se avanza, y aplicado a la matriz <b>ampliada</b>. Al final queda un sistema triangular, que se resuelve de abajo arriba (<b>retrosustitución</b>).</p>
 </div>
 
+<div class="box ex"><span class="h">Animación: método de Gauss sobre un sistema</span>
+  <p>Solo se anula <b>por debajo</b> de cada pivote. Cuando la matriz queda escalonada, se resuelve de abajo hacia arriba. Puedes editar la matriz ampliada (la última columna es el término independiente).</p>
+  <div class="anim-gauss" data-modo="gauss" data-m="1,1,1,6;2,1,-1,1;1,-1,2,5" data-n="3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
 <div class="box thm"><span class="h">Pasos del algoritmo</span>
   <p>U lo enuncia para un sistema cualquiera (no hace falta que sea cuadrado): véase el Ejemplo 1.30 más abajo, con 3 ecuaciones y 5 incógnitas.</p>
   <ol class="steps">
@@ -327,6 +342,13 @@
 <div class="box intu"><span class="h">Idea intuitiva: un paso más que Gauss</span>
   <p>Gauss-Jordan hace todo lo de Gauss y además <b>anula también por encima</b> de cada pivote, no solo por debajo. El resultado es la matriz escalonada <b>reducida</b>: cada pivote vale 1 y es el único elemento no nulo de su columna. Si el sistema es determinado, la última columna de esa matriz reducida <b>ya es la solución</b>: no hace falta retrosustituir.</p>
 </div>
+
+<div class="box ex"><span class="h">Animación: Gauss-Jordan (sistema compatible indeterminado)</span>
+  <p>Gauss-Jordan normaliza cada pivote a 1 y anula <b>también por encima</b>, de modo que la solución se lee directamente. Aquí la tercera ecuación es la suma de las dos primeras, así que sobra una ecuación y queda un parámetro libre. Prueba a cambiar el último término de la fila 3 para ver un sistema incompatible.</p>
+  <div class="anim-gauss" data-modo="gj" data-m="1,1,1,6;2,-1,1,3;3,0,2,9" data-n="3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
 
 <div class="box thm"><span class="h">Comparación de coste y para qué sirve</span>
   <p>Gauss-Jordan tiene complejidad $\sim n^3/2$, más cara que Gauss ($\sim n^3/3$): para resolver <b>un único</b> sistema no es lo más eficiente. Su utilidad principal es <b>calcular la matriz inversa</b>: aplicando Gauss-Jordan a $(A\mid I)$ se llega a $(I\mid A^{-1})$ (idea ya vista en 1.2, aquí formalizada como el mismo algoritmo que resuelve sistemas).</p>

@@ -1,0 +1,628 @@
+/* Componentes interactivos y animaciones de los resúmenes de Álgebra.
+   Cada componente se activa por su clase y se configura con atributos data-*:
+   .anim-gauss   data-m="1,2,3;4,5,6" data-n="2" data-modo="gj|gauss|rango|inversa" data-vars="x,y,z"
+   .anim-prod    data-a="1,2;3,4" data-b="5,6;7,8"
+   .anim-adj     data-m="2,1,3;0,-1,4;1,2,1"
+   .anim-rectas  data-v="1,1,3,1,-1,1"                 (a1,b1,c1,a2,b2,c2)
+   .anim-area    data-v="2,1,0,2"                       (u=(a,c), v=(b,d))
+   .anim-combo   data-modo="combo|coord" data-u="2,1" data-v="-1,2"
+   .anim-union   data-d1="1,0" data-d2="0,1"
+   .anim-oper    data-op="0|1|2|3"
+*/
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function sv(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function html(e, h) { e.innerHTML = h; return e; }
+  var MINUS = '−';
+
+  /* ---------- fracciones exactas ---------- */
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  function F(n, d) { d = d == null ? 1 : d; if (d < 0) { n = -n; d = -d; } var g = gcd(n, d); return { n: n / g, d: d / g }; }
+  function add(a, b) { return F(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function sub(a, b) { return F(a.n * b.d - b.n * a.d, a.d * b.d); }
+  function mul(a, b) { return F(a.n * b.n, a.d * b.d); }
+  function div(a, b) { return F(a.n * b.d, a.d * b.n); }
+  function isz(a) { return a.n === 0; }
+  function ise(a, k) { return a.n === k * a.d; }
+  function neg(a) { return F(-a.n, a.d); }
+  function ftxt(a) { return a.d === 1 ? (a.n < 0 ? MINUS + (-a.n) : String(a.n)) : (a.n < 0 ? MINUS : '') + Math.abs(a.n) + '/' + a.d; }
+  function fhtml(a) {
+    if (a.d === 1) return a.n < 0 ? MINUS + (-a.n) : String(a.n);
+    return (a.n < 0 ? MINUS : '') + '<span class="fr"><i>' + Math.abs(a.n) + '</i><i>' + a.d + '</i></span>';
+  }
+  function fpar(a) { return (a.n < 0) ? '(' + ftxt(a) + ')' : ftxt(a); }
+  function num(x, dec) { var v = Math.round(x * 100) / 100; var s = String(v); if (dec) s = v.toFixed(dec); return s.replace('-', MINUS); }
+
+  /* ---------- barra de control común ---------- */
+  function stepper(root, N, render, hint, speed) {
+    var st = { step: 0, N: N, timer: null };
+    var text = el('p', 'sar-text'); text.setAttribute('aria-live', 'polite');
+    var prog = el('div', 'sar-prog'), bar = el('i'); prog.appendChild(bar);
+    var ctrl = el('div', 'sar-ctrl');
+    function btn(label, fn, cls) { var b = el('button', cls || '', label); b.type = 'button'; b.addEventListener('click', fn); ctrl.appendChild(b); return b; }
+    var bPrev = btn('◀ Anterior', function () { stop(); go(st.step - 1); });
+    var bPlay = btn('▶ Reproducir', function () { st.timer ? stop() : play(); }, 'play');
+    var bNext = btn('Siguiente ▶', function () { stop(); go(st.step + 1); });
+    btn('↺ Reiniciar', function () { stop(); go(0); });
+    function refresh() {
+      bar.style.width = (st.N ? st.step / st.N * 100 : 0) + '%';
+      bPrev.disabled = st.step === 0; bNext.disabled = st.step >= st.N;
+      bPlay.textContent = st.timer ? '⏸ Pausa' : (st.step >= st.N ? '↺ Repetir' : '▶ Reproducir');
+    }
+    function go(s) { st.step = Math.max(0, Math.min(st.N, s)); render(st.step, text); refresh(); }
+    function stop() { if (st.timer) { clearInterval(st.timer); st.timer = null; } refresh(); }
+    function play() {
+      if (st.step >= st.N) st.step = 0; go(st.step);
+      st.timer = setInterval(function () { if (st.step >= st.N) { stop(); return; } go(st.step + 1); if (st.step >= st.N) stop(); }, speed || 2200);
+      refresh();
+    }
+    st.go = go; st.stop = stop; st.text = text; st.setN = function (n) { st.N = n; };
+    st.mount = function (parent, before) {
+      parent.appendChild(text);
+      if (before) parent.appendChild(before);
+      parent.appendChild(prog); parent.appendChild(ctrl);
+      if (hint) parent.appendChild(el('p', 'sar-hint', hint));
+    };
+    return st;
+  }
+
+  function parseM(str) { return str.split(';').map(function (r) { return r.split(',').map(function (x) { return F(parseInt(x, 10) || 0, 1); }); }); }
+  function cloneM(M) { return M.map(function (r) { return r.slice(); }); }
+
+  /* =====================================================================
+     1. GAUSS / GAUSS-JORDAN / RANGO / INVERSA
+     ===================================================================== */
+  function buildGauss(root) {
+    var modo = root.getAttribute('data-modo') || 'gj';
+    var A0 = parseM(root.getAttribute('data-m') || '1,2,-1,3;2,1,1,4;1,-1,2,1');
+    var ncol = A0[0].length;
+    var n = parseInt(root.getAttribute('data-n') || (modo === 'rango' ? ncol : (modo === 'inversa' ? ncol : ncol - 1)), 10);
+    var vars = (root.getAttribute('data-vars') || (n <= 3 ? 'x,y,z' : 'x1,x2,x3,x4,x5,x6')).split(',');
+    var steps = [];
+    root.textContent = ''; root.classList.add('sarrus', 'an-gauss');
+
+    function buildSteps() {
+      steps = [];
+      var M = cloneM(A0), rows = M.length;
+      if (modo === 'inversa') {
+        for (var i = 0; i < rows; i++) for (var j = 0; j < rows; j++) M[i].push(F(i === j ? 1 : 0));
+      }
+      var tot = M[0].length;
+      var full = (modo === 'gj' || modo === 'inversa' || modo === 'rango');
+      steps.push({ M: cloneM(M), txt: modo === 'inversa'
+        ? 'Escribimos la matriz ampliada <b>(A | I)</b>: a la izquierda A y a la derecha la identidad. Vamos a convertir A en I con operaciones por filas; la identidad se transformará en A⁻¹.'
+        : (modo === 'rango' ? 'Matriz de partida. Vamos a escalonarla con operaciones elementales por filas; el rango será el número de filas no nulas.'
+          : 'Matriz ampliada <b>(A | b)</b> del sistema. Aplicamos operaciones elementales por filas (no cambian las soluciones) hasta que quede ' + (full ? 'reducida (Gauss-Jordan)' : 'escalonada (Gauss)') + '.'),
+        hi: {}, op: '' });
+      var r = 0;
+      for (var c = 0; c < n && r < rows; c++) {
+        var k = -1;
+        for (var q = r; q < rows; q++) if (!isz(M[q][c])) { k = q; break; }
+        if (k < 0) {
+          steps.push({ M: cloneM(M), txt: 'Columna ' + (c + 1) + ': a partir de la fila ' + (r + 1) + ' todos son 0, así que no hay pivote en esta columna y pasamos a la siguiente.', hi: { col: c }, op: '' });
+          continue;
+        }
+        if (k !== r) {
+          var t = M[r]; M[r] = M[k]; M[k] = t;
+          steps.push({ M: cloneM(M), txt: 'El pivote de la columna ' + (c + 1) + ' no puede ser 0: <b>intercambiamos F' + (r + 1) + ' ↔ F' + (k + 1) + '</b> para subir una fila con un elemento distinto de 0.', hi: { pivot: [r, c], rows: [r, k] }, op: 'F' + (r + 1) + ' ↔ F' + (k + 1) });
+        }
+        var p = M[r][c];
+        if (full && !ise(p, 1)) {
+          for (var j2 = 0; j2 < tot; j2++) M[r][j2] = div(M[r][j2], p);
+          steps.push({ M: cloneM(M), txt: 'Dividimos la fila del pivote entre <b>' + ftxt(p) + '</b> para que el pivote valga 1: <b>F' + (r + 1) + ' → (1/' + fpar(p) + ')·F' + (r + 1) + '</b>.', hi: { pivot: [r, c], rows: [r] }, op: 'F' + (r + 1) + ' → F' + (r + 1) + ' / ' + fpar(p) });
+          p = M[r][c];
+        }
+        for (var i2 = (full ? 0 : r + 1); i2 < rows; i2++) {
+          if (i2 === r || isz(M[i2][c])) continue;
+          var f = div(M[i2][c], p);
+          var old = M[i2][c];
+          for (var j3 = 0; j3 < tot; j3++) M[i2][j3] = sub(M[i2][j3], mul(f, M[r][j3]));
+          var signo = f.n < 0 ? '+ ' + ftxt(neg(f)) : MINUS + ' ' + ftxt(f);
+          steps.push({ M: cloneM(M), txt: 'Hacemos 0 el <b>' + ftxt(old) + '</b> de la fila ' + (i2 + 1) + ' (columna ' + (c + 1) + '): <b>F' + (i2 + 1) + ' → F' + (i2 + 1) + ' ' + signo + '·F' + (r + 1) + '</b>. Se resta a la fila ' + (i2 + 1) + ' un múltiplo de la fila del pivote.', hi: { pivot: [r, c], rows: [i2], zero: [i2, c] }, op: 'F' + (i2 + 1) + ' → F' + (i2 + 1) + ' ' + signo + '·F' + (r + 1) });
+        }
+        r++;
+      }
+      // mensaje final
+      var rankA = 0, rankAb = 0;
+      for (var i3 = 0; i3 < rows; i3++) {
+        var nzA = false, nzAll = false;
+        for (var j4 = 0; j4 < n; j4++) if (!isz(M[i3][j4])) nzA = true;
+        for (var j5 = 0; j5 < tot; j5++) if (!isz(M[i3][j5])) nzAll = true;
+        if (nzA) rankA++; if (nzAll) rankAb++;
+      }
+      var fin = '';
+      if (modo === 'rango') fin = '<b>Matriz escalonada.</b> Tiene ' + rankA + ' fila' + (rankA === 1 ? '' : 's') + ' no nula' + (rankA === 1 ? '' : 's') + ': <b>rango = ' + rankA + '</b>.';
+      else if (modo === 'inversa') {
+        var isI = rankA === rows && n === rows;
+        if (isI) {
+          fin = '<b>A se ha convertido en I</b>, así que la parte derecha es <b>A⁻¹</b>.';
+        } else fin = '<b>A no se puede convertir en I</b> (rango ' + rankA + ' < ' + rows + '): A <b>no es invertible</b>.';
+      } else {
+        var inc = false;
+        for (var i4 = 0; i4 < rows; i4++) { var zz = true; for (var j6 = 0; j6 < n; j6++) if (!isz(M[i4][j6])) zz = false; if (zz && !isz(M[i4][n])) inc = true; }
+        if (inc) fin = 'Una fila ha quedado <b>0 = número distinto de 0</b>: imposible. rango(A) = ' + rankA + ' ≠ rango(A|b) = ' + rankAb + ' ⇒ sistema <b>incompatible</b> (no tiene solución).';
+        else if (rankA === n) fin = 'rango(A) = rango(A|b) = ' + rankA + ' = n.º de incógnitas ⇒ sistema <b>compatible determinado</b>. ' + solucion(M, n, full, vars, rows);
+        else fin = 'rango(A) = rango(A|b) = ' + rankA + ' < ' + n + ' incógnitas ⇒ sistema <b>compatible indeterminado</b> (' + (n - rankA) + ' parámetro' + (n - rankA > 1 ? 's' : '') + ' libre' + (n - rankA > 1 ? 's' : '') + '). ' + solucion(M, n, full, vars, rows);
+      }
+      steps.push({ M: cloneM(M), txt: fin, hi: { fin: true }, op: '', final: true });
+    }
+
+    // solución a partir de la forma final (se re-reduce internamente para leer parámetros)
+    function solucion(M, n, full, vars, rows) {
+      var R = cloneM(M), r = 0, piv = [];
+      for (var c = 0; c < n && r < rows; c++) {
+        var k = -1; for (var q = r; q < rows; q++) if (!isz(R[q][c])) { k = q; break; }
+        if (k < 0) continue;
+        var t = R[r]; R[r] = R[k]; R[k] = t;
+        var p = R[r][c]; for (var j = 0; j < R[r].length; j++) R[r][j] = div(R[r][j], p);
+        for (var i = 0; i < rows; i++) if (i !== r && !isz(R[i][c])) { var f = R[i][c]; for (var j2 = 0; j2 < R[i].length; j2++) R[i][j2] = sub(R[i][j2], mul(f, R[r][j2])); }
+        piv.push(c); r++;
+      }
+      var free = []; for (var cc = 0; cc < n; cc++) if (piv.indexOf(cc) < 0) free.push(cc);
+      var greek = ['α', 'β', 'γ', 'δ'];
+      var out = [];
+      for (var pi = 0; pi < piv.length; pi++) {
+        var rowi = pi, s = ftxt(R[rowi][n]);
+        var parts = [];
+        if (!isz(R[rowi][n]) || free.length === 0) parts.push(ftxt(R[rowi][n]));
+        for (var fi = 0; fi < free.length; fi++) {
+          var co = neg(R[rowi][free[fi]]);
+          if (isz(co)) continue;
+          var term = (ise(co, 1) ? '' : (ise(co, -1) ? MINUS : ftxt(co) + '·')) + greek[fi];
+          parts.push(term);
+        }
+        var expr = parts.length ? parts.join(' + ').replace(/\+ −/g, MINUS + ' ') : '0';
+        out.push({ c: piv[pi], t: vars[piv[pi]] + ' = ' + expr });
+      }
+      for (var fj = 0; fj < free.length; fj++) out.push({ c: free[fj], t: vars[free[fj]] + ' = ' + greek[fj] });
+      out.sort(function (a, b) { return a.c - b.c; });
+      return (full ? 'Se lee directamente: ' : 'Resolviendo de abajo hacia arriba (sustitución hacia atrás): ') + '<b>' + out.map(function (o) { return o.t; }).join(', ') + '</b>' + (free.length ? ' (' + free.map(function (_, i) { return greek[i]; }).join(', ') + ' ∈ ℝ).' : '.');
+    }
+
+    // ---- DOM ----
+    var tableWrap = el('div', 'gj-wrap');
+    var opLine = el('div', 'gj-op');
+    var detail = el('details', 'gj-edit');
+    detail.appendChild(el('summary', '', '✎ Cambiar la matriz'));
+    var edGrid = el('div', 'gj-grid');
+    var applyBtn = el('button', 'gj-apply', 'Aplicar'); applyBtn.type = 'button';
+    detail.appendChild(edGrid); detail.appendChild(applyBtn);
+    var inputs = [];
+    function mkInputs() {
+      edGrid.textContent = ''; inputs = [];
+      edGrid.style.gridTemplateColumns = 'repeat(' + ncol + ',3.2em)';
+      for (var i = 0; i < A0.length; i++) for (var j = 0; j < ncol; j++) {
+        var inp = el('input'); inp.type = 'number'; inp.step = 1; inp.value = A0[i][j].n; inp.setAttribute('aria-label', 'fila ' + (i + 1) + ' columna ' + (j + 1)); edGrid.appendChild(inp); inputs.push(inp);
+      }
+    }
+    var st;
+    function render(s, text) {
+      var S = steps[s]; tableWrap.textContent = '';
+      var M = S.M, tot = M[0].length, hi = S.hi || {};
+      var tb = el('table', 'gj-m');
+      for (var i = 0; i < M.length; i++) {
+        var tr = el('tr');
+        var lab = el('th', 'gj-lab', 'F' + (i + 1)); tr.appendChild(lab);
+        var changed = hi.rows && hi.rows.indexOf(i) >= 0;
+        for (var j = 0; j < tot; j++) {
+          var td = el('td'); html(td, fhtml(M[i][j]));
+          if (j === 0) td.classList.add('lb');
+          if (j === tot - 1) td.classList.add('rb');
+          if ((modo !== 'rango') && j === n) td.classList.add('bar');
+          if (changed) td.classList.add('chg');
+          if (hi.pivot && hi.pivot[0] === i && hi.pivot[1] === j) td.classList.add('piv');
+          if (hi.zero && hi.zero[0] === i && hi.zero[1] === j) td.classList.add('zer');
+          if (hi.col === j) td.classList.add('colhi');
+          if (modo === 'inversa' && S.final && j >= n && steps[s].M && true) td.classList.add('inv');
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      }
+      tableWrap.appendChild(tb);
+      opLine.textContent = S.op ? 'Operación: ' + S.op : '';
+      html(text, S.txt);
+    }
+    buildSteps(); mkInputs();
+    st = stepper(root, steps.length - 1, render, null, 2600);
+    root.appendChild(tableWrap); root.appendChild(opLine);
+    st.mount(root);
+    root.appendChild(detail);
+    applyBtn.addEventListener('click', function () {
+      var k = 0; for (var i = 0; i < A0.length; i++) for (var j = 0; j < ncol; j++) A0[i][j] = F(parseInt(inputs[k++].value, 10) || 0, 1);
+      st.stop(); buildSteps(); st.setN(steps.length - 1); st.go(0);
+    });
+    st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(steps.length - 1); });
+  }
+
+  /* =====================================================================
+     2. PRODUCTO DE MATRICES (fila x columna)
+     ===================================================================== */
+  function buildProd(root) {
+    var A = parseM(root.getAttribute('data-a') || '1,2;3,4;5,6'), B = parseM(root.getAttribute('data-b') || '7,8,9;10,11,12');
+    var m = A.length, k = A[0].length, p = B[0].length;
+    root.textContent = ''; root.classList.add('sarrus');
+    var C = []; for (var i = 0; i < m; i++) { C[i] = []; for (var j = 0; j < p; j++) { var s = F(0); for (var q = 0; q < k; q++) s = add(s, mul(A[i][q], B[q][j])); C[i][j] = s; } }
+    var wrap = el('div', 'pm-wrap');
+    function grid(M, cls) { var t = el('table', 'gj-m pm ' + cls); M.forEach(function (row, i) { var tr = el('tr'); row.forEach(function (v, j) { var td = el('td'); html(td, fhtml(v)); if (j === 0) td.classList.add('lb'); if (j === row.length - 1) td.classList.add('rb'); tr.appendChild(td); }); t.appendChild(tr); }); return t; }
+    var tA = grid(A, 'pa'), tB = grid(B, 'pb'), tC = grid(C.map(function (r) { return r.map(function () { return F(0); }); }), 'pc');
+    var op1 = el('span', 'pm-sym', '×'), op2 = el('span', 'pm-sym', '='), lA = el('div', 'pm-col'), lB = el('div', 'pm-col'), lC = el('div', 'pm-col');
+    lA.appendChild(tA); lA.appendChild(el('small', '', 'A (' + m + '×' + k + ')'));
+    lB.appendChild(tB); lB.appendChild(el('small', '', 'B (' + k + '×' + p + ')'));
+    lC.appendChild(tC); lC.appendChild(el('small', '', 'C = A·B (' + m + '×' + p + ')'));
+    wrap.appendChild(lA); wrap.appendChild(op1); wrap.appendChild(lB); wrap.appendChild(op2); wrap.appendChild(lC);
+    var res = el('div', 'sar-res');
+    function render(s, text) {
+      var cells = function (t) { return t.querySelectorAll('td'); };
+      [tA, tB, tC].forEach(function (t) { cells(t).forEach(function (td) { td.classList.remove('hr', 'hc', 'hx'); }); });
+      var done = s - 1, ci = Math.floor((s - 1) / p), cj = (s - 1) % p;
+      cells(tC).forEach(function (td, idx) { var ii = Math.floor(idx / p), jj = idx % p; var filled = s > 0 && (ii * p + jj) <= (s - 1); html(td, filled ? fhtml(C[ii][jj]) : '<span class="q">?</span>'); });
+      res.textContent = '';
+      if (s === 0) { text.textContent = 'Para multiplicar A·B, cada elemento de C se obtiene multiplicando una FILA de A por una COLUMNA de B, elemento a elemento, y sumando. Hace falta que A tenga tantas columnas como filas tiene B (' + k + ' = ' + k + ').'; return; }
+      cells(tA).forEach(function (td, idx) { if (Math.floor(idx / k) === ci) td.classList.add('hr'); });
+      cells(tB).forEach(function (td, idx) { if (idx % p === cj) td.classList.add('hc'); });
+      cells(tC).forEach(function (td, idx) { if (idx === ci * p + cj) td.classList.add('hx'); });
+      var terms = [], vals = [];
+      for (var q2 = 0; q2 < k; q2++) { terms.push(fpar(A[ci][q2]) + '·' + fpar(B[q2][cj])); vals.push(ftxt(mul(A[ci][q2], B[q2][cj]))); }
+      text.textContent = 'Elemento c' + (ci + 1) + (cj + 1) + ' = (fila ' + (ci + 1) + ' de A) · (columna ' + (cj + 1) + ' de B).';
+      var line = el('div', 'sar-final'); line.textContent = 'c' + (ci + 1) + (cj + 1) + ' = ' + terms.join(' + ') + ' = ' + vals.join(' + ').replace(/\+ −/g, MINUS + ' ') + ' = ' + ftxt(C[ci][cj]);
+      res.appendChild(line);
+    }
+    var st = stepper(root, m * p, render, null, 2400);
+    root.appendChild(wrap); st.mount(root, res);
+    st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(m * p); });
+  }
+
+  /* =====================================================================
+     3. DESARROLLO POR ADJUNTOS (3x3)
+     ===================================================================== */
+  function buildAdj(root) {
+    var M = parseM(root.getAttribute('data-m') || '2,1,3;0,-1,4;1,2,1');
+    var line = { tipo: 'f', idx: 0 };
+    root.textContent = ''; root.classList.add('sarrus');
+    var ctrlSel = el('div', 'adj-sel');
+    var selT = el('select'); [['f', 'una fila'], ['c', 'una columna']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; selT.appendChild(op); });
+    var selI = el('select'); [0, 1, 2].forEach(function (i) { var op = el('option', '', 'n.º ' + (i + 1)); op.value = i; selI.appendChild(op); });
+    ctrlSel.appendChild(el('span', '', 'Desarrollar por ')); ctrlSel.appendChild(selT); ctrlSel.appendChild(selI);
+    ctrlSel.appendChild(el('span', 'adj-tip', ' (consejo: elige la línea con más ceros)'));
+    var wrap = el('div', 'pm-wrap');
+    var tbl = el('table', 'gj-m pm');
+    for (var i = 0; i < 3; i++) { var tr = el('tr'); for (var j = 0; j < 3; j++) { var td = el('td'); td.textContent = ftxt(M[i][j]); if (j === 0) td.classList.add('lb'); if (j === 2) td.classList.add('rb'); tr.appendChild(td); } tbl.appendChild(tr); }
+    var signT = el('table', 'gj-m pm sg');
+    for (var i2 = 0; i2 < 3; i2++) { var tr2 = el('tr'); for (var j2 = 0; j2 < 3; j2++) { var t2 = el('td'); t2.textContent = ((i2 + j2) % 2 === 0) ? '+' : MINUS; if (j2 === 0) t2.classList.add('lb'); if (j2 === 2) t2.classList.add('rb'); tr2.appendChild(t2); } signT.appendChild(tr2); }
+    var cA = el('div', 'pm-col'); cA.appendChild(tbl); cA.appendChild(el('small', '', 'Matriz A'));
+    var cS = el('div', 'pm-col'); cS.appendChild(signT); cS.appendChild(el('small', '', 'Signos (−1)^(i+j): tablero de ajedrez'));
+    wrap.appendChild(cA); wrap.appendChild(cS);
+    var res = el('div', 'sar-res');
+    function terms() {
+      var out = [];
+      for (var t = 0; t < 3; t++) {
+        var r = line.tipo === 'f' ? line.idx : t, c = line.tipo === 'f' ? t : line.idx;
+        var rs = [0, 1, 2].filter(function (x) { return x !== r; }), cs = [0, 1, 2].filter(function (x) { return x !== c; });
+        var a = M[rs[0]][cs[0]], b = M[rs[0]][cs[1]], cc = M[rs[1]][cs[0]], d = M[rs[1]][cs[1]];
+        var minor = sub(mul(a, d), mul(b, cc));
+        var sg = ((r + c) % 2 === 0) ? 1 : -1;
+        out.push({ r: r, c: c, el: M[r][c], a: a, b: b, cc: cc, d: d, minor: minor, sg: sg, val: mul(F(sg), mul(M[r][c], minor)) });
+      }
+      return out;
+    }
+    function render(s, text) {
+      var tds = tbl.querySelectorAll('td'); tds.forEach(function (td) { td.className = td.className.replace(/\b(hl|dim|mn|el)\b/g, '').trim(); });
+      signT.querySelectorAll('td').forEach(function (td) { td.classList.remove('hl'); });
+      var T = terms(); res.textContent = '';
+      var nombre = line.tipo === 'f' ? 'la fila ' + (line.idx + 1) : 'la columna ' + (line.idx + 1);
+      if (s === 0) {
+        for (var t0 = 0; t0 < 3; t0++) { tds[T[t0].r * 3 + T[t0].c].classList.add('hl'); signT.querySelectorAll('td')[T[t0].r * 3 + T[t0].c].classList.add('hl'); }
+        text.textContent = 'Elegimos desarrollar por ' + nombre + '. El determinante es la suma de (signo)·(elemento)·(menor) para cada elemento de esa línea. El menor de a_ij es el determinante 2×2 que queda al tachar su fila y su columna.';
+        return;
+      }
+      var sumTo = Math.min(s, 3);
+      for (var t = 0; t < sumTo; t++) {
+        var X = T[t];
+        var row = el('div', 'sar-row');
+        var chip = el('span', 'sar-chip ' + (X.sg > 0 ? 'down' : 'up') + (t === s - 1 ? ' now' : ''));
+        chip.textContent = (X.sg > 0 ? '+' : MINUS) + ' ' + fpar(X.el) + ' \u00B7 (' + fpar(X.a) + '\u00B7' + fpar(X.d) + ' \u2212 ' + fpar(X.b) + '\u00B7' + fpar(X.cc) + ') = ' + (X.sg > 0 ? '+' : MINUS) + ' ' + fpar(X.el) + ' \u00B7 (' + ftxt(X.minor) + ') = ' + ftxt(X.val);
+        row.appendChild(chip); res.appendChild(row);
+      }
+      if (s <= 3) {
+        var X2 = T[s - 1];
+        for (var i3 = 0; i3 < 3; i3++) for (var j3 = 0; j3 < 3; j3++) {
+          var td3 = tds[i3 * 3 + j3];
+          if (i3 === X2.r && j3 === X2.c) td3.classList.add('el');
+          else if (i3 === X2.r || j3 === X2.c) td3.classList.add('dim');
+          else td3.classList.add('mn');
+        }
+        signT.querySelectorAll('td')[X2.r * 3 + X2.c].classList.add('hl');
+        text.textContent = 'Término ' + s + ': elemento a' + (X2.r + 1) + (X2.c + 1) + ' = ' + ftxt(X2.el) + '. Se tacha su fila y su columna (gris); el menor es el determinante 2×2 que queda (azul): ' + ftxt(X2.a) + '·' + fpar(X2.d) + ' − ' + fpar(X2.b) + '·' + fpar(X2.cc) + ' = ' + ftxt(X2.minor) + '. Signo: ' + (X2.sg > 0 ? '+' : MINUS) + ' (casilla ' + (X2.r + 1) + ',' + (X2.c + 1) + ' del tablero).';
+      } else {
+        var tot = T[0].val; tot = add(add(T[0].val, T[1].val), T[2].val);
+        var f = el('div', 'sar-final'); f.textContent = '|A| = ' + T.map(function (x) { return ftxt(x.val); }).join(' + ').replace(/\+ −/g, MINUS + ' ') + ' = ' + ftxt(tot);
+        res.appendChild(f);
+        text.textContent = 'Se suman los tres términos. Se obtiene el mismo valor que con Sarrus: el determinante no depende de la línea elegida.';
+      }
+    }
+    var st = stepper(root, 4, render, 'Prueba a cambiar la línea: el resultado siempre es el mismo.', 2800);
+    root.appendChild(ctrlSel); root.appendChild(wrap); st.mount(root, res);
+    function onSel() { line.tipo = selT.value; line.idx = parseInt(selI.value, 10); st.stop(); st.go(0); }
+    selT.addEventListener('change', onSel); selI.addEventListener('change', onSel);
+    st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(4); });
+  }
+
+  /* =====================================================================
+     helpers para planos SVG
+     ===================================================================== */
+  function plane(root, W, H, R) {
+    var svg = sv('svg', { viewBox: '0 0 ' + W + ' ' + H, 'class': 'an-svg', role: 'img' });
+    var sx = W / (2 * R), sy = H / (2 * R);
+    var X = function (x) { return W / 2 + x * sx; }, Y = function (y) { return H / 2 - y * sy; };
+    for (var g = -R; g <= R; g++) {
+      svg.appendChild(sv('line', { x1: X(g), y1: 0, x2: X(g), y2: H, 'class': g === 0 ? 'an-ax' : 'an-gr' }));
+      svg.appendChild(sv('line', { x1: 0, y1: Y(g), x2: W, y2: Y(g), 'class': g === 0 ? 'an-ax' : 'an-gr' }));
+    }
+    for (var t = -R + 1; t < R; t += (R > 5 ? 2 : 1)) if (t !== 0) {
+      var a = sv('text', { x: X(t), y: Y(0) + 13, 'class': 'an-tk', 'text-anchor': 'middle' }); a.textContent = t.toString().replace('-', MINUS); svg.appendChild(a);
+      var b = sv('text', { x: X(0) - 5, y: Y(t) + 4, 'class': 'an-tk', 'text-anchor': 'end' }); b.textContent = t.toString().replace('-', MINUS); svg.appendChild(b);
+    }
+    var layer = sv('g', {}); svg.appendChild(layer);
+    return { svg: svg, X: X, Y: Y, layer: layer, W: W, H: H, R: R, clear: function () { while (layer.firstChild) layer.removeChild(layer.firstChild); } };
+  }
+  function arrow(P, x1, y1, x2, y2, cls, label) {
+    var X = P.X, Y = P.Y, L = P.layer;
+    var ax = X(x2), ay = Y(y2), bx = X(x1), by = Y(y1);
+    var dx = ax - bx, dy = ay - by, len = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / len, uy = dy / len;
+    L.appendChild(sv('line', { x1: bx, y1: by, x2: ax - ux * 2, y2: ay - uy * 2, 'class': 'an-vec ' + cls }));
+    if (len > 6) L.appendChild(sv('polygon', { points: ax + ',' + ay + ' ' + (ax - ux * 11 - uy * 5) + ',' + (ay - uy * 11 + ux * 5) + ' ' + (ax - ux * 11 + uy * 5) + ',' + (ay - uy * 11 - ux * 5), 'class': 'an-head ' + cls }));
+    if (label) { var tx = sv('text', { x: ax + (ux >= 0 ? 8 : -8), y: ay - (uy >= 0 ? -14 : 8), 'class': 'an-lb ' + cls, 'text-anchor': ux >= 0 ? 'start' : 'end' }); tx.textContent = label; L.appendChild(tx); }
+  }
+  function numInput(val, step, w) { var i = el('input', 'an-in'); i.type = 'number'; i.value = val; i.step = step || 1; if (w) i.style.width = w; return i; }
+  function slider(min, max, step, val) { var s = el('input', 'an-sl'); s.type = 'range'; s.min = min; s.max = max; s.step = step; s.value = val; return s; }
+  function btnRow(items, fn) { var d = el('div', 'sar-ctrl an-presets'); items.forEach(function (it, i) { var b = el('button', '', it); b.type = 'button'; b.addEventListener('click', function () { fn(i); }); d.appendChild(b); }); return d; }
+
+  /* =====================================================================
+     4. SISTEMA 2x2 COMO DOS RECTAS
+     ===================================================================== */
+  function buildRectas(root) {
+    var v0 = (root.getAttribute('data-v') || '1,1,3,1,-1,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 360, 360, 6);
+    var inp = [];
+    var box = el('div', 'an-eqs');
+    function eqRow(k) {
+      var d = el('div', 'an-eq ' + (k ? 'up' : 'down'));
+      var a = numInput(v0[3 * k], .5, '3.6em'), b = numInput(v0[3 * k + 1], .5, '3.6em'), c = numInput(v0[3 * k + 2], .5, '3.6em');
+      d.appendChild(a); d.appendChild(el('span', '', ' x + ')); d.appendChild(b); d.appendChild(el('span', '', ' y = ')); d.appendChild(c);
+      inp.push(a, b, c); box.appendChild(d);
+    }
+    eqRow(0); eqRow(1);
+    var text = el('p', 'sar-text'), info = el('div', 'sar-res');
+    var pre = btnRow(['Se cortan en un punto', 'Paralelas (sin solución)', 'La misma recta (infinitas)'], function (i) {
+      var p = [[1, 1, 3, 1, -1, 1], [1, 1, 3, 2, 2, 2], [1, 2, 4, 2, 4, 8]][i]; inp.forEach(function (x, j) { x.value = p[j]; }); draw();
+    });
+    function line(a, b, c, cls) {
+      var R = P.R, pts = [];
+      if (Math.abs(b) > 1e-9) { [-R, R].forEach(function (x) { pts.push([x, (c - a * x) / b]); }); }
+      else if (Math.abs(a) > 1e-9) { [-R, R].forEach(function (y) { pts.push([c / a, y]); }); }
+      else return;
+      P.layer.appendChild(sv('line', { x1: P.X(pts[0][0]), y1: P.Y(pts[0][1]), x2: P.X(pts[1][0]), y2: P.Y(pts[1][1]), 'class': 'an-ln ' + cls }));
+    }
+    function draw() {
+      var v = inp.map(function (x) { return parseFloat(x.value) || 0; });
+      var a1 = v[0], b1 = v[1], c1 = v[2], a2 = v[3], b2 = v[4], c2 = v[5];
+      P.clear(); line(a1, b1, c1, 'down'); line(a2, b2, c2, 'up');
+      var det = a1 * b2 - a2 * b1, eps = 1e-9, rA, rAb;
+      var nz = function (x) { return Math.abs(x) > eps; };
+      if (nz(det)) { rA = 2; rAb = 2; } else { rA = (nz(a1) || nz(b1) || nz(a2) || nz(b2)) ? 1 : 0; rAb = (nz(a1 * c2 - a2 * c1) || nz(b1 * c2 - b2 * c1)) ? 2 : ((rA || nz(c1) || nz(c2)) ? 1 : 0); }
+      var msg;
+      if (rA === 2) {
+        var x = (c1 * b2 - c2 * b1) / det, y = (a1 * c2 - a2 * c1) / det;
+        P.layer.appendChild(sv('circle', { cx: P.X(x), cy: P.Y(y), r: 6, 'class': 'an-dot' }));
+        msg = '<b>Compatible determinado.</b> Las rectas se cortan en un único punto <b>(' + num(x) + ', ' + num(y) + ')</b>. rango(A) = rango(A|b) = 2 = n.º de incógnitas. (det A = ' + num(det) + ' ≠ 0.)';
+      } else if (rA === rAb) msg = '<b>Compatible indeterminado.</b> Las dos ecuaciones describen la <b>misma recta</b>: infinitas soluciones. rango(A) = rango(A|b) = ' + rA + ' < 2 incógnitas.';
+      else msg = '<b>Incompatible.</b> Las rectas son <b>paralelas</b> y distintas: no hay solución. rango(A) = ' + rA + ' ≠ rango(A|b) = ' + rAb + '.';
+      html(text, msg);
+    }
+    inp.forEach(function (x) { x.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Cada ecuación a·x + b·y = c es una recta; resolver el sistema es buscar los puntos comunes a las dos rectas.'));
+    root.appendChild(box); root.appendChild(P.svg); root.appendChild(text); root.appendChild(pre);
+    root.appendChild(el('p', 'sar-hint', 'Cambia los coeficientes (puedes usar decimales) o pulsa un caso.'));
+    draw();
+  }
+
+  /* =====================================================================
+     5. DETERMINANTE 2x2 COMO ÁREA ORIENTADA
+     ===================================================================== */
+  function buildArea(root) {
+    var v0 = (root.getAttribute('data-v') || '2,1,0,2').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 360, 360, 5);
+    var names = ['a', 'b', 'c', 'd'], sl = [], lab = [];
+    var grid = el('div', 'an-sliders');
+    var order = [0, 2, 1, 3];   // u=(a,c), v=(b,d)
+    var titles = ['u₁', 'u₂', 'v₁', 'v₂'];
+    order.forEach(function (idx, k) {
+      var row = el('label', 'an-slrow'); var s = slider(-4, 4, 0.5, v0[idx]); var lb = el('b', '', '');
+      row.appendChild(el('span', '', titles[k] + ' ')); row.appendChild(s); row.appendChild(lb); grid.appendChild(row); sl[idx] = s; lab[idx] = lb;
+    });
+    var text = el('p', 'sar-text'), fin = el('div', 'sar-res');
+    var pre = btnRow(['u=(1,0), v=(0,1)', 'Intercambiar u y v', 'Duplicar u', 'v paralelo a u', 'Sumar u a v'], function (i) {
+      var cur = sl.map(function (s) { return parseFloat(s.value); });  // [a,b,c,d]
+      var set = function (a, b, c, d) { [a, b, c, d].forEach(function (x, j) { sl[j].value = x; }); };
+      if (i === 0) set(1, 0, 0, 1);
+      if (i === 1) set(cur[1], cur[0], cur[3], cur[2]);
+      if (i === 2) set(Math.max(-4, Math.min(4, cur[0] * 2)), cur[1], Math.max(-4, Math.min(4, cur[2] * 2)), cur[3]);
+      if (i === 3) set(2, 4, 1, 2);
+      if (i === 4) set(cur[0], Math.max(-4, Math.min(4, cur[1] + cur[0])), cur[2], Math.max(-4, Math.min(4, cur[3] + cur[2])));
+      draw();
+    });
+    function draw() {
+      var v = sl.map(function (s) { return parseFloat(s.value); }), a = v[0], b = v[1], c = v[2], d = v[3];
+      lab.forEach(function (l, j) { l.textContent = num(v[j]); });
+      P.clear();
+      var det = a * d - b * c, pos = det >= 0;
+      var poly = [[0, 0], [a, c], [a + b, c + d], [b, d]].map(function (p) { return P.X(p[0]) + ',' + P.Y(p[1]); }).join(' ');
+      P.layer.appendChild(sv('polygon', { points: poly, 'class': 'an-poly ' + (Math.abs(det) < 1e-9 ? 'zero' : (pos ? 'down' : 'up')) }));
+      arrow(P, 0, 0, a, c, 'down', 'u'); arrow(P, 0, 0, b, d, 'up', 'v');
+      html(text, 'Matriz con columnas u y v: <b>A = (u | v) = (' + num(a) + ' ' + num(b) + '; ' + num(c) + ' ' + num(d) + ')</b>. El paralelogramo que forman u y v tiene área <b>|det A| = ' + num(Math.abs(det)) + '</b>.');
+      fin.textContent = '';
+      var f = el('div', 'sar-final'); f.textContent = 'det A = a·d − b·c = ' + num(a) + '·' + num(d) + ' − ' + num(b) + '·' + num(c) + ' = ' + num(det); fin.appendChild(f);
+      var note = el('p', 'sar-hint');
+      note.textContent = Math.abs(det) < 1e-9 ? 'det = 0: u y v están alineados, el paralelogramo se aplasta (área 0) y la matriz no es invertible.' : (pos ? 'det > 0: al girar de u a v se va en sentido antihorario (orientación positiva, color azul).' : 'det < 0: al girar de u a v se va en sentido horario (orientación negativa, color naranja). Si intercambias u y v, el determinante cambia de signo.');
+      fin.appendChild(note);
+    }
+    sl.forEach(function (s) { s.addEventListener('input', draw); });
+    root.appendChild(P.svg); root.appendChild(grid); root.appendChild(text); root.appendChild(fin); root.appendChild(pre);
+    draw();
+  }
+
+  /* =====================================================================
+     6. COMBINACIÓN LINEAL / COORDENADAS EN UNA BASE (R2)
+     ===================================================================== */
+  function buildCombo(root) {
+    var modo = root.getAttribute('data-modo') || 'combo';
+    var u0 = (root.getAttribute('data-u') || '2,1').split(',').map(Number), v0 = (root.getAttribute('data-v') || '-1,2').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 380, 380, 6);
+    var uin = [numInput(u0[0], .5, '3.4em'), numInput(u0[1], .5, '3.4em')], vin = [numInput(v0[0], .5, '3.4em'), numInput(v0[1], .5, '3.4em')];
+    var top = el('div', 'an-eqs');
+    var ru = el('div', 'an-eq down'); ru.appendChild(el('span', '', 'u = (')); ru.appendChild(uin[0]); ru.appendChild(el('span', '', ', ')); ru.appendChild(uin[1]); ru.appendChild(el('span', '', ')'));
+    var rv = el('div', 'an-eq up'); rv.appendChild(el('span', '', 'v = (')); rv.appendChild(vin[0]); rv.appendChild(el('span', '', ', ')); rv.appendChild(vin[1]); rv.appendChild(el('span', '', ')'));
+    top.appendChild(ru); top.appendChild(rv);
+    var s1, s2, l1, l2;
+    var sl = el('div', 'an-sliders');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); sl.appendChild(r); }
+    l1 = el('b'); l2 = el('b');
+    if (modo === 'combo') { s1 = slider(-3, 3, 0.5, 1); s2 = slider(-3, 3, 0.5, 1); row('α ', s1, l1); row('β ', s2, l2); }
+    else { s1 = slider(-5, 5, 0.5, 3); s2 = slider(-5, 5, 0.5, 4); row('x ', s1, l1); row('y ', s2, l2); }
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res');
+    function draw() {
+      var u = uin.map(function (i) { return parseFloat(i.value) || 0; }), v = vin.map(function (i) { return parseFloat(i.value) || 0; });
+      var det = u[0] * v[1] - u[1] * v[0], dep = Math.abs(det) < 1e-9;
+      var A = parseFloat(s1.value), B = parseFloat(s2.value), w, al, be;
+      l1.textContent = num(A); l2.textContent = num(B);
+      P.clear();
+      // cuadrícula de combinaciones enteras
+      if (!dep) {
+        for (var k = -6; k <= 6; k++) {
+          var p1 = [k * u[0] - 8 * v[0], k * u[1] - 8 * v[1]], p2 = [k * u[0] + 8 * v[0], k * u[1] + 8 * v[1]];
+          P.layer.appendChild(sv('line', { x1: P.X(p1[0]), y1: P.Y(p1[1]), x2: P.X(p2[0]), y2: P.Y(p2[1]), 'class': 'an-sk down' }));
+          var q1 = [k * v[0] - 8 * u[0], k * v[1] - 8 * u[1]], q2 = [k * v[0] + 8 * u[0], k * v[1] + 8 * u[1]];
+          P.layer.appendChild(sv('line', { x1: P.X(q1[0]), y1: P.Y(q1[1]), x2: P.X(q2[0]), y2: P.Y(q2[1]), 'class': 'an-sk up' }));
+        }
+      } else {
+        var dir = (Math.abs(u[0]) + Math.abs(u[1]) > 1e-9) ? u : v;
+        if (Math.abs(dir[0]) + Math.abs(dir[1]) > 1e-9) P.layer.appendChild(sv('line', { x1: P.X(-8 * dir[0]), y1: P.Y(-8 * dir[1]), x2: P.X(8 * dir[0]), y2: P.Y(8 * dir[1]), 'class': 'an-ln zero' }));
+      }
+      if (modo === 'combo') { al = A; be = B; w = [al * u[0] + be * v[0], al * u[1] + be * v[1]]; }
+      else { w = [A, B]; if (!dep) { al = (w[0] * v[1] - w[1] * v[0]) / det; be = (u[0] * w[1] - u[1] * w[0]) / det; } }
+      if (modo === 'combo' || !dep) {
+        arrow(P, 0, 0, al * u[0], al * u[1], 'down dash', ''); arrow(P, al * u[0], al * u[1], w[0], w[1], 'up dash', '');
+      }
+      arrow(P, 0, 0, u[0], u[1], 'down', 'u'); arrow(P, 0, 0, v[0], v[1], 'up', 'v');
+      arrow(P, 0, 0, w[0], w[1], 'w', 'w');
+      res.textContent = '';
+      var t;
+      if (modo === 'combo') {
+        t = '<b>w = α·u + β·v</b> = ' + num(al) + '·(' + num(u[0]) + ', ' + num(u[1]) + ') + ' + num(be) + '·(' + num(v[0]) + ', ' + num(v[1]) + ') = <b>(' + num(w[0]) + ', ' + num(w[1]) + ')</b>.';
+        if (dep) t += '<br><b>Aquí u y v son linealmente dependientes</b> (det = 0): todas las combinaciones caen sobre una misma recta, así que {u, v} <b>no genera ℝ²</b>.';
+        else t += '<br>Como u y v son independientes (det = ' + num(det) + ' ≠ 0), moviendo α y β se alcanza <b>cualquier</b> punto del plano: {u, v} genera ℝ². La cuadrícula inclinada muestra las combinaciones con α, β enteros.';
+      } else {
+        if (dep) t = '<b>u y v son dependientes</b> (det = 0): no forman base de ℝ², no hay coordenadas respecto de ellos.';
+        else t = 'El vector <b>w = (' + num(w[0]) + ', ' + num(w[1]) + ')</b> en la base canónica tiene, en la base B = {u, v}, las coordenadas <b>(' + num(al) + ', ' + num(be) + ')</b>, porque w = ' + num(al) + '·u + ' + num(be) + '·v.';
+        if (!dep) {
+          var f = el('div', 'sar-final'); f.textContent = '[w]_B = (' + num(al) + ', ' + num(be) + ')    frente a    [w]_can = (' + num(w[0]) + ', ' + num(w[1]) + ')'; res.appendChild(f);
+        }
+      }
+      html(text, t);
+    }
+    [s1, s2].concat(uin, vin).forEach(function (x) { x.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', modo === 'combo' ? 'Una combinación lineal de u y v es w = α·u + β·v. Mueve α y β y mira dónde cae w. Prueba con u y v paralelos (p. ej. u = (1, 2), v = (2, 4)).' : 'Dado un vector w, sus coordenadas respecto de la base {u, v} son los números (α, β) que cumplen w = α·u + β·v. Mueve x e y (las coordenadas canónicas de w) y mira cómo cambian (α, β).'));
+    root.appendChild(top); root.appendChild(P.svg); root.appendChild(sl); root.appendChild(text); root.appendChild(res);
+    draw();
+  }
+
+  /* =====================================================================
+     7. UNIÓN DE SUBESPACIOS (dos rectas de R2)
+     ===================================================================== */
+  function buildUnion(root) {
+    var d1 = (root.getAttribute('data-d1') || '1,0').split(',').map(Number), d2 = (root.getAttribute('data-d2') || '0,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 380, 380, 6);
+    var i1 = [numInput(d1[0], .5, '3.4em'), numInput(d1[1], .5, '3.4em')], i2 = [numInput(d2[0], .5, '3.4em'), numInput(d2[1], .5, '3.4em')];
+    var top = el('div', 'an-eqs');
+    var r1 = el('div', 'an-eq down'); r1.appendChild(el('span', '', 'L₁ = ⟨(')); r1.appendChild(i1[0]); r1.appendChild(el('span', '', ', ')); r1.appendChild(i1[1]); r1.appendChild(el('span', '', ')⟩'));
+    var r2 = el('div', 'an-eq up'); r2.appendChild(el('span', '', 'L₂ = ⟨(')); r2.appendChild(i2[0]); r2.appendChild(el('span', '', ', ')); r2.appendChild(i2[1]); r2.appendChild(el('span', '', ')⟩'));
+    top.appendChild(r1); top.appendChild(r2);
+    var sl = el('div', 'an-sliders'), s1 = slider(-3, 3, 0.5, 2), s2 = slider(-3, 3, 0.5, 1.5), l1 = el('b'), l2 = el('b');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); sl.appendChild(r); }
+    row('t ', s1, l1); row('s ', s2, l2);
+    var text = el('p', 'sar-text');
+    function draw() {
+      var a = i1.map(function (i) { return parseFloat(i.value) || 0; }), b = i2.map(function (i) { return parseFloat(i.value) || 0; });
+      var t = parseFloat(s1.value), s = parseFloat(s2.value); l1.textContent = num(t); l2.textContent = num(s);
+      P.clear();
+      var cross = a[0] * b[1] - a[1] * b[0], same = Math.abs(cross) < 1e-9;
+      function full(d, cls) { if (Math.abs(d[0]) + Math.abs(d[1]) < 1e-9) return; P.layer.appendChild(sv('line', { x1: P.X(-9 * d[0]), y1: P.Y(-9 * d[1]), x2: P.X(9 * d[0]), y2: P.Y(9 * d[1]), 'class': 'an-ln ' + cls })); }
+      full(a, 'down'); full(b, 'up');
+      var u = [t * a[0], t * a[1]], w = [s * b[0], s * b[1]], z = [u[0] + w[0], u[1] + w[1]];
+      P.layer.appendChild(sv('polygon', { points: [[0, 0], u, z, w].map(function (p) { return P.X(p[0]) + ',' + P.Y(p[1]); }).join(' '), 'class': 'an-poly zero' }));
+      arrow(P, 0, 0, u[0], u[1], 'down', 'u'); arrow(P, 0, 0, w[0], w[1], 'up', 'w'); arrow(P, 0, 0, z[0], z[1], 'w', 'u+w');
+      var onL1 = Math.abs(z[0] * a[1] - z[1] * a[0]) < 1e-6, onL2 = Math.abs(z[0] * b[1] - z[1] * b[0]) < 1e-6;
+      var msg = 'u = ' + num(t) + '·d₁ ∈ L₁ y w = ' + num(s) + '·d₂ ∈ L₂ están los dos en la unión L₁ ∪ L₂. Su suma es <b>u + w = (' + num(z[0]) + ', ' + num(z[1]) + ')</b>. ';
+      if (same) msg += '<br>Las dos rectas <b>coinciden</b> (d₁ y d₂ paralelos): entonces L₁ ∪ L₂ = L₁ sí es un subespacio. Es el caso especial L₁ ⊂ L₂.';
+      else if (onL1 || onL2 || (Math.abs(t) < 1e-9 || Math.abs(s) < 1e-9)) msg += '<br>Con estos valores u + w <b>sigue en la unión</b> (porque u = 0 o w = 0). Mueve t y s a valores distintos de 0.';
+      else msg += '<br><b>u + w NO está en L₁ ∪ L₂</b> (no cae sobre ninguna de las dos rectas): la unión <b>no es cerrada para la suma, no es subespacio</b>. En cambio la <b>suma</b> L₁ + L₂ (todo el paralelogramo, y moviendo t y s, todo el plano) sí lo es.';
+      html(text, msg);
+    }
+    [s1, s2].concat(i1, i2).forEach(function (x) { x.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Dos subespacios (rectas por el origen) y un vector de cada uno. ¿Qué pasa con su suma?'));
+    root.appendChild(top); root.appendChild(P.svg); root.appendChild(sl); root.appendChild(text);
+    draw();
+  }
+
+  /* =====================================================================
+     8. LABORATORIO DE OPERACIONES (contraejemplos)
+     ===================================================================== */
+  var OPS = [
+    { n: 'a ⋄ b = a·b − b + a  (en ℝ)', f: function (a, b) { return a * b - b + a; }, e: [0, 1] },
+    { n: 'a ∗ b = a + b + a·b  (en ℝ)', f: function (a, b) { return a + b + a * b; }, e: [0] },
+    { n: 'x ∗ y = x·y + 1  (en ℤ)', f: function (a, b) { return a * b + 1; }, e: [0, 1] },
+    { n: 'a ∗ b = a  (en ℝ)', f: function (a, b) { return a; }, e: [0] }
+  ];
+  function buildOper(root) {
+    var k = parseInt(root.getAttribute('data-op') || '0', 10);
+    root.textContent = ''; root.classList.add('sarrus');
+    var sel = el('select'); OPS.forEach(function (o, i) { var op = el('option', '', o.n); op.value = i; sel.appendChild(op); }); sel.value = k;
+    var top = el('div', 'adj-sel'); top.appendChild(el('span', '', 'Operación: ')); top.appendChild(sel);
+    var ins = el('div', 'an-eqs'); var ia = numInput(2, 1, '3.4em'), ib = numInput(3, 1, '3.4em'), ic = numInput(2, 1, '3.4em'), ie = numInput(0, 1, '3.4em');
+    var r1 = el('div', 'an-eq down'); [['a = ', ia], ['  b = ', ib], ['  c = ', ic]].forEach(function (p) { r1.appendChild(el('span', '', p[0])); r1.appendChild(p[1]); });
+    var r2 = el('div', 'an-eq up'); r2.appendChild(el('span', '', 'candidato a neutro e = ')); r2.appendChild(ie);
+    ins.appendChild(r1); ins.appendChild(r2);
+    var tab = el('table', 'oper-t'); var text = el('p', 'sar-text');
+    function draw() {
+      var o = OPS[parseInt(sel.value, 10)], a = parseFloat(ia.value) || 0, b = parseFloat(ib.value) || 0, c = parseFloat(ic.value) || 0, e = parseFloat(ie.value) || 0;
+      var f = o.f, fm = function (x) { return num(x); };
+      var rows = [
+        ['Conmutativa', 'a ∗ b = ' + fm(f(a, b)), 'b ∗ a = ' + fm(f(b, a)), f(a, b) === f(b, a)],
+        ['Asociativa', '(a ∗ b) ∗ c = ' + fm(f(f(a, b), c)), 'a ∗ (b ∗ c) = ' + fm(f(a, f(b, c))), f(f(a, b), c) === f(a, f(b, c))],
+        ['Neutro por la derecha', 'a ∗ e = ' + fm(f(a, e)), 'a = ' + fm(a), f(a, e) === a],
+        ['Neutro por la izquierda', 'e ∗ a = ' + fm(f(e, a)), 'a = ' + fm(a), f(e, a) === a]
+      ];
+      tab.textContent = '';
+      var th = el('tr'); ['Propiedad', 'Un lado', 'El otro', 'Con estos números'].forEach(function (h) { th.appendChild(el('th', '', h)); }); tab.appendChild(th);
+      rows.forEach(function (r) { var tr = el('tr'); tr.appendChild(el('td', '', r[0])); tr.appendChild(el('td', '', r[1])); tr.appendChild(el('td', '', r[2])); tr.appendChild(el('td', r[3] ? 'ok' : 'ko', r[3] ? '✓ coinciden' : '✗ distintos ⇒ contraejemplo')); tab.appendChild(tr); });
+      text.textContent = 'Un contraejemplo (una sola terna a, b, c que no coincida) basta para probar que una propiedad NO se cumple. En cambio, que coincidan con unos números concretos no demuestra nada: para probar que se cumple hay que hacerlo con letras.';
+    }
+    [ia, ib, ic, ie].forEach(function (x) { x.addEventListener('input', draw); }); sel.addEventListener('change', draw);
+    root.appendChild(top); root.appendChild(ins); root.appendChild(tab); root.appendChild(text);
+    root.appendChild(el('p', 'sar-hint', 'Cambia los números a, b, c y el candidato e para buscar contraejemplos.'));
+    draw();
+  }
+
+  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper]];
+  function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
