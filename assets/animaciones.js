@@ -14,6 +14,7 @@
    .anim-propios data-a="3,-2,1,0" data-x="2,1"   (A 2x2 y vector x deslizable: x frente a Ax, polinomio característico, valores propios y subespacios propios; presets sin valores reales y doble con d=1)
    .anim-semej   data-a="1,1,0,2" data-q="1,0,1,1"   (A 2x2 y Q regular: A'=Q^-1 A Q frente a Q^t A Q; det, traza e invariantes)
    .anim-diag    data-a="4,1,2,3" data-x="2,1"   (diagonalizar A 2x2 paso a paso: valores propios, d y alfa, veredicto, P y Lambda en el mismo orden, comprobacion P*Lambda = A*P y rejilla de la base propia con x_B' = P^-1 x; presets: distintos, doble d=2, doble d=1, giro 90, singular, irracionales)
+   .anim-jordan  data-a="1,0,3;-1,2,0;0,0,2"   (forma de Jordan de A de 2x2 a 4x4, entradas enteras editables y presets: polinomio caracteristico y valores propios (reales; si hay complejas avisa de que no hay J real), rangos de (A-lI)^k, tamanos de bloques, J, cadenas y matriz de paso P paso a paso, comprobacion AP = PJ en fracciones exactas)
 */
 (function () {
   'use strict';
@@ -1071,7 +1072,255 @@
     cur = model(); st.setN(cur.ok ? 5 : 3); st.go(0);
     window.addEventListener('beforeprint', function () { st.go(st.N); });
   }
-  var REG = [['.anim-diag', buildDiag], ['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Forma de Jordan (A de 2x2 a 4x4 con entradas enteras): rangos de (A-lI)^k -> bloques -> J -> P por cadenas -> AP = PJ
+     ===================================================================== */
+  var SUBN = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈'], SUPN = ['⁰', '', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸'];
+  function jz(n) { return String(n).replace('-', MINUS); }
+  function jvec(v) { return '(' + v.map(ftxt).join(', ') + ')'; }
+  function jMul(A, B) { var C = [], i, j, q, s; for (i = 0; i < A.length; i++) { C[i] = []; for (j = 0; j < B[0].length; j++) { s = F(0); for (q = 0; q < B.length; q++) s = add(s, mul(A[i][q], B[q][j])); C[i][j] = s; } } return C; }
+  function jId(n) { var I = [], i, j; for (i = 0; i < n; i++) { I[i] = []; for (j = 0; j < n; j++) I[i][j] = F(i === j ? 1 : 0); } return I; }
+  function jSubL(A, l) { return A.map(function (r, i) { return r.map(function (x, j) { return i === j ? sub(x, F(l)) : x; }); }); }
+  function jApply(M, v) { return M.map(function (r) { var s = F(0); r.forEach(function (x, j) { s = add(s, mul(x, v[j])); }); return s; }); }
+  function jRref(rows) {                                  // devuelve {R, piv}
+    var R = rows.map(function (r) { return r.slice(); }), piv = [], r = 0, c, q, k, nc = R.length ? R[0].length : 0;
+    for (c = 0; c < nc && r < R.length; c++) {
+      k = -1; for (q = r; q < R.length; q++) if (!isz(R[q][c])) { k = q; break; }
+      if (k < 0) continue;
+      var t = R[r]; R[r] = R[k]; R[k] = t;
+      var p = R[r][c]; R[r] = R[r].map(function (x) { return div(x, p); });
+      for (q = 0; q < R.length; q++) if (q !== r && !isz(R[q][c])) { var f = R[q][c], rr = R[r]; R[q] = R[q].map(function (x, j) { return sub(x, mul(f, rr[j])); }); }
+      piv.push(c); r++;
+    }
+    return { R: R, piv: piv };
+  }
+  function jRank(rows) { return rows.length ? jRref(rows).piv.length : 0; }
+  function jNull(M) {                                      // base de {x : Mx = 0}
+    var nc = M[0].length, g = jRref(M), out = [], fc, qi, v;
+    for (fc = 0; fc < nc; fc++) if (g.piv.indexOf(fc) < 0) { v = []; for (qi = 0; qi < nc; qi++) v.push(F(0)); v[fc] = F(1); for (qi = 0; qi < g.piv.length; qi++) v[g.piv[qi]] = neg(g.R[qi][fc]); out.push(v); }
+    return out;
+  }
+  function jDet(M) {
+    var A = cloneM(M), n = A.length, d = F(1), c, q, k;
+    for (c = 0; c < n; c++) {
+      k = -1; for (q = c; q < n; q++) if (!isz(A[q][c])) { k = q; break; }
+      if (k < 0) return F(0);
+      if (k !== c) { var t = A[c]; A[c] = A[k]; A[k] = t; d = neg(d); }
+      d = mul(d, A[c][c]);
+      for (q = c + 1; q < n; q++) { var f = div(A[q][c], A[c][c]); for (k = c; k < n; k++) A[q][k] = sub(A[q][k], mul(f, A[c][k])); }
+    }
+    return d;
+  }
+  function jCharPoly(A) {                                  // Faddeev-LeVerrier: coeficientes de det(lI - A), de grado n a 0
+    var n = A.length, M = A.map(function (r) { return r.map(function () { return F(0); }); }), co = [F(1)], k, AM, tr, i;
+    for (k = 1; k <= n; k++) {
+      M = jMul(A, M); for (i = 0; i < n; i++) M[i][i] = add(M[i][i], co[k - 1]);
+      AM = jMul(A, M); tr = F(0); for (i = 0; i < n; i++) tr = add(tr, AM[i][i]);
+      co.push(neg(div(tr, F(k))));
+    }
+    return co.map(function (f) { return f.n; });
+  }
+  function jEval(co, x) { var s = 0; co.forEach(function (c) { s = s * x + c; }); return s; }
+  function jSynth(co, r) { var out = [co[0]], i; for (i = 1; i < co.length - 1; i++) out.push(co[i] + r * out[i - 1]); return out; }
+  function jGcdDeg(co) {                                   // grado de mcd(q, q') (0 si q es libre de cuadrados)
+    var a = co.map(function (x) { return F(x); }), b = a.slice(0, -1).map(function (x, i) { return mul(x, F(a.length - 1 - i)); }), r, f, i;
+    while (b.length && isz(b[0])) b.shift();
+    while (b.length) {
+      r = a.slice();
+      while (r.length >= b.length) { f = div(r[0], b[0]); for (i = 0; i < b.length; i++) r[i] = sub(r[i], mul(f, b[i])); r.shift(); }
+      while (r.length && isz(r[0])) r.shift();
+      a = b; b = r;
+    }
+    return a.length - 1;
+  }
+  function jRealRoots(co) {                                // raíces reales (simples) por barrido + bisección
+    var B = 1, i, out = [], x, y, fx, fy, lo, hi, m, st, mid;
+    for (i = 1; i < co.length; i++) B = Math.max(B, 1 + Math.abs(co[i] / co[0]));
+    st = B / 6000; x = -B; fx = jEval(co, x);
+    for (i = 1; i <= 12000; i++) {
+      y = -B + i * st; fy = jEval(co, y);
+      if (fx === 0) out.push(x);
+      else if (fx * fy < 0) { lo = x; hi = y; for (m = 0; m < 60; m++) { mid = (lo + hi) / 2; if (jEval(co, lo) * jEval(co, mid) <= 0) hi = mid; else lo = mid; } out.push((lo + hi) / 2); }
+      x = y; fx = fy;
+    }
+    return out;
+  }
+  function jPolyStr(cs, v) {
+    var deg = cs.length - 1, out = '';
+    cs.forEach(function (c, i) { if (!c) return; var p = deg - i, a = Math.abs(c), t = (a === 1 && p > 0 ? '' : a) + (p > 0 ? v + (p > 1 ? '<sup>' + p + '</sup>' : '') : ''); out += out ? (c < 0 ? ' ' + MINUS + ' ' : ' + ') + t : (c < 0 ? MINUS : '') + t; });
+    return out || '0';
+  }
+  function jLin(l) { return l === 0 ? 'λ' : (l > 0 ? '(λ ' + MINUS + ' ' + l + ')' : '(λ + ' + (-l) + ')'); }
+  function jAl(l) { return l === 0 ? 'A' : (l > 0 ? 'A ' + MINUS + ' ' + (l === 1 ? '' : l) + 'I' : 'A + ' + (l === -1 ? '' : -l) + 'I'); }
+  function jBlk(s, l) { return 'J' + SUBN[s] + '(' + jz(l) + ')'; }
+  function jNp(k) { return 'N' + SUPN[k]; }                // N, N², N³ ...
+
+  function jModel(A) {
+    var n = A.length, co = jCharPoly(A), coef = co.slice(), roots = [], B = 1, i, r, a;
+    for (i = 1; i < co.length; i++) B = Math.max(B, 1 + Math.abs(co[i]));
+    for (r = -B; r <= B; r++) { a = 0; while (co.length > 1 && jEval(co, r) === 0) { co = jSynth(co, r); a++; } if (a) roots.push({ l: r, a: a }); }
+    var M = { A: A, n: n, coef: coef, roots: roots, left: co, status: 'ok', irr: [] };
+    if (co.length > 1) {
+      var deg = co.length - 1, real = jRealRoots(co);
+      if (jGcdDeg(co) > 0) M.status = 'rep';
+      else if (real.length === deg) { M.status = 'irr'; M.irr = real; } else M.status = 'cplx';
+      if (deg === 2) M.q2 = { b: co[1], c: co[2], disc: co[1] * co[1] - 4 * co[2] };
+    }
+    roots.forEach(function (ro) {
+      var N = jSubL(A, ro.l), pw = [jId(n)], rk = [n], k = 0, cur = jId(n), q;
+      do { k++; cur = jMul(cur, N); pw.push(cur); rk.push(jRank(cur)); } while (n - rk[k] < ro.a && k <= n);
+      ro.N = N; ro.pw = pw; ro.rk = rk; ro.m = k; ro.c = []; ro.mult = []; ro.sizes = [];
+      for (i = 1; i <= k; i++) ro.c[i] = rk[i - 1] - rk[i];
+      ro.c[k + 1] = 0;
+      for (i = 1; i <= k; i++) ro.mult[i] = ro.c[i] - ro.c[i + 1];
+      for (i = k; i >= 1; i--) for (q = 0; q < ro.mult[i]; q++) ro.sizes.push(i);
+      ro.d = ro.c[1];
+    });
+    if (M.status === 'ok') {
+      roots.forEach(function (ro) {
+        var Kb = [[]], k, chains = [];
+        for (k = 1; k <= ro.m; k++) Kb[k] = jNull(ro.pw[k]);
+        for (k = ro.m; k >= 1; k--) {
+          var S = Kb[k - 1].slice(), cands = [], need = ro.mult[k], e, q;
+          chains.forEach(function (ch) { if (ch.len > k) S.push(ch.vecs[k - 1]); });
+          for (e = 0; e < n; e++) { var u = []; for (q = 0; q < n; q++) u.push(F(q === e ? 1 : 0)); if (jApply(ro.pw[k], u).every(isz)) cands.push(u); }
+          cands = cands.concat(Kb[k]);
+          for (q = 0; q < cands.length && need > 0; q++) {
+            if (jRank(S.concat([cands[q]])) > jRank(S)) {
+              S.push(cands[q]); need--;
+              var vecs = [cands[q]], w = cands[q], j;
+              for (j = 1; j < k; j++) { w = jApply(ro.N, w); vecs.unshift(w); }
+              chains.push({ len: k, vecs: vecs, head: cands[q] });
+            }
+          }
+        }
+        ro.chains = chains;
+      });
+      var cols = [], blocks = [], J = [], r0, c0, pos = 0;
+      roots.forEach(function (ro) { ro.chains.forEach(function (ch) { ch.vecs.forEach(function (v, idx) { cols.push({ v: v, eig: idx === 0 }); }); blocks.push({ l: ro.l, s: ch.len }); }); });
+      for (r0 = 0; r0 < n; r0++) { J[r0] = []; for (c0 = 0; c0 < n; c0++) J[r0][c0] = F(0); }
+      blocks.forEach(function (b) { for (var t = 0; t < b.s; t++) { J[pos + t][pos + t] = F(b.l); if (t < b.s - 1) J[pos + t][pos + t + 1] = F(1); } pos += b.s; });
+      var P = []; for (r0 = 0; r0 < n; r0++) P[r0] = cols.map(function (c) { return c.v[r0]; });
+      M.P = P; M.J = J; M.cols = cols; M.blocks = blocks; M.detP = jDet(P);
+      M.AP = jMul(A, P); M.PJ = jMul(P, J);
+      M.okAP = M.AP.every(function (rw, i2) { return rw.every(function (x, j2) { var y = M.PJ[i2][j2]; return x.n === y.n && x.d === y.d; }); });
+    } else if (M.status === 'irr') {
+      var bl = [];
+      roots.forEach(function (ro) { ro.sizes.forEach(function (s) { bl.push({ l: ro.l, s: s }); }); });
+      M.irr.forEach(function (x) { bl.push({ l: x, s: 1, irr: true, t: '≈' + num(x, 2) }); });
+      M.blocks = bl;
+    }
+    return M;
+  }
+
+  function buildJordan(root) {
+    var def = (root.getAttribute('data-a') || '1,0,3;-1,2,0;0,0,2');
+    root.textContent = ''; root.classList.add('sarrus', 'an-jordan');
+    var rows0 = def.split(';').map(function (r) { return r.split(',').map(function (x) { return parseInt(x, 10) || 0; }); });
+    var nn = rows0.length, inputs = [];
+    var body = el('div', 'an-body'), eq = el('div', 'an-eqs'), er = el('div', 'an-eq down'), grid = el('div', 'jd-grid'), res = el('div', 'sar-res');
+    var sel = el('select'); [2, 3, 4].forEach(function (k) { var o = el('option', '', k + '×' + k); o.value = k; sel.appendChild(o); });
+    sel.setAttribute('aria-label', 'Tamaño de A'); sel.value = nn;
+    er.appendChild(el('span', '', 'A ')); er.appendChild(sel); er.appendChild(el('span', '', ' = ')); er.appendChild(grid); er.appendChild(el('span', '', '  (enteros)')); eq.appendChild(er);
+    function mkGrid(m) {
+      grid.textContent = ''; inputs = []; grid.style.gridTemplateColumns = 'repeat(' + m + ',3.2em)';
+      for (var i = 0; i < m; i++) for (var j = 0; j < m; j++) {
+        var inp = numInput((rows0[i] && rows0[i][j]) || 0, 1, '3.2em'); inp.min = -9; inp.max = 9; inp.setAttribute('aria-label', 'A fila ' + (i + 1) + ' columna ' + (j + 1));
+        inp.addEventListener('input', function () { recalc(true); }); grid.appendChild(inp); inputs.push(inp);
+      }
+    }
+    var PRE = [['2×2 (E 4.36): λ doble, d = 1', '3,1;-1,1'], ['2×2: A = 2I', '2,0;0,2'], ['2×2: λ distintos', '4,1;2,3'], ['2×2: giro 90°', '0,-1;1,0'],
+      ['U 4.17: tres distintos', '1,2,3;0,4,5;0,0,6'], ['U 4.18: bloques 1 y 2', '1,0,3;-1,2,0;0,0,2'], ['U 4.19: λ triple, d = 2', '-1,3,0;0,-1,0;0,2,-1'], ['U 4.20: bloque 3×3', '0,1,2;0,0,1;0,0,0'], ['U 4.21: λ triple, d = 2', '0,-3,-1;2,5,1;-2,-3,1'], ['3×3: raíces complejas', '1,0,0;0,1,-2;0,1,3'], ['3×3: raíces irracionales', '1,1,0;1,0,1;0,1,2'],
+      ['E 4.39: bloques 3 y 1', '2,0,3,0;1,2,0,3;0,0,2,0;0,0,1,2'], ['4×4: bloques 2 y 2', '2,0,1,0;0,2,0,1;0,0,2,0;0,0,0,2'], ['4×4: dos λ dobles', '1,1,1,0;0,1,0,1;0,0,2,0;0,0,0,2']];
+    var pre = btnRow(PRE.map(function (p) { return p[0]; }), function (i) { rows0 = PRE[i][1].split(';').map(function (r) { return r.split(',').map(Number); }); sel.value = rows0.length; mkGrid(rows0.length); recalc(true); });
+    function readA() {
+      var m = parseInt(sel.value, 10), A = [], k = 0, i, j, v;
+      for (i = 0; i < m; i++) { A[i] = []; for (j = 0; j < m; j++) { v = Math.round(parseFloat(inputs[k].value)); if (isNaN(v)) v = 0; v = Math.max(-9, Math.min(9, v)); A[i][j] = F(v); k++; } }
+      return A;
+    }
+    function jtab(rowsS, cellCls) {
+      var t = el('table', 'gj-m pm');
+      rowsS.forEach(function (r, i) { var tr = el('tr'); r.forEach(function (s, j) { var td = el('td'); html(td, s); if (j === 0) td.classList.add('lb'); if (j === r.length - 1) td.classList.add('rb'); var cc = cellCls && cellCls(i, j); if (cc) td.classList.add(cc); tr.appendChild(td); }); t.appendChild(tr); });
+      return t;
+    }
+    function fm(M) { return M.map(function (r) { return r.map(fhtml); }); }
+    function labelled(tab, cap) { var c = el('div', 'pm-col'); c.appendChild(tab); c.appendChild(el('small', '', cap)); return c; }
+    var cur = null, steps = [], st;
+    function build() {
+      var M = cur, n = M.n, S = [], A = M.A;
+      S.push({ t: '<b>Forma de Jordan</b> (U Teor. 4.8). Si A no es diagonalizable (faltan vectores propios), se busca una matriz <b>casi diagonal</b> J = P⁻¹AP: bloques con λ en la diagonal y unos justo encima. Pasos: (1) valores propios y α; (2) rangos de (A ' + MINUS + ' λI)ᵏ ⇒ nº y tamaño de los bloques; (3) matriz J; (4) vectores de P por <b>cadenas</b>; (5) comprobar AP = PJ. Pulsa «Siguiente».', out: function (o) { o.appendChild(labelled(jtab(fm(A)), 'A (' + n + '×' + n + ')')); } });
+      var sg = (n % 2) ? MINUS : '', cs = M.coef.map(function (c) { return (n % 2 ? -c : c); }), fac = '';
+      M.roots.forEach(function (ro) { fac += jLin(ro.l) + (ro.a > 1 ? '<sup>' + ro.a + '</sup>' : ''); });
+      if (M.left.length > 1) fac += '(' + jPolyStr(M.left, 'λ') + ')';
+      var t1 = '<b>1. Valores propios.</b> |A ' + MINUS + ' λI| = ' + jPolyStr(cs, 'λ') + ' = ' + sg + fac + '. ';
+      if (M.status === 'ok') {
+        t1 += 'Valores propios: ' + M.roots.map(function (ro) { return '<b>λ = ' + jz(ro.l) + '</b> (α = ' + ro.a + ')'; }).join(', ') + '. Comprobación: Σ α·λ = ' + jz(M.roots.reduce(function (s, ro) { return s + ro.l * ro.a; }, 0)) + ' = traza de A. Todas las raíces son reales: existe J real.';
+      } else if (M.status === 'irr') {
+        t1 += (M.roots.length ? 'Además de los enteros, hay raíces' : 'Hay raíces') + ' <b>irracionales y distintas</b>: ' + M.irr.map(function (x) { return '≈' + num(x, 3); }).join(' , ') + (M.q2 ? ' (= (' + jz(-M.q2.b) + ' ± √' + M.q2.disc + ')/2)' : '') + '. Son reales, así que existe J real; como son simples, sus bloques son 1×1.';
+      } else if (M.status === 'cplx') {
+        t1 += 'El factor <b>' + jPolyStr(M.left, 'λ') + '</b> no tiene todas sus raíces reales' + (M.q2 ? ' (discriminante ' + jz(M.q2.disc) + ' < 0; λ = ' + num(-M.q2.b / 2, 2) + ' ± ' + num(Math.sqrt(-M.q2.disc) / 2, 2) + 'i)' : '') + '. <b>No hay forma de Jordan real</b>: U Teor. 4.8 supone, sin decirlo, que todas las raíces del polinomio característico son reales (U p.167: «no se puede diagonalizar»). Sobre ℂ sí existiría. Fin de la receta en ℝ.';
+      } else {
+        t1 += 'El factor <b>' + jPolyStr(M.left, 'λ') + '</b> tiene raíces irracionales <b>repetidas</b>: caso fuera del alcance de esta animación (la receta de rangos es la misma, pero los vectores llevarían radicales).';
+      }
+      S.push({ t: t1, out: null });
+      if (M.status === 'cplx' || M.status === 'rep') return S;
+      S.push({ t: '<b>2. Cuántos bloques y de qué tamaño.</b> Para cada λ sea N = A ' + MINUS + ' λI y r<sub>k</sub> = rang Nᵏ (r₀ = n). El nº de bloques de tamaño <b>≥ k</b> es <b>r<sub>k−1</sub> ' + MINUS + ' r<sub>k</sub></b>; se para cuando dim Nuc Nᵏ = n ' + MINUS + ' r<sub>k</sub> = α. Los bloques de tamaño exactamente k son (nº de ≥ k) ' + MINUS + ' (nº de ≥ k+1). El nº de bloques de ese λ es d = n ' + MINUS + ' rang N. (Las matrices semejantes tienen el mismo rango: U Teor. 4.1, p.146 y p.176.)' + (M.status === 'irr' ? ' Los valores irracionales son simples: un bloque 1×1 cada uno.' : '') + M.roots.map(function (ro) { return '<br>λ = ' + jz(ro.l) + ': d = ' + ro.d + ' bloque' + (ro.d > 1 ? 's' : '') + ', tamaños <b>(' + ro.sizes.join(', ') + ')</b>' + (ro.d === ro.a ? ' (d = α: todos 1×1)' : '') + '.'; }).join(''),
+        out: function (o) {
+          M.roots.forEach(function (ro) {
+            var t = el('table', 'jd-t'), h = '<tr><th colspan="4">λ = ' + jz(ro.l) + ', N = ' + jAl(ro.l) + ', α = ' + ro.a + '</th></tr><tr><th>k</th><th>rang Nᵏ</th><th>dim Nuc Nᵏ</th><th>nº de bloques de tamaño ≥ k</th></tr>', k;
+            for (k = 0; k <= ro.m; k++) h += '<tr><td>' + k + '</td><td>' + ro.rk[k] + '</td><td>' + (n - ro.rk[k]) + (k === ro.m ? ' = α' : '') + '</td><td>' + (k ? ro.c[k] : '—') + '</td></tr>';
+            html(t, h); o.appendChild(t);
+          });
+        } });
+      var JS, bl = M.blocks.map(function (b) { return b.irr ? 'J₁(' + b.t + ')' : jBlk(b.s, b.l); }).join(' ⊕ '), nb = M.blocks.length, ones = n - nb;
+      if (M.status === 'ok') JS = M.J.map(function (r) { return r.map(fhtml); });
+      else { JS = []; var pos = 0, i, j; for (i = 0; i < n; i++) { JS[i] = []; for (j = 0; j < n; j++) JS[i][j] = '0'; } M.blocks.forEach(function (b) { for (var t = 0; t < b.s; t++) { JS[pos + t][pos + t] = b.irr ? b.t : jz(b.l); if (t < b.s - 1) JS[pos + t][pos + t + 1] = '1'; } pos += b.s; }); }
+      S.push({ t: '<b>3. Matriz J.</b> Un bloque J<sub>s</sub>(λ) = λI + N, con N nilpotente (unos justo encima de la diagonal). Se colocan juntos los de un mismo λ, de mayor a menor. Aquí J = <b>' + bl + '</b>: ' + nb + ' bloque' + (nb > 1 ? 's' : '') + ' (= nº de vectores propios independientes) y ' + ones + ' uno' + (ones === 1 ? '' : 's') + ' (= n ' + MINUS + ' nº de bloques = vectores no propios que faltan para una base).' + (ones === 0 ? ' Como no hay unos, J = Λ: <b>A es diagonalizable</b>.' : ' Hay unos, luego A <b>no</b> es diagonalizable.') + (M.status === 'irr' ? ' (Valores irracionales aproximados; el orden de los bloques es libre.)' : ''),
+        out: function (o) { o.appendChild(labelled(jtab(JS, function (i2, j2) { return (j2 === i2 + 1 && JS[i2][j2] === '1') ? 'piv' : ''; }), 'J (unos resaltados)')); }, final: 'J = ' + bl });
+      if (M.status === 'irr') { S[S.length - 1].t += ' La matriz de paso con valores irracionales lleva radicales y U no la pide: la animación se detiene aquí.'; return S; }
+      M.roots.forEach(function (ro) {
+        var h = '<b>4. Vectores de P para λ = ' + jz(ro.l) + '</b> (N = ' + jAl(ro.l) + '). ';
+        if (ro.sizes.every(function (s) { return s === 1; })) h += 'Todos los bloques son 1×1: basta una base de Nuc N (vectores propios): ' + ro.chains.map(function (ch) { return jvec(ch.vecs[0]); }).join(', ') + '.';
+        else {
+          h += 'Guion de U p.173: por cada bloque de tamaño k se elige v ∈ Nuc Nᵏ <b>que no esté</b> en Nuc Nᵏ⁻¹ y se forman v, Nv, …, Nᵏ⁻¹v (esta última es vector propio). En el bloque, las columnas van con el <b>vector propio primero</b>: (Nᵏ⁻¹v, …, Nv, v); los vectores se calculan de derecha a izquierda.';
+          ro.chains.forEach(function (ch) {
+            var k = ch.len;
+            if (k === 1) { h += '<br>• Bloque 1×1: vector propio independiente de los anteriores: <b>' + jvec(ch.vecs[0]) + '</b>.'; return; }
+            h += '<br>• Bloque ' + k + '×' + k + ': v = <b>' + jvec(ch.head) + '</b>, con ' + jNp(k) + 'v = 0 (v ∈ Nuc ' + jNp(k) + ') y ' + jNp(k - 1) + 'v ≠ 0 (v ∉ Nuc ' + jNp(k - 1) + '). Cadena: ' + ch.vecs.slice().reverse().map(function (v, idx) { return (idx === 0 ? 'v' : (idx === 1 ? 'Nv' : jNp(idx) + 'v')) + ' = ' + jvec(v); }).join('; ') + '.';
+          });
+        }
+        S.push({ t: h, out: function (o) { var w = el('div', 'pm-wrap'); w.appendChild(labelled(jtab(fm(ro.N)), 'N = ' + jAl(ro.l))); if (ro.m > 1) w.appendChild(labelled(jtab(fm(ro.pw[2])), 'N²')); if (ro.m > 2) w.appendChild(labelled(jtab(fm(ro.pw[3])), 'N³')); if (ro.m > 3) w.appendChild(labelled(jtab(fm(ro.pw[4])), 'N⁴')); o.appendChild(w); } });
+      });
+      S.push({ t: '<b>5. Matriz de paso y comprobación.</b> P = (columnas de cada cadena, bloque a bloque, en el mismo orden que J). det P = <b>' + ftxt(M.detP) + '</b> ≠ 0: P es regular. Comprobación <b>sin invertir</b>: AP ' + (M.okAP ? '= PJ ✓, es decir, <b>J = P⁻¹AP</b>.' : '≠ PJ (¡revisar!).') + ' Columnas azules = vectores propios; naranjas = vectores generalizados (no propios). P <b>no es única</b> (se puede escalar, cambiar v por otro vector de Nuc Nᵏ ∖ Nuc Nᵏ⁻¹ o reordenar los bloques junto con J).' + (ones ? ' Con el orden contrario dentro de un bloque saldrían los unos <b>debajo</b> de la diagonal.' : ''),
+        out: function (o) {
+          var w = el('div', 'pm-wrap');
+          w.appendChild(labelled(jtab(fm(M.P), function (i2, j2) { return M.cols[j2].eig ? 'hr' : 'hc'; }), 'P'));
+          w.appendChild(labelled(jtab(fm(M.J)), 'J')); o.appendChild(w);
+          var w2 = el('div', 'pm-wrap'); w2.appendChild(labelled(jtab(fm(M.AP)), 'A·P')); w2.appendChild(el('span', 'pm-sym', M.okAP ? '=' : '≠')); w2.appendChild(labelled(jtab(fm(M.PJ)), 'P·J')); o.appendChild(w2);
+        }, final: 'J = ' + bl + (M.okAP ? ' = P⁻¹AP' : ' (¡AP ≠ PJ, revisar!)') });
+      return S;
+    }
+    function render(s, text) {
+      var S = steps[s]; html(text, S.t); res.textContent = '';
+      if (S.out) S.out(res);
+      if (s === st.N) {
+        var fin = el('div', 'sar-final');
+        fin.textContent = cur.status === 'cplx' ? 'No hay forma de Jordan real (raíces no reales)' : (cur.status === 'rep' ? 'Caso no tratado (irracionales repetidos)' : steps[steps.length - 1].final || '');
+        res.appendChild(fin);
+      }
+    }
+    function recalc(jump) { cur = jModel(readA()); steps = build(); st.setN(steps.length - 1); st.go(jump ? st.N : 0); }
+    st = stepper(root, 1, render, null, 4200);
+    sel.addEventListener('change', function () { var m = parseInt(sel.value, 10), i, j; rows0 = []; for (i = 0; i < m; i++) { rows0[i] = []; for (j = 0; j < m; j++) rows0[i][j] = (i === j ? 1 : 0); } mkGrid(m); recalc(true); });
+    mkGrid(nn);
+    body.appendChild(el('p', 'sar-text an-title', 'Escribe una matriz A (2×2 a 4×4, enteros de ' + MINUS + '9 a 9; otros valores se recortan a ese intervalo) o elige un caso, y recorre la receta: valores propios, rangos de (A ' + MINUS + ' λI)ᵏ, bloques, J, cadenas y P. Al cambiar A se muestra el resultado completo; «↺ Reiniciar» vuelve al principio.'));
+    body.appendChild(eq); body.appendChild(pre);
+    root.appendChild(body); st.mount(root, res);
+    cur = jModel(readA()); steps = build(); st.setN(steps.length - 1); st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(st.N); });
+  }
+
+  var REG = [['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

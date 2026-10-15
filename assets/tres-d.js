@@ -2,6 +2,7 @@
    .d3-planos  data-n="3" data-v="1,1,1,3;1,-1,0,0;0,1,-1,1" [data-hom="1"]     sistemas de planos (ax+by+cz=d)
    .d3-vect    data-modo="span|det" data-u="1,0,0" data-v="0,1,0" data-w="0,0,1"  vectores de R3: subespacio generado / volumen
    .d3-nuc     data-m="1,0,0;0,1,0;0,0,0"                                         núcleo e imagen de f(x)=A·x, R3 -> R3
+   .d3-propios data-a="1,0,3;-1,2,0;0,0,2"                                       esfera unidad frente a su imagen por A (3x3 entera editable, slider t = deformacion gradual), rectas/planos propios y cadenas de Jordan (presets: distintos, doble d=2, doble d=1, triple d=2, triple bloque 3x3, complejos); sin WebGL queda el texto
    Arrastrar = girar, rueda / pellizco = zoom. */
 (function () {
   'use strict';
@@ -334,7 +335,145 @@
     S1.onTheme = draw; draw();
   }
 
-  var REG = [['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc]];
+  /* =====================================================================
+     4. VALORES Y VECTORES PROPIOS EN R3: esfera unidad frente a su imagen, ejes propios y cadenas de Jordan
+     ===================================================================== */
+  function matVec(A, v) { return [dot(A[0], v), dot(A[1], v), dot(A[2], v)]; }
+  function matMul3(A, B) { return A.map(function (r) { return [0, 1, 2].map(function (j) { return r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]; }); }); }
+  function evalPoly(co, x) { var s = 0; co.forEach(function (c) { s = s * x + c; }); return s; }
+  function propios3(A) {                         // A entera 3x3: raíces enteras (con α), raíces reales no enteras y estado
+    var tr = A[0][0] + A[1][1] + A[2][2];
+    var m2 = (A[0][0] * A[1][1] - A[0][1] * A[1][0]) + (A[0][0] * A[2][2] - A[0][2] * A[2][0]) + (A[1][1] * A[2][2] - A[1][2] * A[2][1]);
+    var det = dot(A[0], cross(A[1], A[2]));
+    var co = [1, -tr, m2, -det], roots = [], B = 1, i, r, a;
+    for (i = 1; i < 4; i++) B = Math.max(B, 1 + Math.abs(co[i]));
+    for (r = -B; r <= B; r++) { a = 0; while (co.length > 1 && Math.abs(evalPoly(co, r)) < 1e-9) { var q = [co[0]]; for (i = 1; i < co.length - 1; i++) q.push(co[i] + r * q[i - 1]); co = q; a++; } if (a) roots.push({ l: r, a: a }); }
+    var out = { roots: roots, left: co, irr: [], status: 'ok', tr: tr, det: det };
+    if (co.length > 1) {                          // factor sin raíces enteras: grado 2 o 3
+      var Bd = 1; for (i = 1; i < co.length; i++) Bd = Math.max(Bd, 1 + Math.abs(co[i] / co[0]));
+      var x = -Bd, fx = evalPoly(co, x), st = Bd / 8000, y, fy, lo, hi, mid, k;
+      for (i = 1; i <= 16000; i++) {
+        y = -Bd + i * st; fy = evalPoly(co, y);
+        if (fx * fy < 0) { lo = x; hi = y; for (k = 0; k < 60; k++) { mid = (lo + hi) / 2; if (evalPoly(co, lo) * evalPoly(co, mid) <= 0) hi = mid; else lo = mid; } out.irr.push((lo + hi) / 2); }
+        x = y; fx = fy;
+      }
+      out.status = out.irr.length === co.length - 1 ? 'irr' : 'cplx';
+      if (co.length === 3) out.q2 = { b: co[1], c: co[2], disc: co[1] * co[1] - 4 * co[2] };
+    }
+    return out;
+  }
+  function eigLine(A, l) {                       // dirección propia de un valor propio simple (real, no necesariamente entero)
+    var N = [0, 1, 2].map(function (i) { return [0, 1, 2].map(function (j) { return A[i][j] - (i === j ? l : 0); }); }), best = null, bn = 0;
+    [[0, 1], [0, 2], [1, 2]].forEach(function (p) { var c = cross(N[p[0]], N[p[1]]), n = norm(c); if (n > bn) { bn = n; best = c; } });
+    return best;
+  }
+  function chains3(A, ro) {                      // cadenas de Jordan (float) para un valor propio entero
+    var N = [0, 1, 2].map(function (i) { return [0, 1, 2].map(function (j) { return A[i][j] - (i === j ? ro.l : 0); }); }), pw = [[[1, 0, 0], [0, 1, 0], [0, 0, 1]]], rk = [3], k = 0, i;
+    do { k++; pw.push(matMul3(pw[k - 1], N)); rk.push(rankOf(pw[k])); } while (3 - rk[k] < ro.a && k < 4);
+    var c = [0], mult = [0];
+    for (i = 1; i <= k; i++) c[i] = rk[i - 1] - rk[i];
+    c[k + 1] = 0; for (i = 1; i <= k; i++) mult[i] = c[i] - c[i + 1];
+    var chains = [];
+    for (var lev = k; lev >= 1; lev--) {
+      var S = lev > 1 ? nullspace(pw[lev - 1]) : [], need = mult[lev], cands = [];
+      chains.forEach(function (ch) { if (ch.vecs.length > lev) S.push(ch.vecs[lev - 1]); });
+      [[1, 0, 0], [0, 1, 0], [0, 0, 1]].forEach(function (e) { if (norm(matVec(pw[lev], e)) < 1e-9) cands.push(e); });
+      cands = cands.concat(nullspace(pw[lev]));
+      for (i = 0; i < cands.length && need > 0; i++) {
+        if (rankOf(S.concat([cands[i]])) > rankOf(S)) {
+          S.push(cands[i]); need--;
+          var vecs = [cands[i]], w = cands[i];
+          for (var j = 1; j < lev; j++) { w = matVec(N, w); vecs.unshift(w); }
+          chains.push({ vecs: vecs });
+        }
+      }
+    }
+    return { chains: chains, d: c[1], sizes: chains.map(function (ch) { return ch.vecs.length; }) };
+  }
+
+  function buildPropios(root) {
+    var a0 = (root.getAttribute('data-a') || '1,0,3;-1,2,0;0,0,2').split(';').map(function (r) { return r.split(',').map(Number); });
+    root.textContent = ''; root.classList.add('sarrus');
+    var R = 4;
+    root.appendChild(el('p', 'sar-text an-title', 'Una matriz A de 3×3 deforma la esfera unidad (gris) en su imagen A·esfera (azul). Las rectas y planos de colores son los subespacios propios, que A solo estira. Si faltan vectores propios (d < α) aparecen los vectores generalizados de las cadenas de Jordan. El deslizador t deforma poco a poco: M(t) = (1 ' + MINUS + ' t)·I + t·A.'));
+    var box = el('div', 'an-eqs'), er = el('div', 'an-eq down'), tbl = el('div', 'd3-mat'), inp = [];
+    er.appendChild(el('span', '', 'A = '));
+    for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) { var x = numInput(a0[i][j], '2.6em'); x.setAttribute('aria-label', 'A fila ' + (i + 1) + ' columna ' + (j + 1)); x.step = 1; inp.push(x); tbl.appendChild(x); }
+    er.appendChild(tbl); er.appendChild(el('span', '', '  (enteros de ' + MINUS + '9 a 9; otros valores se recortan)')); box.appendChild(er); root.appendChild(box);
+    var S = makeScene(root, R, 0.85, 520);
+    var sl = el('div', 'an-sliders'), srow = el('label', 'an-slrow'), st = slider(0, 1, 0.05, 1), sb = el('b');
+    srow.appendChild(el('span', '', 't ')); srow.appendChild(st); srow.appendChild(sb); sl.appendChild(srow);
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res');
+    var PRE = [['Tres valores distintos', [[2, 1, 0], [0, 3, 0], [0, 0, 1]]], ['Doble con d = 2 (diagonalizable)', [[2, 0, 0], [0, 2, 0], [1, 0, 3]]], ['Doble con d = 1 (J′, U Ej. 4.18)', [[1, 0, 3], [-1, 2, 0], [0, 0, 2]]],
+      ['Triple, d = 2 (bloques 2 + 1)', [[2, 1, 0], [0, 2, 0], [0, 0, 2]]], ['Triple, d = 1 (bloque 3×3)', [[2, 1, 0], [0, 2, 1], [0, 0, 2]]], ['Complejos (giro de 90° en un plano)', [[1, 0, 0], [0, 0, -1], [0, 1, 0]]], ['Real irracional + complejos', [[0, 1, 0], [0, 0, 1], [2, 0, 0]]]];
+    var pre = btnRow(PRE.map(function (p) { return p[0]; }), function (k) { PRE[k][1].forEach(function (r, i2) { r.forEach(function (v, j2) { inp[3 * i2 + j2].value = v; }); }); draw(); });
+    var dots = 'abcd';
+    function frm(v) { return '(' + v.map(num).join(', ') + ')'; }
+    function wire(M, k, color) {                 // malla de meridianos y paralelos de la esfera de radio k, deformada por M
+      var T = S.T, pts = [], a, b, lat, lon, P;
+      function pt(la, lo) { var u = [Math.cos(la) * Math.cos(lo), Math.cos(la) * Math.sin(lo), Math.sin(la)], w = matVec(M, u); return new T.Vector3(k * w[0], k * w[1], k * w[2]); }
+      for (lat = -60; lat <= 60; lat += 30) for (lon = 0; lon < 360; lon += 10) { pts.push(pt(lat * Math.PI / 180, lon * Math.PI / 180), pt(lat * Math.PI / 180, (lon + 10) * Math.PI / 180)); }
+      for (lon = 0; lon < 360; lon += 30) for (lat = -90; lat < 90; lat += 10) { pts.push(pt(lat * Math.PI / 180, lon * Math.PI / 180), pt((lat + 10) * Math.PI / 180, lon * Math.PI / 180)); }
+      S.dyn.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(pts), new T.LineBasicMaterial({ color: color, transparent: true, opacity: 0.8 })));
+    }
+    function draw() {
+      var C = COL(), A = [0, 1, 2].map(function (r) { return [0, 1, 2].map(function (c) { var v = Math.round(parseFloat(inp[3 * r + c].value)); return isNaN(v) ? 0 : Math.max(-9, Math.min(9, v)); }); });
+      var t = parseFloat(st.value); sb.textContent = num(t);
+      var pr = propios3(A), cols = [C.a, C.b, C.c, '#8e44ad'], msg = '', info = [], P = [];
+      // factor de escala para que A·esfera quepa en el cubo
+      var mx = 1; for (var la = -90; la <= 90; la += 15) for (var lo = 0; lo < 360; lo += 15) { var u = [Math.cos(la * Math.PI / 180) * Math.cos(lo * Math.PI / 180), Math.cos(la * Math.PI / 180) * Math.sin(lo * Math.PI / 180), Math.sin(la * Math.PI / 180)]; mx = Math.max(mx, norm(matVec(A, u))); }
+      var k = Math.min(1, 3.4 / mx), Mt = A.map(function (r, i2) { return r.map(function (v, j2) { return (1 - t) * (i2 === j2 ? 1 : 0) + t * v; }); });
+      if (S) { S.clearDyn(); wire([[1, 0, 0], [0, 1, 0], [0, 0, 1]], k, C.m); wire(Mt, k, C.a); }
+      var allD = true, nBlocks = 0, ones = 0, bl = [], ci = 0;
+      pr.roots.forEach(function (ro, ri) {
+        var cc = cols[ri % 4], ch = chains3(A, ro), d = ch.d;
+        info.push('λ = ' + num(ro.l) + ' (α = ' + ro.a + ', d = ' + d + ')');
+        if (d < ro.a) allD = false;
+        ch.sizes.forEach(function (s) { bl.push('J' + ['', '₁', '₂', '₃'][s] + '(' + num(ro.l) + ')'); nBlocks++; ones += s - 1; });
+        if (S) {
+          if (d === 1) S.line([0, 0, 0], ch.chains[0].vecs[0], cc, 0.07);
+          else if (d === 2) { var sp = nullspace([[A[0][0] - ro.l, A[0][1], A[0][2]], [A[1][0], A[1][1] - ro.l, A[1][2]], [A[2][0], A[2][1], A[2][2] - ro.l]]); S.plane(cross(sp[0], sp[1]), 0, cc, 0.25); }
+          else S.space(cc);
+          ch.chains.forEach(function (c2) { c2.vecs.forEach(function (v, idx) { P.push({ v: v, c: cc, eig: idx === 0 }); }); });
+        }
+      });
+      if (pr.irr.length) {
+        pr.irr.forEach(function (l, ri) { var dr = eigLine(A, l), cc = cols[(pr.roots.length + ri) % 4]; info.push('λ ≈ ' + num(l) + ' (α = 1, d = 1)'); bl.push('J₁(≈' + num(l) + ')'); nBlocks++; if (S && dr) { S.line([0, 0, 0], dr, cc, 0.07); P.push({ v: dr, c: cc, eig: true }); } });
+      }
+      if (pr.status === 'cplx' && S) {              // plano invariante Im(A - lI) del valor real simple (entero o irracional)
+        var lam = null;
+        if (pr.roots.length === 1 && pr.roots[0].a === 1 && !pr.irr.length) lam = pr.roots[0].l; else if (!pr.roots.length && pr.irr.length === 1) lam = pr.irr[0];
+        if (lam !== null) {
+          var Nn = [0, 1, 2].map(function (r2) { return [0, 1, 2].map(function (c2) { return A[r2][c2] - (r2 === c2 ? lam : 0); }); }), cb = colBasis(Nn);
+          if (cb.length === 2) S.plane(cross(cb[0], cb[1]), 0, '#8e44ad', 0.18);
+        }
+      }
+      if (S) {
+        var big = 0; P.forEach(function (p) { big = Math.max(big, norm(p.v)); });
+        P.forEach(function (p, idx) { var s = big > 0 ? 2.3 / big * 1.0 : 1, vv = p.v.map(function (q) { return q * s; }); S.arrow(vv, p.c, 'p' + (idx + 1)); });
+        S.render();
+      }
+      var Lh = ['Esfera unidad (gris) y su imagen A·esfera (azul)' + (k < 1 ? ', reducidas a escala por ' + num(k) + ' para que quepan. ' : '. ')];
+      if (pr.status === 'cplx') {
+        msg = '<b>Valores propios no reales</b>: ' + (info.length ? info.join(', ') + ' y ' : '') + 'un par complejo' + (pr.q2 ? ' (λ = ' + num(-pr.q2.b / 2) + ' ± ' + (Math.abs(Math.sqrt(Math.max(0, -pr.q2.disc)) / 2 - 1) < 1e-9 ? '' : num(Math.sqrt(Math.max(0, -pr.q2.disc)) / 2)) + 'i)' : '') + '. No hay base de vectores propios reales ni forma de Jordan real (U Teor. 4.8 supone raíces reales). Geométricamente, A <b>gira</b> el plano violeta (invariante) en lugar de estirar sus direcciones: ningún vector de ese plano conserva su recta; la recta propia del valor real (fuera del plano) sí se conserva.';
+      } else {
+        var diag = allD;
+        msg = info.join(' · ') + '. ';
+        if (diag) msg += '<b>d = α en todos</b> ⇒ diagonalizable: ' + (pr.roots.some(function (ro) { return chains3(A, ro).d > 1; }) ? 'hay rectas y planos propios que bastan para una base de ℝ³' : 'tres rectas propias (p₁, p₂, p₃) forman una base') + '. J = Λ (' + bl.join(' ⊕ ') + '). En la base propia A solo estira cada eje: las rectas y planos de color no giran. La imagen de la esfera es un elipsoide, cuyos ejes principales solo coinciden con las direcciones propias si A es simétrica (tema 5.3).';
+        else msg += '<b>d < α</b> en algún valor propio ⇒ <b>no diagonalizable</b>: faltan ejes propios. J = ' + bl.join(' ⊕ ') + ' (' + ones + ' uno' + (ones === 1 ? '' : 's') + '). Los vectores p con índice mayor en un bloque son <b>generalizados</b>: en cada cadena, la cabeza v cumple A·v = N·v + λ·v con N = A − λI, es decir, A la estira por λ y además la desvía hacia el eje propio, como una cizalla (en U 4.18: A·p₃ = p₂ + 2·p₃). La imagen de la esfera es un elipsoide «inclinado»; las rectas y planos propios de color siguen fijos, pero no bastan para una base.';
+        if (pr.status === 'irr') msg += ' (Los valores irracionales se muestran aproximados.)';
+        if (pr.det === 0) msg += ' Como A es singular (λ = 0), la imagen de la esfera es un elipsoide degenerado (aplastado).';
+      }
+      html(text, Lh[0] + msg + '<br><small>Vectores p₁, p₂, p₃ = columnas de P (base propia o de Jordan), dibujados a escala común' + (P.length ? '; rectas y planos de colores = subespacios propios.' : '.') + '</small>');
+      res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = pr.status === 'cplx' ? 'Sin forma de Jordan real' : (allD ? 'Diagonalizable: J = Λ' : 'No diagonalizable: J con ' + ones + ' uno' + (ones === 1 ? '' : 's')); res.appendChild(fin);
+    }
+    root.appendChild(sl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    inp.concat([st]).forEach(function (q) { q.addEventListener('input', draw); });
+    if (S) S.onTheme = draw; draw();
+  }
+
+  var REG = [['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
   function init() {
     var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n]); }); });
     if (!todo.length) return;
