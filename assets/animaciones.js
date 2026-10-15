@@ -13,6 +13,7 @@
    .anim-cambio  data-u="1,1" data-v="-1,1" data-x="3,1"   (cambio de base en R2: columnas de Q = base nueva; x_B = Q x_B′; rejilla de la base nueva)
    .anim-propios data-a="3,-2,1,0" data-x="2,1"   (A 2x2 y vector x deslizable: x frente a Ax, polinomio característico, valores propios y subespacios propios; presets sin valores reales y doble con d=1)
    .anim-semej   data-a="1,1,0,2" data-q="1,0,1,1"   (A 2x2 y Q regular: A'=Q^-1 A Q frente a Q^t A Q; det, traza e invariantes)
+   .anim-diag    data-a="4,1,2,3" data-x="2,1"   (diagonalizar A 2x2 paso a paso: valores propios, d y alfa, veredicto, P y Lambda en el mismo orden, comprobacion P*Lambda = A*P y rejilla de la base propia con x_B' = P^-1 x; presets: distintos, doble d=2, doble d=1, giro 90, singular, irracionales)
 */
 (function () {
   'use strict';
@@ -938,7 +939,139 @@
     root.appendChild(eq); root.appendChild(P.svg); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
     draw();
   }
-  var REG = [['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+
+  /* =====================================================================
+     Diagonalizacion 2x2 paso a paso: valores propios, d y alfa, P y Lambda, rejilla de la base propia
+     ===================================================================== */
+  function buildDiag(root) {
+    var a0 = (root.getAttribute('data-a') || '4,1,2,3').split(',').map(Number), x0 = (root.getAttribute('data-x') || '2,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var body = el('div', 'an-body');
+    var P = plane(body, 340, 340, 5);
+    P.svg.setAttribute('aria-label', 'Plano con los vectores propios de A, la rejilla de la base propia y un vector x');
+    var res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); ctrl.appendChild(r); }
+    var mi = a0.map(function (x) { return numInput(x, 1, '3.2em'); });
+    mi.forEach(function (i, k) { i.setAttribute('aria-label', 'A entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); });
+    var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+    er.appendChild(el('span', '', 'A = (')); [0, 1].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ' ; ')); [2, 3].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ')   (enteros)')); eq.appendChild(er);
+    var sx = slider(-4, 4, 1, x0[0]), sy = slider(-4, 4, 1, x0[1]), lx = el('b'), ly = el('b');
+    sx.setAttribute('aria-label', 'x primera componente'); sy.setAttribute('aria-label', 'x segunda componente');
+    row('x₁ ', sx, lx); row('x₂ ', sy, ly);
+    var pre = btnRow(['Ejemplo (λ distintos)', 'Doble con d = 2', 'Doble con d = 1', 'Giro 90°', 'Singular (λ = 0)', 'Raíces irracionales'], function (i) {
+      var p = [a0, [2, 0, 0, 2], [3, 1, -1, 1], [0, -1, 1, 0], [1, 2, 2, 4], [1, 1, 1, 0]][i];
+      mi.forEach(function (q, j) { q.value = p[j]; }); recalc(true);
+    });
+    var cur = null;
+    /* formato: fraccion si es racional con denominador <= 12; si no, 2 decimales */
+    function pf(x) {
+      if (Math.abs(x) < 1e-9) return '0';
+      for (var q = 1; q <= 12; q++) { var n = Math.round(x * q); if (Math.abs(x * q - n) < 1e-9) return (n < 0 ? MINUS : '') + Math.abs(n) + (q === 1 ? '' : '/' + q); }
+      return '≈' + num(x, 2);
+    }
+    function pm(m) { return '(' + pf(m[0]) + ' ' + pf(m[1]) + ' ; ' + pf(m[2]) + ' ' + pf(m[3]) + ')'; }
+    function eig(a, b, c, d, l, sq) {
+      var r1 = [a - l, b], r2 = [c, d - l], n1 = Math.abs(r1[0]) + Math.abs(r1[1]), n2 = Math.abs(r2[0]) + Math.abs(r2[1]), r;
+      if (n1 >= n2 && n1 > 1e-9) r = r1; else if (n2 > 1e-9) r = r2; else return null;
+      var v = [r[1], -r[0]];
+      if (v[0] < -1e-12 || (Math.abs(v[0]) <= 1e-12 && v[1] < 0)) v = [-v[0], -v[1]];
+      if (v[0] === 0) v[0] = 0;
+      if (v[1] === 0) v[1] = 0;
+      var m = Math.max(Math.abs(v[0]), Math.abs(v[1]));
+      if (sq) {
+        for (var k = 1; k <= 24; k++) { if (Math.abs(k * v[0] - Math.round(k * v[0])) < 1e-9 && Math.abs(k * v[1] - Math.round(k * v[1])) < 1e-9) { v = [Math.round(k * v[0]), Math.round(k * v[1])]; break; } }
+        var g = gcd(v[0], v[1]); v = [v[0] / g, v[1] / g];
+      } else v = [v[0] / m, v[1] / m];
+      return v;
+    }
+    function model() {
+      var q4 = mi.map(function (i) { var f = parseFloat(i.value), r = Math.round(f); if (isNaN(f)) return 0; if (f !== r) i.value = r; return r; });
+      var a = q4[0], b = q4[1], c = q4[2], d = q4[3];
+      var tr = a + d, det = a * d - b * c, disc = tr * tr - 4 * det;
+      var M = { a: a, b: b, c: c, d: d, tr: tr, det: det, disc: disc, ls: [], al: [], dm: [], vs: [], ok: false, irr: false };
+      if (disc < 0) return M;
+      var s = Math.sqrt(disc), sq = Math.abs(s - Math.round(s)) < 1e-12; M.irr = !sq;
+      if (disc === 0) {
+        var l0 = tr / 2, v = eig(a, b, c, d, l0, true); M.ls = [l0]; M.al = [2];
+        if (!v) { M.dm = [2]; M.vs = [[1, 0], [0, 1]]; M.ok = true; } else { M.dm = [1]; M.vs = [v]; }
+      } else {
+        M.ls = [(tr + s) / 2, (tr - s) / 2]; M.al = [1, 1]; M.dm = [1, 1];
+        M.vs = M.ls.map(function (l) { return eig(a, b, c, d, l, sq); }); M.ok = true;
+      }
+      return M;
+    }
+    function zn(n) { return String(n).replace('-', MINUS); }
+    function poly(M) { return 'λ²' + (M.tr > 0 ? ' ' + MINUS + ' ' + (M.tr === 1 ? '' : M.tr) + 'λ' : (M.tr < 0 ? ' + ' + (M.tr === -1 ? '' : -M.tr) + 'λ' : '')) + (M.det > 0 ? ' + ' + M.det : (M.det < 0 ? ' ' + MINUS + ' ' + (-M.det) : '')); }
+    function full(P0, d, cls) { var n = Math.sqrt(d[0] * d[0] + d[1] * d[1]); if (n < 1e-9) return; var k = 14 / n; P0.layer.appendChild(sv('line', { x1: P0.X(-k * d[0]), y1: P0.Y(-k * d[1]), x2: P0.X(k * d[0]), y2: P0.Y(k * d[1]), 'class': 'an-ln ' + cls, opacity: 0.45 })); }
+    function lam2(M) { return M.ls.length === 2 ? M.ls[1] : M.ls[0]; }
+    function render(s, text) {
+      var M = cur; P.clear(); res.textContent = '';
+      var A = [M.a, M.b, M.c, M.d];
+      ctrl.style.display = (M.ok && s >= 5) ? '' : 'none';
+      var x = parseInt(sx.value, 10), y = parseInt(sy.value, 10); lx.textContent = x; ly.textContent = y;
+      if (M.ok && s >= 5) { // rejilla de la base propia B' = columnas de P
+        var u = M.vs[0], w = M.vs[1];
+        for (var k = -14; k <= 14; k++) {
+          [[k * u[0], k * u[1], w[0], w[1]], [k * w[0], k * w[1], u[0], u[1]]].forEach(function (q) {
+            P.layer.appendChild(sv('line', { x1: P.X(q[0] - 14 * q[2]), y1: P.Y(q[1] - 14 * q[3]), x2: P.X(q[0] + 14 * q[2]), y2: P.Y(q[1] + 14 * q[3]), stroke: '#2e9e5b', 'stroke-width': k === 0 ? 1.2 : 0.6, 'stroke-dasharray': '4 3', opacity: k === 0 ? 0.8 : 0.5 }));
+          });
+        }
+      }
+      if (s >= 2 && M.ls.length && M.dm[0] === 1) M.vs.forEach(function (v, i) { if (v) full(P, v, i === 0 ? 'down' : 'up'); });
+      if (s >= 4 && M.ok) M.vs.forEach(function (v, i) {
+        var m = Math.max(Math.abs(v[0]), Math.abs(v[1])), kk = M.irr ? 3 / m : Math.min(1, 4.5 / m);
+        arrow(P, 0, 0, v[0] * kk, v[1] * kk, i === 0 ? 'down' : 'up', 'v' + (i + 1));
+      });
+      if (M.ok && s >= 5) arrow(P, 0, 0, x, y, 'w', 'x');
+      var h = '';
+      if (s === 0) h = '<b>Diagonalizar</b> A (U Def. 4.12) es hallar una base de ℝ² formada por <b>vectores propios</b>: en esa base la aplicación solo estira cada eje y su matriz es diagonal, Λ = P⁻¹AP, donde las columnas de P son los vectores de la base. Aquí A = ' + pm(A) + '. Pasos: (1) valores propios y α; (2) subespacios propios y d; (3) comparar d con α; (4) P y Λ <b>en el mismo orden</b>; (5) comprobar PΛ = AP. Pulsa «Siguiente».';
+      else if (s === 1) {
+        h = '<b>1. Valores propios.</b> |A − λI| = ' + poly(M) + ' (tr = ' + zn(M.tr) + ', det = ' + zn(M.det) + '); discriminante D = tr² − 4·det = ' + zn(M.disc) + '. ';
+        if (M.disc < 0) h += 'D < 0: <b>no hay raíces reales</b>, luego no hay valores propios (en U, λ ∈ ℝ). Σα = 0 < 2.';
+        else if (M.disc === 0) h += 'D = 0: raíz doble <b>λ = ' + pf(M.ls[0]) + '</b>, α = 2.';
+        else h += 'D > 0: dos raíces reales distintas, <b>λ₁ = ' + pf(M.ls[0]) + '</b> y <b>λ₂ = ' + pf(M.ls[1]) + '</b>' + (M.irr ? ' (irracionales, (' + zn(M.tr) + ' ± √' + M.disc + ')/2; se escriben aproximadas)' : '') + ', α₁ = α₂ = 1.';
+      } else if (s === 2) {
+        if (!M.ls.length) h = '<b>2. Subespacios propios.</b> Sin valores propios no hay vectores propios: ningún subespacio propio. (Un giro de 90° no deja ninguna recta fija.)';
+        else {
+          h = '<b>2. Subespacios propios</b> L = Nuc(A − λI) y d = 2 − rang(A − λI).';
+          M.ls.forEach(function (l, i) {
+            var Al = [M.a - l, M.b, M.c, M.d - l], zero = M.dm[i] === 2;
+            h += '<br>λ = ' + pf(l) + ': A − λI = ' + pm(Al) + ', rango ' + (zero ? 0 : 1) + ', <b>d = ' + (zero ? 2 : 1) + '</b>; ' + (zero ? 'L = todo ℝ².' : 'L = ⟨(' + pf(M.vs[i][0]) + ', ' + pf(M.vs[i][1]) + ')⟩, una recta' + (M.dm[i] < M.al[i] ? ' (d = 1 < α = 2)' : '') + '.');
+          });
+          if (M.irr) h += '<br>(Vectores con componentes aproximadas.)';
+        }
+      } else if (s === 3) {
+        h = '<b>3. Comparar d con α</b> (U Teor. 4.7). ';
+        if (M.disc < 0) h += 'Sin raíces reales no existe ninguna base de vectores propios de ℝ²: <b>A no es diagonalizable en ℝ</b>. (El criterio «d = α» solo vale si todas las raíces son reales, es decir, Σα = n; U lo reconoce en p.167.)';
+        else if (M.disc > 0) h += 'd₁ = α₁ = 1 y d₂ = α₂ = 1. Dos valores propios distintos en orden 2 ⇒ <b>diagonalizable</b> (U p.163).' + (M.det === 0 ? ' Aquí λ = 0 es valor propio (A es singular) y, aun así, diagonalizable: «singular» y «diagonalizable» son independientes.' : '');
+        else if (M.dm[0] === 2) h += 'α = d = 2: <b>diagonalizable</b>. De hecho A = λI ya es diagonal (P = I sirve; cualquier base es de vectores propios).';
+        else h += 'α = 2 pero d = 1: <b>d < α ⇒ NO diagonalizable</b>. Solo hay una dirección propia y para una base de ℝ² harían falta dos (Teor. 4.6).';
+      } else if (s === 4) {
+        var D4 = M.vs[0][0] * M.vs[1][1] - M.vs[1][0] * M.vs[0][1];
+        h = '<b>4. P y Λ.</b> Las columnas de P son los vectores propios y Λ lleva sus valores propios <b>en el mismo orden</b>: P = ' + pm([M.vs[0][0], M.vs[1][0], M.vs[0][1], M.vs[1][1]]) + ', Λ = diag(' + pf(M.ls[0]) + ', ' + pf(lam2(M)) + '). det P = ' + pf(D4) + ' ≠ 0: P es regular. Si intercambias las columnas de P, hay que intercambiar los elementos de Λ; P no es única.';
+      } else {
+        var v1 = M.vs[0], v2 = M.vs[1], l1 = M.ls[0], l2 = lam2(M), Pm = [v1[0], v2[0], v1[1], v2[1]], D5 = Pm[0] * Pm[3] - Pm[1] * Pm[2];
+        var AP = [M.a * Pm[0] + M.b * Pm[2], M.a * Pm[1] + M.b * Pm[3], M.c * Pm[0] + M.d * Pm[2], M.c * Pm[1] + M.d * Pm[3]], PL = [Pm[0] * l1, Pm[1] * l2, Pm[2] * l1, Pm[3] * l2];
+        var eqok = AP.every(function (q, i) { return Math.abs(q - PL[i]) < 1e-9; });
+        var al = (x * Pm[3] - Pm[1] * y) / D5, be = (-Pm[2] * x + Pm[0] * y) / D5;
+        h = '<b>5. Comprobación sin invertir P:</b> AP = ' + pm(AP) + ' y PΛ = ' + pm(PL) + (eqok ? ': <b>coinciden ✓</b>, luego P⁻¹AP = Λ.' : ': ¡no coinciden!') +
+          ' La rejilla fina de trazos verdes es la de la base propia B′ = {v₁, v₂}: el vector x = (' + zn(x) + ', ' + zn(y) + ') tiene coordenadas <b>x_B′ = P⁻¹x = (' + pf(al) + ', ' + pf(be) + ')</b>, y en esa base A solo multiplica: Ax tiene coordenadas (' + pf(l1 * al) + ', ' + pf(l2 * be) + ') en B′ (= Λ·x_B′).';
+      }
+      html(text, h);
+      if (s === st.N) { var fin = el('div', 'sar-final'); fin.textContent = M.ok ? 'Diagonalizable: Λ = diag(' + pf(M.ls[0]) + ', ' + pf(lam2(M)) + ') = P⁻¹AP' : 'NO diagonalizable en ℝ' + (M.disc < 0 ? ' (sin valores propios reales)' : ' (d < α)'); res.appendChild(fin); }
+    }
+    var st = stepper(root, 5, render, null, 3400);
+    function recalc(jump) { cur = model(); st.setN(cur.ok ? 5 : 3); st.go(jump ? st.N : Math.min(st.step, st.N)); }
+    mi.forEach(function (q) { q.addEventListener('input', function () { recalc(true); }); });
+    var tmr = null;
+    [sx, sy].forEach(function (q) { q.addEventListener('input', function () { lx.textContent = sx.value; ly.textContent = sy.value; clearTimeout(tmr); tmr = setTimeout(function () { st.text.setAttribute('aria-live', 'off'); st.go(st.step); setTimeout(function () { st.text.setAttribute('aria-live', 'polite'); }, 50); }, 250); }); });
+    body.appendChild(el('p', 'sar-text an-title', 'Edita A (2×2, entradas enteras) o elige un caso y recorre los cinco pasos de la receta. Al cambiar A se muestra el resultado completo; «↺ Reiniciar» vuelve al principio.'));
+    body.appendChild(eq); body.appendChild(P.svg); body.appendChild(ctrl); body.appendChild(pre);
+    root.appendChild(body); st.mount(root, res);
+    cur = model(); st.setN(cur.ok ? 5 : 3); st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(st.N); });
+  }
+  var REG = [['.anim-diag', buildDiag], ['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
