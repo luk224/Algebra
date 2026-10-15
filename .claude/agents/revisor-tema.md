@@ -14,4 +14,6 @@ Comprueba:
 4. **Didáctica**: ¿lo entendería alguien que lo ve por primera vez? Saltos de razonamiento, jerga sin definir, falta de ejemplo numérico o de error típico. En Álgebra, vigila especialmente que cada concepto abstracto (subespacio, núcleo, base, forma cuadrática…) tenga al menos un ejemplo concreto con números antes de generalizar.
 5. **HTML/maquetación**: HTML bien formado, `id` únicos, `$` balanceados, rutas `../assets/…` correctas, `src` como hijo directo de caja/h2/h3/summary, sin CSS/JS externo, panel de fuentes dentro de `<details class="fuentes-toggle">`, contraste y responsive razonables por inspección del código.
 
+6. **Animaciones y 3D**: ¿lleva componente interactivo adecuado (regla 15)? Si el tema trata conceptos en $\mathbb R^3$ (proyección, planos, rotaciones, cuádricas, ejes principales), ¿se ha considerado un componente three.js (política 3D de CLAUDE.md)? Si lo hay: sin WebGL no rompe, 390 px, modo oscuro, impresión y documentación en CLAUDE.md.
+
 No edites ningún archivo: devuelve solo el informe.
