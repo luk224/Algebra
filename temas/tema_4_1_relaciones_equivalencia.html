@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 4.1 Relaciones de equivalencia</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 4 · Diagonalización de matrices · Tema 4.1</div>
+  <h1>Relaciones de equivalencia</h1>
+  <p>Cómo «clasificar» objetos que comparten una cualidad (relaciones de equivalencia y clases) y, en concreto, cómo clasificar matrices: <b>equivalentes</b> ($B=MAN$, las que tienen el mismo rango), <b>congruentes</b> ($B=P^tAP$) y <b>semejantes</b> ($A'=P^{-1}AP$, las que representan el mismo endomorfismo en bases distintas). Es la base de todo el módulo 4: diagonalizar es buscar, en la clase de semejanza de una matriz, una diagonal.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §4.1 (pp. 141-148)</span><span>Ejercicios: E Ej. 4.1–4.10 (pp. 120-128)</span><span>⏱ ~4–5 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §4.1.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 141">U p.141</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>Clasificar es agrupar «lo que es lo mismo desde cierto punto de vista»: los alumnos por curso, las palabras por su letra inicial, los números por su paridad. Una <b>relación de equivalencia</b> es la regla matemática de esa clasificación. Aplicada a matrices da tres clasificaciones: por <b>rango</b> (equivalentes), por <b>forma bilineal</b> (congruentes) y por <b>endomorfismo</b> (semejantes). Dos matrices semejantes son «la misma aplicación vista con gafas distintas»; por eso comparten determinante, traza y valores propios.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del <a href="tema_1_2_algebra_matricial.html">tema 1.2</a>: producto de matrices, matriz inversa, matriz regular, <b>rango</b>.</li>
+  <li>Del <a href="tema_1_3_determinantes.html">tema 1.3</a>: $\det(AB)=\det A\det B$, $\det A^t=\det A$, $A$ regular $\iff\det A\neq0$ (U p.26-27).</li>
+  <li>Del <a href="tema_3_5_inversa_cambios_base.html">tema 3.5</a>: al cambiar las bases de una aplicación lineal, $A'=P^{-1}AQ$ (Def. 3.15, U p.136); en un endomorfismo ($Q=P$) queda $Q^{-1}AQ$ (tema 3.5). En el 4.1 esa misma matriz de paso se llama $P$.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde</th></tr>
+  <tr><td>1 Relaciones binarias</td><td>Def. 4.1, reflexiva / simétrica / transitiva</td><td>U p.141-143</td></tr>
+  <tr><td>2 Relación de equivalencia</td><td>Def. 4.2, clases, partición, conjunto cociente</td><td>U p.144-145</td></tr>
+  <tr><td>3 Matrices equivalentes</td><td>Def. 4.3, Teor. 4.1-4.3, rango como invariante completo</td><td>U p.145-147 · L §1.1 p.6, §5.2 p.277</td></tr>
+  <tr><td>4 Congruentes y semejantes</td><td>Def. 4.4, Def. 4.5, jerarquía, diagrama del cambio de base</td><td>U p.147-148 · L §5.2 p.277, §5.4 p.291-292</td></tr>
+  <tr><td>5 Invariantes</td><td>Cómo probar que dos matrices <b>no</b> son semejantes</td><td>U p.153 (adelanto) · L p.277</td></tr>
+  <tr><td>6 Tabla Lay ↔ U</td><td>Vocabulario que no coincide</td><td>L</td></tr>
+  <tr><td>7 Ejercicios del libro</td><td>E 4.1–4.10 + 9 ejemplos propios + autoevaluación</td><td>E pp.120-128</td></tr>
+  <tr><td>8 Ejemplos de examen</td><td>4 apartados nuevos y enlaces a los ya resueltos</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p><b>(a)</b> Comprobar si una relación dada es reflexiva, simétrica, transitiva, y hallar sus clases (E 4.1-4.3, X «definir relación de equivalencia»). <b>(b)</b> Decidir si dos matrices son equivalentes (¿mismo rango?), congruentes o semejantes, casi siempre con <b>invariantes</b> (determinante, traza) para descartar (E 4.4-4.7). <b>(c)</b> Hallar la matriz de paso $P$ planteando $PA=BP$ (E 4.6-4.9). <b>(d)</b> Verdadero/falso de teoría: «¿qué relación verifican las matrices de un endomorfismo?» (semejantes), «¿congruentes tienen el mismo determinante?» (no).</p>
+</div>
+
+<div class="box warn"><span class="h">Erratas, ambigüedades y avisos sobre los libros</span>
+  <ul>
+    <li><b>U dice «es evidente»</b> en varios sitios: que la equivalencia de matrices es relación de equivalencia (p.146) y que congruentes $\Rightarrow$ equivalentes (p.147); además presenta la congruencia como relación de equivalencia sin prueba. Aquí se demuestran la congruencia (Def. 4.4) y la semejanza (<a href="#ex-sep19a-4">X Sept. 2019</a>).</li>
+    <li><b>E 4.9</b> (p.126): «pueden ser semejantes porque $\operatorname{rang}\Lambda=\operatorname{rang}A$» es solo una condición <b>necesaria</b>; y en p.127 escribe «rang$(A)$ = rang$(B)$» donde debe decir rang$(\Lambda)$.</li>
+    <li><b>E 4.10</b> (p.128): el elemento $(2,3)$ de $A^{15}$ está impreso como $-2^{29}$; es $+2^{29}$ (la conclusión D no cambia). Y la $P$ usada <b>no</b> es «el doble» de la de 4.9 (difieren en el signo de la 3.ª columna), aunque también vale.</li>
+    <li><b>E 4.8 y 4.7 no tienen errata</b> (el texto digital del libro pierde los signos $\neq$; en el libro impreso las opciones son correctas).</li>
+    <li><b>X Feb. 2018 (A) ej. 4</b>: la solución oficial («equivalentes; semejantes a una diagonal») es correcta pero imprecisa. <b>X Feb. 2024 (1.ª) preg. 6</b> (tema 6): la oficial confunde semejante con congruente (ver apartado 5).</li>
+    <li><b>Convenio de este resumen</b> (coherente con el 3.5): $x_B=Q\,x_{B'}$ y $A'=P^{-1}AQ$; en un endomorfismo $Q=P$ y $A'=P^{-1}AP$. Con la Def. 4.3 de U, $M=P^{-1}$ y $N=Q$.</li>
+  </ul>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Relaciones binarias <span class="src" data-l="U" data-ref="U §4.1.1 Relaciones binarias, Def. 4.1, Ejemplos 4.1-4.2 y propiedades, p. 142-143">U p.142-143</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una relación es una lista de las parejas «ordenadas» $(a,b)$ para las que se cumple cierta frase: «$a$ empieza por la misma letra que $b$», «$a$ es menor que $b$». Se puede dibujar como un <b>grafo de flechas</b>: un punto por elemento, una flecha $a\to b$ por cada pareja $(a,b)$ y un <b>lazo</b> (flecha de $a$ a $a$) por cada pareja $(a,a)$.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 4.1 — relación binaria</span>
+  <p>Una <b>relación binaria</b> $R$ en un conjunto $A\neq\emptyset$ es un subconjunto no vacío del producto cartesiano $A\times A$. Si $(a,b)\in R$ se escribe $aRb$ y se dice que «$a$ está relacionado con $b$».</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.1, p. 142">U p.142</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.1-4.2 (U) — palabras que empiezan por la misma letra</span>
+  <p>$A=\{\text{casa, mesa, mono, silla, mantel, cosa}\}$ y $R$: «empezar por la misma letra». $A\times A$ tiene $6\cdot6=36$ pares, pero solo 14 están en $R$ (p. ej. $(\text{mesa},\text{mono})$, $(\text{silla},\text{silla})$; $(\text{mesa},\text{silla})\notin R$).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 4.1 y 4.2, p. 142">U p.142</span>
+</div>
+
+<div class="box def"><span class="h">Propiedades de una relación binaria (U p.143)</span>
+  <table>
+    <tr><th>Propiedad</th><th>Se escribe</th><th>En el grafo de flechas</th></tr>
+    <tr><td><b>Reflexiva</b></td><td>$aRa$ para <b>todo</b> $a\in A$</td><td>todo punto tiene lazo</td></tr>
+    <tr><td>Antirreflexiva</td><td>$a\not R a$ para todo $a$</td><td>ningún punto tiene lazo</td></tr>
+    <tr><td><b>Simétrica</b></td><td>$aRb\Rightarrow bRa$</td><td>cada flecha de ida tiene su vuelta</td></tr>
+    <tr><td>Antisimétrica</td><td>$aRb$ y $bRa\Rightarrow a=b$</td><td>ninguna flecha (entre puntos distintos) tiene vuelta</td></tr>
+    <tr><td><b>Transitiva</b></td><td>$aRb$ y $bRc\Rightarrow aRc$</td><td>cada cadena $a\to b\to c$ tiene su «atajo» $a\to c$</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U Propiedades de las relaciones binarias, p. 143">U p.143</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Confundir «simétrica» con «antisimétrica»</b> (no son opuestas: «=» es ambas). Y <b>«probar» una propiedad con ejemplos</b>: para afirmar que una relación es transitiva hay que revisar <i>todas</i> las cadenas; para negarla basta <i>un</i> contraejemplo.</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Relación de equivalencia, clases y conjunto cociente <span class="src" data-l="U" data-ref="U §4.1.1, Def. 4.2, Ejemplos 4.3-4.5, p. 144-145">U p.144-145</span></h2>
+
+<div class="box def"><span class="h">Definición 4.2 — relación de equivalencia</span>
+  <p>Una relación $R$ en $A$ es <b>de equivalencia</b> si es <b>reflexiva, simétrica y transitiva</b>.</p>
+  <p>Entonces $A$ se divide en conjuntos disjuntos formados por elementos relacionados entre sí: las <b>clases de equivalencia</b>. La clase de $a$ es $[a]=\{x\in A : xRa\}$ y $a$ es su <b>representante</b>. El conjunto de todas las clases es el <b>conjunto cociente</b> $A/R$.</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.2, p. 144">U p.144</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 4.3-4.4 (U) — «mismo número de letras»</span>
+  <p>$A=\{\text{uno, dos, tres, eva}\}$ y $R$: «tiene el mismo número de letras». $R$ tiene 10 pares: los lazos de las 4 palabras y los 6 pares ordenados entre uno, dos, eva. Es reflexiva (4 lazos), simétrica (las flechas van en parejas) y transitiva, luego es de equivalencia. Clases: $\{\text{uno, dos, eva}\}$ (3 letras) y $\{\text{tres}\}$ (4 letras); $A/R=\{\text{Clase 1},\text{Clase 2}\}$. U (Ej. 4.5) comenta que una imagen digital es una matriz de píxeles y una clase puede ser un grupo de píxeles contiguos del mismo color.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 4.3, 4.4, 4.5, p. 144-145">U p.144-145</span>
+</div>
+
+<div class="box intu"><span class="h">Por qué las clases «parten» el conjunto</span>
+  <p>Cada elemento está en su propia clase (reflexiva); si $a$ está relacionado con $b$ entonces las clases de $a$ y $b$ coinciden (simétrica + transitiva); y dos clases distintas no comparten ningún elemento. Es como repartir a los alumnos en clases: nadie queda sin clase y nadie está en dos. Recíprocamente, toda partición de $A$ define una relación de equivalencia («estar en el mismo trozo»).</p>
+  <span class="src" data-l="P" data-ref="Explicación propia a partir de U p.144">propio</span>
+</div>
+
+<div class="box tip"><span class="h">Truco: reconocer una equivalencia de un vistazo</span>
+  <p>Si la relación se puede escribir como «$f(x)=f(y)$» para alguna cantidad $f$ (la paridad, el número de letras, el rango, el resto al dividir entre 3…; ver el <a href="#ej-propio-2">ejemplo propio 2</a>), es <b>siempre</b> de equivalencia, y las clases son los conjuntos donde $f$ vale lo mismo. Ejemplo: en $\mathbb Z$, «$x-y$ múltiplo de 3» $\iff$ mismo resto módulo 3: tres clases $[0],[1],[2]$.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia; ver E 4.3 y ejemplo propio 2">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Olvidar que la <b>reflexividad exige todos los lazos</b>: «$a\le b$» es reflexiva y transitiva pero no simétrica ($1\le2$, $2\not\le1$); no es de equivalencia. Y una relación sin lazos en algún elemento (como $R$ en E 4.1) no es reflexiva por muy «bonita» que parezca.</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Matrices equivalentes: el rango lo decide todo <span class="src" data-l="U" data-ref="U §4.1.2 Matrices equivalentes y cambios de base, Def. 4.3, Teoremas 4.1-4.3, p. 145-147">U p.145-147</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Las operaciones elementales por filas (tema 1.2) no cambian el rango. Si además se permiten operaciones por <b>columnas</b>, cualquier matriz se reduce a la forma $\begin{pmatrix}I_r&0\cr0&0\end{pmatrix}$, donde $r$ es el rango. Dos matrices del mismo tamaño que se reducen a la <i>misma</i> forma son «la misma cosa» para esta relación. Por eso la relación de equivalencia de matrices solo mira el rango.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 4.3 — matrices equivalentes</span>
+  <p>$B$ es <b>equivalente</b> a $A$ si existen dos matrices <b>regulares</b> $M$ y $N$ tales que
+  $$B=MAN.$$
+  $M$ y $N$ son independientes entre sí (y de tamaños $m\times m$ y $n\times n$ si $A$ es $m\times n$). Es una relación de equivalencia (reflexiva: $M=N=I$; simétrica: $A=M^{-1}BN^{-1}$; transitiva: el producto de regulares es regular).</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.3, p. 146 (U dice «es evidente» que es de equivalencia)">U p.146</span>
+</div>
+
+<div class="box thm"><span class="h">Teoremas 4.1, 4.2 y 4.3</span>
+  <ul>
+    <li><b>Teor. 4.1.</b> Si $A=CB$ con $C$ regular (mismo orden), entonces $A$ y $B$ tienen el mismo rango. <i>Idea de la prueba:</i> las filas de $A$ son combinaciones lineales de las de $B$, luego $\operatorname{rang}A\le\operatorname{rang}B$; y como $B=C^{-1}A$, vale también $\operatorname{rang}B\le\operatorname{rang}A$.</li>
+    <li><b>Teor. 4.2.</b> <b>Mismo rango $\iff$ equivalentes</b> (para matrices del mismo tamaño).</li>
+    <li><b>Teor. 4.3</b> (enunciado literal de U): «Las matrices asociadas a un endomorfismo en diferentes bases son equivalentes». El diagrama y la prueba valen para <b>cualquier</b> aplicación lineal $f:V\to W$ con bases independientes en salida y llegada: $A'=P^{-1}AQ$ es la Def. 4.3 con $M=P^{-1}$ y $N=Q$.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Teoremas 4.1, 4.2 y 4.3, p. 146-147">U p.146-147</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_u_4_1_equivalencia.png" alt="Diagrama de cambio de base de una aplicación lineal: (V,B) a (W,S) con matriz A, y (V,B') a (W,S') con matriz A'; las flechas verticales son Q y P, P inversa" loading="lazy"><figcaption>Diagrama del cambio de base de una aplicación lineal (la fórmula $A'=P^{-1}AQ$ del tema 3.5). <span class="src" data-l="U" data-ref="U §4.1.2, diagrama tras el Teorema 4.3, p. 147">U p.147</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Ejemplo — las clases de $\mathcal M_{2\times3}$ son tres, una por rango</span>
+  <p>En $\mathcal M_{2\times3}(\mathbb R)$ se define $A\sim B$ si son equivalentes. Por el Teor. 4.2, $A\sim B\iff\operatorname{rang}A=\operatorname{rang}B$, y el rango puede valer $0,1,2$ (no supera $\min(2,3)$): <b>3 clases</b>, con representantes
+  $$\begin{pmatrix}0&0&0\cr0&0&0\end{pmatrix},\quad\begin{pmatrix}1&0&0\cr0&0&0\end{pmatrix},\quad\begin{pmatrix}1&0&0\cr0&1&0\end{pmatrix}.$$
+  La matriz $C=\begin{pmatrix}1&2&3\cr2&4&6\end{pmatrix}$ tiene $F_2=2F_1$ y $C\neq0$: rango 1, luego está en la clase del segundo representante. Con la animación puedes comprobar cómo el escalonado detecta ese rango.</p>
+  <div class="box ex" style="margin:.8em 0 0"><span class="h">Animación: el rango es el invariante (escalonar para contar pivotes)</span>
+    <div class="anim-gauss" data-modo="rango" data-m="1,2,3;2,4,6"></div>
+    <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-gauss modo rango); C=(1 2 3; 2 4 6)">P</span>
+  </div>
+  <span class="src" data-l="P" data-ref="Ejemplo propio a partir de U Teor. 4.2, p. 147; verificado con sympy">propio</span>
+</div>
+
+<div class="box tip"><span class="h">Lay: «equivalencia por filas» NO es la equivalencia de U</span>
+  <p>En Lay, «equivalentes por filas» (§1.1, p.6) significa que una matriz se obtiene de otra por operaciones de fila, es decir $B=EA$ con $E$ regular (§5.2, p.277, Advertencia 2): es el caso particular $N=I$ de la Def. 4.3. Esa relación <b>conserva más cosas</b> (el espacio de filas, las soluciones del sistema homogéneo $Ax=0$ y las del sistema de matriz ampliada dada). La equivalencia de U (Def. 4.3) permite además operar por columnas y solo conserva el rango. Ver el <a href="#s6">apartado 6</a> y la <a href="#s5">sección de invariantes</a>.</p>
+  <span class="src" data-l="L" data-ref="Lay §1.1, equivalencia por filas, p. 6; §5.2, Advertencia 2 (B=EA), p. 277">L §1.1 p.6 · §5.2 p.277</span>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Congruentes y semejantes <span class="src" data-l="U" data-ref="U §4.1.2 Def. 4.4, p. 147; §4.1.3 Def. 4.5, p. 148">U p.147-148</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: tres «gafas» distintas</span>
+  <p>Una misma matriz cuadrada puede ser <b>(i)</b> una aplicación lineal $V\to W$ con bases independientes en salida y llegada (se cambia por $P^{-1}AQ$, equivalencia), <b>(ii)</b> un <b>endomorfismo</b> $V\to V$ con una sola base (se cambia por $P^{-1}AP$, semejanza), o <b>(iii)</b> una <b>forma bilineal</b> (tema 6: se cambia por $P^tAP$, congruencia). Cada contexto reparte los cambios de base de forma distinta y por eso conserva cosas distintas.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 4.4 — matrices congruentes</span>
+  <p>$B$ es <b>congruente</b> con $A$ si existe una matriz regular $P$ tal que $B=P^tAP$. Si $A$ y $B$ son congruentes, son cuadradas, equivalentes ($M=P^t$, $N=P$) y tienen el mismo rango.</p>
+  <p><b>Es relación de equivalencia</b> (U no lo prueba): <i>reflexiva</i>, $A=I^tAI$; <i>simétrica</i>, de $B=P^tAP$ se despeja $A=(P^{-1})^tBP^{-1}$ (pues $(P^t)^{-1}=(P^{-1})^t$), con $P^{-1}$ regular; <i>transitiva</i>, si $B=P^tAP$ y $C=S^tBS$ entonces $C=(PS)^tA(PS)$ con $PS$ regular.</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.4, p. 147">U p.147</span>
+</div>
+
+<div class="box def"><span class="h">Definición 4.5 — matrices semejantes</span>
+  <p>Cuando $f:V\to V$ es un endomorfismo, el espacio de salida y el de llegada son el mismo y se cambia la base <b>a la vez</b> en los dos ($Q=P$): la fórmula $A'=P^{-1}AQ$ pasa a $A'=P^{-1}AP$. $A'$ es <b>semejante</b> a $A$ si existe una matriz regular $P$, llamada <b>matriz de paso</b>, con
+  $$A'=P^{-1}AP.$$
+  <b>Las matrices asociadas a un endomorfismo en bases diferentes son semejantes.</b> La semejanza es relación de equivalencia (demostración en <a href="#ex-sep19a-4">X Sept. 2019</a>).</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.5 y frase final, p. 148">U p.148</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_u_4_1_semejanza.png" alt="Diagrama de un endomorfismo: (V,B) a (V,B) con matriz A; (V,B') a (V,B') con A'; flecha P hacia arriba y P inversa hacia abajo" loading="lazy"><figcaption>Cambio de base de un endomorfismo: dos vías para obtener $f(x)$ en $B'$: $A'x_{B'}$ o bien $P^{-1}AP\,x_{B'}$ (sube con $P$, aplica $A$, baja con $P^{-1}$). <span class="src" data-l="U" data-ref="U §4.1.3, diagrama, p. 148">U p.148</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Ejemplo — dos matrices de un mismo endomorfismo</span>
+  <p>$f(x,y)=(x+y,\,2y)$ tiene en la base canónica $A=\begin{pmatrix}1&1\cr0&2\end{pmatrix}$. En la base $B'=\{(1,1),(0,1)\}$: $f(1,1)=(2,2)=2(1,1)+0(0,1)$ y $f(0,1)=(1,2)=1(1,1)+1(0,1)$, luego $A'=\begin{pmatrix}2&1\cr0&1\end{pmatrix}$. Y en efecto, con $P=\begin{pmatrix}1&0\cr1&1\end{pmatrix}$ (columnas = $B'$ en la canónica), $P^{-1}AP=\begin{pmatrix}1&0\cr-1&1\end{pmatrix}\begin{pmatrix}1&1\cr0&2\end{pmatrix}\begin{pmatrix}1&0\cr1&1\end{pmatrix}=\begin{pmatrix}2&1\cr0&1\end{pmatrix}$ ✓. Las dos matrices tienen determinante $2$, traza $3$ y polinomio característico $\lambda^2-3\lambda+2$. En la base de vectores propios $\{(1,0),(1,1)\}$ la matriz sería $\operatorname{diag}(1,2)$ (tema 4.3).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; cf. U p.148 y X Feb. 2018 (A) ej. 4">propio</span>
+</div>
+
+<div class="box thm"><span class="h">Jerarquía de las tres relaciones</span>
+  <p>
+  $$\text{semejantes}\ (B=P^{-1}AP)\ \Longrightarrow\ \text{equivalentes}\ (B=MAN)\ \Longleftarrow\ \text{congruentes}\ (B=P^tAP).$$
+  Basta tomar $M=P^{-1},N=P$ en el primer caso y $M=P^t,N=P$ en el segundo. <b>Ninguna flecha se puede invertir</b>, y semejantes y congruentes no se implican entre sí:</p>
+  <table>
+    <tr><th>Afirmación falsa</th><th>Contraejemplo</th><th>Por qué</th></tr>
+    <tr><td>equivalentes $\Rightarrow$ semejantes</td><td>$\begin{pmatrix}1&2\cr3&4\end{pmatrix}$ y $\begin{pmatrix}5&6\cr7&8\end{pmatrix}$</td><td>mismo rango (2) y mismo det ($-2$), pero trazas $5\neq13$</td></tr>
+    <tr><td>congruentes $\Rightarrow$ semejantes</td><td>$I_2$ y $\begin{pmatrix}4&0\cr0&1\end{pmatrix}=P^tIP$, $P=\operatorname{diag}(2,1)$</td><td>$\det$ distinto ($1\neq4$): $|P^tAP|=|P|^2|A|$</td></tr>
+    <tr><td>semejantes $\Rightarrow$ congruentes</td><td>$D=\begin{pmatrix}1&0\cr0&2\end{pmatrix}$ y $B=\begin{pmatrix}1&3\cr0&2\end{pmatrix}$: con $P=\begin{pmatrix}1&3\cr0&1\end{pmatrix}$, $P^{-1}BP=D$</td><td>semejantes, pero no congruentes: si $A$ es simétrica, $(P^tAP)^t=P^tA^tP=P^tAP$ también lo es, y $B$ no</td></tr>
+  </table>
+  <p><b>Cuándo coinciden:</b> si $P$ es <b>ortogonal</b> ($P^t=P^{-1}$, tema 5.2), $P^{-1}AP=P^tAP$: la matriz es a la vez semejante y congruente (U Teor. 5.8, p.224).</p>
+  <span class="src" data-l="U" data-ref="U Definiciones 4.3-4.5, p. 146-148; U Teorema 5.8, p. 224 (adelanto)">U p.146-148</span>
+  <span class="src" data-l="P" data-ref="Contraejemplos propios, verificados con sympy">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: semejante frente a congruente con la misma $P$</span>
+  <p>Cambia $A$ y $Q$ (la matriz de paso, regular) y compara: la semejanza $Q^{-1}AQ$ conserva determinante y traza; la congruencia $Q^tAQ$ multiplica el determinante por $(\det Q)^2$. Prueba «Q singular» para ver que la matriz de paso debe ser regular. Aquí <b>Q = P</b>, la matriz de paso de la Def. 4.5.</p>
+  <div class="anim-semej" data-a="1,1,0,2" data-q="1,0,1,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-semej)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Con la misma $P$: semejanza frente a congruencia</span>
+  <p>$A=\begin{pmatrix}1&2\cr2&-2\end{pmatrix}$ y $P=\begin{pmatrix}2&-1\cr1&2\end{pmatrix}$ ($\det P=5\neq0$; columnas ortogonales pero no unitarias). Semejanza: $P^{-1}AP=\operatorname{diag}(2,-3)$. Congruencia: $P^tAP=\operatorname{diag}(10,-15)$. Mismas matrices de partida y de paso, resultados distintos: no se pueden confundir (verificado con sympy).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; cf. X Feb. 2024 (1.ª sem.), pregunta 6">propio</span>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Invariantes: cómo probar que dos matrices NO son semejantes <span class="src" data-l="U" data-ref="U Teorema 4.4 y consecuencias, §4.2, p. 153 (adelanto); U §1.3.3 p. 26; Lay §5.2 Teorema 4 y advertencias, p. 277">U p.153 · L p.277</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Un <b>invariante</b> es una cantidad que no cambia al pasar de una matriz a otra de su clase. Si dos matrices tienen un invariante distinto, no pueden estar en la misma clase: es la forma más rápida de descartar. Pero que coincidan los invariantes <b>no</b> prueba nada (es solo condición necesaria): para afirmar la semejanza hay que dar la matriz de paso.</p>
+</div>
+
+<table>
+  <tr><th>Invariante</th><th>Semejantes</th><th>Congruentes</th><th>Equivalentes</th></tr>
+  <tr><td>Rango</td><td>sí</td><td>sí</td><td>sí (<b>es</b> el invariante completo)</td></tr>
+  <tr><td>Determinante</td><td>sí: $|P^{-1}AP|=|A|$</td><td>no: $|P|^2|A|$ (se conserva el signo y si es 0)</td><td>no</td></tr>
+  <tr><td>Traza, polinomio característico, valores propios</td><td>sí (U Teor. 4.4, p.153)</td><td>no</td><td>no</td></tr>
+</table>
+
+<div class="box thm"><span class="h">Semejantes: qué se conserva</span>
+  <p>Si $A'=P^{-1}AP$: $\operatorname{rang}A'=\operatorname{rang}A$, $\det A'=\det A$ (porque $|P^{-1}||A||P|=|A|$, con $|P^{-1}|=1/|P|$), y mismo polinomio característico, luego misma traza y mismos valores propios (U p.153, Teor. 4.4; Lay §5.2 Teor. 4, p.277; se estudian en el tema 4.2). Por ejemplo, una matriz de orden $n$ semejante a $\operatorname{diag}(\lambda_1,\dots,\lambda_n)$ tiene determinante $\lambda_1\cdots\lambda_n$ y traza $\lambda_1+\dots+\lambda_n$.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 4.4 y consecuencias, p. 153 (adelanto del tema 4.2); §1.3.3 p. 26">U p.26, 153</span>
+  <span class="src" data-l="L" data-ref="Lay §5.2, Teorema 4, p. 277">L §5.2 p.277</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: ¿son semejantes $A$ y $B$?</span>
+  <ol class="steps">
+    <li>Compara <b>rango, determinante, traza</b> (y, de orden 2, el polinomio $\lambda^2-\operatorname{tr}\lambda+\det$). Si alguno difiere: <b>no semejantes</b>. Fin.</li>
+    <li>Si coinciden todos, <b>no puedes concluir</b>. Plantea $PB=AP$ (sistema <b>lineal</b> en las entradas de $P$: no hace falta $P^{-1}$).</li>
+    <li>Resuelve y exige $\det P\neq0$. Si no hay solución regular, no son semejantes; si la hay, esa $P$ es la matriz de paso (nunca es única: $kP$ también sirve).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia, ver E 4.6-4.8">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Mismos invariantes y, aun así, no semejantes</span>
+  <p>$J=\begin{pmatrix}1&1\cr0&1\end{pmatrix}$ e $I$ tienen el mismo rango (2), determinante (1), traza (2) y polinomio característico $(1-\lambda)^2$. Pero $P^{-1}IP=I\neq J$ para toda $P$: <b>no son semejantes</b> (la única matriz semejante a $I$ es $I$; en general, $\lambda I$ solo es semejante a sí misma). Lay (§5.2 p.277, Advertencia 1) avisa de lo mismo con $\begin{pmatrix}2&1\cr0&2\end{pmatrix}$ y $2I$ (mismos valores propios, no similares): es el mismo fenómeno que $J$ e $I$, desplazado por $2$. Lo que falta lo dan la diagonalización y las matrices de Jordan (temas 4.3-4.4).</p>
+  <span class="src" data-l="L" data-ref="Lay §5.2, Advertencias, p. 277">L §5.2 p.277</span>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Semejante ≠ congruente (aviso sobre una solución oficial)</span>
+  <p>En Feb. 2024 (1.ª sem.), pregunta 6 (tema 6), la solución oficial toma $A=\begin{pmatrix}1&2\cr2&-2\end{pmatrix}$ y la base $\{(2,1),(-1,2)\}$ (matriz de paso $P=\begin{pmatrix}2&-1\cr1&2\end{pmatrix}$, <b>no ortogonal</b>) y afirma que la forma cuadrática pasa a $2x_1'^2-3x_2'^2$. Pero $P^{-1}AP=\operatorname{diag}(2,-3)$ (semejanza) mientras que la forma cuadrática cambia por congruencia: $P^tAP=\operatorname{diag}(10,-15)$. Solo con $P$ ortogonal (columnas normalizadas) coinciden. Se desarrolla en el tema 6.</p>
+  <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), pregunta 6 (aviso; se desarrolla en el tema 6)">X Feb. 2024 (1.ª) P6</span>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Tabla de correspondencia Lay ↔ U <span class="src" data-l="L" data-ref="Lay §1.1 p. 6; §5.2 p. 277; §5.4 p. 291-293; §7.2 p. 402 (desfase −160 en el capítulo 5)">L §5.2, §5.4, §7.2</span></h2>
+
+<p>Lay no tiene una sección equivalente a §4.1: aparece la semejanza dentro de valores propios. Úsalo para repasar la idea; <b>manda U</b> en notación y alcance.</p>
+<table>
+  <tr><th>Concepto</th><th>U</th><th>Lay</th></tr>
+  <tr><td>Semejanza $A'=P^{-1}AP$</td><td>«semejantes», $P$ = matriz de paso (Def. 4.5, p.148)</td><td>«similares»; $P^{-1}AP=B$, «transformación de similitud» (§5.2 p.277)</td></tr>
+  <tr><td>Misma aplicación, otra base</td><td>matrices de un endomorfismo en bases distintas (p.148)</td><td>$[T]_{\mathcal B}=P^{-1}AP$ (§5.4 p.291-292); «el conjunto de las matrices similares a $A$ coincide con el de las representaciones matriciales de $x\mapsto Ax$» (p.292)</td></tr>
+  <tr><td>Es relación de equivalencia</td><td>implícito</td><td>Problema de práctica 2 (§5.4 p.293): reflexiva y transitiva; simétrica en p.277</td></tr>
+  <tr><td>Invariantes</td><td>Teor. 4.4 (p.153)</td><td>Teor. 4: mismo polinomio característico y valores propios (p.277); advertencia: lo recíproco falla</td></tr>
+  <tr><td>«Equivalente»</td><td>$B=MAN$ (Def. 4.3): <b>mismo rango</b></td><td>«equivalentes por filas» (§1.1 p.6): $B=EA$ (§5.2 p.277, Advertencia 2). <b>Otra cosa.</b></td></tr>
+  <tr><td>Matrices congruentes $P^tAP$</td><td>Def. 4.4 (p.147)</td><td>No aparece con ese nombre; su «cambio de variable en una forma cuadrática» $x=Py$ (§7.2, p.402) da la nueva matriz $P^tAP$: es la congruencia</td></tr>
+</table>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, sección 4.1 Relaciones de equivalencia, p. 120-128">E p.120-128</span></h2>
+
+<p>E tiene diez ejercicios en esta sección: 4.1-4.3 (relaciones), 4.4-4.8 (equivalencia, congruencia y semejanza) y 4.9-4.10 (matriz de paso a una diagonal y potencias; son frontera con el <b>tema 4.3</b>: aquí se desarrollan y allí se enlazarán).</p>
+
+<h3 id="bloqueI">Bloque I — Relaciones binarias (E 4.1–4.3)</h3>
+
+<details class="sol" id="ej4-1"><summary>Ejercicio 4.1 — propiedades de $R$ y $R'$ en $A=\{a,b,1,2\}$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.1, p. 120">E p.120</span></summary>
+  <p class="enun">Si $A=\{a,b,1,2\}$ y $R=\{(a,b),(b,1),(2,2)\}$ es una relación binaria en $A$: A) justificar si $R$ es reflexiva, simétrica y transitiva. B) Justificar si $R'=R\cup\{(a,a),(b,b),(1,1),(1,b),(a,1)\}$ es de equivalencia. C) Hacer los diagramas de Venn de $R$ y $R'$.</p>
+  <p><b>Qué se pide.</b> Revisar tres propiedades sobre un grafo de flechas pequeño. Lo importante: para <i>negar</i> basta un contraejemplo, para <i>afirmar</i> hay que revisar todo.</p>
+  <ol class="steps">
+    <li><b>Grafo de $R$</b> (Def. 4.1): flechas $a\to b$, $b\to1$ y un lazo en $2$.</li>
+    <li><b>Reflexiva</b> (hacen falta los 4 lazos): solo está $(2,2)$; $(a,a)\notin R$. <b>No.</b></li>
+    <li><b>Simétrica</b>: $(a,b)\in R$ pero $(b,a)\notin R$. <b>No.</b></li>
+    <li><b>Transitiva</b>: $a\to b\to1$ exigiría $(a,1)\notin R$. <b>No.</b> Respuesta A): $R$ no cumple ninguna de las tres.</li>
+    <li><b>$R'$ completo</b> (8 pares): $(a,b),(b,1),(2,2),(a,a),(b,b),(1,1),(1,b),(a,1)$. Lazos en los 4 elementos; $a\to b$; $b\leftrightarrow1$; $a\to1$.</li>
+    <li><b>Reflexiva:</b> $(a,a),(b,b),(1,1),(2,2)\in R'$. <b>Sí.</b></li>
+    <li><b>Simétrica:</b> $(a,b)\in R'$ y $(b,a)\notin R'$ (también falla $(a,1)$ sin $(1,a)$). <b>No.</b></li>
+    <li><b>Transitiva</b> (se revisan <i>todas</i> las cadenas; los lazos dan cadenas triviales). Flechas no triviales: $a\to b$, $b\to1$, $1\to b$, $a\to1$.
+      <table>
+        <tr><th>1.ª flecha</th><th>2.ª flecha</th><th>exige</th><th>¿está?</th></tr>
+        <tr><td>$a\to b$</td><td>$b\to1$</td><td>$(a,1)$</td><td>sí</td></tr>
+        <tr><td>$a\to1$</td><td>$1\to b$</td><td>$(a,b)$</td><td>sí</td></tr>
+        <tr><td>$b\to1$</td><td>$1\to b$</td><td>$(b,b)$</td><td>sí</td></tr>
+        <tr><td>$1\to b$</td><td>$b\to1$</td><td>$(1,1)$</td><td>sí</td></tr>
+      </table>
+      Ninguna flecha sale de $b$ o $1$ hacia $a$, y $2$ solo se relaciona consigo mismo: no hay más cadenas. <b>Sí es transitiva.</b></li>
+    <li><b>Conclusión B):</b> $R'$ es reflexiva y transitiva pero no simétrica; por la Def. 4.2 <b>no es de equivalencia</b>.</li>
+    <li><b>C)</b> Los «diagramas de Venn» son los grafos de los pasos 1 y 5.</li>
+  </ol>
+  <figure><div style="overflow-x:auto"><svg class="fig" viewBox="0 0 400 142" role="img" aria-label="Grafos de flechas de R y R′ en A={a,b,1,2}" style="max-width:440px"><defs><marker id="ah1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--acc)"/></marker></defs><g transform="translate(5,0)"><text x="95" y="14" text-anchor="middle" class="bd">R</text><path d="M50.0 42.0Q95.0 34.0 138.0 42.0" class="a" style="stroke-width:1.5" marker-end="url(#ah1)"/><path d="M143.2 53.4Q100.9 89.3 51.7 110.6" class="a" style="stroke-width:1.5" marker-end="url(#ah1)"/><circle cx="150.0" cy="127.0" r="6.5" class="a lz" style="stroke-width:1.5"/><circle cx="40" cy="45" r="4.5" class="pt"/><text x="27" y="49" text-anchor="middle">a</text><circle cx="150" cy="45" r="4.5" class="pt"/><text x="163" y="49" text-anchor="middle">b</text><circle cx="40" cy="115" r="4.5" class="pt"/><text x="27" y="119" text-anchor="middle">1</text><circle cx="150" cy="115" r="4.5" class="pt"/><text x="163" y="119" text-anchor="middle">2</text></g><g transform="translate(205,0)"><text x="95" y="14" text-anchor="middle" class="bd">R′</text><path d="M50.0 42.0Q95.0 34.0 138.0 42.0" class="a" style="stroke-width:1.5" marker-end="url(#ah1)"/><path d="M143.2 53.4Q100.9 89.3 51.7 110.6" class="a" style="stroke-width:1.5" marker-end="url(#ah1)"/><circle cx="150.0" cy="127.0" r="6.5" class="a lz" style="stroke-width:1.5"/><circle cx="40.0" cy="33.0" r="6.5" class="a lz" style="stroke-width:1.5"/><circle cx="150.0" cy="33.0" r="6.5" class="a lz" style="stroke-width:1.5"/><circle cx="40.0" cy="127.0" r="6.5" class="a lz" style="stroke-width:1.5"/><path d="M46.8 106.6Q89.1 70.7 138.3 49.4" class="a" style="stroke-width:1.5" marker-end="url(#ah1)"/><path d="M43.0 56.0Q51.0 80.0 43.0 102.0" class="a" style="stroke-width:1.5" marker-end="url(#ah1)"/><circle cx="40" cy="45" r="4.5" class="pt"/><text x="27" y="49" text-anchor="middle">a</text><circle cx="150" cy="45" r="4.5" class="pt"/><text x="163" y="49" text-anchor="middle">b</text><circle cx="40" cy="115" r="4.5" class="pt"/><text x="27" y="119" text-anchor="middle">1</text><circle cx="150" cy="115" r="4.5" class="pt"/><text x="163" y="119" text-anchor="middle">2</text></g></svg></div><figcaption>Diagramas de $R$ (izquierda) y $R'$ (derecha) en $A$ (apartado C). El libro los dibuja en el margen como «diagramas de Venn» (E p.120); aquí, como grafos de flechas más legibles (figura propia). <span class="src" data-l="P" data-ref="Figura propia a partir de E Ej. 4.1 C, p. 120">propio</span></figcaption></figure>
+  <div class="recipe"><b>Receta:</b> reflexiva = mirar los $|A|$ lazos; simétrica = cada flecha con su vuelta; transitiva = listar <b>todas</b> las cadenas $x\to y\to z$ y comprobar el atajo $x\to z$.</div>
+  <p><b>Error típico:</b> afirmar la transitividad tras comprobar una o dos cadenas (el libro lo hace con dos ejemplos); o creer que el lazo en $2$ basta para la reflexividad. <b>Teoría:</b> Def. 4.1 (U p.142), propiedades (p.143), Def. 4.2 (p.144).</p>
+</details>
+
+<details class="sol" id="ej4-2"><summary>Ejercicio 4.2 — completar $R'$ hasta una relación de equivalencia $N$ y hallar $A/N$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.2, p. 121">E p.121</span></summary>
+  <p class="enun">Para $A$ y $R'$ del Ejercicio 4.1: A) añadir los pares necesarios a $R'$ para formar una relación $N$ con $R'\subset N$ de equivalencia. B) Escribir las clases de $A/N$.</p>
+  <p><b>Qué se pide.</b> Hallar la <b>menor</b> relación de equivalencia que contiene a $R'$: añadir solo lo que obligan las tres propiedades, hasta que no haya que añadir más.</p>
+  <ol class="steps">
+    <li><b>Reflexiva:</b> $R'$ ya tiene los 4 lazos. Nada que añadir.</li>
+    <li><b>Simétrica:</b> $(a,b)$ obliga a $(b,a)$; $(a,1)$ obliga a $(1,a)$; $b\leftrightarrow1$ ya está en ambos sentidos.</li>
+    <li><b>Transitiva</b> (con las flechas nuevas hay cadenas nuevas, hay que repasarlas): $b\to a\to1\Rightarrow(b,1)$ ✓; $1\to a\to b\Rightarrow(1,b)$ ✓; $b\to a\to b\Rightarrow(b,b)$ ✓; $1\to a\to1\Rightarrow(1,1)$ ✓; $a\to b\to a\Rightarrow(a,a)$ ✓; $b\to1\to a\Rightarrow(b,a)$ ✓; $1\to b\to a\Rightarrow(1,a)$ ✓. Todas están: hemos terminado.
+    $$N=\{(a,a),(b,b),(1,1),(2,2),(a,b),(b,a),(b,1),(1,b),(a,1),(1,a)\}\quad(10\text{ pares}).$$</li>
+    <li><b>B) Clases</b> ($[x]=\{y: xNy\}$): $[a]=[b]=[1]=\{a,b,1\}$ y $[2]=\{2\}$. $$A/N=\{\{a,b,1\},\{2\}\}.$$ Es una partición: sin solapes y con unión $A$.</li>
+  </ol>
+  <figure><div style="overflow-x:auto"><svg class="fig" viewBox="0 0 200 142" role="img" aria-label="Grafo de flechas de N en A" style="max-width:240px"><defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--acc)"/></marker></defs><g transform="translate(5,0)"><text x="95" y="14" text-anchor="middle" class="bd">N</text><circle cx="40.0" cy="33.0" r="6.5" class="a lz" style="stroke-width:1.5"/><circle cx="150.0" cy="33.0" r="6.5" class="a lz" style="stroke-width:1.5"/><circle cx="40.0" cy="127.0" r="6.5" class="a lz" style="stroke-width:1.5"/><circle cx="150.0" cy="127.0" r="6.5" class="a lz" style="stroke-width:1.5"/><path d="M50.0 42.0Q95.0 34.0 138.0 42.0" class="a" style="stroke-width:1.5" marker-end="url(#ah2)"/><path d="M140.0 48.0Q95.0 56.0 52.0 48.0" class="a" style="stroke-width:1.5" marker-end="url(#ah2)"/><path d="M143.2 53.4Q100.9 89.3 51.7 110.6" class="a" style="stroke-width:1.5" marker-end="url(#ah2)"/><path d="M46.8 106.6Q89.1 70.7 138.3 49.4" class="a" style="stroke-width:1.5" marker-end="url(#ah2)"/><path d="M43.0 56.0Q51.0 80.0 43.0 102.0" class="a" style="stroke-width:1.5" marker-end="url(#ah2)"/><path d="M37.0 104.0Q29.0 80.0 37.0 58.0" class="a" style="stroke-width:1.5" marker-end="url(#ah2)"/><circle cx="40" cy="45" r="4.5" class="pt"/><text x="27" y="49" text-anchor="middle">a</text><circle cx="150" cy="45" r="4.5" class="pt"/><text x="163" y="49" text-anchor="middle">b</text><circle cx="40" cy="115" r="4.5" class="pt"/><text x="27" y="119" text-anchor="middle">1</text><circle cx="150" cy="115" r="4.5" class="pt"/><text x="163" y="119" text-anchor="middle">2</text></g></svg></div><figcaption>Grafo de $N$: $a$, $b$, $1$ unidos todos con todos en ambos sentidos y $2$ aislado con su lazo (el libro lo dibuja en el margen, E p.121). <span class="src" data-l="P" data-ref="Figura propia a partir del diagrama de N, E Ej. 4.2, p. 121">propio</span></figcaption></figure>
+  <div class="recipe"><b>Receta (clausura):</b> añadir lazos $\to$ añadir vueltas $\to$ añadir atajos de todas las cadenas $\to$ repetir hasta que no cambie. Atajo mental: las clases son las «componentes conexas» del grafo (sin mirar el sentido de las flechas) y $N$ = todos los pares dentro de cada componente: una clase de $k$ elementos aporta $k^2$ pares ($3^2+1^2=10$).</div>
+  <p><b>Error típico:</b> añadir $(b,a)$ y $(1,a)$ y olvidar volver a comprobar la transitividad con las flechas nuevas. <b>Teoría:</b> Def. 4.2 y Ej. 4.4 (U p.144-145).</p>
+</details>
+
+<details class="sol" id="ej4-3"><summary>Ejercicio 4.3 — «$x+y$ par» en $\mathbb N\setminus\{0\}$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.3, p. 121">E p.121</span></summary>
+  <p class="enun">En $\mathbb N$ (naturales distintos de 0) se define $xRy\Leftrightarrow x+y$ es par. A) Justificar si $R$ es de equivalencia. B) Escribir el conjunto cociente.</p>
+  <p><b>Qué se pide.</b> Una relación definida por una frase sobre infinitos elementos: ya no se pueden listar las cadenas, hay que <b>demostrar</b> con letras.</p>
+  <ol class="steps">
+    <li><b>Traducción:</b> $x+y$ par $\iff$ $x$ e $y$ tienen la <b>misma paridad</b> (par+par y impar+impar dan par; par+impar da impar).</li>
+    <li><b>Reflexiva:</b> $x+x=2x$ es par $\Rightarrow xRx$. ✓</li>
+    <li><b>Simétrica:</b> $y+x=x+y$ (conmutativa) $\Rightarrow$ si $xRy$ entonces $yRx$. ✓</li>
+    <li><b>Transitiva:</b> si $x+y=2m$ e $y+z=2k$, sumando y restando $2y$: $x+z=2m+2k-2y=2(m+k-y)$, par. ✓</li>
+    <li><b>A)</b> Es de equivalencia (Def. 4.2): <b>cierta</b>.</li>
+    <li><b>B) Clases:</b> $[1]=\{1,3,5,\dots\}$ (impares) y $[2]=\{2,4,6,\dots\}$ (pares). Todo natural es par o impar y no ambos: exactamente dos clases. $$\mathbb N/R=\{\{\text{pares}\},\{\text{impares}\}\}.$$</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> reescribir la condición como «$f(x)=f(y)$» (aquí $f$ = paridad): es siempre de equivalencia y las clases son los conjuntos donde $f$ toma cada valor.</div>
+  <p><b>Error típico:</b> «probar» la transitividad con ejemplos ($2R4$, $4R6\Rightarrow2R6$): un ejemplo no demuestra un «para todo». <b>Teoría:</b> Def. 4.2 (U p.144).</p>
+</details>
+
+<h3 id="propios-rel">Ejemplos propios (relaciones)</h3>
+
+<details class="sol" id="ej-propio-1"><summary>Ejemplo propio 1 (fácil) — $R=\{(1,1),(2,2),(3,3),(1,2),(2,1)\}$ en $\{1,2,3\}$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">¿Es de equivalencia? Halla las clases.</p>
+  <ol class="steps">
+    <li>Reflexiva: los tres lazos están. Simétrica: la única flecha no trivial $1\to2$ tiene vuelta $2\to1$.</li>
+    <li>Transitiva: cadenas $1\to2\to1\Rightarrow(1,1)$ ✓ y $2\to1\to2\Rightarrow(2,2)$ ✓.</li>
+    <li>Sí es de equivalencia; $A/R=\{\{1,2\},\{3\}\}$.</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-2"><summary>Ejemplo propio 2 (medio) — «$x-y$ múltiplo de 3» en $\mathbb Z$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado">propio</span></summary>
+  <p class="enun">Demuestra que es de equivalencia y halla las clases.</p>
+  <ol class="steps">
+    <li>Reflexiva: $x-x=0=3\cdot0$. Simétrica: $y-x=-(x-y)=3(-k)$. Transitiva: $x-z=(x-y)+(y-z)=3k+3l=3(k+l)$.</li>
+    <li>Clases: $[0]=\{\dots,-3,0,3,\dots\}$, $[1]=\{\dots,-2,1,4,\dots\}$, $[2]=\{\dots,-1,2,5,\dots\}$: tres clases, los restos al dividir entre 3 ($f(x)$ = resto).</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-3"><summary>Ejemplo propio 3 (tipo examen) — clausura de $R=\{(p,q),(q,r)\}$ en $\{p,q,r,s\}$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">Halla la menor relación de equivalencia $N\supset R$ y $A/N$.</p>
+  <ol class="steps">
+    <li>Lazos: $(p,p),(q,q),(r,r),(s,s)$. Vueltas: $(q,p),(r,q)$.</li>
+    <li>Atajos: $p\to q\to r\Rightarrow(p,r)$ y $r\to q\to p\Rightarrow(r,p)$. Se revisa de nuevo: no surge nada más.</li>
+    <li>$N$ tiene $3^2+1=10$ pares y $A/N=\{\{p,q,r\},\{s\}\}$.</li>
+  </ol>
+</details>
+
+<h3 id="bloqueII">Bloque II — Matrices equivalentes, congruentes y semejantes (E 4.4–4.8)</h3>
+
+<details class="sol" id="ej4-4"><summary>Ejercicio 4.4 — dos matrices regulares: ¿equivalentes, congruentes, semejantes? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.4, p. 122">E p.122</span></summary>
+  <p class="enun">Si $A$ y $B$ son dos matrices regulares de orden $n$, justificar si es cierto que: A) son equivalentes. B) Son congruentes. C) Son semejantes.</p>
+  <p><b>Qué se pide.</b> «¿Es cierto <i>siempre</i>?»: para negar basta un contraejemplo.</p>
+  <ol class="steps">
+    <li><b>Recordatorio:</b> equivalentes $B=MAN$ ($M,N$ independientes); congruentes $B=P^tAP$; semejantes $B=P^{-1}AP$. Congruentes y semejantes son casos particulares de equivalentes.</li>
+    <li><b>A) Cierta.</b> Regulares de orden $n$ $\Rightarrow$ ambas de rango $n$ $\Rightarrow$ equivalentes (Teor. 4.2). Directo: $M=BA^{-1}$ (regular) y $N=I$ dan $MAN=BA^{-1}A=B$.</li>
+    <li><b>B) Falsa.</b> $A=I_n$, $B=-I_n$. Si fueran congruentes, $-I=P^tIP=P^tP$; pero el elemento $(1,1)$ de $P^tP$ es $\sum_kp_{k1}^2\ge0$, no puede valer $-1$.</li>
+    <li><b>C) Falsa.</b> $A=I$, $B=2I$: para toda $P$ regular $P^{-1}IP=I\neq2I$ (también: $\det I=1\neq2^n$).</li>
+    <li><b>Conclusión:</b> solo A) es cierta. B y C no son «imposibles» (con $A=B$ valen con $P=I$): son falsas porque no se cumplen <i>siempre</i>.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> equivalencia = comparar rangos. Para congruencia y semejanza el rango no basta: busca un invariante que distinga (signo de la diagonal de $P^tP$, determinante, traza) o un contraejemplo con múltiplos de $I$.</div>
+  <p><b>Error típico:</b> pensar que «mismo rango» basta para semejanza o congruencia. <b>Nota:</b> el libro solo dice que no hay datos para afirmar $M=N^t$; los contraejemplos son la justificación rigurosa. <b>Teoría:</b> Def. 4.3 (U p.146), Teor. 4.2 y Def. 4.4 (p.147), Def. 4.5 (p.148).</p>
+</details>
+
+<details class="sol" id="ej4-5"><summary>Ejercicio 4.5 — determinante de una matriz semejante a $\operatorname{diag}(2,-1)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.5, p. 122">E p.122</span></summary>
+  <p class="enun">Si $A$ es una matriz de orden 2 semejante a $\begin{pmatrix}2&0\cr0&-1\end{pmatrix}$, justificar si $|A|$ es: A) 1. B) $-2$. C) 0. D) No se puede calcular.</p>
+  <p><b>Qué se pide.</b> No se conoce $P$, pero el determinante no depende de ella: es un invariante.</p>
+  <ol class="steps">
+    <li>Sea $D=\operatorname{diag}(2,-1)$. Por la Def. 4.5 existe $P$ regular con $A=P^{-1}DP$ (la semejanza es simétrica, el orden no importa).</li>
+    <li>Determinante del producto (U p.26): $|A|=|P^{-1}|\,|D|\,|P|$.</li>
+    <li>$P^{-1}P=I$ da $|P^{-1}||P|=1$, es decir $|P^{-1}|=1/|P|$ (existe: $|P|\neq0$).</li>
+    <li>Luego $|A|=|D|=2\cdot(-1)=-2$ (diagonal: producto de la diagonal).</li>
+    <li><b>B) cierta.</b> A y C son falsas (además $A$ es regular); D es falsa: se calcula sin conocer $P$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> matrices semejantes tienen el mismo determinante: $|P^{-1}AP|=|A|$.</div>
+  <p><b>Error típico:</b> elegir D porque «no conocemos $P$». <b>Teoría:</b> Def. 4.5 (U p.148), U p.26. Mismo método: <a href="tema_1_3_determinantes.html#ex-feb19b4">X Feb. 2019 (B) ej. 4</a>.</p>
+</details>
+
+<details class="sol" id="ej4-6"><summary>Ejercicio 4.6 — ¿existe matriz de paso entre $\operatorname{diag}(2,-1)$ y $\begin{pmatrix}1&1\cr1&0\end{pmatrix}$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.6, p. 123">E p.123</span></summary>
+  <p class="enun">Si $A=\begin{pmatrix}2&0\cr0&-1\end{pmatrix}$ y $B=\begin{pmatrix}1&1\cr1&0\end{pmatrix}$, justificar: A) existe una matriz de paso que demuestra que son semejantes. B) La matriz de paso, si existe, es única. C) Existe pero no se puede determinar con estos datos. D) No existe porque $A$ y $B$ no son semejantes.</p>
+  <p><b>Qué se pide.</b> Decidir si son semejantes; la respuesta correcta se ve con un invariante, pero se confirma con el método general del sistema.</p>
+  <ol class="steps">
+    <li><b>Invariante.</b> $|A|=-2$ y $|B|=1\cdot0-1\cdot1=-1$. Si fueran semejantes tendrían el mismo determinante (Ej. 4.5): <b>no son semejantes</b>.</li>
+    <li><b>Confirmación por el sistema.</b> $B=P^{-1}AP\iff PB=AP$, con $P=\begin{pmatrix}a&b\cr c&d\end{pmatrix}$:
+    $$PB=\begin{pmatrix}a+b&a\cr c+d&c\end{pmatrix},\qquad AP=\begin{pmatrix}2a&2b\cr-c&-d\end{pmatrix}.$$
+    Igualando: $a+b=2a$, $a=2b$ $\Rightarrow b=a$ y $a=2a\Rightarrow a=b=0$; $c+d=-c$, $c=-d$ $\Rightarrow d=-2c$ y $d=-c\Rightarrow c=d=0$. Única solución $P=0$, no regular.</li>
+    <li><b>Opciones:</b> A falsa; B falsa (y cuando existe nunca es única: si $P$ vale, $kP$ con $k\neq0$ también, porque $(kP)^{-1}A(kP)=P^{-1}AP$); C falsa (no existe; cuando existe se determina resolviendo $PB=AP$); <b>D cierta</b>.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> antes de buscar $P$, compara determinante, traza y rango; si alguno difiere, no son semejantes. Si coinciden, plantea $PB=AP$ (lineal en $a,b,c,d$) y busca solución con $\det P\neq0$.</div>
+  <p><b>Error típico:</b> escribir $B=P^{-1}AP$ con $P^{-1}$ simbólica (no lineal): pasa siempre a $PB=AP$. <b>Teoría:</b> Def. 4.5 (U p.148).</p>
+</details>
+
+<details class="sol" id="ej4-7"><summary>Ejercicio 4.7 — ¿qué pares de $A,B,C$ son semejantes? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.7, p. 123-124">E p.123-124</span></summary>
+  <p class="enun">Si $A=\begin{pmatrix}0&0\cr0&8\end{pmatrix}$, $B=\begin{pmatrix}1&-1\cr0&1\end{pmatrix}$, $C=\begin{pmatrix}2&4\cr3&6\end{pmatrix}$, justificar si son semejantes: A) $A$ y $B$. B) $B$ y $C$. C) $A$ y $C$. D) Ninguno de los tres pares.</p>
+  <p><b>Qué se pide.</b> Descartar con invariantes los pares imposibles, y para el que sobreviva hallar la matriz de paso.</p>
+  <ol class="steps">
+    <li><b>Determinantes:</b> $|A|=0$; $|B|=1\cdot1-(-1)\cdot0=1$; $|C|=12-12=0$.</li>
+    <li><b>A) y B) falsas:</b> $|A|=0\neq1=|B|$ y $|B|=1\neq0=|C|$.</li>
+    <li><b>Par $A,C$:</b> $|A|=|C|$ es necesario pero no suficiente; también coinciden las trazas ($0+8=2+6$) y los rangos (1). Hay que buscar $P$: $A=P^{-1}CP\iff PA=CP$.
+    $$PA=\begin{pmatrix}0&8b\cr0&8d\end{pmatrix},\qquad CP=\begin{pmatrix}2a+4c&2b+4d\cr3a+6c&3b+6d\end{pmatrix}.$$
+    Igualando: $2a+4c=0$, $8b=2b+4d$, $3a+6c=0$, $8d=3b+6d$, es decir $a=-2c$ y $3b=2d$ (las otras dos son proporcionales).</li>
+    <li><b>Regularidad</b> (el libro la omite): con $a=-2c$, $d=\tfrac32b$: $\det P=ad-bc=-3bc-bc=-4bc\neq0\iff b\neq0,\ c\neq0$.</li>
+    <li><b>Elección sin fracciones:</b> $c=1$, $b=2$, $a=-2$, $d=3$: $P=\begin{pmatrix}-2&2\cr1&3\end{pmatrix}$, $\det P=-8$.</li>
+    <li><b>Comprobación:</b> $CP=\begin{pmatrix}0&16\cr0&24\end{pmatrix}$ y $P^{-1}=\frac1{-8}\begin{pmatrix}3&-2\cr-1&-2\end{pmatrix}$; $P^{-1}(CP)=\begin{pmatrix}0&0\cr0&8\end{pmatrix}=A$ ✓.</li>
+    <li><b>Respuesta: C).</b> D es falsa porque el par $A,C$ sí lo es.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> (1) invariantes para descartar; (2) para los pares que sobreviven, sistema $PA=CP$; (3) imponer $\det P\neq0$ y elegir parámetros enteros.</div>
+  <p><b>Error típico:</b> dar una $P$ sin comprobar que es regular (con $b=0$ o $c=0$ hay solución del sistema que <b>no</b> es matriz de paso). <b>Teoría:</b> Def. 4.5 (U p.148); la traza como invariante, U p.153.</p>
+</details>
+
+<details class="sol" id="ej4-8"><summary>Ejercicio 4.8 — todas las matrices de paso entre $\operatorname{diag}(2,1)$ y $\begin{pmatrix}2&-1\cr0&1\end{pmatrix}$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.8, p. 125">E p.125</span></summary>
+  <p class="enun">Si $A=\begin{pmatrix}2&0\cr0&1\end{pmatrix}$, $B=\begin{pmatrix}2&-1\cr0&1\end{pmatrix}$ y $P=\begin{pmatrix}a&b\cr c&d\end{pmatrix}$, justificar si para que $A$ y $B$ sean semejantes y $P$ sea matriz de paso deben cumplirse: A) $a^2+b^2=c^2$, $d=0$. B) $b=c=0$, $d\neq0$, $a\neq0$. C) $b=d\neq0$, $c=0$, con $a\neq0$. D) Nunca pueden ser semejantes.</p>
+  <p><b>Qué se pide.</b> No una matriz de paso, sino la <b>familia completa</b> de matrices de paso, y ver cuál opción la describe.</p>
+  <ol class="steps">
+    <li><b>Invariantes</b> (orientan, no deciden): $|A|=2=|B|$ y trazas $3=3$. Puede haber semejanza.</li>
+    <li><b>Sistema</b> $A=P^{-1}BP\iff PA=BP$:
+    $$PA=\begin{pmatrix}2a&b\cr2c&d\end{pmatrix},\qquad BP=\begin{pmatrix}2a-c&2b-d\cr c&d\end{pmatrix}.$$
+    Posición $(1,1)$: $2a=2a-c\Rightarrow c=0$. $(1,2)$: $b=2b-d\Rightarrow b=d$. $(2,1)$: $2c=c\Rightarrow c=0$. $(2,2)$: $d=d$. Solución: $P=\begin{pmatrix}a&b\cr0&b\end{pmatrix}$, con $a,b$ libres.</li>
+    <li><b>Regularidad:</b> $\det P=ab\neq0\iff a\neq0$ y $b\neq0$. Las matrices de paso son exactamente $P=\begin{pmatrix}a&b\cr0&b\end{pmatrix}$ con $a\neq0$, $b=d\neq0$, $c=0$.</li>
+    <li><b>Opciones.</b> A) $d=0\Rightarrow b=0\Rightarrow\det P=0$: falsa. B) $b=0$ y $d\neq0$ contradice $b=d$; falsa (con $P=\operatorname{diag}(a,d)$: $PA=\operatorname{diag}(2a,d)\neq BP$). <b>C) cierta</b>: es la condición del paso 3. D) falsa: con $a=b=d=1$, $c=0$, $P=\begin{pmatrix}1&1\cr0&1\end{pmatrix}$ y $P^{-1}BP=\begin{pmatrix}1&-1\cr0&1\end{pmatrix}\begin{pmatrix}2&-1\cr0&1\end{pmatrix}\begin{pmatrix}1&1\cr0&1\end{pmatrix}=A$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> plantea $PA=BP$, resuelve, y <b>después</b> impón $\det P\neq0$: las matrices de paso son «solución del sistema $\cap$ $\det\neq0$».</div>
+  <p><b>Error típico:</b> olvidar $\det P\neq0$ y dar por válida una opción con $P$ singular (A), o no comprobar que la opción es compatible con el sistema (B). <b>Teoría:</b> Def. 4.5 (U p.148), U p.26-27.</p>
+</details>
+
+<h3 id="propios-sem">Ejemplos propios (equivalencia y semejanza)</h3>
+
+<details class="sol" id="ej-propio-4"><summary>Ejemplo propio 4 (fácil) — equivalentes pero no semejantes, con $M$ y $N$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; teoría U Teor. 4.2 p. 147">propio</span></summary>
+  <p class="enun">$A=\begin{pmatrix}1&2\cr2&4\end{pmatrix}$, $B=\begin{pmatrix}0&0\cr0&3\end{pmatrix}$. ¿Equivalentes? ¿Semejantes?</p>
+  <ol class="steps">
+    <li>$\operatorname{rang}A=1$ ($F_2=2F_1$) y $\operatorname{rang}B=1$: <b>equivalentes</b> (Teor. 4.2). Explícitamente, $M=\begin{pmatrix}-2&1\cr3&0\end{pmatrix}$ ($\det=-3$) y $N=\begin{pmatrix}2&1\cr-1&0\end{pmatrix}$ ($\det=1$) dan $MAN=B$ (comprobado).</li>
+    <li>Trazas $5\neq3$: <b>no semejantes</b>. Moraleja: equivalentes no implica semejantes.</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-5"><summary>Ejemplo propio 5 (medio) — mismos invariantes pero no semejantes <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; cf. Lay §5.2 p. 277">propio</span></summary>
+  <p class="enun">$J=\begin{pmatrix}1&1\cr0&1\end{pmatrix}$ e $I$: ¿semejantes?</p>
+  <ol class="steps">
+    <li>Mismo rango (2), determinante (1) y traza (2).</li>
+    <li>$P^{-1}IP=I\neq J$ para toda $P$: <b>no semejantes</b>. Con el sistema: $PI=JP$ da $c=d=0\Rightarrow\det P=0$.</li>
+    <li>Los invariantes son condición necesaria, no suficiente.</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-6"><summary>Ejemplo propio 6 (tipo examen, como 4.8) — todas las matrices de paso <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">$A=\begin{pmatrix}3&0\cr0&1\end{pmatrix}$, $B=\begin{pmatrix}3&2\cr0&1\end{pmatrix}$. Halla todas las $P$ con $A=P^{-1}BP$.</p>
+  <ol class="steps">
+    <li>$PA=BP$: $PA=\begin{pmatrix}3a&b\cr3c&d\end{pmatrix}$, $BP=\begin{pmatrix}3a+2c&3b+2d\cr c&d\end{pmatrix}$.</li>
+    <li>Entradas: $3a=3a+2c\Rightarrow c=0$; $b=3b+2d\Rightarrow b=-d$; $3c=c\Rightarrow c=0$.</li>
+    <li>$P=\begin{pmatrix}a&-d\cr0&d\end{pmatrix}$, $\det P=ad\neq0$. Con $a=d=1$: $P=\begin{pmatrix}1&-1\cr0&1\end{pmatrix}$ (comprobado).</li>
+  </ol>
+</details>
+
+<h3 id="bloqueIII">Bloque III — Matriz de paso a una diagonal y potencias (E 4.9–4.10, frontera con el tema 4.3)</h3>
+
+<details class="sol" id="ej4-9"><summary>Ejercicio 4.9 — hallar $P$ con $\Lambda=P^{-1}AP$ (y primera columna de $P^{-1}$ dada) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.9, p. 126-127">E p.126-127</span></summary>
+  <p class="enun">Si $A=\begin{pmatrix}3&-1&-1\cr-2&2&2\cr1&1&1\end{pmatrix}$ y $\Lambda=\begin{pmatrix}2&0&0\cr0&4&0\cr0&0&0\end{pmatrix}$: A) encontrar, si es posible, una matriz de paso $P$ para que $\Lambda$ sea semejante a $A$ siendo $(1,0,1)$ la primera columna de $P^{-1}$. B) Encontrar una matriz de paso $P$ para que $\Lambda$ sea semejante a $A$.</p>
+  <p><b>Aviso de notación:</b> la $Q=P^{-1}$ de esta solución (notación del libro) <b>no</b> es la $Q$ del convenio del tema 3.5 ($x_B=Qx_{B'}$); aquí es solo un nombre para $P^{-1}$.</p>
+  <p><b>Qué se pide.</b> Encontrar una $P$ que «diagonalice» a $A$ sin saber todavía valores propios: se resuelve como un sistema lineal. (Este es un adelanto del tema 4.3.)</p>
+  <ol class="steps">
+    <li><b>Planteamiento.</b> $\Lambda=P^{-1}AP$ con $P$ regular. Como el enunciado habla de $P^{-1}$, llamamos $Q=P^{-1}$: $\Lambda=QAQ^{-1}$, y multiplicando por $Q$ a la derecha, $\Lambda Q=QA$. Es lineal en las 9 incógnitas de $Q$.</li>
+    <li><b>Invariantes.</b> $\operatorname{rang}A=2=\operatorname{rang}\Lambda$, $\operatorname{tr}A=6=\operatorname{tr}\Lambda$, $\det=0$ en ambas. Pueden ser semejantes (condición necesaria, no suficiente).</li>
+    <li><b>Lectura por filas.</b> Si $r_1,r_2,r_3$ son las filas de $Q$, la fila $i$ de $\Lambda Q$ es $\lambda_ir_i$ (una diagonal a la izquierda escala filas) y la fila $i$ de $QA$ es $r_iA$. Así $\Lambda Q=QA$ equivale a tres sistemas independientes: $r_1A=2r_1$, $r_2A=4r_2$, $r_3A=0$. Con $r=(x,y,z)$: $rA=(3x-2y+z,\ -x+2y+z,\ -x+2y+z)$.</li>
+    <li><b>Fila 1</b> ($rA=2r$): $x-2y+z=0$, $z=x$, $-x+2y-z=0\Rightarrow z=x,\ y=x$: $r_1=\alpha(1,1,1)$.</li>
+    <li><b>Fila 2</b> ($rA=4r$): $-x-2y+z=0$ y $-x+2y-3z=0$; $z=x+2y$ y entonces $-4x-4y=0$: $y=-x$, $z=-x$: $r_2=\beta(1,-1,-1)$.</li>
+    <li><b>Fila 3</b> ($rA=0$): $3x-2y+z=0$, $-x+2y+z=0$; sumando $2x+2z=0\Rightarrow z=-x$, $y=x$: $r_3=\gamma(1,1,-1)$.</li>
+    <li><b>Familia completa:</b> $Q=\begin{pmatrix}\alpha&\alpha&\alpha\cr\beta&-\beta&-\beta\cr\gamma&\gamma&-\gamma\end{pmatrix}$, $\det Q=4\alpha\beta\gamma$. $Q$ es regular $\iff\alpha,\beta,\gamma\neq0$.</li>
+    <li><b>A)</b> La primera columna de $Q$ es $(\alpha,\beta,\gamma)$; imponer $(1,0,1)$ obliga a $\beta=0$: fila 2 nula, $\det Q=0$, $Q$ no es invertible y $Q=P^{-1}$ debería serlo. <b>No es posible.</b></li>
+    <li><b>B)</b> Tomamos $\alpha=\beta=1$, $\gamma=-1$: $Q=\begin{pmatrix}1&1&1\cr1&-1&-1\cr-1&-1&1\end{pmatrix}$, $\det Q=-4$, y
+    $$P=Q^{-1}=\begin{pmatrix}1/2&1/2&0\cr0&-1/2&-1/2\cr1/2&0&1/2\end{pmatrix}.$$ Comprobación: $QAP=\Lambda$ (sympy) o, sin invertir, $\Lambda Q=QA$: la fila 1 de $QA$ es $(1,1,1)A=(2,2,2)=2(1,1,1)$ ✓.</li>
+    <li><b>Interpretación.</b> Las columnas de $P$ son vectores propios de $A$ (tema 4.2-4.3): $(1,0,1)$ para $\lambda=2$, $(1,-1,0)$ para $4$ y $(0,-1,1)$ para $0$ (salvo múltiplos). Curiosamente $(1,0,1)$ es una columna de $P$, no de $P^{-1}$: la pregunta A) trampea con esa confusión.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> para hallar $P$ con $\Lambda=P^{-1}AP$ y $\Lambda$ diagonal: plantea $\Lambda Q=QA$ con $Q=P^{-1}$ (cada fila de $Q$ cumple $r_iA=\lambda_ir_i$) o $AP=P\Lambda$ (cada columna de $P$ cumple $Ap_j=\lambda_jp_j$), resuelve y exige $\det\neq0$.</div>
+  <p><b>Error típico:</b> confundir columnas de $P$ con columnas de $P^{-1}$, y concluir semejanza solo porque coinciden los rangos. <b>Teoría:</b> Def. 4.5 (U p.148); frontera con U §4.2-4.3 (tema 4.3, donde se enlazará).</p>
+</details>
+
+<details class="sol" id="ej4-10"><summary>Ejercicio 4.10 — $A^{15}$ con la $P$ de 4.9 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.10, p. 128">E p.128</span></summary>
+  <p class="enun">Si $A$ es la matriz del Ejercicio 4.9, justificar si $A^{15}$ es alguna de las matrices: A) $\begin{pmatrix}2^{14}&2^{14}-2^{29}&2^{29}\cr2^{14}&2^{29}-2^{14}&-2^{29}\cr2^{14}&2^{14}-2^{29}&2^{29}\end{pmatrix}$. B) $\begin{pmatrix}2^{15}&2^{15}&0\cr0&-2^{30}&2^{30}\cr0&0&0\end{pmatrix}$. C) $\begin{pmatrix}2^{14}&2^{29}&0\cr2^{14}&-2^{29}&0\cr2^{14}&2^{29}&0\end{pmatrix}$. D) Ninguna de las anteriores.</p>
+  <p><b>Qué se pide.</b> Calcular una potencia grande: se evita multiplicar 15 veces usando $A=P\Lambda P^{-1}$ (idea central del tema 4.3).</p>
+  <ol class="steps">
+    <li><b>Despejar $A$.</b> De $\Lambda=P^{-1}AP$: $A=P\Lambda P^{-1}$.</li>
+    <li><b>Potencia.</b> $A^n=(P\Lambda P^{-1})\cdots(P\Lambda P^{-1})=P\Lambda(P^{-1}P)\Lambda\cdots\Lambda P^{-1}=P\Lambda^nP^{-1}$, y la potencia de una diagonal es la diagonal de las potencias: $\Lambda^{15}=\operatorname{diag}(2^{15},4^{15},0)=\operatorname{diag}(2^{15},2^{30},0)$.</li>
+    <li><b>Una $P$ sin fracciones</b> (columnas = vectores propios): $P=\begin{pmatrix}1&1&0\cr0&-1&1\cr1&0&-1\end{pmatrix}$, $P^{-1}=\frac12\begin{pmatrix}1&1&1\cr1&-1&-1\cr1&1&-1\end{pmatrix}$ (comprobado: $P^{-1}AP=\Lambda$). No es «el doble» de la de 4.9: la 3.ª columna cambia de signo; vale igualmente.</li>
+    <li><b>Producto.</b> $P\Lambda^{15}$ escala las columnas de $P$: $\begin{pmatrix}2^{15}&2^{30}&0\cr0&-2^{30}&0\cr2^{15}&0&0\end{pmatrix}$. Multiplicando por $P^{-1}$:
+      fila 1 $=\tfrac12(2^{15}+2^{30},\,2^{15}-2^{30},\,2^{15}-2^{30})$; fila 2 $=\tfrac12(-2^{30},2^{30},2^{30})$; fila 3 $=\tfrac12(2^{15},2^{15},2^{15})$.
+      $$A^{15}=\begin{pmatrix}2^{14}+2^{29}&2^{14}-2^{29}&2^{14}-2^{29}\cr-2^{29}&2^{29}&2^{29}\cr2^{14}&2^{14}&2^{14}\end{pmatrix}.$$
+      (El libro imprime el elemento $(2,3)$ como $-2^{29}$: errata; sympy da $+2^{29}$.)</li>
+    <li><b>Comparar:</b> el elemento $(1,1)$ debería ser $2^{14}+2^{29}$ y ninguna opción lo tiene. <b>D) cierta.</b></li>
+    <li><b>Atajo de examen (sin calcular $A^{15}$).</b> La traza es invariante: $\operatorname{tr}A^{15}=2^{15}+2^{30}$. Trazas de las opciones: A) $2^{30}$; B) $2^{15}-2^{30}$; C) $2^{14}-2^{29}$. Ninguna coincide $\Rightarrow$ D.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> si $A=P\Lambda P^{-1}$ con $\Lambda$ diagonal, $A^n=P\Lambda^nP^{-1}$. En un test, descarta opciones con la traza ($\operatorname{tr}A^n=\sum\lambda_i^n$) antes de multiplicar.</div>
+  <p><b>Error típico:</b> escribir $A^n=P^{-1}\Lambda^nP$ (orden invertido; depende de si se partió de $\Lambda=P^{-1}AP$ o de $A=P^{-1}\Lambda P$); o creer que $A^{15}$ se obtiene elevando cada elemento. <b>Teoría:</b> Def. 4.5 (U p.148), U §1.2; frontera con U §4.3 (p.159 ss.).</p>
+</details>
+
+<h3 id="propios-pot">Ejemplos propios (matriz de paso a diagonal y potencias)</h3>
+
+<details class="sol" id="ej-propio-7"><summary>Ejemplo propio 7 (fácil) — $P$ con $D=P^{-1}AP$ para una triangular <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">$A=\begin{pmatrix}1&2\cr0&3\end{pmatrix}$, $D=\operatorname{diag}(1,3)$. Halla $P$ con $D=P^{-1}AP$.</p>
+  <ol class="steps">
+    <li>$PD=AP$: $\begin{pmatrix}a&3b\cr c&3d\end{pmatrix}=\begin{pmatrix}a+2c&b+2d\cr3c&3d\end{pmatrix}$ $\Rightarrow c=0$, $b=d$.</li>
+    <li>$P=\begin{pmatrix}1&1\cr0&1\end{pmatrix}$ ($\det=1$). Comprobado: $P^{-1}AP=D$.</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-8"><summary>Ejemplo propio 8 (medio) — potencia $A^n$ de una simétrica <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">$A=\begin{pmatrix}2&1\cr1&2\end{pmatrix}$. Halla $A^n$.</p>
+  <ol class="steps">
+    <li>Con $D=\operatorname{diag}(1,3)$, $PD=AP$ da $a=-c$, $b=d$: $P=\begin{pmatrix}1&1\cr-1&1\end{pmatrix}$, $P^{-1}=\frac12\begin{pmatrix}1&-1\cr1&1\end{pmatrix}$.</li>
+    <li>$A^n=PD^nP^{-1}=\dfrac12\begin{pmatrix}3^n+1&3^n-1\cr3^n-1&3^n+1\end{pmatrix}$; $A^4=\begin{pmatrix}41&40\cr40&41\end{pmatrix}$ (coincide con el cálculo directo).</li>
+    <li>Control: $\operatorname{tr}A^4=82=1^4+3^4$.</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-9"><summary>Ejemplo propio 9 (tipo test, como 4.10) — ¿cuál es $A^5$? <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
+  <p class="enun">Para la $A$ anterior, ¿$A^5$ es: A) $\begin{pmatrix}122&121\cr121&122\end{pmatrix}$, B) $\begin{pmatrix}32&1\cr1&32\end{pmatrix}$, C) $\begin{pmatrix}243&0\cr0&1\end{pmatrix}$?</p>
+  <ol class="steps">
+    <li>Traza correcta: $1^5+3^5=244$. A) 244; B) 64; C) 244. Se descarta B.</li>
+    <li>C es diagonal, pero $A^5$ no lo es: por la fórmula, el elemento $(1,2)=(243-1)/2=121\neq0$. <b>Es A.</b></li>
+    <li>Moraleja: la traza descarta, pero no siempre decide.</li>
+  </ol>
+</details>
+
+<h3 id="autoeval">Autoevaluación del libro (ítems de este tema)</h3>
+<div class="box ex"><span class="h">Autoevaluación del capítulo 4, ítems 1 y 2 (U p.190; soluciones p.312)</span>
+  <ul>
+    <li><b>Ítem 1: «Dos matrices equivalentes son congruentes si las matrices que las relacionan son traspuestas.» Verdadero.</b> Si $B=MAN$ con $M=N^t$, entonces $B=N^tAN$, que es la Def. 4.4.</li>
+    <li><b>Ítem 2: «La operación $P^{-1}AP$ solo se puede hacer si $A$ es cuadrada.» Verdadero.</b> $P$ es regular, luego cuadrada; para que existan $P^{-1}A$ y $AP$ con $P$ de orden $n$, $A$ debe ser $n\times n$.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejercicios de Autoevaluación del capítulo 4, ítems 1 y 2, p. 190; soluciones p. 312">U p.190, 312</span>
+</div>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="examenes"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Cuatro apartados de exámenes de otros años tienen como contenido principal esta sección. Las soluciones oficiales son breves («lo que no se justifica no se puntúa»): aquí se desarrolla el razonamiento completo y todos los cálculos se han verificado con sympy. Los ejercicios sobre determinante de una matriz semejante a una diagonal ya están resueltos en el tema 1.3, y los de matriz de cambio de base de un endomorfismo en el 3.5 (cajas al final).</p>
+
+<h3 id="metodoA">Método A — Definiciones y relaciones de equivalencia</h3>
+
+<details class="sol" id="ex-sep19a-4"><summary>Sept. 2019 (tipo A), ejercicio 4 — definir una relación de equivalencia <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), ejercicio 4">X Sept. 2019 (A) ej. 4</span></summary>
+  <p class="enun">Definir una relación de equivalencia $R$ en un conjunto $A$ no vacío.</p>
+  <p><b>Qué se pide.</b> Una definición de teoría. La solución oficial («corresponde al apartado 4.1; bastaría también con dar un ejemplo») no la escribe; un ejemplo solo vale si se <b>comprueban</b> las tres propiedades.</p>
+  <ol class="steps">
+    <li><b>Relación binaria</b> (U Def. 4.1, p.142): un subconjunto no vacío $R\subset A\times A$; $(a,b)\in R$ se escribe $aRb$.</li>
+    <li><b>Definición</b> (U Def. 4.2, p.144, propiedades de p.143). $R$ es de equivalencia si es a la vez: <b>reflexiva</b> ($aRa$ para todo $a\in A$), <b>simétrica</b> ($aRb\Rightarrow bRa$) y <b>transitiva</b> ($aRb$ y $bRc\Rightarrow aRc$).</li>
+    <li><b>Consecuencia:</b> $A$ queda partido en clases disjuntas $[a]=\{x\in A:xRa\}$ ($a$ = representante); el conjunto de clases es el cociente $A/R$ (U p.144).</li>
+    <li><b>Ejemplo comprobado: la semejanza de matrices.</b> En $\mathcal M_n$, $A\,R\,A'$ si existe $P$ regular con $A'=P^{-1}AP$ (U Def. 4.5).
+      <ul>
+        <li><i>Reflexiva:</i> $A=I^{-1}AI$ con $P=I$ regular.</li>
+        <li><i>Simétrica:</i> de $A'=P^{-1}AP$, multiplicando por $P$ a la izquierda y $P^{-1}$ a la derecha, $A=PA'P^{-1}=(P^{-1})^{-1}A'(P^{-1})$ y $P^{-1}$ es regular.</li>
+        <li><i>Transitiva:</i> si $A'=P^{-1}AP$ y $A''=S^{-1}A'S$ ($P,S$ regulares), $A''=S^{-1}P^{-1}APS=(PS)^{-1}A(PS)$, y $PS$ es regular ($\det(PS)=\det P\det S\neq0$).</li>
+      </ul>
+    </li>
+    <li><b>Contraejemplo para fijar ideas:</b> «$a\le b$» en $\mathbb R$ es reflexiva y transitiva pero no simétrica: no es de equivalencia. (Ejemplo no matricial de U: «tener el mismo número de letras», Ej. 4.3-4.4.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> definir = escribir las tres propiedades con cuantificadores; si das un ejemplo, <b>verifica</b> las tres por separado; para negar basta un contraejemplo a una de ellas.</div>
+  <p><b>Error típico:</b> confundir simétrica con antisimétrica, dar un ejemplo sin comprobar nada, u olvidar la transitiva (la que más cuesta: hay que cerrar el producto de matrices de paso).</p>
+</details>
+
+<h3 id="metodoB">Método B — ¿Qué relación verifican? ¿Qué se conserva? (semejanza frente a congruencia)</h3>
+
+<details class="sol" id="ex-feb18a-4"><summary>Feb. 2018 (tipo A), ejercicio 4 — matrices asociadas a un endomorfismo diagonalizable <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), ejercicio 4">X Feb. 2018 (A) ej. 4</span></summary>
+  <p class="enun">Se pide explicar qué tipo de relación verifican las matrices asociadas a un endomorfismo diagonalizable.</p>
+  <p><b>Qué se pide.</b> La oficial dice: «Son matrices equivalentes. Semejantes a una matriz diagonal». Es correcta pero imprecisa: «equivalentes» es la relación <i>débil</i> (vale para cualquier aplicación lineal y solo garantiza el mismo rango); para un endomorfismo la relación exacta es la <b>semejanza</b>. Hay que deducirla.</p>
+  <ol class="steps">
+    <li><b>Situación.</b> $f:V\to V$ endomorfismo, $\dim V=n$, con matriz $A$ en una base $B$ y $A'$ en otra $B'$. Sea $P$ la matriz de cambio de $B'$ a $B$ (columnas = vectores de $B'$ escritos en $B$): $x_B=Px_{B'}$. $P$ es regular (sus columnas son una base).</li>
+    <li><b>Dos caminos para $f(x)$ en $B'$</b> (U p.148): directo, $x_{B'}\mapsto A'x_{B'}$; o pasando por $B$: $x_{B'}\mapsto Px_{B'}=x_B\mapsto APx_{B'}\mapsto P^{-1}APx_{B'}$. Ambos dan $f(x)$ en $B'$, para todo $x_{B'}$; tomando $x_{B'}=e_j$ se igualan las columnas: $A'=P^{-1}AP$.</li>
+    <li><b>Conclusión 1: son semejantes</b> (Def. 4.5): es $A'=P^{-1}AQ$ con $Q=P$, porque entrada y salida se cambian a la vez.</li>
+    <li><b>Conclusión 2: también equivalentes</b> (Def. 4.3, $M=P^{-1}$, $N=P$), por tanto con el mismo rango. La semejanza es un caso particular; el recíproco no.</li>
+    <li><b>Qué añade «diagonalizable».</b> Existe una base $B'$ (de vectores propios, tema 4.3) en la que la matriz $D$ es diagonal. Por la conclusión 1, <b>todas</b> las matrices de $f$ son semejantes a esa $D$: forman una clase de semejanza que contiene una diagonal (U p.145).</li>
+    <li><b>Invariantes que se pueden añadir:</b> $\det A'=\det A$, y mismo polinomio característico y misma traza (U Teor. 4.4, p.153); en particular $\det A$ y $\operatorname{tr}A$ son el producto y la suma de los elementos de $D$.</li>
+    <li><b>Ejemplo numérico</b> (verificado): el endomorfismo $f(x,y)=(x+y,2y)$ del apartado 4: $A=\begin{pmatrix}1&1\cr0&2\end{pmatrix}$, $A'=\begin{pmatrix}2&1\cr0&1\end{pmatrix}$ y $D=\operatorname{diag}(1,2)$ (en $\{(1,0),(1,1)\}$, $P_2=\begin{pmatrix}1&1\cr0&1\end{pmatrix}$). Las tres tienen $\det=2$, traza 3 y polinomio $(\lambda-1)(\lambda-2)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> matrices del <b>mismo endomorfismo</b> en dos bases $\Rightarrow A'=P^{-1}AP$ (semejantes) $\Rightarrow$ además equivalentes, con el mismo rango, determinante, traza y polinomio característico; «diagonalizable» = en su clase hay una diagonal.</div>
+  <p><b>Error típico:</b> contestar solo «equivalentes» (verdad que pierde la información clave) o «congruentes» ($P^tAP$ es la relación de las formas bilineales, tema 6.1).</p>
+</details>
+
+<details class="sol" id="ex-sep23-5"><summary>Sept. 2023, pregunta 5 — ¿las matrices congruentes tienen el mismo determinante? <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 5">X Sept. 2023 P5</span></summary>
+  <p class="enun">Estudie si la siguiente proposición es verdadera: si dos matrices son congruentes, entonces tienen que tener el mismo determinante.</p>
+  <p><b>Qué se pide.</b> La oficial calcula $|B|=|P|^2|A|$ y concluye «no siempre es verdadera». Falta el <b>contraejemplo</b>: si $|P|^2=1$ sí coincidirían.</p>
+  <ol class="steps">
+    <li><b>Definición</b> (U Def. 4.4): $B=P^tAP$ con $P$ regular.</li>
+    <li><b>Determinante</b> ($|XY|=|X||Y|$ y $|X^t|=|X|$, U p.26): $|B|=|P^t||A||P|=|P|^2|A|$.</li>
+    <li><b>¿Es $|P|^2=1$?</b> No necesariamente: solo se sabe $|P|\neq0$. $|B|=|A|$ solo si $|P|=\pm1$ (o $|A|=0$).</li>
+    <li><b>Contraejemplo.</b> $A=I_2$, $P=\begin{pmatrix}2&0\cr0&1\end{pmatrix}$ (regular): $B=P^tAP=\begin{pmatrix}4&0\cr0&1\end{pmatrix}$. Son congruentes, pero $|A|=1\neq4=|B|$.</li>
+    <li><b>Conclusión: la proposición es falsa.</b></li>
+    <li><b>Lo que sí se conserva:</b> como $|P|^2\gt0$, el <b>signo</b> del determinante (y si es nulo) y el <b>rango</b>. Contraste: las matrices <b>semejantes</b> sí tienen el mismo determinante.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> para «¿se conserva X por congruencia?»: escribe $B=P^tAP$, aplica la propiedad al producto y, si aparece un factor de $P$ que no se cancela, da un contraejemplo con $P$ diagonal sencilla.</div>
+  <p><b>Error típico:</b> confundir congruencia ($P^t\cdots P$) con semejanza ($P^{-1}\cdots P$) y responder «verdadera»; o decir «no siempre» sin contraejemplo. Para el caso de semejanza: <a href="tema_1_3_determinantes.html#ex-feb19b4">tema 1.3, X Feb. 2019 (B)</a>.</p>
+</details>
+
+<details class="sol" id="ex-ene22a-5"><summary>Ene. 2022 (tipo A), ejercicio 5 — matrices de Gram del mismo producto escalar en dos bases <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A), ejercicio 5">X Ene. 2022 (A) ej. 5</span></summary>
+  <p class="enun">Si $G$ y $G'$ son dos matrices de Gram del mismo producto escalar en bases diferentes, razonar si son o no ciertas las siguientes afirmaciones: los dos determinantes son iguales y ambas matrices son congruentes y equivalentes.</p>
+  <p><b>Qué se pide.</b> Tres afirmaciones. El concepto de matriz de Gram es del tema 5.1; el núcleo de la pregunta (congruencia y equivalencia) es de este tema. Solo necesitas saber que, al cambiar de base, $G'=Q^tGQ$ (U Teor. 5.1, p.198).</p>
+  <ol class="steps">
+    <li><b>Matriz de Gram</b> en una base $B$: $G=(e_i\bullet e_j)$, con $x\bullet y=X^tGY$. Si $Q$ es el cambio de $B'$ a $B$, $X=QX'$ e $Y=QY'$, luego $x\bullet y=X'^t(Q^tGQ)Y'$, y por unicidad $G'=Q^tGQ$.</li>
+    <li><b>Congruentes: VERDADERA.</b> $Q$ es regular (cambio de base) y $G'=Q^tGQ$ es exactamente la Def. 4.4.</li>
+    <li><b>Equivalentes: VERDADERA.</b> $M=Q^t$ y $N=Q$ son regulares: Def. 4.3. En particular tienen el mismo rango (aquí $n$, porque las matrices de Gram son regulares).</li>
+    <li><b>Mismos determinantes: FALSA en general.</b> $|G'|=|Q|^2|G|$. Contraejemplo: producto escalar estándar de $\mathbb R^2$, $B$ canónica, $G=I_2$; $B'=\{(1,1),(1,-1)\}$, $Q=\begin{pmatrix}1&1\cr1&-1\end{pmatrix}$ ($|Q|=-2$): $G'=Q^tGQ=\begin{pmatrix}2&0\cr0&2\end{pmatrix}$, $|G'|=4\neq1=|G|$. Comprobación directa: $(1,1)\cdot(1,1)=2$, $(1,1)\cdot(1,-1)=0$, $(1,-1)\cdot(1,-1)=2$.</li>
+    <li><b>Lo que sí se conserva:</b> el signo ($|Q|^2\gt0$) y el rango. Los determinantes coinciden si $|Q|=\pm1$, p. ej. entre bases ortonormales ($Q$ ortogonal).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> cambio de base en Gram o en formas bilineales $\Rightarrow P^tAP$ $\Rightarrow$ congruentes $\Rightarrow$ equivalentes (mismo rango); el determinante queda multiplicado por $|P|^2$.</div>
+  <p><b>Error típico:</b> aplicar la fórmula de los endomorfismos ($Q^{-1}GQ$) a la matriz de Gram y concluir que el determinante no cambia. <b>Nota:</b> la oficial es correcta pero sin contraejemplo en la parte del determinante.</p>
+</details>
+
+<h3>Ya resueltos en otros temas (solo enlaces)</h3>
+<div class="box tip"><span class="h">Preguntas de examen de este tema desarrolladas en 1.3 y 3.5</span>
+  <span class="src" data-l="X" data-ref="Feb. 2019 (B) ej. 4; Sept. 2024 P4; Feb. 2026 (2.ª) P4; Feb. 2017 (A, 2.ª) ej. 3; Feb. 2025 (1.ª) P2; Feb. 2026 (2.ª) P8">X varios</span>
+  <ul>
+    <li><b>Determinante de una matriz semejante a una diagonal</b> (invariante «det», $A=P^{-1}DP\Rightarrow|A|=|D|$; como E 4.5): <a href="tema_1_3_determinantes.html#ex-feb19b4">Feb. 2019 (B), ej. 4</a>; <a href="tema_1_3_determinantes.html#ex-sep24p4">Sept. 2024, preg. 4</a>; <a href="tema_1_3_determinantes.html#ex-feb26b">Feb. 2026 (2.ª), preg. 4</a>.</li>
+    <li><b>Matriz de cambio de base y matriz de un endomorfismo en otra base</b> ($A'=Q^{-1}AQ$, es decir $P^{-1}AP$): <a href="tema_3_5_inversa_cambios_base.html#ex-feb17a-3">Feb. 2017 (A, 2.ª), ej. 3</a>; <a href="tema_3_5_inversa_cambios_base.html#ex-feb25a-p2">Feb. 2025 (1.ª), preg. 2</a>; <a href="tema_3_5_inversa_cambios_base.html#ex-feb26-2p8-35">Feb. 2026 (2.ª), problema 8, 1.er apartado</a>.</li>
+  </ul>
+</div>
+
+<div class="box tip"><span class="h">Para practicar (fronteras, con su tema real)</span>
+  <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores, ejercicios fronterizos">X varios</span>
+  <ul>
+    <li><b>Tema 4.2</b> (valores y vectores propios): Feb. 2018 (B) problema a); Feb. 2020 (B) ej. 4; Sept. 2019 (A) problema a); Sept. 2022 ej. 4; Feb. 2024 (1.ª) preg. 4.</li>
+    <li><b>Tema 4.3</b> (diagonalización; usan la semejanza a una diagonal): Feb. 2019 (A) ej. 4 y (B) problema a) (= E 4.18); Feb. 2023 (2.ª) preg. 4; Sept. 2023 problema 8; Sept. 2018 (A) ej. 4 ($A^{100}$); Feb. 2024 (2.ª) problema; Feb. 2025 (1.ª) y (2.ª) problemas y preg. 4; Feb. 2026 (1.ª) problema y (2.ª) problema 8, 2.º apartado; Sept. 2017 (A) ej. 4 y problema b).</li>
+    <li><b>Tema 4.4</b> (Jordan): Feb. 2020 (A) ej. 4; Ene. 2022 (A) ej. 4; Feb. 2025 (1.ª) preg. 4; Sept. 2024 problema.</li>
+    <li><b>Tema 5.3</b> (simétricas, $P$ ortogonal: semejantes y congruentes a la vez): Feb. 2020 (A) ej. 5; Feb. 2017 (A, 2.ª) ej. 4; Feb. 2022 (2.ª).</li>
+    <li><b>Tema 6</b> (congruencia $P^tAP$ en formas bilineales y cuadráticas): Feb. 2024 (1.ª) preg. 6 (aviso del apartado 5); Feb. 2018 (A) problema b); Sept. 2018 (A) ej. 6; Feb. 2026 (1.ª) preg. 6; Sept. 2023 preg. 6; Sept. 2025.</li>
+    <li><b>Temas 1.2 / 1.4</b> (equivalencia <i>por filas</i>, sistemas equivalentes; es el caso $N=I$ de la Def. 4.3): Sept. 2018 (A) ej. 1; Sept. 2022 ej. 1; Feb. 2026 (2.ª) problema 7.</li>
+  </ul>
+</div>
+
+<p class="note">Ejemplos propios con estos esquemas: propios 1-3 (relaciones), 4-6 (equivalencia y semejanza) y 7-9 (matriz de paso y potencias), en la sección 7.</p>
+
+<!-- ============================ 9 ============================ -->
+<h2 id="chuleta"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Relación binaria (Def. 4.1, U p.142)</td><td>$R\subset A\times A$, $A\neq\emptyset$</td></tr>
+  <tr><td>Equivalencia (Def. 4.2, U p.144)</td><td>reflexiva ($\forall a$), simétrica, transitiva; clases $[a]=\{x:xRa\}$ forman una <b>partición</b>; cociente $A/R$</td></tr>
+  <tr><td>Truco</td><td>«$f(x)=f(y)$» $\Rightarrow$ equivalencia; clases = valores de $f$</td></tr>
+  <tr><td>Equivalentes (Def. 4.3, p.146)</td><td>$B=MAN$, $M,N$ regulares $\iff$ <b>mismo rango</b> (Teor. 4.2, mismo tamaño); forma canónica $\begin{pmatrix}I_r&0\cr0&0\end{pmatrix}$</td></tr>
+  <tr><td>Cambio de base (Teor. 4.3: U lo enuncia para endomorfismos; vale para cualquier $f:V\to W$)</td><td>$A'=P^{-1}AQ$: equivalentes ($M=P^{-1}$, $N=Q$)</td></tr>
+  <tr><td>Congruentes (Def. 4.4, p.147)</td><td>$B=P^tAP$, $P$ regular <i>(solo cuadradas)</i>; $|B|=|P|^2|A|$: conserva rango y signo del det</td></tr>
+  <tr><td>Semejantes (Def. 4.5, p.148)</td><td>$A'=P^{-1}AP$, $P$ = matriz de paso <i>(solo cuadradas)</i>; matrices de un endomorfismo en distintas bases</td></tr>
+  <tr><td>Jerarquía</td><td>semejantes $\Rightarrow$ equivalentes $\Leftarrow$ congruentes; ningún recíproco; semejante y congruente a la vez si $P$ ortogonal</td></tr>
+  <tr><td>Invariantes de la semejanza</td><td>rango, det, traza, polinomio característico, valores propios (U p.153). <b>Necesarios, no suficientes</b> ($J$ e $I$)</td></tr>
+  <tr><td>Hallar la matriz de paso</td><td>$PB=AP$ (lineal) $+\ \det P\neq0$; nunca única ($kP$)</td></tr>
+  <tr><td>Potencias</td><td>$A=P\Lambda P^{-1}\Rightarrow A^n=P\Lambda^nP^{-1}$; control $\operatorname{tr}A^n=\sum\lambda_i^n$</td></tr>
+  <tr><td>Autoevaluación (U p.312)</td><td>ítem 1: V ($M=N^t$ = congruentes); ítem 2: V ($P^{-1}AP$ solo si $A$ cuadrada)</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé comprobar reflexiva, simétrica y transitiva en un conjunto finito (todas las cadenas) y en uno infinito (con letras), y hallar la clausura de equivalencia (E 4.1-4.3).</li>
+  <li>Sé definir relación de equivalencia, clase y conjunto cociente, y demostrar que la semejanza lo es (X Sept. 2019).</li>
+  <li>Sé decidir si dos matrices son equivalentes comparando rangos, y hallar $M$ y $N$ (propio 4).</li>
+  <li>Sé distinguir equivalentes, congruentes y semejantes y dar contraejemplos de cada recíproco (E 4.4).</li>
+  <li>Sé usar determinante, traza y rango para descartar la semejanza (E 4.5-4.7).</li>
+  <li>Sé hallar todas las matrices de paso planteando $PA=BP$ y $\det P\neq0$ (E 4.8, 4.9).</li>
+  <li>Sé explicar qué relación verifican las matrices de un endomorfismo (semejantes, $P^{-1}AP$) y la de una forma bilineal (congruentes, $P^tAP$) (X Feb. 2018, Sept. 2023, Ene. 2022).</li>
+  <li>Sé calcular $A^n=P\Lambda^nP^{-1}$ y descartar opciones con la traza (E 4.10).</li>
+</ul>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li><b>«Probar» una propiedad con ejemplos</b> y no revisar todas las cadenas; o creer que un lazo basta para la reflexividad.</li>
+    <li><b>Confundir simétrica con antisimétrica</b>, y olvidar la transitividad.</li>
+    <li><b>Creer que «mismo rango» implica semejante o congruente</b> (solo implica equivalente).</li>
+    <li><b>Concluir semejanza porque coinciden los invariantes</b> ($J$ e $I$; E 4.9 solo da condición necesaria).</li>
+    <li><b>Dar una matriz de paso sin comprobar $\det P\neq0$</b> (E 4.7, 4.8).</li>
+    <li><b>Confundir semejanza ($P^{-1}AP$) con congruencia ($P^tAP$)</b>: el determinante se conserva en la primera y no en la segunda (X Sept. 2023, Ene. 2022, Feb. 2024).</li>
+    <li><b>Orden de $P$ y $P^{-1}$</b>: $\Lambda=P^{-1}AP\iff A=P\Lambda P^{-1}$, y $A^n=P\Lambda^nP^{-1}$; columnas de $P$ $\neq$ columnas de $P^{-1}$ (E 4.9, 4.10).</li>
+    <li><b>Confundir «equivalente» de U (mismo rango) con la «equivalencia por filas» de Lay</b> ($B=EA$).</li>
+  </ol>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>

@@ -11,6 +11,7 @@
    .anim-lineal  data-modo="lineal|nucimg" data-u="2,1" data-v="-1,2" data-m="1,2,2,4"   (aplicaciones lineales R2->R2)
    .anim-matriz  data-f1="1,2" data-f2="3,-1" data-x="2,1"   (matriz asociada: columnas = f(e1), f(e2); f(x) = x f(e1) + y f(e2))
    .anim-cambio  data-u="1,1" data-v="-1,1" data-x="3,1"   (cambio de base en R2: columnas de Q = base nueva; x_B = Q x_B′; rejilla de la base nueva)
+   .anim-semej   data-a="1,1,0,2" data-q="1,0,1,1"   (A 2x2 y Q regular: A'=Q^-1 A Q frente a Q^t A Q; det, traza e invariantes)
 */
 (function () {
   'use strict';
@@ -822,7 +823,47 @@
     root.appendChild(eq); root.appendChild(P.svg); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
     draw();
   }
-  var REG = [['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Semejanza y congruencia 2x2: A' = Q^-1 A Q frente a Q^t A Q; invariantes
+     ===================================================================== */
+  function buildSemej(root) {
+    var a0 = (root.getAttribute('data-a') || '1,1,0,2').split(',').map(Number), q0 = (root.getAttribute('data-q') || '1,0,1,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res');
+    var ia = a0.map(function (x) { return numInput(x, 1, '3.2em'); }), iq = q0.map(function (x) { return numInput(x, 1, '3.2em'); });
+    ia.forEach(function (i, k) { i.setAttribute('aria-label', 'A entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); });
+    iq.forEach(function (i, k) { i.setAttribute('aria-label', 'Q entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); });
+    var eq = el('div', 'an-eqs');
+    function mrow(lbl, ins) { var r = el('div', 'an-eq down'); r.appendChild(el('span', '', lbl + ' = ( ')); r.appendChild(ins[0]); r.appendChild(ins[1]); r.appendChild(el('span', '', ' ; ')); r.appendChild(ins[2]); r.appendChild(ins[3]); r.appendChild(el('span', '', ' )')); eq.appendChild(r); }
+    mrow('A', ia); mrow('Q', iq);
+    var pre = btnRow(['Ejemplo', 'Q = I', 'Q diagonal', 'A diagonalizada', 'Q singular'], function (i) {
+      var p = [a0.concat(q0), [1, 1, 0, 2, 1, 0, 0, 1], [1, 1, 0, 2, 2, 0, 0, 1], [1, 1, 0, 2, 1, 1, 0, 1], [1, 1, 0, 2, 1, 2, 1, 2]][i];
+      ia.forEach(function (q, j) { q.value = p[j]; }); iq.forEach(function (q, j) { q.value = p[4 + j]; }); draw();
+    });
+    function M2(m) { return m[0] + ',' + m[1] + ' ; ' + m[2] + ',' + m[3]; }
+    function mt(m) { return '(' + ftxt(m[0]) + ' ' + ftxt(m[1]) + ' ; ' + ftxt(m[2]) + ' ' + ftxt(m[3]) + ')'; }
+    function mm(x, y) { return [add(mul(x[0], y[0]), mul(x[1], y[2])), add(mul(x[0], y[1]), mul(x[1], y[3])), add(mul(x[2], y[0]), mul(x[3], y[2])), add(mul(x[2], y[1]), mul(x[3], y[3]))]; }
+    function inv(q) { var d = sub(mul(q[0], q[3]), mul(q[1], q[2])); return [div(q[3], d), div(neg(q[1]), d), div(neg(q[2]), d), div(q[0], d)]; }
+    function detTr(m) { var d = sub(mul(m[0], m[3]), mul(m[1], m[2])), t = add(m[0], m[3]); return { d: d, t: t }; }
+    function draw() {
+      var A = ia.map(function (i) { return F(parseInt(i.value, 10) || 0, 1); }), Q = iq.map(function (i) { return F(parseInt(i.value, 10) || 0, 1); });
+      var dq = sub(mul(Q[0], Q[3]), mul(Q[1], Q[2])), da = detTr(A); res.textContent = '';
+      if (isz(dq)) { html(text, 'Con estas columnas <b>det Q = 0</b>: Q no es regular y no hay matriz de paso. Ni la semejanza ni la congruencia admiten matrices singulares.'); return; }
+      var Qi = inv(Q), S = mm(mm(Qi, A), Q), Qt = [Q[0], Q[2], Q[1], Q[3]], C = mm(mm(Qt, A), Q), s = detTr(S), c = detTr(C);
+      function poly(d) { return 'λ²' + (d.t.n > 0 ? ' ' + MINUS + ' ' + ftxt(d.t) + 'λ' : (d.t.n < 0 ? ' + ' + ftxt(neg(d.t)) + 'λ' : '')) + (d.d.n < 0 ? ' ' + MINUS + ' ' + ftxt(neg(d.d)) : (d.d.n > 0 ? ' + ' + ftxt(d.d) : '')); }
+      function same(x, y) { return x.n === y.n && x.d === y.d; }
+      var ct = same(c.t, da.t) ? 'la traza aquí coincide (casualidad: en general no se conserva)' : 'la traza cambia (' + ftxt(da.t) + ' → <b>' + ftxt(c.t) + '</b>)';
+      var cd = same(c.d, da.d) ? 'el determinante aquí coincide (casualidad: en general se multiplica por (det Q)² = ' + ftxt(mul(dq, dq)) + ')' : 'el determinante se multiplica por (det Q)² = ' + ftxt(mul(dq, dq)) + ' (' + ftxt(da.d) + ' → <b>' + ftxt(c.d) + '</b>)';
+      html(text, '<b>Semejante</b> (U Def. 4.5, con Q = P, la matriz de paso): A′ = Q⁻¹AQ = ' + mt(S) + '. Mismo determinante (' + ftxt(da.d) + ' → <b>' + ftxt(s.d) + '</b>), misma traza (' + ftxt(da.t) + ' → <b>' + ftxt(s.t) + '</b>) y mismo polinomio característico ' + poly(da) + '.<br>' +
+        '<b>Congruente</b> (U Def. 4.4): QᵗAQ = ' + mt(C) + '. En este caso ' + cd + '; ' + ct + ' (solo se conserva si Q es ortogonal).');
+      var fin = el('div', 'sar-final'); fin.textContent = 'det Q = ' + ftxt(dq) + '  ·  semejante: det ' + ftxt(s.d) + ', tr ' + ftxt(s.t) + '  ·  congruente: det ' + ftxt(c.d) + ', tr ' + ftxt(c.t); res.appendChild(fin);
+    }
+    ia.concat(iq).forEach(function (s) { s.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Dada A y una matriz regular Q (entradas enteras), se calculan las dos transformaciones «de cambio de base»: la semejanza Q⁻¹AQ (endomorfismos) y la congruencia QᵗAQ (formas bilineales). Compara qué invariantes sobreviven.'));
+    root.appendChild(eq); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    draw();
+  }
+  var REG = [['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
