@@ -11,6 +11,7 @@
    .anim-lineal  data-modo="lineal|nucimg" data-u="2,1" data-v="-1,2" data-m="1,2,2,4"   (aplicaciones lineales R2->R2)
    .anim-matriz  data-f1="1,2" data-f2="3,-1" data-x="2,1"   (matriz asociada: columnas = f(e1), f(e2); f(x) = x f(e1) + y f(e2))
    .anim-cambio  data-u="1,1" data-v="-1,1" data-x="3,1"   (cambio de base en R2: columnas de Q = base nueva; x_B = Q x_B′; rejilla de la base nueva)
+   .anim-propios data-a="3,-2,1,0" data-x="2,1"   (A 2x2 y vector x deslizable: x frente a Ax, polinomio característico, valores propios y subespacios propios; presets sin valores reales y doble con d=1)
    .anim-semej   data-a="1,1,0,2" data-q="1,0,1,1"   (A 2x2 y Q regular: A'=Q^-1 A Q frente a Q^t A Q; det, traza e invariantes)
 */
 (function () {
@@ -863,7 +864,81 @@
     root.appendChild(eq); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
     draw();
   }
-  var REG = [['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+
+  /* =====================================================================
+     Valores y vectores propios 2x2: x frente a Ax, polinomio caracteristico, subespacios propios
+     ===================================================================== */
+  function buildPropios(root) {
+    var a0 = (root.getAttribute('data-a') || '3,-2,1,0').split(',').map(Number), x0 = (root.getAttribute('data-x') || '2,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 340, 340, 5);
+    P.svg.setAttribute('aria-label', 'Plano con el vector x, su imagen Ax y los subespacios propios de A');
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders');
+    text.setAttribute('aria-live', 'polite');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); ctrl.appendChild(r); }
+    var mi = a0.map(function (x) { return numInput(x, 1, '3.2em'); });
+    mi.forEach(function (i, k) { i.setAttribute('aria-label', 'A entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); });
+    var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+    er.appendChild(el('span', '', 'A = (')); [0, 1].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ' ; ')); [2, 3].forEach(function (i) { er.appendChild(mi[i]); }); er.appendChild(el('span', '', ')')); eq.appendChild(er);
+    var sx = slider(-4, 4, 0.5, x0[0]), sy = slider(-4, 4, 0.5, x0[1]), lx = el('b'), ly = el('b');
+    sx.setAttribute('aria-label', 'x primera componente'); sy.setAttribute('aria-label', 'x segunda componente');
+    row('x₁ ', sx, lx); row('x₂ ', sy, ly);
+    var pre = btnRow(['Ejemplo U 4.6', 'Dos valores propios', 'Simétrica', 'Giro 90° (sin valores propios)', 'Doble con d = 1', 'Doble con d = 2', 'Singular (λ = 0)'], function (i) {
+      var p = [a0, [4, 1, 2, 3], [2, 1, 1, 2], [0, -1, 1, 0], [3, 1, -1, 1], [2, 0, 0, 2], [1, 2, 2, 4]][i];
+      mi.forEach(function (q, j) { q.value = p[j]; }); draw();
+    });
+    function eigvec(a, b, c, d, l) { // vector no nulo de Nuc(A - l I) cuando rang = 1
+      var r1 = [a - l, b], r2 = [c, d - l], n1 = Math.abs(r1[0]) + Math.abs(r1[1]), n2 = Math.abs(r2[0]) + Math.abs(r2[1]);
+      if (n1 >= n2 && n1 > 1e-9) return [r1[1], -r1[0]];
+      if (n2 > 1e-9) return [r2[1], -r2[0]];
+      return null;
+    }
+    function full(P0, d, cls) { var n = Math.sqrt(d[0] * d[0] + d[1] * d[1]); if (n < 1e-9) return; var k = 14 / n; P0.layer.appendChild(sv('line', { x1: P0.X(-k * d[0]), y1: P0.Y(-k * d[1]), x2: P0.X(k * d[0]), y2: P0.Y(k * d[1]), 'class': 'an-ln ' + cls, opacity: 0.45 })); }
+    function vtxt(v) { var m = Math.max(Math.abs(v[0]), Math.abs(v[1])); return '(' + num(v[0] / m) + ', ' + num(v[1] / m) + ')'; }
+    function draw() {
+      var a = parseFloat(mi[0].value) || 0, b = parseFloat(mi[1].value) || 0, c = parseFloat(mi[2].value) || 0, d = parseFloat(mi[3].value) || 0;
+      var x = parseFloat(sx.value), y = parseFloat(sy.value); lx.textContent = num(x); ly.textContent = num(y);
+      var tr = a + d, det = a * d - b * c, disc = tr * tr - 4 * det;
+      var ax = a * x + b * y, ay = c * x + d * y, cross = x * ay - y * ax, zero = Math.abs(x) + Math.abs(y) < 1e-9;
+      var prop = !zero && Math.abs(cross) < 1e-9;
+      var ls = [], info = '';
+      if (disc > 1e-9) { var s = Math.sqrt(disc); ls = [(tr + s) / 2, (tr - s) / 2]; }
+      else if (Math.abs(disc) <= 1e-9) ls = [tr / 2];
+      P.clear();
+      var dirs = ls.map(function (l) { return eigvec(a, b, c, d, l); });
+      dirs.forEach(function (v, i) { if (v) full(P, v, i === 0 ? 'down' : 'up'); });
+      arrow(P, 0, 0, x, y, 'w', 'x');
+      var kk = Math.min(1, 4.7 / Math.max(Math.abs(ax), Math.abs(ay), 1e-9));
+      arrow(P, 0, 0, ax * kk, ay * kk, prop ? 'down' : 'pur', kk < 1 ? 'Ax (a escala)' : 'Ax');
+      function cf(v) { return Math.abs(Math.abs(v) - 1) < 1e-9 ? '' : num(Math.abs(v)); }
+      function aml(l) { var q = num(l); if (q === '0') return 'A'; if (q === '1') return 'A ' + MINUS + ' I'; return l < 0 ? 'A + ' + cf(l) + 'I' : 'A ' + MINUS + ' ' + q + 'I'; }
+      var poly = 'λ²' + (tr > 0 ? ' ' + MINUS + ' ' + cf(tr) + 'λ' : (tr < 0 ? ' + ' + cf(tr) + 'λ' : '')) + (det > 0 ? ' + ' + num(det) : (det < 0 ? ' ' + MINUS + ' ' + num(-det) : ''));
+      var m1;
+      if (zero) m1 = 'x = 0: el vector nulo <b>nunca</b> es vector propio (U Def. 4.6 exige x ≠ 0), aunque A·0 = λ·0 se cumpla para todo λ. Mueve x.';
+      else if (prop) { var lam = Math.abs(x) > 1e-9 ? ax / x : ay / y; m1 = '<b>Ax = ' + num(lam) + '·x</b>: x y Ax son proporcionales, así que <b>x es vector propio</b> y su valor propio es λ = ' + num(lam) + (Math.abs(lam) < 1e-9 ? ' (Ax = 0: x está en el núcleo de A)' : '') + '.'; }
+      else m1 = 'Ax = (' + num(ax) + ', ' + num(ay) + ') no es proporcional a x = (' + num(x) + ', ' + num(y) + ') (x₁·(Ax)₂ − x₂·(Ax)₁ = ' + num(cross) + ' ≠ 0): <b>x no es vector propio</b>, A lo desvía de su recta.';
+      if (ls.length === 0) info = 'Polinomio característico |A − λI| = ' + poly + ' con discriminante tr² − 4·det = ' + num(disc) + ' < 0: <b>no tiene raíces reales</b>, luego A no tiene valores propios (en U, λ ∈ ℝ) y ningún x es propio.';
+      else {
+        info = 'Polinomio característico |A − λI| = ' + poly + ' (tr = ' + num(tr) + ', det = ' + num(det) + '). ';
+        if (ls.length === 2) info += 'Raíces <b>λ₁ = ' + num(ls[0]) + '</b>, <b>λ₂ = ' + num(ls[1]) + '</b> (α = 1 cada una). ';
+        else info += 'Raíz doble <b>λ = ' + num(ls[0]) + '</b> (α = 2). ';
+        ls.forEach(function (l, i) {
+          var v = dirs[i];
+          info += '<br>' + (ls.length === 2 ? 'L' + (i + 1) : 'L') + ' = Nuc(' + aml(l) + '): ' + (v ? 'recta ⟨' + vtxt(v) + '⟩ (d = 1' + (ls.length === 1 ? ' < α = 2: no hay base de vectores propios' : '') + ')' : 'todo ℝ² (A − λI = 0, d = 2 = α)') + '.';
+        });
+        info += '<br>Comprobación: suma de raíces = traza y producto = det' + (ls.length === 1 ? ' (contando la raíz doble dos veces)' : '') + '.';
+      }
+      if (kk < 1) m1 += ' (Ax se dibuja reducido a escala para caber en el lienzo.)';
+      html(text, m1 + '<br>' + info);
+      res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = ls.length ? 'Valores propios: ' + ls.map(function (l) { return num(l); }).join(' , ') : 'Sin valores propios reales'; res.appendChild(fin);
+    }
+    [sx, sy].concat(mi).forEach(function (q) { q.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Un vector propio es un vector x ≠ 0 cuya imagen Ax queda en su misma recta. Cambia A y mueve x: la flecha verde es x y la otra es Ax (azul cuando x es propio). Las rectas finas son los subespacios propios.'));
+    root.appendChild(eq); root.appendChild(P.svg); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    draw();
+  }
+  var REG = [['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
