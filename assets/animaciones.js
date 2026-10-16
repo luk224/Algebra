@@ -16,6 +16,7 @@
    .anim-diag    data-a="4,1,2,3" data-x="2,1"   (diagonalizar A 2x2 paso a paso: valores propios, d y alfa, veredicto, P y Lambda en el mismo orden, comprobacion P*Lambda = A*P y rejilla de la base propia con x_B' = P^-1 x; presets: distintos, doble d=2, doble d=1, giro 90, singular, irracionales)
    .anim-jordan  data-a="1,0,3;-1,2,0;0,0,2"   (forma de Jordan de A de 2x2 a 4x4, entradas enteras editables y presets: polinomio caracteristico y valores propios (reales; si hay complejas avisa de que no hay J real), rangos de (A-lI)^k, tamanos de bloques, J, cadenas y matriz de paso P paso a paso, comprobacion AP = PJ en fracciones exactas)
    .anim-gram    data-g="1,0,1" data-u="2,1" data-v="-1,2"   (producto escalar de R2 con matriz de Gram G=(a b; b c) editable [data-g = a,b,c; simetrica por construccion] y dos vectores u, v con sliders (coordenadas en la base de G): u.v = u^t G v, normas, coseno, angulo, ortogonalidad, distancia; dibujo fiel con Cholesky (los angulos que se ven son los de el producto); avisa si G no es definida positiva (Sylvester) con un vector testigo x.x<=0; presets: estandar, U Ej. 5.5, propios, no definida positiva, semidefinida)
+   .anim-ortog   data-a="1,0,0,1" data-x="2,1" data-y="0.5,1.5"   (matriz A 2x2 [a b; c d] editable, deslizador de angulo theta con botones Giro R_theta / Simetria S_theta y presets: muestra A^tA, si es ortogonal (tolerancia 0,005), det, el cuadrado unidad y su imagen, dos vectores x, y con sliders y sus imagenes Ax, Ay (se conservan normas, producto escalar y angulo solo si A es ortogonal) y el tipo: giro de angulo theta o simetria respecto de la recta de angulo theta/2; si no es ortogonal indica que condicion de las columnas falla)
 */
 (function () {
   'use strict';
@@ -1382,7 +1383,90 @@
     draw();
   }
 
-  var REG = [['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Matrices ortogonales 2x2: giros y simetrias (.anim-ortog)
+     ===================================================================== */
+  function buildOrtog(root) {
+    var nc = function (x) { return num(x).replace('.', ','); };
+    var nd = function (x) { var v = Math.round(x * 1000) / 1000; if (Math.abs(v) < 1e-9) v = 0; return String(v).replace('-', MINUS).replace('.', ','); };
+    var a0 = (root.getAttribute('data-a') || '1,0,0,1').split(',').map(Number), x0 = (root.getAttribute('data-x') || '2,1').split(',').map(Number), y0 = (root.getAttribute('data-y') || '0.5,1.5').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 340, 340, 4);
+    P.svg.setAttribute('aria-label', 'Plano con el cuadrado unidad, su imagen por la matriz A y dos vectores con sus imágenes');
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders'); text.setAttribute('aria-live', 'polite');
+    var mode = null, rd = function (v) { return Math.round(v * 10000) / 10000; };
+    var inp = a0.map(function (v, k) { var i = numInput(v, 0.01, '5em'); i.setAttribute('aria-label', ['a (fila 1, columna 1)', 'b (fila 1, columna 2)', 'c (fila 2, columna 1)', 'd (fila 2, columna 2)'][k]); return i; });
+    var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+    er.appendChild(el('span', '', 'A = ( ')); er.appendChild(inp[0]); er.appendChild(el('span', '', ' ')); er.appendChild(inp[1]); er.appendChild(el('span', '', ' ; ')); er.appendChild(inp[2]); er.appendChild(el('span', '', ' ')); er.appendChild(inp[3]); er.appendChild(el('span', '', ' )'));
+    eq.appendChild(er);
+    var st = slider(0, 360, 5, 45), lt = el('b'), sl = [x0[0], x0[1], y0[0], y0[1]].map(function (v) { return slider(-3, 3, 0.5, v); }), lb = sl.map(function () { return el('b'); });
+    function row(txt, s, l) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(l); ctrl.appendChild(r); }
+    st.setAttribute('aria-label', 'ángulo theta en grados'); row('θ ', st, lt);
+    ['x₁', 'x₂', 'y₁', 'y₂'].forEach(function (t, k) { sl[k].setAttribute('aria-label', 'coordenada ' + t); row(t + ' ', sl[k], lb[k]); });
+    function setM(m) { m.forEach(function (v, k) { inp[k].value = rd(v); }); }
+    function apply() {
+      var t = parseFloat(st.value) * Math.PI / 180, c = Math.cos(t), s = Math.sin(t);
+      if (mode === 'giro') setM([c, -s, s, c]); else if (mode === 'sim') setM([c, s, s, -c]);
+    }
+    var bm = btnRow(['Giro R_θ = (cosθ −senθ; senθ cosθ)', 'Simetría S_θ = (cosθ senθ; senθ −cosθ)'], function (i) { mode = i === 0 ? 'giro' : 'sim'; apply(); draw(); });
+    var pre = btnRow(['Giro 45° (U Ej. 5.28)', 'Giro 90°', 'Simetría respecto de OX', 'Simetría respecto de y = x', 'Columnas ⟂ pero no unitarias (1 −1; 1 1)', 'Cizalla (1 1; 0 1)', 'Unitarias pero no ⟂ (1 .71; 0 .71)'], function (i) {
+      var p = [[0.7071, -0.7071, 0.7071, 0.7071], [0, -1, 1, 0], [1, 0, 0, -1], [0, 1, 1, 0], [1, -1, 1, 1], [1, 1, 0, 1], [1, 0.7071, 0, 0.7071]][i];
+      mode = null; setM(p); draw();
+    });
+    function draw() {
+      var A = inp.map(function (q) { return parseFloat(q.value) || 0; }), a = A[0], b = A[1], c = A[2], d = A[3];
+      var X = sl.map(function (q) { return parseFloat(q.value); });
+      lt.textContent = nc(parseFloat(st.value)) + '°'; X.forEach(function (x, k) { lb[k].textContent = nc(x); });
+      var x = [X[0], X[1]], y = [X[2], X[3]], ap = function (v) { return [a * v[0] + b * v[1], c * v[0] + d * v[1]]; };
+      var Ax = ap(x), Ay = ap(y), n1 = a * a + c * c, n2 = b * b + d * d, p = a * b + c * d, det = a * d - b * c, eps = 5e-3;
+      var orth = Math.abs(n1 - 1) < eps && Math.abs(n2 - 1) < eps && Math.abs(p) < eps;
+      var dt = function (u, v) { return u[0] * v[0] + u[1] * v[1]; }, nr = function (u) { return Math.sqrt(dt(u, u)); };
+      var cosA = function (u, v) { var q = nr(u) * nr(v); return q < 1e-9 ? NaN : dt(u, v) / q; };
+      var pts = [[0, 0], [a, c], [a + b, c + d], [b, d], x, y, Ax, Ay], m = 0;
+      pts.forEach(function (q) { m = Math.max(m, Math.abs(q[0]), Math.abs(q[1])); });
+      var K = m > 3.7 ? 3.7 / m : 1, T = function (q) { return [K * q[0], K * q[1]]; };
+      P.clear();
+      function poly(ps, cls) { P.layer.appendChild(sv('polygon', { points: ps.map(function (q) { q = T(q); return P.X(q[0]) + ',' + P.Y(q[1]); }).join(' '), 'class': 'an-poly ' + cls })); }
+      poly([[0, 0], [1, 0], [1, 1], [0, 1]], 'gr'); poly([[0, 0], [a, c], [a + b, c + d], [b, d]], orth ? '' : 'bad');
+      var h = '<b>AᵗA</b> = (' + nd(n1) + ' ' + nd(p) + '; ' + nd(p) + ' ' + nd(n2) + '): ‖c₁‖² = ' + nd(n1) + ', ‖c₂‖² = ' + nd(n2) + ', c₁•c₂ = ' + nd(p) + ' (las columnas de A son los lados del cuadrado imagen). det A = <b>' + nd(det) + '</b>.<br>';
+      var kind = '';
+      if (orth) {
+        var th = Math.atan2(c, a) * 180 / Math.PI; if (th < 0) th += 360;
+        h += '<b>AᵗA = I: A es ortogonal</b> (columnas ortonormales; tolerancia por redondeo). ';
+        if (det > 0) {
+          var triv = th < 0.5 || th > 359.5 || Math.abs(th - 180) < 0.5;
+          kind = th < 0.5 || th > 359.5 ? 'identidad (giro de 0°)' : 'giro de ' + nc(th) + '°';
+          h += 'det = +1 ⇒ <b>giro</b> de ángulo θ = atan2(c, a) = ' + nc(th) + '° (antihorario). Valores propios: cosθ ± i·senθ' + (triv ? ' (reales: ' + (th < 90 || th > 270 ? '1' : '−1') + ' doble)' : ' = ' + nd(Math.cos(th * Math.PI / 180)) + ' ± ' + nd(Math.sin(th * Math.PI / 180)) + 'i: <b>no hay valores propios reales</b>') + '.';
+        } else {
+          var ang = th / 2; kind = 'simetría respecto de la recta de ángulo ' + nc(ang) + '°';
+          h += 'det = −1 ⇒ <b>simetría</b> respecto de la recta por el origen de ángulo θ/2 = ' + nc(ang) + '° (θ = atan2(c, a) = ' + nc(th) + '°). Valores propios 1 (los puntos de la recta, que quedan fijos: línea verde) y −1 (su perpendicular).';
+          var ux = Math.cos(ang * Math.PI / 180), uy = Math.sin(ang * Math.PI / 180);
+          P.layer.appendChild(sv('line', { x1: P.X(-9 * ux), y1: P.Y(-9 * uy), x2: P.X(9 * ux), y2: P.Y(9 * uy), 'class': 'an-vec w dash' }));
+        }
+      } else {
+        var why = [];
+        if (Math.abs(n1 - 1) >= eps) why.push('‖c₁‖² = ' + nd(n1) + ' ≠ 1');
+        if (Math.abs(n2 - 1) >= eps) why.push('‖c₂‖² = ' + nd(n2) + ' ≠ 1');
+        if (Math.abs(p) >= eps) why.push('c₁•c₂ = ' + nd(p) + ' ≠ 0');
+        kind = 'no ortogonal'; h += '<b>AᵗA ≠ I: A NO es ortogonal</b> (falla: ' + why.join('; ') + '). El cuadrado se deforma (' + (Math.abs(det) < 1e-9 ? 'det = 0: se aplasta sobre una recta' : 'área ' + nd(Math.abs(det)) + ' en vez de 1') + ').';
+      }
+      arrow(P, 0, 0, T(x)[0], T(x)[1], 'gr', 'x'); arrow(P, 0, 0, T(y)[0], T(y)[1], 'gr', 'y');
+      arrow(P, 0, 0, T(Ax)[0], T(Ax)[1], 'down', 'Ax'); arrow(P, 0, 0, T(Ay)[0], T(Ay)[1], 'up', 'Ay');
+      var c1 = cosA(x, y), c2 = cosA(Ax, Ay), same = Math.abs(dt(x, y) - dt(Ax, Ay)) < 1e-9 && Math.abs(nr(x) - nr(Ax)) < 1e-9 && Math.abs(nr(y) - nr(Ay)) < 1e-9;
+      h += '<br>Vectores (punteados: x e y; de color: Ax y Ay): ‖x‖ = ' + nd(nr(x)) + ' → ‖Ax‖ = ' + nd(nr(Ax)) + '; ‖y‖ = ' + nd(nr(y)) + ' → ‖Ay‖ = ' + nd(nr(Ay)) + '; x•y = ' + nd(dt(x, y)) + ' → Ax•Ay = ' + nd(dt(Ax, Ay)) + (isNaN(c1) || isNaN(c2) ? '' : '; cos∠ = ' + nd(c1) + ' → ' + nd(c2)) + '. ' + (orth ? '<b>Se conservan</b> normas, producto escalar y ángulo (U p.217).' : (same ? 'Aquí coinciden por casualidad para estos x, y; cambia los vectores.' : 'Aquí <b>no</b> se conservan.')) + (K < 1 ? ' <i>(Dibujo a escala ' + nc(K) + '.)</i>' : '');
+      html(text, h); res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = orth ? 'Ortogonal: ' + kind : 'No ortogonal'; res.appendChild(fin);
+    }
+    inp.forEach(function (q) { q.addEventListener('input', function () { mode = null; draw(); }); });
+    st.addEventListener('input', function () { if (!mode) mode = 'giro'; apply(); draw(); });
+    sl.forEach(function (q) { q.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Una matriz A de 2×2 transforma el cuadrado unidad (gris) en un paralelogramo cuyos lados son sus columnas. Si A es ortogonal (AᵗA = I) ese paralelogramo sigue siendo un cuadrado de lado 1, girado o reflejado: nada se deforma. Escribe tu matriz, usa θ con los botones de giro o simetría, o carga un ejemplo; mueve x e y para ver que Ax y Ay conservan longitudes y ángulo.'));
+    root.appendChild(eq); root.appendChild(bm); root.appendChild(P.svg); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    draw();
+  }
+
+
+  var REG = [['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

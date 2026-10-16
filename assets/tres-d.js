@@ -6,6 +6,8 @@
    .d3-proy    data-modo="recta|plano|gs" data-v="1,2,3" data-a="1,1,1" data-b="0,1,1" data-c="0,0,2"
                proyección ortogonal (producto estándar de R3): recta -> v sobre ⟨d=a⟩; plano -> v sobre U=⟨a,b⟩ (Gram-Schmidt interno, p = c1e1+c2e2, residuo w ⟂ U, distancia mínima y punto de prueba q con sliders α, β);
                gs -> Gram-Schmidt de (a,b,c) en 4 pasos con botones (e1, e2, e3 y normalización). Entradas editables y presets; sin WebGL queda el texto con los cálculos.
+   .d3-rot     data-modo="giro|plano|comp|libre" data-eje="1,1,1" data-ang="120" data-n="1,2,2" data-al="90" data-be="90" data-a="1,0,0;0,1,0;0,0,1"
+               matrices ortogonales 3x3: cubo unidad y su imagen, esfera unidad (gris) y su imagen, columnas a1,a2,a3 de A; modos: giro (eje + angulo con slider, formula de Rodrigues), simetria respecto de un plano (Householder I-2nn^t/n^tn), composicion R_z(alpha)R_x(beta), matriz libre 3x3 editable (decimales); calcula A^tA, det, traza, eje (valor propio 1, de la parte antisimetrica; morado) y angulo por la traza (tr = 1+2cos), plano de simetria (morado; tr=1 con det=-1; tr distinto = simetria rotatoria; giro de 180 = simetria axial); escena R=2,2 y escala K; presets con E 5.25, U Ej. 5.26 y matrices no ortogonales de contraste; sin WebGL queda el texto
    Arrastrar = girar, rueda / pellizco = zoom. */
 (function () {
   'use strict';
@@ -644,7 +646,153 @@
     if (S) S.onTheme = draw; draw();
   }
 
-  var REG = [['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
+  /* =====================================================================
+     6. MATRICES ORTOGONALES 3x3: giros y simetrías  (.d3-rot)
+        data-modo="giro|plano|comp|libre"  data-eje="1,1,1" data-ang="120" (giro)  data-n="1,2,2" (plano)  data-al="90" data-be="90" (comp)  data-a="1,0,0;0,1,0;0,0,1" (libre)
+     ===================================================================== */
+  function matMul3(A, B) { return [0, 1, 2].map(function (i) { return [0, 1, 2].map(function (j) { return A[i][0] * B[0][j] + A[i][1] * B[1][j] + A[i][2] * B[2][j]; }); }); }
+  function transp3(A) { return [0, 1, 2].map(function (i) { return [A[0][i], A[1][i], A[2][i]]; }); }
+  function rodrigues(u, deg) {
+    var n = norm(u); if (n < EPS) return [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+    var x = u[0] / n, y = u[1] / n, z = u[2] / n, t = deg * Math.PI / 180, c = Math.cos(t), s = Math.sin(t), k = 1 - c;
+    return [[c + x * x * k, x * y * k - z * s, x * z * k + y * s], [y * x * k + z * s, c + y * y * k, y * z * k - x * s], [z * x * k - y * s, z * y * k + x * s, c + z * z * k]];
+  }
+  function householder(n) {
+    var q = dot(n, n); if (q < EPS) return [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+    return [0, 1, 2].map(function (i) { return [0, 1, 2].map(function (j) { return (i === j ? 1 : 0) - 2 * n[i] * n[j] / q; }); });
+  }
+  function buildRot(root) {
+    var g = function (k, d) { return (root.getAttribute('data-' + k) || d).split(',').map(Number); };
+    var modo0 = root.getAttribute('data-modo') || 'giro', eje0 = g('eje', '1,1,1'), ang0 = g('ang', '120')[0], n0 = g('n', '1,2,2'), al0 = g('al', '90')[0], be0 = g('be', '90')[0];
+    var a0 = (root.getAttribute('data-a') || '1,0,0;0,1,0;0,0,1').split(';').map(function (r) { return r.split(',').map(Number); });
+    root.textContent = ''; root.classList.add('sarrus');
+    var nd = function (x) { var v = Math.round(x * 1000) / 1000; if (Math.abs(v) < 1e-9) v = 0; return String(v).replace('-', MINUS).replace('.', ','); };
+    var na = function (x) { return nd(Math.round(x * 10) / 10); };
+    var rd = function (v) { return Math.round(v * 1000) / 1000; };
+    var mode = modo0;
+    root.appendChild(el('p', 'sar-text an-title', 'Una matriz ortogonal de 3×3 mueve el espacio sin deformarlo: el cubo unidad (gris) se convierte en otro cubo unidad (azul) y la esfera unidad (gris) en sí misma. Elige un giro (eje y ángulo), una simetría respecto de un plano o una composición, o escribe tu matriz. Si A no es ortogonal el cubo se deforma y la esfera se vuelve elipsoide. Las flechas a₁ (roja), a₂ (verde), a₃ (azul) son las columnas de A (imágenes de e₁, e₂, e₃). El eje de giro, o la normal de la simetría, se dibuja en morado (y el plano de simetría, morado translúcido).'));
+    var S = makeScene(root, 2.2, 0.85, 520);
+    if (S) S.renderer.domElement.setAttribute('aria-label', 'Figura 3D: el cubo unidad, su imagen por la matriz A, las columnas de A y el eje de giro o el plano de simetría');
+    var mkIn = function (v, w, lab) { var x = numInput(v, w); x.step = 0.01; x.setAttribute('aria-label', lab); return x; };
+    // matriz editable
+    var box = el('div', 'an-eqs'), er = el('div', 'an-eq down'), tbl = el('div', 'd3-mat'), inp = [];
+    er.appendChild(el('span', '', 'A = '));
+    for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) { var x = mkIn(a0[i][j], '4.8em', 'A fila ' + (i + 1) + ' columna ' + (j + 1)); inp.push(x); tbl.appendChild(x); }
+    er.appendChild(tbl); box.appendChild(er);
+    // controles de generador
+    var gen = el('div', 'an-eqs'), gE = el('div', 'an-eq up'), gN = el('div', 'an-eq up'), eI = [], nI = [];
+    gE.appendChild(el('span', '', 'eje u = ('));
+    for (var k = 0; k < 3; k++) { var e = mkIn(eje0[k], '2.8em', 'eje componente ' + (k + 1)); e.step = 1; eI.push(e); gE.appendChild(e); if (k < 2) gE.appendChild(el('span', '', ', ')); }
+    gE.appendChild(el('span', '', ')'));
+    gN.appendChild(el('span', '', 'normal n = ('));
+    for (var k2 = 0; k2 < 3; k2++) { var e2 = mkIn(n0[k2], '2.8em', 'normal componente ' + (k2 + 1)); e2.step = 1; nI.push(e2); gN.appendChild(e2); if (k2 < 2) gN.appendChild(el('span', '', ', ')); }
+    gN.appendChild(el('span', '', ')'));
+    gen.appendChild(gE); gen.appendChild(gN);
+    var sl = el('div', 'an-sliders'), sT = slider(0, 360, 5, ang0), lT = el('b'), sA = slider(0, 360, 15, al0), lA = el('b'), sB = slider(0, 360, 15, be0), lB = el('b'), rT = el('label', 'an-slrow'), rA = el('label', 'an-slrow'), rB = el('label', 'an-slrow');
+    sT.setAttribute('aria-label', 'ángulo del giro'); sA.setAttribute('aria-label', 'ángulo alpha alrededor de OZ'); sB.setAttribute('aria-label', 'ángulo beta alrededor de OX');
+    [[rT, 'θ ', sT, lT], [rA, 'α (eje OZ) ', sA, lA], [rB, 'β (eje OX) ', sB, lB]].forEach(function (r) { r[0].appendChild(el('span', '', r[1])); r[0].appendChild(r[2]); r[0].appendChild(r[3]); sl.appendChild(r[0]); });
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'); text.setAttribute('aria-live', 'polite');
+    var PRE = [
+      ['Giro de 120° alrededor de (1,1,1) (P5)', 'giro', { eje: [1, 1, 1], ang: 120 }], ['Giro de 90° alrededor de OZ', 'giro', { eje: [0, 0, 1], ang: 90 }],
+      ['Simetría respecto del plano x+2y+2z=0 (P6)', 'plano', { n: [1, 2, 2] }], ['Simetría respecto del plano z=0', 'plano', { n: [0, 0, 1] }],
+      ['R_z(90°)·R_x(90°) (P7)', 'comp', { al: 90, be: 90 }],
+      ['E 5.25: giro de 45° alrededor de OY', 'libre', { m: [[0.7071, 0, 0.7071], [0, 1, 0], [-0.7071, 0, 0.7071]] }],
+      ['U Ej. 5.26 (simétrica, A²=I)', 'libre', { m: [[1 / 3, 2 / 3, 2 / 3], [2 / 3, -2 / 3, 1 / 3], [2 / 3, 1 / 3, -2 / 3]] }],
+      ['−I (simetría central)', 'libre', { m: [[-1, 0, 0], [0, -1, 0], [0, 0, -1]] }],
+      ['U Ej. 5.24: unitarias, NO ortogonal', 'libre', { m: [[0.7071, -0.7071, 0], [0, 0.7071, -0.7071], [0.7071, 0, -0.7071]] }],
+      ['Cizalla (NO ortogonal)', 'libre', { m: [[1, 1, 0], [0, 1, 0], [0, 0, 1]] }]];
+    function setM(M) { M.forEach(function (r, i2) { r.forEach(function (v, j2) { inp[3 * i2 + j2].value = rd(v); }); }); }
+    function gen2M() {
+      if (mode === 'giro') setM(rodrigues(eI.map(function (q) { return parseFloat(q.value) || 0; }), parseFloat(sT.value)));
+      else if (mode === 'plano') setM(householder(nI.map(function (q) { return parseFloat(q.value) || 0; })));
+      else if (mode === 'comp') setM(matMul3(rodrigues([0, 0, 1], parseFloat(sA.value)), rodrigues([1, 0, 0], parseFloat(sB.value))));
+    }
+    function showCtl() {
+      gE.style.display = mode === 'giro' ? '' : 'none'; gN.style.display = mode === 'plano' ? '' : 'none'; gen.style.display = (mode === 'giro' || mode === 'plano') ? '' : 'none';
+      rT.style.display = mode === 'giro' ? '' : 'none'; rA.style.display = rB.style.display = mode === 'comp' ? '' : 'none'; sl.style.display = (mode === 'giro' || mode === 'comp') ? '' : 'none';
+    }
+    var pre = btnRow(PRE.map(function (p) { return p[0]; }), function (q) {
+      var p = PRE[q]; mode = p[1];
+      if (mode === 'giro') { p[2].eje.forEach(function (v, i2) { eI[i2].value = v; }); sT.value = p[2].ang; }
+      if (mode === 'plano') p[2].n.forEach(function (v, i2) { nI[i2].value = v; });
+      if (mode === 'comp') { sA.value = p[2].al; sB.value = p[2].be; }
+      if (mode === 'libre') setM(p[2].m); else gen2M();
+      draw();
+    });
+    var modeBar = btnRow(['Giro (eje + ángulo)', 'Simetría respecto de un plano', 'Composición de dos giros', 'Matriz libre'], function (q) { mode = ['giro', 'plano', 'comp', 'libre'][q]; gen2M(); draw(); });
+    function wire(M, k, color, op) {
+      var T = S.T, pts = [], la, lo;
+      function pt(a, b) { var u = [Math.cos(a) * Math.cos(b), Math.cos(a) * Math.sin(b), Math.sin(a)], w = matVec(M, u); return new T.Vector3(k * w[0], k * w[1], k * w[2]); }
+      for (la = -60; la <= 60; la += 30) for (lo = 0; lo < 360; lo += 10) pts.push(pt(la * Math.PI / 180, lo * Math.PI / 180), pt(la * Math.PI / 180, (lo + 10) * Math.PI / 180));
+      for (lo = 0; lo < 360; lo += 30) for (la = -90; la < 90; la += 10) pts.push(pt(la * Math.PI / 180, lo * Math.PI / 180), pt((la + 10) * Math.PI / 180, lo * Math.PI / 180));
+      S.dyn.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(pts), new T.LineBasicMaterial({ color: color, transparent: true, opacity: op })));
+    }
+    function axisFromRI(R) {                         // R giro de 180°: R + I = 2uuᵗ; columna de mayor norma
+      var best = null;
+      for (var jj = 0; jj < 3; jj++) { var c2 = [R[0][jj] + (jj === 0 ? 1 : 0), R[1][jj] + (jj === 1 ? 1 : 0), R[2][jj] + (jj === 2 ? 1 : 0)]; if (!best || norm(c2) > norm(best)) best = c2; }
+      return unit3(best);
+    }
+    function draw() {
+      showCtl(); lT.textContent = nd(parseFloat(sT.value)) + '°'; lA.textContent = nd(parseFloat(sA.value)) + '°'; lB.textContent = nd(parseFloat(sB.value)) + '°';
+      var C = COL(), clip = false, dark = document.documentElement.getAttribute('data-theme') === 'dark', PUR = dark ? '#c39bd3' : '#8e44ad';
+      var A = [0, 1, 2].map(function (r) { return [0, 1, 2].map(function (c) { var v = parseFloat(inp[3 * r + c].value); if (isNaN(v)) return 0; if (Math.abs(v) > 3) clip = true; return Math.max(-3, Math.min(3, v)); }); });
+      var At = transp3(A), AtA = matMul3(At, A), eps = 5e-3, err = 0, i2, j2;
+      for (i2 = 0; i2 < 3; i2++) for (j2 = 0; j2 < 3; j2++) err = Math.max(err, Math.abs(AtA[i2][j2] - (i2 === j2 ? 1 : 0)));
+      var orth = err < eps, det = det3(At[0], At[1], At[2]), tr = A[0][0] + A[1][1] + A[2][2];
+      var dS = orth ? nd(Math.round(det)) : nd(det), cols = At, m = 0;
+      for (var q = 0; q < 8; q++) { var v = [0, 0, 0]; for (var t = 0; t < 3; t++) if (q >> t & 1) v = add(v, cols[t]); m = Math.max(m, norm(v)); }
+      var K = m > 1.9 ? 1.9 / m : 1, kind = '', axis = null, planeN = null, isPlane = false, h = '';
+      var vt = function (u) { return vtxt3(u.map(function (v2) { return Math.round(v2 * 1000) / 1000; })); };
+      h += '<b>AᵗA</b> = (' + AtA.map(function (r) { return r.map(nd).join(' '); }).join('; ') + ')' + (orth ? ' = I: columnas ortonormales ⇒ <b>A es ortogonal</b> (tolerancia por redondeo)' : ' ≠ I: <b>A NO es ortogonal</b> (algunas columnas no son unitarias o no son perpendiculares)') + '. det A = <b>' + dS + '</b>, tr A = <b>' + nd(tr) + '</b>.<br>';
+      if (orth) {
+        var R = det > 0 ? A : A.map(function (r) { return r.map(function (v2) { return -v2; }); }), trR = R[0][0] + R[1][1] + R[2][2];
+        var cphi = Math.max(-1, Math.min(1, (trR - 1) / 2)), phi = Math.acos(cphi) * 180 / Math.PI, half = Math.abs(trR + 1) < eps;   // giro de 180° (tr R = −1)
+        var w = [R[2][1] - R[1][2], R[0][2] - R[2][0], R[1][0] - R[0][1]], ident = Math.abs(trR - 3) < eps;
+        if (!ident) { if (half || norm(w) <= 1e-2) axis = phi > 90 ? axisFromRI(R) : null; else axis = unit3(w); }
+        if (det > 0) {
+          if (ident) { kind = 'identidad'; h += 'det = +1 y tr A = 3 ⇒ <b>A = I</b> (giro de 0°).'; }
+          else if (half) { kind = 'giro de 180° (simetría respecto de una recta)'; h += 'det = +1 y tr A = −1 ⇒ cosθ = −1: <b>giro de 180°</b> = <b>simetría respecto de la recta-eje</b> (simetría axial, no respecto de un plano). Eje = vector propio de valor propio 1 = <b>u = ' + vt(axis) + '</b> (línea morada: queda fija; todo lo perpendicular a ella cambia de signo). A² = I y A es simétrica.'; }
+          else {
+            kind = 'giro de ' + na(phi) + '°'; h += 'det = +1 ⇒ <b>giro</b>. Eje = vector propio de valor propio 1 = <b>u = ' + vt(axis) + '</b> (línea morada: queda fija). Ángulo por la traza: tr A = 1 + 2cosθ ⇒ cosθ = ' + nd(cphi) + ' ⇒ <b>θ = ' + na(phi) + '°</b> (sentido antihorario mirando desde el extremo de u). Con θ entre 0° y 180° y u orientado así; un giro de θ &gt; 180° alrededor de e equivale a girar 360° − θ alrededor de −e.';
+          }
+        } else if (Math.abs(tr + 3) < eps) { kind = 'simetría central −I'; h += 'det = −1 y tr A = −3 ⇒ <b>A = −I</b>: simetría respecto del origen (valor propio −1 triple).'; }
+        else if (Math.abs(tr - 1) < eps) {
+          axis = axisFromRI(R); kind = 'simetría respecto de un plano'; planeN = axis; isPlane = true;
+          h += 'det = −1 y tr A = 1 ⇒ <b>simetría respecto de un plano</b>: valores propios 1, 1, −1. La normal <b>n = ' + vt(axis) + '</b> (valor propio −1, línea morada) cambia de signo; los vectores del plano (cuadrilátero morado, n•x = 0) quedan fijos.';
+        } else {
+          var psi = Math.acos(Math.max(-1, Math.min(1, (tr + 1) / 2))) * 180 / Math.PI; planeN = axis;
+          kind = 'simetría rotatoria (giro de ' + na(psi) + '° + simetría)';
+          h += 'det = −1 y tr A = ' + nd(tr) + ' ≠ 1, −3 ⇒ <b>no</b> es una simetría respecto de un plano: es una <b>simetría rotatoria</b> (giro de ' + na(psi) + '° alrededor de la normal <b>n = ' + vt(axis) + '</b> compuesto con la simetría respecto del plano ⊥ n; n en morado). Valor propio real −1 con vector propio n; tr A = 2cosψ − 1.';
+        }
+        var xv = [1, 2, 3], Ax = matVec(A, xv);
+        h += '<br>Control con x = (1, 2, 3): ‖x‖ = ' + nd(norm(xv)) + ' = ‖Ax‖ = ' + nd(norm(Ax)) + ' (no cambia la longitud). Para una matriz cuadrada también AAᵗ = I (las <b>filas</b> son ortonormales) y A⁻¹ = Aᵗ.';
+      } else {
+        h += 'El cubo imagen no es un cubo (ver figura) y la esfera se deforma en un elipsoide. Una matriz así no es de giro ni de simetría.';
+      }
+      if (K < 1) h += ' <i>(Dibujo a escala ' + nd(K) + '.)</i>';
+      if (clip) h += ' <i>(Las entradas de A se recortan al intervalo [−3, 3].)</i>';
+      if (S) {
+        S.clearDyn();
+        S.solid([1, 0, 0], [0, 1, 0], [0, 0, 1], C.m, 0.14);
+        wire([[1, 0, 0], [0, 1, 0], [0, 0, 1]], 1, C.m, 0.5); wire(A, K, C.a, 0.85);
+        S.solid(mul3(K, cols[0]), mul3(K, cols[1]), mul3(K, cols[2]), C.a, 0.22);
+        [['a1', '#d9434a'], ['a2', '#2e9e5b'], ['a3', '#2a6fd3']].forEach(function (p, idx) { S.arrow(mul3(K, cols[idx]), p[1], p[0]); });
+        if (axis) S.line([0, 0, 0], axis, PUR, 0.05);
+        if (planeN) S.plane(planeN, 0, PUR, isPlane ? 0.2 : 0.1);
+        S.render();
+      }
+      html(text, h); res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = orth ? 'Ortogonal, det = ' + dS + ': ' + kind : 'No ortogonal'; res.appendChild(fin);
+    }
+    inp.forEach(function (q) { q.addEventListener('input', function () { mode = 'libre'; draw(); }); });
+    eI.concat(nI, [sT, sA, sB]).forEach(function (q) { q.addEventListener('input', function () { gen2M(); draw(); }); });
+    root.appendChild(modeBar); root.appendChild(gen); root.appendChild(sl); root.appendChild(box); if (S) root.appendChild(S.wrap); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    if (mode !== 'libre') gen2M();
+    if (S) S.onTheme = draw; draw();
+  }
+
+
+  var REG = [['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
   function init() {
     var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n, false]); }); });
     if (!todo.length) return;
