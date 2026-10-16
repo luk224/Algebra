@@ -18,6 +18,7 @@
    .anim-gram    data-g="1,0,1" data-u="2,1" data-v="-1,2"   (producto escalar de R2 con matriz de Gram G=(a b; b c) editable [data-g = a,b,c; simetrica por construccion] y dos vectores u, v con sliders (coordenadas en la base de G): u.v = u^t G v, normas, coseno, angulo, ortogonalidad, distancia; dibujo fiel con Cholesky (los angulos que se ven son los de el producto); avisa si G no es definida positiva (Sylvester) con un vector testigo x.x<=0; presets: estandar, U Ej. 5.5, propios, no definida positiva, semidefinida)
    .anim-ortog   data-a="1,0,0,1" data-x="2,1" data-y="0.5,1.5"   (matriz A 2x2 [a b; c d] editable, deslizador de angulo theta con botones Giro R_theta / Simetria S_theta y presets: muestra A^tA, si es ortogonal (tolerancia 0,005), det, el cuadrado unidad y su imagen, dos vectores x, y con sliders y sus imagenes Ax, Ay (se conservan normas, producto escalar y angulo solo si A es ortogonal) y el tipo: giro de angulo theta o simetria respecto de la recta de angulo theta/2; si no es ortogonal indica que condicion de las columnas falla)
    .anim-simet   data-a="3,1,3"   (matriz 2x2 de filas (a b; d c) con a, b, c editables y casilla "simetrica" [d = b]; deslizador de angulo phi para un punto x de la circunferencia unidad: x frente a Ax, la elipse imagen de la circunferencia unidad y presets. Si es simetrica: discriminante (a-c)^2+4b^2 >= 0 (valores propios siempre reales), valores propios l1 >= l2, ejes principales u1, u2 perpendiculares (rectas punteadas) con los semiejes |l1|, |l2| de la elipse, angulo theta = 1/2 atan2(2b, a-c) de la matriz de paso P (giro de det 1), P^t A P = diag(l1, l2) calculado numericamente y aviso cuando x esta sobre un eje principal. Si se desmarca la casilla: valores y vectores propios de una A cualquiera, angulo entre los ejes propios (distinto de 90 grados) y por que no hay P ortogonal; presets: matrices del tema 5.3, singular, diagonal, valor doble, contrastes no simetricos)
+   .anim-bilineal data-a="1,1,1,2" data-p="-1,-1,1,2" data-x="2,1" data-y="1,3"   (forma bilineal 2x2: A editable [matriz de f en la base B], P editable [columnas = vectores de B' en coordenadas de B], x e y con sliders enteros; stepper en 5 pasos: A·y; x^t(Ay) = suma a_ij x_i y_j con aviso de que el orden importa [f(y,x)]; base nueva B' con su rejilla; A' = P^t A P con control a'_12 = f(v1,v2); comprobacion x'^t A' y' = f(x,y) con x' = P^-1 x, que se conserva [rango, simetria, signo de det; det A' = det A (det P)^2] y la semejanza P^-1 A P por contraste; avisa si P es singular; 6 presets: U Ej. 6.7 / Sept. 2018, Feb. 2026, Feb. 2025 B, no simetrica, antisimetrica, P singular; break-inside:avoid en impresion)
    .anim-minimos data-p="2,3;4,2;5,1;7,0.5"   (recta de minimos cuadrados y = m x + n para 2 a 8 puntos editables [filas (x_i, y_i); botones +/- punto]: sistema AX=B con una fila (x_i,1) por dato, sumas, ecuaciones normales y su determinante, solucion por Cramer, residuos verticales (segmentos naranjas) con control de que son ortogonales a las columnas (sum e_i = 0, sum x_i e_i = 0), error ||AX-B||, pronostico en un x editable y recta de prueba con sliders dm, dn (discontinua) cuyo error crece por Pitagoras ||AX'-B||^2 = ||AX-B||^2 + ||A(X'-X)||^2; si todos los x coinciden AtA es singular y avisa de solucion no unica; 7 presets: U Ej. 5.41, E 5.40, Lay 6.6 Ej. 1, P2, E 5.44 D, alineados, misma x; break-inside:avoid en impresion)
 */
 (function () {
@@ -1643,7 +1644,98 @@
   }
 
 
-  var REG = [['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+
+  /* =====================================================================
+     Formas bilineales 2x2: f(x,y) = x^t A y y cambio de base A' = P^t A P (.anim-bilineal)
+     ===================================================================== */
+  function buildBilineal(root) {
+    var a0 = (root.getAttribute('data-a') || '1,1,1,2').split(',').map(Number), p0 = (root.getAttribute('data-p') || '1,0,0,1').split(',').map(Number);
+    var x0 = (root.getAttribute('data-x') || '2,1').split(',').map(Number), y0 = (root.getAttribute('data-y') || '1,3').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var body = el('div', 'an-body');
+    var P = plane(body, 340, 340, 5);
+    P.svg.setAttribute('aria-label', 'Plano con los vectores x e y, la base canónica B y la rejilla de la base nueva B′');
+    var res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); ctrl.appendChild(r); }
+    var ia = a0.map(function (x, k) { var i = numInput(x, 1, '3.2em'); i.setAttribute('aria-label', 'A entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); return i; });
+    var ip = p0.map(function (x, k) { var i = numInput(x, 1, '3.2em'); i.setAttribute('aria-label', 'P entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); return i; });
+    var eq = el('div', 'an-eqs');
+    function mrow(lbl, ins, note) { var r = el('div', 'an-eq down'); r.appendChild(el('span', '', lbl + ' = ( ')); r.appendChild(ins[0]); r.appendChild(ins[1]); r.appendChild(el('span', '', ' ; ')); r.appendChild(ins[2]); r.appendChild(ins[3]); r.appendChild(el('span', '', ' )' + note)); eq.appendChild(r); }
+    mrow('A', ia, '   matriz de f en la base B'); mrow('P', ip, '   columnas = vectores de B′ escritos en B');
+    var sl = [x0[0], x0[1], y0[0], y0[1]].map(function (v) { return slider(-4, 4, 1, v); }), lb = sl.map(function () { return el('b'); });
+    ['x₁', 'x₂', 'y₁', 'y₂'].forEach(function (t, k) { sl[k].setAttribute('aria-label', 'coordenada ' + t); row(t + ' ', sl[k], lb[k]); });
+    var pre = btnRow(['U Ej. 6.7 / Sept. 2018', 'Feb. 2026', 'Feb. 2025 B (P = I)', 'No simétrica', 'Antisimétrica', 'P singular'], function (i) {
+      var p = [[1, 1, 1, 2, -1, -1, 1, 2, 2, 1, 1, 3], [1, 1, 1, 1, 1, 1, 1, -1, 1, 2, 2, 1], [5, -9, 2, 1, 1, 0, 0, 1, 1, 1, 2, 3], [1, 2, 0, -1, 1, 1, 1, 2, 2, -1, 1, 3], [0, 1, -1, 0, 1, 1, 0, 1, 2, 1, 1, 3], [1, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 3]][i];
+      ia.forEach(function (q, j) { q.value = p[j]; }); ip.forEach(function (q, j) { q.value = p[4 + j]; }); sl.forEach(function (q, j) { q.value = p[8 + j]; }); recalc(true);
+    });
+    function mm(x, y) { return [add(mul(x[0], y[0]), mul(x[1], y[2])), add(mul(x[0], y[1]), mul(x[1], y[3])), add(mul(x[2], y[0]), mul(x[3], y[2])), add(mul(x[2], y[1]), mul(x[3], y[3]))]; }
+    function tp(m) { return [m[0], m[2], m[1], m[3]]; }
+    function mv(m, v) { return [add(mul(m[0], v[0]), mul(m[1], v[1])), add(mul(m[2], v[0]), mul(m[3], v[1]))]; }
+    function dot(u, v) { return add(mul(u[0], v[0]), mul(u[1], v[1])); }
+    function dt(m) { return sub(mul(m[0], m[3]), mul(m[1], m[2])); }
+    function inv(m) { var d = dt(m); return [div(m[3], d), div(neg(m[1]), d), div(neg(m[2]), d), div(m[0], d)]; }
+    function mt(m) { return '(' + ftxt(m[0]) + ' ' + ftxt(m[1]) + ' ; ' + ftxt(m[2]) + ' ' + ftxt(m[3]) + ')'; }
+    function vt(v) { return '(' + ftxt(v[0]) + ', ' + ftxt(v[1]) + ')'; }
+    function rd(i) { var f = parseFloat(i.value), r = Math.round(f); if (isNaN(f)) return 0; if (f !== r) i.value = r; return r; }
+    var cur = null;
+    function model() {
+      var A = ia.map(function (i) { return F(rd(i), 1); }), Pm = ip.map(function (i) { return F(rd(i), 1); });
+      var X = [F(parseInt(sl[0].value, 10), 1), F(parseInt(sl[1].value, 10), 1)], Y = [F(parseInt(sl[2].value, 10), 1), F(parseInt(sl[3].value, 10), 1)];
+      return { A: A, P: Pm, x: X, y: Y, dp: dt(Pm), ok: !isz(dt(Pm)) };
+    }
+    function same(u, v) { return u.n === v.n && u.d === v.d; }
+    function render(s, text) {
+      var M = cur, A = M.A, Pm = M.P, X = M.x, Y = M.y; P.clear(); res.textContent = '';
+      lb.forEach(function (l, k) { l.textContent = String([X[0], X[1], Y[0], Y[1]][k].n).replace('-', MINUS); });
+      var Ay = mv(A, Y), f = dot(X, Ay), Ax = mv(A, X), fyx = dot(Y, Ax);
+      if (M.ok && s >= 3) {
+        var u = [Pm[0].n, Pm[2].n], w = [Pm[1].n, Pm[3].n];
+        for (var k = -14; k <= 14; k++) {
+          [[k * u[0], k * u[1], w[0], w[1]], [k * w[0], k * w[1], u[0], u[1]]].forEach(function (q) {
+            P.layer.appendChild(sv('line', { x1: P.X(q[0] - 14 * q[2]), y1: P.Y(q[1] - 14 * q[3]), x2: P.X(q[0] + 14 * q[2]), y2: P.Y(q[1] + 14 * q[3]), stroke: '#2e9e5b', 'stroke-width': k === 0 ? 1.2 : 0.6, 'stroke-dasharray': '4 3', opacity: k === 0 ? 0.7 : 0.35 }));
+          });
+        }
+      }
+      arrow(P, 0, 0, 1, 0, 'gr', 'e₁'); arrow(P, 0, 0, 0, 1, 'gr', 'e₂');
+      arrow(P, 0, 0, X[0].n, X[1].n, 'down', 'x'); arrow(P, 0, 0, Y[0].n, Y[1].n, 'up', 'y');
+      if (s >= 3) { arrow(P, 0, 0, Pm[0].n, Pm[2].n, 'w', 'v₁'); arrow(P, 0, 0, Pm[1].n, Pm[3].n, 'w', 'v₂'); }
+      var h = '', sym = same(A[1], A[2]);
+      if (s === 0) h = '<b>Forma bilineal</b> = «producto» f(x, y) que da un <b>número</b> y es lineal en x y en y por separado. Fijada la base B, queda determinada por su matriz A = (aᵢⱼ), aᵢⱼ = f(eᵢ, eⱼ): <b>f(x, y) = xᵗAy</b> = Σ aᵢⱼ xᵢ yⱼ (U Def. 6.3). Aquí A = ' + mt(A) + ', x = ' + vt(X) + ' (azul), y = ' + vt(Y) + ' (naranja), ambos en coordenadas de B. Pasos: (1) A·y; (2) xᵗ(Ay); (3) base nueva B′; (4) A′ = PᵗAP; (5) comprobar que f no cambia (si P no es regular, se para en el paso 3).';
+      else if (s === 1) h = '<b>1. Primero A·y</b> (la matriz actúa sobre el segundo vector): Ay = (' + ftxt(A[0]) + '·' + fpar(Y[0]) + ' + ' + fpar(A[1]) + '·' + fpar(Y[1]) + ',  ' + ftxt(A[2]) + '·' + fpar(Y[0]) + ' + ' + fpar(A[3]) + '·' + fpar(Y[1]) + ') = <b>' + vt(Ay) + '</b>.';
+      else if (s === 2) {
+        var t = [mul(mul(A[0], X[0]), Y[0]), mul(mul(A[1], X[0]), Y[1]), mul(mul(A[2], X[1]), Y[0]), mul(mul(A[3], X[1]), Y[1])];
+        h = '<b>2. Después xᵗ(Ay):</b> f(x, y) = ' + fpar(X[0]) + '·' + fpar(Ay[0]) + ' + ' + fpar(X[1]) + '·' + fpar(Ay[1]) + ' = <b>' + ftxt(f) + '</b>. Es lo mismo que sumar los cuatro términos aᵢⱼxᵢyⱼ: ' + t.map(fpar).join(' + ') + ' = ' + ftxt(f) + '. ' +
+          '<b>El orden importa:</b> f(y, x) = yᵗAx = <b>' + ftxt(fyx) + '</b>' + (same(f, fyx) ? (sym ? ' (iguales porque A es simétrica: a₁₂ = a₂₁)' : ' (iguales aquí por casualidad; A no es simétrica)') : ' ≠ f(x, y), porque A no es simétrica (a₁₂ ≠ a₂₁)') + '.';
+      } else if (!M.ok) {
+        h = '<b>3. Con estas columnas det P = 0:</b> v₁ y v₂ (flechas verdes) están alineados, no son una base de ℝ² y no hay matriz de paso. P tiene que ser <b>regular</b> (Teor. 6.1, Def. 6.4). Cambia P.';
+      } else if (s === 3) {
+        h = '<b>3. Base nueva B′ = {v₁, v₂}:</b> v₁ = ' + vt([Pm[0], Pm[2]]) + ', v₂ = ' + vt([Pm[1], Pm[3]]) + ' (en coordenadas de B), las <b>columnas</b> de P = ' + mt(Pm) + '. det P = ' + ftxt(M.dp) + ' ≠ 0: es base. P es la matriz de paso de B′ a B: X = P·X′ (U Teor. 6.1, p.250). La rejilla verde es la de B′.';
+      } else if (s === 4) {
+        var AP = mm(A, Pm), Ap = mm(tp(Pm), AP), a12 = dot([Pm[0], Pm[2]], mv(A, [Pm[1], Pm[3]]));
+        h = '<b>4. A′ = PᵗAP</b> (¡no P⁻¹AP!). Primero AP = ' + mt(AP) + ' (la columna j es A·vⱼ); luego A′ = Pᵗ(AP) = <b>' + mt(Ap) + '</b>. Control por definición: a′₁₂ = f(v₁, v₂) = v₁ᵗ(Av₂) = ' + ftxt(a12) + (same(a12, Ap[1]) ? ' ✓' : ' ✗') + '.';
+      } else {
+        var Ap5 = mm(tp(Pm), mm(A, Pm)), Pi = inv(Pm), x2 = mv(Pi, X), y2 = mv(Pi, Y), f2 = dot(x2, mv(Ap5, y2)), d1 = dt(A), d2 = dt(Ap5), sem = mm(Pi, mm(A, Pm));
+        h = '<b>5. El valor de f no depende de la base.</b> Coordenadas en B′: x′ = P⁻¹x = ' + vt(x2) + ', y′ = P⁻¹y = ' + vt(y2) + '. Entonces x′ᵗA′y′ = <b>' + ftxt(f2) + '</b> ' + (same(f2, f) ? '= f(x, y) ✓.' : '≠ f(x, y) ✗.') +
+          ' <i>Qué cambia y qué no (congruencia):</i> det A′ = det A·(det P)² = ' + fpar(d1) + '·' + ftxt(mul(M.dp, M.dp)) + ' = ' + ftxt(d2) + (same(mul(M.dp, M.dp), F(1)) ? ' (aquí se conserva porque (det P)² = 1; en general solo se conserva el signo)' : ' (solo se conserva el signo)') + '; el rango se conserva; ' + (sym ? 'A simétrica ⇒ A′ simétrica; ' : '') +
+          (same(add(A[0], A[3]), add(Ap5[0], Ap5[3])) ? 'la traza aquí coincide (' + ftxt(add(A[0], A[3])) + '), pero en general no se conserva. ' : 'la traza no se conserva (' + ftxt(add(A[0], A[3])) + ' → ' + ftxt(add(Ap5[0], Ap5[3])) + '). ') +
+          (sem.every(function (q, i) { return same(q, Ap5[i]); }) ? 'Aquí la semejanza P⁻¹AP = PᵗAP <b>coincide</b> con la congruencia porque P es ortogonal (Pᵗ = P⁻¹).' : 'Para contrastar, la <i>semejanza</i> daría P⁻¹AP = ' + mt(sem) + ' (otra matriz: no es la de la forma bilineal).');
+      }
+      html(text, h);
+      if (s === st.N) { var fin = el('div', 'sar-final'); fin.textContent = M.ok ? 'f(x, y) = ' + ftxt(f) + '  ·  A′ = PᵗAP = ' + mt(mm(tp(Pm), mm(A, Pm))) : 'P no es regular: no hay cambio de base'; res.appendChild(fin); }
+    }
+    var st = stepper(root, 5, render, null, 3400);
+    function recalc(jump) { cur = model(); st.setN(cur.ok ? 5 : 3); st.go(jump ? st.N : Math.min(st.step, st.N)); }
+    ia.concat(ip).forEach(function (q) { q.addEventListener('input', function () { recalc(true); }); });
+    var tmr = null;
+    sl.forEach(function (q) { q.addEventListener('input', function () { cur = model(); clearTimeout(tmr); tmr = setTimeout(function () { st.text.setAttribute('aria-live', 'off'); st.go(st.step); setTimeout(function () { st.text.setAttribute('aria-live', 'polite'); }, 50); }, 200); }); });
+    body.appendChild(el('p', 'sar-text an-title', 'Edita la matriz A de la forma bilineal, la matriz de paso P (enteros) y los vectores x, y (deslizadores), o elige un caso. Recorre los pasos: calcular f(x, y) = xᵗAy, cambiar de base con A′ = PᵗAP y comprobar que f vale lo mismo en las dos bases.'));
+    body.appendChild(eq); body.appendChild(P.svg); body.appendChild(ctrl); body.appendChild(pre);
+    root.appendChild(body); st.mount(root, res);
+    cur = model(); st.setN(cur.ok ? 5 : 3); st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(st.N); });
+  }
+
+  var REG = [['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

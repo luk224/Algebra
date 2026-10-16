@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 6.1 Formas bilineales</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 6 · Formas bilineales y cuadráticas · Tema 6.1</div>
+  <h1>Formas bilineales</h1>
+  <p>Una <b>forma bilineal</b> es una «máquina» que recibe <b>dos</b> vectores y devuelve <b>un número</b>, y es lineal en cada entrada por separado: el producto escalar es el ejemplo que ya conoces. Aprenderás a reconocerlas, a guardarlas en una <b>matriz</b> $A$ ($f(x,y)=x^tAy$), a ver cómo cambia esa matriz al cambiar de base ($A'=P^tAP$, <b>congruencia</b>) y en qué se distingue de la semejanza del tema 4. Es la base de las formas cuadráticas, las cónicas y las cuádricas de los temas siguientes.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §6.1 (pp. 243-251)</span><span>Ejercicios: E Ej. 6.1–6.8 (pp. 202-208)</span><span>Lay §7.2 (p. 402, solo el cambio de variable)</span><span>⏱ ~4–5 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §6.1.1 Elementos didácticos, p. 243">U p.243</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>Un vector se mide con <b>un</b> número si le aplicas una función lineal (tema 3). Una forma bilineal es el paso siguiente: toma <b>dos</b> vectores a la vez y da un único número, de modo que si congelas uno de ellos, la función del otro es lineal. Para saber qué hace con <b>cualquier</b> par basta saber qué hace con los pares de vectores de una base, $f(e_i,e_j)$: esos $n^2$ números forman una matriz $A$, y todo lo demás sale por multiplicar matrices, $f(x,y)=x^tAy$. Si cambias de base, la tabla de números cambia (como cambian las coordenadas de un vector) pero la <b>función</b> es la misma, y la nueva matriz es $A'=P^tAP$.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, p. 245-246: basta conocer los valores f(eᵢ, eⱼ) = aᵢⱼ por la linealidad en ambas variables">U p.245-246</span>
+  <span class="src" data-l="P" data-ref="Redacción propia de la idea del tema">propio</span>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del <a href="tema_1_2_algebra_matricial.html">tema 1.2</a>: producto de matrices, traspuesta y $(AB)^t=B^tA^t$ (se usa en la demostración del teorema principal), y del <a href="tema_1_3_determinantes.html">1.3</a>: $\det(AB)=\det A\det B$, $\det(A^t)=\det A$.</li>
+  <li>Del <a href="tema_2_3_bases_dimension_coordenadas.html">tema 2.3</a>: coordenadas de un vector en una base ($x=x_1e_1+\dots+x_ne_n$) y de <a href="tema_3_5_inversa_cambios_base.html">3.5</a>: matriz de paso entre dos bases y su convenio.</li>
+  <li>Del <a href="tema_3_1_conceptos_propiedades.html">tema 3.1</a>: qué es una aplicación lineal (aquí lo exigimos «por variables»).</li>
+  <li>Del <a href="tema_4_1_relaciones_equivalencia.html#s4">tema 4.1</a>: <b>congruentes</b> ($B=P^tAP$, Def. 4.4) y <b>semejantes</b> ($B=P^{-1}AP$, Def. 4.5) y la idea de «invariante».</li>
+  <li>Del <a href="tema_5_1_producto_escalar.html#s1">tema 5.1</a> (útil, no imprescindible): un producto escalar es una forma bilineal simétrica y definida positiva, y su matriz de Gram cambia justo como aquí: <a href="tema_5_1_producto_escalar.html#cambio-base">$G'=Q^tGQ$</a>.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde</th></tr>
+  <tr><td>1 Aplicación bilineal y forma bilineal</td><td>Linealidad por variables, cómo reconocerla</td><td>U p.244-245 · E 6.1-6.3</td></tr>
+  <tr><td>2 Expresión analítica y matricial</td><td>$a_{ij}=f(e_i,e_j)$, $f(x,y)=x^tAy$, propiedades</td><td>U p.245-248 · E 6.5-6.7</td></tr>
+  <tr><td>3 Cambio de base y congruencia</td><td>$A'=P^tAP$ (Teor. 6.1), convenio de $P$, <b>animación 2D</b></td><td>U p.248-251 · E 6.8</td></tr>
+  <tr><td>4 Congruencia frente a semejanza</td><td>Qué se conserva y qué no, <b>animación 2D</b></td><td>U p.147-148, 153</td></tr>
+  <tr><td>5 Tabla Lay ↔ U</td><td>Vocabulario y alcance</td><td>L §7.2</td></tr>
+  <tr><td>6 Ejercicios del libro</td><td>E 6.1–6.8 (6.4 y 6.7 son frontera con 6.2) + 5 ejemplos propios</td><td>E pp.202-208</td></tr>
+  <tr><td>7 Ejemplos de examen</td><td>Feb. 2025 (B), Feb. 2026 (A), Sept. 2018 (A), Feb. 2022 (A1)</td><td>X</td></tr>
+  <tr><td>8 Chuleta</td><td>Fórmulas con hipótesis, lista de comprobación, errores frecuentes</td><td>—</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p><b>(a)</b> Decidir si una aplicación es bilineal / forma bilineal (E 6.1-6.3). <b>(b)</b> Pasar de la expresión analítica a la matriz y al revés, y <b>evaluar</b> $f(x,y)$ (E 6.5-6.7; X Feb. 2025). <b>(c)</b> Hallar la matriz en <b>otra base</b> con $P^tAP$ (E 6.8; X Feb. 2026) o hallar la matriz de paso conocidas $A$ y $A'$ (X Sept. 2018). <b>(d)</b> Preguntas de teoría sobre congruencia: qué invariantes tiene (X Sept. 2023, Feb. 2022). Tres de los 24 exámenes de 2017-2026 tienen un ejercicio propio de este tema (siempre la pregunta 6 de cuestiones) y otros dos lo tocan por la congruencia; es un tema corto, de cálculo mecánico si te fijas en el convenio de $P$.</p>
+  <span class="src" data-l="P" data-ref="Clasificación propia a partir de E §6.1 y los exámenes 2017-2026">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Convenios y notación del tema (fíjalos desde ya)</span>
+  <ul>
+    <li><b>«Aplicación bilineal» no es lo mismo que «forma bilineal».</b> Aplicación bilineal: $f:E\times F\to V$ (cualquier espacios, Def. 6.1). Forma bilineal: $f:E\times E\to\mathbb R$ (Def. 6.2). Toda forma es aplicación bilineal, pero no al revés.</li>
+    <li><b>Fila = primer vector, columna = segundo.</b> $a_{ij}=f(e_i,e_j)$: la fila $i$ la da el primer argumento, la columna $j$ el segundo. Por eso $f(x,y)=x^tAy$ y <b>no</b> $y^tAx$ (si $A$ no es simétrica, son distintos).</li>
+    <li><b>La matriz de paso $P$ de $B'$ a $B$</b> tiene por <b>columnas</b> los vectores de $B'$ escritos en coordenadas de $B$, y cumple $X=PX'$ (U Teor. 6.1, p.250). Con ella, $A'=P^tAP$. La solución oficial de Feb. 2026 la llama «de $B$ a $B'$»: usa el nombre de U.</li>
+    <li><b>$X,Y$ (mayúsculas)</b> son las matrices columna de coordenadas de $x,y$; $x,y$ son los vectores. En la base canónica coinciden como números.</li>
+    <li><b>Erratas de U:</b> el Ejemplo 6.2 (p.244) dice «definida en el <i>Ejercicio</i> 6.1» (es el <i>Ejemplo</i> 6.1) y el Ejemplo 6.8 (p.250) dice «del <i>Ejercicio</i> 6.5 / 6.6» (son los <i>Ejemplos</i> 6.5 y 6.6).</li>
+    <li>U p.246 dice que el grado del polinomio de la expresión analítica «depende de la dimensión de $E$»: es siempre <b>2</b> (cada monomio $a_{ij}x_iy_j$ tiene un $x$ y un $y$), sea cual sea $\dim E$; lo que depende de $\dim E$ es el número de variables y de términos.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §6.1, Def. 6.1-6.3 p. 244-246, Teor. 6.1 p. 249-250; erratas en p. 244 y p. 250">U p.244-250</span>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Aplicación bilineal y forma bilineal <span class="src" data-l="U" data-ref="U §6.1.1, Definiciones 6.1-6.2 y Ejemplos 6.1-6.3, p. 244-245">U p.244-245</span></h2>
+
+<div class="box intu"><span class="h">Idea: lineal en cada entrada, por separado</span>
+  <p>Piensa en el área de un rectángulo, $\text{ancho}\times\text{alto}$. Si duplicas el ancho (el alto fijo), el área se duplica; si sumas dos anchos, las áreas se suman. Lo mismo con el alto. Es «lineal en cada variable». Pero <b>no</b> es lineal en el par: si duplicas ancho <i>y</i> alto, el área se multiplica por $4$, no por $2$. Eso es una función bilineal: <b>$f(\lambda x,\lambda y)=\lambda^2f(x,y)$</b>, no $\lambda f(x,y)$. Otros ejemplos: el producto escalar $u\cdot v$ y el determinante $2\times2$ de dos vectores $\det(x,y)=x_1y_2-x_2y_1$ (área con signo del paralelogramo que forman).</p>
+  <svg class="fig" viewBox="0 0 330 120" role="img" aria-label="Esquema: dos vectores x e y entran en la máquina f y sale un número real; f es lineal en x con y fijo y lineal en y con x fijo">
+    <line class="a" x1="62" y1="30" x2="128" y2="52"></line>
+    <line class="b" x1="62" y1="92" x2="128" y2="70"></line>
+    <text x="40" y="34" text-anchor="middle" class="lg">x</text>
+    <text x="40" y="96" text-anchor="middle" class="lg">y</text>
+    <rect class="pl1" x="130" y="34" width="80" height="52" rx="9"></rect>
+    <text x="170" y="68" text-anchor="middle" class="lg bd">f</text>
+    <line class="ax" x1="212" y1="60" x2="262" y2="60"></line>
+    <polygon class="pt" points="270,60 259,55 259,65"></polygon>
+    <text x="300" y="65" text-anchor="middle" class="lg">número</text>
+    <text class="sm" x="170" y="108" text-anchor="middle">lineal en x (con y fijo) y lineal en y (con x fijo)</text>
+  </svg>
+  <span class="src" data-l="P" data-ref="Analogía propia del área y esquema propio; el determinante 2×2 como forma bilineal es ejemplo propio (ver ejemplo propio 1)">propio</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.1 — aplicación bilineal</span>
+  <p>Sean $E,F,V$ tres espacios vectoriales. Una aplicación $f:E\times F\to V$ es <b>bilineal</b> si es lineal en cada variable:</p>
+  <table>
+    <tr><th>Lineal en la 1.ª variable</th><th>Lineal en la 2.ª variable</th></tr>
+    <tr><td>$f(x+x',y)=f(x,y)+f(x',y)$</td><td>$f(x,y+y')=f(x,y)+f(x,y')$</td></tr>
+    <tr><td>$f(\lambda x,y)=\lambda f(x,y)$</td><td>$f(x,\lambda y)=\lambda f(x,y)$</td></tr>
+  </table>
+  <p>para todo $x,x'\in E$, $y,y'\in F$, $\lambda\in\mathbb R$. Dicho de otro modo: si fijas $y$, la aplicación $x\mapsto f(x,y)$ es lineal; si fijas $x$, $y\mapsto f(x,y)$ es lineal. Esas dos aplicaciones lineales (las «asociadas», que U llama $f_1$ y $f_2$) son el método práctico para comprobar la definición: con $a\in E$ fijo, $f_1(y)=f(a,y)$; con $b\in F$ fijo, $f_2(x)=f(x,b)$; $f$ es bilineal si y solo si todas las $f_1$ y todas las $f_2$ son lineales (tema 3.1).</p>
+  <span class="src" data-l="U" data-ref="U §6.1.1, Definición 6.1, p. 244; objetivos de la sección, p. 243">U p.243-244</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, introducción de §6.1, p. 201 (aplicaciones lineales asociadas)">E p.201</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.2 — forma bilineal</span>
+  <p>Una <b>forma bilineal</b> es una aplicación bilineal $f:E\times E\to\mathbb R$: los dos factores son el <b>mismo</b> espacio $E$ y el resultado es un <b>número real</b>.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.1, Definición 6.2, p. 245">U p.245</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 6.1-6.3 de U — bilineal, pero no forma bilineal</span>
+  <p>$f:\mathbb R^2\times\mathbb R^3\to\mathbb R$, $f(x,y)=x_1y_2+x_2y_3$ con $x=(x_1,x_2)$, $y=(y_1,y_2,y_3)$.</p>
+  <p><b>Método de U 1: fijar una variable.</b> Con $a=(2,-1)\in\mathbb R^2$ fijo, $f_1(y)=f(a,y)=2y_2-y_3$ es lineal ($\mathbb R^3	o\mathbb R$: suma de múltiplos de coordenadas). Con $b=(b_1,b_2,b_3)$ fijo, $f_2(x)=x_1b_2+x_2b_3$ es lineal ($\mathbb R^2	o\mathbb R$). Como valen para <b>cualquier</b> $a$ y $b$, $f$ es bilineal. <b>Método 2</b>, las cuatro igualdades:</p>
+  <ol class="steps">
+    <li><b>Suma en la 1.ª variable.</b> $f(x+x',y)=(x_1+x_1')y_2+(x_2+x_2')y_3=(x_1y_2+x_2y_3)+(x_1'y_2+x_2'y_3)=f(x,y)+f(x',y)$.</li>
+    <li><b>Producto en la 1.ª:</b> $f(\lambda x,y)=\lambda x_1y_2+\lambda x_2y_3=\lambda f(x,y)$.</li>
+    <li><b>Suma y producto en la 2.ª variable</b>, igual: $f(x,y+y')=f(x,y)+f(x,y')$ y $f(x,\lambda y)=\lambda f(x,y)$. Por tanto es una aplicación <b>bilineal</b> (Ej. 6.1-6.2).</li>
+    <li><b>Pero no es forma bilineal</b> (Ej. 6.3): sale de $\mathbb R^2\times\mathbb R^3$ y $\mathbb R^2\neq\mathbb R^3$. La Def. 6.2 exige el producto de un espacio por <b>sí mismo</b>.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.1.1, Ejemplos 6.1 y 6.2, p. 244-245, y Ejemplo 6.3, p. 245">U p.244-245</span>
+</div>
+
+<div class="box tip"><span class="h">Truco: reconocer una forma bilineal con la mirada</span>
+  <p>Una expresión polinómica $f(x,y)$ es bilineal si y solo si <b>cada sumando lleva exactamente un $x_i$ y exactamente un $y_j$, ambos a la primera potencia</b>: es un polinomio de la forma $\sum a_{ij}x_iy_j$. Señales de que <b>no</b> lo es: un término constante ($x_1y_1+1$), un término solo en $x$ o solo en $y$ ($x_1+y_2$), una potencia ($x_1^2y_1$), o un producto $x_1x_2$. Para <b>probarlo</b> escribe las cuatro igualdades de la Def. 6.1 con letras generales; para <b>refutarlo</b> basta un contraejemplo numérico, o recordar que toda bilineal cumple $f(0,y)=0$ (sección 2). Un número concreto nunca demuestra bilinealidad.</p>
+  <span class="src" data-l="P" data-ref="Truco propio; se apoya en la expresión analítica de U p.246 (polinomio homogéneo Σ aᵢⱼ xᵢ yⱼ) y en las propiedades de U p.248">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Otros ejemplos de aplicaciones bilineales</span>
+  <p>El <b>producto vectorial</b> $\mathbb R^3	imes\mathbb R^3	o\mathbb R^3$, $(u,v)\mapsto u	imes v$, es bilineal (lineal en $u$ y en $v$) pero <b>no</b> es forma bilineal: llega a $\mathbb R^3$, no a $\mathbb R$. En cambio $(X,Y)\mapsto\operatorname{tr}(X^tY)$ en $\mathcal M_{2	imes2}$ sí es forma bilineal (el producto escalar usual de matrices): $\operatorname{tr}(X^tY)=\sum x_{ij}y_{ij}$.</p>
+  <span class="src" data-l="P" data-ref="Ejemplos propios; la traza de XᵗY como producto escalar de matrices aparece en X Feb. 2026 (2.ª sem.) p.5, tema 5.1">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que «bilineal» significa «grado 1 en total». $x_1+y_2$ tiene grado 1, pero <b>no</b> es bilineal (falla $f(\lambda x,y)=\lambda f(x,y)$: queda $\lambda x_1+y_2\neq\lambda x_1+\lambda y_2$). Y al revés: $x_1y_2$ tiene grado <b>2</b> y sí es bilineal, porque en cada variable por separado el grado es 1. Tampoco confundas bilineal con lineal en el par $(x,y)$: $f(x+x',y+y')$ <b>no</b> es $f(x,y)+f(x',y')$.</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Expresión analítica y matricial: una tabla de números <span class="src" data-l="U" data-ref="U §6.1.2, p. 245-248 (expresión analítica y matricial, Definición 6.3, Ejemplos 6.4-6.5, propiedades)">U p.245-248</span></h2>
+
+<div class="box intu"><span class="h">Idea: bastan los valores en la base</span>
+  <p>Una aplicación lineal queda fijada por lo que hace con los vectores de una base (tema 3.3). Con una forma bilineal pasa lo mismo, pero ahora hay que mirar <b>pares</b> de vectores básicos. En $\mathbb R^2$ solo hay cuatro: $f(e_1,e_1)$, $f(e_1,e_2)$, $f(e_2,e_1)$, $f(e_2,e_2)$. Si los conoces, cualquier otro par sale desarrollando: con $x=x_1e_1+x_2e_2$ e $y=y_1e_1+y_2e_2$ y usando la linealidad en cada variable,
+  $$f(x,y)=x_1y_1f(e_1,e_1)+x_1y_2f(e_1,e_2)+x_2y_1f(e_2,e_1)+x_2y_2f(e_2,e_2).$$
+  Esos cuatro números, colocados en una tabla $2\times2$, son la matriz de $f$. Ojo al orden: $f(e_1,e_2)$ y $f(e_2,e_1)$ <b>no tienen por qué ser iguales</b>.</p>
+</div>
+
+<div class="box def"><span class="h">Expresión analítica y matricial. Definición 6.3 — matriz asociada</span>
+  <p>Sea $f:E\times E\to\mathbb R$ forma bilineal y $B=\{e_1,\dots,e_n\}$ una base de $E$, con $x=\sum x_ie_i$, $y=\sum y_je_j$. Por la bilinealidad,
+  $$f(x,y)=\sum_{i,j=1}^{n}a_{ij}\,x_iy_j,\qquad a_{ij}=f(e_i,e_j)\qquad\text{(expresión analítica)}$$
+  $$f(x,y)=X^tAY=(x_1\ \ \dots\ \ x_n)\begin{pmatrix}a_{11}&\cdots&a_{1n}\\\vdots&&\vdots\\a_{n1}&\cdots&a_{nn}\end{pmatrix}\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix}\qquad\text{(expresión matricial)}$$
+  La matriz $A=(a_{ij})$ es la <b>matriz asociada</b> a $f$ en la base $B$; es <b>única</b> una vez fijada la base. Recíprocamente, <b>a toda matriz cuadrada le corresponde una forma bilineal única</b>. Es un polinomio homogéneo de grado 2 en las variables $x_i,y_j$ (cada monomio es un $x_i$ por un $y_j$).</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Expresión analítica y matricial, p. 246, y Definición 6.3, p. 246">U p.246</span>
+</div>
+
+<div class="box thm"><span class="h">Por qué toda $X^tAY$ es bilineal (argumento propio)</span>
+  <p>Las cuatro igualdades de la Def. 6.1 son propiedades del producto de matrices: $(X+X')^tAY=X^tAY+X'^tAY$, $(\lambda X)^tAY=\lambda X^tAY$, $X^tA(Y+Y')=X^tAY+X^tAY'$ y $X^tA(\lambda Y)=\lambda X^tAY$. Así que para <b>demostrar</b> que una expresión es bilineal basta reconocer que es de la forma $X^tAY$ para alguna matriz $A$ (la tabla de los coeficientes de $x_iy_j$).</p>
+  <span class="src" data-l="P" data-ref="Argumento propio con la distributividad del producto de matrices; el enunciado «a toda matriz cuadrada le corresponde una forma bilineal» es de U p.246">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico en $\mathbb R^2$: de la expresión a la matriz y a un valor</span>
+  <p>$f(x,y)=2x_1y_1-x_1y_2+3x_2y_1+x_2y_2$ en la base canónica. Calcula su matriz y $f((1,-2),(3,1))$.</p>
+  <ol class="steps">
+    <li><b>Matriz.</b> $a_{ij}$ es el coeficiente de $x_iy_j$ (porque $f(e_i,e_j)$ deja vivo solo ese monomio): $a_{11}=2,\ a_{12}=-1,\ a_{21}=3,\ a_{22}=1$, es decir $A=\begin{pmatrix}2&-1\\3&1\end{pmatrix}$.</li>
+    <li><b>Evaluar.</b> Primero $AY=\begin{pmatrix}2&-1\\3&1\end{pmatrix}\begin{pmatrix}3\\1\end{pmatrix}=\begin{pmatrix}5\\10\end{pmatrix}$ y luego $X^t(AY)=(1\ \ {-2})\begin{pmatrix}5\\10\end{pmatrix}=5-20=-15$.</li>
+    <li><b>Comprobación con la analítica:</b> $2\cdot1\cdot3-1\cdot1+3\cdot(-2)\cdot3+(-2)\cdot1=6-1-18-2=-15$ ✓.</li>
+    <li><b>El orden importa:</b> $f((3,1),(1,-2))=(3\ \ 1)\,A\begin{pmatrix}1\\-2\end{pmatrix}=(3\ \ 1)\begin{pmatrix}4\\1\end{pmatrix}=13\neq-15$. Como $A\neq A^t$, $f$ no es simétrica.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio (ejemplo propio 2 de la sección 6), verificado con sympy; método de U Def. 6.3 p. 246">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 6.4 y 6.5 de U — de la expresión analítica a la matriz en $\mathbb R^3$</span>
+  <p><b>Ej. 6.4.</b> $f(x,y)=x_1y_1-4x_1y_2+6x_2y_3-x_3y_1-3x_3y_3$. Los coeficientes de $x_iy_j$ son los $f(e_i,e_j)$: $f(e_1,e_1)=1$, $f(e_1,e_2)=-4$, $f(e_1,e_3)=0$ (no aparece $x_1y_3$), $f(e_2,e_3)=6$, $f(e_3,e_1)=-1$, $f(e_3,e_3)=-3$ y el resto $0$:
+  $$A=\begin{pmatrix}1&-4&0\\0&0&6\\-1&0&-3\end{pmatrix}.$$
+  <b>Ej. 6.5.</b> $f=2x_1y_1+3x_1y_2+x_2y_1+6x_1y_3-4x_3y_2-x_3y_3$. Por filas ($x_1,x_2,x_3$) y columnas ($y_1,y_2,y_3$):
+  $$A=\begin{pmatrix}2&3&6\\1&0&0\\0&-4&-1\end{pmatrix}.$$
+  Para ver que no hay truco, U calcula por ejemplo $f(e_1,e_2)=f((1,0,0),(0,1,0))=3$ sustituyendo en la expresión.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Ejemplo 6.4, p. 246-247, y Ejemplo 6.5, p. 247-248">U p.246-248</span>
+</div>
+
+<div class="box thm"><span class="h">Propiedades elementales</span>
+  <p>Para toda forma bilineal: $f(x,0)=f(0,y)=0$ y $f(-x,y)=f(x,-y)=-f(x,y)$. Además, <b>la matriz $A$ depende de la base fijada en $E$</b> (se verá en la sección 3). Consecuencia útil: si una expresión da $f(0,y)\neq0$ para algún $y$, <b>no</b> es bilineal (pero que dé $0$ no basta para probar que lo sea).</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Algunas propiedades de las formas bilineales, p. 248">U p.248</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: expresión analítica ↔ matriz (en la base en que está escrita)</span>
+  <p><b>De la expresión a $A$:</b> $a_{ij}$ = <b>coeficiente de $x_iy_j$</b> (el índice de la $x$ da la fila, el de la $y$ la columna); lo que no aparece es $0$. <b>De $A$ a la expresión:</b> sumas $a_{ij}x_iy_j$ por cada entrada no nula. <b>Evaluar:</b> multiplica primero $AY$ y después $X^t(AY)$. Y recuerda: <b>no se reparte</b> un coeficiente entre $(i,j)$ y $(j,i)$; eso es cosa de las formas <i>cuadráticas</i> (tema 6.2).</p>
+  <p><b>Ojo:</b> «coeficiente de $x_iy_j$» solo vale cuando la expresión está dada en la misma base en la que quieres la matriz (U Ej. 6.6, p.248: «ahora el elemento $a_{ij}'$ de la nueva matriz no es el coeficiente de $x_ix_j$»). Si cambias de base, hay que calcular $A'$ (sección 3).</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Ejemplo 6.4 p. 246-247 y Ejemplo 6.6 p. 248">U p.246-248</span>
+  <span class="src" data-l="P" data-ref="Receta propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Colocar $f(e_2,e_1)$ en la posición $(1,2)$, o sea <b>trasponer</b> $A$. Con $A=\begin{pmatrix}1&2\\-1&5\end{pmatrix}$ (E 6.5) y $x=(5,3)$, $y=(-1,2)$: $x^tAy=48$, pero $x^tA^ty=y^tAx=9$. Si $A$ no es simétrica, el resultado cambia; si lo es, no lo notarás (y por eso es un error fácil de arrastrar).</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Cambio de base: congruencia y el teorema 6.1 <span class="src" data-l="U" data-ref="U §6.1.2, Ejemplo 6.6, Definición 6.4, Teorema 6.1 y Ejemplos 6.7-6.8, p. 248-251">U p.248-251</span> <span class="src" data-l="L" data-ref="Lay §7.2, «Cambio de variable en una forma cuadrática», ecuación (2), p. 402">L p.402</span></h2>
+
+<div class="box intu"><span class="h">Idea: el mismo «medidor», otra libreta de apuntes</span>
+  <p>La forma $f$ es una función: dados dos vectores concretos, da <b>un número</b>, lo midas como lo midas. Lo que cambia con la base es la <b>libreta</b>: las coordenadas de los vectores y la tabla $A$ de valores $f(e_i,e_j)$. Es exactamente lo que ya pasa con un vector: las coordenadas $X$ dependen de la base, el vector no. Para cambiar de base necesitamos una «tabla de traducción» entre coordenadas viejas y nuevas: la matriz de paso $P$, que dice cómo se escriben los vectores nuevos en la base vieja. Ponemos las coordenadas viejas en términos de las nuevas ($X=PX'$) en la fórmula $X^tAY$ y, al desarrollar, sale la nueva tabla $P^tAP$.</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 6.6 de U — la misma $f$, otra base, otra matriz</span>
+  <p>La $f$ del Ejemplo 6.5 ($A=\begin{pmatrix}2&3&6\\1&0&0\\0&-4&-1\end{pmatrix}$ en la canónica) con la base $B'=\{e_1'=(1,0,0),\ e_2'=(1,2,0),\ e_3'=(-1,1,1)\}$. Ahora $a'_{ij}=f(e_i',e_j')$ ya <b>no</b> es el coeficiente de $x_iy_j$; se calcula como $a'_{ij}=(e_i')^tA\,e_j'$ :</p>
+  <ol class="steps">
+    <li>$a'_{11}=(1\ 0\ 0)\,A\,(1\ 0\ 0)^t=2$.</li>
+    <li>$a'_{12}=(1\ 0\ 0)\,A\,(1\ 2\ 0)^t=2+6=8$ (la 1.ª fila de $A$ por $(1,2,0)$).</li>
+    <li>Repitiendo con los otros siete pares:
+    $$A'=\begin{pmatrix}2&8&7\\4&10&5\\-1&-15&-13\end{pmatrix}\neq A.$$</li>
+  </ol>
+  <p>La matriz <b>depende de la base</b>. Hacerlo elemento a elemento son $n^2$ cuentas; el Teorema 6.1 las resume en un solo producto.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Ejemplo 6.6, p. 248-249">U p.248-249</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.4 — matrices congruentes</span>
+  <p>Dos matrices cuadradas $A$ y $A'$ son <b>congruentes</b> si existe una matriz <b>regular</b> $P$ tal que $A'=P^tAP$. Las congruentes son un caso particular de las equivalentes (tema 4.1, Def. 4.4), luego tienen el <b>mismo rango</b>. La congruencia es una <b>relación de equivalencia</b> (reflexiva: $A=I^tAI$; simétrica: $A=(P^{-1})^tA'P^{-1}$; transitiva: $(PS)^tA(PS)$), como se ve en <a href="tema_4_1_relaciones_equivalencia.html#s4">el tema 4.1</a>.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Definición 6.4, p. 249; Definición 4.4 y observación sobre equivalentes y rango, §4.1, p. 147; relación de equivalencia, p. 249">U p.249, 147</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 6.1 — cambio de base de una forma bilineal</span>
+  <p>Las matrices asociadas a una forma bilineal $f:E\times E\to\mathbb R$ en distintas bases son <b>congruentes</b>. Más precisamente: si $A$ es la matriz de $f$ en $B$, $A'$ la de $B'$ y $P$ es la <b>matriz de paso de $B'$ a $B$</b> (columnas = vectores de $B'$ escritos en $B$), entonces
+  $$\boxed{A'=P^tAP}.$$</p>
+  <p><b>Demostración</b> (U la hace entera). Sean $X,Y$ las coordenadas de $x,y$ en $B$, y $X',Y'$ las de los mismos vectores en $B'$. Como $P$ es la matriz de paso de $B'$ a $B$, $X=PX'$ e $Y=PY'$. Entonces
+  $$f(x,y)=X^tAY=(PX')^tA(PY')=X'^t\,(P^tAP)\,Y'\qquad\text{porque }(PX')^t=X'^tP^t.$$
+  Pero también $f(x,y)=X'^tA'Y'$ para todo $X',Y'$. Tomando $X'=e_i$, $Y'=e_j$ (los vectores de la base $B'$), el elemento $(i,j)$ de ambas matrices es el mismo: $a'_{ij}=(P^tAP)_{ij}$; es decir, la matriz asociada es única (Def. 6.3). Luego $A'=P^tAP$.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Teorema 6.1, p. 249, y demostración, p. 250">U p.249-250</span>
+  <span class="src" data-l="L" data-ref="Lay §7.2, cambio de variable x = Py en xᵀAx: la nueva matriz es PᵀAP, ecuación (2), p. 402 (caso de formas cuadráticas)">L p.402</span>
+</div>
+
+<div class="box warn"><span class="h">El convenio de $P$ (el fallo más frecuente en este tema)</span>
+  <p>En $A'=P^tAP$, <b>$A'$ es la matriz nueva</b> (en $B'$) y <b>$P$ es la matriz de paso de $B'$ a $B$</b>: sus <b>columnas</b> son los vectores de la base nueva $B'$ <b>escritos en coordenadas de la base vieja $B$</b>. Cuando se te dan los vectores nuevos «en la canónica» o en la base vieja (lo habitual), los pones <b>en columnas</b> y ya está: no hay que invertir nada. Errores clásicos: (a) usar $P^{-1}AP$ (eso es la <i>semejanza</i> de los endomorfismos); (b) poner los vectores en <b>filas</b> (da $PAP^t$); (c) usar la $P$ «al revés», la de $B$ a $B'$ (es $P^{-1}$).</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 6.7 y 6.8 de U — comprobar $P^tAP=A'$</span>
+  <p><b>Ej. 6.7.</b> $A=\begin{pmatrix}1&1\\1&2\end{pmatrix}$ en $B$, $A'=\begin{pmatrix}1&2\\2&5\end{pmatrix}$ en $B'$, y la matriz de paso de $B'$ a $B$ es $P=\begin{pmatrix}-1&-1\\1&2\end{pmatrix}$. Se comprueba:
+  $$P^tAP=\begin{pmatrix}-1&1\\-1&2\end{pmatrix}\begin{pmatrix}1&1\\1&2\end{pmatrix}\begin{pmatrix}-1&-1\\1&2\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}=A'.$$
+  (Paso a paso: $AP=\begin{pmatrix}0&1\\1&3\end{pmatrix}$, y $P^t(AP)=\begin{pmatrix}-1&1\\-1&2\end{pmatrix}\begin{pmatrix}0&1\\1&3\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}$.)</p>
+  <p><b>Ej. 6.8.</b> Para el Ejemplo 6.6, la matriz de paso es la de las columnas $e_1',e_2',e_3'$: $P=\begin{pmatrix}1&1&-1\\0&2&1\\0&0&1\end{pmatrix}$, y $P^tAP=\begin{pmatrix}2&8&7\\4&10&5\\-1&-15&-13\end{pmatrix}=A'$, el mismo resultado de la cuenta elemento a elemento. Así que ambos métodos coinciden.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.2, Ejemplo 6.7, p. 250, y Ejemplo 6.8, p. 250-251">U p.250-251</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: forma bilineal, evaluación y cambio de base</span>
+  <div class="anim-bilineal" data-a="1,1,1,2" data-p="-1,-1,1,2" data-x="2,1" data-y="1,3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (assets/animaciones.js, anim-bilineal); presets con U Ej. 6.7 (= X Sept. 2018), X Feb. 2026, X Feb. 2025 (B) y casos no simétrico, antisimétrico y P singular">P</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: matriz de $f$ en una base nueva (dos métodos que se verifican entre sí)</span>
+  <ol>
+    <li>$A$ en la base vieja (por la receta de la sección 2).</li>
+    <li>$P$: los vectores de la base nueva <b>en columnas</b>, escritos en la base vieja. Comprueba $\det P\neq0$ (si no, no es base).</li>
+    <li><b>Método 1:</b> $A'=P^tAP$, calculando primero $AP$ (sus columnas son $Av_1,Av_2,\dots$) y luego $P^t(AP)$.</li>
+    <li><b>Método 2 (control):</b> un elemento cualquiera por definición, $a'_{ij}=f(v_i,v_j)=v_i^tAv_j$.</li>
+    <li>Control rápido con determinantes: $\det A'=\det A\,(\det P)^2$ (mismo signo que $\det A$).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U Teorema 6.1 p. 249-250 y det(AB) = det A det B, U §1.3 p. 26">propio</span>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Congruencia frente a semejanza: qué se conserva <span class="src" data-l="U" data-ref="U §4.1.3 Definición 4.5, p. 148; Teorema 4.4, p. 153; §6.1.2 p. 249">U p.148, 153, 249</span></h2>
+
+<div class="box intu"><span class="h">Idea: dos «cambios de base», dos objetos distintos</span>
+  <p>Una misma tabla de números $n\times n$ puede ser <b>dos objetos distintos</b>: la matriz de un <b>endomorfismo</b> $V\to V$ (tema 3: «transforma vectores»), o la matriz de una <b>forma bilineal</b> (aquí: «mide pares de vectores»). Al cambiar de base cambian de manera diferente, porque no hacen el mismo uso de la base: el endomorfismo usa la base una vez a la entrada y otra a la salida ($P^{-1}AP$); la forma bilineal la usa en <b>dos entradas</b> ($P^tAP$). Por eso unas propiedades sobreviven en un caso y no en el otro.</p>
+</div>
+
+<div class="box thm"><span class="h">Tabla: qué se conserva</span>
+  <table>
+    <tr><th></th><th>Semejanza $A'=P^{-1}AP$ (endomorfismos, U Def. 4.5)</th><th>Congruencia $A'=P^tAP$ (formas bilineales, U Def. 6.4)</th></tr>
+    <tr><td>Rango</td><td>sí</td><td>sí</td></tr>
+    <tr><td>Determinante</td><td>sí ($\det A'=\det A$)</td><td><b>no</b>: $\det A'=\det A\,(\det P)^2$. Solo se conserva el <b>signo</b> (y ser cero o no)</td></tr>
+    <tr><td>Traza</td><td>sí</td><td><b>no</b> en general</td></tr>
+    <tr><td>Polinomio característico y valores propios</td><td>sí (U Teor. 4.4)</td><td><b>no</b> en general</td></tr>
+    <tr><td>Ser simétrica</td><td><b>no</b> en general</td><td>sí: $(P^tAP)^t=P^tA^tP=P^tAP$ si $A=A^t$</td></tr>
+    <tr><td>Si $P$ es ortogonal ($P^t=P^{-1}$)</td><td colspan="2">las dos fórmulas coinciden (tema 5.3)</td></tr>
+  </table>
+  <p>Las dos son casos particulares de la <b>equivalencia</b> de matrices ($A'=MAN$ con $M,N$ regulares), de ahí que ambas conserven el rango (tema 4.1). Ninguna implica la otra.</p>
+  <span class="src" data-l="U" data-ref="U §4.1, Definición 4.4 p. 147 (congruentes ⇒ equivalentes ⇒ mismo rango), Definición 4.5 p. 148 (semejantes), Teorema 4.4 p. 153 (el polinomio característico es invariante por cambios de base); det(AB)=det A det B, §1.3 p. 26">U p.147-148, 153, 26</span>
+  <span class="src" data-l="P" data-ref="Tabla comparativa propia; cálculo (P^t A P)^t = P^t A^t P y det(P^t A P)=det(P)^2 det(A) verificados">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: la misma $A$ y la misma $Q$, semejanza frente a congruencia</span>
+  <div class="anim-semej" data-a="1,0,0,2" data-q="1,1,0,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (assets/animaciones.js, anim-semej), ya usada en el tema 4.1; aquí con A = diag(1,2) y P = (1 1; 0 2) del ejemplo propio 5">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>«Son congruentes, luego tienen el mismo determinante» (<b>falso</b>: $\det A'=\det A\,(\det P)^2$; ver <a href="tema_4_1_relaciones_equivalencia.html#ex-sep23-5">X Sept. 2023 p.5 en el tema 4.1</a>) o «son congruentes, luego tienen los mismos valores propios» (falso también). Lo que sí sale gratis es el <b>rango</b> y el <b>signo</b> del determinante. A la inversa, «tienen el mismo rango y el mismo signo de determinante» no basta para ser congruentes: $I_2$ y $-I_2$ lo cumplen y no lo son (ejemplo propio 5); el invariante completo (la signatura) es de los temas 6.2-6.3.</p>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Tabla Lay ↔ U: vocabulario y alcance <span class="src" data-l="L" data-ref="Lay §7.2, Formas cuadráticas, p. 401-403">L p.401-403</span></h2>
+
+<p>Lay <b>no</b> estudia formas bilineales generales ni la congruencia con ese nombre: solo las <b>formas cuadráticas</b> $Q(x)=x^tAx$ (con $A$ simétrica, §7.2), que son el caso $y=x$ de lo de aquí. Úsalo solo como apoyo del cambio de variable. Si algo contradice a U, manda U.</p>
+
+<table>
+  <tr><th>Concepto en U (este tema)</th><th>En Lay</th><th>Comentario</th></tr>
+  <tr><td>Forma bilineal $f(x,y)=X^tAY$ (Def. 6.2-6.3)</td><td>No aparece</td><td>Lay solo trata $Q(x)=x^tAx$, el caso $y=x$ con $A$ simétrica.</td></tr>
+  <tr><td>Matriz asociada $A$ en la base $B$</td><td>«matriz de la forma cuadrática», simétrica</td><td>En U la matriz de una forma bilineal <b>no</b> tiene por qué ser simétrica.</td></tr>
+  <tr><td>Matriz de paso $P$ de $B'$ a $B$, $X=PX'$</td><td>Cambio de variable $x=Py$, «$y$ es el vector de coordenadas de $x$ respecto de la base de las columnas de $P$» (p.402)</td><td>Misma idea y mismo convenio: columnas de $P$ = base nueva.</td></tr>
+  <tr><td>$A'=P^tAP$ (Teor. 6.1)</td><td>«la nueva matriz de la forma cuadrática es $P^tAP$» (ec. (2), p.402)</td><td>Lay lo deduce igual: $x^tAx=(Py)^tA(Py)=y^t(P^tAP)y$.</td></tr>
+  <tr><td>Congruentes (Def. 6.4)</td><td>No se nombra</td><td>Lay lo aplica con $P$ ortogonal para diagonalizar (§7.2, tema 5.3/6.3 de U).</td></tr>
+</table>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="ejercicios"><span class="n">6</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §6.1, Ej. 6.1-6.8, p. 202-208">E p.202-208</span></h2>
+
+<p>La sección 6.1 de E empieza en la p.201 (el Ej. 6.1 en la p.202) y la 6.2 (formas cuadráticas) en la p.209. Los ocho ejercicios de la sección se agrupan por método. Dos de ellos, <b>E 6.4</b> y <b>E 6.7</b>, usan la simetría y son <b>frontera con el tema 6.2</b> (la simetría se define allí, U Def. 6.5, p.252); se resuelven aquí por pertenecer a la sección 6.1 de E, y se avisa de lo que se usa.</p>
+
+<h3 id="bloqueI">Bloque I — ¿Es bilineal? (E 6.3, 6.2, 6.1)</h3>
+
+<details class="sol" id="ej6-3"><summary>Ejercicio 6.3 — test: ¿aplicación bilineal o forma bilineal? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.3, p. 204">E p.204</span></summary>
+  <p class="enun">Si $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ es una aplicación bilineal, se verifica: A) No es forma bilineal porque el espacio imagen no es $\mathbb R$. B) No es bilineal porque el origen de la aplicación es un producto de dos espacios iguales. C) Es forma bilineal.</p>
+  <ol class="steps">
+    <li><b>Qué es una forma bilineal</b> (Def. 6.2): una aplicación bilineal que sale de $E\times E$ (el mismo espacio dos veces) y llega a $\mathbb R$. Hay que comprobar solo esas dos condiciones.</li>
+    <li><b>Origen:</b> $\mathbb R^2\times\mathbb R^2$ es $E\times E$ con $E=\mathbb R^2$ ✓. <b>Llegada:</b> $\mathbb R$ ✓. <b>Bilinealidad:</b> la da el enunciado.</li>
+    <li><b>Conclusión:</b> es forma bilineal, así que <b>C</b> es la verdadera. A es falsa (la imagen sí es $\mathbb R$). B es falsa: que los dos factores sean iguales no impide la bilinealidad, es justo lo que pide la Def. 6.2.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «forma bilineal» = (i) bilineal, (ii) dos factores iguales, (iii) llegada en $\mathbb R$.</div>
+  <p><b>Error típico:</b> confundir «aplicación» y «forma»: $x_1y_2+x_2y_3$ de $\mathbb R^2\times\mathbb R^3$ en $\mathbb R$ es bilineal pero no es forma (U Ej. 6.3, p.245). <b>Teoría:</b> U Def. 6.1 p.244, Def. 6.2 y Ej. 6.3 p.245.</p>
+</details>
+
+<details class="sol" id="ej6-2"><summary>Ejercicio 6.2 — demostrar si son bilineales $x_1+y_2$ y $x_1y_2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.2, p. 203-204">E p.203-204</span></summary>
+  <p class="enun">Demuéstrese si son bilineales las aplicaciones $f((x_1,x_2),(y_1,y_2))$ siguientes: A) $x_1+y_2$. B) $x_1y_2$.</p>
+  <p><b>A) No es bilineal.</b></p>
+  <ol class="steps">
+    <li><b>Para negar</b> basta que <i>una</i> de las cuatro igualdades de la Def. 6.1 falle en <i>un</i> caso. Elegimos $\lambda=2$, $x=(0,1)$, $y=(1,1)$.</li>
+    <li>$f(2x,y)=f((0,2),(1,1))=0+1=1$, mientras que $2f(x,y)=2(0+1)=2$. Como $1\neq2$, falla $f(\lambda x,y)=\lambda f(x,y)$.</li>
+    <li><b>Por qué falla en general:</b> $f(\lambda x,y)=\lambda x_1+y_2$ pero $\lambda f(x,y)=\lambda x_1+\lambda y_2$; el sumando $y_2$ no lleva ninguna $x$ y no «escala» al multiplicar $x$ por $\lambda$.</li>
+    <li><b>Atajo</b> (propiedad de U p.248): toda bilineal cumple $f(0,y)=0$, y aquí $f((0,0),(0,1))=0+1=1\neq0$. (Con $y=(0,0)$ no se vería: $f(0,0)=0$ sí se cumple.)</li>
+  </ol>
+  <p><b>B) Sí es bilineal.</b> Con $x,x',y,y'$ y $\lambda$ <b>cualesquiera</b> (hay que probarlo en general, no con números):</p>
+  <ol class="steps">
+    <li>$f(x+x',y)=(x_1+x_1')y_2=x_1y_2+x_1'y_2=f(x,y)+f(x',y)$ (distributiva en $\mathbb R$).</li>
+    <li>$f(\lambda x,y)=(\lambda x_1)y_2=\lambda(x_1y_2)=\lambda f(x,y)$ (asociatividad).</li>
+    <li>$f(x,y+y')=x_1(y_2+y_2')=x_1y_2+x_1y_2'=f(x,y)+f(x,y')$.</li>
+    <li>$f(x,\lambda y)=x_1(\lambda y_2)=\lambda f(x,y)$. Las cuatro se cumplen y $f$ va de $\mathbb R^2\times\mathbb R^2$ a $\mathbb R$: es <b>forma bilineal</b>, con matriz $\begin{pmatrix}0&1\\0&0\end{pmatrix}$ (solo $a_{12}=f(e_1,e_2)=1$).</li>
+  </ol>
+  <p><i>E solo desarrolla la 1.ª variable y dice «análogamente» para la 2.ª; aquí están escritos los pasos 3 y 4.</i></p>
+  <div class="recipe"><b>Receta:</b> bilineal ⇔ polinomio con todos los sumandos de la forma $a_{ij}x_iy_j$. Si lo es, pruébalo con las 4 igualdades (o reconoce $X^tAY$); si no, busca un contraejemplo numérico (o usa $f(0,y)\neq0$).</div>
+  <p><b>Error típico:</b> «tiene grado 1 en $x$ y grado 1 en $y$»: $x_1+y_2$ no es bilineal. Cada sumando debe tener grado 1 en $x$ <i>y</i> grado 1 en $y$. <b>Teoría:</b> U Def. 6.1 p.244; propiedades p.248.</p>
+</details>
+
+<details class="sol" id="ej6-1"><summary>Ejercicio 6.1 — demostrar que $f=x_1y_1-x_1y_2-3x_2y_1+3x_2y_2$ es bilineal <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.1, p. 202-203">E p.202-203</span></summary>
+  <p class="enun">Dada $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ definida por $f(\bar x,\bar y)=x_1y_1-x_1y_2-3x_2y_1+3x_2y_2$, demostrar que es una aplicación bilineal.</p>
+  <p>Sean $x,x',y,y'\in\mathbb R^2$ y $\lambda\in\mathbb R$ cualesquiera. Como en U Ej. 6.2 (p.244-245), se calcula el primer y el segundo miembro de cada igualdad por separado.</p>
+  <ol class="steps">
+    <li><b>$f(x+x',y)=f(x,y)+f(x',y)$.</b> 1.er miembro: $(x_1+x_1')y_1-(x_1+x_1')y_2-3(x_2+x_2')y_1+3(x_2+x_2')y_2$; al desarrollar con la distributiva queda $(x_1y_1-x_1y_2-3x_2y_1+3x_2y_2)+(x_1'y_1-x_1'y_2-3x_2'y_1+3x_2'y_2)$, que es el 2.º miembro.</li>
+    <li><b>$f(\lambda x,y)=\lambda f(x,y)$.</b> 1.er miembro: $\lambda x_1y_1-\lambda x_1y_2-3\lambda x_2y_1+3\lambda x_2y_2$; sacando $\lambda$ factor común es el 2.º miembro.</li>
+    <li><b>$f(x,y+y')=f(x,y)+f(x,y')$.</b> $x_1(y_1+y_1')-x_1(y_2+y_2')-3x_2(y_1+y_1')+3x_2(y_2+y_2')$ se separa en los términos con $y$ y los términos con $y'$: es $f(x,y)+f(x,y')$.</li>
+    <li><b>$f(x,\lambda y)=\lambda f(x,y)$.</b> El 1.er miembro, $\lambda x_1y_1-\lambda x_1y_2-3\lambda x_2y_1+3\lambda x_2y_2$, coincide con el 2.º.</li>
+    <li><b>Conclusión:</b> $f$ es lineal en cada variable, luego bilineal; como va de $\mathbb R^2\times\mathbb R^2$ a $\mathbb R$, es <b>forma</b> bilineal.</li>
+  </ol>
+  <p><b>Comprobación alternativa (más corta, también válida en examen).</b> La expresión es $X^tAY$ con $A=\begin{pmatrix}1&-1\\-3&3\end{pmatrix}$ (coeficientes de $x_iy_j$). Por las propiedades del producto de matrices (sección 2), toda $X^tAY$ es bilineal.</p>
+  <div class="recipe"><b>Receta:</b> para demostrar bilinealidad, o bien escribes las 4 igualdades con 1.er y 2.º miembro, o bien reconoces $f=X^tAY$ y usas la distributividad. Ambas son justificaciones completas.</div>
+  <p><b>Error típico:</b> comprobarlo solo con vectores concretos: un ejemplo numérico vale para <b>refutar</b>, nunca para <b>demostrar</b>. <b>Teoría:</b> U Def. 6.1 p.244, Ej. 6.2 p.244-245, §6.1.2 p.246.</p>
+</details>
+
+<h3 id="bloqueII">Bloque II — Matriz asociada y evaluación (E 6.5, 6.6, 6.4, 6.7)</h3>
+
+<details class="sol" id="ej6-5"><summary>Ejercicio 6.5 — $f((5,3),(-1,2))$ conocidos los $f(e_i,e_j)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.5, p. 206">E p.206</span></summary>
+  <p class="enun">Si $\{e_1,e_2\}$ es la base canónica de $\mathbb R^2$ y $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ es bilineal con $f(e_1,e_1)=1$, $f(e_1,e_2)=2$, $f(e_2,e_1)=-1$, $f(e_2,e_2)=5$, entonces $f((5,3),(-1,2))$ vale: A) $-19$. B) $(-19,48)$. C) $48$.</p>
+  <ol class="steps">
+    <li><b>Matriz asociada</b> ($a_{ij}=f(e_i,e_j)$, la fila la da el primer vector): $A=\begin{pmatrix}1&2\\-1&5\end{pmatrix}$.</li>
+    <li><b>Por qué basta con eso:</b> por la bilinealidad $f(x,y)=\sum x_iy_jf(e_i,e_j)=X^tAY$; los cuatro valores determinan $f$.</li>
+    <li><b>Evaluación</b> (base canónica: coordenadas = componentes). Primero $AY=\begin{pmatrix}1&2\\-1&5\end{pmatrix}\begin{pmatrix}-1\\2\end{pmatrix}=\begin{pmatrix}3\\11\end{pmatrix}$ y luego $X^t(AY)=(5\ \ 3)\begin{pmatrix}3\\11\end{pmatrix}=15+33=48$.</li>
+    <li><b>Comprobación con la analítica:</b> $f=x_1y_1+2x_1y_2-x_2y_1+5x_2y_2$ da $-5+20+3+30=48$ ✓.</li>
+    <li><b>Opciones:</b> la correcta es <b>C</b>. B es absurda: $f$ toma valores en $\mathbb R$, no en $\mathbb R^2$. (De dónde sale $-19$ en A no lo explica el libro.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> valores en la base ⇒ colócalos en $A$ (primer argumento = fila) ⇒ $f(x,y)=X^tAY$, multiplicando primero $AY$.</div>
+  <p><b>Error típico:</b> trasponer $A$: $X^tA^tY=f((-1,2),(5,3))=9\neq48$. <b>Teoría:</b> U Def. 6.3 y expresión matricial, p.246.</p>
+</details>
+
+<details class="sol" id="ej6-6"><summary>Ejercicio 6.6 — expresión matricial de $f=x_1y_1-4x_1y_2+6x_2y_3-x_3y_1-3x_3y_3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.6, p. 206 (es el Ejemplo 6.4 de U, p. 246-247)">E p.206</span></summary>
+  <p class="enun">Si $f(\bar x,\bar y)=x_1y_1-4x_1y_2+6x_2y_3-x_3y_1-3x_3y_3$ es la expresión analítica de la forma bilineal $f:\mathbb R^3\times\mathbb R^3\to\mathbb R$, calcular su expresión matricial.</p>
+  <ol class="steps">
+    <li><b>Qué se pide:</b> escribir $f=X^tAY$ con $a_{ij}=f(e_i,e_j)$ en la base canónica (Def. 6.3).</li>
+    <li><b>Por qué vale «leer coeficientes».</b> $f(e_1,e_1)$: sustituyes $x=y=(1,0,0)$ y solo sobrevive $x_1y_1=1$, así $a_{11}=1$. En general con $x=e_i$, $y=e_j$ solo sobrevive $x_iy_j$, luego $a_{ij}$ <b>es el coeficiente de $x_iy_j$</b> (0 si no aparece).</li>
+    <li><b>Lectura:</b> fila 1: $x_1y_1\to1$, $x_1y_2\to-4$, $x_1y_3\to0$. Fila 2: $x_2y_1,x_2y_2\to0$, $x_2y_3\to6$. Fila 3: $x_3y_1\to-1$, $x_3y_2\to0$, $x_3y_3\to-3$.</li>
+    <li><b>Resultado:</b>
+    $$f(x,y)=(x_1\ x_2\ x_3)\begin{pmatrix}1&-4&0\\0&0&6\\-1&0&-3\end{pmatrix}\begin{pmatrix}y_1\\y_2\\y_3\end{pmatrix}.$$</li>
+    <li><b>Observación:</b> $A$ <b>no es simétrica</b> ($a_{12}=-4$, $a_{21}=0$), así que $f$ no es simétrica (tema 6.2).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en la base en que está escrita, $a_{ij}$ = coeficiente de $x_iy_j$: el índice de la $x$ es la fila, el de la $y$ la columna; lo que falta, ceros.</div>
+  <p><b>Error típico:</b> «repartir» $-4$ entre $a_{12}$ y $a_{21}$ ($-2$ y $-2$): eso se hace con formas <i>cuadráticas</i> (6.2), nunca con una bilineal. <b>Teoría:</b> U Def. 6.3 p.246, Ej. 6.4 p.246-247.</p>
+</details>
+
+<details class="sol" id="ej6-4"><summary>Ejercicio 6.4 — $f(x-y,x-y)$ para $f$ bilineal simétrica (frontera con 6.2) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.4, p. 205">E p.205</span></summary>
+  <p class="enun">Si $E$ es un espacio vectorial y $f:E\times E\to\mathbb R$ es una aplicación bilineal <b>simétrica</b>, ¿cuánto vale $f(x-y,x-y)$ para todo $x,y\in E$? A) $f(x,x)-f(y,y)$. B) $f(-x+y,-x+y)$. C) $f(x,x)-2f(x,y)+f(y,y)$. D) Ninguna de las anteriores.</p>
+  <p><i>Simétrica</i> significa $f(x,y)=f(y,x)$ (U Def. 6.5, p.252; se estudia en el tema 6.2).</p>
+  <ol class="steps">
+    <li><b>Desarrollo en la 1.ª variable</b> (con $x-y=x+(-1)y$): $f(x-y,x-y)=f(x,x-y)-f(y,x-y)$.</li>
+    <li><b>En la 2.ª</b>, en cada término: $=f(x,x)-f(x,y)-f(y,x)+f(y,y)$. Es «multiplicar como un producto», respetando el orden de los argumentos.</li>
+    <li><b>Simetría</b> (aquí y solo aquí se usa la hipótesis): $f(y,x)=f(x,y)$, luego $=f(x,x)-2f(x,y)+f(y,y)$. <b>C es verdadera.</b></li>
+    <li><b>B.</b> Con $u=x-y$ y la propiedad $f(-u,v)=f(u,-v)=-f(u,v)$ (U p.248): $f(-u,-u)=-f(u,-u)=f(u,u)$. <b>B también es verdadera</b>, y para <i>cualquier</i> forma bilineal, simétrica o no.</li>
+    <li><b>A es falsa:</b> con el producto escalar usual, $x=(1,0)$, $y=(0,1)$: $f(x-y,x-y)=2$ y $f(x,x)-f(y,y)=0$. <b>D es falsa</b> (B y C son ciertas).</li>
+  </ol>
+  <div class="box warn"><span class="h">Aviso sobre el libro</span><p>E marca <b>dos</b> opciones correctas (B y C). La resolución es correcta, pero en un test de respuesta única el enunciado sería ambiguo. Sabe justificar las dos.</p></div>
+  <div class="recipe"><b>Receta:</b> para $f(\text{combinación},\text{combinación})$, multiplica cada sumando del primer argumento por cada sumando del segundo respetando el orden; luego, si $f$ es simétrica, junta $f(x,y)$ con $f(y,x)$.</div>
+  <p><b>Error típico:</b> escribir $-2f(x,y)$ sin tener simetría; en general es $-f(x,y)-f(y,x)$. <b>Teoría:</b> U Def. 6.1 p.244, propiedades p.248; Def. 6.5 p.252 (tema 6.2).</p>
+</details>
+
+<details class="sol" id="ej6-7"><summary>Ejercicio 6.7 — expresión analítica de una forma bilineal simétrica dada en una base (frontera con 6.2) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.7, p. 207">E p.207</span></summary>
+  <p class="enun">Si $\{e_1,e_2,e_3\}$ es una base de $\mathbb R^3$ con $f(e_1,e_1)=f(e_2,e_2)=f(e_3,e_3)=1$ y $f(e_1,e_2)=f(e_2,e_3)=f(e_3,e_1)=a$, se pide la expresión analítica de la forma bilineal <b>simétrica</b> $f$.</p>
+  <ol class="steps">
+    <li><b>Completar la matriz con la simetría.</b> Se dan la diagonal y tres posiciones: $(1,2)$, $(2,3)$, $(3,1)$. Las otras tres, $(2,1)$, $(3,2)$, $(1,3)$, salen de $f(e_j,e_i)=f(e_i,e_j)$ (U Def. 6.5). Sin la palabra «simétrica» el problema no tendría solución única.
+    $$A=\begin{pmatrix}1&a&a\\a&1&a\\a&a&1\end{pmatrix}.$$</li>
+    <li><b>Expresión analítica</b> (con $x_i,y_j$ las coordenadas en <b>esa base</b>, que no es la canónica): $f(x,y)=\sum a_{ij}x_iy_j$,
+    $$f(x,y)=x_1y_1+x_2y_2+x_3y_3+a\,(x_1y_2+x_2y_1+x_2y_3+x_3y_2+x_1y_3+x_3y_1).$$</li>
+    <li><b>Lo que da E</b> es $f(x,x)=x_1^2+x_2^2+x_3^2+2a(x_1x_2+x_2x_3+x_3x_1)$, la <b>forma cuadrática</b> asociada (tema 6.2), que se obtiene del paso 2 poniendo $y=x$.</li>
+  </ol>
+  <div class="box warn"><span class="h">Avisos sobre el libro (omisiones)</span>
+    <ul>
+      <li>El enunciado pide la expresión analítica de la forma <b>bilineal</b> $f(x,y)$, pero E da solo $f(x,x)$. Es correcto como forma cuadrática, no es lo pedido. La respuesta completa es la del paso 2.</li>
+      <li>E escribe «$(x_1,x_2,x_3)=x_1e_1+x_2e_2+x_3e_3$»: solo es cierto si $(x_1,x_2,x_3)$ son las <b>coordenadas en esa base</b>, no las componentes canónicas.</li>
+      <li>Hay una errata tipográfica: falta un paréntesis en $f((x_1,x_2,x_3),(x_1,x_2,x_3))$.</li>
+    </ul>
+  </div>
+  <div class="recipe"><b>Receta:</b> con los datos $f(e_i,e_j)$ rellena $A$; si dice «simétrica», copia lo que falta en las posiciones traspuestas; luego $f(x,y)=\sum a_{ij}x_iy_j$ en coordenadas de esa base.</div>
+  <p><b>Error típico:</b> escribir $2a\,x_1y_2$ en la forma <b>bilineal</b>. El 2 solo aparece en $f(x,x)$, al juntar $x_1x_2$ con $x_2x_1$; en $f(x,y)$ los monomios $x_1y_2$ y $x_2y_1$ son distintos y cada uno lleva $a$. <b>Teoría:</b> U Def. 6.3 y §6.1.2 p.246; Def. 6.5 p.252.</p>
+</details>
+
+<h3 id="bloqueIII">Bloque III — Cambio de base (E 6.8)</h3>
+
+<details class="sol" id="ej6-8"><summary>Ejercicio 6.8 — matriz y expresión de $f$ en una base $B'$ de $\mathbb R^3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.8, p. 207-208">E p.207-208</span></summary>
+  <p class="enun">Si $f(\bar x,\bar y)=x_1y_1-x_1y_3+x_2y_1+x_2y_2+x_2y_3-x_3y_1+x_3y_2+2x_3y_3$ es la expresión de $f$ respecto de la base $B=\{e_1,e_2,e_3\}$ de $\mathbb R^3$, y $B'=\{e_1',e_2',e_3'\}$ es otra base con $e_1'=(2,2,3)_B$, $e_2'=(-1,0,-1)_B$, $e_3'=(0,-1,-1)_B$, se pide la expresión matricial y analítica de $f$ en $B'$.</p>
+  <ol class="steps">
+    <li><b>Matriz en $B$</b> (la expresión está dada en $B$: $a_{ij}$ = coeficiente de $x_iy_j$): fila 1: $1,0,-1$; fila 2: $1,1,1$; fila 3: $-1,1,2$.
+    $$A=\begin{pmatrix}1&0&-1\\1&1&1\\-1&1&2\end{pmatrix}.$$</li>
+    <li><b>Matriz de paso $P$ de $B'$ a $B$:</b> columnas = vectores de $B'$ en coordenadas de $B$ (así $X=PX'$, Teor. 6.1):
+    $$P=\begin{pmatrix}2&-1&0\\2&0&-1\\3&-1&-1\end{pmatrix}.$$</li>
+    <li><b>¿Es $B'$ una base?</b> (E no lo comprueba.) $|P|=2\begin{vmatrix}0&-1\\-1&-1\end{vmatrix}-(-1)\begin{vmatrix}2&-1\\3&-1\end{vmatrix}=2(-1)+1\cdot1=-1\neq0$. Sí.</li>
+    <li><b>Por qué $A'=P^tAP$:</b> $f(x,y)=X^tAY=(PX')^tA(PY')=X'^t(P^tAP)Y'$ (Teor. 6.1).</li>
+    <li><b>Primero $AP$:</b>
+    $$AP=\begin{pmatrix}1&0&-1\\1&1&1\\-1&1&2\end{pmatrix}\begin{pmatrix}2&-1&0\\2&0&-1\\3&-1&-1\end{pmatrix}=\begin{pmatrix}-1&0&1\\7&-2&-2\\6&-1&-3\end{pmatrix}.$$</li>
+    <li><b>Después $P^t(AP)$</b>, con $P^t=\begin{pmatrix}2&2&3\\-1&0&-1\\0&-1&-1\end{pmatrix}$: fila 1: $(-2+14+18,\ 0-4-3,\ 2-4-9)=(30,-7,-11)$; fila 2: $(1-6,\ 0+1,\ -1+3)=(-5,1,2)$; fila 3: $(-7-6,\ 2+1,\ 2+3)=(-13,3,5)$.
+    $$A'=P^tAP=\begin{pmatrix}30&-7&-11\\-5&1&2\\-13&3&5\end{pmatrix}.$$</li>
+    <li><b>Controles.</b> Un elemento por definición: $a'_{12}=f(e_1',e_2')=(2,2,3)\,A\,(-1,0,-1)^t$; $A(-1,0,-1)^t$ es la 2.ª columna de $AP$, $(0,-2,-1)^t$, y $(2,2,3)\cdot(0,-2,-1)=-7$ ✓. Con determinantes: $|A'|=|P|^2|A|=1\cdot(-1)=-1$ ✓ (y $|A|=-1$).</li>
+    <li><b>Expresiones en $B'$</b> ($x_i,y_j$ ahora son coordenadas en $B'$):
+    $$f(x,y)=(x_1\ x_2\ x_3)\begin{pmatrix}30&-7&-11\\-5&1&2\\-13&3&5\end{pmatrix}\begin{pmatrix}y_1\\y_2\\y_3\end{pmatrix},$$
+    $$f(x,y)=30x_1y_1-7x_1y_2-11x_1y_3-5x_2y_1+x_2y_2+2x_2y_3-13x_3y_1+3x_3y_2+5x_3y_3.$$</li>
+  </ol>
+  <p>El resultado de E es correcto; solo omite comprobar que $B'$ sea base.</p>
+  <div class="recipe"><b>Receta:</b> (1) $A$ en la base vieja; (2) $P$ con los vectores nuevos en <b>columnas</b>; (3) $\det P\neq0$; (4) $A'=P^tAP$ calculando $AP$ primero; (5) control con $|A'|=|A||P|^2$ y un $a'_{ij}=v_i^tAv_j$.</div>
+  <p><b>Error típico:</b> usar $P^{-1}AP$ (semejanza), poner los vectores en filas, o usar la $P$ de $B$ a $B'$ (la inversa). <b>Teoría:</b> U Def. 6.3 p.246, Ej. 6.6 p.248-249, Teor. 6.1 p.249-250, Ej. 6.8 p.250-251.</p>
+</details>
+
+<h3 id="propios">Ejemplos propios, de fácil a difícil</h3>
+
+<details class="sol" id="ej-propio-1"><summary>Propio P1 — ¿cuáles son formas bilineales? $2x_1y_2-x_2y_1$, $x_1y_1+1$, $x_1^2y_1$ <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 6.1-6.2 p. 244-245 y propiedades p. 248">propio</span></summary>
+  <p class="enun">Decide cuáles de estas aplicaciones $\mathbb R^2\times\mathbb R^2\to\mathbb R$ son formas bilineales: (a) $f=2x_1y_2-x_2y_1$; (b) $g=x_1y_1+1$; (c) $h=x_1^2y_1$.</p>
+  <ol class="steps">
+    <li><b>(a) Sí.</b> Es $X^tAY$ con $A=\begin{pmatrix}0&2\\-1&0\end{pmatrix}$ ($a_{12}=2$, $a_{21}=-1$); toda $X^tAY$ es bilineal y va de $E\times E$ a $\mathbb R$. (Si los coeficientes fueran iguales y opuestos, $2x_1y_2-2x_2y_1=2\det(x,y)$ sería el doble del área con signo; aquí son distintos y $A$ no es antisimétrica.)</li>
+    <li><b>(b) No.</b> Toda bilineal cumple $g(0,y)=0$, pero $g((0,0),(0,0))=1\neq0$ (término constante).</li>
+    <li><b>(c) No.</b> Falla $h(\lambda x,y)=\lambda h(x,y)$: con $\lambda=2$, $x=y=(1,0)$ da $h((2,0),(1,0))=4$ y $2h((1,0),(1,0))=2$. Aquí $h(0,y)=0$ sí se cumple: ese atajo es <b>necesario pero no suficiente</b>; la potencia $x_1^2$ delata el fallo.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> mira los monomios: solo vale $a_{ij}x_iy_j$ (un $x$ y un $y$ de grado 1). Los demás (constantes, solo $x$, solo $y$, potencias) la rompen.</div>
+</details>
+
+<details class="sol" id="ej-propio-2"><summary>Propio P2 — matriz, evaluación y orden de los argumentos <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 6.3 p. 246">propio</span></summary>
+  <p class="enun">Sea $f=2x_1y_1-x_1y_2+3x_2y_1+x_2y_2$ en la canónica de $\mathbb R^2$. Escribe su matriz y calcula $f((1,-2),(3,1))$ y $f((3,1),(1,-2))$.</p>
+  <ol class="steps">
+    <li>$A=\begin{pmatrix}2&-1\\3&1\end{pmatrix}$ (coeficientes de $x_iy_j$).</li>
+    <li>$AY=A\begin{pmatrix}3\\1\end{pmatrix}=\begin{pmatrix}5\\10\end{pmatrix}$ y $f((1,-2),(3,1))=(1,-2)\cdot(5,10)=-15$. Con la analítica: $6-1-18-2=-15$ ✓.</li>
+    <li>Orden cambiado: $A\begin{pmatrix}1\\-2\end{pmatrix}=\begin{pmatrix}4\\1\end{pmatrix}$ y $f((3,1),(1,-2))=(3,1)\cdot(4,1)=13\neq-15$.</li>
+    <li>Moraleja: $f$ <b>no es simétrica</b> porque $A\neq A^t$; para una no simétrica el orden de los argumentos importa.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $A$ de los coeficientes, $AY$ primero, $X^t(AY)$ después; y vigila el orden.</div>
+</details>
+
+<details class="sol" id="ej-propio-3"><summary>Propio P3 — cambio de base en $\mathbb R^2$ por los dos métodos <span class="src" data-l="P" data-ref="Ejemplo propio; U Teor. 6.1 p. 249-250 y Ej. 6.6 p. 248-249">propio</span></summary>
+  <p class="enun">$f$ tiene matriz $A=\begin{pmatrix}1&2\\0&-1\end{pmatrix}$ en la canónica. Halla su matriz en $B'=\{v_1=(1,1),\ v_2=(1,2)\}$.</p>
+  <ol class="steps">
+    <li>$P=\begin{pmatrix}1&1\\1&2\end{pmatrix}$ (columnas $v_1,v_2$), $|P|=1\neq0$: $B'$ es base.</li>
+    <li>$AP=\begin{pmatrix}1&2\\0&-1\end{pmatrix}\begin{pmatrix}1&1\\1&2\end{pmatrix}=\begin{pmatrix}3&5\\-1&-2\end{pmatrix}$ (sus columnas son $Av_1,Av_2$).</li>
+    <li>$A'=P^tAP=\begin{pmatrix}1&1\\1&2\end{pmatrix}\begin{pmatrix}3&5\\-1&-2\end{pmatrix}=\begin{pmatrix}2&3\\1&1\end{pmatrix}$.</li>
+    <li><b>Control por definición:</b> $a'_{12}=f(v_1,v_2)=(1,1)\cdot(5,-2)=3$ ✓; $a'_{21}=f(v_2,v_1)=(1,2)\cdot(3,-1)=1$ ✓. Con determinantes: $|A'|=2-3=-1=|A||P|^2=(-1)\cdot1$ ✓.</li>
+    <li><b>Contraste con la semejanza:</b> $P^{-1}AP=\begin{pmatrix}7&12\\-4&-7\end{pmatrix}$, otra matriz distinta, la del endomorfismo $x\mapsto Ax$ en $B'$, no la de la forma bilineal.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $P^tAP$ y, como control, uno o dos $a'_{ij}=v_i^tAv_j$.</div>
+</details>
+
+<details class="sol" id="ej-propio-4"><summary>Propio P4 — cambio de base en $\mathbb R^3$ con $|P|\neq\pm1$ y evaluación en $B'$ <span class="src" data-l="P" data-ref="Ejemplo propio; U Teor. 6.1 p. 249-250">propio</span></summary>
+  <p class="enun">$f$ tiene matriz $A=\begin{pmatrix}1&1&0\\0&1&2\\1&0&0\end{pmatrix}$ en la canónica. Halla su matriz en $B'=\{(1,0,0),(1,2,0),(0,1,1)\}$, comprueba el determinante y evalúa $f$ con $x'=(1,0,1)_{B'}$, $y'=(0,1,-1)_{B'}$.</p>
+  <ol class="steps">
+    <li>$P=\begin{pmatrix}1&1&0\\0&2&1\\0&0&1\end{pmatrix}$, triangular: $|P|=2\neq0$, $B'$ es base.</li>
+    <li>$AP=\begin{pmatrix}1&3&1\\0&2&3\\1&1&0\end{pmatrix}$ (columna $j$ = $A$ por el $j$-ésimo vector nuevo).</li>
+    <li>$P^t=\begin{pmatrix}1&0&0\\1&2&0\\0&1&1\end{pmatrix}$ y $A'=P^t(AP)=\begin{pmatrix}1&3&1\\1&7&7\\1&3&3\end{pmatrix}$ (fila 2: $(1,2,0)$ por las columnas da $(1,7,7)$; fila 3: $(0,1,1)$ da $(1,3,3)$).</li>
+    <li><b>Determinante:</b> $|A|=2$ (por la 3.ª fila), así que $|A'|$ debe valer $|A||P|^2=2\cdot4=8$; directamente, $|A'|=1(21-21)-3(3-7)+1(3-7)=8$ ✓. <b>No coincide con $|A|$</b>: la congruencia no conserva el determinante. El rango sí: 3 y 3.</li>
+    <li><b>Evaluar en $B'$:</b> $A'y'=(3-1,\ 7-7,\ 3-3)^t=(2,0,0)^t$, luego $f=x'^tA'y'=(1,0,1)\cdot(2,0,0)=2$. <b>Comprobación en la canónica:</b> $X=Px'=(1,1,1)$, $Y=Py'=(1,1,-1)$, $AY=(2,-1,1)$ y $X^tAY=2-1+1=2$ ✓. El valor de $f$ no depende de la base; solo cambia su expresión.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> el valor de $f(x,y)$ se puede calcular en cualquier base: $X^tAY=X'^tA'Y'$. Úsalo como control cruzado.</div>
+</details>
+
+<details class="sol" id="ej-propio-5"><summary>Propio P5 — congruencia frente a semejanza: qué se conserva, y por qué $I$ y $-I$ no son congruentes <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 6.4 p. 249, Def. 4.5 p. 148, Teor. 4.4 p. 153, §4.1 p. 147">propio</span></summary>
+  <p class="enun">(a) Con $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$ y $P=\begin{pmatrix}1&1\\0&2\end{pmatrix}$, calcula $P^tAP$ y $P^{-1}AP$ y compara rango, determinante, traza, valores propios y simetría. (b) ¿Son congruentes $I_2$ y $-I_2$? ¿Y $I_2$ y $\operatorname{diag}(1,-1)$?</p>
+  <p><b>(a)</b></p>
+  <ol class="steps">
+    <li>Primero $AP=\begin{pmatrix}1&1\\0&4\end{pmatrix}$ y luego $P^tAP=P^t(AP)=\begin{pmatrix}1&0\\1&2\end{pmatrix}\begin{pmatrix}1&1\\0&4\end{pmatrix}=\begin{pmatrix}1&1\\1&9\end{pmatrix}$ (congruente con $A$).</li>
+    <li>$P^{-1}=\tfrac12\begin{pmatrix}2&-1\\0&1\end{pmatrix}$ y $P^{-1}AP=\begin{pmatrix}1&-1\\0&2\end{pmatrix}$ (semejante a $A$).</li>
+  </ol>
+  <table>
+    <tr><th></th><th>$A$</th><th>$P^tAP$ (congruente)</th><th>$P^{-1}AP$ (semejante)</th></tr>
+    <tr><td>rango</td><td>2</td><td>2 ✓</td><td>2 ✓</td></tr>
+    <tr><td>determinante</td><td>2</td><td>$8=2\cdot|P|^2$ (mismo signo)</td><td>2 ✓</td></tr>
+    <tr><td>traza</td><td>3</td><td>10 ✗</td><td>3 ✓</td></tr>
+    <tr><td>valores propios</td><td>1, 2</td><td>$5\pm\sqrt{17}$ ✗</td><td>1, 2 ✓</td></tr>
+    <tr><td>simétrica</td><td>sí</td><td>sí ✓</td><td>no ✗</td></tr>
+  </table>
+  <p><b>(b)</b></p>
+  <ol class="steps">
+    <li><b>$I_2$ y $-I_2$ no son congruentes</b>, aunque tengan rango 2 y determinante $1$. Si $-I=P^tIP=P^tP$ con $P=\begin{pmatrix}a&b\\c&d\end{pmatrix}$, el elemento $(1,1)$ de $P^tP$ es $a^2+c^2\geq0$, y no puede valer $-1$. Interpretación: para la forma de matriz $I$, $f(x,x)=x^tx>0$ en cualquier base.</li>
+    <li><b>$I_2$ y $\operatorname{diag}(1,-1)$ no son congruentes</b>: sus determinantes tienen distinto signo y $|P|^2>0$ no cambia el signo.</li>
+    <li><b>Moraleja:</b> rango y signo del determinante son condiciones <b>necesarias</b> de congruencia, no suficientes (caso 1). El invariante completo (la signatura) se verá en 6.3.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> para refutar que dos matrices son congruentes, busca un invariante que difiera (rango, signo de $\det$, o el signo de $f(x,x)$); para refutar semejanza, la traza, el determinante o los valores propios.</div>
+</details>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="examenes"><span class="n">7</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025), <b>tres</b> ejercicios tienen como contenido principal este tema: Sept. 2018 (A), Feb. 2025 (B) y Feb. 2026 (A); en los tres es la pregunta 6. Además, dos preguntas sobre congruencia están a caballo con los temas 4.1 y 5.1 (Sept. 2023 y Feb. 2022). Se agrupan por método. Las soluciones oficiales son muy breves y aquí se desarrollan; todo está verificado con sympy.</p>
+
+<h3 id="metodoA">Método A — Evaluar $f$ con la matriz</h3>
+
+<details class="sol" id="ex-feb25b-6"><summary>Feb. 2025 (tipo B), pregunta 6 — $f((1,1),(2,3))$ dados los $f(e_i,e_j)$ <span class="src" data-l="X" data-ref="Feb. 2025 (tipo B), pregunta 6">X Feb. 2025 (B) P6</span></summary>
+  <p class="enun">Si $\{e_1,e_2\}$ es la base canónica de $\mathbb R^2$ y $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ es una aplicación bilineal con $f(e_1,e_1)=5$, $f(e_1,e_2)=-9$, $f(e_2,e_1)=2$, $f(e_2,e_2)=1$, calcule $f((1,1),(2,3))$.</p>
+  <ol class="steps">
+    <li><b>Matriz</b> (U Def. 6.3, $a_{ij}=f(e_i,e_j)$, la fila la da el primer vector): $A=\begin{pmatrix}5&-9\\2&1\end{pmatrix}$.</li>
+    <li><b>Fórmula</b> (por bilinealidad, $f(x,y)=\sum x_iy_jf(e_i,e_j)=X^tAY$).</li>
+    <li>$AY=\begin{pmatrix}5&-9\\2&1\end{pmatrix}\begin{pmatrix}2\\3\end{pmatrix}=\begin{pmatrix}10-27\\4+3\end{pmatrix}=\begin{pmatrix}-17\\7\end{pmatrix}$ y $X^tAY=(1\ \ 1)\begin{pmatrix}-17\\7\end{pmatrix}=-10$.</li>
+    <li><b>Alternativa sin matrices:</b> $f(e_1+e_2,\,2e_1+3e_2)=2f(e_1,e_1)+3f(e_1,e_2)+2f(e_2,e_1)+3f(e_2,e_2)=10-27+4+3=-10$ ✓.</li>
+  </ol>
+  <p>Coincide con la oficial ($-10$).</p>
+  <div class="recipe"><b>Receta:</b> la misma que E 6.5: $A$ con el primer argumento en la fila, $AY$ y luego $X^t(AY)$; o desarrollar a mano por bilinealidad.</div>
+  <p><b>Error típico:</b> trasponer $A$ o cambiar el orden de los vectores: $f((2,3),(1,1))=1\neq-10$.</p>
+</details>
+
+<h3 id="metodoB">Método B — Matriz en otra base y matriz de paso</h3>
+
+<details class="sol" id="ex-feb26a-6"><summary>Feb. 2026 (tipo A), pregunta 6 — matriz de $f$ en $B'=\{e_1+e_2,\ e_1-e_2\}$ <span class="src" data-l="X" data-ref="Feb. 2026 (tipo A), pregunta 6">X Feb. 2026 (A) P6</span></summary>
+  <p class="enun">Sea $B=\{e_1,e_2\}$ la base canónica de $\mathbb R^2$ y $B'=\{e_1+e_2,\ e_1-e_2\}$ (en ese orden). Sea $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ forma bilineal con matriz $\begin{pmatrix}1&1\\1&1\end{pmatrix}$ respecto de $B$. Calcule la matriz asociada a $f$ respecto de $B'$.</p>
+  <p><b>Método 1 (elemento a elemento, como U Ej. 6.6).</b></p>
+  <ol class="steps">
+    <li>$v_1=(1,1)$, $v_2=(1,-1)$. Son base: $\begin{vmatrix}1&1\\1&-1\end{vmatrix}=-2\neq0$.</li>
+    <li>$a'_{ij}=f(v_i,v_j)=v_i^tAv_j$. Primero $Av_1=(2,2)^t$ y $Av_2=(0,0)^t$.</li>
+    <li>$a'_{11}=(1,1)\cdot(2,2)=4$; $a'_{12}=(1,1)\cdot(0,0)=0$; $a'_{21}=(1,-1)\cdot(2,2)=0$; $a'_{22}=(1,-1)\cdot(0,0)=0$.</li>
+    <li>$A'=\begin{pmatrix}4&0\\0&0\end{pmatrix}$.</li>
+  </ol>
+  <p><b>Método 2 (congruencia, Teor. 6.1).</b> $P=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ (columnas = $v_1,v_2$ en $B$), $AP=\begin{pmatrix}2&0\\2&0\end{pmatrix}$ y $P^tAP=\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}2&0\\2&0\end{pmatrix}=\begin{pmatrix}4&0\\0&0\end{pmatrix}$ ✓.</p>
+  <p><b>Controles:</b> el rango se conserva ($\operatorname{rg}A=\operatorname{rg}A'=1$) y $|A'|=|A||P|^2=0\cdot4=0$ ✓.</p>
+  <div class="box warn"><span class="h">Avisos sobre la solución oficial</span>
+    <ul>
+      <li>La oficial calcula $f(v_1,v_1)$, $f(v_1,v_2)$ y $f(v_2,v_2)$ pero <b>no</b> $f(v_2,v_1)$: pone $a'_{21}=0$ sin decirlo. Es lícito solo porque $A$ es simétrica (y por tanto $f$ lo es; tema 6.2). En examen, justifícalo o calcula los cuatro, como en el paso 3.</li>
+      <li>La oficial llama a $P$ «matriz de cambio de base de $B$ a $B'$». En la terminología de U (Teor. 6.1, p.250; Ej. 6.7-6.8) esta $P$, con columnas = vectores de $B'$ en $B$ y $X=PX'$, es la matriz de paso de $B'$ a $B$. La fórmula y el resultado son correctos; solo cambia el nombre. Usa el de U.</li>
+    </ul>
+  </div>
+  <div class="recipe"><b>Receta:</b> base nueva dada por combinaciones de la vieja ⇒ $P$ con esas combinaciones <b>en columnas</b> ⇒ $A'=P^tAP$. Con $2\times2$, el método 1 es igual de rápido y sirve de control.</div>
+  <p><b>Intuición.</b> $f(x,y)=(x_1+x_2)(y_1+y_2)$. En la base nueva, $v_2=(1,-1)$ tiene «suma de componentes» cero: todo lo que lo toca vale 0.</p>
+</details>
+
+<details class="sol" id="ex-sep18a-6"><summary>Sept. 2018 (tipo A), ejercicio 6 — hallar la matriz de cambio de base; $P$ no es única <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 6">X Sept. 2018 (A) ej. 6</span></summary>
+  <p class="enun">Si $A=\begin{pmatrix}1&1\\1&2\end{pmatrix}$ es la matriz que caracteriza a una forma bilineal en una base $B$ y $A'=\begin{pmatrix}1&2\\2&5\end{pmatrix}$ es la matriz de la misma forma en otra base $B'$, calcule la matriz de cambio de base de $B'$ a $B$. (Son las matrices del Ejemplo 6.7 de U, p.250.)</p>
+  <p><b>Lo que dice la oficial:</b> solo plantea $\begin{pmatrix}1&2\\2&5\end{pmatrix}=\begin{pmatrix}a&c\\b&d\end{pmatrix}\begin{pmatrix}1&1\\1&2\end{pmatrix}\begin{pmatrix}a&b\\c&d\end{pmatrix}$ y remite a U Ej. 6.7, que da $P=\begin{pmatrix}-1&-1\\1&2\end{pmatrix}$. No resuelve el sistema ni avisa de que <b>la solución no es única</b>.</p>
+  <ol class="steps">
+    <li><b>Planteamiento.</b> Por el Teor. 6.1, si $P=\begin{pmatrix}a&b\\c&d\end{pmatrix}$ es la matriz de paso de $B'$ a $B$, es regular y $P^tAP=A'$.</li>
+    <li><b>Sistema.</b> Multiplicando, $P^tAP=\begin{pmatrix}a^2+2ac+2c^2&ab+ad+bc+2cd\\ab+ad+bc+2cd&b^2+2bd+2d^2\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}$: tres ecuaciones (las posiciones $(1,2)$ y $(2,1)$ coinciden) con cuatro incógnitas y no lineales. No cabe esperar solución única.</li>
+    <li><b>Truco: completar cuadrados.</b> $a^2+2ac+2c^2=(a+c)^2+c^2=1$; $\ b^2+2bd+2d^2=(b+d)^2+d^2=5$; $\ ab+ad+bc+2cd=(a+c)(b+d)+cd=2$. Con $u=(a+c,\ c)$ y $v=(b+d,\ d)$ dicen $|u|^2=1$, $|v|^2=5$, $u\cdot v=2$.</li>
+    <li><b>Una solución entera.</b> Prueba $c=0$, $a=1$, $u=(1,0)$. Entonces $b+d=2$ y $4+d^2=5$ ⇒ $d=\pm1$; con $d=1$, $b=1$:
+    $$P_1=\begin{pmatrix}1&1\\0&1\end{pmatrix},\ |P_1|=1\neq0.$$
+    Comprobación: $AP_1=\begin{pmatrix}1&2\\1&3\end{pmatrix}$ y $P_1^tAP_1=\begin{pmatrix}1&0\\1&1\end{pmatrix}\begin{pmatrix}1&2\\1&3\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}=A'$ ✓.</li>
+    <li><b>La de U Ej. 6.7 también sirve:</b> $P_2=\begin{pmatrix}-1&-1\\1&2\end{pmatrix}$ ($u=(0,1)$, $v=(1,2)$), con $|P_2|=-1$; $AP_2=\begin{pmatrix}0&1\\1&3\end{pmatrix}$ y $P_2^t(AP_2)=\begin{pmatrix}-1&1\\-1&2\end{pmatrix}\begin{pmatrix}0&1\\1&3\end{pmatrix}=A'$ ✓.</li>
+    <li><b>Hay infinitas.</b> $u=(\cos t,\sin t)$ es cualquier unitario y $v=2u\pm u^\perp$ con $u^\perp=(-\sin t,\cos t)$. Deshaciendo el cambio, para todo $t\in\mathbb R$:
+    $$P_+(t)=\begin{pmatrix}\cos t-\sin t&\cos t-3\sin t\\\sin t&\cos t+2\sin t\end{pmatrix}\ (|P_+|=1),\quad P_-(t)=\begin{pmatrix}\cos t-\sin t&3\cos t-\sin t\\\sin t&2\sin t-\cos t\end{pmatrix}\ (|P_-|=-1).$$
+    $P_1=P_+(0)$ y $P_2=P_-(\pi/2)$. Las soluciones <b>enteras</b> en $[-4,4]^4$ son exactamente 8: $(a,b,c,d)\in\{(1,1,0,1),(-1,-1,0,-1),(1,3,0,-1),(-1,-3,0,1),(-1,-1,1,2),(1,1,-1,-2),(-1,-3,1,2),(1,3,-1,-2)\}$.</li>
+    <li><b>Por qué no es única.</b> Si $P$ cumple $P^tAP=A'$ y $U$ es regular con $U^tA'U=A'$, entonces $PU$ también: $(PU)^tA(PU)=U^t(P^tAP)U=U^tA'U=A'$. Geométricamente: como $|A|=1>0$ y $a_{11}>0$, $f$ es un producto escalar (tema 5.1); $A$ y $A'$ son matrices de Gram en dos bases, y cualquier giro o simetría para ese producto lleva una base en otra con la misma matriz de Gram.</li>
+  </ol>
+  <div class="box tip"><span class="h">Respuesta de examen recomendada</span>
+    <p>«Por el Teor. 6.1, la matriz de paso $P$ de $B'$ a $B$ es regular y cumple $P^tAP=A'$. Con $P=\begin{pmatrix}a&b\\c&d\end{pmatrix}$ obtengo $(a+c)^2+c^2=1$, $(b+d)^2+d^2=5$, $(a+c)(b+d)+cd=2$. Una solución es $P=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ (regular), y compruebo $P^tAP=A'$. No es única: por ejemplo, $\begin{pmatrix}-1&-1\\1&2\end{pmatrix}$ (U Ej. 6.7) también la cumple.»</p>
+  </div>
+  <div class="recipe"><b>Receta:</b> matriz de paso desconocida entre dos congruentes dadas: plantea $P^tAP=A'$, escribe cada ecuación como suma de cuadrados o producto escalar, busca una solución sencilla (prueba $c=0$), compruébala y di que no es única.</div>
+  <p><b>Error típico:</b> (a) plantear $P^{-1}AP=A'$ (semejanza): aquí no tiene solución, porque las trazas son 3 y 6 y las semejantes tienen la misma traza (U Teor. 4.4). (b) Dar por mala una $P$ distinta de la del libro. (c) Olvidar comprobar que $P$ es regular.</p>
+</details>
+
+<h3 id="metodoC">Método C — Teoría de la congruencia</h3>
+
+<div class="box tip"><span class="h">Ya desarrollado en el tema 4.1</span>
+  <p><b>Sept. 2023, pregunta 5</b> — «si dos matrices son congruentes, ¿tienen el mismo determinante?» Respuesta: <b>falso</b>, $|B|=|P|^2|A|$; solo se conserva el signo (y el rango). Desarrollado en <a href="tema_4_1_relaciones_equivalencia.html#ex-sep23-5">tema 4.1, #ex-sep23-5</a>.</p>
+  <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 5">X Sept. 2023 P5</span>
+</div>
+
+<details class="sol" id="ex-feb22a1-5"><summary>Feb. 2022 (tipo A1, v2), ejercicio 5 — dos matrices de Gram del mismo producto escalar <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A1, Algebra_Febrero22A1-v2), ejercicio 5">X Feb. 2022 (A1) ej. 5</span></summary>
+  <p class="enun">Si $G$ y $G'$ son dos matrices de Gram del mismo producto escalar en bases diferentes, razone si son o no ciertas: (i) los dos determinantes son iguales; (ii) ambas matrices son congruentes y equivalentes.</p>
+  <ol class="steps">
+    <li><b>Relación entre ellas</b> (U Teor. 5.1, p.198; teoría en el <a href="tema_5_1_producto_escalar.html#cambio-base">tema 5.1</a>): $G'=Q^tGQ$ con $Q$ regular (matriz de cambio de base de $B'$ a $B$). Es exactamente el Teorema 6.1: $G$ es la matriz de una forma bilineal.</li>
+    <li><b>(ii) Verdadero.</b> $G'=Q^tGQ$ es la definición de <b>congruentes</b> (Def. 6.4). Y congruentes ⇒ <b>equivalentes</b> ($G'=MGN$ con $M=Q^t$, $N=Q$ regulares; U §4.1, p.147), luego tienen el mismo rango (aquí, $n$).</li>
+    <li><b>(i) Falso en general.</b> $\det G'=(\det Q)^2\det G$. Contraejemplo: $G=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ ($\det G=1$) y $Q=\begin{pmatrix}1&1\\0&2\end{pmatrix}$: $G'=Q^tGQ=\begin{pmatrix}2&4\\4&10\end{pmatrix}$, con $\det G'=4\neq1$. Solo coinciden si $|\det Q|=1$. Lo que sí se conserva es el signo (en un producto escalar siempre positivo).</li>
+  </ol>
+  <p><i>La oficial cita «Pg. 198» y «Pg. 146-147» de U; la congruencia ⇒ equivalencia está en U p.147, tras la Def. 4.4.</i></p>
+  <div class="recipe"><b>Receta:</b> dos matrices que representan lo mismo en bases distintas son congruentes ($Q^tGQ$) y por tanto equivalentes; su determinante cambia en $(\det Q)^2$.</div>
+  <p><b>Error típico:</b> decir que «son semejantes» (no tiene por qué: la traza cambia) o que «tienen el mismo determinante». <b>Teoría:</b> U Teor. 5.1 p.198; Def. 4.4 p.147.</p>
+</details>
+
+<h3>Para practicar — fronteras con otros temas (no se desarrollan aquí)</h3>
+<ul>
+  <li><b>Tema 6.2 (formas cuadráticas, simetría):</b> Feb. 2017 (A2) ej. 6; Feb. 2018 (A) ej. 6 (antisimétrica ⇒ $a_{ii}=0$); Feb. 2018 (B) ej. 6; Feb. 2020 (A) ej. 6 ($Q(1,1,1)=13$); Feb. 2023 (A) p.6; Feb. 2024 (B) p.6; Feb. 2025 (A) p.6; Sept. 2019 (A) ej. 6; Sept. 2023 p.6.</li>
+  <li><b>Tema 6.3 (clasificación):</b> Feb. 2026 (B) p.6; Feb. 2023 (B); Feb. 2024 (A); Sept. 2022, 2024 y 2025; Feb. 2022 (A1) ej. 6; Feb. 2022 (A2) ej. 6; Feb. 2018 (A) problema b); Feb. 2025 (A) p.5 y (B) p.8.</li>
+</ul>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="chuleta"><span class="n">8</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
+  <table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Bilineal</td><td>lineal en $x$ (con $y$ fijo) y lineal en $y$ (con $x$ fijo): 4 igualdades (Def. 6.1)</td><td>$f(\lambda x,\lambda y)=\lambda^2f(x,y)$; no es lineal en el par</td></tr>
+    <tr><td>Aplicaciones asociadas $f_1,f_2$</td><td>$f_1(y)=f(a,y)$ con $a$ fijo; $f_2(x)=f(x,b)$ con $b$ fijo</td><td>$f$ es bilineal ⇔ todas son lineales (p. ej. $a=(2,-1)$: $f_1(y)=2y_2-y_3$ en U Ej. 6.1)</td></tr>
+    <tr><td>Forma bilineal</td><td>$f:E\times E\to\mathbb R$ bilineal (Def. 6.2)</td><td>Mismo espacio en los dos factores y llegada en $\mathbb R$</td></tr>
+    <tr><td>Matriz asociada</td><td>$a_{ij}=f(e_i,e_j)$; $f(x,y)=X^tAY=\sum a_{ij}x_iy_j$ (Def. 6.3)</td><td>Depende de la base; fila = 1.er argumento, columna = 2.º. $A$ no tiene por qué ser simétrica</td></tr>
+    <tr><td>Leer $A$ de la analítica</td><td>$a_{ij}$ = coeficiente de $x_iy_j$</td><td>Solo en la base en que está escrita la expresión; no se reparte nada</td></tr>
+    <tr><td>Propiedades</td><td>$f(x,0)=f(0,y)=0$; $f(-x,y)=f(x,-y)=-f(x,y)$</td><td>Necesarias, no suficientes</td></tr>
+    <tr><td>Cambio de base (Teor. 6.1)</td><td>$A'=P^tAP$, $X=PX'$</td><td>$P$ regular, <b>matriz de paso de $B'$ a $B$</b>: columnas = vectores de $B'$ en coordenadas de $B$</td></tr>
+    <tr><td>Congruencia</td><td>$A'=P^tAP$ (Def. 6.4)</td><td>Conserva rango, simetría, signo de $\det$; <b>no</b> $\det$ ($\det A'=\det A(\det P)^2$), traza, valores propios</td></tr>
+    <tr><td>Semejanza (contraste)</td><td>$A'=P^{-1}AP$</td><td>Es para endomorfismos; no es la fórmula de este tema (coinciden si $P$ es ortogonal)</td></tr>
+    <tr><td>Valor de $f$</td><td>$X^tAY=X'^tA'Y'$</td><td>El número no depende de la base</td></tr>
+    <tr><td>Matriz de paso entre congruentes</td><td>$P^tAP=A'$</td><td>No es única (si $P$ sirve, $PU$ con $U^tA'U=A'$ también)</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §6.1, Definiciones 6.1-6.4 y Teorema 6.1, p. 244-250">U p.244-250</span>
+  <span class="src" data-l="L" data-ref="Lay §7.2, ecuación (2), p. 402 (cambio de variable: nueva matriz PᵀAP)">L p.402</span>
+</div>
+
+<div class="box tip"><span class="h">Lista de comprobación: «sé hacer…»</span>
+  <ul class="checklist">
+    <li>Decir si una aplicación es <b>bilineal</b> y si es <b>forma</b> bilineal, y justificarlo (4 igualdades o $X^tAY$; contraejemplo o $f(0,y)\neq0$ para refutar) (E 6.1-6.3).</li>
+    <li>Pasar de la expresión analítica a la matriz leyendo los coeficientes de $x_iy_j$, y al revés (E 6.6, 6.7; U Ej. 6.4-6.5).</li>
+    <li>Evaluar $f(x,y)=X^tAY$ y explicar por qué importa el orden de los argumentos (E 6.5; X Feb. 2025).</li>
+    <li>Calcular la matriz en otra base con $A'=P^tAP$, con $P$ en columnas, y comprobarla con $a'_{ij}=f(v_i,v_j)$ y $|A'|=|A||P|^2$ (E 6.8; X Feb. 2026).</li>
+    <li>Plantear $P^tAP=A'$ para hallar $P$ y saber que no es única (X Sept. 2018).</li>
+    <li>Distinguir congruencia de semejanza y decir qué se conserva en cada una (X Sept. 2023, Feb. 2022).</li>
+    <li>Demostrar el Teorema 6.1 con $X=PX'$ e $Y=PY'$.</li>
+    <li>Detectar las omisiones de E (6.4, 6.7, 6.8) y las particularidades de las oficiales (Feb. 2026, Sept. 2018).</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Lista de comprobación propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li><b>Confundir «aplicación bilineal» y «forma bilineal»</b> (E 6.3).</li>
+    <li><b>«Grado 1 ⇒ bilineal»</b> ($x_1+y_2$ no lo es) o <b>comprobar con números</b> para demostrar.</li>
+    <li><b>Trasponer $A$</b> ($f(e_2,e_1)$ en la posición $(1,2)$) y olvidar que el orden de los argumentos importa.</li>
+    <li><b>Repartir coeficientes</b> entre $(i,j)$ y $(j,i)$: se hace con formas cuadráticas, no con bilineales; y poner un factor 2 en la analítica de $f(x,y)$ (E 6.7).</li>
+    <li><b>Leer «coeficiente de $x_iy_j$» en una base distinta de la de la expresión</b> (hay que calcular $A'$).</li>
+    <li><b>Usar $P^{-1}AP$</b> en lugar de $P^tAP$; poner los vectores nuevos en filas; usar la $P$ de $B$ a $B'$.</li>
+    <li><b>No comprobar que $P$ es regular</b> (que $B'$ es base).</li>
+    <li><b>«Congruentes ⇒ mismo determinante / valores propios»</b>: falso; solo el rango y el signo del determinante.</li>
+    <li><b>Creer que la $P$ entre dos matrices congruentes es única</b> (X Sept. 2018).</li>
+    <li><b>Ojo con la nomenclatura:</b> U llama «Ejercicio» (pp. 244 y 250) a lo que son los <i>Ejemplos</i> 6.1, 6.5 y 6.6; no los busques en E.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Errores recopilados de E §6.1, U §6.1 y de las soluciones oficiales de los exámenes">propio</span>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>
