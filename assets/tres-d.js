@@ -8,6 +8,8 @@
                gs -> Gram-Schmidt de (a,b,c) en 4 pasos con botones (e1, e2, e3 y normalización). Entradas editables y presets; sin WebGL queda el texto con los cálculos.
    .d3-rot     data-modo="giro|plano|comp|libre" data-eje="1,1,1" data-ang="120" data-n="1,2,2" data-al="90" data-be="90" data-a="1,0,0;0,1,0;0,0,1"
                matrices ortogonales 3x3: cubo unidad y su imagen, esfera unidad (gris) y su imagen, columnas a1,a2,a3 de A; modos: giro (eje + angulo con slider, formula de Rodrigues), simetria respecto de un plano (Householder I-2nn^t/n^tn), composicion R_z(alpha)R_x(beta), matriz libre 3x3 editable (decimales); calcula A^tA, det, traza, eje (valor propio 1, de la parte antisimetrica; morado) y angulo por la traza (tr = 1+2cos), plano de simetria (morado; tr=1 con det=-1; tr distinto = simetria rotatoria; giro de 180 = simetria axial); escena R=2,2 y escala K; presets con E 5.25, U Ej. 5.26 y matrices no ortogonales de contraste; sin WebGL queda el texto
+   .d3-ejes    data-a="1,0,1;0,2,0;1,0,1"
+               matrices SIMETRICAS 3x3 (ejes principales): seis entradas editables (triangulo superior; el inferior se copia) y presets (tres valores distintos, valor doble con plano propio, singular, estilo E 5.33, A = lambda I); esfera unidad (gris) y su imagen (elipsoide morado) con slider t (M(t) = (1-t)I + tA), las rectas propias perpendiculares (o recta + plano propio perpendicular si hay un valor doble; todo R3 si A = lambda I) y flechas u1, u2, u3 de longitud |semieje|; valores propios por Jacobi (vectores ya ortonormales), P = (u1 u2 u3), PtP = I, det P, Pt A P = diag(l1, l2, l3), traza = suma y determinante = producto; sin WebGL queda el texto con los calculos
    Arrastrar = girar, rueda / pellizco = zoom. */
 (function () {
   'use strict';
@@ -77,7 +79,12 @@
     var T = THREE, MW = maxW || 520, W = Math.min(parent.clientWidth || MW, MW), H = Math.round(W * (aspect || 0.8));
     var wrap = el('div', 'd3-wrap'); parent.appendChild(wrap);
     var renderer;
-    try { renderer = new T.WebGLRenderer({ antialias: true, alpha: true }); }
+    try {
+      var tc = document.createElement('canvas'), gl = tc.getContext('webgl') || tc.getContext('experimental-webgl');
+      if (!gl) throw new Error('sin WebGL');
+      var lc = gl.getExtension('WEBGL_lose_context'); if (lc) lc.loseContext();
+      renderer = new T.WebGLRenderer({ antialias: true, alpha: true });
+    }
     catch (e) { wrap.appendChild(el('p', 'sar-hint', 'Tu navegador no puede mostrar gráficos 3D (WebGL).')); return null; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(W, H);
     renderer.domElement.className = 'd3-canvas'; renderer.domElement.setAttribute('role', 'img'); renderer.domElement.setAttribute('aria-label', 'Figura 3D interactiva (arrastra para girar, rueda o pellizco para acercar)'); wrap.appendChild(renderer.domElement);
@@ -792,7 +799,102 @@
   }
 
 
-  var REG = [['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
+  /* =====================================================================
+     7. MATRICES SIMÉTRICAS 3x3: ejes principales perpendiculares (.d3-ejes)
+        data-a="1,0,1;0,2,0;1,0,1" (se usa el triángulo superior: la matriz es simétrica por construcción)
+     ===================================================================== */
+  function jacobi3(A0) {                              // valores y vectores propios de una simétrica 3x3 por rotaciones de Jacobi (columnas ortonormales)
+    var M = A0.map(function (r) { return r.slice(); }), V = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], it, p, q, i, j;
+    for (it = 0; it < 60; it++) {
+      p = 0; q = 1; var big = Math.abs(M[0][1]);
+      if (Math.abs(M[0][2]) > big) { p = 0; q = 2; big = Math.abs(M[0][2]); }
+      if (Math.abs(M[1][2]) > big) { p = 1; q = 2; big = Math.abs(M[1][2]); }
+      if (big < 1e-13) break;
+      var th = (M[q][q] - M[p][p]) / (2 * M[p][q]), t = (th >= 0 ? 1 : -1) / (Math.abs(th) + Math.sqrt(th * th + 1)), c = 1 / Math.sqrt(t * t + 1), s = t * c;
+      var G = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]; G[p][p] = c; G[q][q] = c; G[p][q] = s; G[q][p] = -s;
+      M = matMul3(transp3(G), matMul3(M, G)); V = matMul3(V, G);
+    }
+    var ev = [0, 1, 2].map(function (k) { var v = [V[0][k], V[1][k], V[2][k]], m = 0; for (j = 0; j < 3; j++) if (Math.abs(v[j]) > Math.abs(v[m]) + 1e-9) m = j; if (v[m] < 0) v = [-v[0], -v[1], -v[2]]; return { l: M[k][k], v: v }; });
+    ev.sort(function (a, b) { return b.l - a.l; });
+    return ev;
+  }
+  function buildEjes(root) {
+    var a0 = (root.getAttribute('data-a') || '1,0,1;0,2,0;1,0,1').split(';').map(function (r) { return r.split(',').map(Number); });
+    root.textContent = ''; root.classList.add('sarrus');
+    var nd = function (x) { var v = Math.round(x * 1000) / 1000; if (Math.abs(v) < 1e-9) v = 0; return String(v).replace('-', MINUS).replace('.', ','); };
+    var mt = function (rows) { var ent = rows.every(function (r) { return r.every(function (x) { return Math.abs(x - Math.round(x)) < 1e-9; }); }); return '(' + rows.map(function (r) { return r.map(nd).join(ent ? ' ' : ' ; '); }).join(' / ') + ')'; };
+    var R = 4;
+    root.appendChild(el('p', 'sar-text an-title', 'Una matriz simétrica A de 3×3 deforma la esfera unidad (gris) en un elipsoide (morado) cuyos tres ejes están sobre rectas perpendiculares entre sí: las rectas propias. Los semiejes miden |λ| (puntos de colores en los extremos); las flechas u₁, u₂, u₃ son los vectores propios unitarios. Si hay un valor propio doble, sus vectores propios llenan un plano (translúcido) perpendicular a la recta del otro. El deslizador t deforma poco a poco: M(t) = (1 ' + MINUS + ' t)·I + t·A. Escribe los seis números de la parte de arriba (la de abajo se copia) o carga un ejemplo.'));
+    var box = el('div', 'an-eqs'), er = el('div', 'an-eq down'), tbl = el('div', 'd3-mat'), inp = {}, ro = {};
+    er.appendChild(el('span', '', 'A = '));
+    for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) {
+      if (i <= j) { var x = numInput(a0[i][j], '3.6em'); x.step = 0.5; x.setAttribute('aria-label', 'A fila ' + (i + 1) + ' columna ' + (j + 1)); inp[i + '' + j] = x; tbl.appendChild(x); }
+      else { var r = el('span', 'an-ro'); r.setAttribute('aria-hidden', 'true'); ro[i + '' + j] = r; tbl.appendChild(r); }
+    }
+    er.appendChild(tbl); er.appendChild(el('span', '', '  (simétrica: aᵢⱼ = aⱼᵢ; valores de ' + MINUS + '5 a 5)')); box.appendChild(er); root.appendChild(box);
+    var S = makeScene(root, R, 0.85, 520);
+    if (S) S.renderer.domElement.setAttribute('aria-label', 'Figura 3D: la esfera unidad, su imagen por la matriz simétrica A (un elipsoide) y las rectas propias perpendiculares');
+    var sl = el('div', 'an-sliders'), srow = el('label', 'an-slrow'), st = slider(0, 1, 0.05, 1), sb = el('b');
+    st.setAttribute('aria-label', 'parámetro t de la deformación'); srow.appendChild(el('span', '', 't ')); srow.appendChild(st); srow.appendChild(sb); sl.appendChild(srow);
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'); text.setAttribute('aria-live', 'polite');
+    var PRE = [['Distintos: E 5.32 (1 1 0; 1 2 −1; 0 −1 1)', [[1, 1, 0], [1, 2, -1], [0, -1, 1]]], ['U Ej. 5.31–5.34 (1 0 1; 0 2 0; 1 0 1)', [[1, 0, 1], [0, 2, 0], [1, 0, 1]]], ['Doble, plano propio: (2 1 1; 1 2 1; 1 1 2)', [[2, 1, 1], [1, 2, 1], [1, 1, 2]]], ['Distintos: (1 1 0; 1 0 1; 0 1 1)', [[1, 1, 0], [1, 0, 1], [0, 1, 1]]],
+      ['Doble −1: (1 2 2; 2 1 2; 2 2 1)', [[1, 2, 2], [2, 1, 2], [2, 2, 1]]], ['Singular: (1 2 0; 2 4 0; 0 0 0)', [[1, 2, 0], [2, 4, 0], [0, 0, 0]]], ['Estilo E 5.33: (1 −1 0; −1 0 0; 0 0 5)', [[1, -1, 0], [-1, 0, 0], [0, 0, 5]]], ['Triple: 2·I', [[2, 0, 0], [0, 2, 0], [0, 0, 2]]]];
+    var pre = btnRow(PRE.map(function (p) { return p[0]; }), function (k) { var Mx = PRE[k][1]; for (var i2 = 0; i2 < 3; i2++) for (var j2 = i2; j2 < 3; j2++) inp[i2 + '' + j2].value = Mx[i2][j2]; draw(); });
+    function wire(M, k, color) {
+      var T = S.T, pts = [], la, lo;
+      function pt(a, b) { var u = [Math.cos(a) * Math.cos(b), Math.cos(a) * Math.sin(b), Math.sin(a)], w = matVec(M, u); return new T.Vector3(k * w[0], k * w[1], k * w[2]); }
+      for (la = -60; la <= 60; la += 30) for (lo = 0; lo < 360; lo += 10) pts.push(pt(la * Math.PI / 180, lo * Math.PI / 180), pt(la * Math.PI / 180, (lo + 10) * Math.PI / 180));
+      for (lo = 0; lo < 360; lo += 30) for (la = -90; la < 90; la += 10) pts.push(pt(la * Math.PI / 180, lo * Math.PI / 180), pt((la + 10) * Math.PI / 180, lo * Math.PI / 180));
+      S.dyn.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(pts), new T.LineBasicMaterial({ color: color, transparent: true, opacity: 0.8 })));
+    }
+    function draw() {
+      var C = COL(), A = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], clip = false, i2, j2;
+      for (i2 = 0; i2 < 3; i2++) for (j2 = i2; j2 < 3; j2++) { var v = parseFloat(inp[i2 + '' + j2].value); if (isNaN(v)) v = 0; if (Math.abs(v) > 5) { clip = true; v = Math.max(-5, Math.min(5, v)); } A[i2][j2] = v; A[j2][i2] = v; }
+      for (i2 = 1; i2 < 3; i2++) for (j2 = 0; j2 < i2; j2++) ro[i2 + '' + j2].textContent = nd(A[i2][j2]);
+      var t = parseFloat(st.value); sb.textContent = nd(t);
+      var ev = jacobi3(A), mx = 0, tol = 1e-6, groups = [], g;
+      ev.forEach(function (e) { mx = Math.max(mx, Math.abs(e.l)); });
+      ev.forEach(function (e) { if (groups.length && Math.abs(groups[groups.length - 1].l - e.l) < tol * (1 + mx)) groups[groups.length - 1].vs.push(e); else groups.push({ l: e.l, vs: [e] }); });
+      var K = Math.min(2, 3.2 / Math.max(1, mx)), Mt = A.map(function (r, a) { return r.map(function (x2, b) { return (1 - t) * (a === b ? 1 : 0) + t * x2; }); });
+      var cols = [C.a, C.b, C.c], P = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+      ev.forEach(function (e, k) { for (var r2 = 0; r2 < 3; r2++) P[r2][k] = e.v[r2]; });
+      var Lm = matMul3(transp3(P), matMul3(A, P)), PtP = matMul3(transp3(P), P), err = 0, detP = det3(ev[0].v, ev[1].v, ev[2].v);
+      for (i2 = 0; i2 < 3; i2++) for (j2 = 0; j2 < 3; j2++) err = Math.max(err, Math.abs(PtP[i2][j2] - (i2 === j2 ? 1 : 0)));
+      if (S) {
+        S.clearDyn(); var dark = document.documentElement.getAttribute('data-theme') === 'dark', ELL = dark ? '#d7a8ec' : '#8e44ad';
+        wire([[1, 0, 0], [0, 1, 0], [0, 0, 1]], K, C.m); wire(Mt, K, ELL);
+        groups.forEach(function (gr, gi) {
+          var cc = cols[gi % 3];
+          if (gr.vs.length === 1) S.line([0, 0, 0], gr.vs[0].v, cc, 0.06);
+          else if (gr.vs.length === 2) { var other = ev.filter(function (e) { return gr.vs.indexOf(e) < 0; })[0]; S.plane(other.v, 0, cc, 0.22); }
+          else S.space(cc);
+        });
+        ev.forEach(function (e, k) { var gi = 0; groups.forEach(function (gr, q) { if (gr.vs.indexOf(e) >= 0) gi = q; }); var len = K * ((1 - t) + t * e.l), L1 = Math.min(3.1, 2.3 * Math.max(1, K)); S.arrow([L1 * e.v[0], L1 * e.v[1], L1 * e.v[2]], cols[gi % 3], 'u' + (k + 1)); S.sphere([len * e.v[0], len * e.v[1], len * e.v[2]], cols[gi % 3], 0.14); });
+        S.render();
+      }
+      var h = 'Se calculan los valores y vectores propios con el método de Jacobi, que los da ya <b>ortonormales</b>. <b>Valores propios</b> (todos reales, por ser A simétrica): ' + groups.map(function (gr) { return '<b>λ = ' + nd(gr.l) + '</b>' + (gr.vs.length > 1 ? ' (α = d = ' + gr.vs.length + ')' : ''); }).join(', ') + '. tr A = ' + nd(A[0][0] + A[1][1] + A[2][2]) + ' = λ₁ + λ₂ + λ₃ = ' + nd(ev[0].l + ev[1].l + ev[2].l) + '; |A| = ' + nd(det3(A[0], A[1], A[2])) + ' = λ₁λ₂λ₃ = ' + nd(ev[0].l * ev[1].l * ev[2].l) + '.<br>';
+      var sub = groups.map(function (gr) {
+        if (gr.vs.length === 1) return 'L(' + nd(gr.l) + ') = recta ⟨(' + gr.vs[0].v.map(nd).join('; ') + ')⟩';
+        if (gr.vs.length === 2) { var o = ev.filter(function (e) { return gr.vs.indexOf(e) < 0; })[0]; return 'L(' + nd(gr.l) + ') = plano ⟂ (' + o.v.map(nd).join('; ') + ')'; }
+        return 'L(' + nd(gr.l) + ') = ℝ³ (A = ' + nd(gr.l) + '·I)';
+      });
+      h += 'Subespacios propios: ' + sub.join('; ') + '. ' + (groups.length === 1 ? '' : 'Los subespacios de valores distintos son <b>perpendiculares</b>' + (groups.length === 2 ? ' (recta ⟂ plano)' : ' (tres rectas perpendiculares dos a dos)') + '. ') + (groups.some(function (gr) { return gr.vs.length > 1; }) ? 'Dentro de un plano propio cualquier base ortonormal vale: las dos columnas mostradas son una elección entre infinitas (aquí es donde se aplicaría Gram-Schmidt a mano).' : '') + '<br>';
+      h += '<b>P</b> = (u₁ u₂ u₃) = ' + mt(P) + ' (columnas = vectores propios unitarios, en el orden de los λ). PᵗP = I (error máximo ' + (err < 1e-9 ? '0' : err.toExponential(0)) + '), det P = <b>' + nd(detP) + '</b>' + (detP > 0 ? ': P es un giro.' : ': P es ortogonal con det −1 (cambiando el signo de una columna sería un giro; ambas valen).') + '<br>';
+      h += '<b>PᵗAP</b> = ' + mt(Lm) + ' = diag(' + ev.map(function (e) { return nd(e.l); }).join(', ') + '): diagonal, con los valores propios en el mismo orden que las columnas de P.<br>';
+      h += 'Elipsoide imagen: semiejes ' + ev.map(function (e) { return '|λ| = ' + nd(Math.abs(e.l)); }).join(', ') + ' sobre las rectas propias' + (ev.some(function (e) { return Math.abs(e.l) < 1e-6; }) ? ' (algún semieje vale 0: el elipsoide se aplasta, A es singular)' : '') + (ev.some(function (e) { return e.l < -1e-6; }) ? '; un λ negativo invierte ese eje' : '') + '.';
+      if (Math.abs(K - 1) > 1e-9) h += ' <i>(Dibujo a escala ' + nd(K) + ' para que quepa bien.)</i>';
+      if (clip) h += ' <i>(Las entradas se recortan al intervalo [−5, 5].)</i>';
+      if (!S) h += '<br><i>Sin gráfico 3D: se muestran solo los cálculos.</i>';
+      html(text, h); res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = groups.length === 3 ? 'Tres valores propios distintos: tres rectas perpendiculares' : (groups.length === 2 ? 'Un valor doble: recta + plano perpendiculares' : 'A = λI: todo vector es propio'); res.appendChild(fin);
+    }
+    root.appendChild(sl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    Object.keys(inp).map(function (k) { return inp[k]; }).concat([st]).forEach(function (q) { q.addEventListener('input', draw); });
+    if (S) S.onTheme = draw; draw();
+  }
+
+
+  var REG = [['.d3-ejes', buildEjes], ['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
   function init() {
     var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n, false]); }); });
     if (!todo.length) return;

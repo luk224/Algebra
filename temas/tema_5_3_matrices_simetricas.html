@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 5.3 Diagonalización de matrices simétricas</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/tres-d.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 5 · Ortogonalidad · Tema 5.3</div>
+  <h1>Diagonalización de matrices simétricas</h1>
+  <p>Las matrices simétricas son las únicas que se diagonalizan <b>sin deformar el espacio</b>: sus vectores propios forman unos ejes <b>perpendiculares</b>, así que la matriz de paso es ortogonal ($P^{-1}=P^t$) y $P^tAP=\Lambda$. Aprenderás por qué sus valores propios son siempre reales, por qué los ejes salen perpendiculares, la receta de cinco pasos (con Gram-Schmidt dentro de cada subespacio propio) y qué hace el teorema espectral.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §5.3 (pp. 220-225)</span><span>Ejercicios: E Ej. 5.26–5.33 (pp. 184-189)</span><span>Lay §7.1 (pp. 395-400)</span><span>⏱ ~6–8 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §5.3.1 Elementos didácticos, p. 220">U p.220</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>En el tema 4 aprendiste a diagonalizar: buscar unos ejes (los vectores propios) en los que la matriz solo <b>estira</b>. Pero esos ejes pueden ser <b>oblicuos</b>: la matriz $\begin{pmatrix}1&2\cr0&3\end{pmatrix}$ tiene ejes que forman $45^\circ$. Una <b>matriz simétrica</b> ($A=A^t$) es la que garantiza lo mejor posible: sus ejes propios son <b>perpendiculares entre sí</b> (como los ejes de una elipse). Entonces, si los tomas de longitud $1$, la matriz de paso $P$ es <b>ortogonal</b> (tema 5.2) y diagonalizar es solo girar el sistema de referencia: $P^tAP=\Lambda$, sin calcular ninguna inversa. Y eso es lo que usarás en el tema 6 para dibujar cónicas y cuádricas.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del <a href="tema_4_3_diagonalizacion.html">tema 4.3</a> (imprescindible): diagonalizar $A$ es hallar $P$ regular con $P^{-1}AP=\Lambda$; las columnas de $P$ son una base de vectores propios; $A$ es diagonalizable si y solo si todas las raíces del polinomio característico son reales ($\sum\alpha_i=n$) y $d_i=\alpha_i$ para cada valor propio (multiplicidad geométrica = algebraica). Del <a href="tema_4_2_valores_vectores_propios.html">tema 4.2</a>: $|A-\lambda I|=0$ y los subespacios propios $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</li>
+  <li>Del <a href="tema_5_1_producto_escalar.html">tema 5.1</a>: producto escalar estándar $x\cdot y=X^tY$, ortogonalidad, normalizar, y sobre todo <b>Gram-Schmidt</b> (lo necesitarás dentro de cada subespacio propio).</li>
+  <li>Del <a href="tema_5_2_matrices_ortogonales.html">tema 5.2</a>: $P$ ortogonal $\iff P^tP=I\iff P^{-1}=P^t$ (columnas ortonormales), y el significado de giro/simetría de una ortogonal ($\det P=\pm1$).</li>
+  <li>Del <a href="tema_1_2_algebra_matricial.html">tema 1.2</a>: traspuesta, $(AB)^t=B^tA^t$ y $(A^t)^t=A$. Del <a href="tema_4_1_relaciones_equivalencia.html">tema 4.1</a>: matrices semejantes ($P^{-1}AP$) y congruentes ($P^tAP$).</li>
+  <li>Un poco de <b>números complejos</b> (conjugado, $z\bar z=|z|^2\ge0$): solo para entender una demostración (sección 2).</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde</th></tr>
+  <tr><td>1 Matriz simétrica</td><td>Definición, operaciones que la conservan, <b>animación 2D</b>: una simétrica deforma la circunferencia en una elipse de ejes perpendiculares</td><td>U p.221 · L p.395 · E 5.26 C</td></tr>
+  <tr><td>2 Dos hechos clave</td><td>Valores propios <b>reales</b> y subespacios propios <b>ortogonales</b>, con demostración</td><td>U p.221-223 · L Teor. 1 p.395-396 · E 5.26 B</td></tr>
+  <tr><td>3 Diagonalización ortogonal</td><td>Teor. 5.7 y 5.8, «diagonalizable ortogonalmente ⇔ simétrica», teorema espectral, descomposición espectral</td><td>U p.223-224 · L p.396-398 · E 5.26 A, 5.27</td></tr>
+  <tr><td>4 Cómo se hace</td><td>Receta de 5 pasos, Gram-Schmidt dentro de $L_\lambda$, orden de $\Lambda$ y $P$, U Ej. 5.31–5.34 y Lay Ej. 3, <b>animación 3D</b></td><td>U p.222-225 · L p.396-397</td></tr>
+  <tr><td>5 Tabla Lay ↔ U</td><td>Vocabulario y alcance</td><td>L</td></tr>
+  <tr><td>6 Ejercicios del libro</td><td>E 5.26–5.33 + 11 ejemplos propios + autoevaluación</td><td>E pp.184-189 · U p.239</td></tr>
+  <tr><td>7 Ejemplos de examen</td><td>El ejercicio propio de 5.3 y tres ampliaciones sobre ejercicios de 4.2 y 4.3</td><td>X</td></tr>
+  <tr><td>8 Chuleta</td><td>Fórmulas con hipótesis, lista de comprobación, errores frecuentes</td><td>—</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p><b>(a)</b> <b>Diagonalizar ortogonalmente</b> una simétrica concreta, dando $P$ ortogonal y $\Lambda$ (E 5.33). <b>(b)</b> <b>Explicar</b> en qué consiste (X Ene. 2020, ejercicio 5). <b>(c)</b> Demostrar propiedades: valores propios reales, $f(x)\cdot y=x\cdot f(y)$, $A=P^t\Lambda P$ ⇒ simétrica (E 5.26, 5.27). <b>(d)</b> Tests de «porque…»: ¿por qué solo tiene valores propios reales? ¿semejantes y/o congruentes? ¿qué valores de $x$ dan una simétrica? (E 5.29–5.32). <b>(e)</b> Construir una simétrica a partir de sus subespacios propios (variante propia sobre X Feb. 2020 B). Esta sección <b>aparece directamente una sola vez</b> en los exámenes (Ene. 2020, 1 punto); sobre todo es <b>herramienta</b> de 6.2-6.4 (formas cuadráticas y cónicas).</p>
+  <span class="src" data-l="P" data-ref="Clasificación propia a partir de E §5.3 y los exámenes 2017-2026">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Convenios del tema que conviene fijar desde ya</span>
+  <ul>
+    <li><b>Solo matrices reales.</b> Todo lo de este tema vale para matrices <b>con todos sus elementos reales</b> (U lo recuerda en una nota al pie, p.221). Con matrices complejas simétricas el teorema es falso (Propio 11).</li>
+    <li><b>Tres palabras que se parecen:</b> <i>simétrica</i> ($A=A^t$), <i>ortogonal</i> ($A^tA=I$, tema 5.2) y <i>diagonalizable ortogonalmente</i> (existe $P$ ortogonal con $P^tAP$ diagonal). El teorema central dice: <b>simétrica ⇔ diagonalizable ortogonalmente</b>. Ninguna de las dos primeras implica la otra.</li>
+    <li>U escribe $\Lambda$ para la matriz diagonal y $P$ para la matriz de paso con columnas = vectores propios; $\Lambda=P^{-1}AP$ y, si $P$ es ortogonal, $\Lambda=P^tAP$. Aquí se usa lo mismo.</li>
+    <li><b>Notación de subespacios propios:</b> aquí $L(\lambda)$ (o $L_\lambda$) es el subespacio propio del valor propio $\lambda$, así que $L(2)$ es el de $\lambda=2$. U los numera $L(1),L(2),\dots$ por orden de aparición (en su Ej. 5.32, $L(1)$ es el de $\lambda=2$ y $L(2)$ el de $\lambda=0$).</li>
+    <li>Todo el tema usa el producto escalar <b>estándar</b> de $\mathbb R^n$.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §5.3, nota 3 al pie de la p. 221 y Teoremas 5.7-5.8, p. 223-224">U p.221-224</span>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Matriz simétrica <span class="src" data-l="U" data-ref="U §5.3, p. 221 (definición recordada: A simétrica ⇔ A = A^t)">U p.221</span> <span class="src" data-l="L" data-ref="Lay §7.1, definición y Ejemplo 1, p. 395">L p.395</span></h2>
+
+<div class="box def"><span class="h">Matriz simétrica</span>
+  <p>Una matriz cuadrada $A$ es <b>simétrica</b> si $A^t=A$, es decir $a_{ij}=a_{ji}$: lo que hay a un lado de la diagonal es el espejo de lo que hay al otro. Los elementos de la diagonal son cualesquiera.</p>
+  <p>Ejemplos: $\begin{pmatrix}1&0\cr0&3\end{pmatrix}$, $\begin{pmatrix}2&-1&5\cr-1&0&8\cr5&8&7\end{pmatrix}$, $\begin{pmatrix}a&b&c\cr b&d&e\cr c&e&f\end{pmatrix}$. No lo son $\begin{pmatrix}1&3\cr-3&0\end{pmatrix}$ (le falta el espejo: $3\neq-3$) ni $\begin{pmatrix}1&2\cr0&3\end{pmatrix}$.</p>
+  <span class="src" data-l="U" data-ref="U §5.3, p. 221: «una matriz A es simétrica si y sólo si A = A^t»">U p.221</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, definición y Ejemplo 1, p. 395">L p.395</span>
+</div>
+
+<div class="box intu"><span class="h">Idea: ¿por qué interesan?</span>
+  <p>Surgen «de forma natural» en las aplicaciones (procesamiento de imágenes, estadística, mecánica…) y, en el tema 6, <b>toda forma cuadrática</b> se escribe con una matriz simétrica. Y sobre todo: son las matrices que <b>no tuercen los ejes</b>. Mira la animación: una matriz simétrica de $2\times2$ convierte la circunferencia unidad en una <b>elipse</b>, y los ejes de esa elipse son justo las direcciones de los vectores propios; como los dos ejes de una elipse son perpendiculares, los dos vectores propios lo son. Con una matriz no simétrica los ejes propios se «inclinan» y dejan de coincidir con los de la elipse.</p>
+</div>
+
+<div class="box ex"><span class="h">Animación: matriz simétrica $2\times2$ → elipse de ejes perpendiculares</span>
+  <div class="anim-simet" data-a="3,1,3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-simet); matrices de E 5.29-5.30, Propios 1-2 y X Ene. 2020 ej. 5">P</span>
+</div>
+
+<div class="box thm"><span class="h">Operaciones que conservan la simetría (útiles para demostraciones)</span>
+  <p>Si $A,B$ son simétricas del mismo orden y $C$ es <b>cualquier</b> matriz para la que el producto existe:</p>
+  <ul>
+    <li>$A+B$, $\lambda A$, $A^k$ ($k\ge1$) y $A^{-1}$ (si existe) son simétricas. Por ejemplo $(A^2)^t=(AA)^t=A^tA^t=AA=A^2$.</li>
+    <li>$C^tAC$, $C^tC$ y $CC^t$ son simétricas: $(C^tAC)^t=C^tA^t(C^t)^t=C^tAC$ (E 5.27 es el caso $C=P$).</li>
+    <li>El producto $AB$ <b>no</b> es simétrico en general: $\begin{pmatrix}1&2\cr2&1\end{pmatrix}\begin{pmatrix}1&0\cr0&2\end{pmatrix}=\begin{pmatrix}1&4\cr2&2\end{pmatrix}$. Lo es si y solo si $AB=BA$ (es el X Feb. 2024, 2.ª sem., pregunta 1, resuelto en el <a href="tema_1_2_algebra_matricial.html#ex-feb24b">tema 1.2</a>).</li>
+  </ul>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Problema de práctica 1 (p. 399) y Ejercicios 27 y 29 (p. 400)">L p.399-400</span>
+  <span class="src" data-l="P" data-ref="Desarrollo propio con (AB)^t = B^t A^t, U §1.2 p. 13; ejemplo numérico propio">propio</span>
+</div>
+
+<div class="box thm"><span class="h">Simetría escrita con el producto escalar: $Ax\cdot y=x\cdot Ay$</span>
+  <p>Con el producto escalar estándar ($u\cdot v=u^tv$): $A$ es simétrica si y solo si $Ax\cdot y=x\cdot Ay$ para todos $x,y$. ($\Rightarrow$) $(AX)^tY=X^tA^tY=X^tAY=X^t(AY)$. ($\Leftarrow$) con $x=e_i$, $y=e_j$: $Ae_i\cdot e_j=a_{ji}$ y $e_i\cdot Ae_j=a_{ij}$, luego $a_{ji}=a_{ij}$. Es exactamente el apartado C del Ejercicio 5.26 (con $f(x)=AX$): «la matriz simétrica es la que no distingue entre aplicar $A$ al primer vector o al segundo». Es el hecho que hace funcionar todas las demostraciones de la sección 2.</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.26 C, p. 184 (ver la solución en la sección 6)">E 5.26 C p.184</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Ejercicio 28, p. 400">L p.400</span>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Dos hechos clave: valores propios reales y ejes perpendiculares <span class="src" data-l="U" data-ref="U §5.3, Propiedades de los valores y de los vectores propios y Ejemplos 5.31-5.32, p. 221-223">U p.221-223</span> <span class="src" data-l="L" data-ref="Lay §7.1, Teorema 1, p. 395-396">L p.395-396</span></h2>
+
+<h3>2.1 Los valores propios de una simétrica son reales</h3>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>En general el polinomio característico de una matriz real puede tener raíces <b>complejas</b> (un giro de $90^\circ$ no tiene ninguna dirección propia real: $\lambda^2+1=0$). Para una simétrica $2\times2$, $\begin{pmatrix}a&b\cr b&c\end{pmatrix}$, el discriminante del polinomio $\lambda^2-(a+c)\lambda+(ac-b^2)$ vale
+  $$(a+c)^2-4(ac-b^2)=(a-c)^2+4b^2=(a-c)^2+(2b)^2\ \ge 0,$$
+  una <b>suma de cuadrados</b>: nunca es negativa. Eso mismo ocurre en cualquier tamaño, aunque la razón es más sutil (hay que pasar por números complejos).</p>
+</div>
+
+<div class="box thm"><span class="h">Propiedad de los valores propios</span>
+  <p>Todas las raíces de la ecuación característica de una matriz <b>simétrica real</b> son reales.</p>
+  <p><b>Demostración (la de U, con un pequeño arreglo).</b> Sea $\lambda\in\mathbb C$ una raíz de $|A-\lambda I|=0$. Existe $X\in\mathbb C^n$, $X\neq0$, con $AX=\lambda X$.</p>
+  <ol class="steps">
+    <li>Conjuga: como $A$ es real, $\bar A=A$ y queda $A\bar X=\bar\lambda\bar X$ (así $\bar\lambda$ es valor propio con vector propio $\bar X$; en U son «$\lambda^*$» e «$Y$»).</li>
+    <li>Multiplica $AX=\lambda X$ por $\bar X^t$ a la izquierda: $\bar X^tAX=\lambda\,\bar X^tX$.</li>
+    <li>Traspón $A\bar X=\bar\lambda\bar X$: $\bar X^tA^t=\bar\lambda\bar X^t$; con $A^t=A$ y multiplicando por $X$ a la derecha: $\bar X^tAX=\bar\lambda\,\bar X^tX$.</li>
+    <li>Restando: $(\lambda-\bar\lambda)\,\bar X^tX=0$. Pero $\bar X^tX=|x_1|^2+\dots+|x_n|^2\gt0$ porque $X\neq0$. Luego $\lambda=\bar\lambda$: $\lambda$ es real. $\blacksquare$</li>
+  </ol>
+  <p><b>Aviso sobre el texto de U (p.221).</b> U toma $X$ e $Y$ vectores propios de $\lambda$ y $\lambda^*$ «cualesquiera» y concluye $\lambda=\lambda^*$ de $\lambda X^tY=\lambda^*X^tY$; eso solo es válido si $X^tY\neq0$, cosa que U no justifica (el vector complejo $X=(1,i)$ cumple $X^tX=1+i^2=0$). Eligiendo $Y=\bar X$ se tiene $X^tY=\sum|x_i|^2\gt0$ y el argumento queda completo. En un examen basta con la idea: se conjuga, se usa $A^t=A$ y se compara.</p>
+  <span class="src" data-l="U" data-ref="U §5.3, «Propiedad de los valores propios» y su demostración, p. 221">U p.221</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.26 B, p. 184">E 5.26 B p.184</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.31 de U: una simétrica $3\times3$ con un valor propio doble</span>
+  <p>$A=\begin{pmatrix}1&0&1\cr0&2&0\cr1&0&1\end{pmatrix}$ (simétrica). Su ecuación característica es
+  $$\begin{vmatrix}1-\lambda&0&1\cr0&2-\lambda&0\cr1&0&1-\lambda\end{vmatrix}=(1-\lambda)^2(2-\lambda)-(2-\lambda)=(2-\lambda)\big[(1-\lambda)^2-1\big]=(2-\lambda)\lambda(\lambda-2)=0 .$$
+  Los valores propios son reales: $\lambda_1=2$ con multiplicidad algebraica $\alpha_1=2$ y $\lambda_2=0$ con $\alpha_2=1$. Comprobación con la traza: $2+2+0=4=1+2+1$. Esta matriz es el hilo conductor de U en toda la sección (Ej. 5.31–5.34).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.31, p. 222 (U lo rotula «Ejemplo» pero lo cita luego como «Ejercicio 5.31»)">U p.222</span>
+</div>
+
+<h3>2.2 Los vectores propios de valores propios distintos son perpendiculares</h3>
+
+<div class="box thm"><span class="h">Propiedad de los vectores propios</span>
+  <p>Si $A$ es una matriz simétrica real de orden $n$, los subespacios de vectores propios asociados a <b>valores propios distintos</b> son <b>ortogonales</b> con el producto escalar estándar: si $Av_1=\lambda_1v_1$, $Av_2=\lambda_2v_2$ y $\lambda_1\neq\lambda_2$, entonces $v_1\cdot v_2=0$.</p>
+  <p><b>Demostración</b> (U la enuncia sin probarla; esta es la de Lay, tres líneas):</p>
+  $$\lambda_1(v_1\cdot v_2)=(Av_1)\cdot v_2=v_1^tA^tv_2=v_1^tAv_2=v_1\cdot(Av_2)=\lambda_2(v_1\cdot v_2).$$
+  <p>Luego $(\lambda_1-\lambda_2)(v_1\cdot v_2)=0$ y, como $\lambda_1\neq\lambda_2$, $v_1\cdot v_2=0$. El único paso que usa la simetría es $A^t=A$ (es $Ax\cdot y=x\cdot Ay$ de la sección 1). $\blacksquare$</p>
+  <span class="src" data-l="U" data-ref="U §5.3, «Propiedad de los vectores propios», p. 222 (sin demostración)">U p.222</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Teorema 1 y demostración, p. 395-396">L p.395-396</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.32 de U: los subespacios propios de la matriz anterior, y su ortogonalidad</span>
+  <ol class="steps">
+    <li><b>$L(2)$ ($\lambda=2$).</b> $(A-2I)X=0$: $\begin{pmatrix}-1&0&1\cr0&0&0\cr1&0&-1\end{pmatrix}X=0\iff x_1-x_3=0$. Con parámetros $x_1=\alpha,\ x_3=\alpha,\ x_2=\beta$: $X=\alpha(1,0,1)+\beta(0,1,0)$. Base $\{(1,0,1),(0,1,0)\}$, $\dim L(2)=2=\alpha_1$: un <b>plano</b>.</li>
+    <li><b>$L(0)$ ($\lambda=0$).</b> $AX=0$: $x_1+x_3=0,\ x_2=0$. Base $\{(1,0,-1)\}$: una <b>recta</b>, $\dim L(0)=1=\alpha_2$.</li>
+    <li><b>Diagonalizable:</b> $d_i=\alpha_i$ para los dos valores propios (U Teor. 4.7).</li>
+    <li><b>$L(2)\perp L(0)$.</b> Basta comprobar que una base de uno es ortogonal a una base del otro: $(1,0,1)\cdot(1,0,-1)=0$ y $(0,1,0)\cdot(1,0,-1)=0$. En concreto, $(4,3,4)=4(1,0,1)+3(0,1,0)\in L(2)$ y $(3,0,-3)\in L(0)$ cumplen $(4,3,4)\cdot(3,0,-3)=12-12=0$. Geométricamente: el plano $x_1=x_3$ y la recta $\langle(1,0,-1)\rangle$ (su normal) son perpendiculares.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.32, p. 222-223 (la última componente de los vectores columna aparece como x2 en vez de x3 en el original)">U p.222-223</span>
+</div>
+
+<div class="box warn"><span class="h">La omisión importante de U: dentro de un mismo subespacio propio NO hay ortogonalidad automática</span>
+  <p>El resultado habla de valores propios <b>distintos</b>. Si un valor propio tiene $\dim L_\lambda\ge2$, dos vectores propios del <b>mismo</b> valor propio pueden no ser ortogonales. En el ejemplo de U la base $\{(1,0,1),(0,1,0)\}$ del plano $L(2)$ sale ortogonal «por casualidad» ($0+0+0=0$); pero la base «natural» que da el método de los parámetros suele ser otra (por ejemplo $\{(1,0,1),(1,1,1)\}$ también es base de $L(2)$ y $(1,0,1)\cdot(1,1,1)=2\neq0$). Para construir una $P$ ortogonal hay que aplicar <b>Gram-Schmidt dentro de cada subespacio propio de dimensión $\ge2$</b> (sección 4). Lay lo hace explícito en su Ejemplo 3 (p.396-397); U no.</p>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Ejemplo 3, p. 396-397">L p.396-397</span>
+  <span class="src" data-l="P" data-ref="Aviso propio sobre la omisión de U §5.3 (en sus ejemplos las bases ya son ortogonales)">propio</span>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Diagonalización ortogonal: Teoremas 5.7 y 5.8 <span class="src" data-l="U" data-ref="U §5.3, Teoremas 5.7 y 5.8 y texto intermedio, p. 223-224">U p.223-224</span> <span class="src" data-l="L" data-ref="Lay §7.1, Teoremas 2 y 3, p. 396-397">L p.396-397</span></h2>
+
+<div class="box thm"><span class="h">Teorema 5.7 — diagonalización de matrices simétricas</span>
+  <p>Las matrices simétricas se pueden diagonalizar respecto de una <b>base ortogonal (ortonormal) de vectores propios</b>. En particular, toda simétrica real es diagonalizable (con $d_i=\alpha_i$ para todos sus valores propios).</p>
+  <p>Si $P$ es la matriz de paso (cambio de base) asociada a esa base, entonces $\Lambda=P^{-1}AP$: $A$ y $\Lambda$ son <b>semejantes</b>. Si la base es <b>ortonormal</b>, $P$ es una matriz ortogonal (sus columnas son ortonormales; tema 5.2). Se dice entonces que $A$ es <b>diagonalizable ortogonalmente</b>.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 5.7, p. 223">U p.223</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, definición de diagonalizable ortogonalmente, p. 396">L p.396</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 5.8 — diagonalización mediante una matriz de paso ortogonal</span>
+  <p>Si $A$ es una matriz simétrica con elementos reales, existe una matriz de paso $P$ <b>ortogonal</b> tal que
+  $$P^tAP=\Lambda,\qquad\text{equivalentemente}\qquad A=P\Lambda P^t,$$
+  con $\Lambda$ diagonal formada por los valores propios de $A$. En particular, <b>$A$ y $\Lambda$ son semejantes ($\Lambda=P^{-1}AP$) y además congruentes ($\Lambda=P^tAP$)</b>, porque $P^{-1}=P^t$.</p>
+  <p><b>Por qué la ortogonalidad importa:</b> (i) no hay que calcular $P^{-1}$, basta trasponer; (ii) la misma $P$ sirve para el cambio de base de matrices <i>(semejanza, tema 4)</i> y de formas cuadráticas <i>(congruencia, tema 6)</i>; (iii) es un cambio entre bases ortonormales, así que conserva longitudes y ángulos (tema 5.2).</p>
+  <span class="src" data-l="U" data-ref="U Teorema 5.8, p. 224">U p.224</span>
+</div>
+
+<div class="box intu"><span class="h">Por qué es cierto (idea de la demostración, propia: U y Lay la omiten)</span>
+  <p>Sea $u$ un vector propio unitario de $A$ (existe, porque hay un valor propio real: sección 2.1) con $Au=\lambda u$. Si $x\perp u$ entonces $Ax\cdot u=x\cdot Au=\lambda\,x\cdot u=0$: <b>$A$ manda el plano (o hiperplano) $u^\perp$ en sí mismo</b>. Dentro de $u^\perp$, $A$ sigue siendo simétrica, de un tamaño menos. Se repite el argumento: se elige otro vector propio unitario dentro de $u^\perp$, y así hasta agotar la dimensión. Resultado: $n$ vectores propios unitarios y perpendiculares dos a dos, es decir, una base ortonormal de vectores propios. Dentro de un subespacio propio doble se elige el segundo vector del plano perpendicular al primero (eso es Gram-Schmidt).</p>
+  <span class="src" data-l="P" data-ref="Esquema propio de inducción; el argumento Ax·u = x·Au es E 5.26 C; Lay p. 396 omite la demostración y U no la da">propio</span>
+</div>
+
+<div class="box thm"><span class="h">Recíproco (E 5.27, Lay Teorema 2): solo las simétricas se diagonalizan ortogonalmente</span>
+  <p>$A$ es diagonalizable ortogonalmente $\iff$ $A$ es simétrica. La ida es el Teor. 5.8; la vuelta es una línea: si $A=P\Lambda P^t$ con $P$ ortogonal y $\Lambda$ diagonal, entonces $A^t=(P\Lambda P^t)^t=P\Lambda^tP^t=P\Lambda P^t=A$. En consecuencia, una matriz <b>no simétrica</b> no puede diagonalizarse ortogonalmente <i>aunque sea diagonalizable</i> (sus ejes propios existen, pero no son perpendiculares).</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.27, p. 184">E 5.27 p.184</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Teorema 2, p. 396">L p.396</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema espectral para matrices simétricas (Lay, no figura con nombre en U)</span>
+  <p>Una matriz simétrica $A$ de $n\times n$ cumple: <b>(a)</b> tiene $n$ valores propios reales, contando multiplicidades; <b>(b)</b> la dimensión de cada subespacio propio es igual a la multiplicidad del valor propio como raíz del polinomio característico ($d_i=\alpha_i$); <b>(c)</b> los subespacios propios son mutuamente ortogonales; <b>(d)</b> $A$ es diagonalizable ortogonalmente. (Al conjunto de valores propios se le llama el <i>espectro</i> de $A$.)</p>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Teorema 3 (teorema espectral), p. 397">L p.397</span>
+  <span class="src" data-l="U" data-ref="Contenido de (a)-(d) en U: p. 221 (a), p. 223 (b y d), p. 222 (c)">U p.221-223</span>
+</div>
+
+<div class="box thm"><span class="h">Descomposición espectral (Lay): $A=\lambda_1u_1u_1^t+\dots+\lambda_nu_nu_n^t$</span>
+  <p>Si $A=P\Lambda P^t$ con $P=(u_1\ \cdots\ u_n)$ ortogonal, multiplicando por columnas y filas resulta
+  $$A=\lambda_1\,u_1u_1^t+\lambda_2\,u_2u_2^t+\dots+\lambda_n\,u_nu_n^t .$$
+  Cada $u_ju_j^t$ es la matriz de la <b>proyección ortogonal</b> sobre la recta $\langle u_j\rangle$ (tema 5.1), de rango 1. Es decir: <b>una simétrica es «estirar por $\lambda_j$ en la dirección $u_j$», sumado sobre ejes perpendiculares.</b> Sirve para reconstruir $A$ desde sus valores y vectores propios, y para calcular $A^k=\sum\lambda_j^ku_ju_j^t$ (Propios 5 y 8).</p>
+  <p><b>Ejemplo (Lay Ej. 4).</b> $A=\begin{pmatrix}7&2\cr2&4\end{pmatrix}=8u_1u_1^t+3u_2u_2^t$ con $u_1=\tfrac1{\sqrt5}(2,1)$, $u_2=\tfrac1{\sqrt5}(-1,2)$: $8u_1u_1^t=\tfrac85\begin{pmatrix}4&2\cr2&1\end{pmatrix}$, $3u_2u_2^t=\tfrac35\begin{pmatrix}1&-2\cr-2&4\end{pmatrix}$, y la suma es $\begin{pmatrix}7&2\cr2&4\end{pmatrix}$.</p>
+  <span class="src" data-l="L" data-ref="Lay §7.1, descomposición espectral y Ejemplo 4, p. 398 (no figura en U)">L p.398</span>
+</div>
+
+<div class="box tip"><span class="h">Diagonalizable, ¿y ortogonalmente? Comparación con el tema 4.3</span>
+  <table>
+    <tr><th></th><th>Diagonalizable (tema 4.3)</th><th>Diagonalizable ortogonalmente (este tema)</th></tr>
+    <tr><td>Condición</td><td>$d_i=\alpha_i$ para todo valor propio (y raíces reales)</td><td>$A=A^t$ (y real)</td></tr>
+    <tr><td>Matriz de paso</td><td>$P$ regular: columnas = base de vectores propios cualquiera</td><td>$P$ <b>ortogonal</b>: columnas = base <b>ortonormal</b> de vectores propios</td></tr>
+    <tr><td>Inversa</td><td>$P^{-1}$ por Gauss-Jordan</td><td>$P^{-1}=P^t$</td></tr>
+    <tr><td>Valores propios</td><td>pueden ser complejos</td><td>siempre reales</td></tr>
+    <tr><td>Ejemplo</td><td>$\begin{pmatrix}1&2\cr0&3\end{pmatrix}$: diagonalizable, ejes a $45^\circ$</td><td>$\begin{pmatrix}3&1\cr1&3\end{pmatrix}$: ejes $y=x$ e $y=-x$, perpendiculares</td></tr>
+  </table>
+  <p>Por tanto: simétrica ⇒ diagonalizable (siempre) y ortogonalmente. Diagonalizable no implica simétrica. Y <b>«ortogonal» no es «simétrica»</b> (el giro de $90^\circ$ no es simétrico).</p>
+  <span class="src" data-l="P" data-ref="Cuadro comparativo propio; U §4.3 Teor. 4.7 p. 164 y U Teor. 5.7-5.8 p. 223-224">propio</span>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Cómo se hace: receta de diagonalización ortogonal <span class="src" data-l="U" data-ref="U Ejemplos 5.32-5.34, p. 222-225">U p.222-225</span> <span class="src" data-l="L" data-ref="Lay §7.1, Ejemplos 2 y 3, p. 395-397">L p.395-397</span></h2>
+
+<div class="box tip"><span class="h">Receta de cinco pasos</span>
+  <ol>
+    <li><b>Comprobar que $A=A^t$</b> (y que es real). Si no lo es, no se puede diagonalizar ortogonalmente (E 5.27).</li>
+    <li><b>Valores propios:</b> resuelve $|A-\lambda I|=0$ (todas las raíces son reales) y anota la multiplicidad $\alpha_i$ de cada una. Control: suma de valores propios = traza; producto = determinante.</li>
+    <li><b>Subespacios propios:</b> para cada $\lambda_i$, base de $L(\lambda_i)=\operatorname{Nuc}(A-\lambda_iI)$. Control: $\dim L(\lambda_i)=\alpha_i$ (lo garantiza el Teor. 5.7, pues una simétrica real es diagonalizable; si te sale menos, hay un error de cálculo).</li>
+    <li><b>Ortogonalizar dentro de cada $L(\lambda_i)$:</b> si $\dim L(\lambda_i)\ge2$ y la base no es ortogonal, aplica <b>Gram-Schmidt solo dentro de ese $L(\lambda_i)$</b> (tema 5.1). Entre subespacios de valores distintos <b>no hace falta</b>: ya son ortogonales (sección 2.2). Los vectores nuevos siguen siendo propios, por ser combinaciones de vectores de $L(\lambda_i)$.</li>
+    <li><b>Normalizar</b> cada vector (dividir por su norma), poner los vectores como <b>columnas de $P$</b> y los valores propios en $\Lambda$ <b>en el mismo orden</b>. Entonces $P$ es ortogonal, $P^{-1}=P^t$ y $P^tAP=\Lambda$. Comprueba al menos $P^tP=I$ y $AP=P\Lambda$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.32-5.34, p. 222-225 (el paso de Gram-Schmidt dentro de L_λ viene de Lay Ej. 3, p. 396-397)">U p.222-225</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Ejemplo 3, p. 396-397">L p.396-397</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 5.33 y 5.34 de U: la matriz de paso, sin normalizar y normalizada</span>
+  <p>Sea de nuevo $A=\begin{pmatrix}1&0&1\cr0&2&0\cr1&0&1\end{pmatrix}$, con $L(2)=\langle(1,0,1),(0,1,0)\rangle$ y $L(0)=\langle(1,0,-1)\rangle$.</p>
+  <ol class="steps">
+    <li><b>Base ortogonal de $\mathbb R^3$ (Ej. 5.33).</b> Como $L(2)\perp L(0)$ (sección 2.2) y la base de $L(2)$ ya es ortogonal, $B'=\{(1,0,1),(0,1,0),(1,0,-1)\}$ es una <b>base ortogonal de vectores propios</b>. La matriz de paso y la diagonal son
+      $$P=\begin{pmatrix}1&0&1\cr0&1&0\cr1&0&-1\end{pmatrix},\qquad \Lambda=P^{-1}AP=\begin{pmatrix}2&0&0\cr0&2&0\cr0&0&0\end{pmatrix}.$$ Aquí $P$ <b>no</b> es ortogonal: $P^tP=\operatorname{diag}(2,1,2)\neq I$. Sirve para $P^{-1}AP$, pero hay que calcular $P^{-1}$.</li>
+    <li><b>Normalizar (Ej. 5.34).</b> Se divide cada columna por su norma: $\|(1,0,1)\|=\sqrt2$, $\|(0,1,0)\|=1$, $\|(1,0,-1)\|=\sqrt2$:
+      $$P=\begin{pmatrix}\frac1{\sqrt2}&0&\frac1{\sqrt2}\cr0&1&0\cr\frac1{\sqrt2}&0&-\frac1{\sqrt2}\end{pmatrix}.$$ Sus columnas son ortonormales, luego $PP^t=I_3$ y $P^{-1}=P^t$.</li>
+    <li><b>Comprobación (la hace U):</b> $P^tAP=\operatorname{diag}(2,2,0)=\Lambda$. ($\det P=-1$; no importa, es ortogonal igualmente: ver más abajo.)</li>
+    <li><b>Qué habría pasado sin normalizar:</b> con la $P$ del paso 1, $P^tAP=\operatorname{diag}(2\cdot2,\ 2\cdot1,\ 0\cdot2)=\operatorname{diag}(4,2,0)\neq\Lambda$: cada valor propio sale multiplicado por $\|v_i\|^2$. Es el error de «$P$ ortogonal» más frecuente (sección «Errores»).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.33 (p. 223-224) y 5.34 (p. 224-225); U los rotula «Ejercicio 5.31/5.32» en el texto por «Ejemplo»">U p.223-225</span>
+  <span class="src" data-l="P" data-ref="Cálculo de P^t A P sin normalizar: propio, comprobado con sympy">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Lay Ejemplo 3: valor propio doble y Gram-Schmidt dentro de $L_\lambda$</span>
+  <p>$A=\begin{pmatrix}3&-2&4\cr-2&6&2\cr4&2&3\end{pmatrix}$ (simétrica). Su ecuación característica es $-(\lambda-7)^2(\lambda+2)=0$: $\lambda=7$ ($\alpha=2$) y $\lambda=-2$ ($\alpha=1$). Traza $12=7+7-2$.</p>
+  <ol class="steps">
+    <li><b>$L(7)$:</b> $A-7I=\begin{pmatrix}-4&-2&4\cr-2&-1&2\cr4&2&-4\end{pmatrix}$ ⇒ una sola ecuación, $2x+y-2z=0$: un plano. Base «de los parámetros»: $v_1=(1,0,1)$, $v_2=(-1,2,0)$. <b>No son ortogonales:</b> $v_1\cdot v_2=-1\neq0$.</li>
+    <li><b>Gram-Schmidt en $L(7)$:</b> $z_2=v_2-\dfrac{v_2\cdot v_1}{v_1\cdot v_1}v_1=(-1,2,0)+\tfrac12(1,0,1)=\left(-\tfrac12,2,\tfrac12\right)\ \sim\ (-1,4,1)$. Sigue en $L(7)$ ($2(-1)+4-2=0$) y $z_2\cdot v_1=-1+0+1=0$.</li>
+    <li><b>$L(-2)$:</b> $(A+2I)X=0$ da $v_3=(-2,-1,2)$. Es ortogonal a $v_1$ y a $z_2$ <b>sin hacer nada</b> (valores propios distintos): $(-2,-1,2)\cdot(1,0,1)=0$, $(-2,-1,2)\cdot(-1,4,1)=2-4+2=0$.</li>
+    <li><b>Normalizar:</b> $\|v_1\|=\sqrt2$, $\|z_2\|=\sqrt{18}$, $\|v_3\|=3$.
+      $$P=\begin{pmatrix}\frac1{\sqrt2}&-\frac1{\sqrt{18}}&-\frac23\cr0&\frac4{\sqrt{18}}&-\frac13\cr\frac1{\sqrt2}&\frac1{\sqrt{18}}&\frac23\end{pmatrix},\qquad\Lambda=\begin{pmatrix}7&0&0\cr0&7&0\cr0&0&-2\end{pmatrix},\qquad P^tAP=\Lambda,\ \ \det P=1 .$$</li>
+  </ol>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Ejemplo 3, p. 396-397 (mismos cálculos con otra base inicial de L(7))">L p.396-397</span>
+</div>
+
+<div class="box ex"><span class="h">Animación 3D: esfera → elipsoide de ejes perpendiculares, rectas y planos propios</span>
+  <div class="d3-ejes" data-a="1,0,1;0,2,0;1,0,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/tres-d.js, d3-ejes); matrices de U Ej. 5.31-5.34, E 5.32 y 5.33 y Propios 3, 4, 6">P</span>
+</div>
+
+<div class="box intu"><span class="h">Detalles de la receta que conviene tener claros</span>
+  <ul>
+    <li><b>El orden manda.</b> Si $\Lambda=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$, la columna $j$ de $P$ debe ser un vector propio unitario de $\lambda_j$. Cambiar el orden en $\Lambda$ obliga a cambiarlo en $P$ (en E 5.33 los valores $3$ y $5$ están «cruzados» respecto de las columnas $e_4$, $e_3$).</li>
+    <li><b>La solución no es única.</b> Cada columna puede cambiar de signo, el orden de los valores propios es libre, y dentro de un $L_\lambda$ con $\dim\ge2$ hay infinitas bases ortonormales. Cualquier $P$ ortogonal que cumpla $P^tAP=\Lambda$ es correcta (por eso la animación 3D solo dibuja una elección).</li>
+    <li><b>$\det P=\pm1$.</b> Si $\det P=1$, $P$ es un giro; si $-1$, un giro compuesto con una simetría (tema 5.2). Cambiar el signo de <i>una</i> columna convierte una en otra y no afecta a $P^tAP=\Lambda$. Para las cónicas (tema 6) se querrá $\det P=1$.</li>
+    <li><b>Valores propios repetidos con trampa:</b> si el Teor. 5.7 dice $\dim L_\lambda=\alpha$, la dimensión <b>no puede quedarse corta</b> (a diferencia del tema 4.3, donde una matriz no simétrica sí puede tener $d\lt\alpha$). Si te sale $d\lt\alpha$ con una simétrica, revisa el cálculo de $\operatorname{rang}(A-\lambda I)$.</li>
+    <li><b>Atajos con ortogonalidad:</b> en $\mathbb R^3$, con dos vectores propios ya conocidos de valores distintos, el tercero sale con el producto vectorial (X Feb. 2017, sección 7); si conoces todos los $L_\lambda$ menos uno, el que falta es el complemento ortogonal.</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Resumen propio de los comentarios a E 5.33 y a U p. 222-224">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos en la diagonalización ortogonal</span>
+  <ul>
+    <li><b>No normalizar</b>: la $P$ de columnas ortogonales pero no unitarias no es ortogonal y $P^tAP\neq\Lambda$ (sale $\operatorname{diag}(\|v_i\|^2\lambda_i)$).</li>
+    <li><b>Creer que dos vectores propios del mismo valor propio ya son ortogonales</b>: solo lo son los de valores distintos. Dentro de un $L_\lambda$ de dimensión $\ge2$, Gram-Schmidt.</li>
+    <li><b>Aplicar Gram-Schmidt a todo el conjunto</b> de vectores propios, mezclando subespacios distintos: innecesario (y si lo haces mal, los vectores salen de su subespacio y dejan de ser propios).</li>
+    <li><b>Desordenar</b> columnas de $P$ y entradas de $\Lambda$.</li>
+    <li><b>Usar $P^{-1}$ por Gauss-Jordan</b> cuando $P$ es ortogonal: pierde tiempo y se equivoca; basta trasponer.</li>
+    <li><b>Aplicarlo a una matriz no simétrica</b> (por ejemplo, una triangular con valores propios distintos): diagonaliza, pero no ortogonalmente.</li>
+  </ul>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Tabla Lay ↔ U: vocabulario y alcance <span class="src" data-l="L" data-ref="Lay §7.1, p. 395-400">L p.395-400</span></h2>
+
+<p>Lay trata este tema en su §7.1 «Diagonalización de matrices simétricas». Es más explícito que U en lo que U da por supuesto (demostración de la ortogonalidad, Gram-Schmidt en espacios propios, espectro). <b>En el examen manda U.</b></p>
+<table>
+  <tr><th>Concepto</th><th>U (oficial)</th><th>Lay</th></tr>
+  <tr><td>Valores propios reales</td><td>«Propiedad de los valores propios», p.221 (demostración con una laguna)</td><td>Teor. 3 a), p.397 (se deduce de un ejercicio de §5.5)</td></tr>
+  <tr><td>Vectores propios de valores distintos ortogonales</td><td>«Propiedad de los vectores propios», p.222 (<b>sin demostración</b>)</td><td>Teor. 1, p.395-396 (<b>con demostración</b>)</td></tr>
+  <tr><td>Diagonalizable ortogonalmente</td><td>Texto tras el Teor. 5.7, p.223 («en términos generales…»)</td><td>Definición formal, $A=PDP^t$, p.396</td></tr>
+  <tr><td>Simétrica ⇒ diagonalizable ortogonalmente</td><td>Teor. 5.7 y 5.8, p.223-224</td><td>Teor. 2, p.396 (es un «si y solo si»)</td></tr>
+  <tr><td>Recíproco (ortogonalmente ⇒ simétrica)</td><td>No lo enuncia (se pide en E 5.27)</td><td>Teor. 2, p.396</td></tr>
+  <tr><td>$\dim L_\lambda=\alpha$</td><td>Implícito en el Ej. 5.32, p.223</td><td>Teor. 3 b), p.397</td></tr>
+  <tr><td>Gram-Schmidt dentro de $L_\lambda$</td><td>No (sus ejemplos ya vienen ortogonales)</td><td>Ejemplo 3, p.396-397</td></tr>
+  <tr><td>Descomposición espectral</td><td>No</td><td>p.398 y Ejemplo 4</td></tr>
+  <tr><td>Notación</td><td>$P^tAP=\Lambda$, $\Lambda$ diagonal; $L_i$ subespacio propio</td><td>$A=PDP^T$, $D$ diagonal; «espacio propio»</td></tr>
+  <tr><td>Semejantes y congruentes</td><td>Teor. 5.8, p.224</td><td>No usa «congruente» aquí (lo hará con las formas cuadráticas, §7.2)</td></tr>
+</table>
+<div class="box warn"><span class="h">Aviso</span>
+  <p>Lay escribe $D$ donde U escribe $\Lambda$ para la matriz diagonal; ambos llaman $P$ a la matriz de paso. Lay supone siempre matrices reales en todo el capítulo 7. Donde Lay y U difieran en notación, manda U.</p>
+  <span class="src" data-l="L" data-ref="Lay §7.1, p. 395-398">L p.395-398</span>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="ejercicios"><span class="n">6</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §5.3, Ej. 5.26-5.33, p. 184-189">E p.184-189</span></h2>
+
+<p>Los Ejercicios 5.26 a 5.33 de E son los de esta sección (los anteriores, hasta el 5.25, son de los temas 5.1 y 5.2; el Ejercicio 5.34, p.191, ya es de 5.4). <b>Orden de estudio recomendado</b> (de fácil a difícil): <b>5.27 → 5.26 → 5.30 → 5.29 → 5.28 → 5.31 → 5.32 → 5.33</b>. Abajo están en el orden del libro. Pulsa «Mostrar soluciones» arriba para abrirlas todas.</p>
+
+<div class="box warn"><span class="h">Erratas y omisiones de E en esta sección (comprobadas en el PDF de E)</span>
+  <ul>
+    <li><b>5.26 A:</b> el enunciado dice «una base de vectores ortogonales dos a dos»; literalmente la cumple cualquier endomorfismo (la base canónica). Debe leerse «una base de <b>vectores propios</b> ortogonales dos a dos». Además la solución escribe «digonalizan».</li>
+    <li><b>5.28:</b> la solución plantea $P^{-1}AP=B$ pero lo convierte en $PA=BP$ (que corresponde a $A=P^{-1}BP$, como escribe al final) e intercambia los resultados de los dos productos. La conclusión ($P$ singular) es correcta.</li>
+    <li><b>5.30 C</b> (pp.186-187): la solución dice «en general, las matrices con filas linealmente independientes no poseen valores propios reales». Es falso: $I$ tiene filas l.i. y valor propio real $1$; lo correcto es «<i>no tienen por qué</i> poseerlos». Tampoco señala que las filas de esta $A$ son l.d. ($\operatorname{rang}A=1$).</li>
+    <li><b>5.31</b> (p.187): la respuesta «ninguna es cierta» es correcta, pero la solución solo prueba la condición necesaria; omite la suficiencia (con raíces reales siempre existe una simétrica: la diagonal de las raíces). La condición exacta es $x\ge-\frac1{12}$ (no hay errata de signo en las opciones: A) no existen, B) $x\le\frac1{12}$, C) $x\le1$).</li>
+    <li><b>5.32</b> (p.188): la última línea queda incompleta («$P^tAP=B\Leftrightarrow P^{-1}BP$»); debe leerse «$P^tAP=B$ y, como $P^t=P^{-1}$, $P^{-1}AP=B$». El «Caso 2» (si los valores propios fueran otros) queda sin concluir: no serían semejantes.</li>
+    <li><b>5.33</b> (p.189): correcta, pero no comprueba $P^tAP=\Lambda$ («siendo $P$ y $D$ las matrices calculadas»); escribe $x$ como variable del polinomio y llama $D$ a la matriz que antes llamó $\Lambda$.</li>
+  </ul>
+  <span class="src" data-l="E" data-ref="Comprobado con el PDF de E, p. 184-189 (Ejercicios 5.26 a 5.33)">E p.184-189</span>
+</div>
+
+<h3 id="bloqueI">Bloque I — Propiedades de las simétricas (E 5.26–5.27)</h3>
+
+<details class="sol" id="ej5-26"><summary>Ejercicio 5.26 — base ortogonal de vectores propios, valores propios reales y $f(x)\cdot y=x\cdot f(y)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.26, p. 184">E p.184</span></summary>
+  <p class="enun">Si $A$ es la matriz simétrica asociada a un endomorfismo $f$ de $\mathbb R^3$ en la base canónica, se pide probar: A) $f$ posee una base de vectores ortogonales dos a dos con el producto escalar usual. B) Todos sus valores propios son reales. C) Considerando el producto escalar estándar, $f(\bar x)\cdot\bar y=\bar x\cdot f(\bar y)$.</p>
+  <p><b>Idea.</b> Lo más natural es probar primero B, luego A. C es la propiedad que hace funcionar B y la ortogonalidad.</p>
+  <ol class="steps">
+    <li><b>B) Valores propios reales.</b> Los valores propios son las raíces de $|A-\lambda I|=0$ (U p.153), en principio complejas. Sea $\lambda\in\mathbb C$ una raíz y $X\in\mathbb C^3$, $X\neq0$, con $AX=\lambda X$.</li>
+    <li>Conjuga la igualdad: como $A$ es real, $A\bar X=\bar\lambda\bar X$. Multiplica la primera por $\bar X^t$ a la izquierda: $\bar X^tAX=\lambda\,\bar X^tX$.</li>
+    <li>Traspón la segunda ($(A\bar X)^t=\bar X^tA^t=\bar X^tA$, por ser $A=A^t$) y multiplica por $X$ a la derecha: $\bar X^tAX=\bar\lambda\,\bar X^tX$.</li>
+    <li>Resta: $(\lambda-\bar\lambda)\,\bar X^tX=0$. Como $\bar X^tX=|x_1|^2+|x_2|^2+|x_3|^2\gt0$ ($X\neq0$), $\lambda=\bar\lambda$, o sea $\lambda\in\mathbb R$. $\blacksquare$ (Es la demostración de la sección 2.1, que arregla la de U p.221.)</li>
+    <li><b>A) Precisión del enunciado.</b> Literalmente, una base de vectores ortogonales dos a dos la tiene cualquier endomorfismo: la canónica. Lo que se quiere probar (y lo que prueba E) es <b>una base ortogonal formada por vectores propios de $f$</b>.</li>
+    <li>Por B, el polinomio característico (grado $3$) tiene sus $3$ raíces reales $\lambda_1,\dots,\lambda_r$ con multiplicidades $\alpha_i$, $\sum\alpha_i=3$. Por el Teor. 5.7 (U p.223), $A$ es diagonalizable respecto de una base ortogonal de vectores propios; en particular $d_i=\alpha_i$.</li>
+    <li><b>Cómo se construye:</b> en cada $L_{\lambda_i}$ se toma una base y se ortogonaliza con Gram-Schmidt (U p.208); los vectores obtenidos siguen en $L_{\lambda_i}$, luego siguen siendo propios. Vectores de subespacios propios <b>distintos</b> son ortogonales automáticamente (U p.222). Reuniendo las bases de cada $L_{\lambda_i}$ se obtienen $\sum d_i=3$ vectores ortogonales dos a dos y no nulos, luego linealmente independientes (U Teor. 5.2, p.206): una base ortogonal de $\mathbb R^3$ de vectores propios. Equivalente: existe $P$ ortogonal con $P^tAP=\Lambda$ (Teor. 5.8) y las columnas de $P$ son esa base. $\blacksquare$</li>
+    <li><b>C) $f(x)\cdot y=x\cdot f(y)$.</b> Con el producto estándar $u\cdot v=u^tv$ y $f(x)=AX$ (matriz en la base canónica): $f(x)\cdot y=(AX)^tY=X^tA^tY$ por $(AB)^t=B^tA^t$ (U p.13). Como $A^t=A$: $X^tA^tY=X^tAY=X^t(AY)=x\cdot f(y)$. $\blacksquare$</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> simétrica real ⇒ (i) valores propios reales, (ii) subespacios propios de valores distintos ortogonales, (iii) $d_i=\alpha_i$ ⇒ base ortonormal de vectores propios (Gram-Schmidt dentro de cada subespacio propio). La identidad $Ax\cdot y=x\cdot Ay$ es «simetría» escrita con productos escalares.</div>
+  <p><b>Error típico:</b> creer que, con un valor propio doble, <i>cualquier</i> base del subespacio propio sirve para una $P$ ortogonal: dentro de $L_\lambda$ los vectores no tienen por qué ser ortogonales (Propio 4). <b>Teoría:</b> U §5.3 pp.221-224; U §1.2 p.13; U §5.1 pp.206-208.</p>
+</details>
+
+<details class="sol" id="ej5-27"><summary>Ejercicio 5.27 — $A=P^t\Lambda P$ implica $A$ simétrica <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.27, p. 184">E p.184</span></summary>
+  <p class="enun">Si $A$ es la matriz real cuadrada tal que $A=P^t\Lambda P$ siendo $\Lambda$ una matriz diagonal, pruébese que $A$ es simétrica.</p>
+  <ol class="steps">
+    <li><b>Qué hay que probar.</b> $A$ es simétrica si $A^t=A$. Calculamos $A^t$ y vemos si vuelve a dar $A$.</li>
+    <li><b>Traspuesta de un producto de tres matrices.</b> $(AB)^t=B^tA^t$ (U p.13), aplicada dos veces, da $(XYZ)^t=Z^tY^tX^t$ (se invierte el orden): $A^t=(P^t\Lambda P)^t=P^t\,\Lambda^t\,(P^t)^t$.</li>
+    <li><b>Simplificar.</b> $(P^t)^t=P$ y $\Lambda^t=\Lambda$ (una matriz diagonal solo tiene entradas en la diagonal, que la trasposición no mueve).</li>
+    <li><b>Conclusión.</b> $A^t=P^t\Lambda P=A$: $A$ es simétrica. $\blacksquare$</li>
+  </ol>
+  <p><b>Observación.</b> No hace falta que $P$ sea ortogonal ni regular: toda matriz $P^tDP$ con $D$ simétrica es simétrica (sección 1). Leído al revés, este ejercicio es la mitad «fácil» del teorema: <b>si $A$ se diagonaliza con una $P$ ortogonal</b> ($P^tAP=\Lambda$ ⇒ $A=P\Lambda P^t$), <b>entonces $A$ es simétrica</b>. Por eso una matriz no simétrica nunca es diagonalizable ortogonalmente (Propios 7 y 10).</p>
+  <div class="recipe"><b>Receta:</b> para probar que algo es simétrico: trasponer, usar $(XYZ)^t=Z^tY^tX^t$ y $D^t=D$ para diagonales.</div>
+  <p><b>Error típico:</b> escribir $(P^t\Lambda P)^t=P^t\Lambda^tP^{tt}$ «sin invertir el orden» y llegar al resultado correcto por casualidad (aquí el producto es palíndromo). Con $(P\Lambda Q)^t$ el orden sí importa: $Q^t\Lambda P^t$. <b>Teoría:</b> U §1.2 p.13; U §5.3 p.224 (Teor. 5.8).</p>
+</details>
+
+<h3 id="bloqueII">Bloque II — Preguntas de «justificar o elegir» (E 5.28–5.32)</h3>
+
+<details class="sol" id="ej5-28"><summary>Ejercicio 5.28 — mismo polinomio característico no implica semejantes <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.28, p. 185">E p.185</span></summary>
+  <p class="enun">Si $A=\begin{pmatrix}2&0\cr0&2\end{pmatrix}$ y $B=\begin{pmatrix}2&1\cr0&2\end{pmatrix}$, se pide comprobar la veracidad de las siguientes proposiciones: A) No tienen el mismo polinomio característico. B) Como tienen el mismo polinomio característico, ambas matrices están asociadas al mismo endomorfismo (pero en distintas bases).</p>
+  <p><b>Idea.</b> Es un ejercicio de repaso de 4.1-4.2 (E lo coloca en esta sección): ¿bastan los valores propios para saber si dos matrices son «la misma aplicación en bases distintas»?</p>
+  <ol class="steps">
+    <li><b>A es falsa.</b> Ambas son triangulares: el determinante es el producto de la diagonal. $|A-\lambda I|=(2-\lambda)^2=|B-\lambda I|$.</li>
+    <li><b>Qué significa B.</b> «Asociadas al mismo endomorfismo en distintas bases» equivale a ser <b>semejantes</b>: existe $P$ regular con $P^{-1}AP=B$ (U Def. 4.5, p.148). El Teor. 4.4 (U p.153) dice semejantes ⇒ mismo polinomio, pero <b>no</b> al revés.</li>
+    <li><b>Argumento corto.</b> $A=2I$ conmuta con todo: $P^{-1}(2I)P=2I$ para cualquier $P$. La única matriz semejante a $2I$ es $2I$, y $B\neq2I$. No son semejantes.</li>
+    <li><b>Argumento por multiplicidades.</b> $\lambda=2$ tiene $\alpha=2$ en ambas. En $A$: $d=2-\operatorname{rang}(A-2I)=2-0=2$. En $B$: $d=2-\operatorname{rang}\begin{pmatrix}0&1\cr0&0\end{pmatrix}=1$. Semejantes tendrían la misma dimensión de subespacio propio. Además $B$ no es diagonalizable ($d\lt\alpha$) y $A$ sí.</li>
+    <li><b>Argumento de E con $P$ genérica.</b> $P^{-1}AP=B\iff AP=PB$. Con $P=\begin{pmatrix}p&q\cr r&s\end{pmatrix}$: $AP=\begin{pmatrix}2p&2q\cr2r&2s\end{pmatrix}$ y $PB=\begin{pmatrix}2p&p+2q\cr2r&r+2s\end{pmatrix}$, luego $p=0$, $r=0$: la primera columna de $P$ es nula y $|P|=0$. No existe $P$ regular. <b>B es falsa.</b></li>
+  </ol>
+  <p><b>Respuesta: A y B falsas.</b></p>
+  <div class="recipe"><b>Receta:</b> para ver que dos matrices con el mismo polinomio <b>no</b> son semejantes: compara las dimensiones de los subespacios propios ($d_i=n-\operatorname{rang}(A-\lambda_iI)$) o usa que $\lambda I$ solo es semejante a sí misma. Si ambas fueran <b>simétricas</b>, mismo polinomio ⇒ semejantes (Ej. 5.32).</div>
+  <p><b>Error típico:</b> «mismo polinomio característico ⇒ semejantes». Falso en general; cierto para simétricas (o diagonalizables). <b>Teoría:</b> U §4.1 p.148; §4.2 p.153; §4.3 p.164.</p>
+</details>
+
+<details class="sol" id="ej5-29"><summary>Ejercicio 5.29 — $\begin{pmatrix}1&1\cr1&0\end{pmatrix}$: valores propios y diagonalizable <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.29, p. 186">E p.186</span></summary>
+  <p class="enun">Se pide decidir si son ciertas las propiedades siguientes para la matriz $\begin{pmatrix}1&1\cr1&0\end{pmatrix}$: A) No tiene autovalores en $\mathbb R$. B) Tiene dos autovalores reales distintos y uno de ellos es $\frac{1+\sqrt5}{2}$. C) Es diagonalizable.</p>
+  <ol class="steps">
+    <li><b>A es falsa sin cuentas.</b> La matriz es simétrica ($a_{12}=a_{21}=1$) y una simétrica real tiene todos sus valores propios reales (U p.221); al ser el polinomio de grado $2$, tiene $2$ raíces reales.</li>
+    <li><b>Polinomio característico:</b> $\begin{vmatrix}1-\lambda&1\cr1&-\lambda\end{vmatrix}=-\lambda(1-\lambda)-1=\lambda^2-\lambda-1$.</li>
+    <li><b>Raíces:</b> $\lambda=\dfrac{1\pm\sqrt{1+4}}2=\dfrac{1\pm\sqrt5}2$: dos reales distintas, una es $\frac{1+\sqrt5}2$ (el número áureo). <b>B cierta.</b></li>
+    <li><b>C cierta.</b> Una matriz $n\times n$ con $n$ valores propios distintos es diagonalizable (U p.163). Además, por ser simétrica, lo es <i>ortogonalmente</i> (Teor. 5.8).</li>
+    <li><b>Comprobación de la ortogonalidad (propia).</b> De $(A-\lambda I)v=0$, segunda fila: $v_1-\lambda v_2=0$, luego $v=(\lambda,1)$. Para las dos raíces: $(\lambda_1,1)\cdot(\lambda_2,1)=\lambda_1\lambda_2+1=-1+1=0$ (el producto de las raíces de $\lambda^2-\lambda-1$ es $-1$). Ortogonales, como predice U p.222.</li>
+  </ol>
+  <p><b>Respuesta: A falsa; B y C ciertas.</b></p>
+  <div class="recipe"><b>Receta:</b> ante una simétrica, «valores propios reales» es gratis; para «diagonalizable» basta citar el Teor. 5.7/5.8 (sin calcular), aunque aquí también sirve «valores propios distintos».</div>
+  <p><b>Teoría:</b> U §5.3 pp.221-224; U §4.3 p.163.</p>
+</details>
+
+<details class="sol" id="ej5-30"><summary>Ejercicio 5.30 — ¿por qué $\begin{pmatrix}1&2\cr2&4\end{pmatrix}$ solo tiene valores propios reales? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.30, p. 186-187">E p.186</span></summary>
+  <p class="enun">Se pide elegir la opción correcta. La matriz $A=\begin{pmatrix}1&2\cr2&4\end{pmatrix}$ solo tiene valores propios reales porque: A) $A$ está definida en $\mathbb R$. B) $A$ es simétrica. C) Sus filas son linealmente independientes.</p>
+  <ol class="steps">
+    <li><b>Valores propios:</b> $|A-\lambda I|=(1-\lambda)(4-\lambda)-4=\lambda^2-5\lambda=\lambda(\lambda-5)$: valores propios $0$ y $5$, reales.</li>
+    <li><b>A, falsa como razón.</b> Ser real no basta: $\begin{pmatrix}0&1\cr-1&0\end{pmatrix}$ es real y su polinomio $\lambda^2+1$ no tiene raíces reales ($\pm i$).</li>
+    <li><b>B, correcta.</b> $A^t=A$ y toda simétrica real tiene sus valores propios reales (U p.221). Es la razón general.</li>
+    <li><b>C, falsa por dos motivos.</b> (a) La premisa es falsa: la segunda fila es el doble de la primera, $\operatorname{rang}A=1$, $|A|=0$ (coherente con que $0$ sea valor propio). (b) Aunque las filas fueran l.i., eso no da valores propios reales: $\begin{pmatrix}0&1\cr-1&0\end{pmatrix}$ tiene filas l.i. y valores propios $\pm i$.</li>
+  </ol>
+  <p><b>Respuesta: B.</b></p>
+  <div class="recipe"><b>Receta:</b> en los tests de «porque…», la razón tiene que ser verdadera <i>y</i> suficiente. Para descartarla basta un contraejemplo; la matriz de giro $\begin{pmatrix}0&1\cr-1&0\end{pmatrix}$ es el contraejemplo universal a «valores propios reales».</div>
+  <p><b>Error típico:</b> elegir A: «real ⇒ autovalores reales» es falso; real ⇒ los complejos aparecen en pares conjugados. <b>Teoría:</b> U §5.3 p.221.</p>
+</details>
+
+<details class="sol" id="ej5-31"><summary>Ejercicio 5.31 — ¿para qué $x$ es $\lambda^3-\lambda^2-3\lambda x$ el polinomio de una simétrica? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.31, p. 187">E p.187</span></summary>
+  <p class="enun">Los valores de $x$ para que $P(\lambda)=\lambda^3-\lambda^2-3\lambda x$ sea el polinomio característico de una matriz simétrica: A) No existen. B) Cumplen $x\le\frac1{12}$. C) Cumplen $x\le1$.</p>
+  <ol class="steps">
+    <li><b>Convención de signo.</b> U define el polinomio como $|A-\lambda I|$, que para $n=3$ empieza por $-\lambda^3$; el dado es mónico ($=|\lambda I-A|=-|A-\lambda I|$). Tienen las mismas raíces, que es lo que importa.</li>
+    <li><b>Condición necesaria.</b> Si $P$ es el polinomio de una simétrica real, sus $3$ raíces son reales (U p.221).</li>
+    <li><b>Factorizar:</b> $P(\lambda)=\lambda(\lambda^2-\lambda-3x)$. Una raíz es $\lambda=0$ (siempre real). Las otras dos son reales $\iff$ el discriminante de $\lambda^2-\lambda-3x$ es $\ge0$: $\Delta=(-1)^2-4\cdot1\cdot(-3x)=1+12x\ge0\iff x\ge-\frac1{12}$.</li>
+    <li><b>Condición suficiente</b> (E no la comenta). Si $x\ge-\frac1{12}$, sean $r_1,r_2$ las raíces reales de $\lambda^2-\lambda-3x$; la matriz diagonal $\operatorname{diag}(0,r_1,r_2)$ es simétrica y su polinomio (mónico) es exactamente $P$. El conjunto buscado es <b>exactamente</b> $x\ge-\frac1{12}$.</li>
+    <li><b>Opciones.</b> A es falsa (por ejemplo $x=0$: $\operatorname{diag}(0,0,1)$). B es falsa: $x=-1\le\frac1{12}$ pero $\Delta=-11\lt0$, y $x=1$ sirve sin cumplir $x\le\frac1{12}$. C es falsa por el mismo $x=-1$ (y $x=2$ sirve sin cumplir $x\le1$).</li>
+  </ol>
+  <p><b>Respuesta: ninguna es cierta</b> (coincide con E).</p>
+  <div class="recipe"><b>Receta:</b> «polinomio de una simétrica» $\iff$ todas sus raíces reales (necesario por U p.221; suficiente porque la diagonal de las raíces es simétrica). Factoriza y exige discriminante $\ge0$.</div>
+  <p><b>Error típico:</b> calcular mal el discriminante ($1-12x$) y elegir B. <b>Teoría:</b> U §5.3 p.221.</p>
+</details>
+
+<details class="sol" id="ej5-32"><summary>Ejercicio 5.32 — matrices congruentes y/o semejantes <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.32, p. 188">E p.188</span></summary>
+  <p class="enun">Se pide justificar si se verifica que las matrices siguientes $A=\begin{pmatrix}1&1&0\cr1&2&-1\cr0&-1&1\end{pmatrix}$ y $B=\begin{pmatrix}0&0&0\cr0&1&0\cr0&0&3\end{pmatrix}$: A) Son congruentes y semejantes. B) Son congruentes pero no semejantes. C) Son semejantes pero no congruentes.</p>
+  <ol class="steps">
+    <li><b>Definiciones</b> (U §4.1): $B$ es congruente con $A$ si $B=P^tAP$ con $P$ regular (Def. 4.4, p.147); semejante si $B=P^{-1}AP$ (Def. 4.5, p.148). Si $P$ es <b>ortogonal</b>, $P^t=P^{-1}$ (Teor. 5.6, p.216) y ambas cosas coinciden.</li>
+    <li><b>$A$ es simétrica</b> ($a_{12}=a_{21}=1$, $a_{13}=a_{31}=0$, $a_{23}=a_{32}=-1$). Por el Teor. 5.8 existe $P$ ortogonal con $P^tAP=\Lambda$. Basta ver si $\Lambda=B$ (salvo orden).</li>
+    <li><b>Polinomio característico</b> (por la primera fila): $(1-\lambda)\big[(2-\lambda)(1-\lambda)-1\big]-1\cdot\big[(1-\lambda)-0\big]=(1-\lambda)\big[(2-\lambda)(1-\lambda)-2\big]=(1-\lambda)(\lambda^2-3\lambda)=-\lambda(\lambda-1)(\lambda-3)$. Valores propios $0,1,3$, los de $B$.</li>
+    <li><b>Matriz de paso explícita</b> (propia; E no la da). Resolviendo $(A-\lambda I)v=0$: $\lambda=0$: $v_1+v_2=0,\ -v_2+v_3=0\Rightarrow(1,-1,-1)$. $\lambda=1$: $v_2=0,\ v_1+v_2-v_3=0\Rightarrow(1,0,1)$. $\lambda=3$: $-2v_1+v_2=0,\ -v_2-2v_3=0\Rightarrow(1,2,-1)$. Son ortogonales dos a dos (valores propios distintos): por ejemplo $(1,-1,-1)\cdot(1,2,-1)=1-2+1=0$. Normalizando (aquí $\det P=-1$, que no importa: $P$ es ortogonal igualmente):
+      $$P=\begin{pmatrix}\frac1{\sqrt3}&\frac1{\sqrt2}&\frac1{\sqrt6}\cr-\frac1{\sqrt3}&0&\frac2{\sqrt6}\cr-\frac1{\sqrt3}&\frac1{\sqrt2}&-\frac1{\sqrt6}\end{pmatrix},\qquad P^tP=I,\qquad P^tAP=\begin{pmatrix}0&0&0\cr0&1&0\cr0&0&3\end{pmatrix}=B .$$</li>
+    <li><b>Conclusión.</b> Como $P^t=P^{-1}$, $B=P^tAP=P^{-1}AP$: congruentes <b>y</b> semejantes. <b>A cierta</b>; B y C son falsas (cada una niega una de las dos relaciones).</li>
+  </ol>
+  <p><b>Respuesta: A.</b></p>
+  <div class="recipe"><b>Receta:</b> simétrica $A$ y diagonal $B$: si los valores propios de $A$ son exactamente la diagonal de $B$ ⇒ semejantes y congruentes a la vez (Teor. 5.8, con $P$ ortogonal). Si no, no son semejantes (Teor. 4.4); la congruencia se decide por los signos (tema 6).</div>
+  <p><b>Error típico:</b> pensar que congruencia y semejanza se excluyen; con $P$ ortogonal son la misma cosa. <b>Teoría:</b> U §4.1 pp.147-148; U §5.2 p.216; U §5.3 p.224.</p>
+</details>
+
+<h3 id="bloqueIII">Bloque III — Diagonalizar ortogonalmente (E 5.33)</h3>
+
+<details class="sol" id="ej5-33"><summary>Ejercicio 5.33 — diagonalizar ortogonalmente una simétrica $4\times4$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.33, p. 189">E p.189</span></summary>
+  <p class="enun">Se pide diagonalizar ortogonalmente la siguiente matriz, $A=\begin{pmatrix}1&-1&0&0\cr-1&0&0&0\cr0&0&5&0\cr0&0&0&3\end{pmatrix}$, calculando su matriz de paso asociada.</p>
+  <ol class="steps">
+    <li><b>Se puede.</b> $A^t=A$ (real): por el Teor. 5.8 existe $P$ ortogonal con $P^tAP=\Lambda$.</li>
+    <li><b>Estructura por bloques.</b> $A=\begin{pmatrix}M&0\cr0&D\end{pmatrix}$ con $M=\begin{pmatrix}1&-1\cr-1&0\end{pmatrix}$ y $D=\operatorname{diag}(5,3)$. El determinante de una matriz diagonal por bloques es el producto de los determinantes:
+      $$|A-\lambda I|=\begin{vmatrix}1-\lambda&-1\cr-1&-\lambda\end{vmatrix}(5-\lambda)(3-\lambda)=(\lambda^2-\lambda-1)(\lambda-5)(\lambda-3)$$
+      (porque $(1-\lambda)(-\lambda)-(-1)(-1)=\lambda^2-\lambda-1$). Desarrollando: $\lambda^4-9\lambda^3+22\lambda^2-7\lambda-15$, el polinomio de E.</li>
+    <li><b>Valores propios:</b> $\lambda_1=\frac{1-\sqrt5}2\approx-0{,}618$, $\lambda_2=\frac{1+\sqrt5}2\approx1{,}618$, $\lambda_3=3$, $\lambda_4=5$. Los cuatro son distintos ⇒ cada subespacio propio es una recta ($d=\alpha=1$, U p.163) y los vectores propios saldrán ortogonales <b>sin Gram-Schmidt</b> (U p.222).</li>
+    <li><b>Vectores propios de $\lambda_{1,2}$.</b> $(A-\lambda I)v=0$ da $(1-\lambda)v_1-v_2=0$, $-v_1-\lambda v_2=0$, $(5-\lambda)v_3=0$, $(3-\lambda)v_4=0$. Como $\lambda\neq5,3$: $v_3=v_4=0$; y $v_2=(1-\lambda)v_1$ (las dos primeras ecuaciones son proporcionales porque $|M-\lambda I|=0$).
+      <br>$\lambda_1$: $1-\lambda_1=\frac{1+\sqrt5}2$ ⇒ $w_1=(2,\,1+\sqrt5,\,0,\,0)$. &nbsp; $\lambda_2$: $1-\lambda_2=\frac{1-\sqrt5}2$ ⇒ $w_2=(2,\,1-\sqrt5,\,0,\,0)$.
+      <br>Comprobación: $w_1\cdot w_2=4+(1+\sqrt5)(1-\sqrt5)=4+(1-5)=0$ ✓.</li>
+    <li><b>Vectores propios de $3$ y $5$.</b> $Ae_4=3e_4$ y $Ae_3=5e_3$ (columnas $4$ y $3$ de $A$): $\lambda_3=3\to e_4=(0,0,0,1)$, $\lambda_4=5\to e_3=(0,0,1,0)$. Son ortogonales a $w_1,w_2$ (soportes disjuntos).</li>
+    <li><b>Normalizar.</b> $\|w_1\|^2=4+(1+\sqrt5)^2=10+2\sqrt5$, $\|w_2\|^2=10-2\sqrt5$. Llamando
+      $$a=\frac2{\sqrt{10+2\sqrt5}}=\sqrt{\tfrac{5-\sqrt5}{10}}\approx0{,}526,\qquad b=\frac{1+\sqrt5}{\sqrt{10+2\sqrt5}}=\sqrt{\tfrac{5+\sqrt5}{10}}\approx0{,}851,$$
+      resulta $\frac{w_1}{\|w_1\|}=(a,b,0,0)$ y $\frac{w_2}{\|w_2\|}=(b,-a,0,0)$. Nótese $a^2+b^2=1$ y $ab=\frac1{\sqrt5}$.</li>
+    <li><b>Matriz de paso y diagonal</b> (columnas en el orden $\lambda_1,\lambda_2,3,5$):
+      $$P=\begin{pmatrix}a&b&0&0\cr b&-a&0&0\cr0&0&0&1\cr0&0&1&0\end{pmatrix},\qquad\Lambda=\begin{pmatrix}\frac{1-\sqrt5}2&0&0&0\cr0&\frac{1+\sqrt5}2&0&0\cr0&0&3&0\cr0&0&0&5\end{pmatrix}.$$</li>
+    <li><b>$P$ es ortogonal</b> (U Teor. 5.5, p.215): columnas unitarias ($a^2+b^2=1$) y ortogonales ($ab-ba=0$; las dos últimas son $e_4,e_3$). Luego $P^{-1}=P^t$ (aquí además $P^t=P$); $\det P=+1$.</li>
+    <li><b>Comprobación de $P^tAP=\Lambda$</b> (que E no hace). Por bloques basta con $Q=\begin{pmatrix}a&b\cr b&-a\end{pmatrix}$ ($Q^t=Q$) y $M$: $MQ=\begin{pmatrix}a-b&b+a\cr-a&-b\end{pmatrix}$, y
+      <br>$(1,1)$: $a(a-b)+b(-a)=a^2-2ab=\frac{5-\sqrt5}{10}-\frac2{\sqrt5}=\frac{1-\sqrt5}2=\lambda_1$.
+      <br>$(1,2)$: $a(b+a)+b(-b)=ab+a^2-b^2=\frac1{\sqrt5}-\frac{2\sqrt5}{10}=0$. &nbsp; $(2,1)$: $b(a-b)+(-a)(-a)=ab-b^2+a^2=0$.
+      <br>$(2,2)$: $b(b+a)+(-a)(-b)=b^2+2ab=\frac{5+\sqrt5}{10}+\frac2{\sqrt5}=\frac{1+\sqrt5}2=\lambda_2$.
+      <br>Bloque inferior: $\begin{pmatrix}0&1\cr1&0\end{pmatrix}\begin{pmatrix}5&0\cr0&3\end{pmatrix}\begin{pmatrix}0&1\cr1&0\end{pmatrix}=\begin{pmatrix}3&0\cr0&5\end{pmatrix}$ (intercambiar filas y columnas permuta la diagonal). Luego $P^tAP=\Lambda$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> (1) comprueba $A=A^t$; (2) polinomio (aprovecha los bloques); (3) base de cada $L_\lambda$; si $\dim L_\lambda\ge2$, Gram-Schmidt dentro; (4) normaliza y coloca las columnas <b>en el mismo orden</b> que los $\lambda$ en $\Lambda$; (5) $P^{-1}=P^t$: no hay que invertir.</div>
+  <p><b>Error típico:</b> desordenar columnas de $P$ respecto de $\Lambda$ (aquí es fácil: $e_4$ va con $3$ y $e_3$ con $5$), u olvidar normalizar (entonces $P$ no es ortogonal y $P^tAP\neq\Lambda$). <b>Teoría:</b> U §5.3 pp.223-224; U §5.2 pp.215-216.</p>
+</details>
+
+<h3 id="propios">Ejemplos propios, de fácil a difícil</h3>
+
+<details class="sol" id="ej-propio-1"><summary>Propio 1 — simétrica $2\times2$: la matriz de paso es un giro <span class="src" data-l="P" data-ref="Ejemplo propio; Teor. 5.8, U p. 224; giros de U §5.2 p. 217">propio</span></summary>
+  <p class="enun">Diagonaliza ortogonalmente $A=\begin{pmatrix}3&1\cr1&3\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>$A=A^t$ ⇒ diagonalizable ortogonalmente (Teor. 5.8).</li>
+    <li>$|A-\lambda I|=(3-\lambda)^2-1=(\lambda-4)(\lambda-2)$.</li>
+    <li>$\lambda=4$: $A-4I=\begin{pmatrix}-1&1\cr1&-1\end{pmatrix}$ ⇒ $v=(1,1)$. $\lambda=2$: $A-2I=\begin{pmatrix}1&1\cr1&1\end{pmatrix}$ ⇒ $v=(-1,1)$. Ortogonales: $-1+1=0$.</li>
+    <li>Normas $\sqrt2$: $P=\frac1{\sqrt2}\begin{pmatrix}1&-1\cr1&1\end{pmatrix}$, $\Lambda=\operatorname{diag}(4,2)$; $P^tP=I$ y $P^tAP=\Lambda$.</li>
+    <li>$\det P=1$ y $P=\begin{pmatrix}\cos45^\circ&-\sin45^\circ\cr\sin45^\circ&\cos45^\circ\end{pmatrix}$: <b>giro de $45^\circ$</b>. Los nuevos ejes son las rectas $y=x$ e $y=-x$ («ejes principales»); en la animación de la sección 1 es el preset $(3\ 1;\ 1\ 3)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en $2\times2$ el segundo vector es el primero girado $90^\circ$: $(p,q)\mapsto(-q,p)$. Con $\det P=+1$, $P$ es un giro.</div>
+</details>
+
+<details class="sol" id="ej-propio-2"><summary>Propio 2 — elegir el signo para que $P$ sea un giro <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.2 p. 216-217">propio</span></summary>
+  <p class="enun">Diagonaliza ortogonalmente $A=\begin{pmatrix}1&2\cr2&-2\end{pmatrix}$ con $\det P=1$.</p>
+  <ol class="steps">
+    <li>$|A-\lambda I|=(1-\lambda)(-2-\lambda)-4=\lambda^2+\lambda-6=(\lambda-2)(\lambda+3)$.</li>
+    <li>$\lambda=2$: $\begin{pmatrix}-1&2\cr2&-4\end{pmatrix}$ ⇒ $(2,1)$. $\lambda=-3$: $\begin{pmatrix}4&2\cr2&1\end{pmatrix}$ ⇒ $(-1,2)$. Ortogonales: $-2+2=0$.</li>
+    <li>$P=\frac1{\sqrt5}\begin{pmatrix}2&-1\cr1&2\end{pmatrix}$, $|P|=\frac{4+1}5=1$ (giro de ángulo $\arctan\frac12\approx26{,}57^\circ$), $P^tAP=\operatorname{diag}(2,-3)$.</li>
+    <li>Si se hubiera tomado $(1,-2)$ para $\lambda=-3$, saldría $|P|=-1$ (una simetría). Ambas son ortogonales y válidas; cambiar el signo de una columna convierte una en otra (útil en cónicas, tema 6).</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-3"><summary>Propio 3 — $3\times3$ con tres valores propios distintos <span class="src" data-l="P" data-ref="Ejemplo propio; U p. 222 (ortogonalidad automática)">propio</span></summary>
+  <p class="enun">Diagonaliza ortogonalmente $A=\begin{pmatrix}1&1&0\cr1&0&1\cr0&1&1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>Simétrica. Desarrollo por la primera fila: $(1-\lambda)[(-\lambda)(1-\lambda)-1]-1\cdot[(1-\lambda)-0]=(1-\lambda)(\lambda^2-\lambda-2)=(1-\lambda)(\lambda-2)(\lambda+1)$. Valores propios $2,1,-1$ (distintos). Traza: $2+1-1=2=1+0+1$ ✓.</li>
+    <li>$\lambda=2$: $(1,1,1)$ (la suma de cada fila vale $2$). $\lambda=1$: $v_2=0,\ v_1+v_3=0$ ⇒ $(1,0,-1)$. $\lambda=-1$: $2v_1+v_2=0,\ v_2+2v_3=0$ ⇒ $(1,-2,1)$.</li>
+    <li>Son ortogonales sin hacer nada (valores distintos): $(1,1,1)\cdot(1,0,-1)=0$, $(1,1,1)\cdot(1,-2,1)=0$, $(1,0,-1)\cdot(1,-2,1)=0$. Normalizando:
+      $$P=\begin{pmatrix}\frac1{\sqrt3}&\frac1{\sqrt2}&\frac1{\sqrt6}\cr\frac1{\sqrt3}&0&-\frac2{\sqrt6}\cr\frac1{\sqrt3}&-\frac1{\sqrt2}&\frac1{\sqrt6}\end{pmatrix},\qquad P^tAP=\operatorname{diag}(2,1,-1).$$ Aquí $\det P=-1$; si se quiere un giro, cambia el signo de una columna.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> tres valores propios distintos ⇒ solo hay que resolver tres sistemas y normalizar; ni Gram-Schmidt ni comprobar la ortogonalidad (aunque conviene comprobarla como control).</div>
+</details>
+
+<details class="sol" id="ej-propio-4"><summary>Propio 4 — $3\times3$ con valor propio doble: Gram-Schmidt dentro de $L_\lambda$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de Lay §7.1 Ejemplo 3, p. 396-397 y U Gram-Schmidt p. 208">propio</span></summary>
+  <p class="enun">Diagonaliza ortogonalmente $A=\begin{pmatrix}2&1&1\cr1&2&1\cr1&1&2\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>$A=I+J$ ($J$ = matriz de unos). $|A-\lambda I|=-(\lambda-4)(\lambda-1)^2$: $\lambda=4$ simple, $\lambda=1$ doble. Traza: $4+1+1=6$ ✓.</li>
+    <li>$\lambda=4$: la suma de cada fila vale $4$ ⇒ $(1,1,1)$.</li>
+    <li>$\lambda=1$: $A-I=J$, rango $1$ ⇒ $d=2=\alpha$; $L(1):\ x+y+z=0$, base de los parámetros $u=(1,-1,0)$, $w=(1,0,-1)$. <b>No son ortogonales</b> ($u\cdot w=1$): si se ponen tal cual, $P$ no sale ortogonal.</li>
+    <li><b>Gram-Schmidt en $L(1)$</b> (U p.208): $z_2=w-\frac{w\cdot u}{u\cdot u}u=(1,0,-1)-\frac12(1,-1,0)=\left(\frac12,\frac12,-1\right)\sim(1,1,-2)$. Sigue en $L(1)$ ($1+1-2=0$) y es ortogonal a $u$.</li>
+    <li>$(1,1,1)$ es ortogonal a $u$ y a $(1,1,-2)$ automáticamente (valores distintos).</li>
+    <li>$P=\begin{pmatrix}\frac1{\sqrt3}&\frac1{\sqrt2}&\frac1{\sqrt6}\cr\frac1{\sqrt3}&-\frac1{\sqrt2}&\frac1{\sqrt6}\cr\frac1{\sqrt3}&0&-\frac2{\sqrt6}\end{pmatrix}$, $\Lambda=\operatorname{diag}(4,1,1)$, $P^tAP=\Lambda$, $\det P=1$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> valor propio múltiple ⇒ base de $L_\lambda$ por paramétricas ⇒ Gram-Schmidt <b>solo dentro</b> de $L_\lambda$ ⇒ normalizar.</div>
+  <p><b>Error típico:</b> usar $u,w$ tal cual: tras normalizar, $P^tP$ tiene un $\frac12$ fuera de la diagonal.</p>
+</details>
+
+<details class="sol" id="ej-propio-5"><summary>Propio 5 — reconstruir una simétrica: descomposición espectral $A=\sum\lambda_iu_iu_i^t$ <span class="src" data-l="L" data-ref="Lay §7.1, descomposición espectral y Ejemplo 4, p. 398">L p.398</span></summary>
+  <p class="enun">(a) Valores propios $8$ y $3$ con vectores unitarios $u_1=\frac1{\sqrt5}(2,1)$, $u_2=\frac1{\sqrt5}(-1,2)$: halla $A$. (b) $A$ simétrica $3\times3$ con $\lambda=5$ simple, vector propio $(1,1,1)$, y $\lambda=2$ doble: halla $A$.</p>
+  <ol class="steps">
+    <li><b>(a)</b> $P=(u_1\ u_2)$ es ortogonal, luego $A=P\Lambda P^t=8u_1u_1^t+3u_2u_2^t$: $8u_1u_1^t=\frac85\begin{pmatrix}4&2\cr2&1\end{pmatrix}$, $3u_2u_2^t=\frac35\begin{pmatrix}1&-2\cr-2&4\end{pmatrix}$ y la suma es $A=\begin{pmatrix}7&2\cr2&4\end{pmatrix}$ (Lay Ej. 4). Cada $u_iu_i^t$ es la matriz de la proyección ortogonal sobre $\langle u_i\rangle$ (tema 5.1).</li>
+    <li><b>(b)</b> Por ser simétrica, $L(2)=\langle(1,1,1)\rangle^\perp$ (U p.222; y $\dim L(2)=2$). Con $u=\frac1{\sqrt3}(1,1,1)$: $A=5\,uu^t+2\,(I-uu^t)=2I+3uu^t=2I+J=\begin{pmatrix}3&1&1\cr1&3&1\cr1&1&3\end{pmatrix}$.</li>
+    <li>Comprobación de (b): $|A-\lambda I|=-(\lambda-5)(\lambda-2)^2$ ✓ y $A(1,1,1)^t=5(1,1,1)^t$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> simétrica a partir de valores y vectores propios: $A=\sum\lambda_iu_iu_i^t$. Con un valor doble, el plano propio es el complemento ortogonal de la recta del otro: $A=\lambda_2I+(\lambda_1-\lambda_2)uu^t$.</div>
+</details>
+
+<details class="sol" id="ej-propio-6"><summary>Propio 6 — completar una simétrica con un vector propio; traza y determinante <span class="src" data-l="P" data-ref="Ejemplo propio; traza y determinante invariantes por semejanza, U Teor. 4.4, p. 153; análogo a E Ej. 4.23">propio</span></summary>
+  <p class="enun">$A=\begin{pmatrix}1&2&2\cr2&1&2\cr2&2&m\end{pmatrix}$ es simétrica y $(1,1,1)$ es vector propio. Halla $m$, los valores propios sin resolver la cúbica y una $P$ ortogonal.</p>
+  <ol class="steps">
+    <li>$A(1,1,1)^t=(5,5,4+m)^t=\lambda(1,1,1)^t$ ⇒ $\lambda=5$ y $4+m=5$ ⇒ $m=1$.</li>
+    <li>$\operatorname{tr}A=3$ y $|A|=1(1-4)-2(2-4)+2(4-2)=5$. Traza = suma y determinante = producto de valores propios (invariantes de semejanza, U p.153; $A\sim\Lambda$). Con $\lambda_1=5$: $\lambda_2+\lambda_3=-2$, $\lambda_2\lambda_3=1$ ⇒ $t^2+2t+1=0$ ⇒ $\lambda_2=\lambda_3=-1$.</li>
+    <li>$A+I=2J$ ⇒ $L(-1):\ x+y+z=0$ ($d=2=\alpha$). Igual que el Propio 4: $P$ con columnas $\frac{(1,1,1)}{\sqrt3},\frac{(1,-1,0)}{\sqrt2},\frac{(1,1,-2)}{\sqrt6}$ y $P^tAP=\operatorname{diag}(5,-1,-1)$ ($\det P=1$, como en el Propio 4).</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-7"><summary>Propio 7 — ¿es diagonalizable ortogonalmente? <span class="src" data-l="L" data-ref="Lay §7.1, Teorema 2, p. 396; E Ej. 5.27 p. 184">L p.396 · E 5.27</span></summary>
+  <p class="enun">Decide, para cada matriz, si es diagonalizable y si es diagonalizable ortogonalmente: $\begin{pmatrix}2&1\cr1&2\end{pmatrix}$, $\begin{pmatrix}1&2\cr0&3\end{pmatrix}$, $\begin{pmatrix}1&1\cr0&1\end{pmatrix}$.</p>
+  <p><b>Criterio.</b> Si $P^tAP=\Lambda$ con $P$ ortogonal, entonces $A=P\Lambda P^t$ es simétrica (E 5.27). Recíprocamente, simétrica ⇒ sí (Teor. 5.8). Por tanto <b>diagonalizable ortogonalmente ⇔ simétrica</b>.</p>
+  <ol class="steps">
+    <li>$\begin{pmatrix}2&1\cr1&2\end{pmatrix}$: simétrica ⇒ <b>sí, ortogonalmente</b> (valores $3$ y $1$, vectores $(1,1)$, $(-1,1)$).</li>
+    <li>$\begin{pmatrix}1&2\cr0&3\end{pmatrix}$: valores propios $1,3$ distintos ⇒ diagonalizable (U p.163), con vectores $(1,0)$ y $(1,1)$, que forman $45^\circ$: <b>no</b> ortogonales. No es simétrica ⇒ <b>no</b> ortogonalmente (aunque sí diagonalizable).</li>
+    <li>$\begin{pmatrix}1&1\cr0&1\end{pmatrix}$: $\lambda=1$ doble con $d=1\lt2$ ⇒ <b>ni siquiera diagonalizable</b> (U Teor. 4.7).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> simétrica ⇒ siempre ortogonalmente; no simétrica ⇒ nunca ortogonalmente. Lo que hay que mirar es $A=A^t$, no los valores propios.</div>
+</details>
+
+<details class="sol" id="ej-propio-8"><summary>Propio 8 — potencias y raíz cuadrada de una simétrica <span class="src" data-l="L" data-ref="Lay §7.1, descomposición espectral, p. 398; U Teor. 5.8, p. 224 (A = PΛP^t)">propio</span></summary>
+  <p class="enun">(a) Calcula $A^n$ para $A=\begin{pmatrix}5&4\cr4&5\end{pmatrix}$ y una raíz cuadrada simétrica. (b) Una raíz cuadrada de la semidefinida $B=\begin{pmatrix}2&2\cr2&2\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>(a)</b> Valores propios $9$ ($u_1=\frac{(1,1)}{\sqrt2}$) y $1$ ($u_2=\frac{(1,-1)}{\sqrt2}$). Con $A=P\Lambda P^t$: $A^n=P\Lambda^nP^t=9^nu_1u_1^t+1^nu_2u_2^t=\dfrac{9^n}2\begin{pmatrix}1&1\cr1&1\end{pmatrix}+\dfrac12\begin{pmatrix}1&-1\cr-1&1\end{pmatrix}$ (los $P^tP=I$ intermedios se cancelan; comprobado para $n=0,\dots,4$).</li>
+    <li><b>Raíz cuadrada</b> (valores propios $\ge0$): $\sqrt A=P\sqrt\Lambda P^t=3u_1u_1^t+u_2u_2^t=\begin{pmatrix}2&1\cr1&2\end{pmatrix}$; en efecto $\begin{pmatrix}2&1\cr1&2\end{pmatrix}^2=\begin{pmatrix}5&4\cr4&5\end{pmatrix}$.</li>
+    <li><b>(b)</b> $B$ tiene valores $4$ y $0$ (≥0): $\sqrt B=2u_1u_1^t+0=\begin{pmatrix}1&1\cr1&1\end{pmatrix}$, y su cuadrado es $B$ ✓.</li>
+    <li>Si algún valor propio fuera negativo, $\sqrt\lambda$ no sería real y este método no da una raíz real simétrica.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $f(A)=P\,f(\Lambda)\,P^t$ para cualquier función sencilla (potencias, raíces, exponencial). Funciona porque $P^{-1}=P^t$ y $A$ es diagonalizable.</div>
+</details>
+
+<details class="sol" id="ej-propio-9"><summary>Propio 9 — simétrica con $A^2=I$ = simetría ortogonal <span class="src" data-l="P" data-ref="Ejemplo propio; E Ej. 5.21 A p. 178 y X Sept. 2025 ej. 5 (tema 5.2)">propio</span></summary>
+  <p class="enun">Si $A=A^t$ y $A^2=I$, ¿qué matriz es? Da un ejemplo $3\times3$.</p>
+  <ol class="steps">
+    <li>$A^tA=A^2=I$ ⇒ $A$ es ortogonal (Teor. 5.5; es el X Sept. 2025 del <a href="tema_5_2_matrices_ortogonales.html#ex-sep25-5">tema 5.2</a>). Y si $Av=\lambda v$, $v=A^2v=\lambda^2v$ ⇒ $\lambda=\pm1$.</li>
+    <li>Diagonalizando ortogonalmente: $A$ deja fijo $L(1)$ y cambia de signo $L(-1)=L(1)^\perp$: es la <b>simetría ortogonal</b> respecto de $L(1)$.</li>
+    <li>Ejemplo: $u=\frac1{\sqrt3}(1,1,1)$, $H=I-2uu^t=\frac13\begin{pmatrix}1&-2&-2\cr-2&1&-2\cr-2&-2&1\end{pmatrix}$. Es simétrica, $H^2=I$, $Hu=u-2u=-u$ ($\lambda=-1$) y $Hv=v$ si $v\perp u$ ($\lambda=1$ doble). $|H-\lambda I|=-(\lambda-1)^2(\lambda+1)$, $|H|=-1$: simetría respecto del plano $x+y+z=0$.</li>
+    <li>Recíproco: simétrica y ortogonal ⇒ $A^2=A^tA=I$.</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-10"><summary>Propio 10 — mismos valores propios reales, pero ejes no perpendiculares <span class="src" data-l="P" data-ref="Ejemplo propio; E Ej. 5.27 y 5.32; U Def. 4.4-4.5, p. 147-148">propio</span></summary>
+  <p class="enun">$A=\begin{pmatrix}1&2\cr2&1\end{pmatrix}$ y $B=\begin{pmatrix}1&4\cr1&1\end{pmatrix}$. Compara.</p>
+  <ol class="steps">
+    <li>$|A-\lambda I|=(1-\lambda)^2-4$ y $|B-\lambda I|=(1-\lambda)^2-4$: ambas $(\lambda-3)(\lambda+1)$, valores propios reales distintos.</li>
+    <li>Ambas diagonalizables y semejantes a $\operatorname{diag}(3,-1)$ ⇒ $A$ y $B$ son <b>semejantes</b> (la semejanza es transitiva, U §4.1).</li>
+    <li>Vectores de $B$: $\lambda=3$: $(2,1)$; $\lambda=-1$: $(2,-1)$; y $(2,1)\cdot(2,-1)=3\neq0$. No hay base ortonormal de vectores propios: $B$ no es diagonalizable ortogonalmente (no es simétrica, Propio 7). Los de $A$ ($(1,1)$ y $(1,-1)$) sí son perpendiculares.</li>
+    <li>¿Congruentes? Si $B=P^tAP$, entonces $B^t=P^tA^tP=P^tAP=B$ sería simétrica (como en E 5.27). $B$ no lo es ⇒ <b>no son congruentes</b>, aunque sí semejantes (contrasta con E 5.32, donde ambas eran simétricas).</li>
+  </ol>
+</details>
+
+<details class="sol" id="ej-propio-11"><summary>Propio 11 — la hipótesis «real» es imprescindible (nota fuera de alcance) <span class="src" data-l="U" data-ref="U §5.3, nota 3 al pie de la p. 221: los resultados solo se aplican a matrices reales">U p.221</span></summary>
+  <p class="enun">$C=\begin{pmatrix}1&i\cr i&-1\end{pmatrix}$ es simétrica ($C^t=C$) pero compleja. ¿Es diagonalizable?</p>
+  <ol class="steps">
+    <li>$|C-\lambda I|=(1-\lambda)(-1-\lambda)-i^2=\lambda^2-1+1=\lambda^2$: $\lambda=0$ doble.</li>
+    <li>Como $C\neq0$, $d=2-\operatorname{rang}C=1\lt2$: <b>no es diagonalizable</b> (de hecho $C^2=0$).</li>
+    <li>Por eso U restringe todo a matrices <b>reales</b>. (El análogo complejo correcto son las matrices hermíticas, $\bar C^t=C$; no es materia del curso.) En el examen basta recordar: «simétrica <b>con elementos reales</b>».</li>
+  </ol>
+</details>
+
+<h3 id="autoeval">Autoevaluación de U (p.239) que corresponde a este tema</h3>
+
+<details class="sol" id="autoeval-9"><summary>Cuestión 9 — «Una matriz simétrica posee una base de vectores propios y, además, dos vectores propios asociados a dos valores propios distintos son ortogonales» <span class="src" data-l="U" data-ref="U Ejercicios de Autoevaluación, cuestión 9, p. 239; solución p. 314">U p.239 · 314</span></summary>
+  <p class="enun">Determínese si es verdadera la afirmación.</p>
+  <ol class="steps">
+    <li><b>Verdadera.</b> Primera parte: una simétrica real es diagonalizable (Teor. 5.7, U p.223), luego tiene una base de vectores propios; de hecho ortonormal. Segunda parte: es la «Propiedad de los vectores propios» (U p.222; demostración en la sección 2.2).</li>
+    <li>La solución oficial dice «Véase teoría. Nótese que como $A$ es diagonalizable (mediante una matriz de paso ortogonal), existe una base de vectores propios».</li>
+    <li><b>Cuidado con la letra pequeña:</b> la ortogonalidad es para valores propios <b>distintos</b>. Dos vectores propios del <i>mismo</i> valor propio no tienen por qué ser ortogonales, y la matriz debe ser <b>real</b>.</li>
+  </ol>
+  <p>Las demás cuestiones de la autoevaluación de ese capítulo son del <a href="tema_5_1_producto_escalar.html">tema 5.1</a> (1-5, 7, 8), del <a href="tema_5_2_matrices_ortogonales.html">tema 5.2</a> (la 6) y del tema 5.4 (la 10).</p>
+</details>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="examenes"><span class="n">7</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025), <b>solo un ejercicio</b> tiene como contenido principal este tema (Ene. 2020, tipo A, ejercicio 5: explicar la diagonalización ortogonal). Es la pregunta típica: <b>teoría con procedimiento</b>. Pero la diagonalización ortogonal es herramienta de otros ejercicios: aquí se desarrollan además <b>tres ampliaciones</b> (la parte de 5.3 de ejercicios ya resueltos en los temas 4.2 y 4.3, que enlazan al original sin duplicarlo) y, al final, los ejercicios de otros temas donde también interviene. Las soluciones oficiales son breves y a veces incompletas: aquí se desarrolla el razonamiento (el examen exige <i>escribir el proceso lógico</i>), todo verificado con sympy.</p>
+
+<div class="box tip"><span class="h">Enlaces: ya desarrollados en otros temas (no se repiten aquí)</span>
+  <ul>
+    <li><b>Sept. 2025, pregunta 5</b> — «$A$ simétrica con $A^2=I_n$: ¿es ortogonal?» (sí, $A^tA=A^2=I$; es E 5.21 A): <a href="tema_5_2_matrices_ortogonales.html#ex-sep25-5">tema 5.2, #ex-sep25-5</a>. En esta página: Propio 9.</li>
+    <li><b>Ene. 2020 (A), problema, apartado b)</b> — «la inversa de una simétrica regular es simétrica» ($ (A^{-1})^t=(A^t)^{-1}=A^{-1}$): <a href="tema_1_2_algebra_matricial.html#ex-feb20a">tema 1.2, #ex-feb20a</a>.</li>
+    <li><b>E 4.25</b> — simétrica $3\times3$ con valor propio doble y $d=\alpha$: <a href="tema_4_3_diagonalizacion.html#ej4-25">tema 4.3, #ej4-25</a> (allí se diagonaliza; con lo de este tema se puede exigir además que la $P$ sea ortogonal).</li>
+    <li><b>Sept. 2017 (A), ejercicio 4</b> — test con $f(x_1,x_2)=(7x_1+4x_2,\,-2x_1+x_2)$ («¿es ortogonal? ¿admite matriz diagonal?»). Su matriz <b>no es simétrica</b> (es diagonalizable por tener valores propios $5\neq3$, pero no ortogonal): <a href="tema_4_3_diagonalizacion.html#ex-sep17a-4">tema 4.3, #ex-sep17a-4</a>. Buen contraste con este tema.</li>
+  </ul>
+  <span class="src" data-l="X" data-ref="Sept. 2025 pregunta 5; Ene. 2020 (A) problema b); Sept. 2017 (A) ejercicio 4">X</span>
+</div>
+
+<h3 id="metodoA">Método A — Explicar en qué consiste la diagonalización ortogonal</h3>
+
+<details class="sol" id="ex-ene20a-5"><summary>Ene. 2020 (tipo A), ejercicio 5 — diagonalización de una simétrica con matriz de paso ortogonal <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 5">X Ene. 2020 (A) ej. 5</span></summary>
+  <p class="enun">Explicar en qué consiste la diagonalización de una matriz simétrica (con elementos reales) mediante una matriz de paso ortogonal. (El examen avisa: «lo que no se justifica o se realiza por otra vía distinta a la pedida, no se puntúa».)</p>
+  <p><b>Modelo de respuesta, en pasos.</b></p>
+  <ol class="steps">
+    <li><b>Punto de partida.</b> Sea $A\in\mathcal M_{n\times n}(\mathbb R)$ simétrica, $A=A^t$. Diagonalizar $A$ es hallar $P$ regular y $\Lambda$ diagonal con $\Lambda=P^{-1}AP$ (U Def. 4.12, p.161). «Mediante una matriz de paso ortogonal» significa exigir además que $P$ sea <b>ortogonal</b>: $P^tP=I$, es decir $P^{-1}=P^t$ (U §5.2, pp.214-216). Entonces $\Lambda=P^{-1}AP=P^tAP$. Interés: no hay que calcular $P^{-1}$, y la misma $P$ sirve para la semejanza ($P^{-1}AP$, tema 4) y la congruencia ($P^tAP$, tema 6).</li>
+    <li><b>Los valores propios son reales</b> (U p.221). Idea de la prueba: se conjuga $AX=\lambda X$, se multiplica por $\bar X^t$ y se usa $A^t=A$ para llegar a $(\lambda-\bar\lambda)\bar X^tX=0$ con $\bar X^tX\gt0$. Consecuencia: el polinomio característico se descompone en factores lineales reales; la diagonalización nunca falla «por raíces complejas».</li>
+    <li><b>Vectores propios de valores propios distintos son ortogonales</b> (U p.222; demostración de Lay, Teor. 1, p.396). Si $Av_1=\lambda_1v_1$, $Av_2=\lambda_2v_2$, $\lambda_1\neq\lambda_2$: $\lambda_1(v_1\cdot v_2)=(Av_1)^tv_2=v_1^tA^tv_2=v_1^tAv_2=\lambda_2(v_1\cdot v_2)$, luego $(\lambda_1-\lambda_2)\,v_1\cdot v_2=0$ y $v_1\cdot v_2=0$. El paso clave es $A^t=A$.</li>
+    <li><b>Siempre existe una base ortonormal de vectores propios</b> (U Teor. 5.7, p.223; Teor. 5.8, p.224). En particular toda simétrica real es diagonalizable ($\dim L_\lambda=$ multiplicidad; Lay Teor. 3 b, p.397).</li>
+    <li><b>Procedimiento</b> (U Ejemplos 5.32-5.34, pp.222-225): (i) polinomio característico $|A-\lambda I|$ y valores propios $\lambda_i$ (reales); (ii) base de cada $L_i=\operatorname{Nuc}(A-\lambda_iI)$; (iii) si $\dim L_i\ge2$ y la base no es ortogonal, <b>Gram-Schmidt dentro de $L_i$</b> (U pp.207-208); entre subespacios distintos no hace falta; (iv) <b>normalizar</b> cada vector; (v) $P$ = esos vectores en columnas y $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$ <b>en el mismo orden</b>. Entonces $P$ es ortogonal y $P^tAP=\Lambda$.</li>
+    <li><b>Recíproco</b> (E 5.27; Lay Teor. 2, p.396): si $A=P\Lambda P^t$ con $P$ ortogonal, $A^t=(P\Lambda P^t)^t=P\Lambda^tP^t=P\Lambda P^t=A$. Solo las simétricas se diagonalizan con matriz de paso ortogonal.</li>
+    <li><b>Ejemplo breve</b> (propio): $A=\begin{pmatrix}2&2\cr2&-1\end{pmatrix}$. $|A-\lambda I|=\lambda^2-\lambda-6=(\lambda-3)(\lambda+2)$. $L(3)$: $(A-3I)X=0\iff-x+2y=0$, $v_1=(2,1)$. $L(-2)$: $4x+2y=0$, $v_2=(-1,2)$. $v_1\cdot v_2=0$ (paso 3). Normas $\sqrt5$: $P=\frac1{\sqrt5}\begin{pmatrix}2&-1\cr1&2\end{pmatrix}$ ($\det P=1$, un giro), $P^tAP=\begin{pmatrix}3&0\cr0&-2\end{pmatrix}$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «Explicar la diagonalización ortogonal» = (i) $A=A^t$ ⇒ valores propios reales; (ii) los subespacios propios son ortogonales entre sí; (iii) base ortonormal de cada uno (Gram-Schmidt si $\dim\ge2$) ⇒ $P$ ortogonal, $P^tAP=\Lambda$. Acompaña con un ejemplo $2\times2$.</div>
+  <p><b>Error típico:</b> creer que basta con tomar vectores propios cualesquiera: si no se <b>normalizan</b>, $P$ no es ortogonal y $P^tAP\neq\Lambda$ (da $\operatorname{diag}(\|v_i\|^2\lambda_i)$). Y afirmar que dos vectores propios del <b>mismo</b> valor propio son automáticamente ortogonales (falso: $(1,-1,0)$ y $(1,0,-1)$ en el Propio 4).</p>
+  <p><i>Nota sobre la oficial:</i> es correcta pero mínima. Dice que las simétricas son siempre diagonalizables, que los vectores propios de valores distintos son ortogonales y que $D=P^tAP$ con $P$ ortogonal. No menciona que los valores propios son reales, <b>ni cómo se obtiene $P$</b> (normalizar; Gram-Schmidt si un valor propio es múltiple), ni por qué $P^{-1}=P^t$. Con la advertencia del examen, una respuesta completa debe incluir al menos los pasos 1, 3, 4 y 5.</p>
+</details>
+
+<h3 id="metodoB">Método B — Diagonalizar ortogonalmente la matriz obtenida en otro ejercicio (ampliaciones)</h3>
+
+<details class="sol" id="ex-feb17a-4-orto"><summary>Feb. 2017 (A, 2.ª sem.) y Feb. 2022 (A), ejercicio 4 — ampliación: diagonaliza ortogonalmente la $A$ obtenida <span class="src" data-l="X" data-ref="Feb. 2017 (A, 2.ª sem.), ejercicio 4, y Feb. 2022 (tipo A), ejercicio 4 — ampliación propia">X Feb. 2017 / Feb. 2022 ej. 4</span> <span class="src" data-l="P" data-ref="Ampliación propia de la parte de 5.3; el enunciado y el cálculo de A son del examen">P</span></summary>
+  <p class="enun"><b>Enunciado del examen</b> (Feb. 2022): «Si $A$ es una matriz simétrica de un endomorfismo cuyas dos primeras columnas son $(4,2,2)$ y $(2,1,1)$ y tal que $(2,1,-2)$ es un vector propio suyo, halle la matriz $A$.» (Feb. 2017: igual, en test, preguntando $a_{33}$.) <b>Es también el E 4.23</b> (<a href="tema_4_2_valores_vectores_propios.html#ej4-23">tema 4.2, #ej4-23</a>). <b>Lo ya resuelto en el <a href="tema_4_2_valores_vectores_propios.html#ex-feb17a-4">tema 4.2</a>:</b> por ser simétrica, la tercera columna es $(2,1,b)$; $A(2,1,-2)^t=\lambda(2,1,-2)^t$ da $\lambda=3$ y $b=\frac{11}2$: $A=\begin{pmatrix}4&2&2\cr2&1&1\cr2&1&\frac{11}2\end{pmatrix}$. <b>Ampliación (propia):</b> diagonalízala ortogonalmente.</p>
+  <ol class="steps">
+    <li><b>Un valor propio ya conocido:</b> $\lambda=3$ con $v_2=(2,1,-2)$ (del enunciado).</li>
+    <li><b>Otro gratis: $\lambda=0$.</b> Las dos primeras columnas son proporcionales ($(4,2,2)=2(2,1,1)$), así que $|A|=0$ (U §1.3) y $0$ es valor propio. Vector: $AX=0$ con $C_1=2C_2$ sugiere $x=-1,\ y=2,\ z=0$: $A(-1,2,0)^t=(-4+4,\,-2+2,\,-2+2)=0$. $v_1=(-1,2,0)$.</li>
+    <li><b>El tercero, por la traza.</b> $A\sim\Lambda$ (Teor. 5.8) y las matrices semejantes tienen la misma traza (U p.153): $4+1+\frac{11}2=\frac{21}2=0+3+\lambda_3$ ⇒ $\lambda_3=\frac{15}2$. Control con el polinomio: $|A-\lambda I|=-\frac12\lambda(\lambda-3)(2\lambda-15)$.</li>
+    <li><b>Su vector, sin resolver ningún sistema.</b> Al ser $A$ simétrica con tres valores propios distintos, $v_3$ es ortogonal a $v_1$ y a $v_2$ (U p.222), luego $v_3\parallel v_1\times v_2$: $(-1,2,0)\times(2,1,-2)=(2\cdot(-2)-0\cdot1,\ 0\cdot2-(-1)(-2),\ -1\cdot1-2\cdot2)=(-4,-2,-5)\ \to\ v_3=(4,2,5)$. Comprobación: $A(4,2,5)^t=(16+4+10,\ 8+2+5,\ 8+2+\frac{55}2)=(30,15,\frac{75}2)=\frac{15}2(4,2,5)$ ✓.</li>
+    <li><b>Ortogonalidad</b> (control; no hace falta Gram-Schmidt porque los tres valores son distintos): $v_1\cdot v_2=-2+2+0=0$, $v_1\cdot v_3=-4+4+0=0$, $v_2\cdot v_3=8+2-10=0$.</li>
+    <li><b>Normalizar:</b> $\|v_1\|=\sqrt5$, $\|v_2\|=3$, $\|v_3\|=\sqrt{45}=3\sqrt5$.
+      $$P=\begin{pmatrix}-\frac1{\sqrt5}&\frac23&\frac4{3\sqrt5}\cr\frac2{\sqrt5}&\frac13&\frac2{3\sqrt5}\cr0&-\frac23&\frac5{3\sqrt5}\end{pmatrix},\qquad P^tAP=\begin{pmatrix}0&0&0\cr0&3&0\cr0&0&\frac{15}2\end{pmatrix}.$$ ($\det P=-1$; aquí no importa.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en una simétrica $3\times3$ con dos vectores propios conocidos de valores distintos, el tercero sale por <b>producto vectorial</b> (ortogonal a ambos) y su valor propio por la <b>traza</b>. Valores propios «gratis»: $0$ si $|A|=0$ (columnas proporcionales).</div>
+  <p><b>Error típico:</b> olvidar normalizar $v_3=(4,2,5)$ (norma $3\sqrt5$, no $1$), o colocar en $\Lambda$ los valores en otro orden que las columnas de $P$. <b>Teoría:</b> U p.222; Teor. 5.8 p.224; U §4.2 p.153.</p>
+</details>
+
+<details class="sol" id="ex-feb25b-p7-orto"><summary>Feb. 2025 (2.ª sem.), problema 7 — ampliación: $P$ ortogonal y $A^{51}=P\Lambda^{51}P^t$ <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª sem.), problema 7 — ampliación propia (P ortogonal)">X Feb. 2025 (2.ª) P7</span></summary>
+  <p class="enun"><b>Enunciado:</b> «Considere $A=\begin{pmatrix}-2&1\cr1&-2\end{pmatrix}$. Halle, si es posible, una matriz $P$ tal que $P^{-1}AP$ sea una matriz diagonal (1 punto). Determine de manera razonada si la matriz $A^{51}$ es diagonalizable (1 punto).» <b>Ya resuelto en el <a href="tema_4_3_diagonalizacion.html#ex-feb25b-p7">tema 4.3</a>:</b> valores propios $-1$ (vector $(1,1)$) y $-3$ (vector $(1,-1)$), $P=\begin{pmatrix}1&1\cr1&-1\end{pmatrix}$ y $A^{51}=PD^{51}P^{-1}$ diagonalizable. Aquí solo se añade la versión de 5.3.</p>
+  <ol class="steps">
+    <li><b>$A$ es simétrica</b> ($a_{12}=a_{21}=1$): es diagonalizable <b>ortogonalmente</b> (Teor. 5.8), así que la respuesta «sí es posible» se justifica incluso antes de calcular.</li>
+    <li><b>Los vectores propios ya son ortogonales:</b> $(1,1)\cdot(1,-1)=0$ (valores distintos). Norma $\sqrt2$ cada uno:
+      $$P=\frac1{\sqrt2}\begin{pmatrix}1&1\cr1&-1\end{pmatrix},\qquad P^{-1}=P^t=P,\qquad P^tAP=\begin{pmatrix}-1&0\cr0&-3\end{pmatrix}.$$ ($\det P=-1$; aquí no importa.)</li>
+    <li><b>$A^{51}$:</b> $A=P\Lambda P^t\Rightarrow A^{51}=P\Lambda^{51}P^t$ (los $P^tP=I$ intermedios se cancelan), con $\Lambda^{51}=\operatorname{diag}(-1,-3^{51})$: diagonalizable, con la misma $P$ ortogonal. Otra justificación, propia de 5.3: $(A^{51})^t=(A^t)^{51}=A^{51}$, luego $A^{51}$ es simétrica y, por el Teor. 5.8, diagonalizable (incluso ortogonalmente). Explícitamente: $A^{51}=-\frac12\begin{pmatrix}1+3^{51}&1-3^{51}\cr1-3^{51}&1+3^{51}\end{pmatrix}$ (coincide con $A^{51}$ calculada con sympy).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> si la matriz es simétrica, «¿es diagonalizable?» se contesta en una línea con el Teor. 5.8; y cualquier potencia $A^k$ es simétrica, luego también lo es.</div>
+  <p><b>Error típico:</b> dar $P$ con vectores sin normalizar y llamarla «ortogonal» (sus columnas son ortogonales pero no unitarias: $P^tP=2I\neq I$). <b>Teoría:</b> U Teor. 5.8 p.224; U §1.2 (traspuesta de un producto).</p>
+</details>
+
+<h3 id="metodoC">Método C — Construir una simétrica a partir de sus subespacios propios</h3>
+
+<details class="sol" id="ex-feb20b-4-sim"><summary>Feb. 2020 (tipo B), ejercicio 4 — variante simétrica: matriz con $L(0)$ = el plano $x+y-2z=0$ y otro valor propio $6$ <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B), ejercicio 4 — variante simétrica propia">X Feb. 2020 (B) ej. 4</span></summary>
+  <p class="enun"><b>Enunciado:</b> «Escribir la matriz de un endomorfismo de $\mathbb R^3$ tal que el subespacio de vectores propios asociados al valor propio $0$ sea el plano de ecuación $x+y-2z=0$.» <b>Lo ya resuelto en el <a href="tema_4_2_valores_vectores_propios.html#ex-feb20b-4">tema 4.2</a>:</b> la oficial da $\begin{pmatrix}1&1&-2\cr2&2&-4\cr1&1&-2\end{pmatrix}$ (correcta: su núcleo es el plano), <b>no simétrica</b>, y menciona «otra forma»: escribir una diagonal y una matriz de paso. Aquí se hace esa otra forma <b>con $P$ ortogonal</b>, que da una matriz simétrica. <b>Variante (propia):</b> halla una matriz <i>simétrica</i> con $L(0)$ = el plano y otro valor propio $6$.</p>
+  <ol class="steps">
+    <li><b>El otro subespacio propio está forzado.</b> Si $A$ es simétrica, $L(6)\perp L(0)$ (U p.222), y como $\dim L(0)=2$ en $\mathbb R^3$, $L(6)=L(0)^\perp=\langle(1,1,-2)\rangle$ (el complemento ortogonal de $ax+by+cz=0$ es $\langle(a,b,c)\rangle$).</li>
+    <li><b>Base ortonormal de $L(0)$.</b> El plano contiene $(1,-1,0)$ y $(1,1,1)$ ($1-1-0=0$, $1+1-2=0$), ortogonales entre sí ($1-1+0=0$): no hace falta Gram-Schmidt. Normalizados: $\frac1{\sqrt2}(1,-1,0)$, $\frac1{\sqrt3}(1,1,1)$; y $u_3=\frac1{\sqrt6}(1,1,-2)$.</li>
+    <li><b>Montar $A=P\Lambda P^t$</b> con $\Lambda=\operatorname{diag}(0,0,6)$ (de $P^tAP=\Lambda$, porque $P^{-1}=P^t$). Como los dos primeros valores son $0$, solo queda la tercera columna:
+      $$A=6\,u_3u_3^t=6\cdot\frac16\begin{pmatrix}1\cr1\cr-2\end{pmatrix}\begin{pmatrix}1&1&-2\end{pmatrix}=\begin{pmatrix}1&1&-2\cr1&1&-2\cr-2&-2&4\end{pmatrix}.$$</li>
+    <li><b>Comprobación:</b> es simétrica; $A(1,-1,0)^t=0$, $A(1,1,1)^t=0$; $A(1,1,-2)^t=(6,6,-12)=6(1,1,-2)$; $|A-\lambda I|=-\lambda^2(\lambda-6)$ y $\dim L(0)=3-\operatorname{rang}A=2$ (todas las filas proporcionales a $(1,1,-2)$). Así $L(0)$ es exactamente el plano $x+y-2z=0$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> matriz simétrica con subespacios propios dados ⇒ base ortonormal de cada uno (el último, el ortogonal de los demás) y $A=P\Lambda P^t=\sum\lambda_iu_iu_i^t$ (descomposición espectral). Si un único valor propio $\lambda\neq0$ acompaña al $0$, $A=\lambda\,uu^t$.</div>
+  <p><b>Error típico:</b> usar $A=P\Lambda P^t$ con una $P$ <b>no ortogonal</b> (por ejemplo con $(1,-1,0),(2,0,1)$, base del plano no ortogonal y sin normalizar): $P\Lambda P^t$ ya no es semejante a $\Lambda$ y los valores propios cambian. Con $P$ no ortogonal hay que usar $P\Lambda P^{-1}$. <b>Teoría:</b> U p.222, Teor. 5.8 p.224; Lay p.398.</p>
+</details>
+
+<h3 id="practicar-ex">Ejemplos propios con estos esquemas</h3>
+
+<details class="sol" id="ex-propio-A"><summary>Propio A — una simétrica y una que no lo es <span class="src" data-l="P" data-ref="Ejemplo propio; U Teor. 5.8 p. 224 y E Ej. 5.27 p. 184">propio</span></summary>
+  <p class="enun">a) Diagonaliza ortogonalmente $A=\begin{pmatrix}5&2\cr2&2\end{pmatrix}$. b) ¿Es $N=\begin{pmatrix}1&1\cr0&2\end{pmatrix}$ diagonalizable? ¿Ortogonalmente?</p>
+  <ol class="steps">
+    <li>$A=A^t$ ⇒ diagonalizable con $P$ ortogonal (Teor. 5.8). $|A-\lambda I|=\lambda^2-7\lambda+6=(\lambda-6)(\lambda-1)$.</li>
+    <li>$L(6)$: $-x+2y=0$, $v_1=(2,1)$. $L(1)$: $4x+2y=0$, $v_2=(1,-2)$. $v_1\cdot v_2=0$ ✓. Normas $\sqrt5$: $P=\frac1{\sqrt5}\begin{pmatrix}2&1\cr1&-2\end{pmatrix}$, $P^tAP=\operatorname{diag}(6,1)$ ($\det P=-1$; aquí no importa).</li>
+    <li>b) $N$ es triangular con valores propios $1,2$ distintos ⇒ diagonalizable (U p.163), con vectores $(1,0)$ y $(1,1)$, <b>no ortogonales</b>. No es diagonalizable ortogonalmente: si lo fuera, $N=P\Lambda P^t$ sería simétrica (E 5.27) y $N^t\neq N$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> simétrica ⇒ siempre; no simétrica ⇒ nunca ortogonalmente (aunque sea diagonalizable).</div>
+</details>
+
+<details class="sol" id="ex-propio-B"><summary>Propio B — valor propio doble con Gram-Schmidt: $A=nn^t$ <span class="src" data-l="P" data-ref="Ejemplo propio; Gram-Schmidt, U p. 208; Lay §7.1 Ejemplo 3 p. 396-397">propio</span></summary>
+  <p class="enun">Diagonaliza ortogonalmente $A=\begin{pmatrix}1&2&2\cr2&4&4\cr2&4&4\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>$A=nn^t$ con $n=(1,2,2)$: simétrica, rango $1$. Valores propios: $\lambda=9=n\cdot n$ (simple, vector $n$, pues $Ann^t n=nn^tn=9n$) y $\lambda=0$ doble (traza $9=9+0+0$ ✓).</li>
+    <li>$L(9)=\langle(1,2,2)\rangle$. $L(0)=\operatorname{Nuc}A$: $x+2y+2z=0$ (el plano ortogonal a $n$), $\dim=2=\alpha$. Base de parámetros: $u=(-2,1,0)$, $w=(-2,0,1)$, <b>no ortogonales</b> ($u\cdot w=4$).</li>
+    <li><b>Gram-Schmidt en $L(0)$:</b> $e_2=w-\frac{w\cdot u}{u\cdot u}u=(-2,0,1)-\frac45(-2,1,0)=\left(-\frac25,-\frac45,1\right)\sim(-2,-4,5)$. Control: $u\cdot e_2=4-4=0$; $n\cdot e_2=-2-8+10=0$ ✓.</li>
+    <li>Normas: $\|n\|=3$, $\|u\|=\sqrt5$, $\|e_2\|=\sqrt{45}=3\sqrt5$:
+      $$P=\begin{pmatrix}\frac13&-\frac2{\sqrt5}&-\frac2{3\sqrt5}\cr\frac23&\frac1{\sqrt5}&-\frac4{3\sqrt5}\cr\frac23&0&\frac5{3\sqrt5}\end{pmatrix},\qquad P^tAP=\operatorname{diag}(9,0,0),\ \det P=1.$$</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $A=nn^t$ siempre tiene un único valor propio no nulo ($\|n\|^2$) y el plano $n^\perp$ como núcleo: la parte difícil es una base ortonormal de ese plano.</div>
+</details>
+
+<details class="sol" id="ex-propio-C"><summary>Propio C — reconstruir la simétrica y calcular $A^n$ <span class="src" data-l="P" data-ref="Ejemplo propio; U p. 222 y Teor. 5.8 p. 224; Lay descomposición espectral p. 398">propio</span></summary>
+  <p class="enun">$A$ es simétrica real de orden $3$ con valores propios $10$ (simple) y $1$ (doble), y $(2,1,2)$ es vector propio de $10$. Halla $A$, una $P$ ortogonal que la diagonalice, y $A^n$.</p>
+  <ol class="steps">
+    <li><b>$L(1)$ está determinado.</b> $L(1)\perp L(10)=\langle(2,1,2)\rangle$ (U p.222) y $\dim L(1)=2$ (Teor. 5.7): $L(1)=\{2x+y+2z=0\}$.</li>
+    <li><b>Base ortonormal.</b> Base de parámetros del plano: $a=(-1,2,0)$, $b=(-1,0,1)$ (no ortogonales: $a\cdot b=1$). Gram-Schmidt: $z=b-\frac{b\cdot a}{a\cdot a}a=(-1,0,1)-\frac15(-1,2,0)=\left(-\frac45,-\frac25,1\right)\sim(-4,-2,5)$. Normas: $\|(2,1,2)\|=3$, $\|a\|=\sqrt5$, $\|(-4,-2,5)\|=3\sqrt5$. $P=\left(\frac{(2,1,2)}3\ \ \frac{(-1,2,0)}{\sqrt5}\ \ \frac{(-4,-2,5)}{3\sqrt5}\right)$, $\Lambda=\operatorname{diag}(10,1,1)$, $\det P=1$.</li>
+    <li><b>$A=P\Lambda P^t$.</b> Atajo: $u_2u_2^t+u_3u_3^t=I-u_1u_1^t$ (las tres $u_iu_i^t$ suman $PP^t=I$), así $A=10\,u_1u_1^t+(I-u_1u_1^t)=I+9u_1u_1^t=I+vv^t$ con $v=(2,1,2)$ (porque $9u_1u_1^t=vv^t$):
+      $$A=\begin{pmatrix}5&2&4\cr2&2&2\cr4&2&5\end{pmatrix}.$$ Comprobación: $A(2,1,2)^t=(20,10,20)=10(2,1,2)$; $|A-\lambda I|=-(\lambda-10)(\lambda-1)^2$.</li>
+    <li><b>$A^n=P\Lambda^nP^t=10^nu_1u_1^t+(I-u_1u_1^t)=I+\dfrac{10^n-1}9\,vv^t$.</b> Comprobación: $n=1$ da $A$; $n=0$ da $I$; coincide con $A^2,\dots,A^4$ calculadas directamente.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en una simétrica, conocer los subespacios propios de todos los valores menos uno basta: el que falta es el complemento ortogonal. Después $A=\sum\lambda_iu_iu_i^t$ y $A^n=\sum\lambda_i^nu_iu_i^t$.</div>
+  <p><b>Error típico:</b> escribir $A=P\Lambda P^{-1}$ con $P$ de columnas $(2,1,2),(-1,2,0),(-1,0,1)$ (no ortogonales) y luego «trasponer» en lugar de invertir: solo vale $P^{-1}=P^t$ si $P$ es ortogonal.</p>
+</details>
+
+<h3>Para practicar — fronteras con otros temas (no se desarrollan aquí)</h3>
+<ul>
+  <li><b>6.2 y 6.3 (formas cuadráticas: forma canónica por valores propios, signatura, rango):</b> usan esta diagonalización ortogonal como herramienta, pero lo que se pide es de la forma cuadrática. Feb. 2024 (1.ª sem.), pregunta 6 (forma canónica de $x_1^2+4x_1x_2-2x_2^2$); Feb. 2022 (A) ej. 6; Sept. 2025 problema 8; Feb. 2018 (A) problema b); Feb. 2025 (2.ª sem.) problema 8 y Feb. 2026 (2.ª sem.) pregunta 6; Sept. 2024, Sept. 2023, Feb. 2023 (1.ª), Sept. 2022, Ene. 2020 (A) y Feb. 2017: pregunta o ejercicio 6.</li>
+  <li><b>6.1:</b> Feb. 2026 (1.ª sem.) pregunta 6, matriz de una forma bilineal en otra base ($P^tAP$).</li>
+  <li><b>6.4 Cónicas:</b> Feb. 2019 (A) y (B) ej. 6, Sept. 2017 ej. 6, Feb. 2020 (B) ej. 6 (la diagonalización ortogonal lleva a los ejes de la cónica; la $P$ debe tener $\det=1$).</li>
+  <li><b>5.4 Mínimos cuadrados:</b> Feb. 2017 pb. b), Feb. 2018 (B) pb. c), Feb. 2019 (A) ej. 5, Feb. 2020 (B) pb. b).</li>
+</ul>
+
+<div class="box warn"><span class="h">Error de la solución oficial de Feb. 2024 (1.ª sem.), pregunta 6: la lección de este tema</span>
+  <p>La oficial toma los vectores propios $(2,1),(-1,2)$ <b>sin normalizar</b> y da $Q=2x_1'^2-3x_2'^2$; con esa $P$ sale $P^tAP=\operatorname{diag}(10,-15)$, no $\operatorname{diag}(2,-3)$. Normalizar es lo que hace que $P^t=P^{-1}$. Se desarrolla en 6.2/6.3.</p>
+  <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª semana), pregunta 6">X Feb. 2024 (1.ª) P6</span>
+</div>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="chuleta"><span class="n">8</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
+  <table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Simétrica</td><td>$A=A^t$, $a_{ij}=a_{ji}$</td><td>Cuadrada; el tema solo vale con elementos <b>reales</b></td></tr>
+    <tr><td>Valores propios</td><td>Todos reales (raíces de $|A-\lambda I|=0$); $\sum\lambda_i=\operatorname{tr}A$, $\prod\lambda_i=|A|$ (contando multiplicidades)</td><td>Simétrica real. En $2\times2$: $\Delta=(a-c)^2+4b^2\ge0$</td></tr>
+    <tr><td>Vectores propios</td><td>$\lambda_1\neq\lambda_2\Rightarrow v_1\cdot v_2=0$ ($L_{\lambda_1}\perp L_{\lambda_2}$)</td><td>Solo valores propios <b>distintos</b>; dentro de un $L_\lambda$ hay que aplicar Gram-Schmidt</td></tr>
+    <tr><td>Multiplicidades</td><td>$d_i=\alpha_i$ siempre</td><td>Una simétrica real nunca tiene $d\lt\alpha$</td></tr>
+    <tr><td>Diagonalización ortogonal</td><td>$P^tAP=\Lambda$, $P^{-1}=P^t$, $A=P\Lambda P^t$ (Teor. 5.8)</td><td>$P$ de columnas <b>ortonormales</b> (normalizar); $\Lambda$ con el mismo orden que $P$</td></tr>
+    <tr><td>Semejante y congruente</td><td>$A$ es semejante <b>y</b> congruente a $\Lambda$ a la vez</td><td>Porque $P^{-1}=P^t$ (Teor. 5.8)</td></tr>
+    <tr><td>Recíproco</td><td>diagonalizable ortogonalmente $\iff$ simétrica</td><td>Matriz real (E 5.27; Lay Teor. 2)</td></tr>
+    <tr><td>Simetría con el producto escalar</td><td>$Ax\cdot y=x\cdot Ay$</td><td>Producto escalar estándar (E 5.26 C)</td></tr>
+    <tr><td>Descomposición espectral</td><td>$A=\sum\lambda_ju_ju_j^t$; $A^k=\sum\lambda_j^ku_ju_j^t$</td><td>$u_j$ unitarios y ortogonales (Lay p.398)</td></tr>
+    <tr><td>$\det P$</td><td>$\pm1$: giro ($+1$) o giro + simetría ($-1$)</td><td>Cambiar el signo de una columna cambia el signo de $\det P$</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §5.3, Teoremas 5.7-5.8 y propiedades de las pp. 221-224">U p.221-224</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Teoremas 1-3 y descomposición espectral, p. 395-398">L p.395-398</span>
+</div>
+
+<div class="box tip"><span class="h">Lista de comprobación: «sé hacer…»</span>
+  <ul class="checklist">
+    <li>Reconocer una matriz simétrica y decir qué operaciones la conservan ($A^k$, $A^{-1}$, $C^tAC$; no $AB$) (sección 1; E 5.27).</li>
+    <li>Explicar por qué los valores propios de una simétrica son reales (conjugar y usar $A^t=A$) y por qué los de valores distintos son ortogonales (E 5.26 B; X Ene. 2020).</li>
+    <li>Enunciar los Teor. 5.7 y 5.8 y el recíproco («diagonalizable ortogonalmente ⇔ simétrica») (E 5.27; X Ene. 2020).</li>
+    <li><b>Diagonalizar ortogonalmente</b> una simétrica $2\times2$, $3\times3$ y $4\times4$ por bloques con la receta de cinco pasos, dando $P$ <b>y</b> $\Lambda$ en el mismo orden (E 5.33; Propios 1-4).</li>
+    <li>Aplicar <b>Gram-Schmidt dentro de un subespacio propio</b> de dimensión $\ge2$ y <b>normalizar</b> (Propios 4, B, C).</li>
+    <li>Comprobar el resultado: $P^tP=I$, $AP=P\Lambda$ y $\operatorname{tr}A=\sum\lambda_i$.</li>
+    <li>Decidir si dos matrices son semejantes y/o congruentes cuando una es simétrica (E 5.28, 5.32) y cuándo una matriz diagonalizable <b>no</b> lo es ortogonalmente (Propio 7).</li>
+    <li>Responder tests de «¿por qué tiene valores propios reales?» y «¿para qué parámetros es el polinomio de una simétrica?» (E 5.29-5.31).</li>
+    <li>Construir una simétrica con valores y subespacios propios dados ($A=\sum\lambda_iu_iu_i^t$; X Feb. 2020 B), completar una simétrica con un vector propio (X Feb. 2017) y calcular $A^n$ (Propios 5, 6, 8, C).</li>
+    <li>Explicar en un examen, con ejemplo, en qué consiste la diagonalización ortogonal (X Ene. 2020, modelo de respuesta).</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Lista de comprobación propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li><b>No normalizar</b> los vectores propios: $P$ no es ortogonal y $P^tAP=\operatorname{diag}(\|v_i\|^2\lambda_i)\neq\Lambda$. (Es el error de la solución oficial de Feb. 2024 en el tema 6.)</li>
+    <li><b>«Los vectores propios de una simétrica son ortogonales»</b> sin matizar: solo los de valores propios <b>distintos</b>. Con un valor doble, Gram-Schmidt dentro de $L_\lambda$.</li>
+    <li><b>Desordenar</b> las columnas de $P$ respecto de $\Lambda$.</li>
+    <li><b>Aplicar el teorema a una matriz no simétrica</b> o con elementos complejos. Diagonalizable ≠ diagonalizable ortogonalmente.</li>
+    <li><b>Confundir simétrica con ortogonal</b> (un giro es ortogonal y no simétrico; una simétrica no es ortogonal en general). Las dos a la vez: simétricas con $A^2=I$.</li>
+    <li><b>Calcular $P^{-1}$ por Gauss-Jordan</b> cuando $P$ es ortogonal: $P^{-1}=P^t$.</li>
+    <li><b>Mal discriminante</b> o mal polinomio característico (tests de E 5.31): comprueba siempre con traza y determinante.</li>
+    <li><b>Pensar que mismo polinomio característico ⇒ semejantes</b> (E 5.28): vale para simétricas, no en general.</li>
+    <li><b>Creer que dos matrices semejantes son congruentes</b> o al revés: solo coinciden si $P$ es ortogonal (Propio 10).</li>
+    <li><b>Dejar de justificar</b> («lo que no se justifica no se puntúa»): cita el teorema (valores reales, subespacios ortogonales, Teor. 5.8) y comprueba $P^tP=I$.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Errores recopilados de E §5.3 y de las soluciones oficiales de los exámenes">propio</span>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>

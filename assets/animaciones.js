@@ -17,6 +17,7 @@
    .anim-jordan  data-a="1,0,3;-1,2,0;0,0,2"   (forma de Jordan de A de 2x2 a 4x4, entradas enteras editables y presets: polinomio caracteristico y valores propios (reales; si hay complejas avisa de que no hay J real), rangos de (A-lI)^k, tamanos de bloques, J, cadenas y matriz de paso P paso a paso, comprobacion AP = PJ en fracciones exactas)
    .anim-gram    data-g="1,0,1" data-u="2,1" data-v="-1,2"   (producto escalar de R2 con matriz de Gram G=(a b; b c) editable [data-g = a,b,c; simetrica por construccion] y dos vectores u, v con sliders (coordenadas en la base de G): u.v = u^t G v, normas, coseno, angulo, ortogonalidad, distancia; dibujo fiel con Cholesky (los angulos que se ven son los de el producto); avisa si G no es definida positiva (Sylvester) con un vector testigo x.x<=0; presets: estandar, U Ej. 5.5, propios, no definida positiva, semidefinida)
    .anim-ortog   data-a="1,0,0,1" data-x="2,1" data-y="0.5,1.5"   (matriz A 2x2 [a b; c d] editable, deslizador de angulo theta con botones Giro R_theta / Simetria S_theta y presets: muestra A^tA, si es ortogonal (tolerancia 0,005), det, el cuadrado unidad y su imagen, dos vectores x, y con sliders y sus imagenes Ax, Ay (se conservan normas, producto escalar y angulo solo si A es ortogonal) y el tipo: giro de angulo theta o simetria respecto de la recta de angulo theta/2; si no es ortogonal indica que condicion de las columnas falla)
+   .anim-simet   data-a="3,1,3"   (matriz 2x2 de filas (a b; d c) con a, b, c editables y casilla "simetrica" [d = b]; deslizador de angulo phi para un punto x de la circunferencia unidad: x frente a Ax, la elipse imagen de la circunferencia unidad y presets. Si es simetrica: discriminante (a-c)^2+4b^2 >= 0 (valores propios siempre reales), valores propios l1 >= l2, ejes principales u1, u2 perpendiculares (rectas punteadas) con los semiejes |l1|, |l2| de la elipse, angulo theta = 1/2 atan2(2b, a-c) de la matriz de paso P (giro de det 1), P^t A P = diag(l1, l2) calculado numericamente y aviso cuando x esta sobre un eje principal. Si se desmarca la casilla: valores y vectores propios de una A cualquiera, angulo entre los ejes propios (distinto de 90 grados) y por que no hay P ortogonal; presets: matrices del tema 5.3, singular, diagonal, valor doble, contrastes no simetricos)
 */
 (function () {
   'use strict';
@@ -1466,7 +1467,93 @@
   }
 
 
-  var REG = [['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Matrices simetricas 2x2: ejes principales perpendiculares (.anim-simet)
+     ===================================================================== */
+  function buildSimet(root) {
+    var nc = function (x) { return num(x).replace('.', ','); };
+    var nd = function (x) { var v = Math.round(x * 1000) / 1000; if (Math.abs(v) < 1e-9) v = 0; return String(v).replace('-', MINUS).replace('.', ','); };
+    var mt = function (rows) { var ent = rows.every(function (r) { return r.every(function (x) { return Math.abs(x - Math.round(x)) < 1e-9; }); }); return '(' + rows.map(function (r) { return r.map(nd).join(ent ? ' ' : ' ; '); }).join(' / ') + ')'; };
+    var simpl = function (u) { var m = 0; u.forEach(function (x) { if (Math.abs(x) > 1e-9 && (m === 0 || Math.abs(x) < m)) m = Math.abs(x); }); if (!m) return null; for (var k = 1; k <= 12; k++) { var w = u.map(function (x) { return x / m * k; }); if (w.every(function (x) { return Math.abs(x - Math.round(x)) < 1e-6; })) { var g = w.map(Math.round); if (g[0] < 0 || (g[0] === 0 && g[1] < 0)) g = g.map(function (x) { return -x; }); return g; } } return null; };
+    var poly = function (tr, dt) { var t = -tr, s = 'λ²'; if (Math.abs(t) > 1e-9) s += (t < 0 ? ' ' + MINUS + ' ' : ' + ') + (Math.abs(Math.abs(t) - 1) < 1e-9 ? '' : nd(Math.abs(t)) + '·') + 'λ'; if (Math.abs(dt) > 1e-9) s += (dt < 0 ? ' ' + MINUS + ' ' : ' + ') + nd(Math.abs(dt)); return s; };
+    var axes = null;
+    var a0 = (root.getAttribute('data-a') || '3,1,3').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 340, 340, 4);
+    P.svg.setAttribute('aria-label', 'Plano con la circunferencia unidad, su imagen (una elipse) por la matriz A, los ejes propios y un punto x con su imagen Ax');
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders'); text.setAttribute('aria-live', 'polite');
+    var mk = function (v, lab) { var i = numInput(v, 0.5, '3.8em'); i.setAttribute('aria-label', lab); return i; };
+    var ia = mk(a0[0], 'a (fila 1, columna 1)'), ib = mk(a0[1], 'b (fila 1, columna 2)'), ic = mk(a0[2], 'c (fila 2, columna 2)'), id = mk(a0[1], 'd (fila 2, columna 1)');
+    var chk = document.createElement('input'); chk.type = 'checkbox'; chk.checked = true; chk.setAttribute('aria-label', 'Matriz simétrica (d = b)');
+    var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down'), tg = el('label', 'an-slrow');
+    [el('span', '', 'A = ( '), ia, el('span', '', ' '), ib, el('span', '', ' ; '), id, el('span', '', ' '), ic, el('span', '', ' )')].forEach(function (n) { er.appendChild(n); });
+    eq.appendChild(er); tg.appendChild(chk); tg.appendChild(el('span', '', 'simétrica (d = b)')); tg.style.justifyContent = 'center'; eq.appendChild(tg);
+    var sp = slider(0, 360, 0.5, 30), lp = el('b'), r1 = el('label', 'an-slrow');
+    sp.setAttribute('aria-label', 'ángulo φ del vector x sobre la circunferencia unidad'); r1.appendChild(el('span', '', 'φ ')); r1.appendChild(sp); r1.appendChild(lp); ctrl.appendChild(r1);
+    function sync() { if (chk.checked) { id.value = ib.value; id.disabled = true; } else id.disabled = false; }
+    var PRE = [['(3 1; 1 3)  [Propio 1]', [3, 1, 3, 1]], ['(1 2; 2 −2)  [Propio 2]', [1, 2, -2, 2]], ['E 5.29: (1 1; 1 0)', [1, 1, 0, 1]], ['E 5.30: (1 2; 2 4), singular', [1, 2, 4, 2]], ['Ene. 2020: (2 2; 2 −1)', [2, 2, -1, 2]], ['Diagonal (2 0; 0 1)', [2, 0, 1, 0]], ['Valor doble: 2·I', [2, 0, 2, 0]], ['Contraste: (1 2; 0 3) NO simétrica', [1, 2, 3, 0, 1]], ['Contraste: (0 1; −1 0), giro, sin valores reales', [0, 1, 0, -1, 1]]];
+    var pre = btnRow(PRE.map(function (q) { return q[0]; }), function (k) { var q = PRE[k][1]; chk.checked = q.length < 5; ia.value = q[0]; ib.value = q[1]; ic.value = q[2]; id.value = q[3]; sync(); draw(); });
+    var bx = btnRow(['x = u₁', 'x = u₂'], function (i) { if (!axes) return; var v = ((axes[i] % 360) + 360) % 360; sp.value = Math.round(v * 2) / 2; draw(); });
+    bx.classList.add('an-axbtn');
+    function draw() {
+      sync();
+      var a = parseFloat(ia.value) || 0, b = parseFloat(ib.value) || 0, c = parseFloat(ic.value) || 0, d = chk.checked ? b : (parseFloat(id.value) || 0), sym = Math.abs(b - d) < 1e-9, phi = parseFloat(sp.value);
+      lp.textContent = nc(phi) + '°';
+      var disc = (a - c) * (a - c) + 4 * b * d, img = function (t) { return [a * Math.cos(t) + b * Math.sin(t), d * Math.cos(t) + c * Math.sin(t)]; };
+      var m = 0, k, pts = [], pc = [];
+      for (k = 0; k < 90; k++) { var q = img(k * Math.PI / 45); pts.push(q); m = Math.max(m, Math.abs(q[0]), Math.abs(q[1])); pc.push([Math.cos(k * Math.PI / 45), Math.sin(k * Math.PI / 45)]); }
+      var K = m > 3.7 ? 3.7 / m : 1, T = function (q) { return [K * q[0], K * q[1]]; }, tp = function (ps) { return ps.map(function (q) { q = T(q); return P.X(q[0]) + ',' + P.Y(q[1]); }).join(' '); };
+      P.clear();
+      P.layer.appendChild(sv('polygon', { points: tp(pc), 'class': 'an-poly gr' })); P.layer.appendChild(sv('polygon', { points: tp(pts), 'class': 'an-poly' }));
+      var ph = phi * Math.PI / 180, x = [Math.cos(ph), Math.sin(ph)], Ax = [a * x[0] + b * x[1], d * x[0] + c * x[1]];
+      var h = '<b>A</b> = ' + mt([[a, b], [d, c]]) + (sym ? ' es <b>simétrica</b> (A = Aᵗ)' : ' <b>no es simétrica</b> (d ≠ b)') + '. Polinomio característico: ' + poly(a + c, a * c - b * d) + ' (traza ' + nd(a + c) + ', determinante ' + nd(a * c - b * d) + '). ';
+      var kind = ''; axes = null;
+      if (sym) {
+        h += 'Discriminante Δ = (a ' + MINUS + ' c)² + 4b² = <b>' + nd(disc) + ' ≥ 0</b>: suma de cuadrados, <b>siempre</b> hay raíces reales (U p.221). ';
+        if (disc < 1e-9) {
+          kind = 'A = ' + nd(a) + '·I, valor doble, cualquier base ortonormal sirve'; h += '<br>Aquí a = c y b = 0: <b>A = ' + nd(a) + '·I</b>, un único valor propio λ = ' + nd(a) + ' doble con todo ℝ² como subespacio propio (d = α = 2). Todo vector es propio, la imagen de la circunferencia es una circunferencia de radio ' + nd(Math.abs(a)) + ' y puedes tomar P = I (o cualquier giro).';
+        } else {
+          var s = Math.sqrt(disc), l1 = (a + c + s) / 2, l2 = (a + c - s) / 2, th = 0.5 * Math.atan2(2 * b, a - c), u1 = [Math.cos(th), Math.sin(th)], u2 = [-Math.sin(th), Math.cos(th)], thd = th * 180 / Math.PI;
+          var Pm = [[u1[0], u2[0]], [u1[1], u2[1]]], AP = [[a * Pm[0][0] + b * Pm[1][0], a * Pm[0][1] + b * Pm[1][1]], [b * Pm[0][0] + c * Pm[1][0], b * Pm[0][1] + c * Pm[1][1]]];
+          var L = [[Pm[0][0] * AP[0][0] + Pm[1][0] * AP[1][0], Pm[0][0] * AP[0][1] + Pm[1][0] * AP[1][1]], [Pm[0][1] * AP[0][0] + Pm[1][1] * AP[1][0], Pm[0][1] * AP[0][1] + Pm[1][1] * AP[1][1]]];
+          kind = 'λ₁ = ' + nd(l1) + ', λ₂ = ' + nd(l2) + ', ejes perpendiculares'; axes = [thd, thd + 90];
+          var s1 = simpl(u1), s2 = simpl(u2), vt = function (u, sv2) { return '(' + nd(u[0]) + '; ' + nd(u[1]) + ')' + (sv2 ? ' ∝ (' + sv2[0] + '; ' + sv2[1] + ')' : ''); };
+          [u1, u2].forEach(function (u, i) { P.layer.appendChild(sv('line', { x1: P.X(-9 * u[0]), y1: P.Y(-9 * u[1]), x2: P.X(9 * u[0]), y2: P.Y(9 * u[1]), 'class': 'an-vec dash ' + (i ? 'up' : 'w') })); });
+          h += '<br>Valores propios <b>λ₁ = ' + nd(l1) + '</b> y <b>λ₂ = ' + nd(l2) + '</b> (λ = (a+c)/2 ± ½√Δ). Vectores propios unitarios <b>u₁ = ' + vt(u1, s1) + '</b> y <b>u₂ = ' + vt(u2, s2) + '</b>, con u₁•u₂ = ' + nd(u1[0] * u2[0] + u1[1] * u2[1]) + ': los ejes (rectas punteadas) son <b>perpendiculares</b>.';
+          h += '<br>La matriz de paso P = (u₁ u₂) es el <b>giro de θ = ' + nc(thd) + '°</b> (det P = 1, PᵗP = I, P⁻¹ = Pᵗ), y PᵗAP = ' + mt(L) + ' = diag(λ₁, λ₂): los números de fuera de la diagonal salen 0.';
+          h += '<br>La circunferencia unidad (gris) se convierte en una <b>elipse</b> cuyos semiejes, medidos sobre los ejes propios, son |λ₁| = ' + nd(Math.abs(l1)) + ' y |λ₂| = ' + nd(Math.abs(l2)) + (Math.abs(l2) < 1e-9 || Math.abs(l1) < 1e-9 ? ' (uno vale 0: la elipse se aplasta sobre un segmento, A es singular)' : '') + (l1 < -1e-9 || l2 < -1e-9 ? '; como ' + (l1 < -1e-9 && l2 < -1e-9 ? 'λ₁ y λ₂ son negativos, A invierte el sentido de los ejes u₁ y u₂' : (l2 < -1e-9 ? 'λ₂ es negativo, A invierte el sentido del eje u₂' : 'λ₁ es negativo, A invierte el sentido del eje u₁')) : '') + '.';
+          P.layer.appendChild(sv('circle', { cx: P.X(K * l1 * u1[0]), cy: P.Y(K * l1 * u1[1]), r: 4.5, 'class': 'an-dot' })); P.layer.appendChild(sv('circle', { cx: P.X(K * l2 * u2[0]), cy: P.Y(K * l2 * u2[1]), r: 4.5, 'class': 'an-dot' }));
+          var cr = Math.abs(x[0] * Ax[1] - x[1] * Ax[0]) / Math.max(Math.hypot(Ax[0], Ax[1]), 0.5);
+          h += '<br>' + (cr < 0.026 ? '<b>El vector x apunta a un eje principal</b>: Ax es paralelo a x (Ax = λx, con λ = ' + nd(x[0] * Ax[0] + x[1] * Ax[1]) + ').' : 'Mueve φ (o pulsa «x = u₁», «x = u₂»): Ax es paralelo a x solo cuando x cae sobre una de las dos rectas punteadas (' + nc(thd) + '° y ' + nc(thd + 90) + '°).');
+        }
+      } else if (disc < -1e-9) {
+        kind = 'sin valores propios reales'; h += 'Δ = (a ' + MINUS + ' c)² + 4bd = <b>' + nd(disc) + ' &lt; 0</b>: no hay raíces reales, <b>no hay vectores propios reales</b> (ninguna recta se conserva). Sin simetría esto sí puede ocurrir (giros).';
+      } else {
+        var sq = Math.sqrt(Math.max(0, disc)), l1b = (a + c + sq) / 2, l2b = (a + c - sq) / 2;
+        var vec = function (l) { if (Math.abs(b) > 1e-9) return [b, l - a]; if (Math.abs(d) > 1e-9) return [l - c, d]; return Math.abs(l - a) < 1e-9 ? [1, 0] : [0, 1]; };
+        if (disc < 1e-9) {
+          var lam = (a + c) / 2, triv = Math.abs(b) < 1e-9 && Math.abs(d) < 1e-9;
+          kind = triv ? 'A = λI' : 'no diagonalizable'; h += 'Δ = 0: valor propio doble λ = ' + nd(lam) + (triv ? '.' : ', pero A − λI ≠ 0 tiene rango 1: solo una recta propia (d = 1 &lt; α = 2), <b>no es diagonalizable</b>.');
+        } else {
+          var v1 = vec(l1b), v2 = vec(l2b), w1 = simpl(v1) || v1, w2 = simpl(v2) || v2, n1 = Math.hypot(v1[0], v1[1]), n2 = Math.hypot(v2[0], v2[1]), cs = (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2), ang = Math.acos(Math.min(1, Math.abs(cs))) * 180 / Math.PI;
+          kind = 'diagonalizable, pero ejes no perpendiculares';
+          [v1, v2].forEach(function (u, i) { var nn = Math.hypot(u[0], u[1]); P.layer.appendChild(sv('line', { x1: P.X(-9 * u[0] / nn), y1: P.Y(-9 * u[1] / nn), x2: P.X(9 * u[0] / nn), y2: P.Y(9 * u[1] / nn), 'class': 'an-vec dash ' + (i ? 'up' : 'w') })); });
+          h += 'Δ = ' + nd(disc) + ' &gt; 0: λ₁ = ' + nd(l1b) + ', λ₂ = ' + nd(l2b) + ' (distintos, así que A sí es diagonalizable), con vectores propios (' + nd(w1[0]) + '; ' + nd(w1[1]) + ') y (' + nd(w2[0]) + '; ' + nd(w2[1]) + '). <br>Los ejes propios forman <b>' + nc(ang) + '°</b> (cos = ' + nd(cs) + '), no 90°.  No hay ninguna P <b>ortogonal</b> que diagonalice esta A (E 5.27: si la hubiera, A sería simétrica). Los ejes de la elipse no están sobre las rectas propias.';
+        }
+      }
+      arrow(P, 0, 0, T(x)[0], T(x)[1], 'gr', 'x'); arrow(P, 0, 0, T(Ax)[0], T(Ax)[1], 'down', 'Ax');
+      if (K < 1) h += ' <i>(Dibujo a escala ' + nc(K) + '.)</i>';
+      html(text, h); res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = (sym ? 'Simétrica: ' : 'No simétrica: ') + kind; res.appendChild(fin);
+    }
+    [ia, ib, ic, id, sp, chk].forEach(function (q) { q.addEventListener('input', draw); q.addEventListener('change', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Una matriz simétrica de 2×2 deforma la circunferencia unidad (gris, discontinua) en una elipse (azul). Sus dos ejes están justo en las direcciones de los vectores propios y son siempre perpendiculares: por eso se diagonaliza con una matriz de paso ortogonal (un giro). Cambia a, b, c, mueve φ para ver cuándo Ax es paralelo a x, y desmarca «simétrica» para ver qué se pierde.'));
+    root.appendChild(eq); root.appendChild(P.svg); root.appendChild(ctrl); root.appendChild(bx); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    draw();
+  }
+
+
+  var REG = [['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
