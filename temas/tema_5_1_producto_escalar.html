@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 5.1 Producto escalar</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/tres-d.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 5 · Ortogonalidad · Tema 5.1</div>
+  <h1>Producto escalar</h1>
+  <p>Cómo medir <b>longitudes, distancias y ángulos</b> en cualquier espacio vectorial (no solo en $\mathbb R^2$ y $\mathbb R^3$): el producto escalar y su matriz de Gram, la norma, la ortogonalidad, el método de <b>Gram-Schmidt</b> para fabricar bases ortonormales, el suplementario ortogonal y la <b>proyección ortogonal</b> como «el punto más cercano».</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §5.1 (pp. 193-213)</span><span>Ejercicios: E Ej. 5.1–5.15 (pp. 161-173)</span><span>Lay cap. 6 (§6.1-6.4, §6.7)</span><span>⏱ ~9–11 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §5.1.1 Elementos didácticos, p. 193">U p.193</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>En $\mathbb R^2$ y $\mathbb R^3$ sabes medir: la longitud de $(3,4)$ es $5$, y dos flechas son perpendiculares si $u_1v_1+u_2v_2+u_3v_3=0$. Todo eso sale de una sola operación, el <b>producto escalar</b>. Este tema dice qué propiedades debe tener «una operación que mide» para que funcione en <b>cualquier</b> espacio vectorial (matrices, polinomios, funciones…) y qué se obtiene gratis: <b>normas, distancias, ángulos, ortogonalidad y proyecciones</b>. Lo sorprendente es que hay <b>muchos</b> productos escalares en el mismo espacio y que dos vectores pueden ser perpendiculares para uno y no para otro: lo que mide es el producto, no el espacio.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del <a href="tema_1_2_algebra_matricial.html">tema 1.2</a>: producto de matrices, traspuesta, matriz simétrica $A^t=A$, $(AB)^t=B^tA^t$.</li>
+  <li>De los temas <a href="tema_2_1_espacios_vectoriales.html">2.1</a>-<a href="tema_2_3_bases_dimension_coordenadas.html">2.3</a>: subespacio, sistema generador, base, dimensión y <b>coordenadas</b> $X$ de un vector en una base; y de <a href="tema_2_4_suma_directa.html">2.4</a>: suma directa $U\oplus U'$ y suplementario.</li>
+  <li>Del <a href="tema_3_5_inversa_cambios_base.html">tema 3.5</a>: la matriz de cambio de base $Q$ (columnas = vectores de la base nueva escritos en la antigua) y la regla $X=QX'$.</li>
+  <li>Del <a href="tema_4_1_relaciones_equivalencia.html">tema 4.1</a> (opcional): matrices <b>congruentes</b> $B=Q^tAQ$ (Def. 4.4, U p.147), que es la que aparece en el cambio de base de una matriz de Gram.</li>
+  <li>Sistemas homogéneos y su espacio de soluciones (<a href="tema_1_4_sistemas_ecuaciones.html">tema 1.4</a>): casi todo lo de «subespacio ortogonal» acaba en resolver $AX=0$.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde</th></tr>
+  <tr><td>1 Producto escalar</td><td>Def. 5.1, el estándar, ejemplos y contraejemplos, polinomios y matrices</td><td>U p.193-195</td></tr>
+  <tr><td>2 Matriz de Gram</td><td>$x\bullet y=X^tGY$, simétrica y definida positiva (Sylvester), $G'=Q^tGQ$, animación 2D</td><td>U p.195-199</td></tr>
+  <tr><td>3 Norma, distancia, ángulo</td><td>Normalizar, coseno, ortogonalidad, Pitágoras, Cauchy-Schwarz, ortogonal a un subespacio</td><td>U p.199-204 · L</td></tr>
+  <tr><td>4 Sistemas ortogonales</td><td>Ortogonal / ortonormal, Teor. 5.2 (libres), Teor. 5.3 (coordenadas)</td><td>U p.204-207</td></tr>
+  <tr><td>5 Gram-Schmidt</td><td>Receta, Ejemplo 5.21, figura de Lay y animación 3D paso a paso</td><td>U p.207-209 · L §6.4</td></tr>
+  <tr><td>6 Suplementario ortogonal y proyección</td><td>$U^\perp$, $v=u+w$, fórmula (5.2), mejor aproximación (Teor. 5.4), animación 3D</td><td>U p.209-213 · L §6.3</td></tr>
+  <tr><td>7 Tabla Lay ↔ U</td><td>Vocabulario y alcance (Lay solo trata el estándar)</td><td>L</td></tr>
+  <tr><td>8 Ejercicios del libro</td><td>E 5.1–5.15 + 12 ejemplos propios + autoevaluación</td><td>E pp.161-173 · U p.238</td></tr>
+  <tr><td>9 Ejemplos de examen</td><td>22 ejercicios de exámenes anteriores, por métodos, + ejemplos propios</td><td>X</td></tr>
+  <tr><td>10 Chuleta</td><td>Fórmulas con hipótesis, lista de comprobación, errores frecuentes</td><td>—</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p><b>(a)</b> ¿Es esta expresión / esta matriz un producto escalar? y calcular la <b>matriz de Gram</b> (E 5.1-5.2, 5.9, 5.11-5.13; X: Feb. 2023, Feb. 2022, Feb. 2019). <b>(b)</b> <b>Norma, ángulo, distancia</b> con un producto no estándar (E 5.3, 5.11; X Feb. 2018, Sept. 2022, Sept. 2025, Feb. 2024, Feb. 2026). <b>(c)</b> <b>Sistema ortogonal / ortonormal</b> y por qué siempre hay una base ortonormal (X Feb. 2026, Feb. 2025, Sept. 2018, Feb. 2019). <b>(d)</b> <b>Gram-Schmidt</b> (E 5.15 A; X Sept. 2019). <b>(e)</b> <b>Subespacio ortogonal / suplementario ortogonal</b> (E 5.5-5.8, 5.10; X Feb. 2017, Feb. 2018, Sept. 2019, Feb. 2022). <b>(f)</b> <b>Proyección ortogonal y mínima distancia</b> (E 5.14, 5.15; X Sept. 2017, Sept. 2025, Feb. 2020, Sept. 2024). Casi siempre vale 1 punto de los 10 del examen y suele ser la pregunta corta número 5.</p>
+  <span class="src" data-l="P" data-ref="Clasificación propia a partir de E §5.1 y los exámenes 2017-2026">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Convenios del tema que conviene fijar desde ya</span>
+  <ul>
+    <li><b>Si no dice qué producto, es el estándar</b> $x\cdot y=x_1y_1+\dots+x_ny_n$ (U p.203, Ejemplo 5.16: «cuando no se especifica el producto escalar se considera el estándar»).</li>
+    <li>U escribe $\bullet$ para un producto escalar cualquiera y $\cdot$ para el estándar; yo uso $\bullet$ en general y $\cdot$ solo cuando es el estándar.</li>
+    <li>Los ejemplos numerados de U (aquí «Ejemplo 5.n») no se deben confundir con los <b>ejercicios</b> de E («Ejercicio 5.n»): son numeraciones distintas. U los llama a veces «Ejercicio 5.n» por error.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.16, p. 203: producto estándar por defecto">U p.203</span>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>El producto escalar: qué es y qué no es <span class="src" data-l="U" data-ref="U §5.1.1, Definición 5.1 y Ejemplos 5.1-5.3, p. 194-195">U p.194-195</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: «una regla de medir» que se puede cambiar</span>
+  <p>Piensa en una <b>regla de medir</b> (el producto escalar) y en lo que mide con ella: la longitud de una flecha es «cuánto da la regla al medir la flecha consigo misma», $\|v\|^2=v\bullet v$, y el coseno del ángulo entre dos flechas sale de $u\bullet v$. Cada regla (cada producto) mide a su manera: en un plano con un suelo inclinado, lo que a un observador le parece un ángulo recto a otro no. Pero toda regla «honesta» cumple cinco condiciones razonables: es simétrica, lineal, y mide longitudes <b>positivas</b> (solo el vector nulo mide cero). Esas cinco condiciones son la definición.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.1 — producto escalar</span>
+  <p>Un <b>producto escalar</b> en un espacio vectorial real $V$ es una aplicación $\bullet:V\times V\to\mathbb R$ que cumple, para todos $u,v,w\in V$ y $\lambda\in\mathbb R$:</p>
+  <ol>
+    <li><b>Simetría:</b> $u\bullet v=v\bullet u$.</li>
+    <li><b>Homogeneidad:</b> $(\lambda u)\bullet v=\lambda(u\bullet v)$.</li>
+    <li><b>Aditividad:</b> $(u+v)\bullet w=u\bullet w+v\bullet w$.</li>
+    <li><b>Positiva:</b> $u\bullet u\ge0$.</li>
+    <li><b>Definida:</b> $u\bullet u=0\iff u=0$.</li>
+  </ol>
+  <p>Un espacio vectorial real con un producto escalar se llama <b>espacio euclídeo</b>. Por 1-3, es lineal también en la 2.ª variable ($u\bullet(\lambda v)=\lambda(u\bullet v)$, $u\bullet(v+w)=u\bullet v+u\bullet w$).</p>
+  <span class="src" data-l="U" data-ref="U §5.1.1, Definición 5.1, p. 194" >U p.194</span>
+  <span class="src" data-l="L" data-ref="Lay §6.7 (axiomas de producto interior) y §6.1 Teorema 1, p. 331 y 376-377">L p.331 · 376</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.1 de U — el producto escalar estándar de $\mathbb R^n$</span>
+  <p>$x\cdot y=x_1y_1+x_2y_2+\dots+x_ny_n=X^tY$. En $\mathbb R^3$: $(1,2,3)\cdot(4,-1,2)=4-2+6=8$. Cumple las cinco propiedades porque $x\cdot x=x_1^2+\dots+x_n^2$ es una suma de cuadrados: $\ge0$ y $=0$ solo si todas las coordenadas son $0$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.1, p. 194-195">U p.194-195</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.2 de U — una operación que <u>no</u> es producto escalar</span>
+  <p>En $\mathbb R^2$, $x\bullet y=x_1y_1-x_2y_2$. Es simétrica y lineal, pero con $u=(0,1)$: $u\bullet u=0\cdot0-1\cdot1=-1\lt 0$. Falla la propiedad <b>4</b>. <b>Un solo contraejemplo basta</b> para refutar.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.2, p. 195">U p.195</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.3 de U — un producto escalar sobre polinomios</span>
+  <p>En $V=\{ax+b\}$ (polinomios de grado $\le1$), $p\bullet q=\displaystyle\int_0^1p(x)q(x)\,dx$. Con $p=1+x$, $q=1-x$: $p\bullet q=\int_0^1(1-x^2)dx=\left[x-\tfrac{x^3}3\right]_0^1=\tfrac23$. Aquí «la longitud» de un polinomio es la de su gráfica «medida con una integral».</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.3, p. 195">U p.195</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico: quedarse en «lineal y simétrica»</span>
+  <p>Las propiedades 1-3 se ven casi siempre a ojo; lo que <b>decide</b> es la positividad (4 y 5). Y la 5 es sutil: una forma como $x\bullet y=x_1y_1$ en $\mathbb R^2$ cumple 1-4, pero $(0,1)\bullet(0,1)=0$ con $(0,1)\neq0$: no es producto escalar. Para <b>refutar</b>: busca un vector (empieza por los de la base canónica) con $u\bullet u\lt 0$, o con $u\bullet u=0$ siendo $u\neq0$. Y <b>no</b> es argumento que «no sea el estándar»: hay infinitos productos escalares en $\mathbb R^n$.</p>
+  <span class="src" data-l="P" data-ref="Aviso propio; cf. U Ejemplo 5.2 p. 195 y ejercicios de examen Feb. 2023 (2.ª) p.5">propio</span>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>La matriz de Gram: un producto escalar «en una tabla» <span class="src" data-l="U" data-ref="U §5.1.2, Definición 5.2, Teorema 5.1 y Ejemplos 5.4-5.8, p. 195-199">U p.195-199</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: la tabla de todos los productos de la base</span>
+  <p>Por la bilinealidad, saber $u\bullet v$ para <b>cualquier</b> par de vectores es lo mismo que saber $e_i\bullet e_j$ para los vectores de una base: el resto se reconstruye sumando. Esos $n^2$ números se ponen en una tabla, la <b>matriz de Gram</b> $G$. Es el «carnet de identidad» del producto escalar <i>en esa base</i>.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.2 — matriz de Gram (o métrica)</span>
+  <p>Si $B=\{e_1,\dots,e_n\}$ es una base de un espacio euclídeo $V$, la <b>matriz de Gram</b> del producto escalar en $B$ es $G=(g_{ij})$ con $g_{ij}=e_i\bullet e_j$. Si $X$ e $Y$ son las coordenadas de $x$ e $y$ en $B$:
+  $$x\bullet y=X^tGY=\sum_{i,j}g_{ij}\,x_iy_j .$$</p>
+  <span class="src" data-l="U" data-ref="U §5.1.2, Definición 5.2, p. 196">U p.196</span>
+</div>
+
+<div class="box thm"><span class="h">Propiedades de la matriz de Gram</span>
+  <p>$G$ depende de la base elegida (aunque el producto sea el mismo); es <b>simétrica</b> ($g_{ij}=g_{ji}$, por la propiedad 1); y $g_{ii}=e_i\bullet e_i>0$. <b>Pero no toda matriz simétrica con diagonal positiva es de Gram</b>: la positividad exige más (siguiente cuadro).</p>
+  <span class="src" data-l="U" data-ref="U §5.1.2, p. 197: propiedades de G y «no toda matriz puede ser de Gram»">U p.197</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo en $\mathbb R^2$ — Ejemplos 5.4 y 5.5 de U</span>
+  <ol class="steps">
+    <li><b>Estándar:</b> $e_i\cdot e_j=1$ si $i=j$ y $0$ si no, así que $G=I$ (Ej. 5.4).</li>
+    <li><b>Otro producto:</b> $x\bullet y=4x_1y_1+x_1y_2+x_2y_1+9x_2y_2$. El coeficiente de $x_iy_j$ es $g_{ij}$: $G=\begin{pmatrix}4&1\cr1&9\end{pmatrix}$ (Ej. 5.5). Ahora $e_1\bullet e_1=4$ (así $\|e_1\|=2$) y $e_1\bullet e_2=1\ne0$: <b>la base canónica ya no es ortogonal</b>.</li>
+    <li><b>Evaluar:</b> con $u=(2,1)$, $v=(7,0)$ (Ej. 5.6): $GV=\begin{pmatrix}28\cr7\end{pmatrix}$ y $u\bullet v=U^t(GV)=2\cdot28+1\cdot7=63$. El estándar daría $14$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.4, 5.5 (p. 197) y 5.6 (p. 198)">U p.197-198</span>
+</div>
+
+<div class="box thm"><span class="h">Criterio: ¿cuándo una matriz $G$ es de un producto escalar?</span>
+  <p>$G$ define un producto escalar $x\bullet y=X^tGY$ si y solo si es <b>simétrica</b> (propiedad 1) y <b>definida positiva</b>: $X^tGX>0$ para todo $X\neq0$ (propiedades 4-5). Comprobación práctica, el <b>criterio de Sylvester</b>: todos los menores principales $\Delta_1=g_{11}$, $\Delta_2=\begin{vmatrix}g_{11}&g_{12}\cr g_{21}&g_{22}\end{vmatrix}$, …, $\Delta_n=|G|$ son $>0$. (Se estudia en el tema 6.3; aquí se usa como herramienta, o bien se completan cuadrados.)</p>
+  <span class="src" data-l="U" data-ref="U §6.3.2, Criterio de Sylvester, p. 267; anticipado aquí" >U p.267 (tema 6.3)</span>
+  <span class="src" data-l="P" data-ref="Formulación propia del criterio para matrices de Gram">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo: qué falla en una $G$ «aparentemente buena»</span>
+  <p>$G=\begin{pmatrix}2&3\cr3&1\end{pmatrix}$ es simétrica y con diagonal positiva, pero $\Delta_2=2-9=-7\lt 0$. Testigo: $x=(1,-1)$, $x\bullet x=2-3-3+1=-3\lt 0$. <b>No</b> es de Gram. (Sylvester tiene la última palabra: «simétrica y diagonal positiva» son condiciones <i>necesarias</i>, no suficientes.)</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, cf. enunciado defectuoso de Feb. 2024 (2.ª sem.) p.5">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Animación 2D: el mismo par de vectores, distintos productos</span>
+  <p>Elige $G=\begin{pmatrix}a&b\cr b&c\end{pmatrix}$ y dos vectores (sus <b>coordenadas</b> en la base de $G$). El programa calcula $u\bullet v$, las normas, el ángulo y si son ortogonales, y dibuja los vectores con sus <b>longitudes y ángulos reales</b> para ese producto. Prueba los casos: con «<b>Propio: (2,1,1) con u ⟂ v</b>» los vectores $(1,0)$ y $(-1,2)$ son ortogonales aunque con el estándar no lo sean; con «<b>No definida positiva</b>» el programa te da el vector testigo $x\bullet x\le0$.</p>
+  <div class="anim-gram" data-g="4,1,9" data-u="2,1" data-v="7,0"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-gram); G de U Ejemplo 5.5 p. 197">P</span>
+</div>
+
+<h3 id="cambio-base">Cómo cambia $G$ al cambiar de base</h3>
+<div class="box thm"><span class="h">Teorema 5.1 — cambio de base</span>
+  <p>Si $G$ y $G'$ son las matrices de Gram del mismo producto escalar en las bases $B$ y $B'$, y $Q$ es la matriz de cambio de base de $B'$ a $B$ (columnas: los vectores de $B'$ escritos en $B$, convenio del <a href="tema_3_5_inversa_cambios_base.html">tema 3.5</a>), entonces
+  $$G'=Q^tGQ .$$
+  Es decir, $G'$ y $G$ son <b>congruentes</b>. Consecuencias: mismo rango (siempre $n$) y $\det G'=(\det Q)^2\det G$, y la congruencia por sí sola solo conserva el <b>signo</b> de $\det G$ (no su valor). Que ese signo sea positivo viene de que $G$ es definida positiva ($\Delta_n=|G|>0$); también se ve así: en una base ortonormal (Gram-Schmidt) $G=I$, luego en cualquier otra base $\det G=(\det Q)^2>0$.</p>
+  <span class="src" data-l="U" data-ref="U §5.1.2, Teorema 5.1, p. 198">U p.198</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.7 y 5.8 de U — de la canónica a una base «rescalada»</span>
+  <p>Con $G=\begin{pmatrix}4&1\cr1&9\end{pmatrix}$ y $B'=\{(\tfrac12,0),(0,\tfrac13)\}$: $Q=\begin{pmatrix}\tfrac12&0\cr0&\tfrac13\end{pmatrix}$ y
+  $$G'=Q^tGQ=\begin{pmatrix}\tfrac12&0\cr0&\tfrac13\end{pmatrix}\begin{pmatrix}4&1\cr1&9\end{pmatrix}\begin{pmatrix}\tfrac12&0\cr0&\tfrac13\end{pmatrix}=\begin{pmatrix}1&\tfrac16\cr\tfrac16&1\end{pmatrix}.$$
+  Con $u=(1,1)_{B'}$ y $v=(2,0)_{B'}$ (Ej. 5.8): $u\bullet v=(1,1)G'(2,0)^t=2\left(1+\tfrac16\right)=\tfrac73$. En la base nueva los vectores tienen norma 1 ($g'_{ii}=1$), pero siguen sin ser ortogonales ($g'_{12}=\frac16$).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.7 y 5.8, p. 198-199">U p.198-199</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen: Gram del estándar en otra base</span>
+  <p>Si el producto es el estándar y los vectores de la base nueva son las columnas de $Q$ (en la canónica, $G=I$), entonces $G'=Q^tIQ=Q^tQ$: <b>tabla de productos escalares</b> de los vectores de la base, y $\det G'=(\det Q)^2$. El ejercicio de examen con dos matrices de Gram del mismo producto en dos bases (Ene. 2022, ej. 5) está resuelto en el <a href="tema_4_1_relaciones_equivalencia.html#ex-ene22a-5">tema 4.1</a>.</p>
+  <span class="src" data-l="P" data-ref="Truco propio a partir del Teorema 5.1 (U p. 198) y U Ejemplo 5.4 p. 197">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico: $G'=Q^{-1}GQ$ o $Q$ por filas</span>
+  <p>El cambio de base de una <b>aplicación lineal</b> es $A'=Q^{-1}AQ$ (semejanza, tema 4.1); el de un <b>producto escalar</b> es $Q^tGQ$ (congruencia). No se mezclan: la semejanza conserva el determinante y la congruencia no (lo multiplica por $(\det Q)^2$). Además, $Q$ lleva los vectores de $B'$ <b>por columnas</b>: si los pones por filas obtendrás $QGQ^t$.</p>
+  <span class="src" data-l="P" data-ref="Aviso propio; cf. E Ejercicio 5.4 p. 163 y U Teorema 5.1 p. 198">propio</span>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Norma, distancia, ángulo y ortogonalidad <span class="src" data-l="U" data-ref="U §5.1.3, Definiciones 5.3-5.8 y Ejemplos 5.9-5.17, p. 199-204">U p.199-204</span> <span class="src" data-l="L" data-ref="Lay §6.1, Teoremas 1 y 2, p. 331-335; §6.7 Teoremas 16 y 17, p. 379-380">L §6.1 p.331-335</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: todo sale de «medir un vector consigo mismo»</span>
+  <p>Una vez que tenemos $u\bullet v$ con las cinco propiedades, imitamos la geometría de siempre: la <b>longitud</b> es la raíz de $v\bullet v$; la <b>distancia</b> entre dos puntos es la longitud de su diferencia; el <b>ángulo</b> sale del coseno $\frac{u\bullet v}{\|u\|\|v\|}$ (que vale $0$ cuando son perpendiculares). La definición de la raíz tiene sentido <i>justo</i> por la propiedad 4, y que solo el $0$ mida $0$ viene de la 5.</p>
+</div>
+
+<div class="box def"><span class="h">Definiciones 5.3 a 5.7</span>
+  <ul>
+    <li><b>Norma</b> (5.3): $\|v\|=\sqrt{v\bullet v}$. Propiedades: $\|\lambda v\|=|\lambda|\|v\|$ y $\|v\|=0\iff v=0$.</li>
+    <li><b>Unitario / normalizar</b> (5.4): $v$ es unitario si $\|v\|=1$; el <b>normalizado</b> de $v\ne0$ es $\dfrac{v}{\|v\|}$, que tiene norma $1$ y la misma dirección y sentido.</li>
+    <li><b>Distancia</b> (5.5): $d(u,v)=\|u-v\|$.</li>
+    <li><b>Ángulo</b> (5.6): $\cos(\widehat{u,v})=\dfrac{u\bullet v}{\|u\|\,\|v\|}$ ($u,v\neq0$).</li>
+    <li><b>Ortogonales</b> (5.7): $u\perp v\iff u\bullet v=0$. U la define para vectores no nulos, pero «por convenio» el vector nulo es ortogonal a todos ($0\bullet u=0$). Un vector $v$ es ortogonal a un conjunto si lo es a cada uno de sus vectores.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §5.1.3, Definiciones 5.3 (p. 199), 5.4 (p. 200), 5.5 y 5.6 (p. 201) y 5.7 (p. 202)">U p.199-202</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos de U con $G=\begin{pmatrix}4&1\cr1&9\end{pmatrix}$ y con integrales</span>
+  <ol class="steps">
+    <li><b>Normas</b> (Ej. 5.9): $\|e_1\|=\sqrt{4}=2$, $\|e_2\|=\sqrt9=3$ (la diagonal de $G$ son las <b>normas al cuadrado</b>).</li>
+    <li><b>Polinomios</b> (Ej. 5.10): con $p\bullet q=\int_0^1pq$, $\|1+x\|^2=\int_0^1(1+x)^2dx=\frac{7}3$, así que $\|1+x\|=\sqrt{7/3}$; y $\|1-x\|=\frac1{\sqrt3}$.</li>
+    <li><b>Normalizar</b> (Ej. 5.11-5.12): $(0,4,3)$ tiene norma $5$ y su normalizado es $(0,\frac45,\frac35)$; el de $1+x$ es $\frac{\sqrt{21}}{7}(1+x)$.</li>
+    <li><b>Distancia</b> (Ej. 5.13): en $\mathbb R^2$ estándar, $d((2,3),(5,1))=\|(-3,2)\|=\sqrt{13}$.</li>
+    <li><b>Ángulo</b> (Ej. 5.14): $\cos(1+x,1-x)=\dfrac{2/3}{\sqrt{7/3}\cdot\frac1{\sqrt3}}=\dfrac2{\sqrt7}$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.9-5.10 (p. 200), 5.11-5.12 (p. 200-201), 5.13 (p. 201) y 5.14 (p. 202)">U p.200-202</span>
+</div>
+
+<div class="box thm"><span class="h">Pitágoras</span>
+  <p>Desarrollando $\|u+v\|^2=(u+v)\bullet(u+v)=\|u\|^2+2\,u\bullet v+\|v\|^2$. Si $u\perp v$, queda
+  $$\|u+v\|^2=\|u\|^2+\|v\|^2.$$
+  Es exactamente el teorema de Pitágoras, ahora válido en cualquier espacio euclídeo (y la demostración usa solo las propiedades 1-3).</p>
+  <span class="src" data-l="U" data-ref="U §5.1.3, p. 202-203, teorema de Pitágoras">U p.202-203</span>
+  <span class="src" data-l="L" data-ref="Lay §6.1, Teorema 2 (Teorema de Pitágoras), p. 334">L p.334</span>
+</div>
+
+<div class="box thm"><span class="h">Desigualdad de Cauchy-Schwarz y desigualdad triangular <span style="font-weight:400">(no están en U)</span></span>
+  <p>En todo espacio euclídeo: $\;|u\bullet v|\le\|u\|\,\|v\|\;$ (Cauchy-Schwarz) y $\;\|u+v\|\le\|u\|+\|v\|\;$ (triangular). La primera es lo que garantiza que el cociente de la Def. 5.6 está entre $-1$ y $1$, es decir, <b>que existe un ángulo</b> con ese coseno (U lo usa sin enunciarlo). Igualdad solo si $u$ y $v$ son proporcionales. Demostración corta (Lay): si $u\ne0$, la proyección de $v$ sobre $\langle u\rangle$ no puede ser más larga que $v$.</p>
+  <span class="src" data-l="L" data-ref="Lay §6.7, Teorema 16 (Desigualdad de Cauchy-Schwarz), p. 379; Teorema 17 (desigualdad del triángulo), p. 380. No figuran en U §5.1">L p.379-380</span>
+</div>
+
+<div class="box ex"><span class="h">Comprobación numérica (propia) de Cauchy-Schwarz y la triangular</span>
+  <p>$u=(1,2,2)$, $v=(2,-1,2)$ con el estándar: $u\cdot v=2-2+4=4$, $\|u\|=\|v\|=3$. Cauchy-Schwarz: $4\le9$. Triangular: $u+v=(3,1,4)$, $\|u+v\|=\sqrt{26}\approx5{,}10\le3+3=6$. La igualdad no se da porque no son proporcionales.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio con L §6.7 Teoremas 16-17, p. 379-380">propio</span>
+</div>
+
+<h3 id="ortsub">Vector ortogonal a un subespacio</h3>
+<div class="box def"><span class="h">Definición 5.8</span>
+  <p>$v\perp U$ si $v$ es ortogonal a un <b>sistema generador</b> de $U$ (y entonces lo es a <b>todos</b> los vectores de $U$, por linealidad). Figura 5.1 de U.</p>
+  <figure class="bookfig"><img src="../assets/img/fig_u_5_1_fig51.png" alt="Un vector v perpendicular a un plano U generado por u1 y u2" loading="lazy"><figcaption>Vector ortogonal a un subespacio, $v\perp U$ (Figura 5.1 de U). <span class="src" data-l="U" data-ref="U Figura 5.1, p. 204">U p.204</span></figcaption></figure>
+  <span class="src" data-l="U" data-ref="U §5.1.3, Definición 5.8, p. 203">U p.203</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.16 de U — ortogonales a tres vectores = sistema homogéneo</span>
+  <p>Hallar $x\in\mathbb R^3$ (estándar) ortogonal a $(1,2,1)$, $(0,1,-1)$, $(1,1,2)$: con $x=(a,b,c)$,
+  $$\begin{cases}a+2b+c=0\cr b-c=0\cr a+b+2c=0\end{cases}\Longrightarrow x=(-3\alpha,\alpha,\alpha).$$
+  La solución <b>no es única</b>: es toda la recta $\langle(-3,1,1)\rangle$. (El rango de los tres vectores es $2$, por eso queda un parámetro; $\dim=3-2=1$.) <b>Cada vector es una ecuación</b>: «ortogonal a $k$ vectores» $=$ núcleo de la matriz con esos vectores por filas.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.16 y 5.17, p. 203">U p.203</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico con un producto no estándar</span>
+  <p>«Ortogonal a $u$» significa $u^tGX=0$, <b>no</b> $u^tX=0$. Con $G\ne I$ las ecuaciones de $U^\perp$ no son los coeficientes de la ecuación de $U$. Detalle en el Ejercicio 5.5 de abajo.</p>
+  <span class="src" data-l="P" data-ref="Aviso propio; cf. E Ejercicio 5.5, p. 164">propio</span>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Sistemas ortogonales y ortonormales <span class="src" data-l="U" data-ref="U §5.1.4, Definición 5.9 (p. 204), Ejemplos 5.18-5.20 (p. 205-206), Teoremas 5.2 (p. 206) y 5.3 (p. 207)">U p.204-207</span> <span class="src" data-l="L" data-ref="Lay §6.2, Teoremas 4 (p. 338) y 5 (p. 339)">L §6.2 p.338-339</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: ejes perpendiculares</span>
+  <p>Una base ortogonal es un <b>sistema de ejes perpendiculares</b> (como las aristas de una caja). Con ejes así todo es fácil: las coordenadas de un vector se leen «proyectándolo» sobre cada eje, sin resolver ningún sistema, y la matriz de Gram es diagonal. Si además cada eje mide $1$ (ortonormal), $G=I$ y las cuentas son las del estándar.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.9</span>
+  <p>Sea $S=\{u_1,\dots,u_p\}$ en un espacio euclídeo. $S$ es:</p>
+  <ul>
+    <li><b>ortogonal</b> si $u_i\bullet u_j=0$ para $i\ne j$ <b>y</b> $u_i\neq0$ para todo $i$;</li>
+    <li><b>ortonormal</b> si es ortogonal y $\|u_i\|=1$ para todo $i$;</li>
+    <li><b>normalizado</b> si $\|u_i\|=1$ para todo $i$ (sin pedir ortogonalidad).</li>
+  </ul>
+  <p>Una <b>base</b> con esas propiedades es una base ortogonal / ortonormal / normalizada. Si $B$ es base ortogonal, $G$ es <b>diagonal</b>; si es ortonormal, $G=I$; y en una base normalizada $g_{ii}=1$ (U p.206). Normalizar cada vector de un sistema ortogonal da uno ortonormal.</p>
+  <span class="src" data-l="U" data-ref="U §5.1.4, Definición 5.9, p. 204 (G diagonal / G = I, p. 206)">U p.204-206</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 5.18-5.20 de U</span>
+  <ol class="steps">
+    <li><b>Ni ortogonal ni normalizado:</b> $\{(1,2,3,4),(4,3,2,1),(1,0,1,0)\}$ en $\mathbb R^4$: $(1,2,3,4)\cdot(4,3,2,1)=20\ne0$ y las normas no son $1$ (Ej. 5.18).</li>
+    <li><b>Normalizado pero no ortogonal</b> (Ej. 5.19): hay que comprobar las dos cosas por separado.</li>
+    <li><b>Funciones</b> (Ej. 5.20): $\{1,\operatorname{sen}x,\cos x\}$ es ortogonal con $f\bullet g=\int_{-\pi}^{\pi}fg\,dx$ (las integrales cruzadas son $0$ por la simetría de las funciones impares); normalizando: $\left\{\frac1{\sqrt{2\pi}},\frac{\operatorname{sen}x}{\sqrt\pi},\frac{\cos x}{\sqrt\pi}\right\}$ (normas $\sqrt{2\pi},\sqrt\pi,\sqrt\pi$).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.18 (p. 205), 5.19 (p. 205) y 5.20 (p. 205-206)">U p.205-206</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 5.2 — ortogonal $\Rightarrow$ libre</span>
+  <p>Todo sistema <b>ortogonal</b> es linealmente independiente. <i>Por qué:</i> si $\sum c_iu_i=0$, multiplicando escalarmente por $u_k$ se anulan todos los términos menos $c_k\,u_k\bullet u_k$, y $u_k\bullet u_k>0$ (porque $u_k\neq0$), luego $c_k=0$. En particular, $n$ vectores ortogonales en un espacio de dimensión $n$ son <b>base</b> sin más comprobaciones.</p>
+  <span class="src" data-l="U" data-ref="U §5.1.4, Teorema 5.2, p. 206">U p.206</span>
+  <span class="src" data-l="L" data-ref="Lay §6.2, Teorema 4, p. 338">L p.338</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 5.3 — coordenadas en una base ortogonal</span>
+  <p>Si $\{u_1,\dots,u_n\}$ es una base ortogonal de $V$, para todo $x\in V$:
+  $$x=\sum_{i=1}^n\frac{x\bullet u_i}{u_i\bullet u_i}\,u_i ,\qquad\text{es decir}\qquad c_i=\frac{x\bullet u_i}{u_i\bullet u_i}.$$
+  Si la base es <b>ortonormal</b>, $c_i=x\bullet u_i$. Sin ecuaciones: se multiplica $x=\sum c_ju_j$ por $u_i$ y solo sobrevive $c_i\,u_i\bullet u_i$.</p>
+  <span class="src" data-l="U" data-ref="U §5.1.4, Teorema 5.3, p. 207">U p.207</span>
+  <span class="src" data-l="L" data-ref="Lay §6.2, Teorema 5, p. 339">L p.339</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo propio en $\mathbb R^2$</span>
+  <p>$u_1=(1,1)$, $u_2=(1,-1)$ son ortogonales ($1-1=0$) y no nulos: base ortogonal. Coordenadas de $x=(5,1)$: $c_1=\frac{5+1}{2}=3$, $c_2=\frac{5-1}2=2$, y en efecto $3(1,1)+2(1,-1)=(5,1)$. Comparado con resolver el sistema $c_1+c_2=5$, $c_1-c_2=1$, no hay sistema que resolver.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio para el Teorema 5.3, p. 207">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <p>(i) Usar $c_i=x\bullet u_i$ con una base ortogonal <b>sin normalizar</b> (falta dividir entre $u_i\bullet u_i$). (ii) Aplicar el Teorema 5.3 a una base que <b>no</b> es ortogonal: da un vector equivocado. (iii) Olvidar «$u_i\ne0$» al probar que un sistema es ortogonal (la solución oficial de varios exámenes lo omite). (iv) «$G=I$ porque es el estándar»: solo en una base <b>ortonormal</b>.</p>
+  <span class="src" data-l="P" data-ref="Avisos propios; cf. X Feb. 2026 (1.ª) p.5, Feb. 2025 (2.ª) p.5, Feb. 2022 (A) ej. 5">propio</span>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Gram-Schmidt: fabricar una base ortogonal <span class="src" data-l="U" data-ref="U §5.1.5, método de ortonormalización de Gram-Schmidt, p. 207-208; Ejemplo 5.21, p. 208-209">U p.207-209</span> <span class="src" data-l="L" data-ref="Lay §6.4, Proceso de Gram-Schmidt, p. 354-359; Teorema 11 en p. 355">L §6.4 p.354-359</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: «endereza» cada vector quitándole su sombra</span>
+  <p>Tienes tres varillas $u_1,u_2,u_3$ que no son perpendiculares y quieres tres perpendiculares que sigan «abarcando» lo mismo. <b>Paso 1:</b> te quedas con la primera. <b>Paso 2:</b> a la segunda le quitas su <b>sombra</b> sobre la primera (la parte que va en la dirección de $e_1$); lo que sobra es perpendicular a $e_1$. <b>Paso 3:</b> a la tercera le quitas las sombras sobre $e_1$ <b>y</b> sobre $e_2$ (ahora sí se pueden restar por separado porque $e_1\perp e_2$). Al final, si quieres longitud $1$, divides cada una entre su norma.</p>
+</div>
+
+<div class="box thm"><span class="h">Método de Gram-Schmidt</span>
+  <p>Dada una <b>base</b> (o un sistema libre) $\{u_1,\dots,u_p\}$ de un espacio euclídeo:</p>
+  <p><b>Paso 1 — ortogonalizar:</b>
+  $$e_1=u_1,\qquad e_2=u_2-\frac{u_2\bullet e_1}{e_1\bullet e_1}e_1,\qquad e_3=u_3-\frac{u_3\bullet e_1}{e_1\bullet e_1}e_1-\frac{u_3\bullet e_2}{e_2\bullet e_2}e_2,\ \dots$$
+  $$e_k=u_k-\sum_{i\lt k}\frac{u_k\bullet e_i}{e_i\bullet e_i}\,e_i .$$
+  <b>Paso 2 — normalizar:</b> $e_k'=e_k/\|e_k\|$. Resultado: $\{e_k\}$ ortogonal y $\{e_k'\}$ ortonormal, con $\langle e_1,\dots,e_k\rangle=\langle u_1,\dots,u_k\rangle$ para cada $k$. Consecuencia: <b>todo espacio euclídeo de dimensión finita posee bases ortonormales</b>.</p>
+  <span class="src" data-l="U" data-ref="U §5.1.5, método de ortonormalización de Gram-Schmidt, p. 207-208">U p.207-208</span>
+  <span class="src" data-l="L" data-ref="Lay §6.4, Teorema 11 (Proceso de Gram-Schmidt), p. 355; Figuras 1 y 2, p. 354-355">L p.354-355</span>
+</div>
+
+<div class="box tip"><span class="h">Receta</span>
+  <ol>
+    <li>Comprueba que el sistema es libre (si no, en algún paso saldrá $e_k=0$).</li>
+    <li>$e_1=u_1$. Para cada $k$ calcula las sombras de $u_k$ sobre los $e_i$ <b>ya ortogonalizados</b> (no sobre los $u_i$ originales) y réstalas.</li>
+    <li><b>Control en cada paso:</b> $e_k\bullet e_i=0$ para todo $i\lt k$.</li>
+    <li>Para evitar fracciones puedes <b>reescalar</b> cada $e_i$ a un múltiplo entero: la ortogonalidad no cambia y, al normalizar, el factor desaparece.</li>
+    <li>Normaliza al final (o no, si solo piden base ortogonal).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U §5.1.5 p. 207-208">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.21 de U — $\{(1,0,1),(1,1,0),(0,0,2)\}$ (producto estándar)</span>
+  <ol class="steps">
+    <li><b>$e_1=u_1=(1,0,1)$,</b> $e_1\cdot e_1=2$.</li>
+    <li><b>$e_2$.</b> $u_2\cdot e_1=1$, así que $e_2=(1,1,0)-\frac12(1,0,1)=\left(\frac12,1,-\frac12\right)$. Control: $e_2\cdot e_1=\frac12-\frac12=0$ ✓; $e_2\cdot e_2=\frac32$.</li>
+    <li><b>$e_3$.</b> $u_3\cdot e_1=2$ y $u_3\cdot e_2=-1$: $e_3=(0,0,2)-\frac22(1,0,1)-\frac{-1}{3/2}\left(\frac12,1,-\frac12\right)=\left(-\frac23,\frac23,\frac23\right)$. Control: $e_3\cdot e_1=-\frac23+\frac23=0$ ✓, $e_3\cdot e_2=-\frac13+\frac23-\frac13=0$ ✓.</li>
+    <li><b>Normalizar:</b> $\|e_1\|=\sqrt2$, $\|e_2\|=\sqrt{3/2}$, $\|e_3\|=\frac2{\sqrt3}$:
+      $$\tfrac1{\sqrt2}(1,0,1),\quad\left(\tfrac{\sqrt6}6,\tfrac{\sqrt6}3,-\tfrac{\sqrt6}6\right),\quad\left(-\tfrac{\sqrt3}3,\tfrac{\sqrt3}3,\tfrac{\sqrt3}3\right).$$</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.21, p. 208-209">U p.208-209</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_l_6_4_fig1.png" alt="Construcción de una base ortogonal v1, v2 en un plano W de R3: v2 = x2 menos su proyección p sobre v1" loading="lazy" style="max-width:300px"><figcaption>Lay, Figura 1 del §6.4: $v_1=x_1$ y $v_2=x_2-p$, con $p$ la sombra de $x_2$ sobre $v_1$ (paso 2). <span class="src" data-l="L" data-ref="Lay §6.4, Figura 1, p. 354">L p.354</span></figcaption></figure>
+<figure class="bookfig"><img src="../assets/img/fig_l_6_4_fig2.png" alt="Construcción de v3 restando a x3 su proyección sobre el plano W2 generado por v1 y v2'" loading="lazy" style="max-width:460px"><figcaption>Lay, Figura 2 del §6.4: $v_3=x_3-\operatorname{proy}_{W_2}x_3$ (paso 3: se resta la proyección sobre el plano ya construido). Lay escribe $v_2'$ para el $e_2$ reescalado. <span class="src" data-l="L" data-ref="Lay §6.4, Figura 2, p. 355">L p.355</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Animación 3D: Gram-Schmidt paso a paso</span>
+  <p>Avanza con «Siguiente» y mira el dibujo: en el paso 2 aparece la sombra de $u_2$ sobre $e_1$ y el resto $e_2$ (con su ángulo recto rojo); en el paso 3 se resta la sombra sobre el <b>plano</b> $\langle e_1,e_2\rangle$ y queda $e_3$ perpendicular a él; el paso 4 normaliza. Empieza con el sistema del Ejemplo 5.21; con «Dependiente (falla)» verás por qué Gram-Schmidt exige un sistema libre. Si tu navegador no admite 3D, quedan los números.</p>
+  <div class="d3-proy" data-modo="gs" data-a="1,0,1" data-b="1,1,0" data-c="0,0,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/tres-d.js, d3-proy modo gs); vectores de U Ejemplo 5.21 p. 208-209">P</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <p>(i) Proyectar $u_3$ sobre $u_1,u_2$ <b>originales</b> en vez de sobre $e_1,e_2$ (solo vale si ya eran ortogonales). (ii) Normalizar «a medias» y luego usar la fórmula con $e_i\bullet e_i$ equivocado (si $e_i$ ya es unitario, $e_i\bullet e_i=1$ y se simplifica; si no, no). (iii) Olvidar que con un producto no estándar los $\bullet$ y las normas usan $G$. (iv) Responder «la canónica» a «calcula una base ortonormal a partir de esta base»: es ortonormal solo con el estándar y no muestra el método.</p>
+  <span class="src" data-l="P" data-ref="Avisos propios; cf. X Sept. 2019 (A) ej. 5 y Feb. 2019 (B) ej. 5">propio</span>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Suplementario ortogonal y proyección ortogonal <span class="src" data-l="U" data-ref="U §5.1.6, Definiciones 5.10-5.12, Ecuación (5.2), Ejemplos 5.22-5.23 y Teorema 5.4, p. 209-213">U p.209-213</span> <span class="src" data-l="L" data-ref="Lay §6.1 (W⊥, p. 334; Teorema 3, p. 335), §6.3 (Teoremas 8 y 9, p. 348-350)">L §6.1 p.334 · §6.3 p.347-353</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: la sombra y la plomada</span>
+  <p>Un plano $U$ en $\mathbb R^3$ y un punto $v$ fuera de él. Si dejas caer una <b>plomada</b> desde $v$ hasta el plano, el pie de la plomada es la <b>proyección ortogonal</b> $u=\operatorname{Proy}_U(v)$ (la «sombra» al mediodía) y la cuerda de la plomada, $w=v-u$, es <b>perpendicular al plano</b>: vive en $U^\perp$. Y es el punto de $U$ <b>más cercano</b> a $v$: cualquier otro punto del plano queda más lejos (Pitágoras). Eso es la «mejor aproximación» y es la base de los mínimos cuadrados (tema 5.4).</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.10 — subespacios ortogonales y suplementario ortogonal</span>
+  <p>Dos subespacios $U,U'$ son <b>ortogonales</b> ($U\perp U'$) si todo vector de $U$ es ortogonal a todo vector de $U'$ (basta comprobarlo con sistemas generadores). El <b>suplementario ortogonal</b> $U^\perp$ de $U$ es el subespacio ortogonal a $U$ que además es su suplementario: $U\oplus U^\perp=V$. Se obtiene como $U^\perp=\{x\in V:\ x\perp U\}$ y, en dimensión finita, cumple $\dim U+\dim U^\perp=\dim V$ y $(U^\perp)^\perp=U$ (ambas consecuencia de $U\oplus U^\perp=V$).</p>
+  <span class="src" data-l="U" data-ref="U §5.1.6, Definición 5.10, p. 209">U p.209</span>
+  <span class="src" data-l="L" data-ref="Lay §6.1, complemento ortogonal W⊥, p. 334, y Teorema 3 ((Fil A)⊥ = Nul A), p. 335">L p.334-335</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.22 de U — $U^\perp$ de una recta de $\mathbb R^3$</span>
+  <p>$U=\langle(1,0,2)\rangle$ con el estándar. $x\perp U\iff x\cdot(1,0,2)=0\iff x_1+2x_3=0$. Es un plano: $U^\perp=\langle(2,0,-1),(0,1,0)\rangle$, $\dim=2=3-1$. <b>Ortogonal no es suplementario:</b> la recta $\langle(0,1,0)\rangle$ es ortogonal a $U$, pero $U\oplus\langle(0,1,0)\rangle$ solo tiene dimensión $2$. Solo $U^\perp$ entero es a la vez ortogonal y suplementario; los demás subespacios ortogonales a $U$ son subespacios de $U^\perp$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.22, p. 209-210">U p.209-210</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: calcular $U^\perp$</span>
+  <ol>
+    <li>Toma un sistema generador $\{u_1,\dots,u_p\}$ de $U$ (o una base).</li>
+    <li>Escribe una ecuación por generador: $u_i^tG\,X=0$ (con el estándar, $G=I$: $u_i\cdot x=0$). Es el sistema homogéneo con las filas $u_i^tG$.</li>
+    <li>Resuélvelo: sus soluciones son $U^\perp$, de dimensión $n-\operatorname{rang}$. Si $U$ viene por ecuaciones (estándar), los coeficientes de cada ecuación son generadores de $U^\perp$.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U Definición 5.8 (p. 203) y Ejemplo 5.16 (p. 203)">propio</span>
+</div>
+
+<div class="box def"><span class="h">Definiciones 5.11 y 5.12 — proyección ortogonal</span>
+  <p>Como $V=U\oplus U^\perp$, todo $v\in V$ se escribe de forma <b>única</b> como $v=u+w$ con $u\in U$, $w\in U^\perp$. El vector $u=\operatorname{Proy}_U(v)$ es la <b>proyección ortogonal</b> de $v$ sobre $U$ (y $w=\operatorname{Proy}_{U^\perp}(v)$). Si $v\in U$, $\operatorname{Proy}_U(v)=v$; si $v\in U^\perp$, vale $0$. (U define la proyección para $v\ne0$ y $U$ subespacio propio; extenderla a $v=0$, donde $\operatorname{Proy}_U(0)=0$, o a $U=V$, donde $\operatorname{Proy}_V=\mathrm{Id}$, es inocuo.) Sobre una recta ($U=\langle u\rangle$):
+  $$\operatorname{Proy}_u(v)=\frac{v\bullet u}{u\bullet u}\,u .$$</p>
+  <figure class="bookfig"><img src="../assets/img/fig_u_5_1_fig52.png" alt="Descomposición v = u + w con u en el plano U y w en la recta perpendicular U-perp" loading="lazy"><figcaption>Descomposición $v=u+w$, $u=\operatorname{Proy}_U(v)$ (Figura 5.2 de U). <span class="src" data-l="U" data-ref="U Figura 5.2, p. 211">U p.211</span></figcaption></figure>
+  <span class="src" data-l="U" data-ref="U §5.1.6, Definiciones 5.11 (p. 210) y 5.12 (p. 211)">U p.210-211</span>
+  <span class="src" data-l="L" data-ref="Lay §6.3, Teorema 8 (Descomposición ortogonal), p. 348; proyección sobre una recta, p. 340">L p.340 · 348</span>
+</div>
+
+<div class="box thm"><span class="h">Fórmula (5.2) — proyección con una base ortogonal</span>
+  <p>Si $\{e_1,\dots,e_p\}$ es una base <b>ortogonal</b> de $U$,
+  $$\operatorname{Proy}_U(v)=\sum_{i=1}^p c_i\,e_i,\qquad c_i=\frac{v\bullet e_i}{e_i\bullet e_i}\quad(\text{coeficientes de Fourier}).$$
+  Si la base es ortonormal, $c_i=v\bullet e_i$. <b>La suma solo funciona con base ortogonal</b>: si la que te dan no lo es, haz primero Gram-Schmidt.</p>
+  <span class="src" data-l="U" data-ref="U §5.1.6, Ecuación (5.2), p. 212">U p.212</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.23 de U — proyección en polinomios</span>
+  <p>Con $p\bullet q=\int_0^1pq$: $\operatorname{Proy}_{1-x}(1+x)=\dfrac{(1+x)\bullet(1-x)}{(1-x)\bullet(1-x)}(1-x)=\dfrac{2/3}{1/3}(1-x)=2-2x$. Comprobación: $(1+x)-(2-2x)=-1+3x$ y $(-1+3x)\bullet(1-x)=\int_0^1(-1+4x-3x^2)dx=-1+2-1=0$ ✓.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.23, p. 212">U p.212</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 5.4 — mejor aproximación (mínima distancia)</span>
+  <p>Sea $U$ subespacio de un espacio euclídeo y $v\in V$. El vector $v_U=\operatorname{Proy}_U(v)$ es el <b>punto de $U$ más próximo a $v$</b>: $\|v-v_U\|\le\|v-x\|$ para todo $x\in U$ (con igualdad solo si $x=v_U$), y $v-v_U\perp U$. La <b>distancia de $v$ a $U$</b> es $d(v,U)=\|v-v_U\|=\|\operatorname{Proy}_{U^\perp}v\|$. <i>Por qué:</i> para $x\in U$, $v-x=(v-v_U)+(v_U-x)$ con el primer sumando en $U^\perp$ y el segundo en $U$; por Pitágoras $\|v-x\|^2=\|v-v_U\|^2+\|v_U-x\|^2\ge\|v-v_U\|^2$.</p>
+  <figure class="bookfig"><img src="../assets/img/fig_u_5_1_fig53.png" alt="Mínima distancia entre v y los vectores del plano U: el pie de la perpendicular v_U es el más cercano" loading="lazy"><figcaption>Mínima distancia entre $v$ y los vectores de $U$ (Figura 5.3 de U). <span class="src" data-l="U" data-ref="U Figura 5.3, p. 213">U p.213</span></figcaption></figure>
+  <span class="src" data-l="U" data-ref="U §5.1.6, Teorema 5.4 (mejor aproximación), p. 213">U p.213</span>
+  <span class="src" data-l="L" data-ref="Lay §6.3, Teorema 9 (Teorema de la mejor aproximación), p. 350">L p.350</span>
+</div>
+
+<div class="box ex"><span class="h">Animación 3D: proyección sobre una recta</span>
+  <p>Cambia $v$ y la dirección $d$. La flecha verde es la sombra $p$; el segmento rojo $w=v-p$ forma un <b>ángulo recto</b> con la recta. Mueve el deslizador $\alpha$: el punto morado se desplaza por la recta y su distancia a $v$ crece; el mínimo está en $\alpha=0$ (Teorema 5.4). Con «$v\perp d$» la sombra es nula.</p>
+  <div class="d3-proy" data-modo="recta" data-v="1,2,3" data-a="1,1,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/tres-d.js, d3-proy modo recta); ejemplo propio P11(a)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Animación 3D: proyección sobre un plano y distancia mínima</span>
+  <p>Aquí $U=\langle u_1,u_2\rangle$ es un plano. El programa ortogonaliza la base (Gram-Schmidt) y suma las dos «sombras»: el camino verde son los dos términos de la fórmula (5.2). El residuo rojo $w$ es <b>perpendicular al plano</b> (paralelo a la recta gris, que es $U^\perp$). Con los deslizadores $\alpha,\beta$ mueves un punto $q$ del plano y compruebas que su distancia a $v$ solo es mínima en $p$. Empieza con el Ejercicio 5.14 de E.</p>
+  <div class="d3-proy" data-modo="plano" data-v="1,1,0" data-a="1,-1,0" data-b="-1,0,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/tres-d.js, d3-proy modo plano); datos de E Ejercicio 5.14, p. 171">P</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: proyectar sobre un plano de $\mathbb R^3$ (dos caminos)</span>
+  <ul>
+    <li><b>Con la normal:</b> si $U:\ ax+by+cz=0$ (estándar), $n=(a,b,c)$ y $U^\perp=\langle n\rangle$. Entonces $\operatorname{Proy}_Uv=v-\dfrac{v\cdot n}{n\cdot n}\,n$ y $d(v,U)=\dfrac{|v\cdot n|}{\|n\|}$ (un solo producto escalar).</li>
+    <li><b>Con una base ortogonal:</b> Gram-Schmidt sobre los generadores y fórmula (5.2). Sirve en cualquier dimensión y con cualquier producto.</li>
+    <li><b>Control:</b> $v-\operatorname{Proy}_Uv$ es ortogonal a los generadores de $U$.</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U Ec. (5.2) p. 212 y Teorema 5.4 p. 213">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico: proyectar sobre cada generador y sumar</span>
+  <p>$\operatorname{Proy}_Uv=\operatorname{Proy}_{u_1}v+\operatorname{Proy}_{u_2}v$ <b>solo si $u_1\perp u_2$</b>. Con generadores no ortogonales la suma da un vector equivocado (el control $v-p\perp U$ falla). Es el error número uno de los exámenes de proyección.</p>
+  <span class="src" data-l="P" data-ref="Aviso propio; cf. E Ejercicio 5.14 y X Feb. 2020 (B) ej. 5">propio</span>
+</div>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="s7"><span class="n">7</span>Tabla Lay ↔ U: vocabulario y alcance <span class="src" data-l="L" data-ref="Lay cap. 6: §6.1 p. 331-335, §6.2 p. 338-346, §6.3 p. 347-353, §6.4 p. 354-359, §6.7 p. 376-383">L cap. 6 p.331-383</span></h2>
+
+<p>Lay explica muy bien la <b>geometría</b> (figuras, ejemplos con números), pero casi siempre con el producto <b>estándar</b> $u\cdot v=u^tv$. U trabaja con un producto escalar cualquiera y su matriz de Gram $G$: <b>en el examen manda U</b>. Úsalo para entender la idea; en cuanto el enunciado traiga una matriz $G$, aplica la receta de U.</p>
+<table>
+  <tr><th>Concepto</th><th>U (oficial)</th><th>Lay</th></tr>
+  <tr><td>Producto escalar</td><td>Def. 5.1 (5 propiedades) en cualquier $V$ real; p.194</td><td>§6.1: solo $u\cdot v=u^tv$ en $\mathbb R^n$ (Teor. 1, p.331); §6.7: «producto interior» $\langle u,v\rangle$ con los mismos axiomas (p.376-377)</td></tr>
+  <tr><td>Matriz de Gram y cambio de base</td><td>Def. 5.2 (p.196), Teor. 5.1 $G'=Q^tGQ$ (p.198)</td><td><b>No la trata.</b> Lo más cercano: Ej. 1 de §6.7, $\langle u,v\rangle=4u_1v_1+5u_2v_2$ (producto con pesos)</td></tr>
+  <tr><td>Norma, normalizar, distancia</td><td>Def. 5.3-5.5 (p.199-201)</td><td>«longitud», «vector unitario», «distancia» (p.331-333)</td></tr>
+  <tr><td>Ángulo</td><td>Def. 5.6 (p.201); se usa en ejercicios</td><td>p.335 (opcional)</td></tr>
+  <tr><td>Pitágoras</td><td>p.202-203 (desarrollo de $\|u+v\|^2$)</td><td>Teor. 2 (p.334)</td></tr>
+  <tr><td>Cauchy-Schwarz, triangular</td><td><b>No figuran</b> en §5.1</td><td>§6.7, Teor. 16 (p.379) y 17 (p.380)</td></tr>
+  <tr><td>Ortogonal / ortonormal, libre</td><td>Def. 5.9 (p.204), Teor. 5.2 (p.206)</td><td>«conjunto ortogonal», Teor. 4 (p.338)</td></tr>
+  <tr><td>Coordenadas en base ortogonal</td><td>Teor. 5.3 (p.207)</td><td>Teor. 5 (p.339), $c_j=\frac{y\cdot u_j}{u_j\cdot u_j}$</td></tr>
+  <tr><td>Gram-Schmidt</td><td>§5.1.5 (p.207-208), Ej. 5.21</td><td>§6.4, Teor. 11 (p.355), Figs. 1-2 (p.354-355); además factorización QR (Teor. 12, p.356-357), que en U pertenece a §5.2</td></tr>
+  <tr><td>Complemento ortogonal $U^\perp$</td><td>Def. 5.10 (p.209): es el <i>suplementario</i> ortogonal; se calcula con ecuaciones</td><td>$W^\perp$ (p.334) y $(\operatorname{Fil}A)^\perp=\operatorname{Nul}A$, $(\operatorname{Col}A)^\perp=\operatorname{Nul}A^t$ (Teor. 3, p.335)</td></tr>
+  <tr><td>Proyección ortogonal</td><td>Def. 5.11-5.12, fórmula (5.2) (p.210-212)</td><td>$\hat y=\operatorname{proy}_Wy$, Teor. 8 (p.348); sobre una recta (p.340)</td></tr>
+  <tr><td>Mejor aproximación</td><td>Teor. 5.4 (p.213)</td><td>Teor. 9 (p.350)</td></tr>
+</table>
+<div class="box warn"><span class="h">Aviso</span>
+  <p>Si Lay y U difieren, manda U. Ejemplos: Lay llama «producto interior» a lo que U llama «producto escalar»; Lay escribe $\operatorname{Gen}\{\dots\}$ y $\operatorname{Nul}$/$\operatorname{Col}$ donde U escribe $\langle\dots\rangle$ y $\operatorname{Nuc}$/$\operatorname{Im}$; y en U se usan los «ejemplos» y «ejercicios» con numeración propia. Las figuras de U (5.1-5.3) y las de Lay (§6.4) son complementarias.</p>
+</div>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="ejercicios"><span class="n">8</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §5.1, Ej. 5.1-5.15, p. 161-173">E p.161-173</span></h2>
+
+<p>Los Ejercicios 5.1 a 5.15 de E son los de esta sección (el 5.16 en adelante, desde la p.174, es la sección 5.2). <b>Orden de estudio recomendado</b> (de fácil a difícil): <b>5.3 → 5.11 → 5.9 → 5.1 → 5.2 → 5.13 → 5.12 → 5.4 → 5.10 → 5.7 → 5.6 → 5.8 → 5.5 → 5.14 → 5.15</b>. Abajo están en el orden del libro, agrupados por bloques. Pulsa «Mostrar soluciones» arriba para abrirlas todas.</p>
+
+<div class="box warn"><span class="h">Erratas y ambigüedades de E en esta sección (todas comprobadas)</span>
+  <ul>
+    <li><b>5.1:</b> la matriz de Gram dada <b>no es definida positiva</b> ($\det G=-1$): no existe ningún producto escalar con ella; además las opciones A y C son ambas ciertas.</li>
+    <li><b>5.2:</b> el libro solo impone la simetría; falta comprobar la positividad (que sí se cumple para $\lambda=3$).</li>
+    <li><b>5.7:</b> ninguna de las tres opciones es correcta (el libro las razona todas como falsas); la justificación de B olvida el subespacio $\{0\}$.</li>
+    <li><b>5.10:</b> las opciones A y C son ciertas (el libro lo dice).</li>
+    <li><b>5.12:</b> la $G$ dada es singular: <b>no</b> es producto escalar (el cálculo de $G'=Q^tGQ$ es correcto como forma bilineal).</li>
+    <li><b>5.13:</b> notación ambigua en $g_{33}$ (expresión y resultado correctos). Los símbolos $\neq$, $\notin$, $\sqrt{\ }$ que faltan en el texto extraído de algunos enunciados <b>no son erratas</b>: el PDF es correcto.</li>
+  </ul>
+  <span class="src" data-l="E" data-ref="Comprobado con el PDF de E, p. 162-173 (Ejercicios 5.1, 5.2, 5.7, 5.10, 5.12, 5.13)">E p.162-170</span>
+</div>
+
+<h3 id="bloqueI">Bloque I — ¿Es producto escalar? Matriz de Gram (E 5.1, 5.2, 5.4, 5.9, 5.11–5.13)</h3>
+
+<details class="sol" id="ej5-1"><summary>Ejercicio 5.1 — leer una matriz de Gram (errata de fondo) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.1, p. 162">E p.162</span></summary>
+  <p class="enun">Sea $E$ un espacio vectorial con un producto escalar tal que la matriz de Gram en una base $B=\{e_1,e_2,e_3\}$ es $G=\begin{pmatrix}1&0&1\cr0&1&1\cr1&1&1\end{pmatrix}$. Elegir la proposición correcta: A) $B$ no es ortonormal. B) $e_1$ es ortogonal al subespacio generado por $\{e_2,e_3\}$. C) Los vectores de $B$ son unitarios.</p>
+  <p><b>Qué se pide.</b> Traducir cada frase a entradas de $G$.</p>
+  <ol class="steps">
+    <li><b>Leer $G$</b> (Def. 5.2): $g_{ij}=e_i\bullet e_j$. Diagonal: $e_i\bullet e_i=1$ para $i=1,2,3$. Fuera: $e_1\bullet e_2=0$, $e_1\bullet e_3=1$, $e_2\bullet e_3=1$.</li>
+    <li><b>A) Cierta.</b> Ortonormal $\iff G=I$. Aquí $g_{13}=1\ne0$: $e_1$ y $e_3$ no son ortogonales.</li>
+    <li><b>B) Falsa.</b> Ser ortogonal a $\langle e_2,e_3\rangle$ exige serlo a <b>ambos</b> generadores (Def. 5.8): $e_1\bullet e_2=0$ pero $e_1\bullet e_3=1\ne0$.</li>
+    <li><b>C) Cierta.</b> $\|e_i\|=\sqrt{g_{ii}}=1$.</li>
+  </ol>
+  <p><b>Aviso 1 (ambigüedad).</b> A y C son ciertas a la vez (el libro lo reconoce) aunque el enunciado pide «la» correcta.</p>
+  <p><b>Aviso 2 (errata de fondo).</b> Esta $G$ <b>no puede ser de Gram</b>: $\Delta_1=1$, $\Delta_2=1$, $\Delta_3=\det G=-1\lt 0$ (Sylvester falla). Concretamente, con $x=e_1+e_2-e_3$, $X=(1,1,-1)^t$, $GX=(0,0,1)^t$ y $x\bullet x=X^tGX=-1\lt 0$: viola la propiedad 4. La lectura «formal» de A/B/C sigue siendo la que espera el libro. Con $g_{33}=3$ la matriz sí sería de Gram ($\Delta=1,1,1$) y entonces C sería falsa y solo A cierta.</p>
+  <div class="recipe"><b>Receta:</b> ortonormal $\iff G=I$; ortogonales dos a dos $\iff G$ diagonal; unitarios $\iff$ diagonal de unos; $e_i\perp\langle e_j,\dots\rangle\iff$ ceros en las posiciones $(i,j),\dots$ de $G$. Y antes de fiarte de una «matriz de Gram», pasa Sylvester.</div>
+  <p><b>Error típico:</b> mirar solo la diagonal («unitarios») y concluir «ortonormal»; o comprobar la ortogonalidad a un subespacio con un solo generador. <b>Teoría:</b> U Def. 5.2 p.196; Def. 5.8 p.203; Def. 5.9 p.204.</p>
+</details>
+
+<details class="sol" id="ej5-2"><summary>Ejercicio 5.2 — ¿para qué $\lambda$ es producto escalar? (omisión del libro) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.2, p. 162">E p.162</span></summary>
+  <p class="enun">Si $f((x_1,x_2),(y_1,y_2))=(x_1\ x_2)\begin{pmatrix}2&1\cr\lambda-2&4\lambda\end{pmatrix}\begin{pmatrix}y_1\cr y_2\end{pmatrix}$ es un producto escalar en $\mathbb R^2$, el valor de $\lambda$: A) es único. B) es cualquiera. C) puede ser $\lambda=1$.</p>
+  <p><b>Qué se pide.</b> Saber qué propiedades se cumplen siempre y cuáles imponen condición.</p>
+  <ol class="steps">
+    <li><b>Lo gratis.</b> $f(x,y)=X^tAY$ es lineal en cada variable para todo $\lambda$: propiedades 2 y 3 de la Def. 5.1. Hay que imponer <b>simetría</b> y <b>positividad</b>.</li>
+    <li><b>Simetría.</b> $f(e_1,e_2)=a_{12}=1$ y $f(e_2,e_1)=a_{21}=\lambda-2$. Han de ser iguales: $\lambda=3$.</li>
+    <li><b>Positividad</b> (el libro la omite). Con $\lambda=3$, $A=\begin{pmatrix}2&1\cr1&12\end{pmatrix}$ y $f(x,x)=2x_1^2+2x_1x_2+12x_2^2=2\left(x_1+\frac12x_2\right)^2+\frac{23}2x_2^2\ge0$, y solo vale $0$ si $x_2=0$ y $x_1=0$. (Con Sylvester: $\Delta_1=2$, $\Delta_2=24-1=23>0$.) Por tanto $\lambda=3$ sí funciona.</li>
+    <li><b>Opciones.</b> A) <b>cierta</b> (la simetría fuerza $\lambda=3$ y el paso 3 asegura que sirve). B) falsa ($\lambda=0$ no es simétrica). C) falsa: con $\lambda=1$, $f(e_1,e_2)=1\ne-1=f(e_2,e_1)$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $f(x,y)=X^tAY$ es producto escalar $\iff$ $A$ simétrica <b>y</b> definida positiva (completar cuadrados o Sylvester).</div>
+  <p><b>Error típico:</b> quedarse en «$A$ simétrica» y olvidar la positividad: sin el paso 3 no sabrías si hay algún $\lambda$ válido. <b>Teoría:</b> U Def. 5.1 p.194; p.197; Sylvester U p.267.</p>
+</details>
+
+<details class="sol" id="ej5-4"><summary>Ejercicio 5.4 — $G$ y $G'$ del mismo producto en bases distintas <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.4, p. 163">E p.163</span></summary>
+  <p class="enun">Si $G$ y $G'$ son dos matrices asociadas al mismo producto escalar respecto de dos bases distintas $B$ y $B'$, entonces: A) $G$ y $G'$ son equivalentes. B) $\operatorname{rang}G\neq\operatorname{rang}G'$. C) $\det G=\det G'$.</p>
+  <p><b>Qué se pide.</b> Consecuencias de $G'=Q^tGQ$.</p>
+  <ol class="steps">
+    <li><b>Relación:</b> Teorema 5.1 (U p.198): $G'=Q^tGQ$ con $Q$ regular. Es decir, $G'$ es <b>congruente</b> con $G$ (Def. 4.4, U p.147).</li>
+    <li><b>A) Cierta.</b> Equivalentes: $G'=MGN$ con $M,N$ regulares (Def. 4.3, p.146). Basta $M=Q^t$, $N=Q$ (regulares: $\det Q^t=\det Q\ne0$).</li>
+    <li><b>B) Falsa.</b> Las matrices equivalentes tienen el mismo rango. (Además $G$ es definida positiva, luego regular: ambos rangos son $n$.)</li>
+    <li><b>C) Falsa en general.</b> $\det G'=\det Q^t\det G\det Q=(\det Q)^2\det G$, que solo coincide si $\det Q=\pm1$. Contraejemplo: estándar en $\mathbb R^2$, $B$ canónica ($G=I$), $B'=\{(2,0),(0,1)\}$: $G'=\begin{pmatrix}4&0\cr0&1\end{pmatrix}$, $\det G'=4\ne1$.</li>
+  </ol>
+  <p><b>Observación:</b> la congruencia por sí sola solo conserva el <b>signo</b> de $\det G$. Que el determinante de una Gram sea positivo se debe a que $G$ es definida positiva ($|G|=\Delta_n>0$), o a que en una base ortonormal $G=I$ y entonces $\det G=(\det Q)^2>0$ en cualquier otra.</p>
+  <div class="recipe"><b>Receta:</b> cambio de base de un producto escalar: $G'=Q^tGQ$ $\Rightarrow$ mismo rango, determinante multiplicado por $(\det Q)^2>0$.</div>
+  <p><b>Error típico:</b> confundir con el cambio de base de un endomorfismo ($A'=Q^{-1}AQ$, que sí conserva el determinante). <b>Teoría:</b> U Teor. 5.1 p.198; Def. 4.3-4.4 p.146-147.</p>
+</details>
+
+<details class="sol" id="ej5-9"><summary>Ejercicio 5.9 — matriz métrica a partir de datos geométricos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.9, p. 167">E p.167</span></summary>
+  <p class="enun">En un espacio euclídeo $E$ de dimensión $3$ hay una base $B=\{e_1,e_2,e_3\}$ con $\|e_1\|=1$, $e_2\cdot e_2=1$, $\|e_3\|=\sqrt2$; $e_1\perp e_2$ y $2e_2-e_3$ es ortogonal a $e_1$ y a $e_3$. Calcular la matriz métrica en $B$.</p>
+  <p><b>Qué se pide.</b> Los 6 números $g_{11},g_{22},g_{33},g_{12},g_{13},g_{23}$ (la matriz es simétrica).</p>
+  <ol class="steps">
+    <li><b>Diagonal</b> (norma al cuadrado): $g_{11}=1$, $g_{22}=1$, $g_{33}=(\sqrt2)^2=2$.</li>
+    <li><b>$g_{12}$:</b> $e_1\perp e_2\Rightarrow g_{12}=0$.</li>
+    <li><b>$g_{13}$:</b> $0=(2e_2-e_3)\bullet e_1=2\,e_2\bullet e_1-e_3\bullet e_1=2\cdot0-g_{13}\Rightarrow g_{13}=0$.</li>
+    <li><b>$g_{23}$:</b> $0=(2e_2-e_3)\bullet e_3=2g_{23}-g_{33}=2g_{23}-2\Rightarrow g_{23}=1$.</li>
+    <li><b>Resultado:</b> $G_B=\begin{pmatrix}1&0&0\cr0&1&1\cr0&1&2\end{pmatrix}$. Coherencia: $\Delta=1,1,1>0$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> traduce cada dato a una ecuación en los $g_{ij}$: normas $\to$ diagonal; ortogonalidades $\to$ ceros; combinaciones $\to$ desarrolla por bilinealidad.</div>
+  <p><b>Error típico:</b> poner $g_{33}=\sqrt2$ (es la norma, no su cuadrado). <b>Teoría:</b> U Def. 5.2 p.196; Def. 5.3 p.199.</p>
+</details>
+
+<details class="sol" id="ej5-11"><summary>Ejercicio 5.11 — Gram a partir de normas y un coseno <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.11, p. 168">E p.168</span></summary>
+  <p class="enun">Dos vectores $u_1,u_2$ de un espacio euclídeo cumplen $\|u_1\|=1$, $\|u_2\|=3$ y $\cos(u_1,u_2)=\frac12$. Determinar la matriz $G$ del producto escalar en el subespacio generado por $\{u_1,u_2\}$.</p>
+  <p><b>Qué se pide.</b> La matriz de Gram en la base $\{u_1,u_2\}$.</p>
+  <ol class="steps">
+    <li><b>Son base:</b> si $u_2=cu_1$ el coseno sería $\pm1$; como vale $\frac12$ no son proporcionales, luego son base de su subespacio.</li>
+    <li><b>Diagonal:</b> $u_1\bullet u_1=1$, $u_2\bullet u_2=9$.</li>
+    <li><b>Fuera</b> (despejando de la Def. 5.6): $u_1\bullet u_2=\|u_1\|\|u_2\|\cos=1\cdot3\cdot\frac12=\frac32$.</li>
+    <li><b>Resultado:</b> $G=\begin{pmatrix}1&\frac32\cr\frac32&9\end{pmatrix}$. Control: $\Delta_1=1$, $\det G=9-\frac94=\frac{27}4>0$ ✓ (el ángulo es de $60^\circ$).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $g_{ii}=\|u_i\|^2$, $g_{ij}=\|u_i\|\|u_j\|\cos(u_i,u_j)$.</div>
+  <p><b>Error típico:</b> poner las normas ($1$ y $3$) en la diagonal en vez de sus cuadrados. <b>Teoría:</b> U Def. 5.6 p.201; Def. 5.2 p.196.</p>
+</details>
+
+<details class="sol" id="ej5-12"><summary>Ejercicio 5.12 — $G'=Q^tGQ$ con una reordenación (errata de fondo) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.12, p. 169">E p.169</span></summary>
+  <p class="enun">La matriz asociada a un producto escalar en la base canónica es $G=\begin{pmatrix}1&1&0\cr1&1&0\cr0&0&1\end{pmatrix}$. Calcular la matriz de Gram $G'$ en la base $B'=\{(1,0,0),(0,0,1),(0,1,0)\}$.</p>
+  <p><b>Qué se pide.</b> Aplicar el cambio de base de la Gram.</p>
+  <ol class="steps">
+    <li><b>Vía 1 (reordenar).</b> $B'=\{e_1,e_3,e_2\}$: la canónica con $e_2,e_3$ intercambiados. Se intercambian las filas y columnas 2 y 3 de $G$: $g'_{12}=g_{13}=0$, $g'_{13}=g_{12}=1$, $g'_{22}=g_{33}=1$, $g'_{33}=g_{22}=1$, $g'_{23}=g_{32}=0$.</li>
+    <li><b>Vía 2 (Teorema 5.1).</b> $Q$ = vectores de $B'$ en columnas: $Q=\begin{pmatrix}1&0&0\cr0&0&1\cr0&1&0\end{pmatrix}$ y
+      $$G'=Q^tGQ=\begin{pmatrix}1&0&1\cr0&1&0\cr1&0&1\end{pmatrix}.$$</li>
+  </ol>
+  <p><b>Errata de fondo (no señalada por el libro).</b> $G$ <b>no</b> es la matriz de un producto escalar: $\det G=0$ ($\Delta_2=1-1=0$). Con $x=(1,-1,0)\ne0$: $x\bullet x=X^tGX=0$, lo que contradice la propiedad 5. La forma $(x_1+x_2)^2+x_3^2$ es solo semidefinida positiva. El cálculo de $G'$ es correcto como cambio de base de una forma bilineal simétrica (tema 6.1), y $G'$ hereda el defecto ($\det G'=0$). Corrección mínima: $g_{22}=2$.</p>
+  <div class="recipe"><b>Receta:</b> $G'=Q^tGQ$ con $Q$ = coordenadas de la base nueva <b>en columnas</b>. Si $B'$ solo reordena $B$, $G'$ es $G$ con filas y columnas reordenadas igual.</div>
+  <p><b>Error típico:</b> usar $Q^{-1}GQ$ (semejanza) o poner los vectores por filas (aquí $Q$ es simétrica y no se nota, en general sí). <b>Teoría:</b> U Teor. 5.1 p.198.</p>
+</details>
+
+<details class="sol" id="ej5-13"><summary>Ejercicio 5.13 — determinante de una matriz de Gram <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.13, p. 170">E p.170</span></summary>
+  <p class="enun">Calcular el determinante de la matriz de Gram del producto usual de $\mathbb R^3$ respecto de la base $\{(1,1,2),(3,1,1),(-2,-1,2)\}$.</p>
+  <p><b>Qué se pide.</b> $\det G$; hay dos caminos.</p>
+  <ol class="steps">
+    <li><b>Vía 1 (calcular $G$).</b> $g_{ij}=u_i\cdot u_j$: $g_{11}=6$, $g_{22}=11$, $g_{33}=(-2)(-2)+(-1)(-1)+2\cdot2=9$, $g_{12}=3+1+2=6$, $g_{13}=-2-1+4=1$, $g_{23}=-6-1+2=-5$. $G=\begin{pmatrix}6&6&1\cr6&11&-5\cr1&-5&9\end{pmatrix}$ y $\det G=6(99-25)-6(54+5)+1(-30-11)=444-354-41=49$.</li>
+    <li><b>Vía 2 (Teorema 5.1).</b> En la canónica $G=I$, así que $G=Q^tQ$ con $Q=\begin{pmatrix}1&3&-2\cr1&1&-1\cr2&1&2\end{pmatrix}$ (vectores en columnas). $\det Q=1(2+1)-3(2+2)-2(1-2)=3-12+2=-7$ y $\det G=(\det Q)^2=49$.</li>
+    <li><b>Lectura.</b> $\det Q\ne0$ confirma que es base; $\det G=(\det Q)^2>0$, como corresponde a una Gram (es definida positiva); menores $6,30,49>0$.</li>
+  </ol>
+  <p><b>Nota.</b> En la vía 1 el libro escribe el término $g_{33}$ como «$-2\cdot(-2)-1\cdot(-1)+2\cdot2$»; debe leerse $(-2)(-2)+(-1)(-1)+2\cdot2=4+1+4=9$. Es una notación ambigua, no un error: expresión y resultado son correctos.</p>
+  <div class="recipe"><b>Receta:</b> $\det\left(\text{Gram estándar de }\{u_i\}\right)=\left(\det[u_1\,u_2\,u_3]\right)^2$: más rápido que calcular $G$.</div>
+  <p><b>Error típico:</b> calcular $\det Q$ y olvidar elevar al cuadrado (daría $-7$, imposible en una Gram). <b>Teoría:</b> U Teor. 5.1 p.198; Ej. 5.4 p.197.</p>
+</details>
+
+<h3 id="bloqueII">Bloque II — Norma y ortogonalidad (E 5.3, 5.10)</h3>
+
+<details class="sol" id="ej5-3"><summary>Ejercicio 5.3 — normalizar una matriz <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.3, p. 163">E p.163</span></summary>
+  <p class="enun">En $\mathcal M_{2\times2}$ se define $\begin{pmatrix}a_{11}&a_{12}\cr a_{21}&a_{22}\end{pmatrix}\bullet\begin{pmatrix}b_{11}&b_{12}\cr b_{21}&b_{22}\end{pmatrix}=a_{11}b_{11}+a_{12}b_{12}+a_{21}b_{21}+a_{22}b_{22}$. Normalizar $\begin{pmatrix}1&2\cr1&-3\end{pmatrix}$.</p>
+  <p><b>Qué se pide.</b> Dividir el «vector» (aquí una matriz) entre su norma.</p>
+  <ol class="steps">
+    <li><b>Idea.</b> Normalizar es dividir entre la norma para obtener un vector de norma $1$ con la misma dirección (Def. 5.4). El producto dado es el estándar de $\mathbb R^4$ leyendo la matriz entrada a entrada.</li>
+    <li><b>Norma</b> (Def. 5.3): $\|A\|=\sqrt{A\bullet A}=\sqrt{1+4+1+9}=\sqrt{15}$.</li>
+    <li><b>Normalizado:</b> $\dfrac A{\sqrt{15}}=\begin{pmatrix}\frac1{\sqrt{15}}&\frac2{\sqrt{15}}\cr\frac1{\sqrt{15}}&-\frac3{\sqrt{15}}\end{pmatrix}$.</li>
+    <li><b>Comprobación:</b> $\left\|\frac A{\sqrt{15}}\right\|^2=\frac1{15}(A\bullet A)=1$ (homogeneidad).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $\hat v=v/\sqrt{v\bullet v}$; en $\mathcal M_{m\times n}$ con este producto, $\|A\|^2$ = suma de los cuadrados de todas las entradas.</div>
+  <p><b>Error típico:</b> usar $\det A$ o $AA$ en vez del producto dado, u olvidar la raíz. <b>Teoría:</b> U Def. 5.3 p.199, Def. 5.4 p.200.</p>
+</details>
+
+<details class="sol" id="ej5-10"><summary>Ejercicio 5.10 — vector unitario ortogonal a dos vectores de $\mathbb R^4$ (dos respuestas válidas) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.10, p. 167-168">E p.167-168</span></summary>
+  <p class="enun">En $\mathbb R^4$ (estándar) existe, al menos, un vector $(x,y,z,t)$ de norma $1$ y perpendicular a $(1,2,3,0)$ y $(1,1,0,0)$ que verifica la ecuación: A) $x+3z=0$. B) $t=z=0$. C) $x=3z=-y$.</p>
+  <p><b>Qué se pide.</b> Describir el conjunto de candidatos y ver qué ecuación admite algún unitario.</p>
+  <ol class="steps">
+    <li><b>Condiciones:</b> $x+2y+3z=0$ y $x+y=0$; norma $1$: $x^2+y^2+z^2+t^2=1$.</li>
+    <li><b>Resolver:</b> $y=-x$, $x-2x+3z=0\Rightarrow x=3z$. Con $z=\alpha$, $t=\beta$: $(x,y,z,t)=(3\alpha,-3\alpha,\alpha,\beta)$, es decir $W=\langle(3,-3,1,0),(0,0,0,1)\rangle$ (¡$t$ es parámetro libre aunque no aparezca!). Norma $1$: $19\alpha^2+\beta^2=1$.</li>
+    <li><b>A) Cierta.</b> Con $x+3z=0$: $3\alpha+3\alpha=0\Rightarrow\alpha=0$, $\beta=\pm1$: existe $(0,0,0,\pm1)$.</li>
+    <li><b>B) Falsa.</b> $t=z=0\Rightarrow\alpha=\beta=0$: solo el vector nulo, que tiene norma $0\ne1$. (El libro dice «no tiene solución»: con precisión, «no tiene solución de norma 1».)</li>
+    <li><b>C) Cierta.</b> $x=3z$ y $x=-y$ describen exactamente $W$, así que todo unitario de $W$ las cumple: $\frac1{\sqrt{19}}(3,-3,1,0)$ (norma $\frac{19}{19}=1$) o $(0,0,0,1)$.</li>
+  </ol>
+  <p><b>Aviso:</b> A y C son ciertas (el libro lo dice): la pregunta no tiene respuesta única.</p>
+  <div class="recipe"><b>Receta:</b> vector unitario ortogonal a varios: resuelve el homogéneo (generadores como filas) y luego impón $\|v\|=1$ a la solución general.</div>
+  <p><b>Error típico:</b> olvidar la variable libre $t$. <b>Teoría:</b> U Ejemplo 5.16 p.203 (ortogonal a varios vectores); Def. 5.3 p.199.</p>
+</details>
+
+<h3 id="bloqueIII">Bloque III — Subespacios ortogonales y suplementario ortogonal (E 5.5–5.8)</h3>
+
+<details class="sol" id="ej5-5"><summary>Ejercicio 5.5 — $U^\perp$ con un producto no estándar <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.5, p. 164">E p.164</span></summary>
+  <p class="enun">Se considera el producto escalar en $\mathbb R^3$ con matriz métrica $G=\begin{pmatrix}1&1&0\cr1&2&-1\cr0&-1&5\end{pmatrix}$. Calcular las ecuaciones paramétricas y la dimensión del suplementario ortogonal del subespacio $U:\ x+y+2z=0$.</p>
+  <p><b>Qué se pide.</b> $U^\perp$ <b>con este producto</b>.</p>
+  <ol class="steps">
+    <li><b>Comprobación previa:</b> $G$ es simétrica y $\Delta_1=1$, $\Delta_2=1$, $\Delta_3=4>0$: es un producto escalar.</li>
+    <li><b>Base de $U$:</b> una ecuación en $\mathbb R^3\Rightarrow\dim U=2$. Despejando $x=-y-2z$: $u_1=(1,-1,0)$, $u_2=(-2,0,1)$ (independientes).</li>
+    <li><b>Dimensión:</b> $U\oplus U^\perp=\mathbb R^3\Rightarrow\dim U^\perp=1$.</li>
+    <li><b>Condiciones</b> (Def. 5.8, con $G$): $v=(a,b,c)$ ha de cumplir $u_i^tGv=0$. Calculamos las filas $u_1^tG=(1,-1,0)G=(0,-1,1)$ y $u_2^tG=(-2,0,1)G=(-2,-3,5)$. Ecuaciones: $-b+c=0$ y $-2a-3b+5c=0$.</li>
+    <li><b>Resolver:</b> $c=b$; $-2a-3b+5b=0\Rightarrow a=b$. $U^\perp=\langle(1,1,1)\rangle$: paramétricas $x=\alpha$, $y=\alpha$, $z=\alpha$; <b>dimensión 1</b>.</li>
+    <li><b>Comprobación:</b> $(1,1,1)\notin U$ ($1+1+2=4\ne0$), coherente con $U\cap U^\perp=\{0\}$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $U^\perp$ con métrica $G$: base $\{u_i\}$ de $U$, una ecuación $u_i^tGX=0$ por generador, resolver; $\dim U^\perp=n-\dim U$.</div>
+  <p><b>Error típico:</b> usar el vector normal $(1,1,2)$ de la ecuación de $U$: solo vale con el estándar. Aquí $(1,1,2)G=(2,2,9)$ da $(2,2,9)\cdot(1,-1,0)=0$ pero $(2,2,9)\cdot(-2,0,1)=5\ne0$. <b>Teoría:</b> U Def. 5.8 p.203; Def. 5.10 p.209; Sylvester p.267.</p>
+</details>
+
+<details class="sol" id="ej5-6"><summary>Ejercicio 5.6 — repaso de intersección, unión, suma y un ortogonal <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.6, p. 165">E p.165</span></summary>
+  <p class="enun">$L_1=\langle(1,0,0),(0,0,1)\rangle$ y $L_2=\langle(1,1,1)\rangle$ en $\mathbb R^3$. A) Demostrar que $L_1\cap L_2$ es subespacio (caracterización). B) Discutir si $L_1\cup L_2$ lo es. C) Ecuaciones cartesianas de $L_1+L_2$. D) Con el producto estándar, un subespacio ortogonal a $L_1$ y si es suplementario.</p>
+  <p><b>Qué se pide.</b> A-C son repaso de los temas 2.1 y 2.4; D es de esta sección. Previo: $L_1=\{(\alpha,0,\beta)\}$ (plano $y=0$) y $L_2=\{(\gamma,\gamma,\gamma)\}$ (recta $x=y=z$).</p>
+  <ol class="steps">
+    <li><b>A.</b> Caracterización (U (2.2), p.66): $0\in L_1\cap L_2$; si $u,v\in L_1\cap L_2$ y $\lambda,\mu\in\mathbb R$, $\lambda u+\mu v\in L_1$ (subespacio) y $\in L_2$, luego en la intersección. Concretamente $(\gamma,\gamma,\gamma)\in L_1\iff\gamma=0$: $L_1\cap L_2=\{0\}$.</li>
+    <li><b>B. No es subespacio.</b> Contraejemplo: $(0,0,1)\in L_1$ y $(1,1,1)\in L_2$; su diferencia $(-1,-1,0)$ no está en $L_1$ ($y\ne0$) ni en $L_2$ (componentes distintas). La unión solo es subespacio si uno contiene al otro.</li>
+    <li><b>C.</b> $L_1+L_2=\langle(1,0,0),(0,0,1),(1,1,1)\rangle$, y $\det\begin{pmatrix}1&0&1\cr0&0&1\cr0&1&1\end{pmatrix}=-1\ne0$: rango $3$, $L_1+L_2=\mathbb R^3$ (Grassmann: $2+1-0=3$). No hay ecuaciones cartesianas (ninguna restricción). Como $L_1\cap L_2=\{0\}$, la suma es directa: $L_2$ es suplementario de $L_1$ <b>pero no ortogonal</b> ($(1,1,1)\cdot(1,0,0)=1$).</li>
+    <li><b>D.</b> $v=(x,y,z)\perp L_1\iff v\cdot(1,0,0)=x=0$ y $v\cdot(0,0,1)=z=0$. Así $U=\{x=0,\ z=0\}=\langle(0,1,0)\rangle$ (paramétricas $x=0$, $y=\lambda$, $z=0$).</li>
+    <li><b>¿Suplementario?</b> $L_1\cap U=\{0\}$ y $\dim L_1+\dim U=3$: $L_1\oplus U=\mathbb R^3$. <b>Sí</b>; siendo ortogonal y suplementario, es $L_1^\perp$ (único). (Matiz: los subespacios ortogonales a $L_1$ son exactamente $\{0\}$ y $\langle(0,1,0)\rangle$.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> intersección = imponer a la vez las ecuaciones; unión = contraejemplo explícito; suma = juntar generadores y calcular el rango; ortogonal = ecuaciones $v\cdot u_i=0$ con los generadores.</div>
+  <p><b>Error típico:</b> pensar que «suplementario» implica «ortogonal» ($L_2$ es suplementario de $L_1$ y no ortogonal); o decir «la unión en general no es subespacio» sin contraejemplo. <b>Teoría:</b> U p.66, p.91-97 (2.4); Def. 5.8 p.203; Def. 5.10 p.209.</p>
+</details>
+
+<details class="sol" id="ej5-7"><summary>Ejercicio 5.7 — ortogonales a un plano de $\mathbb R^3$ (errata: ninguna opción correcta) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.7, p. 166">E p.166</span></summary>
+  <p class="enun">En $\mathbb R^3$ con el producto estándar, un subespacio ortogonal a $U:\ x+2y-z=0$ cumple: A) es $\langle(1,2,3)\rangle$. B) puede tener dimensión $2$. C) es cualquier recta perpendicular a $U$.</p>
+  <p><b>Qué se pide.</b> Decidir qué es un subespacio ortogonal a un plano.</p>
+  <ol class="steps">
+    <li><b>$U^\perp$.</b> Con el estándar, los coeficientes de la ecuación dan el normal: $U^\perp=\langle(1,2,-1)\rangle$. Un subespacio ortogonal a $U$ es cualquiera contenido en $U^\perp$: $\{0\}$ o $U^\perp$ (dimensión $\le1$).</li>
+    <li><b>A) Falsa.</b> $(1,2,3)\cdot(1,0,1)=4\ne0$ ($(1,0,1)\in U$): no es ortogonal.</li>
+    <li><b>B) Falsa.</b> Si $V\perp U$, $U\cap V=\{0\}$ (un $w$ en ambos cumple $w\bullet w=0\Rightarrow w=0$), la suma es directa y $\dim U+\dim V\le3\Rightarrow\dim V\le1$.</li>
+    <li><b>C) Falsa.</b> Una recta perpendicular al plano que <b>no pasa por el origen</b> no es subespacio; y el único subespacio de dimensión $1$ ortogonal a $U$ es $\langle(1,2,-1)\rangle$.</li>
+  </ol>
+  <p><b>Errata confirmada: ninguna opción es correcta</b> (el libro razona las tres como falsas). Probablemente A debía ser $\langle(1,2,-1)\rangle$. Además la justificación de B dice «dimensión necesariamente 1»: olvida $\{0\}$; lo correcto es $\dim V\le1$.</p>
+  <div class="recipe"><b>Receta:</b> con el estándar, el ortogonal de $ax+by+cz=0$ es $\langle(a,b,c)\rangle$; todo subespacio ortogonal a $U$ está en $U^\perp$ y cumple $\dim\le n-\dim U$.</div>
+  <p><b>Error típico:</b> confundir «recta perpendicular» (afín) con «subespacio» (pasa por el origen). <b>Teoría:</b> U Def. 5.10 p.209; Ejemplo 5.22 p.209-210.</p>
+</details>
+
+<details class="sol" id="ej5-8"><summary>Ejercicio 5.8 — un ortogonal que no es el suplementario ortogonal <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.8, p. 166">E p.166</span></summary>
+  <p class="enun">Calcular un subespacio ortogonal que no sea el suplementario ortogonal de $U=\langle(1,2,-3,0),(1,0,-1,0)\rangle$.</p>
+  <p><b>Qué se pide.</b> Un subespacio estrictamente contenido en $U^\perp$. (Producto estándar de $\mathbb R^4$, convenio de U.)</p>
+  <ol class="steps">
+    <li><b>$\dim U=2$</b> (los generadores no son proporcionales).</li>
+    <li><b>$U^\perp$:</b> $(x,y,z,t)\cdot(1,2,-3,0)=x+2y-3z=0$ y $(x,y,z,t)\cdot(1,0,-1,0)=x-z=0$. De la 2.ª, $z=x$; en la 1.ª, $x+2y-3x=0\Rightarrow y=x$: $(a,a,a,t)$, $U^\perp=\langle(1,1,1,0),(0,0,0,1)\rangle$, $\dim=2=4-2$.</li>
+    <li><b>Idea:</b> $W\perp U\iff W\subseteq U^\perp$. Para que <b>no</b> sea el suplementario ortogonal basta $W\subsetneq U^\perp$, p. ej. de dimensión $1$ (entonces $\dim U+\dim W=3\lt 4$).</li>
+    <li><b>Ejemplos:</b> $W=\langle(1,1,1,1)\rangle$ (comprobación: $1+2-3+0=0$ y $1-1=0$), o $\langle(2,2,2,0)\rangle$, o $\{0\}$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> subespacios ortogonales a $U$ = subespacios de $U^\perp$; el único que además es suplementario es $U^\perp$ entero.</div>
+  <p><b>Error típico:</b> proponer un vector ortogonal solo a uno de los generadores. <b>Teoría:</b> U Def. 5.10 p.209.</p>
+</details>
+
+<h3 id="bloqueIV">Bloque IV — Proyección, mínima distancia y Gram-Schmidt (E 5.14, 5.15)</h3>
+
+<details class="sol" id="ej5-14"><summary>Ejercicio 5.14 — mejor aproximación de un vector a un plano <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.14, p. 171">E p.171</span></summary>
+  <p class="enun">Hallar la mínima distancia (mejor aproximación) del vector $v=(1,1,0)$ al subespacio $U=\langle(1,-1,0),(-1,0,1)\rangle$ y el vector $u\in U$ que la realiza.</p>
+  <p><b>Qué se pide.</b> $u=\operatorname{Proy}_Uv$ y $\|v-u\|$ (Teorema 5.4). Puedes verlo en la animación 3D de la sección 6 (preset «E 5.14»).</p>
+  <ol class="steps">
+    <li><b>Por qué la proyección.</b> Por el Teorema 5.4 (p.213), el vector de $U$ más cercano a $v$ es $v_U=\operatorname{Proy}_Uv$ y la distancia mínima es $\|v-v_U\|$.</li>
+    <li><b>$U^\perp$:</b> $(a,b,c)\cdot(1,-1,0)=a-b=0$ y $(a,b,c)\cdot(-1,0,1)=-a+c=0$: $U^\perp=\langle(1,1,1)\rangle$.</li>
+    <li><b>Descomponer</b> $(1,1,0)=\alpha(1,-1,0)+\beta(-1,0,1)+\gamma(1,1,1)$: $\alpha-\beta+\gamma=1$, $-\alpha+\gamma=1$, $\beta+\gamma=0$. Sumando: $3\gamma=2$, $\gamma=\frac23$; $\alpha=-\frac13$, $\beta=-\frac23$.</li>
+    <li><b>Proyección:</b> $v_U=-\frac13(1,-1,0)-\frac23(-1,0,1)=\left(\frac13,\frac13,-\frac23\right)$; $w=\gamma(1,1,1)=\left(\frac23,\frac23,\frac23\right)$.</li>
+    <li><b>Distancia:</b> $d(v,U)=\|w\|=\sqrt{\frac49\cdot3}=\frac2{\sqrt3}=\frac{2\sqrt3}3\approx1{,}155$.</li>
+    <li><b>Vía rápida (comprobación).</b> $w=\operatorname{Proy}_nv=\frac{v\cdot n}{n\cdot n}n=\frac23(1,1,1)$ con $n=(1,1,1)$, y $v_U=v-w$. Mismo resultado.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> si $U$ es un plano de $\mathbb R^3$: proyecta sobre la normal $n$ (un solo producto escalar), $v_U=v-\operatorname{Proy}_nv$ y $d=\frac{|v\cdot n|}{\|n\|}$.</div>
+  <p><b>Error típico:</b> proyectar $v$ sobre cada generador de $U$ y sumar: solo vale si son ortogonales (aquí $(1,-1,0)\cdot(-1,0,1)=-1\ne0$). <b>Teoría:</b> U Def. 5.11 p.210; Def. 5.12 p.211; Teor. 5.4 p.213.</p>
+</details>
+
+<details class="sol" id="ej5-15"><summary>Ejercicio 5.15 — Gram-Schmidt, coordenadas y proyección en $\mathbb R^4$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.15, p. 172-173">E p.172-173</span></summary>
+  <p class="enun">Sea $U=\langle(1,0,-1,1),(2,0,3,-1)\rangle$ (estándar de $\mathbb R^4$). A) Base ortogonal $B_1$ de $U$. B) Base ortonormal $B_2$ de $U^\perp$. C) Coordenadas en $B_1$ de $(4,0,1,1)\in U$. D) Coordenadas en $B_2$ de $(4,5,-6,-10)\in U^\perp$. E) Proyección ortogonal de $(1,0,1,0)$ sobre $U$.</p>
+  <p><b>Qué se pide.</b> Un recorrido completo por las herramientas del tema.</p>
+  <ol class="steps">
+    <li><b>A) Gram-Schmidt.</b> $u_1=(1,0,-1,1)$, $u_2=(2,0,3,-1)$ (independientes). $e_1=u_1$; $u_2\cdot e_1=2-3-1=-2$, $e_1\cdot e_1=3$: $e_2=u_2+\frac23e_1=\left(\frac83,0,\frac73,-\frac13\right)$. Control: $e_2\cdot e_1=\frac83-\frac73-\frac13=0$ ✓. Multiplicando por $3$: <b>$B_1=\{(1,0,-1,1),(8,0,7,-1)\}$</b>.</li>
+    <li><b>B) $U^\perp$.</b> $x-z+t=0$ y $2x+3z-t=0$ ($\dim=4-2=2$). Sumando: $3x+2z=0$. Con $y$ libre y $x=2s$: $z=-3s$, $t=z-x=-5s$; solución $y(0,1,0,0)+s(2,0,-3,-5)$. Ya son ortogonales ($(0,1,0,0)\cdot(2,0,-3,-5)=0$), no hace falta Gram-Schmidt. Normas $1$ y $\sqrt{4+9+25}=\sqrt{38}$: <b>$B_2=\left\{(0,1,0,0),\frac1{\sqrt{38}}(2,0,-3,-5)\right\}$</b>.</li>
+    <li><b>C) Teorema 5.3.</b> $(4,0,1,1)=2u_1+u_2\in U$ ✓. $c_i=\frac{x\cdot e_i}{e_i\cdot e_i}$: $c_1=\frac{4-1+1}3=\frac43$, $c_2=\frac{32+7-1}{64+49+1}=\frac{38}{114}=\frac13$. Coordenadas $\left(\frac43,\frac13\right)_{B_1}$. Comprobación: $\frac43(1,0,-1,1)+\frac13(8,0,7,-1)=(4,0,1,1)$ ✓.</li>
+    <li><b>D)</b> Base ortonormal: $c_i=x\cdot e_i$. Está en $U^\perp$ ($4+6-10=0$, $8-18+10=0$). $c_1=5$; $c_2=\frac{8+18+50}{\sqrt{38}}=\frac{76}{\sqrt{38}}=2\sqrt{38}$. Coordenadas $(5,\,2\sqrt{38})_{B_2}$.</li>
+    <li><b>E) Fórmula (5.2)</b> con la base <b>ortogonal</b> $B_1$: $z=(1,0,1,0)$, $z\cdot e_1=1-1=0$; $z\cdot e_2=8+7=15$ y $e_2\cdot e_2=114$: $c_2=\frac{15}{114}=\frac5{38}$. $\operatorname{Proy}_Uz=\frac5{38}(8,0,7,-1)=\left(\frac{20}{19},0,\frac{35}{38},-\frac5{38}\right)$.</li>
+    <li><b>Comprobación de E:</b> $z-\operatorname{Proy}_Uz=\left(-\frac1{19},0,\frac3{38},\frac5{38}\right)=-\frac1{38}(2,0,-3,-5)\in U^\perp$ ✓. (Distancia de $z$ a $U$: $\frac{\sqrt{38}}{38}$.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> base ortogonal $\to$ Gram-Schmidt; coordenadas en base ortogonal $\to\frac{x\cdot e_i}{e_i\cdot e_i}$; proyección $\to$ suma de esos términos sobre una base <b>ortogonal</b> de $U$; control: $v-\operatorname{Proy}_Uv\perp U$.</div>
+  <p><b>Error típico:</b> aplicar Fourier con la base original $\{u_1,u_2\}$ (no ortogonal): daría un vector incorrecto. <b>Teoría:</b> U Teor. 5.3 p.207; §5.1.5 p.207-208; Ec. (5.2) p.212.</p>
+</details>
+
+<h3 id="propios">Ejemplos propios (dificultad creciente)</h3>
+
+<details class="sol" id="ej-propio-1"><summary>Propio 1 — comprobar los axiomas en $\mathbb R^2$ <span class="src" data-l="P" data-ref="Ejemplo propio; cf. U Ejemplo 5.2, p. 195">propio</span></summary>
+  <p class="enun">¿Es $x\bullet y=2x_1y_1+x_1y_2+x_2y_1+x_2y_2$ un producto escalar en $\mathbb R^2$? ¿Y $x\circ y=x_1y_1-x_2y_2$?</p>
+  <ol class="steps">
+    <li><b>Forma matricial:</b> $G=\begin{pmatrix}2&1\cr1&1\end{pmatrix}$ (el coeficiente de $x_iy_j$ va en la posición $(i,j)$).</li>
+    <li><b>Propiedad 1:</b> intercambiar $x\leftrightarrow y$ da la misma expresión ($G$ simétrica) ✓. <b>2-3:</b> cada término es (constante)$\cdot x_iy_j$, lineal en $x$ ✓.</li>
+    <li><b>4-5:</b> $x\bullet x=2x_1^2+2x_1x_2+x_2^2=x_1^2+(x_1+x_2)^2\ge0$, y vale $0$ $\iff x_1=0$ y $x_1+x_2=0\iff x=0$ ✓. <b>Sí es producto escalar.</b></li>
+    <li><b>$\circ$:</b> $(0,1)\circ(0,1)=-1\lt 0$ viola la 4: <b>no</b> lo es (es el Ejemplo 5.2 de U).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> simetría y linealidad se ven a ojo; la positividad se prueba completando cuadrados y se refuta con un vector.</div>
+</details>
+
+<details class="sol" id="ej-propio-2"><summary>Propio 2 — matriz $2\times2$ con parámetro <span class="src" data-l="P" data-ref="Ejemplo propio; Sylvester, U p. 267">propio</span></summary>
+  <p class="enun">¿Para qué $a$ define $G=\begin{pmatrix}1&a\cr a&4\end{pmatrix}$ un producto escalar en $\mathbb R^2$?</p>
+  <ol class="steps">
+    <li><b>Simétrica</b> para todo $a$.</li>
+    <li><b>Definida positiva</b> (Sylvester): $\Delta_1=1>0$; $\Delta_2=4-a^2>0\iff-2\lt a\lt 2$.</li>
+    <li><b>Por qué falla en el borde:</b> con $a=2$ y $x=(2,-1)$: $x\bullet x=4+2\cdot2\cdot2\cdot(-1)+4=0$ con $x\ne0$ (viola la 5).</li>
+  </ol>
+  <p><b>Resultado:</b> $a\in(-2,2)$. Con $|a|>2$ aparecen vectores con $x\bullet x\lt 0$.</p>
+  <div class="recipe"><b>Receta:</b> «¿para qué parámetro?» $\Rightarrow$ menores principales $>0$; en el valor frontera busca el vector con $x\bullet x=0$.</div>
+</details>
+
+<details class="sol" id="ej-propio-3"><summary>Propio 3 — Sylvester en $3\times3$ con parámetro <span class="src" data-l="P" data-ref="Ejemplo propio; Sylvester, U p. 267">propio</span></summary>
+  <p class="enun">¿Para qué $k$ es $G=\begin{pmatrix}1&1&0\cr1&2&1\cr0&1&k\end{pmatrix}$ matriz de Gram?</p>
+  <ol class="steps">
+    <li>Simétrica ✓. $\Delta_1=1$, $\Delta_2=2-1=1$, $\Delta_3=1(2k-1)-1(k-0)=k-1$.</li>
+    <li>Definida positiva $\iff k>1$.</li>
+    <li>Para $k=1$: $x=(1,-1,1)$ da $X^tGX=k-1=0$ con $x\ne0$: falla.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> calcula los tres menores principales; hay un parámetro $\Rightarrow$ solo el último depende de él.</div>
+</details>
+
+<details class="sol" id="ej-propio-4"><summary>Propio 4 — producto integral en polinomios: Gram, norma y ángulo <span class="src" data-l="P" data-ref="Ejemplo propio; cf. U Ejemplo 5.3 p. 195 y Ejemplo 5.14 p. 202">propio</span></summary>
+  <p class="enun">En $\mathcal P_2$ (grado $\le2$) sea $p\bullet q=\int_{-1}^1p(x)q(x)\,dx$. (a) Justifica que es producto escalar. (b) Matriz de Gram en $\{1,x,x^2\}$. (c) Norma de $1+x$ y de $x^2$ y coseno del ángulo que forman.</p>
+  <ol class="steps">
+    <li><b>(a)</b> Simetría ($pq=qp$) y linealidad (de la integral). Positividad: $p\bullet p=\int p^2\ge0$; si $\int_{-1}^1p^2=0$ con $p^2\ge0$ continua, $p\equiv0$ en $[-1,1]$, y un polinomio con infinitas raíces es el nulo ✓.</li>
+    <li><b>(b)</b> $\int_{-1}^1x^m\,dx=0$ si $m$ impar y $\frac2{m+1}$ si par: $G=\begin{pmatrix}2&0&\frac23\cr0&\frac23&0\cr\frac23&0&\frac25\end{pmatrix}$ ($\Delta=2,\frac43,\frac{32}{135}>0$ ✓).</li>
+    <li><b>(c)</b> $1+x\leftrightarrow(1,1,0)$, $x^2\leftrightarrow(0,0,1)$. $(1+x)\bullet x^2=g_{13}+g_{23}=\frac23$; $\|1+x\|^2=g_{11}+2g_{12}+g_{22}=2+\frac23=\frac83$, $\|1+x\|=\frac{2\sqrt6}3$; $\|x^2\|=\sqrt{2/5}=\frac{\sqrt{10}}5$. $\cos=\dfrac{2/3}{\frac{2\sqrt6}3\cdot\frac{\sqrt{10}}5}=\dfrac{\sqrt{15}}6\approx0{,}645$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en un espacio de polinomios, escribe vectores en coordenadas $(a_0,a_1,a_2)$ y usa $X^tGY$; $G$ se obtiene con $\int x^{i+j}$.</div>
+</details>
+
+<details class="sol" id="ej-propio-5"><summary>Propio 5 — cambio de base $G'=Q^tGQ$ <span class="src" data-l="P" data-ref="Ejemplo propio; U Teorema 5.1, p. 198">propio</span></summary>
+  <p class="enun">Con $G=\begin{pmatrix}2&1\cr1&1\end{pmatrix}$ (Propio 1) en la canónica, halla $G'$ en $B'=\{(1,0),(1,-2)\}$ y comprueba con $u=(1,1)_{B'}$, $w=(2,-1)_{B'}$.</p>
+  <ol class="steps">
+    <li>$Q=\begin{pmatrix}1&1\cr0&-2\end{pmatrix}$ (columnas = vectores de $B'$).</li>
+    <li>$GQ=\begin{pmatrix}2&0\cr1&-1\end{pmatrix}$; $G'=Q^t(GQ)=\begin{pmatrix}1&0\cr1&-2\end{pmatrix}\begin{pmatrix}2&0\cr1&-1\end{pmatrix}=\begin{pmatrix}2&0\cr0&2\end{pmatrix}$.</li>
+    <li><b>Lectura:</b> $B'$ es <b>ortogonal</b> para este producto (aunque $(1,0)\cdot(1,-2)=1\ne0$ con el estándar). $\det G'=4=(\det Q)^2\det G=4\cdot1$ ✓.</li>
+    <li><b>Comprobación:</b> $u\bullet w=(1,1)G'(2,-1)^t=2(2-1)=2$. En canónicas: $u=Q(1,1)^t=(2,-2)$, $w=Q(2,-1)^t=(1,2)$ y $(2,-2)G(1,2)^t=(2,-2)\cdot(4,3)=2$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $G'=Q^tGQ$; verifica con un par de vectores calculados en las dos bases.</div>
+</details>
+
+<details class="sol" id="ej-propio-6"><summary>Propio 6 — norma, ángulo y distancia con una $G$ no estándar <span class="src" data-l="P" data-ref="Ejemplo propio; U Definiciones 5.3-5.7, p. 199-202">propio</span></summary>
+  <p class="enun">Con $G=\begin{pmatrix}2&1\cr1&1\end{pmatrix}$: normas de $e_1,e_2$, ángulo que forman, distancia entre ellos y un vector ortogonal a $e_1$.</p>
+  <ol class="steps">
+    <li>$e_1\bullet e_2=g_{12}=1$; $\|e_1\|=\sqrt2$, $\|e_2\|=1$.</li>
+    <li>$\cos=\frac1{\sqrt2\cdot1}=\frac{\sqrt2}2$: ángulo $45^\circ$ (¡no $90^\circ$ como con el estándar!).</li>
+    <li>$d(e_1,e_2)=\|(1,-1)\|=\sqrt{2-2+1}=1$.</li>
+    <li>Ortogonal a $e_1$: $(1,0)G(a,b)^t=2a+b=0\Rightarrow(1,-2)$ (coherente con Propio 5); $\|(1,-2)\|=\sqrt{2-4+4}=\sqrt2$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> con $G$: $\|x\|^2=X^tGX$, $\cos=\frac{X^tGY}{\|x\|\|y\|}$, $d(x,y)=\|x-y\|$; nada de «los vectores canónicos son perpendiculares» sin mirar $G$.</div>
+</details>
+
+<details class="sol" id="ej-propio-7"><summary>Propio 7 — Cauchy-Schwarz y desigualdad triangular <span class="src" data-l="L" data-ref="Lay §6.7, Teoremas 16 y 17, p. 379-380">L p.379-380</span></summary>
+  <p class="enun">Con el estándar de $\mathbb R^3$, $u=(1,2,2)$, $v=(2,-1,2)$: comprueba $|u\cdot v|\le\|u\|\|v\|$ y $\|u+v\|\le\|u\|+\|v\|$. ¿Por qué garantiza Cauchy-Schwarz que la Def. 5.6 tiene sentido?</p>
+  <ol class="steps">
+    <li>$u\cdot v=4$, $\|u\|=\|v\|=3$: $4\le9$ ✓. $u+v=(3,1,4)$, $\|u+v\|=\sqrt{26}\approx5{,}10\le6$ ✓.</li>
+    <li><b>Sentido del coseno:</b> Cauchy-Schwarz da $-1\le\frac{u\bullet v}{\|u\|\|v\|}\le1$ en <b>cualquier</b> espacio euclídeo, luego existe un ángulo con ese coseno (U lo usa sin demostrarlo).</li>
+    <li><b>La triangular se deduce:</b> $\|u+v\|^2=\|u\|^2+2u\bullet v+\|v\|^2\le\|u\|^2+2\|u\|\|v\|+\|v\|^2=(\|u\|+\|v\|)^2$.</li>
+    <li><b>Igualdad</b> solo si son proporcionales (aquí no: $4\lt 9$).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «justifica que el ángulo está bien definido» $\Rightarrow$ Cauchy-Schwarz.</div>
+</details>
+
+<details class="sol" id="ej-propio-8"><summary>Propio 8 — ortogonal a un subespacio con $G$ no estándar <span class="src" data-l="P" data-ref="Ejemplo propio; U Definiciones 5.8 y 5.10, p. 203 y 209">propio</span></summary>
+  <p class="enun">En $\mathbb R^3$ con $G=\begin{pmatrix}1&1&0\cr1&2&1\cr0&1&2\end{pmatrix}$ (Propio 3 con $k=2$, definida positiva) halla $U^\perp$ para (a) $U=\langle(1,0,0)\rangle$, (b) $L_1=\langle(1,0,0),(0,0,1)\rangle$ y compáralo con el estándar.</p>
+  <ol class="steps">
+    <li><b>(a)</b> $(1,0,0)G=(1,1,0)$, ecuación $x+y=0$: $U^\perp=\langle(-1,1,0),(0,0,1)\rangle$, $\dim2=3-1$. (Con el estándar sería $x=0$.)</li>
+    <li><b>(b)</b> $(1,0,0)G=(1,1,0)$ y $(0,0,1)G=(0,1,2)$: $x+y=0$, $y+2z=0\Rightarrow z=t$, $y=-2t$, $x=2t$: $L_1^\perp=\langle(2,-2,1)\rangle$. (Con el estándar, Ejercicio 5.6 D: $\langle(0,1,0)\rangle$.)</li>
+    <li><b>Comprobación:</b> $(2,-2,1)\notin L_1$ ($y\ne0$), luego $L_1\oplus L_1^\perp=\mathbb R^3$.</li>
+  </ol>
+  <p><b>Moraleja:</b> el ortogonal depende del producto escalar; cada condición es $u_i^tGX=0$, no $u_i^tX=0$.</p>
+</details>
+
+<details class="sol" id="ej-propio-9"><summary>Propio 9 — Gram-Schmidt en $\mathbb R^3$ reescalando para evitar fracciones <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.1.5, p. 207-208">propio</span></summary>
+  <p class="enun">Ortonormaliza $\{(1,1,0),(1,0,1),(0,1,1)\}$ (estándar).</p>
+  <ol class="steps">
+    <li>$e_1=(1,1,0)$, $e_1\cdot e_1=2$.</li>
+    <li>$e_2=(1,0,1)-\frac12(1,1,0)=\left(\frac12,-\frac12,1\right)$; reescalado, $e_2'=(1,-1,2)$ ($e_2'\cdot e_2'=6$). Control $e_1\cdot e_2'=0$ ✓.</li>
+    <li>$e_3=(0,1,1)-\frac{(0,1,1)\cdot e_1}2e_1-\frac{(0,1,1)\cdot e_2'}6e_2'=(0,1,1)-\frac12(1,1,0)-\frac16(1,-1,2)=\left(-\frac23,\frac23,\frac23\right)$, o $e_3'=(-1,1,1)$. Controles: $e_3'\cdot e_1=0$, $e_3'\cdot e_2'=-1-1+2=0$ ✓.</li>
+    <li><b>Normalizar:</b> $$\left\{\frac1{\sqrt2}(1,1,0),\ \frac1{\sqrt6}(1,-1,2),\ \frac1{\sqrt3}(-1,1,1)\right\}.$$</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en cada paso puedes reescalar $e_i$ (ortogonalidad intacta; al normalizar el factor desaparece).</div>
+</details>
+
+<details class="sol" id="ej-propio-10"><summary>Propio 10 — Gram-Schmidt en polinomios y mejor aproximación <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.1.5 p. 207-208 y Teorema 5.4 p. 213">propio</span></summary>
+  <p class="enun">Con $p\bullet q=\int_{-1}^1pq$: (a) ortogonaliza $\{1,x,x^2\}$; (b) halla el polinomio de grado $\le1$ más próximo a $x^3$ y la distancia.</p>
+  <ol class="steps">
+    <li><b>(a)</b> $e_1=1$, $e_1\bullet e_1=2$. $e_2=x-\frac{\int x}{2}\cdot1=x$ ($\int_{-1}^1x=0$), $e_2\bullet e_2=\frac23$. $e_3=x^2-\frac{x^2\bullet1}2\cdot1-\frac{x^2\bullet x}{2/3}x=x^2-\frac13$, con $\|e_3\|^2=\int(x^4-\frac23x^2+\frac19)=\frac25-\frac49+\frac29=\frac8{45}$. Ortonormal: $\left\{\frac1{\sqrt2},\sqrt{\tfrac32}\,x,\tfrac{3\sqrt{10}}4\left(x^2-\tfrac13\right)\right\}$ (son, salvo constantes, los polinomios de Legendre).</li>
+    <li><b>(b)</b> Por el Teorema 5.4 es $\operatorname{Proy}_{\langle1,x\rangle}x^3$ con la base ortogonal $\{1,x\}$: $c_1=\frac{\int x^3}2=0$, $c_2=\frac{\int x^4}{2/3}=\frac{2/5}{2/3}=\frac35$. Proyección: $\frac35x$.</li>
+    <li><b>Distancia:</b> $\|x^3-\frac35x\|^2=\int(x^6-\frac65x^4+\frac9{25}x^2)=\frac27-\frac{12}{25}+\frac6{25}=\frac8{175}$, $d=\frac{2\sqrt{14}}{35}\approx0{,}214$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «mejor aproximación por polinomios de grado $\le k$» = proyección sobre $\langle1,\dots,x^k\rangle$ con base ortogonal obtenida por Gram-Schmidt.</div>
+</details>
+
+<details class="sol" id="ej-propio-11"><summary>Propio 11 — proyección sobre recta y plano de $\mathbb R^3$, descomposición y Pitágoras <span class="src" data-l="P" data-ref="Ejemplo propio; U Definiciones 5.11-5.12 y Ec. (5.2), p. 210-212">propio</span></summary>
+  <p class="enun">(a) Proyecta $v=(1,2,3)$ sobre la recta $\langle(1,1,1)\rangle$. (b) Proyecta $v=(2,0,3)$ sobre el plano $U=\langle(1,0,1),(0,1,1)\rangle$. En ambos, descompón $v=u+w$, calcula la distancia mínima y comprueba Pitágoras. (Mismos datos que las animaciones del apartado 6.)</p>
+  <ol class="steps">
+    <li><b>(a)</b> $d=(1,1,1)$: $u=\frac{v\cdot d}{d\cdot d}d=\frac63(1,1,1)=(2,2,2)$. $w=v-u=(-1,0,1)$, $w\cdot d=0$ ✓. Distancia $\|w\|=\sqrt2$. Pitágoras: $\|v\|^2=14=\|u\|^2+\|w\|^2=12+2$ ✓.</li>
+    <li><b>(b) Base ortogonal de $U$</b> (los generadores no lo son: $(1,0,1)\cdot(0,1,1)=1$): $e_1=(1,0,1)$, $e_2=(0,1,1)-\frac12(1,0,1)=\left(-\frac12,1,\frac12\right)\to(-1,2,1)$.</li>
+    <li><b>Fourier</b> (5.2): $u=\frac{v\cdot e_1}2e_1+\frac{v\cdot e_2}6e_2=\frac52(1,0,1)+\frac16(-1,2,1)=\left(\frac73,\frac13,\frac83\right)$.</li>
+    <li>$w=v-u=\left(-\frac13,-\frac13,\frac13\right)$, paralelo a la normal $n=(1,0,1)\times(0,1,1)=(-1,-1,1)$ ✓. Distancia $\|w\|=\frac1{\sqrt3}$; atajo $\frac{|v\cdot n|}{\|n\|}=\frac{|-2+3|}{\sqrt3}$ ✓.</li>
+    <li><b>Pitágoras:</b> $\|v\|^2=13=\|u\|^2+\|w\|^2=\frac{49+1+64}9+\frac39=\frac{117}9=13$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> proyecta sobre una base <b>ortogonal</b>; controla $w\perp U$ y Pitágoras.</div>
+</details>
+
+<details class="sol" id="ej-propio-12"><summary>Propio 12 — complemento ortogonal por ecuaciones y $\dim U+\dim U^\perp=n$ <span class="src" data-l="P" data-ref="Ejemplo propio; U Definición 5.10 p. 209; Lay §6.1 Teorema 3, p. 335">propio</span></summary>
+  <p class="enun">En $\mathbb R^4$ (estándar): (a) $U=\langle(1,1,0,0),(0,1,1,1)\rangle$; (b) $W=\{x+y+z+t=0\}$. Halla $U^\perp$ y $W^\perp$ con ecuaciones, bases y dimensiones.</p>
+  <ol class="steps">
+    <li><b>(a) Generadores $\to$ ecuaciones:</b> $x+y=0$ y $y+z+t=0$. Libres $z,t$: $y=-z-t$, $x=z+t$, $U^\perp=\langle(1,-1,1,0),(1,-1,0,1)\rangle$. $\dim U+\dim U^\perp=2+2=4$ ✓.</li>
+    <li><b>(b) Ecuaciones $\to$ generadores:</b> $W$ es justamente el conjunto de vectores ortogonales a $(1,1,1,1)$, así $W^\perp=\langle(1,1,1,1)\rangle$; $\dim W=3$, $3+1=4$ ✓.</li>
+    <li><b>Regla (estándar):</b> generadores de $U$ = filas de $A$ $\Rightarrow$ $U^\perp=\{AX=0\}$ (Lay: $(\operatorname{Fil}A)^\perp=\operatorname{Nul}A$); si $U$ viene por ecuaciones, $U^\perp$ está generado por los vectores de coeficientes.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> generadores $\leftrightarrow$ ecuaciones: se intercambian al pasar de $U$ a $U^\perp$.</div>
+</details>
+
+<h3 id="autoeval">Autoevaluación de U (capítulo 5) — ítems de este tema</h3>
+<div class="box ex"><span class="h">Ejercicios de autoevaluación 1-5, 7 y 8 (U p.238-239; soluciones p.313-314)</span>
+  <ul>
+    <li><b>1. «El producto escalar definido en un espacio vectorial siempre es único.» Falso.</b> Hay infinitos (en $\mathbb R^2$: $G=I$, $G=\begin{pmatrix}4&1\cr1&9\end{pmatrix}$, …).</li>
+    <li><b>2. «El único vector que posee norma 0 es el vector neutro.» Verdadero.</b> $\|v\|=0\iff v\bullet v=0\iff v=0$ (propiedad 5).</li>
+    <li><b>3. «Si dos vectores son ortogonales, entonces ninguno de ellos es el vector nulo.» Verdadero según U</b> (la solución dice que la ortogonalidad se define para vectores no nulos, Def. 5.7). Ojo: en el mismo apartado U acepta «por convenio» que $0$ es ortogonal a todo vector; con ese convenio el ítem sería falso. Para el examen: la Def. 5.7 de U (vectores <b>no nulos</b>) y la respuesta «Verdadero».</li>
+    <li><b>4. «Para definir un producto escalar basta fijar una base y dar una matriz métrica en dicha base.» Verdadero</b> (U), entendiendo «matriz métrica» como matriz de Gram válida: simétrica y definida positiva. La matriz depende de la base pero el producto es el mismo.</li>
+    <li><b>5. «La matriz métrica puede tener en la diagonal valores negativos.» Falso.</b> $g_{ii}=e_i\bullet e_i>0$ (propiedades 4-5).</li>
+    <li><b>7. «Si dos subespacios $U,U'$ de un espacio euclídeo son ortogonales entonces $U+U'$ es suma directa.» Verdadero.</b> Si $x\in U\cap U'$, $x\perp x$: $x\bullet x=0\Rightarrow x=0$. Luego $U\cap U'=\{0\}$ (caracterización de la suma directa, U p.97).</li>
+    <li><b>8. «No siempre es posible hallar una base ortonormal de un espacio euclídeo.» Falso.</b> Gram-Schmidt (en dimensión finita siempre).</li>
+  </ul>
+  <p>Los ítems 6 y 9 son de las secciones 5.2 y 5.3, y el 10 de la 5.4.</p>
+  <span class="src" data-l="U" data-ref="U Ejercicios de Autoevaluación del capítulo 5, ítems 1-5, 7 y 8, p. 238-239; soluciones p. 313-314">U p.238-239, 313-314</span>
+</div>
+
+<!-- ============================ 9 ============================ -->
+<h2 id="examenes"><span class="n">9</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025), <b>22 ejercicios o apartados</b> tienen el producto escalar como contenido principal. Se agrupan por método: <b>A</b> ¿es producto escalar? y matriz de Gram; <b>B</b> norma, distancia y ángulo; <b>C</b> sistemas ortogonales y ortonormales; <b>D</b> Gram-Schmidt; <b>E</b> subespacio ortogonal y suplementario; <b>F</b> proyección ortogonal. Las soluciones oficiales son breves y a veces tienen erratas: aquí se desarrolla el razonamiento completo (todo verificado con sympy) y se avisa de lo que falla en la oficial. Se usa siempre el producto estándar cuando el enunciado no dice otro (U p.203).</p>
+
+<div class="box tip"><span class="h">Enlaces: ya desarrollados en otros temas (no se repiten aquí)</span>
+  <ul>
+    <li><b>Ene. 2022 (A), ej. 5</b> — matrices de Gram del mismo producto en dos bases (Teorema 5.1): <a href="tema_4_1_relaciones_equivalencia.html#ex-ene22a-5">tema 4.1, #ex-ene22a-5</a>.</li>
+    <li><b>Feb. 2023 (2.ª sem.), problema 7 (iv)</b> — base ortonormal de $U=\langle E\rangle$: <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb23b">tema 2.3, #ex-feb23b</a>. Nota de 5.1: con Gram-Schmidt sobre $\{(1,3,1),(3,8,2)\}$ sale $e_2=w_2-\frac{29}{11}w_1=\frac1{11}(4,1,-7)$, proporcional al $(-4,-1,7)$ de la oficial; base ortonormal $\{\frac1{\sqrt{11}}(1,3,1),\frac1{\sqrt{66}}(-4,-1,7)\}$. No se puede «extraer» de $E$ (ningún par de $E$ es ortogonal).</li>
+  </ul>
+  <span class="src" data-l="X" data-ref="Ene. 2022 (A) ej. 5; Feb. 2023 (2.ª sem.) p. 7 (iv)">X</span>
+</div>
+
+<h3 id="metodoA">Método A — ¿Es un producto escalar? Matriz de Gram</h3>
+
+<details class="sol" id="ex-feb23b-5"><summary>Feb. 2023 (2.ª sem.), pregunta 5 — ¿define un producto escalar en $\mathbb R^4$? <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª semana), pregunta 5">X Feb. 2023 (2.ª) P5</span></summary>
+  <p class="enun">Estudiar si $(x_1,x_2,x_3,x_4)\bullet(y_1,y_2,y_3,y_4)=10x_1y_1-x_2y_2-7x_3y_4-7x_4y_3+x_3y_3+2x_4y_4$ define o no un producto escalar en $\mathbb R^4$.</p>
+  <p><b>Qué se pide.</b> Comprobar la Def. 5.1; para decir «no» basta un contraejemplo (como U en el Ejemplo 5.2).</p>
+  <ol class="steps">
+    <li><b>Las tres primeras sí.</b> La expresión es un polinomio con un término $x_iy_j$ en cada sumando: lineal en $x$ (propiedades 2-3); y simétrica porque los coeficientes de $x_3y_4$ y $x_4y_3$ son iguales ($-7$) y el resto son $x_iy_i$.</li>
+    <li><b>Probar la 4.</b> El término $-x_2y_2$ es negativo: con $u=(0,1,0,0)$, $u\bullet u=-1\lt 0$.</li>
+    <li><b>Conclusión:</b> falla la propiedad 4: <b>no</b> es producto escalar. (Otro testigo: $(0,0,1,1)$ da $1-14+2=-11\lt 0$.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> para refutar, busca un vector (empieza por los de la base canónica, $e_i\bullet e_i=g_{ii}$) con $u\bullet u\lt 0$ o con $u\bullet u=0$ y $u\ne0$. Para probar que sí lo es, hay que verificar las cinco propiedades para todo vector.</div>
+  <p><b>Error típico:</b> (i) «No es producto escalar porque no es el usual»: hay infinitos. (ii) Escribir «$u\bullet u=-1\le0$»: «$\le0$» no refuta nada (el $0$ cumple $0\ge0$); hace falta $\lt 0$, o $=0$ con $u\ne0$. La oficial escribe «$\le0$»: el número es correcto, la desigualdad está mal elegida.</p>
+</details>
+
+<details class="sol" id="ex-feb23a-5"><summary>Feb. 2023 (1.ª sem.), pregunta 5 — matriz de Gram a partir de la expresión <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª semana), pregunta 5">X Feb. 2023 (1.ª) P5</span></summary>
+  <p class="enun">Calcule la matriz de Gram respecto de la base canónica del producto escalar de $\mathbb R^3$ dado por $(x_1,x_2,x_3)\bullet(y_1,y_2,y_3)=8x_1y_1-3x_1y_2-3x_2y_1+5x_2y_2+9x_3y_3$.</p>
+  <ol class="steps">
+    <li><b>Definición:</b> $G=(g_{ij})$, $g_{ij}=e_i\bullet e_j$ (Def. 5.2), y $x\bullet y=X^tGY=\sum g_{ij}x_iy_j$ (en la canónica, coordenadas = componentes).</li>
+    <li><b>$g_{ij}$ = coeficiente de $x_iy_j$</b> (método del Ejemplo 5.5 de U): $g_{11}=8$, $g_{12}=-3$, $g_{21}=-3$, $g_{22}=5$, $g_{33}=9$; los demás no aparecen: $0$.</li>
+    <li><b>Comprobación directa:</b> $e_1\bullet e_2$: solo sobrevive $-3x_1y_2=-3$ ✓.
+      $$G=\begin{pmatrix}8&-3&0\cr-3&5&0\cr0&0&9\end{pmatrix}.$$</li>
+    <li><b>Coherencia:</b> simétrica, $g_{ii}>0$ (y $\Delta=8,31,279>0$).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $g_{ij}$ = coeficiente de $x_iy_j$. Un término cruzado $c\,x_1y_2$ va <b>entero</b> a la posición $(1,2)$.</div>
+  <p><b>Error típico:</b> dividir entre $2$ los coeficientes cruzados como en una forma cuadrática ($-3x_1y_2-3x_2y_1$ ya están separados). Si la expresión trajera $-6x_1y_2$ y nada en $x_2y_1$, no sería simétrica ni producto escalar.</p>
+</details>
+
+<details class="sol" id="ex-feb22a-5"><summary>Feb. 2022 (tipo A), ejercicio 5 — Gram del estándar en otra base <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A, Algebra_Febrero22A2), ejercicio 5">X Feb. 2022 (A) ej. 5</span></summary>
+  <p class="enun">Calcule la matriz asociada al producto escalar estándar en $\mathbb R^3$ respecto de la base $\{(1,1,1),(2,1,1),(2,0,1)\}$.</p>
+  <ol class="steps">
+    <li><b>Es base:</b> $\det\begin{pmatrix}1&2&2\cr1&1&0\cr1&1&1\end{pmatrix}=-1\ne0$.</li>
+    <li><b>Tabla de productos</b> ($g_{ij}=v_i\cdot v_j$, por simetría basta calcular 6): $v_1\cdot v_1=3$, $v_1\cdot v_2=2+1+1=4$, $v_1\cdot v_3=2+0+1=3$, $v_2\cdot v_2=6$, $v_2\cdot v_3=4+0+1=5$, $v_3\cdot v_3=5$.
+      $$G'=\begin{pmatrix}3&4&3\cr4&6&5\cr3&5&5\end{pmatrix}.$$</li>
+    <li><b>Otra vía (Teor. 5.1):</b> $G'=Q^tIQ=Q^tQ$ con los vectores en columnas de $Q$. Mismo resultado (y $\det G'=(\det Q)^2=1$).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> Gram del estándar en una base $=$ tabla de productos escalares de sus vectores $=Q^tQ$.</div>
+  <p><b>Error típico:</b> calcular $QQ^t$ (filas por filas) o dar la identidad «porque es el estándar»: $G=I$ solo en una base ortonormal (U p.206).</p>
+</details>
+
+<details class="sol" id="ex-feb19a-pc"><summary>Feb. 2019 (tipo A), problema c) — Gram a partir de $e_i\bullet e_j=ij$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), problema c)">X Feb. 2019 (A) pb. c)</span></summary>
+  <p class="enun">En el espacio euclídeo $\mathbb R^4$ hay una base $B=\{e_1,\dots,e_4\}$ con $e_i\bullet e_j=i\cdot j$ para $i\ne j$ y $|e_i|^2=1+i^2$. Hallar la matriz de Gram en $B$.</p>
+  <ol class="steps">
+    <li><b>Definición:</b> $g_{ij}=e_i\bullet e_j$.</li>
+    <li><b>Fuera de la diagonal</b> ($i\ne j$): $g_{ij}=ij$: $g_{12}=2$, $g_{13}=3$, $g_{14}=4$, $g_{23}=6$, $g_{24}=8$, $g_{34}=12$ (y simétricos).</li>
+    <li><b>Diagonal:</b> $g_{ii}=\|e_i\|^2=1+i^2$: $2,5,10,17$.
+      $$G=\begin{pmatrix}2&2&3&4\cr2&5&6&8\cr3&6&10&12\cr4&8&12&17\end{pmatrix}.$$</li>
+    <li><b>Control:</b> simétrica y $g_{ii}>0$. (Curiosidad: $G=I+ww^t$ con $w=(1,2,3,4)^t$, así $X^tGX=\|X\|^2+(w\cdot X)^2>0$: los datos son coherentes.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> diagonal = normas al cuadrado; fuera = productos cruzados.</div>
+  <p><b>Error típico:</b> poner la norma $\sqrt{1+i^2}$ en la diagonal, o poner $i\cdot i=i^2$ olvidando que la regla $ij$ es solo para $i\ne j$.</p>
+</details>
+
+<h3 id="metodoB">Método B — Norma, distancia y ángulo</h3>
+
+<details class="sol" id="ex-feb18a-5"><summary>Feb. 2018 (tipo A), ejercicio 5 — coseno del ángulo (estándar) <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), ejercicio 5">X Feb. 2018 (A) ej. 5</span></summary>
+  <p class="enun">Calcule el coseno del ángulo que forman $(1,2,3)$ y $(1,1,5)$ en $\mathbb R^3$ con el producto escalar estándar.</p>
+  <ol class="steps">
+    <li><b>Fórmula</b> (Def. 5.6): $\cos=\dfrac{u\cdot v}{\|u\|\|v\|}$.</li>
+    <li>$u\cdot v=1+2+15=18$; $\|u\|=\sqrt{14}$; $\|v\|=\sqrt{27}=3\sqrt3$.</li>
+    <li>$\cos=\dfrac{18}{3\sqrt{42}}=\dfrac6{\sqrt{42}}=\dfrac{\sqrt{42}}7\approx0{,}926$ (ángulo $\approx22{,}2^\circ$; positivo, agudo).</li>
+  </ol>
+  <p>La oficial deja $\frac{1+2+15}{\sqrt{1+4+9}\sqrt{1+1+25}}$ sin simplificar (vale en examen).</p>
+  <div class="recipe"><b>Receta:</b> producto, dos normas, dividir; simplifica raíces ($\sqrt{14}\sqrt{27}=3\sqrt{42}$).</div>
+  <p><b>Error típico:</b> olvidar las raíces de las normas (dividir entre $14\cdot27$).</p>
+</details>
+
+<details class="sol" id="ex-sep22-5"><summary>Sept. 2022, ejercicio 5 — norma de $u_1-u_2$ con la Gram en la base $\{u_1,u_2\}$ <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 5">X Sept. 2022 ej. 5</span></summary>
+  <p class="enun">$\{u_1,u_2\}$ es una base de $\mathbb R^2$ con un producto escalar cuya matriz de Gram tiene por filas $(1,\frac32)$ y $(\frac32,10)$. Hallar la norma de $u_1-u_2$.</p>
+  <ol class="steps">
+    <li><b>La Gram es en la base $\{u_1,u_2\}$:</b> $u_1\bullet u_1=1$, $u_1\bullet u_2=\frac32$, $u_2\bullet u_2=10$. No hace falta saber quiénes son $u_1,u_2$.</li>
+    <li><b>Vía propiedades:</b> $(u_1-u_2)\bullet(u_1-u_2)=u_1\bullet u_1-2\,u_1\bullet u_2+u_2\bullet u_2=1-3+10=8$.</li>
+    <li><b>Vía matricial:</b> coordenadas $(1,-1)$: $\begin{pmatrix}1&-1\end{pmatrix}\begin{pmatrix}1&\frac32\cr\frac32&10\end{pmatrix}\begin{pmatrix}1\cr-1\end{pmatrix}=8$.</li>
+    <li>$\|u_1-u_2\|=\sqrt8=2\sqrt2$ (también $d(u_1,u_2)$).</li>
+  </ol>
+  <p><b>Aviso sobre la oficial:</b> escribe «$(u_1-u_2)\cdot(u_1-u_2)=\sqrt{\dots}=\sqrt8$», mezclando el producto escalar (que vale $8$) con la norma ($\sqrt8$). El resultado es correcto.</p>
+  <div class="recipe"><b>Receta:</b> con la Gram en una base: coordenadas del vector en <b>esa</b> base, $X^tGX$, raíz.</div>
+  <p><b>Error típico:</b> usar las componentes de $u_1,u_2$ como si fuera la canónica, o el producto estándar ($\|(1,-1)\|=\sqrt2$, mal).</p>
+</details>
+
+<details class="sol" id="ex-sep25-6"><summary>Sept. 2025, pregunta 6 — norma con una matriz de Gram $3\times3$ <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 6">X Sept. 2025 P6</span></summary>
+  <p class="enun">En $\mathbb R^3$ se define un producto escalar cuya matriz de Gram en la base canónica es $\begin{pmatrix}1&1&0\cr1&2&-1\cr0&-1&5\end{pmatrix}$. Calcule la norma del vector $(1,1,2)$.</p>
+  <ol class="steps">
+    <li>$u\bullet u=U^tGU$ (en la canónica las coordenadas son las componentes).</li>
+    <li>$GU=\begin{pmatrix}1+1+0\cr1+2-2\cr0-1+10\end{pmatrix}=\begin{pmatrix}2\cr1\cr9\end{pmatrix}$; $U^t(GU)=2+1+18=21$.</li>
+    <li>$\|u\|=\sqrt{21}$. (Comprobación: $G$ es definida positiva, menores $1,1,4$.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> multiplica primero $GU$ (una columna) y luego $U^t$: menos errores que desarrollar los 9 términos.</div>
+  <p><b>Error típico:</b> usar el estándar ($1+1+4=6$) u olvidar la raíz.</p>
+</details>
+
+<details class="sol" id="ex-feb24b-5"><summary>Feb. 2024 (2.ª sem.), pregunta 5 — norma con Gram (enunciado defectuoso) <span class="src" data-l="X" data-ref="Feb. 2024 (2.ª semana), pregunta 5">X Feb. 2024 (2.ª) P5</span></summary>
+  <p class="enun">En $\mathbb R^3$ se define un producto escalar cuya matriz de Gram en la base canónica es $G=\begin{pmatrix}2&3&1\cr3&1&0\cr1&0&2\end{pmatrix}$. Calcule la norma del vector $(1,0,2)$.</p>
+  <ol class="steps">
+    <li>$GU=\begin{pmatrix}2+0+2\cr3+0+0\cr1+0+4\end{pmatrix}=\begin{pmatrix}4\cr3\cr5\end{pmatrix}$, $U^tGU=4+0+10=14$.</li>
+    <li>$\|(1,0,2)\|=\sqrt{14}$ (coincide con la oficial).</li>
+  </ol>
+  <p><b>Aviso (error del enunciado).</b> Esa $G$ <b>no puede ser de Gram</b>: con $w=(1,-1,0)$, $W^tGW=\begin{pmatrix}1&-1&0\end{pmatrix}\begin{pmatrix}-1\cr2\cr1\end{pmatrix}=-3\lt 0$, violando la propiedad 4. Pasa las dos comprobaciones de U p.197 (simétrica, $g_{ii}>0$): <b>no son suficientes</b>. (Sylvester: menores $2,-7,-15$.) El cálculo pedido sale igual, pero conviene señalarlo.</p>
+  <div class="recipe"><b>Receta:</b> igual que Sept. 2025. <b>Truco de control:</b> en cada bloque $2\times2$, si $g_{ij}^2>g_{ii}g_{jj}$, el enunciado es incoherente (aquí $9>2\cdot1$).</div>
+  <p><b>Error típico:</b> creer que «simétrica con diagonal positiva» basta para que sea de Gram.</p>
+</details>
+
+<details class="sol" id="ex-feb26b-5"><summary>Feb. 2026 (2.ª sem.), pregunta 5 — norma en $\mathcal M_{2\times2}$ con $\operatorname{traza}(A^tB)$ <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª semana), pregunta 5">X Feb. 2026 (2.ª) P5</span></summary>
+  <p class="enun">En $\mathcal M_{2\times2}$ se define $A\bullet B=\operatorname{traza}(A^tB)$. Calcule la norma de $\begin{pmatrix}5&-9\cr2&1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Norma</b> (Def. 5.3): $\|A\|=\sqrt{\operatorname{traza}(A^tA)}$.</li>
+    <li>$A^tA=\begin{pmatrix}5&2\cr-9&1\end{pmatrix}\begin{pmatrix}5&-9\cr2&1\end{pmatrix}=\begin{pmatrix}29&-43\cr-43&82\end{pmatrix}$; solo hace falta la diagonal: $25+4=29$ y $81+1=82$.</li>
+    <li>$\operatorname{traza}=111$, $\|A\|=\sqrt{111}$.</li>
+    <li><b>Atajo.</b> El elemento $(j,j)$ de $A^tB$ es $\sum_ia_{ij}b_{ij}$; sumando, $\operatorname{traza}(A^tB)=\sum_{i,j}a_{ij}b_{ij}$: el producto <b>estándar</b> de las 4 entradas. Así $\|A\|^2=25+81+4+1=111$ ✓ (y por eso cumple la Def. 5.1).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> $\operatorname{traza}(A^tB)$ = suma de productos entrada a entrada; norma = raíz de la suma de cuadrados de las entradas.</div>
+  <p><b>Error típico:</b> calcular $\operatorname{traza}(A)$ o $\det(A^tA)$; olvidar la raíz.</p>
+</details>
+
+<h3 id="metodoC">Método C — Sistemas ortogonales y ortonormales</h3>
+
+<details class="sol" id="ex-feb26a-5"><summary>Feb. 2026 (1.ª sem.), pregunta 5 — un sistema ortogonal en $\mathcal M_{2\times2}$ <span class="src" data-l="X" data-ref="Feb. 2026 (1.ª semana), pregunta 5">X Feb. 2026 (1.ª) P5</span></summary>
+  <p class="enun">Sean $E_1=\begin{pmatrix}1&0\cr0&1\end{pmatrix}$, $E_2=\begin{pmatrix}1&0\cr0&-1\end{pmatrix}$, $E_3=\begin{pmatrix}0&1\cr1&0\end{pmatrix}$, $E_4=\begin{pmatrix}0&-1\cr1&0\end{pmatrix}$ con $A\bullet B=\operatorname{traza}(A^tB)$. Demuestre que $E=\{E_1,E_2,E_3,E_4\}$ es ortogonal.</p>
+  <ol class="steps">
+    <li><b>Qué probar</b> (Def. 5.9): (a) $E_i\bullet E_j=0$ para $i\ne j$ (6 productos) y (b) $E_i\ne0$.</li>
+    <li><b>Herramienta:</b> $\operatorname{traza}(A^tB)=\sum a_{ij}b_{ij}$. Con las entradas en orden $(a_{11},a_{12},a_{21},a_{22})$: $E_1\sim(1,0,0,1)$, $E_2\sim(1,0,0,-1)$, $E_3\sim(0,1,1,0)$, $E_4\sim(0,-1,1,0)$.</li>
+    <li><b>Los 6 productos:</b> $E_1\bullet E_2=1-1=0$; $E_1\bullet E_3=0$; $E_1\bullet E_4=0$; $E_2\bullet E_3=0$; $E_2\bullet E_4=0$; $E_3\bullet E_4=-1+1=0$.</li>
+    <li><b>No nulos:</b> $E_i\bullet E_i=2\ne0$ (la oficial omite esta comprobación, que forma parte de la definición).</li>
+    <li><b>Conclusión:</b> $E$ es ortogonal. Por el Teorema 5.2 es libre, y son $4$ en un espacio de dimensión $4$: <b>base ortogonal</b>; $\{E_i/\sqrt2\}$ es ortonormal.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> sistema ortogonal: los $\binom n2$ pares dan $0$ <b>y</b> ningún vector es nulo.</div>
+  <p><b>Error típico:</b> comprobar solo productos consecutivos, o calcular $\operatorname{traza}(AB)$ sin trasponer (con $E_4$ cambia el signo: $\operatorname{traza}(E_4E_4)=-2$ mientras $E_4\bullet E_4=2$).</p>
+</details>
+
+<details class="sol" id="ex-feb25b-5"><summary>Feb. 2025 (2.ª sem.), pregunta 5 — $\{1,x,\frac{3x^2-1}2\}$ es ortogonal en $[-1,1]$ <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª semana), pregunta 5">X Feb. 2025 (2.ª) P5</span></summary>
+  <p class="enun">Sean $f_1=1$, $f_2=x$, $f_3=\frac{3x^2-1}2$. Demuestre que $\{f_1,f_2,f_3\}$ es ortogonal con $f\bullet g=\int_{-1}^1f(x)g(x)\,dx$.</p>
+  <ol class="steps">
+    <li><b>Qué probar:</b> los 3 productos cruzados son $0$ y ninguna función es nula (modelo: Ejemplo 5.20 de U).</li>
+    <li>$f_1\bullet f_2=\int_{-1}^1x\,dx=\left[\frac{x^2}2\right]_{-1}^1=0$.</li>
+    <li>$f_2\bullet f_3=\int_{-1}^1\frac{3x^3-x}2dx=\left[\frac{3x^4}8-\frac{x^2}4\right]_{-1}^1=0$.</li>
+    <li>$f_1\bullet f_3=\int_{-1}^1\frac{3x^2-1}2dx=\left[\frac{x^3}2-\frac x2\right]_{-1}^1=0$.</li>
+    <li><b>No nulas:</b> $f_1\bullet f_1=2$, $f_2\bullet f_2=\frac23$, $f_3\bullet f_3=\frac25$, todas $\ne0$. Luego ortogonal (y libre, Teorema 5.2).</li>
+  </ol>
+  <p><b>Aviso sobre la oficial:</b> en $f_1\bullet f_3$ escribe la primitiva $\left[\frac{3x^3}6-\frac x4\right]$; la correcta es $\frac{3x^3}6-\frac x2=\frac{x^3-x}2$. Con la primitiva oficial saldría $\frac12\ne0$; el «$=0$» final es correcto pero no se sigue de lo escrito. También omite comprobar que son no nulas.</p>
+  <div class="recipe"><b>Receta:</b> en un intervalo simétrico $[-a,a]$ un integrando <b>impar</b> ($x$, $x^3$) da $0$; justifícalo con la primitiva si piden «demuestre».</div>
+  <p><b>Error típico:</b> equivocarse en la primitiva (como la oficial) o integrar en $[0,1]$.</p>
+</details>
+
+<details class="sol" id="ex-sep18a-pc"><summary>Sept. 2018 (tipo A), problema c) — definir sistema ortonormal y dar un ejemplo <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), problema c)">X Sept. 2018 (A) pb. c)</span></summary>
+  <p class="enun">Definir y proporcionar un ejemplo de sistema ortonormal de un espacio euclídeo.</p>
+  <ol class="steps">
+    <li><b>Definición</b> (Def. 5.9): en $(V,\bullet)$, $S=\{u_1,\dots,u_p\}$ es <b>ortonormal</b> si $u_i\bullet u_j=0$ para $i\ne j$ (ortogonales dos a dos) y $\|u_i\|=1$ para todo $i$ (unitarios). (Un ortogonal exige además $u_i\neq0$: aquí es automático.)</li>
+    <li><b>Ejemplo no trivial</b> en $\mathbb R^2$ estándar: $S=\{(\frac35,\frac45),(-\frac45,\frac35)\}$. $u_1\cdot u_2=-\frac{12}{25}+\frac{12}{25}=0$; $\|u_1\|^2=\frac{9+16}{25}=1$, $\|u_2\|^2=1$.</li>
+    <li>La oficial da la base canónica $\{(1,0),(0,1)\}$, también válida.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> definición = dos condiciones (ortogonales + norma $1$); ejemplo = comprobar ambas con números, y decir respecto de qué producto.</div>
+  <p><b>Error típico:</b> definir solo «vectores perpendiculares» (falta norma $1$), u olvidar el producto escalar.</p>
+</details>
+
+<details class="sol" id="ex-feb19b-5"><summary>Feb. 2019 (tipo B), ejercicio 5 — ¿siempre hay una base ortonormal? <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), ejercicio 5">X Feb. 2019 (B) ej. 5</span></summary>
+  <p class="enun">Justificar si siempre es posible hallar una base ortonormal de un espacio euclídeo. Se puede razonar con un ejemplo concreto.</p>
+  <ol class="steps">
+    <li><b>Respuesta:</b> sí, en todo espacio euclídeo $V\ne\{0\}$ de dimensión finita.</li>
+    <li><b>Por qué.</b> $V$ tiene una base $B=\{u_1,\dots,u_n\}$ (tema 2.3), libre; Gram-Schmidt (U §5.1.5) produce un sistema ortonormal $S'$ con $\langle S'\rangle=\langle B\rangle=V$. Un ortonormal es ortogonal, luego libre (Teor. 5.2); como además genera, es base. U lo dice: «todo espacio euclídeo $V$ posee bases ortonormales» (p.208).</li>
+    <li><b>Ejemplo con un producto no estándar</b> (U Ejemplo 5.5): $G=\begin{pmatrix}4&1\cr1&9\end{pmatrix}$. La canónica no es ortonormal ($e_1\bullet e_1=4$, $e_1\bullet e_2=1$). $w_1=e_1=(1,0)$, $w_1\bullet w_1=4$; $w_2=e_2-\frac{e_2\bullet w_1}{w_1\bullet w_1}w_1=(0,1)-\frac14(1,0)=\left(-\frac14,1\right)$ (comprobación: $w_2\bullet w_1=-\frac14\cdot4+1\cdot1=0$ ✓); $w_2\bullet w_2=\frac{35}4$. Base ortonormal: $\left\{\left(\frac12,0\right),\left(-\frac1{2\sqrt{35}},\frac2{\sqrt{35}}\right)\right\}$.</li>
+    <li><b>Ejemplo más simple</b> (estándar): $\{(1,1),(0,2)\}\to\{(1,1),(-1,1)\}\to\left\{\frac1{\sqrt2}(1,1),\frac1{\sqrt2}(-1,1)\right\}$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «siempre existe base ortonormal» = «hay base + Gram-Schmidt + Teorema 5.2».</div>
+  <p><b>Error típico:</b> responder «sí, la canónica»: solo es ortonormal con el estándar. La oficial no justifica nada.</p>
+</details>
+
+<h3 id="metodoD">Método D — Gram-Schmidt</h3>
+
+<details class="sol" id="ex-sep19a-5"><summary>Sept. 2019 (tipo A), ejercicio 5 — base ortonormal a partir de $\{(1,0,1),(1,1,0),(0,0,2)\}$ <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), ejercicio 5">X Sept. 2019 (A) ej. 5</span></summary>
+  <p class="enun">Calcular una base ortonormal a partir de la base $\{(1,0,1),(1,1,0),(0,0,2)\}$.</p>
+  <p><b>Qué se pide.</b> Es exactamente el Ejemplo 5.21 de U (estándar, pues no se especifica otro).</p>
+  <ol class="steps">
+    <li><b>Ortogonalizar.</b> $e_1=(1,0,1)$, $e_1\cdot e_1=2$.</li>
+    <li>$e_2=u_2-\frac{u_2\cdot e_1}{e_1\cdot e_1}e_1=(1,1,0)-\frac12(1,0,1)=\left(\frac12,1,-\frac12\right)$. Control $e_2\cdot e_1=0$ ✓; $e_2\cdot e_2=\frac32$.</li>
+    <li>$u_3\cdot e_1=2$, $u_3\cdot e_2=-1$: $e_3=(0,0,2)-1\cdot(1,0,1)+\frac23\left(\frac12,1,-\frac12\right)=\left(-\frac23,\frac23,\frac23\right)$. Control: $e_3\cdot e_1=0$, $e_3\cdot e_2=-\frac13+\frac23-\frac13=0$ ✓.</li>
+    <li><b>Normalizar:</b> $\|e_1\|=\sqrt2$, $\|e_2\|=\sqrt{3/2}$, $\|e_3\|=\frac2{\sqrt3}$:
+      $$e_1'=\tfrac1{\sqrt2}(1,0,1),\quad e_2'=\tfrac1{\sqrt6}(1,2,-1),\quad e_3'=\tfrac1{\sqrt3}(-1,1,1).$$</li>
+  </ol>
+  <p><b>Truco:</b> antes de seguir, sustituye $e_2$ por $(1,2,-1)$ y $e_3$ por $(-1,1,1)$: la ortogonalidad no depende de la escala. <b>Comentario a la oficial:</b> añade «otra opción es un cambio de base a la canónica»: la canónica ya es ortonormal para el estándar, pero el ejercicio pide «a partir de la base» dada, es decir Gram-Schmidt.</p>
+  <div class="recipe"><b>Receta:</b> $e_k=u_k-\sum_{i\lt k}\frac{u_k\cdot e_i}{e_i\cdot e_i}e_i$ con los $e_i$ ya ortogonalizados; comprueba cada $e_k\cdot e_i=0$; normaliza al final.</div>
+  <p><b>Error típico:</b> proyectar sobre los $u_i$ originales en vez de sobre los $e_i$; normalizar en medio y usar la fórmula con un $e_i\cdot e_i$ equivocado.</p>
+</details>
+
+<h3 id="metodoE">Método E — Subespacio ortogonal y suplementario ortogonal</h3>
+
+<p><b>Idea común.</b> $x\perp U$ si lo es a un sistema generador (Def. 5.8): cada generador da una ecuación homogénea (Ejemplo 5.16). «Los ortogonales a $k$ vectores» es el núcleo de la matriz con esos vectores por filas: $\dim=n-\operatorname{rango}$. Si $U$ viene dado por ecuaciones, los coeficientes de cada ecuación son vectores ortogonales a $U$.</p>
+
+<details class="sol" id="ex-feb17a-5"><summary>Feb. 2017 (2.ª sem., tipo A), ejercicio 5 — test sobre $U^\perp$ en $\mathbb R^4$ <span class="src" data-l="X" data-ref="Feb. 2017 (2.ª semana, tipo A), ejercicio 5">X Feb. 2017 (A) ej. 5</span></summary>
+  <p class="enun">En $\mathbb R^4$ euclídeo, $U=\{x-y=0,\ z-t=0\}$. Entonces $U^\perp$ es: A) $\langle(1,-1,0,0),(-1,1,1,-1)\rangle$; B) $\{x=y=z=t\}$; C) $\{x-y=0,\ z+t=0\}$; D) ninguno.</p>
+  <ol class="steps">
+    <li><b>Base de $U$:</b> $(x,x,z,z)=x(1,1,0,0)+z(0,0,1,1)$, $\dim U=2$.</li>
+    <li><b>$U^\perp$:</b> $(a,b,c,d)\perp U\iff a+b=0,\ c+d=0$: $U^\perp=\langle(1,-1,0,0),(0,0,1,-1)\rangle$, $\dim=4-2=2$.</li>
+    <li><b>A.</b> $(1,-1,0,0)$: $1-1=0$, ✓. $(-1,1,1,-1)$: $-1+1=0$, $1-1=0$ ✓. No proporcionales: generan un subespacio de dimensión $2$ contenido en $U^\perp$ (de dimensión $2$) $\Rightarrow$ es $U^\perp$. <b>A es correcta.</b></li>
+    <li><b>B</b> es la recta $\langle(1,1,1,1)\rangle$ (dimensión $1$; además $(1,1,1,1)\cdot(1,1,0,0)=2\ne0$). Falsa. <b>C</b> contiene $(1,1,0,0)\in U$, que no es ortogonal a sí mismo. Falsa.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> para validar un candidato a $U^\perp$: cada generador suyo $\perp$ cada generador de $U$, <b>y</b> dimensión $=n-\dim U$.</div>
+  <p><b>Error típico:</b> tomar como $U^\perp$ las ecuaciones «parecidas» (opción C), o comprobar solo la ortogonalidad sin la dimensión (un subespacio más pequeño también es ortogonal, pero no es el suplementario).</p>
+</details>
+
+<details class="sol" id="ex-feb18a-pa"><summary>Feb. 2018 (tipo A), problema a) — $V$ ortogonal a dos vectores y $V^\perp$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), problema a)">X Feb. 2018 (A) pb. a)</span></summary>
+  <p class="enun">Calcular el subespacio $V$ de $\mathbb R^4$ de los vectores ortogonales a $(0,1,-1,4)$ y $(2,1,1,0)$ (0,5 ptos.). Hallar el subespacio $V^\perp$ ortogonal a $V$ (0,5 ptos.).</p>
+  <ol class="steps">
+    <li><b>Ecuaciones de $V$</b> (Ejemplo 5.16): $y-z+4t=0$ y $2x+y+z=0$. Los vectores no son proporcionales (rango $2$): $\dim V=2$.</li>
+    <li><b>Base de $V$:</b> $z=\alpha$, $t=\beta$: $y=\alpha-4\beta$, $x=-\alpha+2\beta$: $V=\langle(-1,1,1,0),(2,-4,0,1)\rangle$ (ambos anulan las dos ecuaciones ✓).</li>
+    <li><b>$V^\perp$ sin cálculo.</b> Sea $W=\langle(0,1,-1,4),(2,1,1,0)\rangle$. Por definición de $V$, los generadores de $W$ son ortogonales a $V$, luego $W\subset V^\perp$. Como $V\oplus V^\perp=\mathbb R^4$, $\dim V^\perp=4-2=2=\dim W$: $V^\perp=W$.</li>
+    <li><b>Comprobación directa:</b> $V^\perp$: $-a+b+c=0$, $2a-4b+d=0$ $\Rightarrow a(1,0,1,-2)+b(0,1,-1,4)$, y $(2,1,1,0)=2(1,0,1,-2)+(0,1,-1,4)$ ✓.</li>
+  </ol>
+  <p>La oficial da el resultado sin justificar $V^\perp=W$: en el examen hay que dar el argumento del paso 3.</p>
+  <div class="recipe"><b>Receta:</b> «ortogonales a $k$ vectores» = sistema homogéneo con esos vectores por filas. El ortogonal del ortogonal es el de partida (contenido + dimensiones).</div>
+  <p><b>Error típico:</b> dar $V^\perp$ con dimensión equivocada o confundir $V$ (ecuaciones) con $V^\perp$ (generadores).</p>
+</details>
+
+<details class="sol" id="ex-sep19a-pb"><summary>Sept. 2019 (tipo A), problema b) — ortogonales a tres vectores y su dimensión <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), problema b)">X Sept. 2019 (A) pb. b)</span></summary>
+  <p class="enun">Determinar el subconjunto $V$ de $\mathbb R^4$ (producto habitual) de los vectores ortogonales a la vez a $a=(2,1,1,0)$, $b=(1,0,1,-1)$, $c=(1,-2,-1,3)$ (1 pto.). Calcular su dimensión (0,5 pto.).</p>
+  <ol class="steps">
+    <li><b>Ecuaciones:</b> $2x+y+z=0$; $x+z-t=0$; $x-2y-z+3t=0$.</li>
+    <li><b>Es subespacio:</b> soluciones de un sistema homogéneo (o $V=\langle a,b,c\rangle^\perp$).</li>
+    <li><b>Resolver:</b> $x=t-z$; en la 1.ª, $2t-2z+y+z=0\Rightarrow y=z-2t$; en la 3.ª, $(t-z)-2(z-2t)-z+3t=8t-4z=0\Rightarrow z=2t$, $x=-t$, $y=0$: $V=\langle(-1,0,2,1)\rangle$.</li>
+    <li><b>Dimensión $1$</b>: equivalentemente $\operatorname{rango}\{a,b,c\}=3$ y $\dim V=4-3=1$.</li>
+    <li><b>Comprobación:</b> $(-1,0,2,1)\cdot a=-2+2=0$, $\cdot b=-1+2-1=0$, $\cdot c=-1-2+3=0$ ✓.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> igual que arriba; el rango de los vectores dados fija la dimensión: $n-\operatorname{rango}$.</div>
+  <p><b>Error típico:</b> afirmar $\dim V=1$ sin comprobar que los tres vectores son independientes (si fueran dependientes, $\dim V$ sería $2$).</p>
+</details>
+
+<details class="sol" id="ex-feb22a-pa"><summary>Feb. 2022 (tipo A), problema a) — ortogonal a una recta de $\mathbb R^3$; ¿suplementario? <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A, Algebra_Febrero22A2), problema a)">X Feb. 2022 (A) pb. a)</span></summary>
+  <p class="enun">Encuentre un subespacio $V$ de $\mathbb R^3$ ortogonal al subespacio $U$ definido por $x+z=0;\ y=0$. Razone si $V$ es suplementario de $U$.</p>
+  <ol class="steps">
+    <li><b>$U$ es una recta:</b> $y=0$, $z=-x$: $U=\langle(1,0,-1)\rangle$.</li>
+    <li><b>Ortogonales a $U$</b> (Def. 5.8): $(x,y,z)\cdot(1,0,-1)=x-z=0$. Todos ellos forman el plano $U^\perp:\ x-z=0=\langle(1,0,1),(0,1,0)\rangle$.</li>
+    <li><b>Elección:</b> un subespacio ortogonal a $U$ es cualquiera de $U^\perp$; elegimos $V=U^\perp$.</li>
+    <li><b>¿Suplementario?</b> $\det\begin{pmatrix}1&1&0\cr0&0&1\cr-1&1&0\end{pmatrix}=-2\ne0$: $\{(1,0,-1),(1,0,1),(0,1,0)\}$ es base de $\mathbb R^3$, luego $U+V=\mathbb R^3$ y $U\cap V=\{0\}$ ($1+2-3=0$). <b>Sí</b>: es el suplementario ortogonal $U^\perp$.</li>
+    <li><b>Matiz:</b> con $V'=\langle(0,1,0)\rangle$ (ortogonal a $U$) la suma $U\oplus V'$ tiene dimensión $2\lt 3$: <b>no</b> suplementario. Solo $U^\perp$ es ortogonal <b>y</b> suplementario.</li>
+  </ol>
+  <p><b>Aviso sobre la oficial:</b> llama «$V$» al subespacio dado (que es $U$) y mezcla los nombres; el contenido es correcto. (El tema 2.4 solo lo cita en «Para practicar»: se desarrolla aquí.)</p>
+  <div class="recipe"><b>Receta:</b> $U$ por ecuaciones $\to$ base $\to$ ecuaciones de $U^\perp$ (una por generador) $\to$ suplementario si las dimensiones suman $n$ (la intersección ya es $\{0\}$ por la propiedad 5).</div>
+  <p><b>Error típico:</b> pensar que «ortogonal» implica «suplementario» (falla con la recta), o que todo suplementario es ortogonal (el plano $z=0$ es suplementario de $U$ pero $(1,0,0)\cdot(1,0,-1)=1$).</p>
+</details>
+
+<h3 id="metodoF">Método F — Proyección ortogonal</h3>
+
+<p><b>Idea común.</b> Fórmula (5.2): con base <b>ortogonal</b> $\{e_i\}$ de $U$, $\operatorname{Proy}_U(v)=\sum\frac{v\bullet e_i}{e_i\bullet e_i}e_i$. Si la base que dan no es ortogonal: primero Gram-Schmidt (o proyecta sobre la normal, si $U$ es un plano de $\mathbb R^3$). Control final: $v-\operatorname{Proy}_Uv\perp U$.</p>
+
+<details class="sol" id="ex-sep17a-5"><summary>Sept. 2017 (tipo A), ejercicio 5 — test: proyección sobre $\langle(1,1,0),(0,0,1)\rangle$ <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A), ejercicio 5">X Sept. 2017 (A) ej. 5</span></summary>
+  <p class="enun">La proyección del vector $(1,0,-5)$ sobre $\langle(1,1,0),(0,0,1)\rangle$ es: A) $(\frac12,\frac12,-5)$; B) $(\frac12,-\frac12,-1)$; C) $(-\frac12,\frac13,-2)$; D) ninguna.</p>
+  <ol class="steps">
+    <li><b>¿Base ortogonal?</b> $(1,1,0)\cdot(0,0,1)=0$ ✓ y no nulos: se puede usar (5.2) sin Gram-Schmidt.</li>
+    <li>$\frac{v\cdot e_1}{e_1\cdot e_1}=\frac12$, $\frac{v\cdot e_2}{e_2\cdot e_2}=-5$.</li>
+    <li>$\operatorname{Proy}_Uv=\frac12(1,1,0)-5(0,0,1)=\left(\frac12,\frac12,-5\right)$: <b>opción A</b>.</li>
+    <li><b>Control:</b> $v-\operatorname{Proy}=(\frac12,-\frac12,0)\perp(1,1,0),(0,0,1)$ ✓. Atajo: B y C no están en $U$ (todo vector de $U$ tiene $1.^a$ y $2.^a$ componentes iguales) y la proyección siempre está en $U$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> base ortogonal $\Rightarrow$ suma de proyecciones sobre cada vector.</div>
+  <p><b>Error típico:</b> usar la fórmula con una base no ortogonal, u olvidar dividir entre $e_i\cdot e_i$.</p>
+</details>
+
+<details class="sol" id="ex-sep25-4"><summary>Sept. 2025, pregunta 4 — proyección de $(2,0,-3)$ sobre $\langle(1,1,0),(0,0,1)\rangle$ <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 4">X Sept. 2025 P4</span></summary>
+  <p class="enun">Calcule la proyección ortogonal de $v=(2,0,-3)$ sobre $U=\langle(1,1,0),(0,0,1)\rangle$.</p>
+  <ol class="steps">
+    <li>$u_1=(1,1,0)$, $u_2=(0,0,1)$ son ortogonales y no nulos: base ortogonal.</li>
+    <li>(5.2): $\frac{v\cdot u_1}{u_1\cdot u_1}=\frac22=1$, $\frac{v\cdot u_2}{u_2\cdot u_2}=-3$.</li>
+    <li>$\operatorname{Proy}_Uv=(1,1,0)-3(0,0,1)=(1,1,-3)$. Control: $v-\operatorname{Proy}=(1,-1,0)\perp u_1,u_2$ ✓.</li>
+  </ol>
+  <p>La oficial normaliza primero ($v_1=\frac1{\sqrt2}(1,1,0)$, $v_2=u_2$) y usa $\sum(v\cdot v_i)v_i$: mismo resultado; la versión ortogonal evita raíces.</p>
+  <div class="recipe"><b>Receta:</b> como Sept. 2017.</div>
+  <p><b>Error típico:</b> normalizar y luego <b>olvidar</b> multiplicar otra vez por $v_i$ (dar solo los coeficientes $\sqrt2$, $-3$).</p>
+</details>
+
+<details class="sol" id="ex-feb20b-5"><summary>Feb. 2020 (tipo B, 1.ª sem.), ejercicio 5 — proyección sobre el plano $2x+y-z=0$ <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B, 1.ª semana), ejercicio 5">X Feb. 2020 (B) ej. 5</span></summary>
+  <p class="enun">Hallar la proyección del vector $(1,1,1)$ sobre el plano $2x+y-z=0$.</p>
+  <p><b>Qué se pide.</b> Tres vías; la 1.ª es la más rápida (estándar).</p>
+  <ol class="steps">
+    <li><b>Vía $U^\perp$.</b> El plano son los vectores ortogonales a $n=(2,1,-1)$: $U^\perp=\langle n\rangle$ (Ejemplo 5.22, en sentido inverso). Como $v=\operatorname{Proy}_Uv+\operatorname{Proy}_{U^\perp}v$ y $\operatorname{Proy}_{U^\perp}v=\frac{v\cdot n}{n\cdot n}n=\frac26(2,1,-1)$: $\operatorname{Proy}_Uv=(1,1,1)-\frac13(2,1,-1)=\left(\frac13,\frac23,\frac43\right)$.</li>
+    <li><b>Vía base ortogonal.</b> Base de $U$: $(0,1,1)$, $(1,-2,0)$ (cumplen la ecuación), no ortogonales ($\cdot=-2$). Gram-Schmidt: $e_1=(0,1,1)$, $e_2=(1,-2,0)-\frac{-2}2(0,1,1)=(1,-1,1)$. (5.2): $\frac22(0,1,1)+\frac13(1,-1,1)=\left(\frac13,\frac23,\frac43\right)$.</li>
+    <li><b>Vía descomposición (la oficial).</b> $(1,1,1)=\alpha(0,1,1)+\beta(1,-2,0)+\gamma(2,1,-1)$: $\alpha=\frac43$, $\beta=\gamma=\frac13$; la proyección es $\alpha(0,1,1)+\beta(1,-2,0)$, mismo vector.</li>
+    <li><b>Control:</b> $2\cdot\frac13+\frac23-\frac43=0$ (está en el plano) y $v-\operatorname{Proy}=\frac13(2,1,-1)\parallel n$ ✓. Distancia al plano: $\frac{\sqrt6}3$.</li>
+  </ol>
+  <p><b>Aviso sobre la oficial:</b> escribe «$\alpha(0,1,-1)+\beta(1,-2,0)$»: errata, debe ser $(0,1,1)$ ($(0,1,-1)$ no está en el plano). El resultado final es correcto.</p>
+  <div class="recipe"><b>Receta:</b> proyección sobre un plano de $\mathbb R^3$: $v-\frac{v\cdot n}{n\cdot n}n$ con $n$ el vector de coeficientes de la ecuación.</div>
+  <p><b>Error típico:</b> aplicar (5.2) con la base no ortogonal $\{(0,1,1),(1,-2,0)\}$: daría $\left(-\frac15,\frac75,1\right)$, que <b>no</b> es la proyección.</p>
+</details>
+
+<details class="sol" id="ex-sep24-5"><summary>Sept. 2024, pregunta 5 — proyección en $\mathbb R^4$ con una base ortogonal con raíces <span class="src" data-l="X" data-ref="Sept. 2024, pregunta 5">X Sept. 2024 P5</span></summary>
+  <p class="enun">Calcule la proyección ortogonal de $v=(0,1,0,0)$ sobre $U=\langle(3,0,0,4),(-4,\sqrt{12},\sqrt{12},3)\rangle$.</p>
+  <ol class="steps">
+    <li><b>¿Base ortogonal?</b> $u_1\cdot u_2=-12+0+0+12=0$ ✓, ambos no nulos: ortogonal (y libre, Teor. 5.2).</li>
+    <li><b>Normas al cuadrado:</b> $u_1\cdot u_1=25$; $u_2\cdot u_2=16+12+12+9=49$.</li>
+    <li><b>Coeficientes:</b> $v\cdot u_1=0$ (¡desaparece!), $v\cdot u_2=\sqrt{12}=2\sqrt3$.</li>
+    <li>$\operatorname{Proy}_Uv=\frac{2\sqrt3}{49}(-4,2\sqrt3,2\sqrt3,3)=\left(-\frac{8\sqrt3}{49},\frac{12}{49},\frac{12}{49},\frac{6\sqrt3}{49}\right)$.</li>
+    <li><b>Control:</b> $v-\operatorname{Proy}=\frac1{49}(8\sqrt3,37,-12,-6\sqrt3)$ es ortogonal a $u_1$ y $u_2$ ✓.</li>
+  </ol>
+  <p>La oficial normaliza ($v_1=(\frac35,0,0,\frac45)$, $v_2=\frac17u_2$) y da $\left(\frac{-4\sqrt{12}}{49},\frac{12}{49},\frac{12}{49},\frac{3\sqrt{12}}{49}\right)$: correcto, igual que el nuestro con $\sqrt{12}=2\sqrt3$.</p>
+  <div class="recipe"><b>Receta:</b> antes de nada, comprueba si la base dada ya es ortogonal (aquí lo es) y mira si algún $v\cdot u_i=0$.</div>
+  <p><b>Error típico:</b> $\sqrt{12}\cdot\sqrt{12}=12$, no $144$; olvidar la raíz al normalizar ($\|u_2\|=7$, no $49$) si usas la versión ortonormal.</p>
+</details>
+
+<h3 id="practicar">Ejemplos propios con estos esquemas</h3>
+
+<details class="sol" id="ex-propio-1"><summary>Propio A — mismos vectores, otro producto escalar <span class="src" data-l="P" data-ref="Ejemplo propio; U Definiciones 5.3-5.7, p. 199-202">propio</span></summary>
+  <p class="enun">En $\mathbb R^2$ con $G=\begin{pmatrix}2&1\cr1&1\end{pmatrix}$ (canónica), $u=(1,0)$, $v=(-1,2)$. Calcular $\|u\|$, $\|v\|$, $u\bullet v$ y $d(u,v)$.</p>
+  <ol class="steps">
+    <li>$u\bullet u=g_{11}=2\Rightarrow\|u\|=\sqrt2$.</li>
+    <li>$Gv=\begin{pmatrix}-2+2\cr-1+2\end{pmatrix}=\begin{pmatrix}0\cr1\end{pmatrix}$; $v\bullet v=(-1)\cdot0+2\cdot1=2\Rightarrow\|v\|=\sqrt2$; $u\bullet v=1\cdot0+0\cdot1=0$: <b>son ortogonales</b> para $\bullet$, aunque con el estándar $u\cdot v=-1\ne0$.</li>
+    <li>$d(u,v)=\|(2,-2)\|$: $G(2,-2)^t=(2,0)^t$, $(2,-2)\cdot(2,0)=4$, $d=2$. Pitágoras: $2+2=4$ ✓.</li>
+  </ol>
+  <p><b>Moraleja:</b> «ortogonal» depende del producto escalar. (Es el preset «Propio: (2,1,1) con u ⟂ v» de la animación 2D.)</p>
+</details>
+
+<details class="sol" id="ex-propio-2"><summary>Propio B — proyección sobre un plano con generadores no ortogonales <span class="src" data-l="P" data-ref="Ejemplo propio; U Ec. (5.2), p. 212">propio</span></summary>
+  <p class="enun">$v=(1,2,3)$ y $U=\langle(1,1,0),(1,0,1)\rangle$ (estándar). Hallar $\operatorname{Proy}_Uv$ y $d(v,U)$.</p>
+  <ol class="steps">
+    <li><b>Gram-Schmidt:</b> $e_1=(1,1,0)$, $e_2=(1,0,1)-\frac12(1,1,0)=\left(\frac12,-\frac12,1\right)$ ($e_1\cdot e_2=0$ ✓); $e_1\cdot e_1=2$, $e_2\cdot e_2=\frac32$.</li>
+    <li>$v\cdot e_1=3$, $v\cdot e_2=\frac12-1+3=\frac52$.</li>
+    <li>$\operatorname{Proy}_Uv=\frac32(1,1,0)+\frac{5/2}{3/2}\left(\frac12,-\frac12,1\right)=\left(\frac73,\frac23,\frac53\right)$.</li>
+    <li><b>Control por la normal:</b> $n=(1,1,0)\times(1,0,1)=(1,-1,-1)$; $v-\frac{v\cdot n}3n=(1,2,3)+\frac43(1,-1,-1)=\left(\frac73,\frac23,\frac53\right)$ ✓. Distancia $\left\|\frac43(-1,1,1)\right\|=\frac4{\sqrt3}$.</li>
+  </ol>
+</details>
+
+<details class="sol" id="ex-propio-3"><summary>Propio C — Sylvester en $3\times3$ con parámetro fuera de la diagonal y vector testigo <span class="src" data-l="P" data-ref="Ejemplo propio; Sylvester, U p. 267; cf. U Ejemplo 5.2 p. 195">propio</span></summary>
+  <p class="enun">En $\mathbb R^3$, $x\bullet y=x_1y_1+x_2y_2+x_3y_3+a\,(x_1y_2+x_2y_1+x_2y_3+x_3y_2)$. ¿Para qué $a$ es producto escalar? Si no lo es, da un vector testigo.</p>
+  <ol class="steps">
+    <li><b>Matriz:</b> el coeficiente de $x_iy_j$ es $g_{ij}$: $G=\begin{pmatrix}1&a&0\cr a&1&a\cr0&a&1\end{pmatrix}$, simétrica para todo $a$ (propiedades 1-3 siempre).</li>
+    <li><b>Sylvester:</b> $\Delta_1=1$, $\Delta_2=1-a^2$, $\Delta_3=|G|=1\cdot(1-a^2)-a\cdot(a\cdot1-0)=1-2a^2$.</li>
+    <li><b>Definida positiva</b> $\iff1-a^2>0$ y $1-2a^2>0\iff|a|\lt\frac1{\sqrt2}=\frac{\sqrt2}2$ (la segunda condición implica la primera).</li>
+    <li><b>Testigo para $|a|\ge\frac{\sqrt2}2$</b> (con $a>0$; si $a\lt0$ cambia el signo de $x_2$): $x=(1,-\sqrt2,1)\ne0$ da $x\bullet x=1+2+1+2a(-\sqrt2)+2a(-\sqrt2)=4-4\sqrt2\,a$. Si $a=\frac{\sqrt2}2$ vale $0$ con $x\ne0$: falla la propiedad <b>5</b>; si $a>\frac{\sqrt2}2$ es negativo: falla la <b>4</b>.</li>
+  </ol>
+  <p><b>Resultado:</b> producto escalar $\iff|a|\lt\frac{\sqrt2}2$. Nota que $\Delta_2>0$ no basta: para $a=0{,}8$ se tiene $\Delta_2=0{,}36>0$ pero $\Delta_3=-0{,}28\lt0$.</p>
+  <div class="recipe"><b>Receta:</b> parámetro fuera de la diagonal $\Rightarrow$ todos los menores dependen de él; la condición más restrictiva es la del último menor. En el borde busca el vector con $x\bullet x=0$ (autovector del valor propio $0$ de $G$).</div>
+</details>
+
+<h3>Para practicar — fronteras con otros temas (no se desarrollan aquí)</h3>
+<ul>
+  <li><b>1.4</b> (ya desarrollado): Feb. 2022 (A) pb. b) — $A$ ortogonal $m\times n$ $\Rightarrow$ $AX=B$ compatible determinado o incompatible: <a href="tema_1_4_sistemas_ecuaciones.html#ex-feb22pb">tema 1.4, #ex-feb22pb</a> (contenido de 5.2).</li>
+  <li><b>4.3</b> (ya desarrollado): Sept. 2017 (A) ej. 4 (opción «es ortogonal»): <a href="tema_4_3_diagonalizacion.html#ex-sep17a-4">tema 4.3, #ex-sep17a-4</a>.</li>
+  <li><b>2.4:</b> Feb. 2022 (A) pb. a) está arriba (#ex-feb22a-pa): el tema 2.4 enlaza aquí.</li>
+  <li><b>5.2 Matrices ortogonales</b> (tema aún sin resumen): Feb. 2018 (B) ej. 5 y Feb. 2024 (1.ª sem.) p.5 (definir transformación ortogonal y ejemplo en $\mathbb R^2$; U p.217, Ejemplo 5.28); Ene. 2022 (A1) pb. b) ($s,t$ para que una matriz sea ortogonal); Sept. 2023 p.4; Sept. 2025 p.5 (simétrica con $A^2=I$ $\Rightarrow$ ortogonal); Feb. 2020 (B) pb. a) (factorización QR, usa Gram-Schmidt).</li>
+  <li><b>5.3:</b> Feb. 2020 (A) ej. 5 (diagonalización ortogonal).</li>
+  <li><b>5.4 Mínimos cuadrados:</b> Feb. 2019 (A) ej. 5; Feb. 2020 (B) pb. b); Feb. 2017 (2.ª sem.) pb. b); Feb. 2018 (B) pb. c); Sept. 2018 (A) ej. 5; Feb. 2023 (1.ª sem.) p.8.</li>
+  <li><b>6.x:</b> las formas bilineales y cuadráticas que aparecen junto a estas preguntas (Feb. 2026 A p.6, Feb. 2025 B p.6: 6.1; Feb. 2026 B p.6, Feb. 2023 B p.6, Sept. 2024 p.6: 6.2-6.3). La condición «$G$ definida positiva» que detecta el error de Feb. 2024 B p.5 se estudia a fondo en 6.3 (Sylvester).</li>
+</ul>
+
+<!-- ============================ 10 ============================ -->
+<h2 id="chuleta"><span class="n">10</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
+  <table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Producto escalar</td><td>simétrico, bilineal, $u\bullet u\ge0$, $u\bullet u=0\iff u=0$ (Def. 5.1)</td><td>Para refutar: un $u\ne0$ con $u\bullet u\le0$</td></tr>
+    <tr><td>Matriz de Gram</td><td>$g_{ij}=e_i\bullet e_j$, $x\bullet y=X^tGY$</td><td>$G$ simétrica y <b>definida positiva</b> (Sylvester: $\Delta_k>0$); $g_{ii}>0$ no basta</td></tr>
+    <tr><td>Cambio de base</td><td>$G'=Q^tGQ$, $\det G'=(\det Q)^2\det G$</td><td>$Q$: columnas = vectores de $B'$ en $B$</td></tr>
+    <tr><td>Norma, normalizar</td><td>$\|v\|=\sqrt{X^tGX}$, $\hat v=v/\|v\|$</td><td>$v\ne0$; la diagonal de $G$ son normas <b>al cuadrado</b></td></tr>
+    <tr><td>Distancia, ángulo</td><td>$d(u,v)=\|u-v\|$, $\cos=\frac{u\bullet v}{\|u\|\|v\|}$</td><td>$u,v\ne0$; $|\cos|\le1$ por Cauchy-Schwarz (Lay)</td></tr>
+    <tr><td>Pitágoras</td><td>$u\perp v\Rightarrow\|u+v\|^2=\|u\|^2+\|v\|^2$</td><td>Solo con ortogonales</td></tr>
+    <tr><td>$v\perp U$</td><td>ortogonal a un sistema generador</td><td>Con $G$: $u_i^tGX=0$</td></tr>
+    <tr><td>Sistema ortogonal</td><td>$u_i\bullet u_j=0$ ($i\ne j$) <b>y</b> $u_i\ne0$ $\Rightarrow$ libre (Teor. 5.2)</td><td>ortonormal: además $\|u_i\|=1$; en base ortogonal $G$ es diagonal</td></tr>
+    <tr><td>Coordenadas</td><td>$c_i=\frac{x\bullet u_i}{u_i\bullet u_i}$ (Teor. 5.3)</td><td>Solo base <b>ortogonal</b>; ortonormal: $c_i=x\bullet u_i$</td></tr>
+    <tr><td>Gram-Schmidt</td><td>$e_k=u_k-\sum_{i\lt k}\frac{u_k\bullet e_i}{e_i\bullet e_i}e_i$</td><td>Sistema libre; proyecta sobre los $e_i$, no sobre los $u_i$</td></tr>
+    <tr><td>$U^\perp$</td><td>$U\oplus U^\perp=V$, $\dim U^\perp=n-\dim U$, $(U^\perp)^\perp=U$</td><td>Ortogonal $\ne$ suplementario: ortogonal $\iff\subseteq U^\perp$</td></tr>
+    <tr><td>Proyección</td><td>$\operatorname{Proy}_U v=\sum\frac{v\bullet e_i}{e_i\bullet e_i}e_i$ (Ec. 5.2), $v=u+w$, $w\in U^\perp$</td><td>Base <b>ortogonal</b> de $U$</td></tr>
+    <tr><td>Mejor aproximación</td><td>$d(v,U)=\|v-\operatorname{Proy}_Uv\|$ (Teor. 5.4)</td><td>Plano de $\mathbb R^3$ (estándar): $\frac{|v\cdot n|}{\|n\|}$</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §5.1, resumen de Definiciones 5.1-5.12 y Teoremas 5.1-5.4, p. 194-213; Sylvester p. 267">U p.194-213</span>
+</div>
+
+<div class="box tip"><span class="h">Lista de comprobación: «sé hacer…»</span>
+  <ul class="checklist">
+    <li>Decidir si una operación o una matriz $G$ da un producto escalar: simetría, linealidad y positividad (completar cuadrados o Sylvester), y refutar con un vector concreto.</li>
+    <li>Escribir la matriz de Gram a partir de la expresión (coeficientes de $x_iy_j$), de normas y cosenos (E 5.11), de un producto de vectores de una base (E 5.13, X Feb. 2022) o de datos geométricos (E 5.9).</li>
+    <li>Cambiar de base: $G'=Q^tGQ$ con $Q$ por columnas; sé que $\det G'=(\det Q)^2\det G$ y que el rango no cambia.</li>
+    <li>Calcular norma, distancia, coseno y comprobar ortogonalidad con $G$ (X Sept. 2022, Sept. 2025) y en matrices y polinomios (E 5.3, X Feb. 2026).</li>
+    <li>Demostrar que un sistema es ortogonal (todos los pares y no nulos) y deducir que es libre; normalizarlo.</li>
+    <li>Hallar coordenadas en una base ortogonal con $\frac{x\bullet u_i}{u_i\bullet u_i}$ (E 5.15 C-D).</li>
+    <li>Aplicar Gram-Schmidt con control de ortogonalidad en cada paso y explicar por qué siempre existe una base ortonormal (X Sept. 2019, Feb. 2019).</li>
+    <li>Calcular $U^\perp$ (ecuaciones $u_i^tGX=0$), su dimensión, y decidir si un subespacio ortogonal es suplementario (E 5.5-5.8, X Feb. 2022).</li>
+    <li>Proyectar sobre una recta, un plano o un subespacio de $\mathbb R^4$ y calcular la distancia mínima (E 5.14-5.15, X Feb. 2020, Sept. 2024).</li>
+    <li>Detectar un enunciado incoherente (Gram no definida positiva: E 5.1, 5.12, X Feb. 2024).</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Lista de comprobación propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li><b>Creer que «simétrica con diagonal positiva» basta</b> para ser Gram: falta la definida positiva (Sylvester).</li>
+    <li><b>Dar por hecho el estándar</b> cuando el enunciado trae $G$: las normas, ángulos y ortogonalidades salen de $X^tGY$.</li>
+    <li><b>Diagonal de $G$ = normas</b>: son normas <b>al cuadrado</b> ($g_{ii}=\|e_i\|^2$).</li>
+    <li>$G'=Q^{-1}GQ$ en vez de $Q^tGQ$, o $Q$ con los vectores por filas.</li>
+    <li><b>Ortogonal $\Rightarrow$ suplementario</b> (falso) y <b>suplementario $\Rightarrow$ ortogonal</b> (falso): solo $U^\perp$ es ambas cosas.</li>
+    <li>Sistema «ortogonal» sin comprobar que los vectores son <b>no nulos</b> ni todos los pares.</li>
+    <li>Usar Fourier / Teorema 5.3 con una base <b>no ortogonal</b>, o sumar proyecciones sobre generadores no ortogonales.</li>
+    <li>En Gram-Schmidt, proyectar sobre los $u_i$ originales en vez de sobre los $e_i$.</li>
+    <li>Olvidar la raíz al calcular la norma, o dar $u\bullet u$ como «norma».</li>
+    <li>Escribir «$u\bullet u\le0$» como refutación: hace falta $\lt 0$ (o $=0$ con $u\ne0$).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Errores recopilados de E §5.1 y de las soluciones oficiales de los exámenes">propio</span>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>

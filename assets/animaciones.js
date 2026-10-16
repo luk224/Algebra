@@ -15,6 +15,7 @@
    .anim-semej   data-a="1,1,0,2" data-q="1,0,1,1"   (A 2x2 y Q regular: A'=Q^-1 A Q frente a Q^t A Q; det, traza e invariantes)
    .anim-diag    data-a="4,1,2,3" data-x="2,1"   (diagonalizar A 2x2 paso a paso: valores propios, d y alfa, veredicto, P y Lambda en el mismo orden, comprobacion P*Lambda = A*P y rejilla de la base propia con x_B' = P^-1 x; presets: distintos, doble d=2, doble d=1, giro 90, singular, irracionales)
    .anim-jordan  data-a="1,0,3;-1,2,0;0,0,2"   (forma de Jordan de A de 2x2 a 4x4, entradas enteras editables y presets: polinomio caracteristico y valores propios (reales; si hay complejas avisa de que no hay J real), rangos de (A-lI)^k, tamanos de bloques, J, cadenas y matriz de paso P paso a paso, comprobacion AP = PJ en fracciones exactas)
+   .anim-gram    data-g="1,0,1" data-u="2,1" data-v="-1,2"   (producto escalar de R2 con matriz de Gram G=(a b; b c) editable [data-g = a,b,c; simetrica por construccion] y dos vectores u, v con sliders (coordenadas en la base de G): u.v = u^t G v, normas, coseno, angulo, ortogonalidad, distancia; dibujo fiel con Cholesky (los angulos que se ven son los de el producto); avisa si G no es definida positiva (Sylvester) con un vector testigo x.x<=0; presets: estandar, U Ej. 5.5, propios, no definida positiva, semidefinida)
 */
 (function () {
   'use strict';
@@ -1320,7 +1321,68 @@
     window.addEventListener('beforeprint', function () { st.go(st.N); });
   }
 
-  var REG = [['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Producto escalar con matriz de Gram 2x2 editable (.anim-gram)
+     ===================================================================== */
+  function buildGram(root) {
+    var nc = function (x) { return num(x).replace('.', ','); };
+    var g0 = (root.getAttribute('data-g') || '1,0,1').split(',').map(Number), u0 = (root.getAttribute('data-u') || '2,1').split(',').map(Number), v0 = (root.getAttribute('data-v') || '-1,2').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var P = plane(root, 340, 340, 5);
+    P.svg.setAttribute('aria-label', 'Plano con los vectores u y v dibujados con las longitudes y ángulos reales del producto escalar');
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders'); text.setAttribute('aria-live', 'polite');
+    var gi = g0.map(function (x, k) { var i = numInput(x, 0.5, '3.8em'); i.setAttribute('aria-label', ['g11', 'g12 (= g21)', 'g22'][k]); return i; });
+    var eq = el('div', 'an-eqs'), er = el('div', 'an-eq down'), bsp = el('span', '', '');
+    er.appendChild(el('span', '', 'G = ( ')); er.appendChild(gi[0]); er.appendChild(el('span', '', ' ')); er.appendChild(gi[1]); er.appendChild(el('span', '', ' ; ')); er.appendChild(bsp); er.appendChild(el('span', '', ' ')); er.appendChild(gi[2]); er.appendChild(el('span', '', ' )'));
+    eq.appendChild(er);
+    var sl = [u0[0], u0[1], v0[0], v0[1]].map(function (x) { return slider(-8, 8, 0.5, x); }), lb = sl.map(function () { return el('b'); });
+    function row(txt, s, l) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(l); ctrl.appendChild(r); }
+    ['u₁', 'u₂', 'v₁', 'v₂'].forEach(function (t, k) { sl[k].setAttribute('aria-label', 'coordenada ' + t); row(t + ' ', sl[k], lb[k]); });
+    var pre = btnRow(['Estándar G = I', 'U Ejemplo 5.5: (4,1,9)', 'e₁, e₂ a 60°: (1,½,1)', 'Propio: (2,1,1) con u ⟂ v', 'No definida positiva (1,2,1)', 'Semidefinida (1,1,1)'], function (i) {
+      var p = [[1, 0, 1, 2, 1, -1, 2], [4, 1, 9, 2, 1, 7, 0], [1, 0.5, 1, 1, 0, 0, 1], [2, 1, 1, 1, 0, -1, 2], [1, 2, 1, 1, 0, 0, 1], [1, 1, 1, 1, -1, 1, 0]][i];
+      gi.forEach(function (q, j) { q.value = p[j]; }); sl.forEach(function (q, j) { q.value = p[3 + j]; }); draw();
+    });
+    function draw() {
+      var a = parseFloat(gi[0].value) || 0, b = parseFloat(gi[1].value) || 0, c = parseFloat(gi[2].value) || 0, X = sl.map(function (q) { return parseFloat(q.value); });
+      X.forEach(function (x, k) { lb[k].textContent = nc(x); }); bsp.textContent = nc(b);
+      var u = [X[0], X[1]], v = [X[2], X[3]], det = a * c - b * b, eps = 1e-9;
+      function ip(p, q) { return p[0] * (a * q[0] + b * q[1]) + p[1] * (b * q[0] + c * q[1]); }
+      var pd = a > eps && det > eps, uv = ip(u, v), uu = ip(u, u), vv = ip(v, v), h = '', std = u[0] * v[0] + u[1] * v[1];
+      h += '<b>G</b> = (' + nc(a) + ' ' + nc(b) + '; ' + nc(b) + ' ' + nc(c) + '), Δ₁ = ' + nc(a) + ', Δ₂ = |G| = ' + nc(det) + '. ';
+      P.clear();
+      if (pd) {
+        var s = Math.sqrt(a), r12 = b / s, r22 = Math.sqrt(det / a);       // G = R^t R con R = (s r12; 0 r22): R x = coordenadas en una base ortonormal
+        var T = function (p) { return [s * p[0] + r12 * p[1], r22 * p[1]]; };
+        var U2 = T(u), V2 = T(v), m = 0;
+        [U2, V2, [s, 0], [r12, r22]].forEach(function (q) { m = Math.max(m, Math.abs(q[0]), Math.abs(q[1])); });
+        var k = Math.min(1, 4.6 / Math.max(m, eps));
+        arrow(P, 0, 0, k * s, 0, 'gr', 'e₁'); arrow(P, 0, 0, k * r12, k * r22, 'gr', 'e₂');
+        arrow(P, 0, 0, k * U2[0], k * U2[1], 'down', 'u'); arrow(P, 0, 0, k * V2[0], k * V2[1], 'up', 'v');
+        var nu = Math.sqrt(Math.max(uu, 0)), nv = Math.sqrt(Math.max(vv, 0)), co = (nu > eps && nv > eps) ? uv / (nu * nv) : NaN, dd = [u[0] - v[0], u[1] - v[1]], d2 = ip(dd, dd), sm = [u[0] + v[0], u[1] + v[1]];
+        h += '<b>G es definida positiva</b> (Δ₁ > 0, Δ₂ > 0, criterio de Sylvester): es un producto escalar.<br>';
+        h += '<b>u•v = uᵗGv = ' + nc(uv) + '</b>; ‖u‖ = √' + nc(uu) + ' = ' + nc(nu) + ', ‖v‖ = √' + nc(vv) + ' = ' + nc(nv) + ', d(u,v) = √' + nc(d2) + ' = ' + nc(Math.sqrt(Math.max(d2, 0))) + '.<br>';
+        if (isNaN(co)) h += 'Alguno de los vectores es nulo: el coseno no está definido.';
+        else if (Math.abs(uv) < 1e-9) h += 'cos = 0: <b>u ⟂ v</b> (ángulo 90°). Pitágoras: ‖u+v‖² = ' + nc(ip(sm, sm)) + ' = ‖u‖² + ‖v‖² = ' + nc(uu) + ' + ' + nc(vv) + '.';
+        else h += 'cos(u,v) = ' + nc(co) + ' ⇒ ángulo ≈ ' + nc(Math.acos(Math.max(-1, Math.min(1, co))) * 180 / Math.PI) + '°. No son ortogonales.';
+        h += '<br>Con el producto estándar u·v valdría ' + nc(std) + ': «ortogonal», «norma» y «ángulo» dependen del producto escalar elegido. <i>El dibujo es fiel: los ángulos y longitudes que ves son los de • (se muestra la base e₁, e₂ de G' + (k < 1 ? ', a escala ' + nc(k) : '') + ').</i>';
+      } else {
+        var cl = function (x) { return Math.max(-4.8, Math.min(4.8, x)); };
+        arrow(P, 0, 0, cl(u[0]), cl(u[1]), 'down', 'u'); arrow(P, 0, 0, cl(v[0]), cl(v[1]), 'up', 'v');
+        var w = a <= eps ? [1, 0] : [-b, a], ww = ip(w, w);
+        h += '<b>G NO es definida positiva</b> ' + (a <= eps ? '(Δ₁ = ' + nc(a) + ' ≤ 0)' : '(Δ₂ = ' + nc(det) + ' ≤ 0)') + ': no es un producto escalar. Vector testigo x = (' + nc(w[0]) + ', ' + nc(w[1]) + ') ≠ 0 con x•x = <b>' + nc(ww) + ' ≤ 0</b>: ' + (ww < -eps ? 'falla la propiedad 4 (x•x < 0)' : 'falla la propiedad 5 (x•x = 0 con x ≠ 0)') + ' de U Def. 5.1.<br>';
+        h += 'Si insistes: «u•v» = ' + nc(uv) + ', «u•u» = ' + nc(uu) + (uu < 0 ? ' (¡negativo: no hay norma real!)' : '') + '. <i>(Dibujo en coordenadas; no representa ángulos reales porque no hay geometría euclídea.)</i>';
+      }
+      html(text, h); res.textContent = '';
+      var fin = el('div', 'sar-final'); var nul = Math.abs(u[0]) + Math.abs(u[1]) < eps || Math.abs(v[0]) + Math.abs(v[1]) < eps;
+      fin.textContent = pd ? 'u•v = ' + nc(uv) + (nul ? '  (un vector es nulo)' : (Math.abs(uv) < 1e-9 ? '  (ortogonales)' : '')) : 'G no define un producto escalar'; res.appendChild(fin);
+    }
+    gi.concat(sl).forEach(function (q) { q.addEventListener('input', draw); });
+    root.appendChild(el('p', 'sar-text an-title', 'Un producto escalar de ℝ² queda fijado por su matriz de Gram G = (gᵢⱼ), gᵢⱼ = eᵢ•eⱼ: u•v = uᵗGv. Cambia G (simétrica: g₁₂ se escribe una sola vez) y mueve las coordenadas de u y v. Mira cómo cambian norma, ángulo y ortogonalidad, y qué pasa cuando G deja de ser definida positiva.'));
+    root.appendChild(eq); root.appendChild(P.svg); root.appendChild(ctrl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    draw();
+  }
+
+  var REG = [['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

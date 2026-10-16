@@ -3,6 +3,9 @@
    .d3-vect    data-modo="span|det" data-u="1,0,0" data-v="0,1,0" data-w="0,0,1"  vectores de R3: subespacio generado / volumen
    .d3-nuc     data-m="1,0,0;0,1,0;0,0,0"                                         núcleo e imagen de f(x)=A·x, R3 -> R3
    .d3-propios data-a="1,0,3;-1,2,0;0,0,2"                                       esfera unidad frente a su imagen por A (3x3 entera editable, slider t = deformacion gradual), rectas/planos propios y cadenas de Jordan (presets: distintos, doble d=2, doble d=1, triple d=2, triple bloque 3x3, complejos); sin WebGL queda el texto
+   .d3-proy    data-modo="recta|plano|gs" data-v="1,2,3" data-a="1,1,1" data-b="0,1,1" data-c="0,0,2"
+               proyección ortogonal (producto estándar de R3): recta -> v sobre ⟨d=a⟩; plano -> v sobre U=⟨a,b⟩ (Gram-Schmidt interno, p = c1e1+c2e2, residuo w ⟂ U, distancia mínima y punto de prueba q con sliders α, β);
+               gs -> Gram-Schmidt de (a,b,c) en 4 pasos con botones (e1, e2, e3 y normalización). Entradas editables y presets; sin WebGL queda el texto con los cálculos.
    Arrastrar = girar, rueda / pellizco = zoom. */
 (function () {
   'use strict';
@@ -68,13 +71,14 @@
 
   /* ---------- escena genérica ---------- */
   function makeScene(parent, R, aspect, maxW) {
+    if (!window.THREE) { parent.appendChild(el('p', 'sar-hint', 'No se ha podido cargar el motor 3D: se muestran solo los cálculos.')); return null; }
     var T = THREE, MW = maxW || 520, W = Math.min(parent.clientWidth || MW, MW), H = Math.round(W * (aspect || 0.8));
     var wrap = el('div', 'd3-wrap'); parent.appendChild(wrap);
     var renderer;
     try { renderer = new T.WebGLRenderer({ antialias: true, alpha: true }); }
     catch (e) { wrap.appendChild(el('p', 'sar-hint', 'Tu navegador no puede mostrar gráficos 3D (WebGL).')); return null; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(W, H);
-    renderer.domElement.className = 'd3-canvas'; wrap.appendChild(renderer.domElement);
+    renderer.domElement.className = 'd3-canvas'; renderer.domElement.setAttribute('role', 'img'); renderer.domElement.setAttribute('aria-label', 'Figura 3D interactiva (arrastra para girar, rueda o pellizco para acercar)'); wrap.appendChild(renderer.domElement);
     wrap.appendChild(el('span', 'd3-help', 'Arrastra para girar · rueda/pellizco para acercar'));
     var scene = new T.Scene(), camera = new T.PerspectiveCamera(38, W / H, 0.1, 200);
     camera.up.set(0, 0, 1); camera.position.set(R * 3.0, -R * 3.4, R * 2.2);
@@ -473,17 +477,186 @@
     if (S) S.onTheme = draw; draw();
   }
 
-  var REG = [['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
+  /* =====================================================================
+     5. PROYECCIÓN ORTOGONAL y GRAM-SCHMIDT en R3 con el producto escalar estándar
+        .d3-proy data-modo="recta|plano|gs"
+          recta: data-v="1,2,3" (vector a proyectar) data-a="1,1,1" (director d)
+          plano: data-v="2,0,3" data-a="1,0,1" data-b="0,1,1" (generadores u1, u2 del plano U)
+          gs   : data-a, data-b, data-c = u1, u2, u3 (se ortogonalizan paso a paso y se normalizan)
+     ===================================================================== */
+  function sub3(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+  function mul3(k, a) { return [k * a[0], k * a[1], k * a[2]]; }
+  function unit3(a) { var n = norm(a); return n < EPS ? [0, 0, 0] : mul3(1 / n, a); }
+  function nc(x) { return num(x).replace('.', ','); }                       // decimales con coma en los textos
+  function vtxt3(v) { return '(' + v.map(nc).join('; ') + ')'; }
+  function projOn(v, e) { var d = dot(e, e); return d < EPS ? [0, 0, 0] : mul3(dot(v, e) / d, e); }
+  function scaleOf(pts) { var m = 0; pts.forEach(function (p) { p.forEach(function (x) { m = Math.max(m, Math.abs(x)); }); }); return m < 1e-9 ? 1 : 3.2 / m; }   // el mayor vector mide ~3,2
+  function rightAngle(S, P0, u, w, s) {            // cuadradito de ángulo recto en P0 entre las direcciones unitarias u y w
+    if (!S || norm(u) < 0.5 || norm(w) < 0.5) return;
+    var T = S.T, A = add(P0, mul3(s, u)), B = add(A, mul3(s, w)), C = add(P0, mul3(s, w));
+    var pts = [A, B, C].map(function (p) { return new T.Vector3(p[0], p[1], p[2]); });
+    S.dyn.add(new T.Line(new T.BufferGeometry().setFromPoints(pts), new T.LineBasicMaterial({ color: '#d9434a' })));
+  }
+  function raSize(a, b) { return Math.max(0.22, Math.min(0.45, 0.5 * a, 0.5 * b)); }   // tamaño mínimo para que se lea
+  function vecInputs(names, cls, vals) {
+    var box = el('div', 'an-eqs'), inp = [];
+    names.forEach(function (nm, i) {
+      var d = el('div', 'an-eq ' + cls[i]), r = []; d.appendChild(el('span', '', nm + ' = ('));
+      for (var j = 0; j < 3; j++) { var x = numInput(vals[i][j], '2.8em'); x.setAttribute('aria-label', nm + ' componente ' + (j + 1)); r.push(x); d.appendChild(x); if (j < 2) d.appendChild(el('span', '', ', ')); }
+      d.appendChild(el('span', '', ')')); inp.push(r); box.appendChild(d);
+    });
+    return { box: box, inp: inp,
+      get: function () { return inp.map(function (r) { return r.map(function (x) { return parseFloat(x.value) || 0; }); }); },
+      set: function (M) { M.forEach(function (r, i) { r.forEach(function (x, j) { inp[i][j].value = x; }); }); } };
+  }
+  function buildProy(root) {
+    var modo = root.getAttribute('data-modo') || 'recta';
+    var g = function (k, d) { return (root.getAttribute('data-' + k) || d).split(',').map(Number); };
+    var names, cls, vals;
+    if (modo === 'gs') { names = ['u1', 'u2', 'u3']; cls = ['down', 'up', 'w']; vals = [g('a', '1,0,1'), g('b', '1,1,0'), g('c', '0,0,2')]; }
+    else if (modo === 'plano') { names = ['v', 'u1', 'u2']; cls = ['down', 'up', 'up']; vals = [g('v', '2,0,3'), g('a', '1,0,1'), g('b', '0,1,1')]; }
+    else { names = ['v', 'd']; cls = ['down', 'up']; vals = [g('v', '1,2,3'), g('a', '1,1,1')]; }
+    root.textContent = ''; root.classList.add('sarrus');
+    var S = makeScene(root, 4, 0.85);                    // si no hay WebGL o three.js: makeScene deja un único aviso y devolvemos solo texto
+    if (S) S.renderer.domElement.setAttribute('aria-label', { recta: 'Figura 3D: un vector v, su proyección ortogonal sobre una recta y el residuo perpendicular', plano: 'Figura 3D: un vector v, su proyección ortogonal sobre un plano y el residuo perpendicular al plano', gs: 'Figura 3D: los vectores de Gram-Schmidt paso a paso' }[modo]);
+    var cl = function (t) { return S ? t : ''; };         // menciones a colores o a la figura solo si hay figura
+    var V = vecInputs(names, cls, vals), text = el('p', 'sar-text'), res = el('div', 'sar-res'); text.setAttribute('aria-live', 'polite');
+    var sa = slider(-2, 2, 0.1, 0), sb = slider(-2, 2, 0.1, 0), la = el('b'), lb = el('b'), sl = el('div', 'an-sliders'), step = 0, NST = 4, info = el('b', 'sar-final');
+    function srow(txt, s, lb2) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb2); sl.appendChild(r); }
+    sa.setAttribute('aria-label', 'Desplazamiento del punto de prueba, dirección 1'); sb.setAttribute('aria-label', 'Desplazamiento del punto de prueba, dirección 2');
+    if (modo === 'recta') srow('α ', sa, la); if (modo === 'plano') { srow('α ', sa, la); srow('β ', sb, lb); }
+    var R_ = '#d9434a', GR = '#8a93a3', LG = '#7fbf9a', PU = '#7a52c7';
+    function esc(K) { return Math.abs(K - 1) > 0.01 ? ' <i>(Dibujo a escala ' + nc(K) + ' para que quepa y se lea.)</i>' : ''; }
+
+    function drawRecta(M, C) {
+      var v = M[0], d = M[1];
+      if (isZero(d)) return 'd = 0 no genera una recta: elige un d ≠ 0.';
+      var t = dot(v, d) / dot(d, d), p = mul3(t, d), w = sub3(v, p), dh = unit3(d), al = S ? (parseFloat(sa.value) || 0) : 0; la.textContent = nc(al);
+      var q = add(p, mul3(al, dh)), K = scaleOf([v, p, d, q]);
+      if (S) {
+        S.line([0, 0, 0], d, C.b, 0.05); S.arrow(mul3(K, d), C.b, 'd'); S.arrow(mul3(K, v), C.a, 'v');
+        if (norm(p) > 1e-6) S.arrow(mul3(K, p), C.c, 'p');
+        if (norm(w) > 1e-6) S.arrow(mul3(K, v), R_, '', mul3(K, p));
+        var Kp = mul3(K, p);
+        rightAngle(S, Kp, norm(p) > 1e-6 ? unit3(mul3(-1, p)) : dh, unit3(w), raSize(norm(Kp) || 0.45, K * norm(w)));
+        S.sphere(mul3(K, q), PU, 0.13); S.tube(mul3(K, q), mul3(K, v), PU, 0.025);
+      }
+      var wn = norm(w), vq = Math.sqrt(wn * wn + al * al);
+      return '<b>p</b> = Proy<sub>d</sub>(v) = (v•d)/(d•d)·d = (' + nc(dot(v, d)) + '/' + nc(dot(d, d)) + ')·d = <b>' + vtxt3(p) + '</b>.<br>' +
+        '<b>w</b> = v − p = ' + vtxt3(w) + cl(' (rojo)') + '. Control: w•d = <b>' + nc(dot(w, d)) + '</b> ' + (Math.abs(dot(w, d)) < 1e-9 ? '(w ⟂ d ✓)' : '') + '.<br>' +
+        'Pitágoras: ‖v‖² = ' + nc(dot(v, v)) + ' = ‖p‖² + ‖w‖² = ' + nc(dot(p, p)) + ' + ' + nc(wn * wn) + '.<br>' +
+        '<b>Distancia mínima de v a la recta = ‖w‖ = ' + nc(wn) + '</b>.' +
+        (S ? ' El punto morado q = p + α·d/‖d‖ (mueve α) está a distancia √(‖w‖² + α²) = <b>' + nc(vq) + '</b> de v: sale ≥ ‖w‖ y solo vale lo mismo con α = 0 (U Teor. 5.4).' : ' Cualquier otro punto de la recta está a distancia √(‖w‖² + α²) ≥ ‖w‖ de v (U Teor. 5.4).') + esc(K);
+    }
+    function drawPlano(M, C) {
+      var v = M[0], a = M[1], b = M[2], n = cross(a, b);
+      if (isZero(n)) return 'u1 y u2 son linealmente dependientes: no generan un plano (rango ' + rankOf([a, b]) + '). Elige dos vectores independientes.';
+      var e1 = a, e2 = sub3(b, projOn(b, e1)), c1 = dot(v, e1) / dot(e1, e1), c2 = dot(v, e2) / dot(e2, e2);
+      var p1 = mul3(c1, e1), p2 = mul3(c2, e2), p = add(p1, p2), w = sub3(v, p), h1 = unit3(e1), h2 = unit3(e2);
+      var al = S ? (parseFloat(sa.value) || 0) : 0, be = S ? (parseFloat(sb.value) || 0) : 0; la.textContent = nc(al); lb.textContent = nc(be);
+      var q = add(p, add(mul3(al, h1), mul3(be, h2))), K = scaleOf([v, p, a, b, q]);
+      if (S) {
+        S.plane(n, 0, C.b, 0.25); S.line([0, 0, 0], n, GR, 0.04);
+        S.arrow(mul3(K, a), C.b, 'u1'); S.arrow(mul3(K, b), C.b, 'u2'); S.arrow(mul3(K, v), C.a, 'v');
+        if (norm(p1) > 1e-6) S.arrow(mul3(K, p1), LG, '');
+        if (norm(p2) > 1e-6) S.arrow(mul3(K, p), LG, '', mul3(K, p1));
+        if (norm(p) > 1e-6) S.arrow(mul3(K, p), C.c, 'p');
+        if (norm(w) > 1e-6) S.arrow(mul3(K, v), R_, '', mul3(K, p));
+        var Kp = mul3(K, p);
+        rightAngle(S, Kp, norm(p) > 1e-6 ? unit3(mul3(-1, p)) : h1, unit3(w), raSize(norm(Kp) || 0.45, K * norm(w)));
+        S.sphere(mul3(K, q), PU, 0.13); S.tube(mul3(K, q), mul3(K, v), PU, 0.025);
+      }
+      var wn = norm(w), vq = Math.sqrt(wn * wn + al * al + be * be), dn = Math.abs(dot(v, n)) / norm(n);
+      return 'Base ortogonal de U (Gram-Schmidt): e1 = u1 = ' + vtxt3(e1) + ', e2 = u2 − Proy<sub>e1</sub>u2 = ' + vtxt3(e2) + ' (e1•e2 = ' + nc(dot(e1, e2)) + ').<br>' +
+        'Fourier (U Ec. 5.2): c1 = (v•e1)/(e1•e1) = ' + nc(c1) + ', c2 = (v•e2)/(e2•e2) = ' + nc(c2) + ' ⇒ <b>p</b> = c1·e1 + c2·e2 = <b>' + vtxt3(p) + '</b>' + cl(' (camino verde: dos tramos perpendiculares)') + '.<br>' +
+        '<b>w</b> = v − p = ' + vtxt3(w) + cl(' (rojo)') + ', paralelo a la normal n = u1×u2 = ' + vtxt3(n) + cl(' (recta gris = U<sup>⊥</sup>)') + ': w•u1 = ' + nc(dot(w, a)) + ', w•u2 = ' + nc(dot(w, b)) + '.<br>' +
+        '<b>Distancia mínima de v al plano = ‖w‖ = ' + nc(wn) + '</b> (otra vía: |v•n|/‖n‖ = ' + nc(dn) + ').' +
+        (S ? ' El punto morado q ∈ U (mueve α, β) está a √(‖w‖² + α² + β²) = <b>' + nc(vq) + '</b> de v: nunca menos que ‖w‖ (U Teor. 5.4).' : ' Cualquier otro punto q ∈ U está a √(‖w‖² + ‖p−q‖²) ≥ ‖w‖ de v (U Teor. 5.4).') + esc(K);
+    }
+    function drawGS(M, C) {
+      var u1 = M[0], u2 = M[1], u3 = M[2];
+      var e1 = u1, p2 = projOn(u2, e1), e2 = sub3(u2, p2), pa = projOn(u3, e1), pb = projOn(u3, e2), p3 = add(pa, pb), e3 = sub3(u3, p3);
+      var ok1 = norm(e1) > 1e-9, ok2 = ok1 && norm(e2) > 1e-9, ok3 = ok2 && norm(e3) > 1e-9, nMax = ok3 ? 4 : 0;
+      if (step > nMax) step = nMax;
+      var f = [e1, e2, e3].map(unit3), K = scaleOf([u1, u2, u3, e1, e2, e3, p2, p3, f[0], f[1], f[2]]);
+      var t = '', fade = GR;
+      function A(p, col, lab, from) { if (S) S.arrow(mul3(K, p), col, lab, from ? mul3(K, from) : undefined); }
+      function ra(P0, dir, res2) { rightAngle(S, mul3(K, P0), dir, unit3(res2), raSize(K * (norm(P0) || 9), K * norm(res2))); }
+      if (!ok3) {
+        if (S) { A(u1, C.a, 'u1'); A(u2, C.b, 'u2'); A(u3, C.c, 'u3'); }
+        t = !ok1 ? 'u1 = 0: no puede formar parte de una base.' : (!ok2 ? 'u2 es múltiplo de u1: al restar su proyección sobre e1 queda e2 = 0. Gram-Schmidt exige un sistema <b>libre</b> (U §5.1.5).' : 'u3 está en el plano ⟨u1, u2⟩: al restar su proyección sobre ⟨e1, e2⟩ queda e3 = 0. Gram-Schmidt exige un sistema <b>libre</b> (det = ' + nc(det3(u1, u2, u3)) + ').');
+        info.textContent = 'Sistema dependiente'; html(text, t); return;
+      }
+      if (step === 0) {
+        A(u1, C.a, 'u1'); A(u2, C.b, 'u2'); A(u3, C.c, 'u3');
+        t = '<b>Paso 0 · punto de partida.</b> Base {u1, u2, u3} (det = ' + nc(det3(u1, u2, u3)) + ' ≠ 0: independientes) pero con ángulos no rectos: u1•u2 = ' + nc(dot(u1, u2)) + ', u1•u3 = ' + nc(dot(u1, u3)) + ', u2•u3 = ' + nc(dot(u2, u3)) + '. Vamos a «enderezarla».';
+      } else if (step === 1) {
+        A(u2, fade, ''); A(u3, fade, ''); A(e1, C.a, 'e1'); if (S) S.line([0, 0, 0], e1, C.a, 0.04);
+        t = '<b>Paso 1 · e1 = u1</b> = ' + vtxt3(e1) + '. El primer vector se queda como está; fijamos su recta. e1•e1 = ' + nc(dot(e1, e1)) + '.';
+      } else if (step === 2) {
+        A(u3, fade, ''); A(u2, C.b, 'u2'); A(e1, C.a, 'e1'); A(p2, LG, 'proy'); A(e2, C.b, 'e2'); A(u2, R_, '', p2);
+        if (S) S.plane(cross(e1, e2), 0, C.b, 0.18);
+        ra(p2, norm(p2) > 1e-6 ? unit3(mul3(-1, p2)) : f[0], e2);
+        t = '<b>Paso 2 · e2 = u2 − Proy<sub>e1</sub>u2.</b> Proy<sub>e1</sub>u2 = (u2•e1)/(e1•e1)·e1 = (' + nc(dot(u2, e1)) + '/' + nc(dot(e1, e1)) + ')·e1 = ' + vtxt3(p2) + cl(' (verde claro)') + '. Lo que queda, <b>e2 = ' + vtxt3(e2) + '</b>, es perpendicular a e1: e2•e1 = <b>' + nc(dot(e2, e1)) + '</b>' + cl(' (trazo rojo)') + '. Plano ⟨e1, e2⟩ = ⟨u1, u2⟩.';
+      } else if (step === 3) {
+        A(u3, C.c, 'u3'); A(e1, C.a, 'e1'); A(e2, C.b, 'e2'); A(p3, LG, 'proy'); A(e3, C.c, 'e3'); A(u3, R_, '', p3);
+        if (S) S.plane(cross(e1, e2), 0, C.b, 0.18);
+        ra(p3, norm(p3) > 1e-6 ? unit3(mul3(-1, p3)) : f[0], e3);
+        t = '<b>Paso 3 · e3 = u3 − Proy<sub>e1</sub>u3 − Proy<sub>e2</sub>u3.</b> Coeficientes: (u3•e1)/(e1•e1) = ' + nc(dot(u3, e1) / dot(e1, e1)) + ', (u3•e2)/(e2•e2) = ' + nc(dot(u3, e2) / dot(e2, e2)) + '. Proyección sobre el plano = ' + vtxt3(p3) + '. <b>e3 = ' + vtxt3(e3) + '</b>: e3•e1 = ' + nc(dot(e3, e1)) + ', e3•e2 = ' + nc(dot(e3, e2)) + ' (y e3 ⟂ plano ⟨e1, e2⟩).';
+      } else {
+        A(f[0], C.a, "e1'"); A(f[1], C.b, "e2'"); A(f[2], C.c, "e3'");
+        t = '<b>Paso 4 · normalizar.</b> ‖e1‖ = ' + nc(norm(e1)) + ', ‖e2‖ = ' + nc(norm(e2)) + ', ‖e3‖ = ' + nc(norm(e3)) + '. Base <b>ortonormal</b>: e1\' = ' + vtxt3(f[0]) + ', e2\' = ' + vtxt3(f[1]) + ', e3\' = ' + vtxt3(f[2]) + '. Comprobación: e1\'•e2\' = ' + nc(dot(f[0], f[1])) + ', e1\'•e3\' = ' + nc(dot(f[0], f[2])) + ', e2\'•e3\' = ' + nc(dot(f[1], f[2])) + ', normas 1 (matriz de Gram = I).';
+      }
+      t += esc(K);
+      info.textContent = 'Paso ' + step + ' de ' + NST; html(text, t);
+    }
+    function draw() {
+      var C = COL(), M = V.get(), t;
+      if (S) S.clearDyn();
+      if (modo === 'gs') { drawGS(M, C); }
+      else { t = modo === 'plano' ? drawPlano(M, C) : drawRecta(M, C); html(text, t); }
+      if (S) S.render();
+    }
+    var presets = modo === 'gs'
+      ? [['U Ejemplo 5.21', [[1, 0, 1], [1, 1, 0], [0, 0, 2]]], ['Propio P9', [[1, 1, 0], [1, 0, 1], [0, 1, 1]]], ['Ya ortogonal', [[1, 0, 0], [0, 2, 0], [0, 0, 3]]], ['Dependiente (falla)', [[1, 0, 1], [2, 0, 2], [0, 1, 0]]]]
+      : modo === 'plano'
+        ? [['E 5.14: v=(1,1,0)', [[1, 1, 0], [1, -1, 0], [-1, 0, 1]]], ['Propio P11(b)', [[2, 0, 3], [1, 0, 1], [0, 1, 1]]], ['Plano z = 0', [[1, 2, 3], [1, 0, 0], [0, 1, 0]]], ['v dentro del plano', [[1, 1, 2], [1, 0, 1], [0, 1, 1]]], ['v perpendicular al plano', [[1, 1, 1], [1, -1, 0], [-1, 0, 1]]]]
+        : [['Propio P11(a)', [[1, 2, 3], [1, 1, 1]]], ['v ⟂ d (proyección nula)', [[1, -1, 0], [1, 1, 1]]], ['v sobre la recta', [[2, 2, 2], [1, 1, 1]]], ['E 5.14: normal', [[1, 1, 0], [1, 1, 1]]]];
+    var pre = btnRow(presets.map(function (p) { return p[0]; }), function (k) { V.set(presets[k][1]); step = 0; sa.value = 0; sb.value = 0; draw(); });
+    var nav = null;
+    if (modo === 'gs') {
+      nav = el('div', 'sar-ctrl');
+      [['◀ Anterior', function () { step = Math.max(0, step - 1); draw(); }], ['Siguiente ▶', function () { step = Math.min(NST, step + 1); draw(); }], ['↺ Reiniciar', function () { step = 0; draw(); }]].forEach(function (b) { var x = el('button', '', b[0]); x.type = 'button'; x.addEventListener('click', b[1]); nav.appendChild(x); });
+      nav.appendChild(info);
+    }
+    var tit3 = { recta: 'Proyección ortogonal de v sobre una recta ⟨d⟩ de ℝ³ (producto estándar). La flecha verde p es la sombra de v sobre la recta; el segmento rojo w = v − p es perpendicular a ella (cuadradito rojo = ángulo recto) y mide la distancia mínima. Cambia v y d, o mueve el punto morado por la recta: ninguno está más cerca de v que p.',
+      plano: 'Proyección ortogonal de v sobre un plano U = ⟨u1, u2⟩ de ℝ³. Se ortogonaliza la base (Gram-Schmidt), p = c1·e1 + c2·e2 (camino verde) y w = v − p es perpendicular al plano, paralelo a su normal (recta gris = U⊥). El punto morado q ∈ U está siempre más lejos de v que p.',
+      gs: 'Gram-Schmidt en ℝ³ paso a paso: cada vector nuevo se «endereza» restándole su sombra sobre los anteriores. Recorre los 4 pasos (los dos últimos usan el plano ⟨e1, e2⟩ y terminan normalizando) o prueba otros tres vectores.' };
+    var tit0 = { recta: 'Proyección ortogonal de v sobre una recta ⟨d⟩ de ℝ³ (producto estándar): p = (v•d)/(d•d)·d y w = v − p es perpendicular a d. Cambia v y d.',
+      plano: 'Proyección ortogonal de v sobre un plano U = ⟨u1, u2⟩ de ℝ³: se ortogonaliza la base (Gram-Schmidt), p = c1·e1 + c2·e2 y w = v − p es perpendicular al plano. Cambia los vectores.',
+      gs: 'Gram-Schmidt en ℝ³ paso a paso: cada vector nuevo se «endereza» restándole su sombra sobre los anteriores. Recorre los 4 pasos o prueba otros tres vectores.' };
+    root.appendChild(el('p', 'sar-text an-title', (S ? tit3 : tit0)[modo]));
+    root.appendChild(V.box); if (nav) root.appendChild(nav); if (S) root.appendChild(S.wrap);
+    if (modo !== 'gs' && S) root.appendChild(sl);
+    root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    V.inp.forEach(function (r) { r.forEach(function (x) { x.addEventListener('input', draw); }); });
+    [sa, sb].forEach(function (x) { x.addEventListener('input', draw); });
+    if (S) S.onTheme = draw; draw();
+  }
+
+  var REG = [['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
   function init() {
-    var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n]); }); });
+    var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n, false]); }); });
     if (!todo.length) return;
-    var go = function (t) { try { t[0](t[1]); } catch (e) { console.error(e); } };
+    var go = function (t) { if (t[2]) return; t[2] = true; try { t[0](t[1]); } catch (e) { console.error(e); } };
+    var io = null;
+    window.addEventListener('beforeprint', function () { todo.forEach(function (t) { if (!t[2]) { if (io) io.unobserve(t[1]); go(t); } }); });   // al imprimir se construyen las figuras pendientes
     loadThree().then(function () {
       if (!('IntersectionObserver' in window)) { todo.forEach(go); return; }
-      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); var t = todo.filter(function (x) { return x[1] === e.target; })[0]; if (t) go(t); } }); }, { rootMargin: '300px' });
+      io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); var t = todo.filter(function (x) { return x[1] === e.target; })[0]; if (t) go(t); } }); }, { rootMargin: '300px' });
       todo.forEach(function (t) { t[1].style.minHeight = '300px'; io.observe(t[1]); });
     })
-      .catch(function (e) { console.error(e); todo.forEach(function (t) { t[1].textContent = 'No se pudo cargar la figura 3D.'; }); });
+      .catch(function (e) { console.error(e); todo.forEach(go); });   // sin three.js: cada componente se construye en modo solo-texto (makeScene devuelve null)
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
