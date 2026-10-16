@@ -10,6 +10,8 @@
                matrices ortogonales 3x3: cubo unidad y su imagen, esfera unidad (gris) y su imagen, columnas a1,a2,a3 de A; modos: giro (eje + angulo con slider, formula de Rodrigues), simetria respecto de un plano (Householder I-2nn^t/n^tn), composicion R_z(alpha)R_x(beta), matriz libre 3x3 editable (decimales); calcula A^tA, det, traza, eje (valor propio 1, de la parte antisimetrica; morado) y angulo por la traza (tr = 1+2cos), plano de simetria (morado; tr=1 con det=-1; tr distinto = simetria rotatoria; giro de 180 = simetria axial); escena R=2,2 y escala K; presets con E 5.25, U Ej. 5.26 y matrices no ortogonales de contraste; sin WebGL queda el texto
    .d3-ejes    data-a="1,0,1;0,2,0;1,0,1"
                matrices SIMETRICAS 3x3 (ejes principales): seis entradas editables (triangulo superior; el inferior se copia) y presets (tres valores distintos, valor doble con plano propio, singular, estilo E 5.33, A = lambda I); esfera unidad (gris) y su imagen (elipsoide morado) con slider t (M(t) = (1-t)I + tA), las rectas propias perpendiculares (o recta + plano propio perpendicular si hay un valor doble; todo R3 si A = lambda I) y flechas u1, u2, u3 de longitud |semieje|; valores propios por Jacobi (vectores ya ortonormales), P = (u1 u2 u3), PtP = I, det P, Pt A P = diag(l1, l2, l3), traza = suma y determinante = producto; sin WebGL queda el texto con los calculos
+   .d3-minimos data-a1="1,0,1" data-a2="0,1,1" data-b="1,1,3"
+               minimos cuadrados en R3: A = (C1 C2) de 3x2 con columnas y b editables. Plano Col A (translucido), C1, C2, b, p = A x^ (verde, camino x1 C1 + x2 C2), residuo b - A x^ (rojo) perpendicular al plano con cuadradito de angulo recto, recta gris = (Col A)^perp; calcula AtA, Atb, las ecuaciones normales, x^ unica (rango 2) y el error minimo; punto de prueba A x con x = x^ + (d1, d2) (sliders, morado) cuya distancia a b es sqrt(|b - A x^|^2 + |A d|^2) >= minimo; rango 1: Col A es una recta y las soluciones son una recta afin (todas con el mismo A x^ y el mismo error); rango 0 avisa; 6 presets (P1, E 5.37, Feb. 2023 A ej. 8, U Ej. 5.36, b en Col A, columnas dependientes); sin WebGL queda el texto con los calculos; break-inside:avoid en impresion
    Arrastrar = girar, rueda / pellizco = zoom. */
 (function () {
   'use strict';
@@ -894,7 +896,94 @@
   }
 
 
-  var REG = [['.d3-ejes', buildEjes], ['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
+  /* =====================================================================
+     8. MINIMOS CUADRADOS EN R3 (.d3-minimos): b fuera del plano Col A, p = A x^ y residuo perpendicular
+        data-a1="1,0,1" data-a2="0,1,1" data-b="1,1,3"   (A = (a1 a2), de 3x2)
+     ===================================================================== */
+  function buildMinimos3(root) {
+    var g = function (k, d) { return (root.getAttribute('data-' + k) || d).split(',').map(Number); };
+    var vals = [g('a1', '1,0,1'), g('a2', '0,1,1'), g('b', '1,1,3')];
+    root.textContent = ''; root.classList.add('sarrus');
+    var S = makeScene(root, 4, 0.85);
+    if (S) S.renderer.domElement.setAttribute('aria-label', 'Figura 3D: el plano Col A generado por las dos columnas de A, el vector b fuera de él, su proyección A x-gorro y el residuo perpendicular');
+    var cl = function (t) { return S ? t : ''; };
+    var V = vecInputs(['C₁', 'C₂', 'b'], ['up', 'up', 'down'], vals), text = el('p', 'sar-text'), res = el('div', 'sar-res'); text.setAttribute('aria-live', 'polite');
+    var sa = slider(-2, 2, 0.1, 0), sb = slider(-2, 2, 0.1, 0), la = el('b'), lb = el('b'), sl = el('div', 'an-sliders');
+    sa.setAttribute('aria-label', 'Cambio δ1 de la primera componente de x respecto de la solución por mínimos cuadrados'); sb.setAttribute('aria-label', 'Cambio δ2 de la segunda componente de x respecto de la solución por mínimos cuadrados');
+    function srow(txt, s, lb2) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb2); sl.appendChild(r); }
+    srow('δ₁ ', sa, la); srow('δ₂ ', sb, lb);
+    var R_ = '#d9434a', LG = '#7fbf9a', PU = '#7a52c7', GR = '#8a93a3';
+    function esc(K) { return S && Math.abs(K - 1) > 0.01 ? ' <i>(Dibujo a escala ' + nc(K) + ' para que quepa y se lea.)</i>' : ''; }
+
+    function draw() {
+      var C = COL(), M = V.get(), a1 = M[0], a2 = M[1], b = M[2];
+      if (S) S.clearDyn();
+      var G11 = dot(a1, a1), G12 = dot(a1, a2), G22 = dot(a2, a2), r1 = dot(a1, b), r2 = dot(a2, b), det = G11 * G22 - G12 * G12;
+      var rk = rankOf([a1, a2]), t = '';
+      var Ah = '<b>AᵗA</b> = (' + nc(G11) + ' ' + nc(G12) + ' / ' + nc(G12) + ' ' + nc(G22) + '), <b>AᵗB</b> = (' + nc(r1) + '; ' + nc(r2) + ').';
+      if (rk === 2) {
+        var x1 = (r1 * G22 - r2 * G12) / det, x2 = (G11 * r2 - G12 * r1) / det;
+        var p1 = mul3(x1, a1), p2 = mul3(x2, a2), p = add(p1, p2), w = sub3(b, p), n = cross(a1, a2);
+        sb.disabled = false; sa.setAttribute('aria-label', 'Cambio δ1 de la primera componente de x respecto de la solución por mínimos cuadrados');
+        var al = S ? (parseFloat(sa.value) || 0) : 0, be = S ? (parseFloat(sb.value) || 0) : 0; la.textContent = nc(al); lb.textContent = nc(be);
+        var q = add(p, add(mul3(al, a1), mul3(be, a2))), K = scaleOf([b, p, a1, a2, q]);
+        if (S) {
+          S.plane(n, 0, C.b, 0.25); S.line([0, 0, 0], n, GR, 0.04);
+          S.arrow(mul3(K, a1), C.b, 'C₁'); S.arrow(mul3(K, a2), C.b, 'C₂'); S.arrow(mul3(K, b), C.a, 'b');
+          if (norm(p1) > 1e-6) S.arrow(mul3(K, p1), LG, '');
+          if (norm(p2) > 1e-6) S.arrow(mul3(K, p), LG, '', mul3(K, p1));
+          if (norm(p) > 1e-6) S.arrow(mul3(K, p), C.c, 'Ax̂');
+          if (norm(w) > 1e-6) S.arrow(mul3(K, b), R_, '', mul3(K, p));
+          var Kp = mul3(K, p);
+          rightAngle(S, Kp, norm(p) > 1e-6 ? unit3(mul3(-1, p)) : unit3(a1), unit3(w), raSize(norm(Kp) || 0.45, K * norm(w)));
+          S.sphere(mul3(K, q), PU, 0.13); S.tube(mul3(K, q), mul3(K, b), PU, 0.025);
+        }
+        var wn = norm(w), Ad = add(mul3(al, a1), mul3(be, a2)), eq = Math.sqrt(wn * wn + dot(Ad, Ad));
+        t = 'Las columnas C₁ = ' + vtxt3(a1) + ', C₂ = ' + vtxt3(a2) + ' son independientes (C₁×C₂ = ' + vtxt3(n) + ' ≠ 0): Col A es un <b>plano</b> y la solución por mínimos cuadrados es <b>única</b>.<br>' + Ah + ' det(AᵗA) = ' + nc(det) + ' ≠ 0.<br>' +
+          '<b>Ecuaciones normales:</b> ' + nc(G11) + '·x₁ + ' + nc(G12) + '·x₂ = ' + nc(r1) + ' ; ' + nc(G12) + '·x₁ + ' + nc(G22) + '·x₂ = ' + nc(r2) + ' ⇒ <b>x̂ = (' + nc(x1) + '; ' + nc(x2) + ')</b>.<br>' +
+          '<b>Ax̂</b> = x̂₁C₁ + x̂₂C₂ = <b>' + vtxt3(p) + '</b> = Proy<sub>Col A</sub> b' + cl(' (flecha verde: dos tramos paralelos a C₁ y C₂)') + '. Residuo <b>b − Ax̂ = ' + vtxt3(w) + '</b>' + cl(' (rojo)') + ': C₁•w = ' + nc(dot(a1, w)) + ', C₂•w = ' + nc(dot(a2, w)) + ' (perpendicular al plano' + cl(', cuadradito rojo') + ').<br>' +
+          '<b>Error mínimo</b> ‖b − Ax̂‖ = <b>' + nc(wn) + '</b>' + (wn < 1e-9 ? ' = 0: b está en Col A, el sistema es compatible.' : '.') +
+          (S ? ' El punto morado A·x con x = x̂ + (δ₁, δ₂) está a √(‖b − Ax̂‖² + ‖A(δ₁,δ₂)‖²) = <b>' + nc(eq) + '</b> de b: nunca menos, y solo igual con δ = 0 (columnas independientes ⇒ A δ ≠ 0 si δ ≠ 0).' : ' Cualquier otro x da ‖b − Ax‖² = ‖b − Ax̂‖² + ‖A(x − x̂)‖² ≥ ‖b − Ax̂‖².') + esc(K);
+      } else if (rk === 1) {
+        var d = norm(a1) >= norm(a2) ? a1 : a2, first = d === a1, tt = dot(b, d) / dot(d, d), s_o = dot(first ? a2 : a1, d) / dot(d, d);
+        sb.disabled = true; sa.setAttribute('aria-label', 'Desplazamiento δ1 del punto de prueba a lo largo de la recta Col A');
+        var p0 = mul3(tt, d), w0 = sub3(b, p0), dh = unit3(d), al0 = S ? (parseFloat(sa.value) || 0) : 0; la.textContent = nc(al0); lb.textContent = '—';
+        var q0 = add(p0, mul3(al0, dh)), K0 = scaleOf([b, p0, a1, a2, q0]);
+        if (S) {
+          S.line([0, 0, 0], d, C.b, 0.05); S.arrow(mul3(K0, a1), C.b, 'C₁'); S.arrow(mul3(K0, a2), C.b, 'C₂'); S.arrow(mul3(K0, b), C.a, 'b');
+          if (norm(p0) > 1e-6) S.arrow(mul3(K0, p0), C.c, 'Ax̂');
+          if (norm(w0) > 1e-6) S.arrow(mul3(K0, b), R_, '', mul3(K0, p0));
+          var Kp0 = mul3(K0, p0);
+          rightAngle(S, Kp0, norm(p0) > 1e-6 ? unit3(mul3(-1, p0)) : dh, unit3(w0), raSize(norm(Kp0) || 0.45, K0 * norm(w0)));
+          S.sphere(mul3(K0, q0), PU, 0.13); S.tube(mul3(K0, q0), mul3(K0, b), PU, 0.025);
+        }
+        var eq0 = first ? ('x₁ + ' + nc(s_o) + '·x₂ = ' + nc(tt)) : (nc(s_o) + '·x₁ + x₂ = ' + nc(tt)), wn0 = norm(w0);
+        t = 'Las columnas son <b>dependientes</b> (rango 1): Col A es solo una <b>recta</b> ⟨' + vtxt3(d) + '⟩ y la solución por mínimos cuadrados <b>no es única</b>.<br>' + Ah + ' det(AᵗA) = 0.<br>' +
+          'Las dos ecuaciones normales dicen lo mismo: <b>' + eq0 + '</b>, una recta de soluciones en ℝ² (variedad afín x<sub>p</sub> + Nuc A).<br>' +
+          '<b>Ax̂</b> = Proy<sub>Col A</sub> b = <b>' + vtxt3(p0) + '</b> es el mismo para todas ellas, y el residuo ' + vtxt3(w0) + ' también: <b>error mínimo ' + nc(wn0) + '</b>.' +
+          (S ? ' El punto morado se mueve sobre la recta Col A (δ₁): su distancia a b es √(‖w‖² + δ₁²) = <b>' + nc(Math.sqrt(wn0 * wn0 + al0 * al0)) + '</b>.' : '') + esc(K0);
+      } else {
+        sb.disabled = true; la.textContent = '—'; lb.textContent = '—';
+        t = 'A = 0: todas las columnas son nulas, Col A = {0} y Ax = 0 para todo x. Cualquier x es solución por mínimos cuadrados (error ‖b‖ = ' + nc(norm(b)) + '). Cambia las columnas.';
+      }
+      html(text, t);
+      if (S) S.render();
+    }
+    var presets = [['Propio P1', [[1, 0, 1], [0, 1, 1], [1, 1, 3]]], ['E 5.37 (= E 5.35)', [[2, 1, 3], [1, -2, 1], [3, -1, 2]]], ['Feb. 2023 (A) ej. 8', [[2, 1, 1], [1, 2, 1], [2, 0, -3]]], ['U Ej. 5.36', [[1, 1, 0], [0, 0, 1], [1, 0, -5]]], ['b dentro de Col A (error 0)', [[1, 0, 1], [0, 1, 1], [1, 2, 3]]], ['Columnas dependientes (rango 1)', [[1, 0, 1], [2, 0, 2], [1, 1, 1]]]];
+    var pre = btnRow(presets.map(function (q) { return q[0]; }), function (k) { V.set(presets[k][1]); sa.value = 0; sb.value = 0; draw(); });
+    root.appendChild(el('p', 'sar-text an-title', S
+      ? 'Mínimos cuadrados en ℝ³ con A = (C₁ C₂) de 3×2. Los vectores Ax con x ∈ ℝ² llenan el plano Col A (translúcido). Si b no está en él, AX = b es incompatible: el mejor candidato es la proyección Ax̂ (verde), y el residuo b − Ax̂ (rojo) es perpendicular al plano, es decir, a C₁ y a C₂: eso son las ecuaciones normales AᵗA x = Aᵗb. El punto morado A·x, con x = x̂ + (δ₁, δ₂), siempre queda más lejos de b. Cambia las columnas y b, o carga un ejemplo.'
+      : 'Mínimos cuadrados en ℝ³ con A = (C₁ C₂) de 3×2: Ax̂ es la proyección de b sobre el plano Col A y el residuo b − Ax̂ es perpendicular a C₁ y a C₂ (ecuaciones normales AᵗA x = Aᵗb). Cambia las columnas y b.'));
+    root.appendChild(V.box); if (S) root.appendChild(S.wrap);
+    if (S) root.appendChild(sl);
+    root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    V.inp.forEach(function (r) { r.forEach(function (x) { x.addEventListener('input', function () { sa.value = 0; sb.value = 0; draw(); }); }); });
+    [sa, sb].forEach(function (x) { x.addEventListener('input', draw); });
+    if (S) S.onTheme = draw; draw();
+  }
+
+
+  var REG = [['.d3-minimos', buildMinimos3], ['.d3-ejes', buildEjes], ['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
   function init() {
     var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n, false]); }); });
     if (!todo.length) return;

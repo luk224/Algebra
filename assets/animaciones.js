@@ -18,6 +18,7 @@
    .anim-gram    data-g="1,0,1" data-u="2,1" data-v="-1,2"   (producto escalar de R2 con matriz de Gram G=(a b; b c) editable [data-g = a,b,c; simetrica por construccion] y dos vectores u, v con sliders (coordenadas en la base de G): u.v = u^t G v, normas, coseno, angulo, ortogonalidad, distancia; dibujo fiel con Cholesky (los angulos que se ven son los de el producto); avisa si G no es definida positiva (Sylvester) con un vector testigo x.x<=0; presets: estandar, U Ej. 5.5, propios, no definida positiva, semidefinida)
    .anim-ortog   data-a="1,0,0,1" data-x="2,1" data-y="0.5,1.5"   (matriz A 2x2 [a b; c d] editable, deslizador de angulo theta con botones Giro R_theta / Simetria S_theta y presets: muestra A^tA, si es ortogonal (tolerancia 0,005), det, el cuadrado unidad y su imagen, dos vectores x, y con sliders y sus imagenes Ax, Ay (se conservan normas, producto escalar y angulo solo si A es ortogonal) y el tipo: giro de angulo theta o simetria respecto de la recta de angulo theta/2; si no es ortogonal indica que condicion de las columnas falla)
    .anim-simet   data-a="3,1,3"   (matriz 2x2 de filas (a b; d c) con a, b, c editables y casilla "simetrica" [d = b]; deslizador de angulo phi para un punto x de la circunferencia unidad: x frente a Ax, la elipse imagen de la circunferencia unidad y presets. Si es simetrica: discriminante (a-c)^2+4b^2 >= 0 (valores propios siempre reales), valores propios l1 >= l2, ejes principales u1, u2 perpendiculares (rectas punteadas) con los semiejes |l1|, |l2| de la elipse, angulo theta = 1/2 atan2(2b, a-c) de la matriz de paso P (giro de det 1), P^t A P = diag(l1, l2) calculado numericamente y aviso cuando x esta sobre un eje principal. Si se desmarca la casilla: valores y vectores propios de una A cualquiera, angulo entre los ejes propios (distinto de 90 grados) y por que no hay P ortogonal; presets: matrices del tema 5.3, singular, diagonal, valor doble, contrastes no simetricos)
+   .anim-minimos data-p="2,3;4,2;5,1;7,0.5"   (recta de minimos cuadrados y = m x + n para 2 a 8 puntos editables [filas (x_i, y_i); botones +/- punto]: sistema AX=B con una fila (x_i,1) por dato, sumas, ecuaciones normales y su determinante, solucion por Cramer, residuos verticales (segmentos naranjas) con control de que son ortogonales a las columnas (sum e_i = 0, sum x_i e_i = 0), error ||AX-B||, pronostico en un x editable y recta de prueba con sliders dm, dn (discontinua) cuyo error crece por Pitagoras ||AX'-B||^2 = ||AX-B||^2 + ||A(X'-X)||^2; si todos los x coinciden AtA es singular y avisa de solucion no unica; 7 presets: U Ej. 5.41, E 5.40, Lay 6.6 Ej. 1, P2, E 5.44 D, alineados, misma x; break-inside:avoid en impresion)
 */
 (function () {
   'use strict';
@@ -1553,7 +1554,96 @@
   }
 
 
-  var REG = [['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Minimos cuadrados: recta de regresion por puntos editables (.anim-minimos)
+     ===================================================================== */
+  function buildMinimos(root) {
+    var nd = function (x) { var v = Math.round(x * 1000) / 1000; if (Math.abs(v) < 1e-9) v = 0; return String(v).replace('-', MINUS).replace('.', ','); };
+    var sg = function (v) { return v < 0 ? MINUS + ' ' + nd(-v) : '+ ' + nd(v); };
+    var pts0 = (root.getAttribute('data-p') || '2,3;4,2;5,1;7,0.5').split(';').map(function (r) { return r.split(',').map(Number); });
+    root.textContent = ''; root.classList.add('sarrus');
+    var W = 420, H = 300, ML = 40, MB = 28, MT = 12, MR = 14;
+    var svg = sv('svg', { viewBox: '0 0 ' + W + ' ' + H, 'class': 'an-svg', role: 'img', 'aria-label': 'Puntos de datos, recta de mínimos cuadrados y residuos verticales' });
+    svg.style.maxWidth = '460px';
+    var layer = sv('g', {}); svg.appendChild(layer);
+    var eqs = el('div', 'an-eqs'), rows = [], text = el('p', 'sar-text'), res = el('div', 'sar-res'), sl = el('div', 'an-sliders');
+    text.setAttribute('aria-live', 'polite');
+    var sm = slider(-1, 1, 0.05, 0), sn = slider(-4, 4, 0.1, 0), lm = el('b'), ln = el('b');
+    sm.setAttribute('aria-label', 'Cambio Δm de la pendiente de la recta de prueba'); sn.setAttribute('aria-label', 'Cambio Δn del término independiente de la recta de prueba');
+    [['Δm ', sm, lm], ['Δn ', sn, ln]].forEach(function (q) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', q[0])); r.appendChild(q[1]); r.appendChild(q[2]); sl.appendChild(r); });
+    var fx = numInput(10, 0.5, '4.2em'); fx.setAttribute('aria-label', 'valor de x para el pronóstico');
+    var fr = el('label', 'an-slrow'); fr.style.justifyContent = 'center'; fr.appendChild(el('span', '', 'Pronóstico en x = ')); fr.appendChild(fx);
+
+    function addRow(x, y) {
+      var d = el('div', 'an-eq ' + (rows.length % 2 ? 'up' : 'down')), ix = numInput(x, 0.5, '3.6em'), iy = numInput(y, 0.5, '3.6em');
+      ix.setAttribute('aria-label', 'x del punto ' + (rows.length + 1)); iy.setAttribute('aria-label', 'y del punto ' + (rows.length + 1));
+      d.appendChild(el('span', '', 'P' + (rows.length + 1) + ' ( ')); d.appendChild(ix); d.appendChild(el('span', '', ' , ')); d.appendChild(iy); d.appendChild(el('span', '', ' )'));
+      ix.addEventListener('input', draw); iy.addEventListener('input', draw);
+      eqs.appendChild(d); rows.push({ d: d, x: ix, y: iy });
+    }
+    function setPts(P) { rows.forEach(function (r) { eqs.removeChild(r.d); }); rows = []; P.forEach(function (p) { addRow(p[0], p[1]); }); }
+    var PRE = [['U Ej. 5.41', [[2, 3], [4, 2], [5, 1], [7, 0.5]]], ['E 5.40', [[1, 2], [2, 1.5], [3, 2.5], [4, 1], [5, 2]]], ['Lay §6.6 Ej. 1', [[2, 1], [5, 2], [7, 3], [8, 3]]], ['Propio P2', [[0, 1], [1, 1], [2, 2], [3, 4]]], ['E 5.44 D: (0,0), (1,1), (2,0)', [[0, 0], [1, 1], [2, 0]]], ['Alineados: error 0', [[0, 1], [1, 3], [2, 5]]], ['Misma x (AᵗA singular)', [[2, 1], [2, 3], [2, 5]]]];
+    var pre = btnRow(PRE.map(function (q) { return q[0]; }), function (k) { setPts(PRE[k][1]); sm.value = 0; sn.value = 0; fx.value = 10; draw(); });
+    var cnt = btnRow(['+ punto', '− punto'], function (i) {
+      if (i === 0 && rows.length < 8) { var l = rows[rows.length - 1], xx = l ? (parseFloat(l.x.value) || 0) + 1 : 0; addRow(xx, l ? (parseFloat(l.y.value) || 0) : 0); }
+      if (i === 1 && rows.length > 2) { var r = rows.pop(); eqs.removeChild(r.d); }
+      draw();
+    });
+    function nice(lo, hi, n) { var span = Math.max(hi - lo, 1e-6), raw = span / n, p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), f = raw / p, st = (f < 1.5 ? 1 : f < 3.5 ? 2 : f < 7.5 ? 5 : 10) * p, out = []; for (var t = Math.ceil(lo / st - 1e-9) * st; t <= hi + 1e-9; t += st) out.push(Math.round(t / st) * st); return out; }
+
+    function draw() {
+      var P = rows.map(function (r) { return [parseFloat(r.x.value) || 0, parseFloat(r.y.value) || 0]; }), N = P.length;
+      var Sx = 0, Sxx = 0, Sy = 0, Sxy = 0; P.forEach(function (p) { Sx += p[0]; Sxx += p[0] * p[0]; Sy += p[1]; Sxy += p[0] * p[1]; });
+      var det = N * Sxx - Sx * Sx, ok = Math.abs(det) > 1e-9, m = 0, n = N ? Sy / N : 0;
+      if (ok) { m = (N * Sxy - Sx * Sy) / det; n = (Sxx * Sy - Sx * Sxy) / det; }
+      var dm = parseFloat(sm.value) || 0, dn = parseFloat(sn.value) || 0; lm.textContent = nd(dm); ln.textContent = nd(dn);
+      var mt = m + dm, nt = n + dn;
+      var xs = P.map(function (p) { return p[0]; }), ys = P.map(function (p) { return p[1]; });
+      var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys.concat([m * x0 + n, m * x1 + n])), y1 = Math.max.apply(null, ys.concat([m * x0 + n, m * x1 + n]));
+      var px = Math.max((x1 - x0) * 0.12, 0.6), py = Math.max((y1 - y0) * 0.15, 0.6); x0 -= px; x1 += px; y0 -= py; y1 += py;
+      var X = function (x) { return ML + (x - x0) / (x1 - x0) * (W - ML - MR); }, Y = function (y) { return H - MB - (y - y0) / (y1 - y0) * (H - MB - MT); };
+      while (layer.firstChild) layer.removeChild(layer.firstChild);
+      var t;
+      nice(x0, x1, 7).forEach(function (v) { layer.appendChild(sv('line', { x1: X(v), y1: MT, x2: X(v), y2: H - MB, 'class': 'an-gr' })); t = sv('text', { x: X(v), y: H - MB + 14, 'class': 'an-tk', 'text-anchor': 'middle' }); t.textContent = nd(v); layer.appendChild(t); });
+      nice(y0, y1, 6).forEach(function (v) { layer.appendChild(sv('line', { x1: ML, y1: Y(v), x2: W - MR, y2: Y(v), 'class': 'an-gr' })); t = sv('text', { x: ML - 5, y: Y(v) + 4, 'class': 'an-tk', 'text-anchor': 'end' }); t.textContent = nd(v); layer.appendChild(t); });
+      layer.appendChild(sv('line', { x1: ML, y1: H - MB, x2: W - MR, y2: H - MB, 'class': 'an-ax' })); layer.appendChild(sv('line', { x1: ML, y1: MT, x2: ML, y2: H - MB, 'class': 'an-ax' }));
+      var line = function (mm, nn, cls) { layer.appendChild(sv('line', { x1: X(x0), y1: Y(mm * x0 + nn), x2: X(x1), y2: Y(mm * x1 + nn), 'class': cls })); };
+      var trial = ok && (Math.abs(dm) > 1e-9 || Math.abs(dn) > 1e-9);
+      if (trial) line(mt, nt, 'an-ln up dashl');
+      if (ok) line(m, n, 'an-ln down');
+      var E2 = 0, Et2 = 0, sumE = 0, sumXE = 0, resid = [];
+      P.forEach(function (p) {
+        var e = p[1] - (m * p[0] + n); E2 += e * e; sumE += e; sumXE += p[0] * e; resid.push(e); Et2 += Math.pow(p[1] - (mt * p[0] + nt), 2);
+        if (ok) { var s = sv('line', { x1: X(p[0]), y1: Y(p[1]), x2: X(p[0]), y2: Y(m * p[0] + n), 'class': 'an-vec up' }); s.style.strokeWidth = '2.2'; layer.appendChild(s); }
+        layer.appendChild(sv('circle', { cx: X(p[0]), cy: Y(p[1]), r: 4.6, 'class': 'an-dot' }));
+      });
+      var fxv = parseFloat(fx.value); if (isNaN(fxv)) fxv = 0;
+      if (ok && fxv >= x0 && fxv <= x1) layer.appendChild(sv('circle', { cx: X(fxv), cy: Y(m * fxv + n), r: 5, 'class': 'an-dot ker' }));
+      var rec = 'y = ' + nd(m) + '·x ' + sg(n);
+      var h = '<b>Sistema</b> AX = B: cada punto (xᵢ, yᵢ) da una ecuación m·xᵢ + n = yᵢ, así que A tiene una fila (xᵢ, 1) por dato: <b>' + N + ' ecuaciones y 2 incógnitas</b> (m, n).';
+      h += '<br><b>Sumas:</b> Σx = ' + nd(Sx) + ', Σx² = ' + nd(Sxx) + ', Σy = ' + nd(Sy) + ', Σxy = ' + nd(Sxy) + ', N = ' + N + '.';
+      h += '<br><b>Ecuaciones normales</b> AᵗAX = AᵗB: ' + nd(Sxx) + '·m + ' + nd(Sx) + '·n = ' + nd(Sxy) + ' ; ' + nd(Sx) + '·m + ' + N + '·n = ' + nd(Sy) + '. Determinante de AᵗA = N·Σx² − (Σx)² = <b>' + nd(det) + '</b>.';
+      if (!ok) {
+        h += '<br><b>AᵗA es singular</b>: todos los xᵢ son iguales (' + nd(xs[0]) + '), las columnas (xᵢ) y (1,…,1) de A son proporcionales (dependientes) y la solución por mínimos cuadrados <b>no es única</b>: sirve cualquier (m, n) con m·' + nd(xs[0]) + ' + n = ' + nd(Sy / N) + ' (la media de los yᵢ). Además, puntos con la misma x no los describe ninguna función y = mx + n.';
+      } else {
+        h += '<br><b>Solución</b> (Cramer): m = (N·Σxy − Σx·Σy)/det = <b>' + nd(m) + '</b>, n = (Σx²·Σy − Σx·Σxy)/det = <b>' + nd(n) + '</b>. Recta de mínimos cuadrados: <b>' + rec + '</b>.';
+        h += '<br><b>Residuos</b> eᵢ = yᵢ − (m·xᵢ + n) (segmentos naranjas): ' + resid.map(nd).join('; ') + '. Control de las normales: Σeᵢ = ' + nd(sumE) + ' y Σxᵢeᵢ = ' + nd(sumXE) + ' (el vector de residuos es <b>ortogonal a las dos columnas</b> de A).';
+        h += '<br><b>Error</b> ‖AX − B‖ = √Σeᵢ² = <b>' + nd(Math.sqrt(E2)) + '</b>' + (E2 < 1e-9 ? ': los puntos están alineados, AX = B es compatible y el error es 0.' : '.');
+        if (trial) h += '<br><b>Tu recta de prueba</b> y = ' + nd(mt) + '·x ' + sg(nt) + ' (discontinua) tiene error √Σeᵢ² = <b>' + nd(Math.sqrt(Et2)) + '</b> ' + (Et2 >= E2 - 1e-9 ? '≥ ' : '&lt; ') + nd(Math.sqrt(E2)) + '. Pitágoras: ‖AX′ − B‖² = ‖AX − B‖² + ‖A(X′ − X)‖² = ' + nd(E2) + ' + ' + nd(Et2 - E2) + ' = ' + nd(Et2) + '; por eso nunca mejora.';
+        else h += '<br>Mueve Δm y Δn para ver una recta de prueba: su error siempre es mayor, porque ‖AX′ − B‖² = ‖AX − B‖² + ‖A(X′ − X)‖².';
+        h += '<br><b>Pronóstico</b> en x = ' + nd(fxv) + ': y = ' + nd(m * fxv + n) + '.';
+      }
+      html(text, h); res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = ok ? rec + ' · error ' + nd(Math.sqrt(E2)) : 'Solución no única (columnas dependientes)'; res.appendChild(fin);
+    }
+    root.appendChild(el('p', 'sar-text an-title', 'Cuando los datos no caen sobre una recta, el sistema AX = B de «m·xᵢ + n = yᵢ» es incompatible. La recta de mínimos cuadrados (azul) hace mínima la suma de los cuadrados de los residuos verticales (naranja). Edita los puntos o carga un ejemplo; con Δm y Δn separas la recta de prueba (discontinua) de la óptima y ves cómo crece el error.'));
+    root.appendChild(eqs); root.appendChild(cnt); root.appendChild(svg); root.appendChild(sl); root.appendChild(fr); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    [sm, sn, fx].forEach(function (q) { q.addEventListener('input', draw); });
+    setPts(pts0); draw();
+  }
+
+
+  var REG = [['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

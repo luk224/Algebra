@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 5.4 Mínimos cuadrados</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/tres-d.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 5 · Ortogonalidad · Tema 5.4</div>
+  <h1>Mínimos cuadrados</h1>
+  <p>Cuando un sistema $AX=B$ <b>no tiene solución</b> (lo normal con datos medidos), no te rindes: buscas la <b>mejor solución aproximada</b>, la que deja el vector $AX$ lo más cerca posible de $B$. Verás que eso es una <b>proyección ortogonal</b> (tema 5.1), que se calcula con las <b>ecuaciones normales</b> $A^tAX=A^tB$ o con la factorización $QR$ (tema 5.2), y cómo ajustar una <b>recta</b>, una <b>parábola</b> o un <b>plano</b> a una nube de puntos.</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §5.4 (pp. 225-239)</span><span>Ejercicios: E Ej. 5.34–5.44 (pp. 191-200)</span><span>Lay §6.5-6.6 (pp. 360-375)</span><span>⏱ ~6–8 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="X" data-ref="Examen de convocatorias anteriores (Álgebra, UNED)">X</span> examen
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §5.4.1 Elementos didácticos, pp. 225-226">U p.225-226</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>Mides tres veces dos magnitudes y los resultados <b>se contradicen</b>: por ejemplo, la báscula dice que $x$ pesa $1$, que $y$ pesa $1$ y que juntos pesan $3$. El sistema $x=1,\ y=1,\ x+y=3$ no tiene solución. Pero no vas a dejar de pesar: querrás los valores $(x,y)$ que <b>menos contradigan</b> a las tres medidas. Eso es una <b>solución por mínimos cuadrados</b>: la $X$ que hace lo más pequeño posible el «fallo» $\|AX-B\|$. Geométricamente es la proyección ortogonal de $B$ sobre el conjunto de vectores que $A$ sabe fabricar (el subespacio generado por sus columnas), y el fallo mínimo es la <b>distancia</b> de $B$ a ese subespacio. Ya sabes calcular proyecciones (tema 5.1); aquí aprendes a convertir un sistema de ecuaciones en una de ellas.</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, p. 225-226: «hallar un x₀ tal que el vector Ax₀ se aproxime a b lo máximo posible»">U p.225-226</span>
+  <span class="src" data-l="P" data-ref="Analogía de las tres medidas propia; es el ejemplo propio P1 de la sección 7">propio</span>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Del <a href="tema_5_1_producto_escalar.html#s6">tema 5.1</a> (imprescindible): <b>proyección ortogonal</b> de un vector sobre un subespacio, el residuo $v-\operatorname{Proy}_Uv\perp U$ y el <b>teorema de mejor aproximación</b> (Teor. 5.4, U p.213): el punto de $U$ más cercano a $v$ es su proyección. Todo este tema es ese teorema aplicado a $U=$ «lo que genera $A$».</li>
+  <li>Del <a href="tema_5_2_matrices_ortogonales.html">tema 5.2</a>: la factorización $A=QR$ ($Q$ con columnas ortonormales, $R$ triangular superior) y que $Q^tQ=I$.</li>
+  <li>Del <a href="tema_1_4_sistemas_ecuaciones.html">tema 1.4</a>: sistema compatible/incompatible por rangos (Rouché-Frobenius) y sistemas por Gauss o Cramer; del <a href="tema_1_2_algebra_matricial.html">1.2</a>: traspuesta, $(AB)^t=B^tA^t$.</li>
+  <li>Del <a href="tema_2_2_sistemas_generadores.html">tema 2.2</a> y <a href="tema_3_2_nucleo_imagen.html">3.2</a>: $Ax=x_1C_1+\dots+x_nC_n$ es una combinación lineal de las columnas; subespacio generado por las columnas y núcleo $\operatorname{Nuc}A$.</li>
+  <li>Producto escalar <b>estándar</b> de $\mathbb R^n$: todo el tema lo usa ($u\cdot v=u^tv$).</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde</th></tr>
+  <tr><td>1 El problema</td><td>Error cuadrático, solución por mínimos cuadrados, interpretación geométrica, <b>animación 3D</b></td><td>U p.226-230 · L p.360 · E 5.35</td></tr>
+  <tr><td>2 Ecuaciones normales</td><td>$A^tAX=A^tB$, caracterizaciones, ejemplos U 5.36-5.38</td><td>U p.228-231 · L Teor. 13 p.361 · E 5.37</td></tr>
+  <tr><td>3 ¿Es única?</td><td>Columnas independientes ⇔ $A^tA$ regular; si no, $x_p+\operatorname{Nuc}A$ (U Ej. 5.39)</td><td>U p.229-232 · L Teor. 14 p.363 · E 5.39</td></tr>
+  <tr><td>4 Con la factorización QR</td><td>$RX=Q^tB$ y por qué; U Ej. 5.40</td><td>U p.232-233 · L Teor. 15 p.365 · E 5.38</td></tr>
+  <tr><td>5 Modelos lineales</td><td>Recta, parábola y plano de mínimos cuadrados, <b>animación 2D</b>, pronósticos</td><td>U p.233-238 · L §6.6 p.368-371 · E 5.40-5.43</td></tr>
+  <tr><td>6 Tabla Lay ↔ U</td><td>Vocabulario y alcance</td><td>L</td></tr>
+  <tr><td>7 Ejercicios del libro</td><td>E 5.34–5.44 (con 3 errores de E corregidos) + 5 ejemplos propios + autoevaluación</td><td>E pp.191-200 · U p.239</td></tr>
+  <tr><td>8 Ejemplos de examen</td><td>Feb. 2023, Feb. 2019, Sept. 2018, Feb. 2020, y la pregunta de teoría (Feb. 2017 y Feb. 2018)</td><td>X</td></tr>
+  <tr><td>9 Chuleta</td><td>Fórmulas con hipótesis, lista de comprobación, errores frecuentes</td><td>—</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios y en el examen</span>
+  <p><b>(a)</b> Calcular el <b>error cuadrático</b> de un $X_0$ dado (Feb. 2019, E 5.35). <b>(b)</b> Hallar la solución por mínimos cuadrados con las <b>ecuaciones normales</b> (Feb. 2023, E 5.37) o escribirlas (Sept. 2018). <b>(c)</b> Hacerlo con la <b>factorización QR</b> que te dan (Feb. 2020, E 5.38). <b>(d)</b> Sistemas con columnas dependientes y describir el conjunto de soluciones (E 5.39). <b>(e)</b> <b>Ajustar</b> recta, parábola o plano y hacer un pronóstico (E 5.40-5.43). <b>(f)</b> Explicar «en qué consiste el método de mínimos cuadrados y cómo se halla su solución» (Feb. 2017, Feb. 2018) y verdadero/falso (E 5.36, 5.44). Aparece en 6 de los 24 exámenes de 2017-2026 (el último, Feb. 2023); cuando sale es un cálculo corto: bien preparado, son puntos «baratos».</p>
+  <span class="src" data-l="P" data-ref="Clasificación propia a partir de E §5.4 y los exámenes 2017-2026">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Convenios y notación del tema (fíjalos desde ya)</span>
+  <ul>
+    <li><b>«Error cuadrático» en U es una <i>norma</i>, no su cuadrado:</b> $\|Ax_0-b\|$ (Def. 5.14). El nombre viene de que esa norma es la raíz de una suma de cuadrados (nota al margen de U p.226). Si en un ejercicio sale $20$, el error es $\sqrt{20}$.</li>
+    <li><b>Mayúscula o minúscula.</b> U escribe $AX=B$ cuando usa matrices columna y $Ax=b$ cuando usa vectores de $\mathbb R^m$ y $\mathbb R^n$: es lo mismo (U p.226). Aquí se usan ambas.</li>
+    <li><b>«$\operatorname{Col}A$» en U es el <i>sistema</i> de columnas de $A$</b> y $\langle\operatorname{Col}A\rangle$ es el subespacio que generan. Lay llama $\operatorname{Col}A$ al subespacio. Aquí uso $\langle\operatorname{Col}A\rangle$ como U; «$C_1,\dots,C_n$» son las columnas.</li>
+    <li><b>Letras de Lay:</b> la solución se llama $\hat x$ («x gorro») en Lay y $x_0$ en U; Lay escribe la recta como $y=\beta_0+\beta_1x$ con columnas $(1,x_i)$ y U como $y=mx+n$ con columnas $(x_i,1)$ (sección 6).</li>
+    <li><b>Todo con el producto escalar estándar.</b> Con otro producto escalar (matriz de Gram $G\neq I$) las ecuaciones normales serían otras: no entra en este tema.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §5.4.2, p. 226-227 (notación AX = B ⇔ Ax = b, Definición 5.14 y nota al margen)">U p.226-227</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, p. 360 y §6.6, p. 368-369">L p.360, 368</span>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>El problema: un sistema sin solución y la mejor aproximación <span class="src" data-l="U" data-ref="U §5.4.2, Definiciones 5.14-5.15 y Ejemplo 5.35, p. 226-228">U p.226-228</span> <span class="src" data-l="L" data-ref="Lay §6.5, definición, p. 360">L p.360</span></h2>
+
+<div class="box intu"><span class="h">Idea: qué vectores sabe fabricar $A$</span>
+  <p>Multiplicar $A$ por un vector $x$ es <b>mezclar las columnas</b> de $A$: $Ax=x_1C_1+\dots+x_nC_n$. Si $A$ es de $3\times2$, todo lo que $A$ puede fabricar son combinaciones de dos vectores de $\mathbb R^3$: un <b>plano</b> que pasa por el origen, $\langle\operatorname{Col}A\rangle$. Resolver $Ax=b$ es preguntar «¿está $b$ en ese plano?». Si $b$ se sale del plano, no hay solución. Entonces, el mejor «sustituto» es el punto del plano <b>más cercano</b> a $b$: el pie de la plomada que bajas desde $b$ hasta el plano. Ese punto es $\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$ (tema 5.1) y la $x_0$ que lo fabrica es la solución por mínimos cuadrados.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.14 — error cuadrático</span>
+  <p>El <b>error cuadrático</b> cometido al sustituir $x_0\in\mathbb R^n$ en el sistema $Ax=b$ es $\|Ax_0-b\|$, la distancia entre lo que sale ($Ax_0$) y lo que se quería ($b$).</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Definición 5.14, p. 227">U p.227</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.35 de U — calcular el error de un $X$ dado</span>
+  <p>$A=\begin{pmatrix}1&2\\2&-1\\3&3\end{pmatrix}$, $B=\begin{pmatrix}1\\2\\-3\end{pmatrix}$, y sustituimos $X=\begin{pmatrix}4\\2\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li>Calcula $AX$ (fila por columna): $AX=\begin{pmatrix}1\cdot4+2\cdot2\\2\cdot4-1\cdot2\\3\cdot4+3\cdot2\end{pmatrix}=\begin{pmatrix}8\\6\\18\end{pmatrix}$.</li>
+    <li>Réstale $B$: $AX-B=(8-1,\ 6-2,\ 18+3)=(7,4,21)$.</li>
+    <li>Norma: $\|(7,4,21)\|=\sqrt{49+16+441}=\sqrt{506}\approx22{,}5$. Es un error enorme: $X=(4,2)$ es una <b>muy mala</b> aproximación. ¿Cuál es la mejor? Se responde en la sección 2 (la solución es $X_0=(\frac5{23},-\frac{18}{23})$, con error $\frac{6\sqrt{115}}{23}\approx2{,}80$: ocho veces menor).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplo 5.35, p. 227">U p.227</span>
+  <span class="src" data-l="P" data-ref="La solución por mínimos cuadrados de este sistema (5/23, -18/23) y su error son cálculo propio, verificado con sympy">propio</span>
+</div>
+
+<div class="box def"><span class="h">Definición 5.15 — solución por mínimos cuadrados</span>
+  <p>Una <b>solución por mínimos cuadrados</b> de $Ax=b$ es un $x_0\in\mathbb R^n$ que <b>minimiza el error cuadrático</b>:
+  $$\|Ax_0-b\|\le\|Ax-b\|\quad\text{para todo }x\in\mathbb R^n,$$
+  es decir, $x_0$ resuelve el problema de optimización $\displaystyle\min_{x\in\mathbb R^n}\|Ax-b\|$.</p>
+  <p>Si $Ax=b$ <b>sí</b> es compatible, sus soluciones exactas tienen error $0$, el menor posible, y por tanto <b>son</b> soluciones por mínimos cuadrados (y las únicas). La definición solo aporta algo nuevo cuando el sistema es incompatible.</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Definición 5.15, p. 227">U p.227</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, definición, p. 360">L p.360</span>
+</div>
+
+<div class="box thm"><span class="h">Lo que dice la geometría (Teorema 5.4 de mejor aproximación aplicado a $A$)</span>
+  <p>Como los vectores $Ax$ recorren exactamente el subespacio $\langle\operatorname{Col}A\rangle$, el Teorema 5.4 (U p.213) dice que el $Ax$ más cercano a $b$ es la proyección: una solución por mínimos cuadrados es una $x_0$ con
+  $$Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b,\qquad\text{y el residuo }b-Ax_0\ \perp\ \langle\operatorname{Col}A\rangle.$$
+  El error mínimo es la <b>distancia</b> de $b$ al subespacio, $\|b-\operatorname{Proy}b\|$.</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, p. 228 («Por el Teorema 5.4 (Mejor aproximación), la solución por mínimos cuadrados x₀ verifica Proy b = Ax₀») y Teorema 5.4, p. 213">U p.228, 213</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, ecuación (1), p. 361">L p.361</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_l_6_5_fig1.png" alt="Dibujo de Lay: el plano Col A, el vector b fuera de él, su proyección A x-gorro con un cuadradito de ángulo recto y otros dos puntos Ax más lejos de b" loading="lazy"><figcaption>El punto $A\hat x$ (la proyección) es el del plano $\operatorname{Col}A$ más cercano a $\mathbf b$; cualquier otro $A\mathbf x$ queda más lejos (Lay, Figura 1, §6.5). <span class="src" data-l="L" data-ref="Lay §6.5, Figura 1, p. 360">L p.360</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Animación 3D: $b$ fuera del plano $\operatorname{Col}A$, su proyección y el residuo perpendicular</span>
+  <div class="d3-minimos" data-a1="1,0,1" data-a2="0,1,1" data-b="1,1,3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (assets/tres-d.js, d3-minimos); presets con el ejemplo propio P1, E 5.37, Feb. 2023 (A) ej. 8 y U Ej. 5.36">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.36 de U — la geometría paso a paso</span>
+  <p>Sistema $\begin{pmatrix}1&0\\1&0\\0&1\end{pmatrix}\begin{pmatrix}x_1\\x_2\end{pmatrix}=\begin{pmatrix}1\\0\\-5\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>¿Incompatible?</b> $\operatorname{rang}A=2$ y la ampliada $\left(\begin{array}{cc|c}1&0&1\\1&0&0\\0&1&-5\end{array}\right)$ tiene rango $3$ (la 1.ª y la 2.ª fila piden $x_1=1$ y $x_1=0$). Rouché-Frobenius: incompatible.</li>
+    <li><b>El plano.</b> $\langle\operatorname{Col}A\rangle=\langle(1,1,0),(0,0,1)\rangle$: los vectores $(a,a,c)$. Las dos columnas son <b>ortogonales</b> ($1\cdot0+1\cdot0+0\cdot1=0$), así que se puede proyectar con la fórmula de Fourier (U (5.2), p.212).</li>
+    <li><b>Proyección:</b> $\operatorname{Proy}b=\frac{b\cdot(1,1,0)}{2}(1,1,0)+\frac{b\cdot(0,0,1)}{1}(0,0,1)=\frac12(1,1,0)-5(0,0,1)=\left(\frac12,\frac12,-5\right)$.</li>
+    <li><b>Resolver $Ax=\operatorname{Proy}b$</b> (este sistema <i>sí</i> es compatible): $x_1=\frac12,\ x_2=-5$. Solución por mínimos cuadrados: $x_0=\left(\frac12,-5\right)$, única porque las columnas son independientes.</li>
+    <li><b>Error</b> (Ej. 5.38 de U): $Ax_0-b=\left(\frac12,\frac12,-5\right)-(1,0,-5)=\left(-\frac12,\frac12,0\right)$, de norma $\sqrt{\frac12}\approx0{,}707$. Es la distancia de $b$ al plano.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplos 5.36 (p. 230) y 5.38 (p. 231)">U p.230-231</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que «mínimos cuadrados» es resolver el sistema ignorando ecuaciones, o resolver las ecuaciones por parejas y promediar. Nada de eso: se minimiza el <b>fallo conjunto</b> $\|Ax-b\|$ en <b>todas</b> las ecuaciones a la vez. En el ejemplo, la solución $\left(\frac12,-5\right)$ no cumple la primera ecuación ($x_1=1$) ni la segunda ($x_1=0$): <b>reparte el fallo</b> entre las dos ($\frac12$ cada una).</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Las ecuaciones normales: cómo se calcula <span class="src" data-l="U" data-ref="U §5.4.2, ecuaciones normales y caracterizaciones, p. 228-229">U p.228-229</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 13, p. 361">L p.361</span></h2>
+
+<div class="box intu"><span class="h">Idea: «perpendicular al plano» = «perpendicular a cada columna»</span>
+  <p>El residuo $b-Ax_0$ tiene que ser perpendicular al plano. Un vector es perpendicular a un plano si y solo si es perpendicular a <b>cada vector que lo genera</b>, es decir, a cada columna. Escribir «el residuo es perpendicular a la columna $C_i$» es $C_i^t(b-Ax_0)=0$. Apilando las $n$ condiciones, las filas $C_i^t$ forman justamente la matriz $A^t$, y queda una sola ecuación matricial. Y esa ecuación ya no habla de proyecciones: es un sistema de ecuaciones normal y corriente, de $n$ ecuaciones con $n$ incógnitas.</p>
+</div>
+
+<div class="box thm"><span class="h">Ecuaciones normales y caracterizaciones</span>
+  <p>De $C_i^t(B-AX_0)=0$ para $i=1,\dots,n$ se obtiene $A^t(B-AX_0)=0$, o sea
+  $$\boxed{A^tA\,X=A^tB}\qquad\text{(ecuaciones normales de }AX=B).$$
+  Son equivalentes (U p.229):</p>
+  <ol>
+    <li>$x_0$ es solución por mínimos cuadrados, es decir, $\|Ax-b\|$ es mínimo para $x=x_0$.</li>
+    <li>$b-Ax_0$ es ortogonal a $\langle\operatorname{Col}A\rangle$ (a todas las columnas).</li>
+    <li>$X_0$ es solución de $A^tAX=A^tB$.</li>
+    <li>$x_0$ es solución de $Ax=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$.</li>
+  </ol>
+  <p><b>La solución por mínimos cuadrados siempre existe</b> (el sistema $Ax=\operatorname{Proy}b$ siempre es compatible). El vector $Ax_0=\operatorname{Proy}b$ es <b>único</b>; la $x_0$ puede no serlo (sección 3).</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, ecuaciones normales (p. 228) y caracterizaciones (p. 229)">U p.228-229</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 13: las soluciones de mínimos cuadrados de Ax = b son las soluciones de AᵗAx = Aᵗb, p. 361">L Teor. 13 p.361</span>
+</div>
+
+<div class="box tip"><span class="h">Cómo escribir $A^tA$ y $A^tB$ sin multiplicar a ciegas</span>
+  <p>El elemento $(i,j)$ de $A^tA$ es el <b>producto escalar de la columna $C_i$ por la columna $C_j$</b>; el $i$-ésimo de $A^tB$ es $C_i\cdot B$. Así $A^tA$ es simétrica ($C_i\cdot C_j=C_j\cdot C_i$) y su diagonal son las normas al cuadrado. Si $A$ es $m\times n$, $A^tA$ es $n\times n$ y $A^tB$ es $n\times1$ (da igual cuántas ecuaciones había).</p>
+  <span class="src" data-l="P" data-ref="Truco propio a partir de la definición del producto A^t A (U §1.2, p. 11-13)">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.37 de U — el mismo sistema, por ecuaciones normales</span>
+  <p>$A=\begin{pmatrix}1&0\\1&0\\0&1\end{pmatrix}$, $B=\begin{pmatrix}1\\0\\-5\end{pmatrix}$ (el de la sección 1).</p>
+  <ol class="steps">
+    <li>Columnas: $C_1=(1,1,0)$, $C_2=(0,0,1)$. $C_1\cdot C_1=2$, $C_1\cdot C_2=0$, $C_2\cdot C_2=1$ $\Rightarrow$ $A^tA=\begin{pmatrix}2&0\\0&1\end{pmatrix}$.</li>
+    <li>$C_1\cdot B=1+0+0=1$, $C_2\cdot B=-5$ $\Rightarrow$ $A^tB=\begin{pmatrix}1\\-5\end{pmatrix}$.</li>
+    <li>Sistema $\begin{pmatrix}2&0\\0&1\end{pmatrix}\begin{pmatrix}x_1\\x_2\end{pmatrix}=\begin{pmatrix}1\\-5\end{pmatrix}$: $2x_1=1,\ x_2=-5$. Misma solución, $\left(\frac12,-5\right)$, sin haber proyectado nada.</li>
+    <li><b>Comprobación</b> (caracterización 2): el residuo $B-AX_0=\left(\frac12,-\frac12,0\right)$ es ortogonal a $C_1$ ($\frac12-\frac12=0$) y a $C_2$ ($0$) ✓.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplo 5.37, p. 231">U p.231</span>
+</div>
+
+<div class="box ex"><span class="h">Otro ejemplo (el de la sección 1): $A$ de $3\times2$ con $A^tA$ no diagonal</span>
+  <p>Para $A=\begin{pmatrix}1&2\\2&-1\\3&3\end{pmatrix}$, $B=\begin{pmatrix}1\\2\\-3\end{pmatrix}$ (U Ej. 5.35):</p>
+  <ol class="steps">
+    <li>$A^tA=\begin{pmatrix}1+4+9&2-2+9\\9&4+1+9\end{pmatrix}=\begin{pmatrix}14&9\\9&14\end{pmatrix}$, $A^tB=\begin{pmatrix}1+4-9\\2-2-9\end{pmatrix}=\begin{pmatrix}-4\\-9\end{pmatrix}$.</li>
+    <li>$\det=196-81=115$. Cramer: $x_1=\dfrac{-4\cdot14+9\cdot9}{115}=\dfrac{25}{115}=\dfrac5{23}$, $x_2=\dfrac{14\cdot(-9)+9\cdot4}{115}=\dfrac{-90}{115}=-\dfrac{18}{23}$.</li>
+    <li>Error: $AX_0=\left(\frac{5-36}{23},\frac{10+18}{23},\frac{15-54}{23}\right)=\frac1{23}(-31,28,-39)$; $AX_0-B=\frac1{23}(-54,-18,30)$, de norma $\frac{\sqrt{2916+324+900}}{23}=\frac{\sqrt{4140}}{23}=\frac{6\sqrt{115}}{23}\approx2{,}80$ (frente a $22{,}5$ del $X=(4,2)$ de antes).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio sobre la A y B del Ejemplo 5.35 de U (p. 227); resultado verificado con sympy">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>$AA^t$ en lugar de $A^tA$.</b> Para $A$ de $3\times2$, $A^tA$ es $2\times2$ (el tamaño de las incógnitas) y $AA^t$ es $3\times3$ y singular.</li>
+    <li><b>Multiplicar solo el lado izquierdo por $A^t$:</b> hay que multiplicar <b>ambos</b> miembros: $A^tAX=A^t\,B$.</li>
+    <li><b>Resolver el sistema original «quitando» una ecuación.</b> Eso no minimiza nada; da una solución exacta de un subsistema.</li>
+    <li>Pensar que las normales pueden ser incompatibles: <b>siempre</b> tienen solución (aunque $AX=B$ no).</li>
+  </ul>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>¿Es única? Columnas independientes y dependientes <span class="src" data-l="U" data-ref="U §5.4.2, caracterización de la unicidad, p. 229 y Ejemplo 5.39, p. 231-232">U p.229-232</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 14, p. 363">L p.363</span></h2>
+
+<div class="box thm"><span class="h">Caracterización de la unicidad</span>
+  <p>Para $A$ de $m\times n$ son equivalentes:</p>
+  <ol>
+    <li>La solución por mínimos cuadrados de $Ax=b$ es <b>única</b> (para cada $b$).</li>
+    <li>Las columnas de $A$ son <b>linealmente independientes</b> ($\operatorname{rang}A=n$).</li>
+    <li>$A^tA$ es <b>regular</b> (invertible).</li>
+  </ol>
+  <p>En tal caso $x_0=(A^tA)^{-1}A^tb$ (fórmula de Lay, útil sobre todo cuando $A^tA$ es $2\times2$ o para teoría; en la práctica se resuelve el sistema).</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, caracterización de la unicidad, p. 229">U p.229</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 14 y fórmula (4), p. 363">L Teor. 14 p.363</span>
+</div>
+
+<div class="box intu"><span class="h">Por qué (argumento propio; U lo enuncia sin demostrar)</span>
+  <p>Si $A^tAx=0$, multiplica por $x^t$: $x^tA^tAx=(Ax)^t(Ax)=\|Ax\|^2=0$, luego $Ax=0$. O sea $\operatorname{Nuc}(A^tA)=\operatorname{Nuc}A$. Si las columnas son independientes, $Ax=0$ solo tiene la solución $x=0$, así que $A^tA$ (cuadrada) solo anula al $0$: es regular. Y viceversa. Además, si $x_0$ y $x_0'$ son dos soluciones de las normales, $A^tA(x_0-x_0')=0$, así que $x_0-x_0'\in\operatorname{Nuc}A$.</p>
+  <p><b>Consecuencia práctica:</b> si las columnas son dependientes, <b>el conjunto de soluciones por mínimos cuadrados es $x_p+\operatorname{Nuc}A$</b> (una solución particular de las normales más el núcleo de $A$): una <b>variedad afín</b> de dimensión $n-\operatorname{rang}A$. En general <b>no es un subespacio</b>: pasa por el origen solo si $A^tB=0$ (es decir, $b\perp$ columnas) y entonces es exactamente $\operatorname{Nuc}A$.</p>
+  <span class="src" data-l="P" data-ref="Argumento propio: Nuc(AᵗA) = Nuc(A); consecuencia x_p + Nuc A, verificada con E 5.39 y el ejemplo propio P4">propio</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_u_5_4_fig54.png" alt="Figura 5.4 de U: la aplicación A lleva R^n a R^m; dos puntos x0 y x0' distintos van al mismo A x0 = Proy b sobre el plano ⟨Col A⟩" loading="lazy"><figcaption>Si las columnas son dependientes, <b>varias</b> $x_0,x_0'$ dan el <b>mismo</b> $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$: el error es único, la solución no. <span class="src" data-l="U" data-ref="U §5.4.2, Figura 5.4, p. 230">U Fig. 5.4 p.230</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Ejemplo 5.39 de U — infinitas soluciones por mínimos cuadrados</span>
+  <p>$A=\begin{pmatrix}1&1&0&0\\0&2&0&1\\2&2&0&0\end{pmatrix}$, $B=\begin{pmatrix}5\\0\\0\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Incompatible y no única.</b> La 3.ª fila es el doble de la 1.ª, así que $\operatorname{rang}A=2$; la ampliada tiene rango $3$ (la 1.ª y la 3.ª fila piden $x_1+x_2=5$ y $2x_1+2x_2=0$). Como $\operatorname{rang}A=2<4=n$, las columnas son dependientes: la solución por mínimos cuadrados <b>no es única</b>.</li>
+    <li><b>Ecuaciones normales:</b> $A^tA=\begin{pmatrix}5&5&0&0\\5&9&0&2\\0&0&0&0\\0&2&0&1\end{pmatrix}$, $A^tB=\begin{pmatrix}5\\5\\0\\0\end{pmatrix}$ (la columna 3 de $A$ es nula: fila y columna de ceros).</li>
+    <li><b>Resolver:</b> $5x_1+5x_2=5\Rightarrow x_1=1-x_2$; y $5x_1+9x_2+2x_4=5\Rightarrow5(1-x_2)+9x_2+2x_4=5\Rightarrow4x_2+2x_4=0\Rightarrow x_4=-2x_2$. La 3.ª ecuación es $0=0$ ($x_3$ libre), la 4.ª ($2x_2+x_4=0$) repite la anterior. Poniendo $x_2=\lambda$, $x_3=\mu$:
+    $$(x_1,x_2,x_3,x_4)=(1-\lambda,\ \lambda,\ \mu,\ -2\lambda)=\underbrace{(1,0,0,0)}_{x_p}+\lambda(-1,1,0,-2)+\mu(0,0,1,0).$$</li>
+    <li><b>Es $x_p+\operatorname{Nuc}A$:</b> $\operatorname{Nuc}A$ se obtiene de $x_1+x_2=0,\ 2x_2+x_4=0$: $\langle(-1,1,0,-2),(0,0,1,0)\rangle$, de dimensión $4-2=2$ ✓.</li>
+    <li><b>Mismo error para todas</b> (U): $A(1,0,0,0)=A(1,0,2,0)=(1,0,2)$, y $\|(1,0,2)-(5,0,0)\|=\|(-4,0,2)\|=\sqrt{20}\approx4{,}47$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplo 5.39, p. 231-232">U p.231-232</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Contestar «la solución es…» con una sola solución cuando $A^tA$ es singular. Si las normales salen compatibles indeterminadas, hay que dar <b>todas</b> las soluciones (con parámetros), y decir que $AX_0$ y el error son los mismos para todas. Y no confundas: <b>el sistema $AX=B$ incompatible</b> y <b>las normales con infinitas soluciones</b> son cosas distintas (las normales siempre son compatibles).</p>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Con la factorización $QR$ <span class="src" data-l="U" data-ref="U §5.4.2, «Solución por mínimos cuadrados a partir de la factorización QR» y Ejemplo 5.40, p. 232-233">U p.232-233</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 15, p. 365">L Teor. 15 p.365</span></h2>
+
+<div class="box intu"><span class="h">Idea: ¿para qué otra vía?</span>
+  <p>Las ecuaciones normales exigen multiplicar $A^tA$, que puede ser engorroso (y numéricamente delicado, avisa Lay en p.364). Si ya tienes $A=QR$ (tema 5.2), $Q$ tiene columnas <b>ortonormales</b>: la proyección sobre $\langle\operatorname{Col}Q\rangle$ es trivial y el sistema que queda es <b>triangular</b>, que se resuelve de abajo arriba sin invertir nada.</p>
+</div>
+
+<div class="box thm"><span class="h">Solución por mínimos cuadrados a partir de $A=QR$</span>
+  <p>Si $A=QR$ (con $Q^tQ=I$, $R$ triangular superior regular), la solución por mínimos cuadrados de $AX=B$ es la del sistema triangular
+  $$\boxed{R\,X=Q^tB}.$$</p>
+  <p><b>Por qué.</b> Las normales son $A^tAX=A^tB$. Con $A=QR$: $A^tA=R^tQ^tQR=R^tR$ y $A^tB=R^tQ^tB$. Queda $R^tRX=R^tQ^tB$; como $R^t$ es regular, se cancela: $RX=Q^tB$. Así que da la <b>misma</b> solución que las normales, y es única (las columnas de $A$ son independientes: si no, no habría $QR$ con $R$ regular, U p.218).</p>
+  <p><b>Aviso de Lay:</b> la solución es $\hat x=R^{-1}Q^tb$, pero «<i>se debería calcular como la solución exacta de $Rx=Q^tb$</i>», por sustitución regresiva, en vez de invertir $R$.</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, «Solución por mínimos cuadrados a partir de la factorización QR», p. 232; factorización QR en U §5.2.2, p. 218">U p.232, 218</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 15 y nota numérica, p. 365">L Teor. 15 p.365</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.40 de U — mínimos cuadrados con $QR$</span>
+  <p>$A=QR$ con $Q=\begin{pmatrix}\frac1{\sqrt2}&\frac1{\sqrt2}\\\frac1{\sqrt2}&-\frac1{\sqrt2}\\0&0\end{pmatrix}$, $R=\begin{pmatrix}1&1\\0&1\end{pmatrix}$, y $B=\begin{pmatrix}1\\1\\1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Producto de $Q^t$ por $B$</b> (cada columna de $Q$ por $B$): $q_1\cdot B=\frac1{\sqrt2}+\frac1{\sqrt2}=\sqrt2$, $q_2\cdot B=\frac1{\sqrt2}-\frac1{\sqrt2}=0$. Luego $Q^tB=(\sqrt2,0)^t$.</li>
+    <li><b>Sistema triangular</b> $RX=Q^tB$: $\ x+y=\sqrt2,\ \ y=0$.</li>
+    <li><b>Sustitución regresiva:</b> $y=0$; $x=\sqrt2$. Solución: $X=(\sqrt2,0)^t$.</li>
+    <li><b>Qué ha pasado.</b> $A=QR=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\\\frac1{\sqrt2}&0\\0&0\end{pmatrix}$ tiene la 3.ª fila nula: la 3.ª ecuación es $0=1$ y el sistema es incompatible. $AX=(1,1,0)$ es la proyección de $(1,1,1)$ sobre el plano $z=0$, y el error es $1$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplo 5.40, p. 232-233">U p.232-233</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Escribir $X=R^{-1}Q^tB$ e invertir $R$ (más cuentas, más fallos), o usar «$Q^{-1}$»: $Q$ es $m\times n$ con $m>n$, <b>no es cuadrada</b>, solo cumple $Q^tQ=I$ (no $QQ^t=I$); solo si $m=n$ $Q$ es ortogonal y el sistema es compatible. Y si el enunciado dice «por la factorización $QR$», hacerlo por las normales <b>no puntúa</b> (el examen de Feb. 2020 avisa: «lo que se realiza por otra vía distinta a la pedida no se puntúa»); úsalas solo como comprobación.</p>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Modelos lineales: ajustar una recta, una parábola o un plano <span class="src" data-l="U" data-ref="U §5.4.3 Aplicación a modelos lineales, p. 233-238">U p.233-238</span> <span class="src" data-l="L" data-ref="Lay §6.6 Aplicaciones a modelos lineales, p. 368-371">L p.368-371</span></h2>
+
+<div class="box intu"><span class="h">Idea: la recta que «menos falla»</span>
+  <p>Tienes datos medidos $(x_i,y_i)$ que casi parecen alineados, pero no del todo. Quieres la recta $y=mx+n$ que mejor los describa. Si esa recta pasara por <b>todos</b> los puntos se cumpliría $mx_i+n=y_i$ para cada $i$: un sistema con una ecuación por dato y solo <b>dos incógnitas, $m$ y $n$</b>. Casi siempre es incompatible, y la solución por mínimos cuadrados es la recta que hace mínima la suma de los <b>cuadrados de los errores verticales</b> $e_i=y_i-(mx_i+n)$. Ojo con los papeles: las <b>incógnitas</b> son $m$ y $n$; los $x_i,y_i$ son datos (números), y van en la matriz $A$ y en $B$.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.16 — recta de mínimos cuadrados</span>
+  <p>La recta $y=mx+n$ que mejor se aproxima a los puntos observados $\{(x_i,y_i)\}_{i=1}^N$ mediante mínimos cuadrados (minimiza $\sum e_i^2$, con $e_i=|mx_i+n-y_i|$) es la <b>recta de mínimos cuadrados</b>. Se obtiene resolviendo por mínimos cuadrados
+  $$\underbrace{\begin{pmatrix}x_1&1\\x_2&1\\\vdots&\vdots\\x_N&1\end{pmatrix}}_{A}\begin{pmatrix}m\\n\end{pmatrix}=\underbrace{\begin{pmatrix}y_1\\y_2\\\vdots\\y_N\end{pmatrix}}_{B},\qquad A^tA=\begin{pmatrix}\sum x_i^2&\sum x_i\\\sum x_i&N\end{pmatrix},\quad A^tB=\begin{pmatrix}\sum x_iy_i\\\sum y_i\end{pmatrix}.$$
+  Tiene solución única si hay al menos dos valores distintos de $x_i$ (así las columnas $(x_i)$ y $(1,\dots,1)$ son independientes). La solución es
+  $$m=\frac{N\sum x_iy_i-\sum x_i\sum y_i}{N\sum x_i^2-\left(\sum x_i\right)^2},\qquad n=\frac{\sum x_i^2\sum y_i-\sum x_i\sum x_iy_i}{N\sum x_i^2-\left(\sum x_i\right)^2}.$$</p>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Definición 5.16 y cálculo de la recta, p. 233">U p.233</span>
+  <span class="src" data-l="L" data-ref="Lay §6.6, rectas de mínimos cuadrados (recta de regresión) y sistema (1), p. 368-369">L p.368-369</span>
+  <span class="src" data-l="P" data-ref="Fórmulas explícitas de m y n por Cramer, desarrollo propio sobre las ecuaciones normales de U p. 233">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.41 de U — recta por cuatro puntos</span>
+  <p>Puntos $(2,3),(4,2),(5,1),(7,\tfrac12)$.</p>
+  <ol class="steps">
+    <li><b>Sumas</b> ($N=4$): $\sum x=18$, $\sum x^2=4+16+25+49=94$, $\sum y=\frac{13}2$, $\sum xy=6+8+5+\frac72=\frac{45}2$.</li>
+    <li><b>Normales</b> $A^tAX=A^tB$: $\begin{pmatrix}94&18\\18&4\end{pmatrix}\begin{pmatrix}m\\n\end{pmatrix}=\begin{pmatrix}45/2\\13/2\end{pmatrix}$. $\det=376-324=52$.</li>
+    <li><b>Resolver:</b> $m=\dfrac{4\cdot\frac{45}2-18\cdot\frac{13}2}{52}=\dfrac{90-117}{52}=-\dfrac{27}{52}$, $\ n=\dfrac{94\cdot\frac{13}2-18\cdot\frac{45}2}{52}=\dfrac{611-405}{52}=\dfrac{103}{26}$.</li>
+    <li><b>Recta:</b> $y=-\dfrac{27}{52}x+\dfrac{103}{26}$ ($\approx-0{,}52x+3{,}96$).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Ejemplo 5.41, p. 233-234 y Figura 5.5, p. 235">U p.233-235</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_u_5_4_fig55.png" alt="Figura 5.5 de U: cuatro puntos marcados con una cruz, la recta de mínimos cuadrados y un segmento vertical entre un valor observado y el valor estimado" loading="lazy"><figcaption>Los cuatro puntos del Ejemplo 5.41 y su recta. El segmento negro es el error de un dato (valor observado menos valor estimado); la recta hace mínima la suma de los cuadrados de estos segmentos. <span class="src" data-l="U" data-ref="U §5.4.3, Figura 5.5, p. 235">U Fig. 5.5 p.235</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Animación: recta de mínimos cuadrados con puntos editables</span>
+  <div class="anim-minimos" data-p="2,3;4,2;5,1;7,0.5"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (assets/animaciones.js, anim-minimos); presets con U Ej. 5.41, E 5.40, Lay §6.6 Ej. 1, ejemplo propio P2 y E 5.44 D">P</span>
+</div>
+
+<div class="box tip"><span class="h">Truco: centrar los $x$ ahorra cuentas (forma de desviación media de Lay)</span>
+  <p>Si restas la media $\bar x$ a todos los $x_i$, las columnas $(x_i-\bar x)$ y $(1,\dots,1)$ pasan a ser <b>ortogonales</b> ($\sum(x_i-\bar x)=0$) y las normales quedan <b>diagonales</b>: con $x_i^*=x_i-\bar x$,
+  $$m=\frac{\sum x_i^*\,y_i}{\sum (x_i^*)^2},\qquad n=\bar y-m\,\bar x.$$
+  Es especialmente cómodo con $x_i$ equiespaciados (meses, años: $x=1,\dots,5$ ⇒ $x^*=-2,-1,0,1,2$) o con valores de $y$ grandes (E 5.41). Y deja ver una propiedad útil: <b>la recta pasa siempre por el punto de medias $(\bar x,\bar y)$</b>.</p>
+  <span class="src" data-l="L" data-ref="Lay §6.6, forma de desviación media, p. 370">L p.370</span>
+  <span class="src" data-l="P" data-ref="Fórmulas centradas verificadas en E 5.40 y E 5.41 (sympy)">propio</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_l_6_6_fig2.png" alt="Dibujo de Lay: cuatro puntos y su recta de mínimos cuadrados con ordenada en el origen pequeña y pendiente positiva" loading="lazy"><figcaption>Lay, Ejemplo 1 de §6.6: puntos $(2,1),(5,2),(7,3),(8,3)$; ecuaciones normales $\begin{pmatrix}4&22\\22&142\end{pmatrix}\beta=\begin{pmatrix}9\\57\end{pmatrix}$, $\det=4\cdot142-22^2=84$, $\beta_0=\frac{24}{84}=\frac27$, $\beta_1=\frac{30}{84}=\frac5{14}$ ⇒ $y=\frac27+\frac5{14}x$. <span class="src" data-l="L" data-ref="Lay §6.6, Ejemplo 1 y Figura 2, p. 370">L Ej. 1 p.370</span></figcaption></figure>
+
+<h3>Más allá de la recta: parábola y plano</h3>
+
+<div class="box intu"><span class="h">«Lineal» quiere decir lineal en los <i>coeficientes</i></span>
+  <p>El método sirve siempre que la función a ajustar sea una combinación lineal de funciones <b>conocidas</b> con <b>coeficientes incógnita</b>. Una parábola $y=ax^2+bx+c$ no es una recta, pero sí es lineal en $a,b,c$: cada dato da la ecuación $a\,x_i^2+b\,x_i+c=y_i$ y la matriz tiene una fila $(x_i^2,\ x_i,\ 1)$ por dato. Con tres variables, un plano $z=ax+by+c$ tiene filas $(x_i,\ y_i,\ 1)$. Todo lo demás (normales, unicidad, error) es idéntico; solo cambia cuántas columnas tiene $A$.</p>
+  <table>
+    <tr><th>Modelo</th><th>Incógnitas</th><th>Fila de $A$ por dato</th><th>Dato en $B$</th></tr>
+    <tr><td>Recta $y=mx+n$</td><td>$m,n$</td><td>$(x_i,\ 1)$</td><td>$y_i$</td></tr>
+    <tr><td>Parábola $y=ax^2+bx+c$</td><td>$a,b,c$</td><td>$(x_i^2,\ x_i,\ 1)$</td><td>$y_i$</td></tr>
+    <tr><td>Plano $z=ax+by+c$</td><td>$a,b,c$</td><td>$(x_i,\ y_i,\ 1)$</td><td>$z_i$</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §5.4.3, modelo con ternas z = ax + by + c, p. 237; Ejemplo 5.44, p. 237-238">U p.237-238</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.42 (parábola), p. 198, y Ej. 5.43 (plano), p. 199">E 5.42-5.43 p.198-199</span>
+  <span class="src" data-l="P" data-ref="Tabla y razonamiento propios sobre U p. 237 y E 5.42">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 5.42 y 5.43 de U — pronóstico (con una aclaración sobre el redondeo)</span>
+  <p>U ajusta el porcentaje $y$ de alumnos que aprobaron alguna asignatura de Ingeniería en cada semestre (de 2007 a 2009), con $x=1,\dots,6$; el pronóstico $x=10$ corresponde al 2.º semestre de 2011. Datos: $(1;0{,}20),(2;0{,}25),(3;0{,}35),(4;0{,}15),(5;0{,}30),(6;0{,}45)$.</p>
+  <ol class="steps">
+    <li>$N=6$, $\sum x=21$, $\sum x^2=91$, $\sum y=1{,}7$, $\sum xy=6{,}55$. Normales: $\begin{pmatrix}91&21\\21&6\end{pmatrix}\begin{pmatrix}m\\n\end{pmatrix}=\begin{pmatrix}6{,}55\\1{,}7\end{pmatrix}$, $\det=546-441=105$.</li>
+    <li>$m=\frac{6\cdot6{,}55-21\cdot1{,}7}{105}=\frac{3{,}6}{105}=\frac6{175}\approx0{,}0343$ y $n=\frac{91\cdot1{,}7-21\cdot6{,}55}{105}=\frac{17{,}15}{105}=\frac{49}{300}\approx0{,}1633$. U redondea a $y=0{,}03x+0{,}16$ (p.237).</li>
+    <li><b>Pronóstico</b> para $x=10$ (U, Ej. 5.43): con los coeficientes redondeados $0{,}03\cdot10+0{,}16=0{,}46$ ($46\%$). <b>Con los coeficientes exactos:</b> $\frac6{175}\cdot10+\frac{49}{300}=\frac{1063}{2100}\approx0{,}506$ ($50{,}6\%$). La diferencia viene solo del redondeo: <b>no redondees antes de pronosticar</b>.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Ejemplos 5.42 y 5.43, p. 235-237">U p.235-237</span>
+  <span class="src" data-l="P" data-ref="Valores exactos m = 6/175, n = 49/300 y pronóstico 1063/2100: cálculo propio, verificado con sympy">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.44 de U — plano por cuatro puntos</span>
+  <p>Puntos $(x,y,z)$: $(1,-1,3),(2,3,-2),(1,1,1),(1,3,4)$. Modelo $z=ax+by+c$, filas $(x_i,y_i,1)$:</p>
+  <ol class="steps">
+    <li>$A=\begin{pmatrix}1&-1&1\\2&3&1\\1&1&1\\1&3&1\end{pmatrix}$, $B=\begin{pmatrix}3\\-2\\1\\4\end{pmatrix}$.</li>
+    <li>$A^tA=\begin{pmatrix}7&9&5\\9&20&6\\5&6&4\end{pmatrix}$, $A^tB=\begin{pmatrix}4\\4\\6\end{pmatrix}$ (productos escalares de columnas).</li>
+    <li>Resolviendo por Cramer ($\det A^tA=24$; $\Delta_a=-124$, $\Delta_b=6$, $\Delta_c=182$): $(a,b,c)=\left(-\frac{124}{24},\frac6{24},\frac{182}{24}\right)=\left(-\frac{31}6,\frac14,\frac{91}{12}\right)$, es decir, $z=-\frac{31}6x+\frac14y+\frac{91}{12}$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Ejemplo 5.44, p. 237-238">U p.237-238</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos en los modelos</span>
+  <ul>
+    <li><b>Poner mal las columnas:</b> en la recta de U la columna de unos va <b>a la derecha</b> y las incógnitas son $(m,n)$; si la pones a la izquierda (como Lay), las incógnitas son $(n,m)$.</li>
+    <li>Escribir $N=1$ (o el número de variables) en la esquina de $A^tA$: ahí va <b>el número de datos</b> ($\sum1=N$).</li>
+    <li><b>Creer que la recta pasa por algún dato</b> (E 5.44 D): en general no pasa por ninguno.</li>
+    <li>Confundir <b>ajuste</b> con <b>interpolación</b> (E 5.44 C): un polinomio de grado $N-1$ pasa por los $N$ puntos (error $0$); el de mínimos cuadrados, de menor grado, no.</li>
+    <li>Redondear coeficientes demasiado pronto: se nota en el pronóstico (ver arriba).</li>
+  </ul>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Tabla Lay ↔ U: vocabulario y alcance <span class="src" data-l="L" data-ref="Lay §6.5-6.6, p. 360-371">L p.360-371</span></h2>
+
+<p>Lay explica bien esta parte (§6.5 y §6.6) y su estructura coincide con la de U. Esta tabla traduce el vocabulario; si hay diferencia, <b>manda U</b>.</p>
+<table>
+  <tr><th>Concepto</th><th>U (§5.4)</th><th>Lay (§6.5-6.6)</th></tr>
+  <tr><td>Solución</td><td>$x_0$, Def. 5.15 (p.227)</td><td>$\hat x$, definición (p.360)</td></tr>
+  <tr><td>Subespacio de las columnas</td><td>$\langle\operatorname{Col}A\rangle$ (el «sistema» $\operatorname{Col}A$ es el de columnas)</td><td>$\operatorname{Col}A$ (p.360)</td></tr>
+  <tr><td>Error</td><td>«error cuadrático» $\|Ax_0-b\|$, Def. 5.14 (p.227)</td><td>«error de mínimos cuadrados» $\|b-A\hat x\|$ (Ej. 3, p.363-364)</td></tr>
+  <tr><td>Geometría</td><td>$Ax_0=\operatorname{Proy}b$ (p.228)</td><td>$A\hat x=\hat b=\operatorname{proy}_{\operatorname{Col}A}b$, ec. (1) (p.361); Figura 1</td></tr>
+  <tr><td>Ecuaciones normales</td><td>$A^tAX=A^tB$ (p.228)</td><td>$A^TAx=A^Tb$, ec. (3); Teor. 13 (p.361)</td></tr>
+  <tr><td>Unicidad</td><td>columnas independientes ⇔ $A^tA$ regular (p.229)</td><td>Teor. 14 (p.363), con $\hat x=(A^TA)^{-1}A^Tb$ (4)</td></tr>
+  <tr><td>QR</td><td>$RX=Q^tB$ (p.232)</td><td>Teor. 15: $\hat x=R^{-1}Q^Tb$ (p.365); calcular resolviendo $Rx=Q^Tb$</td></tr>
+  <tr><td>Recta</td><td>$y=mx+n$, filas $(x_i,1)$, «línea de mínimos cuadrados» (p.233)</td><td>$y=\beta_0+\beta_1x$, matriz de diseño $X$ con filas $(1,x_i)$, «recta de regresión» (p.368-369)</td></tr>
+  <tr><td>Residuo</td><td>$e_i=|mx_i+n-y_i|$ (p.233)</td><td>valor observado − valor predicho, con signo (p.369)</td></tr>
+</table>
+<p><b>Alcance.</b> Lay trae además el ejemplo con $A^TA$ singular de tipo ANOVA (Ej. 2, p.362-363), el truco de columnas ortogonales (Ej. 4, p.364) y regresión múltiple y ajuste de curvas (p.371 y siguientes); aquí solo se usa lo que respalda U. Con U se pide: ecuaciones normales, QR, recta, plano y (por E) parábola.</p>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §5.4, Ej. 5.34-5.44, p. 190-200">E p.190-200</span></h2>
+
+<p>Los Ejercicios 5.34 a 5.44 de E son los de esta sección (el 5.33 y anteriores, hasta la p.189, son de 5.3 y anteriores). <b>Orden de estudio recomendado</b> (de fácil a difícil): <b>5.35 → 5.36 → 5.37 → 5.40 → 5.43 → 5.38 → 5.39 → 5.41 → 5.42 → 5.44 → 5.34</b>. Abajo están agrupados por método y, dentro de cada grupo, en el orden del libro. Pulsa «Mostrar soluciones» arriba para abrirlas todas.</p>
+
+<div class="box warn"><span class="h">Errores de E detectados y corregidos en esta sección (verificados con sympy)</span>
+  <ul>
+    <li><b>E 5.39</b> (p.195): E da las soluciones $(-\alpha,0,\alpha,-1)$ y dice que son «una recta de $\mathbb R^4$». <b>No cumplen las ecuaciones normales</b> (con $\alpha=1$, $A^tA(-1,0,1,-1)^t=(-2,-3,-2,-3)^t\neq(4,5,4,5)^t$). El conjunto correcto es $x_1=\frac25-x_3,\ x_2=\frac75-x_4$ con $x_3,x_4$ libres: un <b>plano afín (2 parámetros)</b>, no una recta.</li>
+    <li><b>E 5.41</b> (p.197): E da $m=-0{,}2748$, $n=101{,}5925$ e IPC $\approx99{,}1193$. Con los datos del enunciado salen $m=-0{,}0947$, $n=101{,}2323$ y <b>IPC $\approx100{,}38$</b>. (Además E escribe «diciembre 2012» donde debe decir diciembre 2011.)</li>
+    <li><b>E 5.42</b> (p.198): los coeficientes $a=-0{,}8455$, $b=5{,}428$, $c=0{,}4056$ son correctos, pero la raíz positiva que da E ($6{,}461$) no lo es: con esa parábola el proyectil toca el suelo en $x\approx6{,}494$ ($f(6{,}461)\approx0{,}18\neq0$).</li>
+    <li><b>E 5.37</b> (p.193): el valor del error es $\frac2{\sqrt3}\approx1{,}1547$ (correcto). <b>E 5.34</b> (p.191): el enunciado es $v\notin U$ (el símbolo se pierde en algunas copias). <b>E 5.44 B</b> (p.200): debe leerse «$AX_0-B=0$». <b>E 5.38</b> (p.194): la matriz del enunciado se lee mal en el texto extraído de E (aquí está leída del PDF); la solución es correcta.</li>
+  </ul>
+  <span class="src" data-l="E" data-ref="Comprobado con sympy y con el PDF de E, p. 191-200 (Ejercicios 5.34 a 5.44)">E p.191-200</span>
+</div>
+
+<h3 id="bloqueI">Bloque I — Error cuadrático y teoría (E 5.35, 5.36, 5.44, 5.34)</h3>
+
+<details class="sol" id="ej5-35"><summary>Ejercicio 5.35 — error cuadrático al sustituir $X_0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.35, p. 192">E p.192</span></summary>
+  <p class="enun">Calcúlese el error cuadrático cometido en $AX=B$, si $A=\begin{pmatrix}2&1\\1&-2\\3&1\end{pmatrix}$ y $B=\begin{pmatrix}3\\-1\\2\end{pmatrix}$, al sustituir $X$ por $X_0=\begin{pmatrix}1\\-1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Qué se pide.</b> Por la Definición 5.14 (U p.227), el error cuadrático es la norma de $AX_0-B$: mide «cuánto falla» $X_0$ como solución.</li>
+    <li><b>Calcular $AX_0$:</b> $AX_0=\begin{pmatrix}2\cdot1+1\cdot(-1)\\1\cdot1+(-2)(-1)\\3\cdot1+1\cdot(-1)\end{pmatrix}=\begin{pmatrix}1\\3\\2\end{pmatrix}$.</li>
+    <li><b>Restar $B$:</b> $AX_0-B=(1-3,\ 3+1,\ 2-2)=(-2,4,0)$.</li>
+    <li><b>Norma:</b> $\sqrt{4+16+0}=\sqrt{20}=2\sqrt5\approx4{,}4721$.</li>
+  </ol>
+  <p><b>Resultado:</b> error $=2\sqrt5\approx4{,}472$.</p>
+  <div class="recipe"><b>Receta:</b> error cuadrático en un $X_0$ dado: multiplica $AX_0$, resta $B$ y calcula la norma (raíz de la suma de cuadrados).</div>
+  <p><b>Error típico:</b> olvidar la raíz y dar $20$ (eso es $\|AX_0-B\|^2$). <b>Teoría:</b> U §5.4.2, Def. 5.14 y Ej. 5.35, p.227.</p>
+</details>
+
+<details class="sol" id="ej5-36"><summary>Ejercicio 5.36 — verdadero/falso: definición y unicidad <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.36, p. 192">E p.192</span></summary>
+  <p class="enun">Si $A\in\mathcal M_{m\times n}$, se pide decidir si es cierto: A) La solución por mínimos cuadrados de $Ax=b$ es un vector $x_0$ tal que es solución del problema $\min_{x\in\mathbb R^n}\|Ax-b\|$. B) Si $AX=B$ es compatible determinado, la solución por mínimos cuadrados de $AX=B$ es única y es la solución de $AX=B$.</p>
+  <ol class="steps">
+    <li><b>A) Cierto.</b> Es literalmente la Definición 5.15 (U p.227): $x_0$ es solución por mínimos cuadrados si $\|Ax_0-b\|\le\|Ax-b\|$ para todo $x$, es decir, si $x_0$ minimiza $\|Ax-b\|$.</li>
+    <li><b>B) Cierto.</b> Sea $X_0$ la (única) solución de $AX=B$. Su error es $\|AX_0-B\|=\|0\|=0$. Como una norma nunca es negativa, $0\le\|AX-B\|$ para todo $X$: $X_0$ alcanza el mínimo y es solución por mínimos cuadrados.</li>
+    <li><b>Unicidad.</b> Si $X_1$ fuera otra solución por mínimos cuadrados, su error tendría que ser el mínimo, $0$; luego $AX_1=B$ (la única norma nula es la del vector cero). Como el sistema es compatible <b>determinado</b>, $X_1=X_0$. (Otra vía: compatible determinado ⇒ $\operatorname{rang}A=n$ ⇒ columnas independientes ⇒ solución por mínimos cuadrados única, U p.229.)</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> en los verdadero/falso de mínimos cuadrados, reduce a la definición (mínimo de $\|Ax-b\|$) y a la caracterización de la unicidad (columnas independientes).</div>
+  <p><b>Error típico:</b> pensar que la solución por mínimos cuadrados es siempre única (E 5.39). <b>Teoría:</b> U §5.4.2, Def. 5.15 p.227; unicidad p.229.</p>
+</details>
+
+<details class="sol" id="ej5-44"><summary>Ejercicio 5.44 — cinco afirmaciones sobre mínimos cuadrados <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.44, p. 200">E p.200</span></summary>
+  <p class="enun">Justifíquese si son ciertas o no: A) En la práctica, al modelizar problemas reales aparecen sistemas de ecuaciones que son inconsistentes. B) Si $X_0$ es solución por mínimos cuadrados del sistema inconsistente $AX=B$, entonces $AX_0-B=0$. C) A diferencia del polinomio de mínimos cuadrados, la interpolación polinómica pasa exactamente por los puntos $(x_i,y_i)$ dados. D) Si $y=mx+n$ es la recta por mínimos cuadrados asociada a los datos $(x_i,y_i)$, entonces existe $i$ tal que $y_i=mx_i+n$. E) Si $X_1$ y $X_2$ son soluciones por mínimos cuadrados de $AX=B$, entonces $\|AX_1-B\|=\|AX_2-B\|$.</p>
+  <ol class="steps">
+    <li><b>A) Cierto.</b> Los datos medidos tienen errores y hay más ecuaciones (observaciones) que incógnitas (parámetros): lo normal es que no haya solución exacta. Es la motivación de U §5.4 (p.225); p. ej. 5 puntos no alineados (E 5.40).</li>
+    <li><b>B) Falso.</b> Si $AX_0-B=0$, entonces $AX_0=B$ y $X_0$ sería solución exacta, contra «inconsistente». Luego $\|AX_0-B\|>0$ (en E 5.37 vale $\frac2{\sqrt3}$).</li>
+    <li><b>C) Cierto.</b> El polinomio de interpolación se define imponiendo $p(x_i)=y_i$ en todos los datos (grado $N-1$ con $N$ datos de abscisas distintas); el de mínimos cuadrados, de menor grado, solo minimiza $\sum(p(x_i)-y_i)^2$ y en general no pasa por ninguno. (La razón es la <i>definición</i> de interpolación; la que da E, «no minimiza el error en puntos distintos de los observados», no es el argumento.)</li>
+    <li><b>D) Falso.</b> Contraejemplo: datos $(0,0),(1,1),(2,0)$. Normales $\begin{pmatrix}5&3\\3&3\end{pmatrix}\binom mn=\binom11$ ⇒ $m=0$, $n=\frac13$: la recta $y=\frac13$ no pasa por ninguno de los tres puntos (en la animación de la sección 5, preset «E 5.44 D»).</li>
+    <li><b>E) Cierto.</b> Ambas minimizan $\|AX-B\|$, y el mínimo es un único número: $\|AX_1-B\|=\|AX_2-B\|$. Más aún, $AX_1=AX_2=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}B$ (U p.229; ejemplo en la sección 3).</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> V/F: definición (Def. 5.15), «el error es $0$ solo si el sistema es compatible» y «la proyección es única aunque $X_0$ no lo sea».</div>
+  <p><b>Error típico:</b> confundir «la solución $X_0$ puede no ser única» con «el error puede ser distinto»: el error mínimo (y el vector $AX_0$) es siempre único. <b>Teoría:</b> U §5.4, p.225-229.</p>
+</details>
+
+<details class="sol" id="ej5-34"><summary>Ejercicio 5.34 — el problema $\min_{u\in U}\|v-u\|$ (frontera con 5.1) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.34, p. 191">E p.191</span></summary>
+  <p class="enun">Si $E$ es un espacio euclídeo, $U\subset E$ es un subespacio de dimensión $m$ y $v\in E$ pero $v\notin U$, se pide estudiar la solución del problema $\min_{u\in U}\|v-u\|^2$.</p>
+  <p><b>Idea.</b> Es el Teorema 5.4 de U (tema 5.1) demostrado «a mano». Es la base de todo el tema: con $U=\langle\operatorname{Col}A\rangle$ y $v=b$, el $u_0$ que sale es $Ax_0$.</p>
+  <ol class="steps">
+    <li><b>Reformular.</b> Buscamos $u_0\in U$ con $\|v-u_0\|^2\le\|v-u\|^2$ para todo $u\in U$. Minimizar la norma o su cuadrado es lo mismo ($t\mapsto t^2$ crece para $t\ge0$).</li>
+    <li><b>Coordenadas.</b> Sea $\{u_1,\dots,u_m\}$ una base <b>ortonormal</b> de $U$ (existe por Gram-Schmidt, U p.207). Todo $u\in U$ es $u=\sum x_iu_i$: hay que hallar los $x_i$.</li>
+    <li><b>Separar la parte de $v$ fuera de $U$.</b> Sea $w=v-\sum_i(v\cdot u_i)u_i$. Entonces $w\cdot u_j=v\cdot u_j-(v\cdot u_j)\cdot1=0$ para cada $j$ (ortonormalidad): $w\in U^\perp$. Además $w\neq0$ porque $v\notin U$.</li>
+    <li><b>Reescribir:</b> $v-\sum x_iu_i=w+\sum_i(v\cdot u_i-x_i)u_i$. Son sumandos ortogonales dos a dos, y por Pitágoras (U p.203, repetido):
+    $$\Big\|v-\sum x_iu_i\Big\|^2=\|w\|^2+\sum_{i=1}^m(v\cdot u_i-x_i)^2.$$</li>
+    <li><b>Minimizar.</b> $\|w\|^2$ no depende de los $x_i$ y cada sumando es $\ge0$: el mínimo se alcanza justo cuando todos son $0$, es decir, $x_i=v\cdot u_i$.</li>
+    <li><b>Conclusión.</b> Existe y es <b>única</b> la solución $u_0=\sum_i(v\cdot u_i)u_i=\operatorname{Proy}_U(v)$ (U p.212), y el valor mínimo es $\|w\|^2=\|v-\operatorname{Proy}_Uv\|^2$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> mínima distancia de $v$ a $U$: base ortonormal de $U$, proyección $\sum(v\cdot u_i)u_i$; distancia mínima $\|v-\operatorname{Proy}_Uv\|$.</div>
+  <p><b>Error típico:</b> aplicar $\sum(v\cdot u_i)u_i$ con una base que <b>no</b> es ortonormal (con base ortogonal hay que dividir por $\|u_i\|^2$, U (5.2) p.212). <b>Teoría:</b> U §5.1.6, Teor. 5.4 p.213 y (5.2) p.212; el tema <a href="tema_5_1_producto_escalar.html#s6">5.1</a>.</p>
+</details>
+
+<h3 id="bloqueII">Bloque II — Ecuaciones normales y QR (E 5.37, 5.38, 5.39)</h3>
+
+<details class="sol" id="ej5-37"><summary>Ejercicio 5.37 — mínimos cuadrados del sistema de E 5.35 y su error <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.37, p. 193">E p.193</span></summary>
+  <p class="enun">Hállese la solución por mínimos cuadrados del sistema del Ejercicio 5.35 y su error cuadrático asociado.</p>
+  <ol class="steps">
+    <li><b>¿Incompatible?</b> Ampliada $\left(\begin{array}{cc|c}2&1&3\\1&-2&-1\\3&1&2\end{array}\right)$: $\det=2(-4+1)-1(2+3)+3(1+6)=-6-5+21=10\neq0$. El rango de la ampliada es $3$ y el de $A$, a lo sumo $2$: incompatible. Por eso tiene sentido buscar una solución aproximada.</li>
+    <li><b>¿Única?</b> Las columnas $(2,1,3)$ y $(1,-2,1)$ no son proporcionales ⇒ independientes ⇒ $A^tA$ regular y solución por mínimos cuadrados <b>única</b> (U p.229).</li>
+    <li><b>Ecuaciones normales</b> (productos escalares de columnas): $A^tA=\begin{pmatrix}4+1+9&2-2+3\\3&1+4+1\end{pmatrix}=\begin{pmatrix}14&3\\3&6\end{pmatrix}$, $A^tB=\begin{pmatrix}6-1+6\\3+2+2\end{pmatrix}=\begin{pmatrix}11\\7\end{pmatrix}$.</li>
+    <li><b>Resolver</b> $14x_1+3x_2=11,\ 3x_1+6x_2=7$. $\det=84-9=75$. Cramer: $x_1=\frac{66-21}{75}=\frac35$, $x_2=\frac{98-33}{75}=\frac{13}{15}$.</li>
+    <li><b>Error.</b> $AX_0=\left(\frac{31}{15},-\frac{17}{15},\frac83\right)$, $AX_0-B=\left(-\frac{14}{15},-\frac2{15},\frac23\right)$,
+    $$\|AX_0-B\|=\sqrt{\tfrac{196+4+100}{225}}=\sqrt{\tfrac43}=\tfrac2{\sqrt3}=\tfrac{2\sqrt3}3\approx1{,}1547.$$</li>
+    <li><b>Comprobación</b> (caracterización 2 de U p.229): el residuo $B-AX_0=\left(\frac{14}{15},\frac2{15},-\frac23\right)$ es ortogonal a las columnas: $\frac{28+2-30}{15}=0$ y $\frac{14-4-10}{15}=0$ ✓. Y $1{,}1547<4{,}472$ (error de E 5.35), como debe ser: $X_0=(1,-1)$ era peor.</li>
+  </ol>
+  <p><b>Resultado:</b> $X_0=\left(\frac35,\frac{13}{15}\right)^t$, error $\frac2{\sqrt3}$.</p>
+  <div class="recipe"><b>Receta:</b> columnas independientes ⇒ calcula $A^tA$ (productos escalares de columnas) y $A^tB$, resuelve el sistema $n\times n$ y comprueba que $B-AX_0$ es ortogonal a cada columna.</div>
+  <p><b>Error típico:</b> resolver $AX=B$ «quitando una ecuación», o escribir $AA^t$ (es $3\times3$ y singular) en lugar de $A^tA$. <b>Teoría:</b> U §5.4.2, p.228-229.</p>
+</details>
+
+<details class="sol" id="ej5-38"><summary>Ejercicio 5.38 — mínimos cuadrados con la factorización $QR$ de E 5.23 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.38, p. 194 (matriz leída del PDF de E)">E p.194</span></summary>
+  <p class="enun">Utilizando la factorización $QR$ del Ejercicio 5.23 (tema 5.2), se pide calcular la solución por mínimos cuadrados del sistema asociado a $\begin{pmatrix}1&0&1\\0&1&2\\-1&2&1\\0&1&1\end{pmatrix}\begin{pmatrix}x\\y\\z\end{pmatrix}=\begin{pmatrix}0\\1\\1\\1\end{pmatrix}$. (La factorización es la de la matriz $A$ de este sistema.)</p>
+  <p><b>Datos</b> (E 5.23 del tema <a href="tema_5_2_matrices_ortogonales.html#ej5-23">5.2</a>, Gram-Schmidt de las columnas de esta misma $A$): $Q=\begin{pmatrix}\frac1{\sqrt2}&\frac12&-\frac1{2\sqrt3}\\0&\frac12&\frac{\sqrt3}2\\-\frac1{\sqrt2}&\frac12&-\frac1{2\sqrt3}\\0&\frac12&-\frac1{2\sqrt3}\end{pmatrix}$, $R=\begin{pmatrix}\sqrt2&-\sqrt2&0\\0&2&\frac52\\0&0&\frac{\sqrt3}2\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Incompatible.</b> $\det(A\mid B)=-1\neq0$ (como matriz $4\times4$ la ampliada): rango $4$ frente a $\operatorname{rang}A=3$ ⇒ incompatible. Se busca la solución por mínimos cuadrados.</li>
+    <li><b>Por qué vale $RX=Q^tB$</b> (sección 4): $A^tA=R^tR$ y $A^tB=R^tQ^tB$; se cancela $R^t$ (regular). La solución es única (columnas independientes).</li>
+    <li><b>Calcular $Q^tB$</b> (cada columna de $Q$ por $B=(0,1,1,1)$): $q_1\cdot B=-\frac1{\sqrt2}$; $q_2\cdot B=\frac12+\frac12+\frac12=\frac32$; $q_3\cdot B=\frac{\sqrt3}2-\frac1{2\sqrt3}-\frac1{2\sqrt3}=\frac{\sqrt3}2-\frac1{\sqrt3}=\frac1{2\sqrt3}=\frac{\sqrt3}6$.</li>
+    <li><b>Sistema triangular</b> $RX=Q^tB$:
+    $$\begin{cases}\sqrt2\,x-\sqrt2\,y=-\frac1{\sqrt2}\\[2pt]2y+\frac52z=\frac32\\[2pt]\frac{\sqrt3}2z=\frac{\sqrt3}6\end{cases}$$</li>
+    <li><b>Sustitución regresiva</b> (de abajo arriba): $z=\frac{\sqrt3/6}{\sqrt3/2}=\frac13$. $2y=\frac32-\frac52\cdot\frac13=\frac32-\frac56=\frac23\Rightarrow y=\frac13$. $\sqrt2(x-y)=-\frac1{\sqrt2}\Rightarrow x-y=-\frac12\Rightarrow x=\frac13-\frac12=-\frac16$.</li>
+    <li><b>Comprobación con las normales:</b> $A^tA=\begin{pmatrix}2&-2&0\\-2&6&5\\0&5&7\end{pmatrix}$, $A^tB=(-1,4,4)^t$; con $\left(-\frac16,\frac13,\frac13\right)$: $-\frac13-\frac23=-1$ ✓, $\frac13+2+\frac53=4$ ✓, $\frac53+\frac73=4$ ✓. Residuo $B-AX=\left(-\frac16,0,-\frac16,\frac13\right)$, error $\frac1{\sqrt6}\approx0{,}408$.</li>
+  </ol>
+  <p><b>Resultado:</b> $x=-\frac16,\ y=\frac13,\ z=\frac13$ (coincide con E).</p>
+  <div class="recipe"><b>Receta:</b> con $A=QR$: calcula $Q^tB$ (producto escalar de cada columna de $Q$ con $B$) y resuelve $RX=Q^tB$ de abajo arriba; no hace falta formar $A^tA$.</div>
+  <p><b>Error típico:</b> invertir $R$ o usar $Q^{-1}$ ($Q$ no es cuadrada). <b>Teoría:</b> U §5.4.2, p.232 (Ej. 5.40, p.232-233); QR en U §5.2.2, p.218.</p>
+</details>
+
+<details class="sol" id="ej5-39"><summary>Ejercicio 5.39 — columnas dependientes: conjunto de soluciones (la oficial falla) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.39, p. 195">E p.195</span></summary>
+  <p class="enun">Hállese la solución del problema de mínimos cuadrados $\begin{cases}x_1+x_2+x_3+x_4=4\\x_1+x_2+x_3+x_4=-1\\x_2+x_4=2\\x_1+x_3=1\end{cases}$ y estúdiese el conjunto obtenido en términos de espacios vectoriales.</p>
+  <ol class="steps">
+    <li><b>Incompatible:</b> las dos primeras ecuaciones piden que el mismo número $x_1+x_2+x_3+x_4$ valga $4$ y $-1$. (Rangos: $\operatorname{rang}A=2$, $\operatorname{rang}(A\mid B)=3$.)</li>
+    <li><b>Matrices.</b> $A=\begin{pmatrix}1&1&1&1\\1&1&1&1\\0&1&0&1\\1&0&1&0\end{pmatrix}$, $B=(4,-1,2,1)^t$. Columnas: $C_1=C_3=(1,1,0,1)$, $C_2=C_4=(1,1,1,0)$: <b>dependientes</b> (rango $2$) ⇒ la solución por mínimos cuadrados <b>no es única</b>.</li>
+    <li><b>Ecuaciones normales</b> (productos escalares de columnas): $C_1\cdot C_1=3$, $C_1\cdot C_2=2$, $C_2\cdot C_2=3$; $C_1\cdot B=4-1+0+1=4$, $C_2\cdot B=4-1+2+0=5$:
+    $$A^tA=\begin{pmatrix}3&2&3&2\\2&3&2&3\\3&2&3&2\\2&3&2&3\end{pmatrix},\ A^tB=\begin{pmatrix}4\\5\\4\\5\end{pmatrix}\ \Longrightarrow\ \begin{cases}3x_1+2x_2+3x_3+2x_4=4\\2x_1+3x_2+2x_3+3x_4=5\end{cases}$$
+    (las ecuaciones 3.ª y 4.ª repiten la 1.ª y la 2.ª). Hasta aquí E es correcto.</li>
+    <li><b>Resolver (truco: agrupar).</b> Las incógnitas solo aparecen como $u=x_1+x_3$ y $v=x_2+x_4$: $3u+2v=4,\ 2u+3v=5$. Restando, $u-v=-1$; sumando, $5u+5v=9$. Luego $u=\frac25$, $v=\frac75$.</li>
+    <li><b>Conjunto de soluciones:</b> $x_1=\frac25-x_3$, $x_2=\frac75-x_4$, con $x_3,x_4$ libres:
+    $$(x_1,x_2,x_3,x_4)=\left(\tfrac25,\tfrac75,0,0\right)+\lambda(-1,0,1,0)+\mu(0,-1,0,1).$$</li>
+    <li><b>En términos de espacios vectoriales.</b> Es $x_p+\operatorname{Nuc}(A)$ con $x_p=(\frac25,\frac75,0,0)$ y $\operatorname{Nuc}A=\langle(-1,0,1,0),(0,-1,0,1)\rangle$ (dimensión $4-2=2$). Es un <b>plano afín (variedad lineal de dimensión 2) de $\mathbb R^4$</b> que <b>no es un subespacio</b>: no contiene al $0$ (porque $A^tA\cdot0=0\neq A^tB$).</li>
+    <li><b>Comprobación.</b> Todas comparten $Ax_0=\left(\frac95,\frac95,\frac75,\frac25\right)=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}B$ y el residuo $B-Ax_0=\left(\frac{11}5,-\frac{14}5,\frac35,\frac35\right)$ es ortogonal a $C_1$ ($\frac{11-14+3}5=0$) y a $C_2$ ($\frac{11-14+3}5=0$) ✓. Error común $\frac{\sqrt{335}}5\approx3{,}661$.</li>
+  </ol>
+  <div class="box warn"><span class="h">Fallo de la solución oficial de E</span>
+    <p>E da $(-\alpha,0,\alpha,-1)$ y dice que es «una recta de $\mathbb R^4$». Para esa familia $u=x_1+x_3=0$, $v=x_2+x_4=-1$ y $3u+2v=-2\neq4$: <b>no son soluciones</b> de las normales. Además el número de parámetros es $4-\operatorname{rang}(A^tA)=2$, no $1$.</p>
+  </div>
+  <div class="recipe"><b>Receta:</b> columnas dependientes ⇒ las normales son compatibles indeterminadas: resuélvelas por Gauss; el conjunto de soluciones es «una solución particular + $\operatorname{Nuc}A$», con $n-\operatorname{rang}A$ parámetros.</div>
+  <p><b>Error típico:</b> contar mal los parámetros o llamar «subespacio» al conjunto de soluciones: es una variedad afín. <b>Teoría:</b> U §5.4.2 p.228-229 y Ej. 5.39 (p.231-232), del mismo tipo.</p>
+</details>
+
+<h3 id="bloqueIII">Bloque III — Ajuste de datos (E 5.40–5.43)</h3>
+
+<details class="sol" id="ej5-40"><summary>Ejercicio 5.40 — recta por cinco puntos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.40, p. 196">E p.196</span></summary>
+  <p class="enun">Se pide calcular la recta que ajusta por mínimos cuadrados los datos $x=1,2,3,4,5$; $\ y=2,\,1{,}5,\,2{,}5,\,1,\,2$.</p>
+  <ol class="steps">
+    <li><b>Modelo.</b> Se busca $y=mx+n$. Si pasara por los $5$ puntos: $mx_i+n=y_i$, una fila $(x_i,1)$ por dato:
+    $$\underbrace{\begin{pmatrix}1&1\\2&1\\3&1\\4&1\\5&1\end{pmatrix}}_{A}\begin{pmatrix}m\\n\end{pmatrix}=\underbrace{\begin{pmatrix}2\\1{,}5\\2{,}5\\1\\2\end{pmatrix}}_{B}.$$
+    Los puntos no están alineados: incompatible. Minimizar $\sum e_i^2$ (U p.233) es minimizar $\|AX-B\|^2$.</li>
+    <li><b>Normales.</b> Las columnas son independientes (los $x_i$ no son todos iguales) ⇒ solución única. Sumas: $\sum x=15$, $\sum x^2=55$, $\sum y=9$, $\sum xy=2+3+7{,}5+4+10=26{,}5$:
+    $$A^tA=\begin{pmatrix}55&15\\15&5\end{pmatrix},\qquad A^tB=\begin{pmatrix}26{,}5\\9\end{pmatrix}.$$</li>
+    <li><b>Resolver.</b> $\det=275-225=50$; $m=\frac{5\cdot26{,}5-15\cdot9}{50}=\frac{132{,}5-135}{50}=-\frac1{20}$; $n=\frac{55\cdot9-15\cdot26{,}5}{50}=\frac{495-397{,}5}{50}=\frac{39}{20}$.</li>
+    <li><b>Recta:</b> $y=-\frac1{20}x+\frac{39}{20}$. <b>Comprobación:</b> la 2.ª normal dice $\sum(y_i-mx_i-n)=0$: $9+\frac{15}{20}-5\cdot\frac{39}{20}=9+0{,}75-9{,}75=0$ ✓. (Con la forma centrada: $\bar x=3$, $\sum(x-3)y=-4-1{,}5+0+1+4=-0{,}5$, $\sum(x-3)^2=10$, $m=-0{,}05$ ✓.)</li>
+  </ol>
+  <p><b>Resultado:</b> $y=-0{,}05x+1{,}95$.</p>
+  <div class="recipe"><b>Receta (recta de m.c.):</b> fila $(x_i,1)$ por dato; normales $\begin{pmatrix}\sum x_i^2&\sum x_i\\\sum x_i&N\end{pmatrix}\begin{pmatrix}m\\n\end{pmatrix}=\begin{pmatrix}\sum x_iy_i\\\sum y_i\end{pmatrix}$ ($N$ = número de datos); resolver por Cramer.</div>
+  <p><b>Error típico:</b> poner $N=1$ en la esquina (es el número de datos, $\sum1$) o intercambiar el orden de las incógnitas entre $A$ y $X$. <b>Teoría:</b> U §5.4.3, Def. 5.16 y Ej. 5.41, p.233-234.</p>
+</details>
+
+<details class="sol" id="ej5-41"><summary>Ejercicio 5.41 — recta y pronóstico del IPC (la oficial falla) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.41, p. 197">E p.197</span></summary>
+  <p class="enun">Los datos mensuales del INE del índice general de precios al consumo (IPC) en la Comunidad de Madrid son: nov. 2011: $101{,}120$; dic. 2011: $101{,}512$; ene. 2012: $100{,}423$; feb. 2012: $100{,}567$; mar. 2012: $101{,}119$. Utilizando la línea de mínimos cuadrados asociada, estímese el IPC de julio de 2012 suponiendo que continúe la tendencia.</p>
+  <ol class="steps">
+    <li><b>Variable $x$.</b> Numeramos los meses: nov. 2011 $\to x=1$, …, mar. 2012 $\to x=5$. Julio 2012 es $x=9$ (abr. 6, may. 7, jun. 8, jul. 9).</li>
+    <li><b>Sistema.</b> Mismas $x_i$ que en E 5.40, luego $A^tA=\begin{pmatrix}55&15\\15&5\end{pmatrix}$ y $A^tB=\begin{pmatrix}\sum x_iy_i\\\sum y_i\end{pmatrix}$ con $\sum y_i=504{,}741$ y $\sum x_iy_i=101{,}120+203{,}024+301{,}269+402{,}268+505{,}595=1513{,}276$.</li>
+    <li><b>Solución por Cramer</b> ($\det=50$): $m=\frac{5\cdot1513{,}276-15\cdot504{,}741}{50}=\frac{7566{,}38-7571{,}115}{50}=\frac{-4{,}735}{50}=-0{,}0947$.</li>
+    <li><b>Atajo (centrar).</b> $\bar x=3$: $\sum(x_i-3)y_i=-2(101{,}120)-101{,}512+0+100{,}567+2(101{,}119)=-0{,}947$ y $\sum(x_i-3)^2=10$ ⇒ $m=-0{,}0947$ (mismo valor, sin restar números grandes).</li>
+    <li><b>$n$</b> de la 2.ª normal $15m+5n=\sum y_i$: $n=\bar y-3m=100{,}9482+0{,}2841=101{,}2323$.</li>
+    <li><b>Recta:</b> $y=-0{,}0947x+101{,}2323$. <b>Pronóstico</b> julio 2012: $y(9)=101{,}2323-0{,}8523=100{,}38$.</li>
+  </ol>
+  <p><b>Resultado:</b> IPC estimado $\approx100{,}38$ (exactos: $m=-\frac{947}{10000}$, $n=\frac{1012323}{10000}$, $y(9)=\frac{5019}{50}$).</p>
+  <div class="box warn"><span class="h">Fallo de la solución oficial de E</span>
+    <p>E da $m=-0{,}2748$, $n=101{,}5925$ y $99{,}1193$. Con esos valores la 2.ª ecuación normal da $15m+5n=503{,}84\neq504{,}741=\sum y_i$: <b>no resuelven las normales</b> de estos datos. Además E dice «diciembre 2012» por diciembre 2011.</p>
+  </div>
+  <div class="recipe"><b>Receta:</b> con $x_i$ equiespaciados, centra: $m=\frac{\sum(x_i-\bar x)y_i}{\sum(x_i-\bar x)^2}$, $n=\bar y-m\bar x$; para pronosticar, sustituye el $x$ del instante pedido.</div>
+  <p><b>Error típico:</b> numerar mal el mes objetivo (julio es $x=9$, no $8$) o restar números grandes con pocos decimales (cancelación): mejor centrar. <b>Teoría:</b> U §5.4.3, p.233 y Ej. 5.43 (pronóstico), p.237.</p>
+</details>
+
+<details class="sol" id="ej5-42"><summary>Ejercicio 5.42 — parábola y punto de impacto (la raíz oficial falla) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.42, p. 198">E p.198</span></summary>
+  <p class="enun">Los datos observados de la trayectoria de un proyectil son $x=1;\,2{,}5;\,3{,}5;\,4;\,5{,}5$ e $y=5,\,8,\,12,\,6,\,5$. Considerando que la trayectoria es parabólica, estímese mediante mínimos cuadrados dónde toca el suelo.</p>
+  <ol class="steps">
+    <li><b>Modelo.</b> $y=ax^2+bx+c$ es <b>lineal en las incógnitas</b> $a,b,c$: cada dato da $a x_i^2+b x_i+c=y_i$, fila $(x_i^2,x_i,1)$:
+    $$\begin{pmatrix}1&1&1\\6{,}25&2{,}5&1\\12{,}25&3{,}5&1\\16&4&1\\30{,}25&5{,}5&1\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}5\\8\\12\\6\\5\end{pmatrix}.$$
+    Incompatible (rango $A=3$, ampliada $4$). Cinco abscisas distintas ⇒ columnas independientes ⇒ solución única.</li>
+    <li><b>Normales</b> (sumas de potencias de $x$): $A^tA=\begin{pmatrix}\sum x^4&\sum x^3&\sum x^2\\\sum x^3&\sum x^2&\sum x\\\sum x^2&\sum x&5\end{pmatrix}=\begin{pmatrix}1361{,}1875&289{,}875&65{,}75\\289{,}875&65{,}75&16{,}5\\65{,}75&16{,}5&5\end{pmatrix}$, $A^tB=\begin{pmatrix}449{,}25\\118{,}5\\36\end{pmatrix}$.</li>
+    <li><b>Solución</b> (exacta, con Gauss o sympy): $a=-\frac{6694}{7917}\approx-0{,}8455$, $b=\frac{14325}{2639}\approx5{,}4282$, $c=\frac{247}{609}\approx0{,}4056$. Coinciden con E.</li>
+    <li><b>Dónde toca el suelo:</b> $y=0$: $-0{,}8455x^2+5{,}4282x+0{,}4056=0$, $x=\dfrac{-5{,}4282\pm\sqrt{5{,}4282^2+4\cdot0{,}8455\cdot0{,}4056}}{2(-0{,}8455)}=\dfrac{-5{,}4282\pm5{,}5531}{-1{,}6910}$. Raíces: $x\approx-0{,}0739$ y $x\approx6{,}4938$.</li>
+    <li><b>Elegir la raíz.</b> El proyectil avanza hacia $x$ crecientes (datos de $x=1$ a $5{,}5$); la raíz negativa es el otro corte de la parábola completa. Toca el suelo en $x\approx6{,}494$.</li>
+  </ol>
+  <div class="box warn"><span class="h">Fallo de la solución oficial de E</span>
+    <p>E da las raíces $-0{,}07428$ y $6{,}461$. Con los mismos coeficientes, $f(6{,}461)\approx0{,}18\neq0$: el valor correcto es $\approx6{,}494$ (y $\approx-0{,}0739$).</p>
+  </div>
+  <div class="recipe"><b>Receta:</b> ajuste polinómico = mínimos cuadrados con una columna por potencia ($x^2$, $x$, $1$); las normales tienen las sumas $\sum x^k$; luego usa la curva (aquí, resolver $y=0$ y escoger la raíz con sentido físico).</div>
+  <p><b>Error típico:</b> pensar que «parábola» no es un modelo lineal (lo es en los coeficientes), o redondear demasiado pronto. <b>Nota de examen:</b> E lo resuelve con Maxima (fuera de examen); en un examen se haría como en el Propio P3 (datos sencillos, normales y Gauss a mano). <b>Teoría:</b> U §5.4.3, p.233-237 (U trata recta y plano; la parábola es la misma idea con la columna $x_i^2$).</p>
+</details>
+
+<details class="sol" id="ej5-43"><summary>Ejercicio 5.43 — plano de mínimos cuadrados y estimación en $(7,8)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.43, p. 199">E p.199</span></summary>
+  <p class="enun">Calcúlese el plano que mejor se ajuste, por mínimos cuadrados, a los puntos $(x,y,z)=(1,3,1),(2,2,3),(3,1,-1),(5,4,2),(6,5,2)$, y estímese el valor de $z$ para $(x,y)=(7,8)$.</p>
+  <ol class="steps">
+    <li><b>Modelo</b> (U p.237): $z=ax+by+c$; fila $(x_i,y_i,1)$ por punto:
+    $$\begin{pmatrix}1&3&1\\2&2&1\\3&1&1\\5&4&1\\6&5&1\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}1\\3\\-1\\2\\2\end{pmatrix}.$$
+    Incompatible (rango $3$ frente a $4$ de la ampliada); columnas independientes ⇒ solución única.</li>
+    <li><b>Normales</b> (productos escalares de columnas): $\sum x^2=75$, $\sum xy=3+4+3+20+30=60$, $\sum x=17$, $\sum y^2=55$, $\sum y=15$, $N=5$; $\sum xz=1+6-3+10+12=26$, $\sum yz=3+6-1+8+10=26$, $\sum z=7$:
+    $$\begin{pmatrix}75&60&17\\60&55&15\\17&15&5\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}26\\26\\7\end{pmatrix}.$$</li>
+    <li><b>Resolver por Cramer</b> ($\det A^tA=455$; $\Delta_a,\Delta_b,\Delta_c$ = determinantes con la columna correspondiente cambiada por $(26,26,7)^t$): $\Delta_a=-115$, $\Delta_b=331$, $\Delta_c=35$ ⇒ $a=-\frac{115}{455}=-\frac{23}{91}$, $b=\frac{331}{455}$, $c=\frac{35}{455}=\frac1{13}$.</li>
+    <li><b>Estimación</b> en $(7,8)$: $z=-\frac{23}{91}\cdot7+\frac{331}{455}\cdot8+\frac1{13}=\frac{-805+2648+35}{455}=\frac{1878}{455}\approx4{,}1275$.</li>
+  </ol>
+  <p><b>Resultado:</b> $z=-\frac{23}{91}x+\frac{331}{455}y+\frac1{13}$; $z(7,8)\approx4{,}128$.</p>
+  <div class="recipe"><b>Receta:</b> plano de m.c.: fila $(x_i,y_i,1)$, normales con $\sum x^2,\sum xy,\sum x,\sum y^2,\sum y,N$ y segundo miembro $\sum xz,\sum yz,\sum z$.</div>
+  <p><b>Error típico:</b> pensar que el plano pasa por algún punto (con más de $3$ puntos no coplanares, en general no pasa por ninguno). <b>Teoría:</b> U §5.4.3, p.237 (Ej. 5.44, p.237-238).</p>
+</details>
+
+<h3 id="propios">Ejemplos propios, de fácil a difícil</h3>
+
+<details class="sol" id="ej-propio-1"><summary>Propio P1 — tres medidas contradictorias: dos métodos <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 5.15 p. 227 y ecuaciones normales p. 228">propio</span></summary>
+  <p class="enun">Halla la solución por mínimos cuadrados de $x=1,\ y=1,\ x+y=3$ y su error. (Es la animación 3D de la sección 1, preset «Propio P1».)</p>
+  <ol class="steps">
+    <li>$A=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}$, $B=(1,1,3)^t$. Incompatible: de las dos primeras $x+y=2\neq3$.</li>
+    <li>Columnas independientes ⇒ solución única. $A^tA=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $A^tB=\begin{pmatrix}4\\4\end{pmatrix}$.</li>
+    <li>$2x+y=4,\ x+2y=4$ ⇒ (restando) $x=y$; $3x=4$: $x=y=\frac43$.</li>
+    <li>$AX_0=\left(\frac43,\frac43,\frac83\right)$; residuo $B-AX_0=\left(-\frac13,-\frac13,\frac13\right)$, ortogonal a $(1,0,1)$ y a $(0,1,1)$ ✓. Error $=\frac1{\sqrt3}$.</li>
+    <li><b>Interpretación:</b> la medida $x+y=3$ «tira» de la solución; cada ecuación falla en $\frac13$: el reparto más equilibrado posible.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> sistema pequeño: normales, resolver y comprobar la ortogonalidad del residuo.</div>
+</details>
+
+<details class="sol" id="ej-propio-2"><summary>Propio P2 — recta de regresión, error y pronóstico <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 5.16 p. 233">propio</span></summary>
+  <p class="enun">Recta de mínimos cuadrados para $(0,1),(1,1),(2,2),(3,4)$; error cuadrático y pronóstico en $x=4$. (Preset «Propio P2» de la animación.)</p>
+  <ol class="steps">
+    <li>Filas $(x_i,1)$: $\sum x=6$, $\sum x^2=14$, $\sum y=8$, $\sum xy=0+1+4+12=17$, $N=4$.</li>
+    <li>Normales $\begin{pmatrix}14&6\\6&4\end{pmatrix}\binom mn=\binom{17}8$; $\det=56-36=20$; $m=\frac{4\cdot17-6\cdot8}{20}=1$, $n=\frac{14\cdot8-6\cdot17}{20}=\frac12$.</li>
+    <li>Recta $y=x+\frac12$. Residuos $y_i-(x_i+\frac12)$: $\frac12,-\frac12,-\frac12,\frac12$ (suman $0$ ✓); error $=\sqrt{4\cdot\frac14}=1$.</li>
+    <li>Pronóstico: $y(4)=4{,}5$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> sumas → normales → Cramer → residuos (deben sumar $0$) → error.</div>
+</details>
+
+<details class="sol" id="ej-propio-3"><summary>Propio P3 — parábola por cuatro puntos <span class="src" data-l="P" data-ref="Ejemplo propio; modelo polinómico como en E 5.42 p. 198">propio</span></summary>
+  <p class="enun">Ajusta $y=ax^2+bx+c$ a $(-1,2),(0,1),(1,0),(2,3)$.</p>
+  <ol class="steps">
+    <li>Filas $(x_i^2,x_i,1)$: $A=\begin{pmatrix}1&-1&1\\0&0&1\\1&1&1\\4&2&1\end{pmatrix}$, $B=(2,1,0,3)^t$. Incompatible (rango $3$, ampliada $4$).</li>
+    <li>Sumas: $\sum x^4=18$, $\sum x^3=8$, $\sum x^2=6$, $\sum x=2$, $N=4$; $\sum x^2y=2+0+0+12=14$, $\sum xy=-2+0+0+6=4$, $\sum y=6$. Normales (dividiendo por $2$):
+    $$\begin{pmatrix}18&8&6\\8&6&2\\6&2&4\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}14\\4\\6\end{pmatrix}\ \xrightarrow{\ \div2\ }\ \left(\begin{array}{ccc|c}9&4&3&7\\4&3&1&2\\3&1&2&3\end{array}\right).$$</li>
+    <li>Gauss: de la 3.ª, $b=3-3a-2c$. En la 2.ª: $4a+3(3-3a-2c)+c=2\Rightarrow-5a-5c=-7$. En la 1.ª: $9a+4(3-3a-2c)+3c=7\Rightarrow-3a-5c=-5$. Restando, $-2a=-2$: $a=1$; $c=\frac{7-5}5=\frac25$; $b=3-3-\frac45=-\frac45$.</li>
+    <li>$y=x^2-\frac45x+\frac25$. Residuos $B-AX=\left(-\frac15,\frac35,-\frac35,\frac15\right)$ (ortogonales a las tres columnas), error $\sqrt{\frac{20}{25}}=\frac2{\sqrt5}$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> una columna por potencia; las normales llevan $\sum x^k$ hasta $k=2\cdot(\text{grado})$.</div>
+</details>
+
+<details class="sol" id="ej-propio-4"><summary>Propio P4 — columnas dependientes: recta de soluciones <span class="src" data-l="P" data-ref="Ejemplo propio; unicidad U p. 229 y Ej. 5.39 p. 231-232">propio</span></summary>
+  <p class="enun">Halla todas las soluciones por mínimos cuadrados de $A=\begin{pmatrix}1&0&1\\0&1&1\\1&1&2\end{pmatrix}$, $B=(1,1,1)^t$.</p>
+  <ol class="steps">
+    <li>$C_3=C_1+C_2$ ⇒ $\operatorname{rang}A=2$ ⇒ <b>no hay solución única</b> (U p.229) y $A^tA$ es singular.</li>
+    <li>Incompatible: en $(A\mid B)$, $F_3-F_1-F_2$ da $(0\ 0\ 0\mid-1)$.</li>
+    <li>Normales: $A^tA=\begin{pmatrix}2&1&3\\1&2&3\\3&3&6\end{pmatrix}$, $A^tB=\begin{pmatrix}2\\2\\4\end{pmatrix}$. La 3.ª ecuación es suma de las dos primeras. De $2x_1+x_2+3x_3=2$ y $x_1+2x_2+3x_3=2$: restando, $x_1=x_2$; luego $3x_1+3x_3=2$.</li>
+    <li>Soluciones: $(x_1,x_2,x_3)=\left(\frac23,\frac23,0\right)+t(-1,-1,1)$, $t\in\mathbb R$: una <b>recta afín</b> $=x_p+\operatorname{Nuc}A$, con $\operatorname{Nuc}A=\langle(-1,-1,1)\rangle$.</li>
+    <li>Todas dan el mismo $AX=\left(\frac23,\frac23,\frac43\right)=\operatorname{Proy}B$ y el mismo error $\frac1{\sqrt3}$ (residuo $(\frac13,\frac13,-\frac13)$).</li>
+    <li><i>Método geométrico (U p.229):</i> $\langle\operatorname{Col}A\rangle=\langle(1,0,1),(0,1,1)\rangle$ es el plano $x+y-z=0$, de normal $n=(1,1,-1)$. $\operatorname{Proy}B=B-\frac{B\cdot n}{\|n\|^2}n=(1,1,1)-\frac13(1,1,-1)=\left(\frac23,\frac23,\frac43\right)$ ✓. Después se resuelve el sistema compatible $Ax=\operatorname{Proy}B$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> dependencia de columnas ⇒ normales indeterminadas ⇒ $x_p+\operatorname{Nuc}A$; el error y $Ax_0$ no cambian.</div>
+</details>
+
+<details class="sol" id="ej-propio-5"><summary>Propio P5 — mínimos cuadrados con $QR$ calculada a mano <span class="src" data-l="P" data-ref="Ejemplo propio; U p. 232 (RX = QᵗB) y QR de U §5.2.2, p. 218">propio</span></summary>
+  <p class="enun">$A=\begin{pmatrix}1&0\\1&1\\1&1\\1&0\end{pmatrix}$, $B=(1,2,4,3)^t$. Halla la $QR$ de $A$ y la solución por mínimos cuadrados con $RX=Q^tB$.</p>
+  <ol class="steps">
+    <li>Gram-Schmidt: $\|a_1\|=2$, $q_1=\frac12(1,1,1,1)$. $a_2\cdot q_1=1$; $e_2=a_2-q_1=\left(-\frac12,\frac12,\frac12,-\frac12\right)$, $\|e_2\|=1$, $q_2=e_2$.</li>
+    <li>$R=Q^tA=\begin{pmatrix}q_1\cdot a_1&q_1\cdot a_2\\0&q_2\cdot a_2\end{pmatrix}=\begin{pmatrix}2&1\\0&1\end{pmatrix}$.</li>
+    <li>$Q^tB=\left(\frac{1+2+4+3}2,\ \frac{-1+2+4-3}2\right)=(5,1)$.</li>
+    <li>$RX=Q^tB$: $y=1$; $2x+1=5\Rightarrow x=2$. Solución $(2,1)$.</li>
+    <li><b>Comprobación con normales:</b> $A^tA=\begin{pmatrix}4&2\\2&2\end{pmatrix}$, $A^tB=(10,6)^t$: $8+2=10$ ✓, $4+2=6$ ✓. Residuo $B-AX=(-1,-1,1,1)$ (ortogonal a $C_1$ y a $C_2$), error $2$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> Gram-Schmidt → $Q$; $R=Q^tA$; $Q^tB$; sustitución regresiva. Comprueba con normales.</div>
+</details>
+
+<h3 id="autoeval">Autoevaluación de U (p.239) que corresponde a este tema</h3>
+
+<details class="sol" id="autoeval-10"><summary>Cuestión 10 — «La solución de un sistema $AX=B$ mediante mínimos cuadrados está relacionada con la proyección de un vector sobre un subespacio» <span class="src" data-l="U" data-ref="U Ejercicios de Autoevaluación, cuestión 10, p. 239">U p.239</span></summary>
+  <p class="enun">Determínese si es verdadera la afirmación.</p>
+  <ol class="steps">
+    <li><b>Verdadera.</b> $x_0$ es solución por mínimos cuadrados si y solo si $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$ (U p.229): se proyecta $b$ sobre el subespacio generado por las columnas y después se resuelve el sistema compatible $Ax=\operatorname{Proy}b$. Las ecuaciones normales no son más que «el residuo es ortogonal al subespacio».</li>
+  </ol>
+  <p>Las demás cuestiones de la autoevaluación de ese capítulo son de <a href="tema_5_1_producto_escalar.html">5.1</a> (1-5, 7, 8), <a href="tema_5_2_matrices_ortogonales.html">5.2</a> (6) y <a href="tema_5_3_matrices_simetricas.html">5.3</a> (9).</p>
+</details>
+
+<!-- ============================ 8 ============================ -->
+<h2 id="examenes"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025), <b>seis ejercicios</b> tienen como contenido principal este tema: Feb. 2017 (2.ª sem.), Feb. 2018 (B), Sept. 2018 (A), Feb. 2019 (A), Feb. 2020 (B) y Feb. 2023 (1.ª sem.). Se agrupan por método. En la mayoría (Feb. 2018, Sept. 2018, Feb. 2019, Feb. 2020) el examen avisa de que «lo que no se justifica o se realiza por otra vía distinta a la pedida no se puntúa»: modela escribir el <b>razonamiento</b>, no solo el número. Las soluciones oficiales son breves y aquí se desarrollan; las matrices de Feb. 2020 y Feb. 2023 se han reconstruido del texto escaneado (consistentes con los resultados oficiales) y todo está verificado con sympy.</p>
+
+<div class="box tip"><span class="h">Fronteras: ya desarrollados en otros temas (no se repiten aquí)</span>
+  <ul>
+    <li><b>Feb. 2020 (B), problema, apartado a)</b> — factorización $QR$ de $A=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\\\frac1{\sqrt2}&0\\0&0\end{pmatrix}$ (es la $A$ del apartado b de esta sección): <a href="tema_5_2_matrices_ortogonales.html#ex-feb20b-pa">tema 5.2, #ex-feb20b-pa</a>.</li>
+    <li><b>Feb. 2022 (A), problema, apartado b)</b> — «$A$ ortogonal de $m\times n$ ⇒ $AX=B$ es compatible determinado o incompatible»: <a href="tema_1_4_sistemas_ecuaciones.html#ex-feb22pb">tema 1.4, #ex-feb22pb</a> (contenido de 5.2).</li>
+  </ul>
+  <span class="src" data-l="X" data-ref="Feb. 2020 (B), problema a); Feb. 2022 (A), problema b)">X</span>
+</div>
+
+<h3 id="metodoA">Método A — Ecuaciones normales y error cuadrático</h3>
+
+<details class="sol" id="ex-feb23a-8"><summary>Feb. 2023 (1.ª semana), pregunta 8 (2 puntos) — mínimos cuadrados de $AX=B$ incompatible <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª semana), pregunta 8">X Feb. 2023 (1.ª) P8</span></summary>
+  <p class="enun">Sean $A=\begin{pmatrix}2&1\\1&2\\1&1\end{pmatrix}$ y $B=\begin{pmatrix}2\\0\\-3\end{pmatrix}$. El sistema $AX=B$ es incompatible. Aplique el método de mínimos cuadrados para obtener el $X=\begin{pmatrix}x_1\\x_2\end{pmatrix}$ que hace mínima la distancia de $AX$ a $B$.</p>
+  <ol class="steps">
+    <li><b>Comprobar lo que dice el enunciado.</b> $\det(A\mid B)=\left|\begin{array}{cc|c}2&1&2\\1&2&0\\1&1&-3\end{array}\right|=2(-6)-1(-3)+2(-1)=-11\neq0$ ⇒ rango de la ampliada $3>\operatorname{rang}A$ ⇒ incompatible.</li>
+    <li><b>Qué se minimiza.</b> «La distancia de $AX$ a $B$» es $\|AX-B\|$: la Def. 5.15 (U p.227). Su solución es la de las ecuaciones normales (U p.228-229).</li>
+    <li><b>Unicidad.</b> Las columnas $(2,1,1)$ y $(1,2,1)$ no son proporcionales ⇒ independientes ⇒ $A^tA$ regular y solución única (U p.229).</li>
+    <li><b>Normales</b> $A^tAX=A^tB$: $A^tA=\begin{pmatrix}4+1+1&2+2+1\\5&1+4+1\end{pmatrix}=\begin{pmatrix}6&5\\5&6\end{pmatrix}$, $A^tB=\begin{pmatrix}4+0-3\\2+0-3\end{pmatrix}=\begin{pmatrix}1\\-1\end{pmatrix}$.</li>
+    <li><b>Resolver</b> $6x_1+5x_2=1,\ 5x_1+6x_2=-1$: restando, $x_1-x_2=2$; sumando, $11(x_1+x_2)=0$. Luego $x_1=1$, $x_2=-1$.</li>
+    <li><b>Comprobación:</b> $AX=(1,-1,0)$, residuo $B-AX=(1,1,-3)$, ortogonal a $(2,1,1)$ ($2+1-3=0$ ✓) y a $(1,2,1)$ ($1+2-3=0$ ✓). Distancia mínima $\sqrt{11}$.</li>
+  </ol>
+  <p><b>Resultado:</b> $X=(1,-1)^t$ (coincide con la oficial).</p>
+  <div class="recipe"><b>Receta:</b> normales ⇒ resolver ⇒ comprobar la ortogonalidad del residuo. Con $A^tA=\begin{pmatrix}p&q\\q&p\end{pmatrix}$, sumar y restar las dos ecuaciones acelera el cálculo.</div>
+  <p><b>Teoría:</b> U §5.4.2, p.227-229. Igual que E 5.37. Puedes ver este caso en la animación 3D de la sección 1 (preset «Feb. 2023 (A) ej. 8»).</p>
+</details>
+
+<details class="sol" id="ex-feb19a-5"><summary>Feb. 2019 (tipo A), ejercicio 5 — error cuadrático al sustituir un $X$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), ejercicio 5">X Feb. 2019 (A) ej. 5</span></summary>
+  <p class="enun">Calcular el error cuadrático cometido en $AX=B$ al sustituir $X$ por $\begin{pmatrix}1\\2\end{pmatrix}$, siendo $A=\begin{pmatrix}1&2\\2&-1\\3&3\end{pmatrix}$ y $B=\begin{pmatrix}1\\2\\-3\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Definición</b> (U Def. 5.14, p.227): el error es $\|AX-B\|$. No hay que minimizar nada: solo evaluar.</li>
+    <li><b>$AX$:</b> $\begin{pmatrix}1\cdot1+2\cdot2\\2\cdot1-1\cdot2\\3\cdot1+3\cdot2\end{pmatrix}=\begin{pmatrix}5\\0\\9\end{pmatrix}$.</li>
+    <li><b>$AX-B$:</b> $(5-1,\ 0-2,\ 9+3)=(4,-2,12)$.</li>
+    <li><b>Norma:</b> $\sqrt{4^2+(-2)^2+12^2}=\sqrt{164}=2\sqrt{41}\approx12{,}8$. (La oficial indica que basta dejarlo sin desarrollar, al no haber calculadora, y remite al Ejemplo 5.35 de U.)</li>
+  </ol>
+  <p><b>Resultado:</b> error $=\sqrt{164}=2\sqrt{41}$.</p>
+  <p><b>Ampliación (propia).</b> ¿Cuánto podría mejorarse? La solución por mínimos cuadrados de este sistema es $X_0=\left(\frac5{23},-\frac{18}{23}\right)$ (sección 2) y su error es $\frac{6\sqrt{115}}{23}\approx2{,}80$: el $X=(1,2)$ del examen es unas cuatro veces y media peor.</p>
+  <div class="recipe"><b>Receta:</b> producto $AX$, resta $B$, norma. Sin calculadora, deja la raíz sin simplificar.</div>
+  <p><b>Error típico:</b> dar $164$ (sin raíz) o equivocar el signo con el $-3$ de $B$ ($9-(-3)=12$, no $6$). <b>Teoría:</b> U Def. 5.14 y Ej. 5.35, p.227; E 5.35.</p>
+</details>
+
+<details class="sol" id="ex-sep18a-5"><summary>Sept. 2018 (tipo A), ejercicio 5 — escribir las ecuaciones normales <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 5">X Sept. 2018 (A) ej. 5</span></summary>
+  <p class="enun">Escribir las ecuaciones normales asociadas al sistema $AX=B$ que sirven para hallar su solución por mínimos cuadrados. (Es una pregunta de teoría: sin matrices concretas.)</p>
+  <p><b>La oficial dice solo</b> «las ecuaciones normales son $A^tAX=A^tB$». Con la advertencia de que lo que no se justifica no se puntúa, conviene argumentar. <b>Modelo de respuesta, en pasos:</b></p>
+  <ol class="steps">
+    <li>Si $A\in\mathcal M_{m\times n}$, $Ax=x_1C_1+\dots+x_nC_n$ recorre $\langle\operatorname{Col}A\rangle$. La solución por mínimos cuadrados $x_0$ hace mínima $\|Ax-b\|$, y por el Teorema 5.4 (U p.213) esto ocurre cuando $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$, es decir, cuando $b-Ax_0$ es ortogonal a $\langle\operatorname{Col}A\rangle$.</li>
+    <li>Ortogonal a $\langle\operatorname{Col}A\rangle$ ⇔ ortogonal a cada columna: $C_i^t(B-AX_0)=0$ para $i=1,\dots,n$. Como las $C_i^t$ son las filas de $A^t$: $A^t(B-AX_0)=0$.</li>
+    <li><b>Ecuaciones normales:</b> $\boxed{A^tAX=A^tB}$. Es un sistema $n\times n$, <b>siempre compatible</b>; tiene solución única si y solo si las columnas de $A$ son independientes ($A^tA$ regular), U p.229.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> «residuo ortogonal a cada columna» ⇒ $A^t(B-AX)=0$ ⇒ $A^tAX=A^tB$.</div>
+  <p><b>Teoría:</b> U §5.4.2, p.228-229.</p>
+</details>
+
+<h3 id="metodoB">Método B — Mínimos cuadrados con la factorización $QR$</h3>
+
+<details class="sol" id="ex-feb20b-pb"><summary>Feb. 2020 (tipo B), problema, apartado b) (1,5 puntos) — $RX=Q^tB$ <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B), problema, apartado b)">X Feb. 2020 (B) pb. b)</span></summary>
+  <p class="enun">a) (1,5 ptos.) Hallar la factorización $QR$ de $A=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\\\frac1{\sqrt2}&0\\0&0\end{pmatrix}$. b) (1,5 ptos.) Resolver el siguiente problema de mínimos cuadrados $AX=B$ siendo $A$ la matriz del apartado a) y $B=\begin{pmatrix}1\\1\\1\end{pmatrix}$. <i>(El apartado a) es del tema 5.2; se resume lo necesario.)</i></p>
+  <ol class="steps">
+    <li><b>QR del apartado a)</b> (resumen; detalle en <a href="tema_5_2_matrices_ortogonales.html#ex-feb20b-pa">5.2</a>): Gram-Schmidt sobre $a_1=\left(\frac1{\sqrt2},\frac1{\sqrt2},0\right)$, $a_2=(\sqrt2,0,0)$. $\|a_1\|=1\Rightarrow q_1=a_1$. $a_2\cdot q_1=1$, $e_2=a_2-q_1=\left(\frac1{\sqrt2},-\frac1{\sqrt2},0\right)$, $\|e_2\|=1\Rightarrow q_2=e_2$. $R=Q^tA=\begin{pmatrix}1&1\\0&1\end{pmatrix}$.</li>
+    <li><b>Incompatible:</b> la tercera ecuación es $0\cdot x+0\cdot y=1$. Por eso se pide mínimos cuadrados.</li>
+    <li><b>Por qué se usa $RX=Q^tB$:</b> $A^tA=R^tR$, $A^tB=R^tQ^tB$, $R^t$ regular (sección 4; U p.232). Y el enunciado pide «el problema de mínimos cuadrados con la $QR$ de a)»: hay que usarla.</li>
+    <li><b>$Q^tB$:</b> $q_1\cdot B=\frac2{\sqrt2}=\sqrt2$, $q_2\cdot B=0$.</li>
+    <li><b>Sistema triangular:</b> $x+y=\sqrt2,\ y=0$ ⇒ $y=0$, $x=\sqrt2$.</li>
+    <li><b>Interpretación:</b> $AX=(1,1,0)$ es la proyección de $(1,1,1)$ sobre $\langle\operatorname{Col}A\rangle$, que es el plano $z=0$; el residuo $(0,0,1)$ es perpendicular a ese plano ✓. Error $=1$.</li>
+    <li><b>Comprobación con las normales</b> (solo como control): $A^tA=\begin{pmatrix}1&1\\1&2\end{pmatrix}$, $A^tB=(\sqrt2,\sqrt2)^t$ ⇒ $x+y=\sqrt2$, $x+2y=\sqrt2$ ⇒ $y=0$, $x=\sqrt2$ ✓.</li>
+  </ol>
+  <p><b>Resultado:</b> $X=(\sqrt2,0)^t$ (coincide con la oficial y con el Ejemplo 5.40 de U, que usa la misma $Q$, $R$ y $B$).</p>
+  <div class="recipe"><b>Receta:</b> $Q^tB$ (productos escalares de las columnas de $Q$ con $B$), sistema triangular, sustitución regresiva. Si piden $QR$, no las normales (solo como comprobación).</div>
+  <p><b>Teoría:</b> U §5.4.2, p.232 (Ej. 5.40, p.232-233); U §5.2.2, p.218. Hace pareja con E 5.38 y con el Propio P5.</p>
+</details>
+
+<h3 id="metodoC">Método C — Explicar en qué consiste el método de mínimos cuadrados</h3>
+
+<details class="sol" id="ex-teoria"><summary>Feb. 2018 (tipo B), problema c) y Feb. 2017 (2.ª sem.), problema b) — «explicar en qué consiste el método y cómo se halla la solución» <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), problema c) (0,5 + 0,5 puntos) y Feb. 2017 (tipo A2, 2.ª semana), problema b) (1 punto)">X Feb. 2018 (B) pb. c) · Feb. 2017 pb. b)</span></summary>
+  <p class="enun"><b>Feb. 2018 (B):</b> «Explicar en qué consiste el método de los mínimos cuadrados (0,5 ptos.) y decir cómo se halla su solución (0,5 ptos.).» <b>Feb. 2017:</b> «Explicar en qué consiste el problema de los mínimos cuadrados y presentar cómo se puede obtener una solución por mínimos cuadrados (1 pto.).» Las dos soluciones oficiales son «véase la bibliografía básica / la teoría».</p>
+  <p><b>Modelo de respuesta (resumen de todo el tema, en cinco pasos):</b></p>
+  <ol class="steps">
+    <li><b>Planteamiento.</b> Si $AX=B$ es incompatible (caso habitual con datos reales: más ecuaciones que incógnitas), se busca un $x_0$ que lo resuelva «lo mejor posible»: el que <b>minimiza el error cuadrático</b> $\|Ax-b\|$ (Def. 5.14-5.15, U p.227). El nombre viene de que la norma es la raíz de una suma de cuadrados.</li>
+    <li><b>Geometría.</b> Como $Ax$ recorre $\langle\operatorname{Col}A\rangle$, por el teorema de mejor aproximación (U p.213) $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$ y $b-Ax_0$ es ortogonal a cada columna de $A$.</li>
+    <li><b>Ecuaciones normales.</b> Eso equivale a $A^tAX=A^tB$, que siempre tiene solución; es única si y solo si las columnas de $A$ son independientes (⇔ $A^tA$ regular); si no, hay infinitas ($x_p+\operatorname{Nuc}A$) y todas dan el mismo $Ax_0$ y el mismo error (U p.229).</li>
+    <li><b>Cómo se calcula.</b> (a) Resolver las normales; (b) proyectar $b$ sobre $\langle\operatorname{Col}A\rangle$ y resolver $Ax=\operatorname{Proy}b$; (c) si $A=QR$, resolver el sistema triangular $RX=Q^tB$ (U p.232).</li>
+    <li><b>Aplicación y ejemplo breve.</b> Recta $y=mx+n$ de mínimos cuadrados a los datos $(x_i,y_i)$ (U p.233). Ejemplo: $x=1,\ y=1,\ x+y=3$ (Propio P1): $A^tA=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $A^tB=\binom44$ ⇒ $x=y=\frac43$, error $\frac1{\sqrt3}$.</li>
+  </ol>
+  <div class="recipe"><b>Receta:</b> definición (minimiza $\|Ax-b\|$) → geometría (proyección, residuo ⟂) → normales → cuándo es única → un ejemplo numérico de $2\times2$.</div>
+  <p><b>Error típico:</b> contestar solo «$A^tAX=A^tB$» sin decir <i>qué</i> se minimiza ni <i>por qué</i> son esas las ecuaciones. <b>Teoría:</b> U §5.4.2, p.226-232.</p>
+</details>
+
+<h3>Para practicar — fronteras con otros temas (no se desarrollan aquí)</h3>
+<ul>
+  <li><b>5.1 Proyección ortogonal sobre un subespacio</b> (es el primer paso del método geométrico: $Ax_0=\operatorname{Proy}b$): <a href="tema_5_1_producto_escalar.html#ex-sep17a-5">Sept. 2017 (A1) ej. 5</a> (proyección de $(1,0,-5)$ sobre $\langle(1,1,0),(0,0,1)\rangle$: es el U Ej. 5.36 de la sección 1); <a href="tema_5_1_producto_escalar.html#ex-sep25-4">Sept. 2025 p.4</a> (la proyección de $(2,0,-3)$ sobre el mismo subespacio); <a href="tema_5_1_producto_escalar.html#ex-feb20b-5">Feb. 2020 (B) ej. 5</a> (proyección de $(1,1,1)$ sobre $2x+y-z=0$); <a href="tema_5_1_producto_escalar.html#ex-sep24-5">Sept. 2024 p.5</a> (en $\mathbb R^4$ con base ortogonal).</li>
+  <li><b>5.2:</b> <a href="tema_5_2_matrices_ortogonales.html#ex-feb20b-pa">Feb. 2020 (B) pb. a)</a> (la $QR$ que se usa en B); <b>1.4:</b> <a href="tema_1_4_sistemas_ecuaciones.html#ex-feb22pb">Feb. 2022 (A) pb. b)</a>.</li>
+  <li><b>6.2-6.3:</b> la forma cuadrática $x^t(A^tA)x=\|Ax\|^2$ es siempre semidefinida positiva: es lo que hay detrás de «$A^tA$ regular ⇔ columnas independientes» y se retoma en el tema 6.</li>
+</ul>
+
+<!-- ============================ 9 ============================ -->
+<h2 id="chuleta"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
+  <table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Error cuadrático</td><td>$\|Ax_0-b\|$ (Def. 5.14)</td><td>Es la <b>norma</b>, no su cuadrado; producto escalar estándar</td></tr>
+    <tr><td>Solución por mínimos cuadrados</td><td>$x_0$ con $\|Ax_0-b\|\le\|Ax-b\|$ para todo $x$ (Def. 5.15)</td><td><b>Siempre existe</b>. Si $AX=B$ es compatible, son sus soluciones exactas (error $0$)</td></tr>
+    <tr><td>Geometría</td><td>$Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$; $b-Ax_0\perp$ cada columna</td><td>Teor. 5.4. El vector $Ax_0$ y el error son <b>únicos</b></td></tr>
+    <tr><td>Ecuaciones normales</td><td>$A^tAX=A^tB$ ($n\times n$)</td><td>Siempre compatible. $(A^tA)_{ij}=C_i\cdot C_j$, $(A^tB)_i=C_i\cdot B$</td></tr>
+    <tr><td>Unicidad</td><td>solución única ⇔ columnas independientes ⇔ $A^tA$ regular; entonces $x_0=(A^tA)^{-1}A^tb$</td><td>Si no: $x_0\in x_p+\operatorname{Nuc}A$ (variedad afín de dimensión $n-\operatorname{rang}A$; en general no es subespacio: lo es, $=\operatorname{Nuc}A$, solo si $A^tB=0$)</td></tr>
+    <tr><td>Con $QR$</td><td>$A=QR\Rightarrow RX=Q^tB$ (regresiva)</td><td>Columnas de $A$ independientes; $Q^tQ=I$ pero $Q$ no es cuadrada</td></tr>
+    <tr><td>Error mínimo</td><td>$\|b-Ax_0\|^2=\|b\|^2-\|Ax_0\|^2$ (Pitágoras)</td><td>Porque $Ax_0\perp b-Ax_0$ (útil para comprobar)</td></tr>
+    <tr><td>Recta $y=mx+n$</td><td>filas $(x_i,1)$; $\begin{pmatrix}\sum x^2&\sum x\\\sum x&N\end{pmatrix}\binom mn=\binom{\sum xy}{\sum y}$</td><td>Al menos dos $x_i$ distintos. $\sum e_i=0$, $\sum x_ie_i=0$; pasa por $(\bar x,\bar y)$</td></tr>
+    <tr><td>Parábola / plano</td><td>filas $(x_i^2,x_i,1)$ / $(x_i,y_i,1)$</td><td>Lineal en los coeficientes. Solución única ⇔ columnas independientes (parábola: al menos 3 abscisas distintas; plano: puntos no alineados en $(x,y)$). Con más datos que incógnitas el sistema suele ser incompatible</td></tr>
+    <tr><td>Ajuste vs interpolación</td><td>$N$ puntos ⇒ polinomio de grado $N-1$ pasa por todos</td><td>El de mínimos cuadrados (menor grado) en general no pasa por ninguno</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §5.4, Definiciones 5.14-5.16 y resultados de las pp. 226-238">U p.226-238</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5-6.6, Teoremas 13-15 y rectas de mínimos cuadrados, p. 360-371">L p.360-371</span>
+</div>
+
+<div class="box tip"><span class="h">Lista de comprobación: «sé hacer…»</span>
+  <ul class="checklist">
+    <li>Calcular el <b>error cuadrático</b> de un $X_0$ dado (producto, resta, norma) (E 5.35; X Feb. 2019).</li>
+    <li>Explicar por qué una solución por mínimos cuadrados es una proyección y por qué el residuo es ortogonal a las columnas (E 5.34; sección 1).</li>
+    <li>Escribir y justificar las <b>ecuaciones normales</b> $A^tAX=A^tB$ (X Sept. 2018) y resolverlas con $A^tA$ de $2\times2$ y $3\times3$ (E 5.37; X Feb. 2023).</li>
+    <li>Comprobar el resultado: $A^t(B-AX_0)=0$ y que el error baja respecto de otro $X$.</li>
+    <li>Decidir si la solución es <b>única</b> (columnas independientes) y, si no, dar el conjunto $x_p+\operatorname{Nuc}A$ con sus parámetros (E 5.39; Propio P4).</li>
+    <li>Resolver con la <b>$QR$</b>: $Q^tB$ y sustitución regresiva (E 5.38; X Feb. 2020; Propio P5).</li>
+    <li><b>Ajustar</b> una recta, una parábola o un plano y hacer un <b>pronóstico</b> (E 5.40–5.43; Propios P2-P3); centrar los $x$ para ahorrar cuentas.</li>
+    <li>Contestar verdadero/falso sobre mínimos cuadrados con la definición y la caracterización de la unicidad (E 5.36, 5.44).</li>
+    <li>Explicar «en qué consiste el método y cómo se halla la solución» con ejemplo (X Feb. 2017, Feb. 2018).</li>
+    <li>Detectar los <b>errores de E</b> (5.39, 5.41, 5.42) comprobando siempre las normales.</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Lista de comprobación propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li><b>Dar $\|Ax_0-b\|^2$ como error cuadrático</b> (U define el error como la norma, con raíz).</li>
+    <li><b>$AA^t$ en lugar de $A^tA$</b>, o multiplicar por $A^t$ solo un miembro.</li>
+    <li><b>Dar una sola solución cuando $A^tA$ es singular:</b> hay infinitas ($x_p+\operatorname{Nuc}A$); el error es el mismo para todas.</li>
+    <li><b>Llamar «subespacio» al conjunto de soluciones</b> cuando hay infinitas: es una variedad afín $x_p+\operatorname{Nuc}A$ (en general no es subespacio; pasa por el origen solo si $A^tB=0$, y entonces es $\operatorname{Nuc}A$) (E 5.39).</li>
+    <li><b>Invertir $R$ o $Q$</b> en el método $QR$ ($Q$ no es cuadrada); o resolver por normales cuando el enunciado pide la $QR$.</li>
+    <li><b>En la recta:</b> $N=1$ en la esquina de $A^tA$, intercambiar el orden de $(m,n)$ entre $A$ y $X$, o numerar mal el instante de un pronóstico.</li>
+    <li><b>Redondear coeficientes antes de pronosticar</b> (U Ej. 5.43: $0{,}46$ frente a $0{,}506$).</li>
+    <li><b>Pensar que la recta de mínimos cuadrados pasa por algún dato</b> (E 5.44 D) o que el plano pasa por tres de los puntos.</li>
+    <li><b>Fiarse de la solución oficial de E</b> en 5.39, 5.41 y 5.42: están mal; comprueba con las normales (la 2.ª normal de la recta dice $\sum e_i=0$).</li>
+    <li><b>No justificar:</b> «lo que no se justifica no se puntúa». Cita la definición, las normales y comprueba la ortogonalidad del residuo.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Errores recopilados de E §5.4, U §5.4 y de las soluciones oficiales de los exámenes">propio</span>
+</div>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>
