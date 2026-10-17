@@ -20,6 +20,7 @@
    .anim-simet   data-a="3,1,3"   (matriz 2x2 de filas (a b; d c) con a, b, c editables y casilla "simetrica" [d = b]; deslizador de angulo phi para un punto x de la circunferencia unidad: x frente a Ax, la elipse imagen de la circunferencia unidad y presets. Si es simetrica: discriminante (a-c)^2+4b^2 >= 0 (valores propios siempre reales), valores propios l1 >= l2, ejes principales u1, u2 perpendiculares (rectas punteadas) con los semiejes |l1|, |l2| de la elipse, angulo theta = 1/2 atan2(2b, a-c) de la matriz de paso P (giro de det 1), P^t A P = diag(l1, l2) calculado numericamente y aviso cuando x esta sobre un eje principal. Si se desmarca la casilla: valores y vectores propios de una A cualquiera, angulo entre los ejes propios (distinto de 90 grados) y por que no hay P ortogonal; presets: matrices del tema 5.3, singular, diagonal, valor doble, contrastes no simetricos)
    .anim-bilineal data-a="1,1,1,2" data-p="-1,-1,1,2" data-x="2,1" data-y="1,3"   (forma bilineal 2x2: A editable [matriz de f en la base B], P editable [columnas = vectores de B' en coordenadas de B], x e y con sliders enteros; stepper en 5 pasos: A·y; x^t(Ay) = suma a_ij x_i y_j con aviso de que el orden importa [f(y,x)]; base nueva B' con su rejilla; A' = P^t A P con control a'_12 = f(v1,v2); comprobacion x'^t A' y' = f(x,y) con x' = P^-1 x, que se conserva [rango, simetria, signo de det; det A' = det A (det P)^2] y la semejanza P^-1 A P por contraste; avisa si P es singular; 6 presets: U Ej. 6.7 / Sept. 2018, Feb. 2026, Feb. 2025 B, no simetrica, antisimetrica, P singular; break-inside:avoid en impresion)
    .anim-minimos data-p="2,3;4,2;5,1;7,0.5"   (recta de minimos cuadrados y = m x + n para 2 a 8 puntos editables [filas (x_i, y_i); botones +/- punto]: sistema AX=B con una fila (x_i,1) por dato, sumas, ecuaciones normales y su determinante, solucion por Cramer, residuos verticales (segmentos naranjas) con control de que son ortogonales a las columnas (sum e_i = 0, sum x_i e_i = 0), error ||AX-B||, pronostico en un x editable y recta de prueba con sliders dm, dn (discontinua) cuyo error crece por Pitagoras ||AX'-B||^2 = ||AX-B||^2 + ||A(X'-X)||^2; si todos los x coinciden AtA es singular y avisa de solucion no unica; 7 presets: U Ej. 5.41, E 5.40, Lay 6.6 Ej. 1, P2, E 5.44 D, alineados, misma x; break-inside:avoid en impresion)
+   .anim-lu      data-a="2,2,2;4,7,7;6,18,22" data-b="2,2,1"   (factorizacion LU n x n paso a paso: reemplazos sin normalizar, multiplicador m que pasa a L, aviso de pivote 0 [hace falta PA=LU]; despues LY=B progresiva y UX=Y retrosustitucion; A y B editables)
 */
 (function () {
   'use strict';
@@ -1735,7 +1736,142 @@
     window.addEventListener('beforeprint', function () { st.go(st.N); });
   }
 
-  var REG = [['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+
+  /* =====================================================================
+     LU. FACTORIZACION A = LU Y RESOLUCION DE AX = B (tema 1.4)
+     ===================================================================== */
+  function buildLU(root) {
+    var A0 = parseM(root.getAttribute('data-a') || '2,2,2;4,7,7;6,18,22');
+    var n = A0.length;
+    var B0 = (root.getAttribute('data-b') || '2,2,1').split(',').map(function (x) { return F(parseInt(x, 10) || 0, 1); });
+    var steps = [];
+    root.textContent = ''; root.classList.add('sarrus', 'an-lu');
+    function ident() { var L = []; for (var i = 0; i < n; i++) { L.push([]); for (var j = 0; j < n; j++) L[i].push(F(i === j ? 1 : 0)); } return L; }
+    function buildSteps() {
+      steps = [];
+      var U = cloneM(A0), L = ident(), known = [], i, j, c;
+      for (i = 0; i < n; i++) { known.push([]); for (j = 0; j < n; j++) known[i].push(i <= j); }
+      var Y = null, X = null, fail = false;
+      function push(txt, hi, op, fin) { steps.push({ U: cloneM(U), L: cloneM(L), kn: known.map(function (r) { return r.slice(); }), Y: Y ? Y.slice() : null, X: X ? X.slice() : null, txt: txt, hi: hi || {}, op: op || '', fin: !!fin }); }
+      push('Queremos escribir <b>A = L·U</b>. Partimos de U = A (se irá convirtiendo en triangular superior) y de L = I (los huecos « ? » de debajo de la diagonal se rellenarán con los multiplicadores). Regla: solo reemplazos <b>F<sub>i</sub> → F<sub>i</sub> − m·F<sub>j</sub></b> con j &lt; i, sin normalizar pivotes ni intercambiar filas.');
+      for (c = 0; c < n - 1 && !fail; c++) {
+        if (isz(U[c][c])) {
+          fail = true;
+          push('El pivote de la columna ' + (c + 1) + ' es <b>0</b> y para arreglarlo habría que intercambiar filas. Sin intercambios <b>no existe la factorización LU</b> de esta A: hay que usar la LU permutada PA = LU (§9).', { piv: [c, c] }, '', true);
+          break;
+        }
+        for (i = c + 1; i < n; i++) {
+          var m = div(U[i][c], U[c][c]);
+          if (isz(m)) {
+            L[i][c] = F(0); known[i][c] = true;
+            push('La posición (' + (i + 1) + ',' + (c + 1) + ') de U ya vale 0: multiplicador <b>m = 0</b>, no hay que operar. Se anota <b>l<sub>' + (i + 1) + (c + 1) + '</sub> = 0</b> en L.', { piv: [c, c], lhi: [i, c] }, '');
+            continue;
+          }
+          var old = U[i][c];
+          for (j = 0; j < n; j++) U[i][j] = sub(U[i][j], mul(m, U[c][j]));
+          L[i][c] = m; known[i][c] = true;
+          var sg = m.n < 0 ? '+ ' + ftxt(neg(m)) : MINUS + ' ' + ftxt(m);
+          push('Para anular el <b>' + ftxt(old) + '</b> de la posición (' + (i + 1) + ',' + (c + 1) + ') dividimos entre el pivote: <b>m = ' + ftxt(old) + ' / ' + fpar(U[c][c]) + ' = ' + ftxt(m) + '</b>. Operación en U: <b>F' + (i + 1) + ' → F' + (i + 1) + ' ' + sg + '·F' + (c + 1) + '</b>. Ese mismo m se guarda en L: <b>l<sub>' + (i + 1) + (c + 1) + '</sub> = ' + ftxt(m) + '</b> (en U restamos ' + fpar(m) + '·F' + (c + 1) + ' y en L guardamos ' + ftxt(m) + ': es la operación contraria, la que «deshace» el paso).', { piv: [c, c], zer: [i, c], rows: [i], lhi: [i, c] }, 'F' + (i + 1) + ' → F' + (i + 1) + ' ' + sg + '·F' + (c + 1));
+        }
+      }
+      if (!fail) {
+        if (isz(U[n - 1][n - 1])) push('U es triangular superior, pero su último pivote es 0: <b>A es singular</b>. La factorización A = LU existe, pero no se podrá despejar X de forma única.', {}, '');
+        else push('<b>U ya es triangular superior</b> y L está completa. Comprobación: multiplicando L·U se recupera A (cada operación hecha sobre las filas queda guardada en L).', { all: true }, '');
+        if (B0.length === n && !isz(U[n - 1][n - 1])) {
+          Y = []; X = [];
+          for (i = 0; i < n; i++) { Y.push(null); X.push(null); }
+          push('<b>Resolver AX = B.</b> Como A = LU: AX = B ⇔ L(UX) = B. Llamamos <b>Y = UX</b> y resolvemos en dos pasos triangulares: <b>(1) LY = B</b> de arriba abajo, <b>(2) UX = Y</b> de abajo arriba. B = (' + B0.map(ftxt).join(', ') + ')ᵗ.', {}, '');
+          for (i = 0; i < n; i++) {
+            var s = B0[i], parts = [];
+            for (j = 0; j < i; j++) { s = sub(s, mul(L[i][j], Y[j])); parts.push(fpar(L[i][j]) + '·' + fpar(Y[j])); }
+            Y[i] = s;
+            push('<b>LY = B, fila ' + (i + 1) + '</b> (progresiva): ' + (i === 0 ? 'la primera fila de L es (1, 0, …, 0), así que y₁ = b₁ = <b>' + ftxt(s) + '</b>.' : 'y<sub>' + (i + 1) + '</sub> = b<sub>' + (i + 1) + '</sub> ' + MINUS + ' (' + parts.join(' + ') + ') = <b>' + ftxt(s) + '</b>.'), { yi: i }, '');
+          }
+          for (i = n - 1; i >= 0; i--) {
+            var t = Y[i], q = [];
+            for (j = i + 1; j < n; j++) { t = sub(t, mul(U[i][j], X[j])); q.push(fpar(U[i][j]) + '·' + fpar(X[j])); }
+            X[i] = div(t, U[i][i]);
+            push('<b>UX = Y, fila ' + (i + 1) + '</b> (retrosustitución, de abajo arriba): ' + (q.length ? 'x<sub>' + (i + 1) + '</sub> = (y<sub>' + (i + 1) + '</sub> ' + MINUS + ' (' + q.join(' + ') + ')) / ' + fpar(U[i][i]) : 'x<sub>' + (i + 1) + '</sub> = y<sub>' + (i + 1) + '</sub> / ' + fpar(U[i][i])) + ' = <b>' + ftxt(X[i]) + '</b>.', { xi: i }, '');
+          }
+          push('<b>Solución:</b> X = (' + X.map(ftxt).join(', ') + ')ᵗ. Si llega otro B′ con la misma A, <b>no se repite la factorización</b>: solo se rehacen estos dos barridos triangulares.', {}, '', true);
+        }
+      }
+    }
+    function mtab(M, kn, hi, kind) {
+      var tb = el('table', 'gj-m');
+      for (var i = 0; i < n; i++) {
+        var tr = el('tr');
+        for (var j = 0; j < n; j++) {
+          var td = el('td');
+          if (kn && !kn[i][j]) { td.textContent = '?'; td.classList.add('dim'); } else html(td, fhtml(M[i][j]));
+          if (j === 0) td.classList.add('lb');
+          if (j === n - 1) td.classList.add('rb');
+          if (kind === 'U') {
+            if (hi.piv && hi.piv[0] === i && hi.piv[1] === j) td.classList.add('piv');
+            if (hi.zer && hi.zer[0] === i && hi.zer[1] === j) td.classList.add('zer');
+            else if (hi.rows && hi.rows.indexOf(i) >= 0) td.classList.add('chg');
+          }
+          if (kind === 'L' && hi.lhi && hi.lhi[0] === i && hi.lhi[1] === j) td.classList.add('hx');
+          if (hi.all && ((kind === 'U' && j >= i) || (kind === 'L' && j <= i))) td.classList.add('inv');
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      }
+      return tb;
+    }
+    function ctab(v, hl) {
+      var tb = el('table', 'gj-m');
+      v.forEach(function (x, i) {
+        var tr = el('tr'), td = el('td');
+        if (x) html(td, fhtml(x)); else { td.textContent = '?'; td.classList.add('dim'); }
+        td.classList.add('lb', 'rb'); if (hl === i) td.classList.add('hx');
+        tr.appendChild(td); tb.appendChild(tr);
+      });
+      return tb;
+    }
+    function lab(t) { return el('span', 'lu-sym', t); }
+    var wrap = el('div', 'gj-wrap lu-wrap'), wrap2 = el('div', 'gj-wrap lu-wrap');
+    var opLine = el('div', 'gj-op');
+    var detail = el('details', 'gj-edit');
+    detail.appendChild(el('summary', '', '✎ Cambiar A y B'));
+    var edGrid = el('div', 'gj-grid'), applyBtn = el('button', 'gj-apply', 'Aplicar'); applyBtn.type = 'button';
+    detail.appendChild(edGrid); detail.appendChild(applyBtn);
+    var inputs = [];
+    edGrid.style.gridTemplateColumns = 'repeat(' + (n + 1) + ',3.2em)';
+    for (var ii = 0; ii < n; ii++) for (var jj = 0; jj <= n; jj++) {
+      var inp = el('input'); inp.type = 'number'; inp.step = 1; inp.value = jj < n ? A0[ii][jj].n : (B0[ii] ? B0[ii].n : 0);
+      inp.setAttribute('aria-label', jj < n ? 'A fila ' + (ii + 1) + ' columna ' + (jj + 1) : 'B fila ' + (ii + 1)); edGrid.appendChild(inp); inputs.push(inp);
+    }
+    function render(s, text) {
+      var S = steps[s];
+      wrap.textContent = ''; wrap2.textContent = '';
+      var a = el('div', 'lu-blk'); a.appendChild(lab('A')); a.appendChild(mtab(A0, null, {}, 'A'));
+      var l = el('div', 'lu-blk'); l.appendChild(lab('L')); l.appendChild(mtab(S.L, S.kn, S.hi, 'L'));
+      var u = el('div', 'lu-blk'); u.appendChild(lab('U')); u.appendChild(mtab(S.U, null, S.hi, 'U'));
+      wrap.appendChild(a); wrap.appendChild(lab('=')); wrap.appendChild(l); wrap.appendChild(lab('·')); wrap.appendChild(u);
+      if (S.Y) {
+        var b = el('div', 'lu-blk'); b.appendChild(lab('B')); b.appendChild(ctab(B0));
+        var y = el('div', 'lu-blk'); y.appendChild(lab('Y (LY = B)')); y.appendChild(ctab(S.Y, S.hi.yi));
+        var x = el('div', 'lu-blk'); x.appendChild(lab('X (UX = Y)')); x.appendChild(ctab(S.X, S.hi.xi));
+        wrap2.appendChild(b); wrap2.appendChild(y); wrap2.appendChild(x);
+      }
+      opLine.textContent = S.op ? 'Operación: ' + S.op : '';
+      html(text, S.txt);
+    }
+    buildSteps();
+    var st = stepper(root, steps.length - 1, render, null, 3200);
+    root.appendChild(wrap); root.appendChild(wrap2); root.appendChild(opLine);
+    st.mount(root); root.appendChild(detail);
+    applyBtn.addEventListener('click', function () {
+      var k = 0;
+      for (var i = 0; i < n; i++) { for (var j = 0; j < n; j++) A0[i][j] = F(parseInt(inputs[k++].value, 10) || 0, 1); B0[i] = F(parseInt(inputs[k++].value, 10) || 0, 1); }
+      st.stop(); buildSteps(); st.setN(steps.length - 1); st.go(0);
+    });
+    st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(steps.length - 1); });
+  }
+
+  var REG = [['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

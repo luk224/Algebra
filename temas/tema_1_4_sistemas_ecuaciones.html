@@ -405,6 +405,17 @@
   <span class="src" data-l="L" data-ref="Lay §2.5, factorización LU, coste comparable a Gauss + ~n² por sistema adicional, p. 124-127">L p.124-127</span>
 </div>
 
+<div class="box intu"><span class="h">La idea de $L$ en una frase</span>
+  <p>Al escalonar, cada vez que haces $F_i\to F_i-m\,F_j$ estás <i>gastando</i> información de $A$. $L$ es el <b>cuaderno donde apuntas esos $m$</b>: si algún día quieres deshacer todo el proceso (volver de $U$ a $A$), basta volver a <i>sumar</i> esos múltiplos en orden inverso, y eso es justo multiplicar por $L$. Por eso $A=LU$: «$U$» es el resultado y «$L$» el registro de cómo llegaste.</p>
+  <p><b>Receta práctica (3 reglas):</b> (1) trabaja columna por columna, de izquierda a derecha y de arriba abajo; (2) para cada posición que anulas, calcula $m=\dfrac{\text{elemento a anular}}{\text{pivote}}$ y haz $F_i\to F_i-m\,F_j$; (3) <b>apunta ese mismo $m$</b> (con su signo, tal cual lo restaste) en la posición $(i,j)$ de $L$. Diagonal de $L$ = unos; encima de la diagonal, ceros.</p>
+</div>
+
+<div class="box ex"><span class="h">Animación: $A=LU$ paso a paso y resolución de $AX=B$ (Ejemplos 1.34 y 1.36 de U)</span>
+  <p>Pulsa «Siguiente» (o «Reproducir»): en cada paso verás el multiplicador $m$ que se calcula, la operación sobre $U$ y cómo ese mismo $m$ aparece en $L$. Después se resuelve $LY=B$ (de arriba abajo) y $UX=Y$ (de abajo arriba). Puedes cambiar $A$ y $B$ con «✎ Cambiar A y B».</p>
+  <div class="anim-lu" data-a="2,2,2;4,7,7;6,18,22" data-b="2,2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia sobre los datos de U Ej. 1.34 y 1.36, p. 47-49">P</span>
+</div>
+
 <div class="box ex"><span class="h">Ejemplo 1.33 de U — $2\times2$, el caso más simple</span>
   <p>$A=\begin{pmatrix}3&2\\1&1\end{pmatrix}$. $F_2\to F_2-\frac13F_1$: $(1,1)-\frac13(3,2)=(0,\frac13)$. Así
   $$U=\begin{pmatrix}3&2\\0&\frac13\end{pmatrix},\qquad L=\begin{pmatrix}1&0\\\frac13&1\end{pmatrix}$$
@@ -451,6 +462,12 @@
   <p>Si al triangularizar $A$ aparece un $0$ en la posición del pivote y no se puede arreglar sin <b>intercambiar filas</b>, la factorización $LU$ (tal como se ha definido) <b>no existe</b>. Ejemplo mínimo (propio): $A=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ es regular ($\det A=-1$), pero si $A=LU$ con $L=\begin{pmatrix}1&0\\l&1\end{pmatrix}$, la entrada $(1,1)$ obligaría a $u_{11}=0$ y la $(2,1)$ a $l\,u_{11}=1$, es decir $0=1$: imposible. El remedio es permutar filas primero.</p>
   <span class="src" data-l="U" data-ref="U §1.4.3, p. 50 (motivación de la LU permutada)">U p.50</span>
   <span class="src" data-l="P" data-ref="Contraejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: cuándo falla la $LU$ sin permutar</span>
+  <p>Esta $A$ tiene un $0$ donde debería ir el primer pivote: la animación se detiene y avisa. Cambia un valor (p. ej. $a_{11}=1$) con «✎ Cambiar A y B» y verás cómo ya sí se puede factorizar.</p>
+  <div class="anim-lu" data-a="0,-2,1;3,1,4;1,1,2" data-b="0,3,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia sobre la A del Ejemplo 1.37 de U, p. 50">P</span>
 </div>
 
 <div class="box def"><span class="h">$LU$ permutada</span>
