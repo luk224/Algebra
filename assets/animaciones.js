@@ -23,6 +23,7 @@
    .anim-cuadratica data-m="1,4,0,3" data-p="1,0,0,1" data-x="2,1"   (forma cuadratica 2x2, tema 6.2: M editable [cualquier matriz, Q(x)=x^t M x], P editable [columnas = base nueva B'], x con sliders enteros; stepper en 4 pasos: evaluar Q(x) y su polinomio con la curva de nivel Q=Q(x); parte simetrica S=(M+M^t)/2 [el termino cruzado se reparte a medias] y antisimetrica K con x^t K x = 0, rango; homogeneidad Q(2x)=4Q(x), Q(-x)=Q(x); cambio de base S'=P^t S P con comprobacion x'^t S' x' = Q(x); 6 presets)
    .anim-lu      data-a="2,2,2;4,7,7;6,18,22" data-b="2,2,1"   (factorizacion LU n x n paso a paso: reemplazos sin normalizar, multiplicador m que pasa a L, aviso de pivote 0 [hace falta PA=LU]; despues LY=B progresiva y UX=Y retrosustitucion; A y B editables)
    .anim-clasif data-a="1,2,1"   (clasificacion de una forma cuadratica 2x2, tema 6.3: a11, a12 y a22 editables [A simetrica], 8 presets [E 6.18, E 6.19, U Ej. 6.26, U Ej. 6.24, DN, SN, D1 = 0, Q = 0]; stepper en 5 pasos: polinomio y matriz; Sylvester con la rama aplicable [definida: "<=>", semidefinida: "=>", o "no decide"] y zonas Q>0 azul / Q<0 naranja; valores propios con control de traza y determinante y ejes principales; forma canonica, signatura, rango, cuadro de invariantes y curvas Q = 1 y Q = -1 [elipse, hiperbolas, rectas]; vectores testigo y veredicto; break-inside:avoid en impresion)
+   .anim-conica data-a="1,0,4,-4,-16,19"   (conicas, tema 6.4: los 6 coeficientes enteros de a11 x1^2 + 2a12 x1x2 + a22 x2^2 + 2a01 x1 + 2a02 x2 + a00 = 0 [orden: a11, 2a12, a22, 2a01, 2a02, a00] editables y 21 presets [E 6.28, E 6.27 B, E 6.32, Feb. 2018 B, Sept. 2017 A1, U Ej. 6.31, hiperbola y parabola con giro, degeneradas, Feb. 2019 A, familia P5 con parametro k, circunferencia]; stepper en 5 pasos: matriz asociada e invariantes |A|, a11+a22, A00 y rango; clasificacion por el cuadro de U p.286 [con el criterio A11+A22 para las rectas paralelas, que corrige el uso de solo A11 del libro]; giro [valores propios de la parte cuadratica, u1 y u2 unitarios con det P = 1, angulo, nueva ecuacion]; traslacion [completar cuadrados, centro o vertice en coordenadas originales, control d = |A|/A00 o |A| = -lambda b^2/4]; ecuacion reducida con semiejes, focos, vertices, asintotas, directriz y eje; dibuja la conica original [elipse, hiperbola, parabola, rectas, punto] con los ejes de cada paso; 0 puntos reales se avisa; break-inside:avoid en impresion)
 */
 (function () {
   'use strict';
@@ -2073,7 +2074,275 @@
   }
 
 
-  var REG = [['.anim-clasif', buildClasif], ['.anim-cuadratica', buildCuadratica], ['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Conicas: clasificacion por invariantes y ecuacion reducida (.anim-conica)
+     ===================================================================== */
+  /*CONICA-MODEL*/
+  function cnQ(x) {                                   // fraccion p/q (q <= 120), a√n/q o decimal aproximado
+    if (Math.abs(x) < 1e-10) return '0';
+    var q, n, ng = x < 0 ? MINUS : '', ax = Math.abs(x);
+    for (q = 1; q <= 120; q++) { n = Math.round(ax * q); if (Math.abs(ax * q - n) < 1e-9 * q) return ng + n + (q > 1 ? '/' + q : ''); }
+    for (q = 1; q <= 60; q++) {
+      var N = Math.round(ax * q * ax * q);
+      if (N > 0 && N <= 4000 && Math.abs(ax * q * ax * q - N) < 1e-8) {
+        var a = 1, r = N, f;
+        for (f = 2; f * f <= r; f++) while (r % (f * f) === 0) { r /= f * f; a *= f; }
+        var g = gcd(a, q); a /= g; var qq = q / g;
+        return ng + (a > 1 ? a : '') + '√' + r + (qq > 1 ? '/' + qq : '');
+      }
+    }
+    var SQF = [2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 33, 34, 35], ii, kk, dd, nn, aa, ee;
+    for (ii = 0; ii < SQF.length; ii++) for (dd = 1; dd <= 12; dd++) for (kk = -60; kk <= 60; kk++) {
+      if (!kk) continue;
+      aa = x - kk * Math.sqrt(SQF[ii]) / dd;
+      for (ee = 1; ee <= 12; ee++) { nn = Math.round(aa * ee); if (nn !== 0 && Math.abs(aa * ee - nn) < 1e-9) {
+        var ga = gcd(Math.abs(nn), ee), an = nn / ga, ae = ee / ga, ak = Math.abs(kk), gk = gcd(ak, dd), kn = ak / gk, kd = dd / gk;
+        return (an < 0 ? MINUS : '') + Math.abs(an) + (ae > 1 ? '/' + ae : '') + (kk < 0 ? ' ' + MINUS + ' ' : ' + ') + (kn > 1 ? kn : '') + '√' + SQF[ii] + (kd > 1 ? '/' + kd : '');
+      } }
+    }
+    return '≈' + (Math.round(x * 1000) / 1000).toString().replace('-', MINUS).replace('.', ',');
+  }
+  function cnDet3(B) { return B[0][0] * (B[1][1] * B[2][2] - B[1][2] * B[2][1]) - B[0][1] * (B[1][0] * B[2][2] - B[1][2] * B[2][0]) + B[0][2] * (B[1][0] * B[2][1] - B[1][1] * B[2][0]); }
+  function cnRank(B) {
+    var i, j, k, l;
+    if (cnDet3(B) !== 0) return 3;
+    for (i = 0; i < 3; i++) for (k = i + 1; k < 3; k++) for (j = 0; j < 3; j++) for (l = j + 1; l < 3; l++) if (B[i][j] * B[k][l] - B[i][l] * B[k][j] !== 0) return 2;
+    for (i = 0; i < 3; i++) for (j = 0; j < 3; j++) if (B[i][j] !== 0) return 1;
+    return 0;
+  }
+  /* p = [p11, p12, p22, p1, p2, p0]: p11 x1^2 + p12 x1x2 + p22 x2^2 + p1 x1 + p2 x2 + p0 = 0   (p12 = 2a12, p1 = 2a01, p2 = 2a02) */
+  function conicModel(p) {
+    var p11 = p[0], p12 = p[1], p22 = p[2], p1 = p[3], p2 = p[4], p0 = p[5];
+    var m = { p: p, quad: !!(p11 || p12 || p22) };
+    var B = [[2 * p0, p1, p2], [p1, 2 * p11, p12], [p2, p12, 2 * p22]];     // B = 2A: entera
+    m.det = cnDet3(B) / 8; m.A00 = (4 * p11 * p22 - p12 * p12) / 4; m.tr = p11 + p22;
+    m.A11 = p0 * p22 - p2 * p2 / 4; m.A22 = p0 * p11 - p1 * p1 / 4; m.As = m.A11 + m.A22;
+    m.rank = cnRank(B);
+    if (!m.quad) { m.kind = 'noconica'; return m; }
+    var k;
+    if (m.rank === 3) { if (m.A00 > 0) k = (m.tr * m.det < 0) ? ((p12 === 0 && p11 === p22) ? 'circunferencia' : 'elipse') : 'elipseImag'; else if (m.A00 < 0) k = 'hiperbola'; else k = 'parabola'; }
+    else if (m.rank === 2) { if (m.A00 < 0) k = 'secantes'; else if (m.A00 > 0) k = 'punto'; else k = m.As < 0 ? 'paralelas' : (m.As > 0 ? 'paralelasImag' : 'paralelasX'); }
+    else k = 'doble';
+    m.kind = k;
+    /* --- paso 1: giro --- */
+    var l1, l2, u1, u2, rot = p12 !== 0, n;
+    if (rot) {
+      var h = Math.sqrt((p11 - p22) * (p11 - p22) / 4 + p12 * p12 / 4), c = m.tr / 2;
+      l1 = c + h; l2 = c - h;
+      if (m.A00 === 0) { if (m.tr > 0) l2 = 0; else l1 = 0; }
+      u1 = [p12 / 2, l1 - p11]; n = Math.hypot(u1[0], u1[1]); u1 = [u1[0] / n, u1[1] / n];
+      if (u1[0] < -1e-12 || (Math.abs(u1[0]) <= 1e-12 && u1[1] < 0)) u1 = [-u1[0], -u1[1]];
+      u2 = [-u1[1], u1[0]];
+    } else { l1 = p11; l2 = p22; u1 = [1, 0]; u2 = [0, 1]; }
+    m.rot = rot; m.l = [l1, l2]; m.u = [u1, u2]; m.theta = Math.atan2(u1[1], u1[0]) * 180 / Math.PI;
+    var b = [p1 * u1[0] + p2 * u1[1], p1 * u2[0] + p2 * u2[1]]; m.b = b;
+    var toX = function (y1, y2) { return [u1[0] * y1 + u2[0] * y2, u1[1] * y1 + u2[1] * y2]; };
+    m.toX = toX;
+    /* --- paso 2: traslacion --- */
+    var l = [l1, l2], yo, d, j, kk, e;
+    m.pts = []; m.lines = []; m.curves = null;
+    if (m.A00 !== 0) {
+      yo = [-b[0] / (2 * l1), -b[1] / (2 * l2)]; d = p0 - b[0] * b[0] / (4 * l1) - b[1] * b[1] / (4 * l2); m.d = d; m.center = true;
+    } else {
+      j = l1 === 0 ? 0 : 1; kk = 1 - j; m.j = j; m.k = kk;
+      var yk0 = -b[kk] / (2 * l[kk]); e = p0 - b[kk] * b[kk] / (4 * l[kk]); m.e = e;
+      yo = [0, 0]; yo[kk] = yk0;
+      if (k === 'parabola') { yo[j] = -e / b[j]; m.twoP = -b[j] / l[kk]; }
+      m.center = false;
+    }
+    m.yo = yo; m.O = toX(yo[0], yo[1]);
+    var zx = function (z1, z2) { return toX(yo[0] + z1, yo[1] + z2); };
+    var O = m.O, add2 = function (P0, v, s) { return [P0[0] + s * v[0], P0[1] + s * v[1]]; };
+    var A2, B2, A, Bq, c2, t, o;
+    if (k === 'elipse' || k === 'circunferencia' || k === 'elipseImag') {
+      A2 = -d / l1; B2 = -d / l2; m.A2 = A2; m.B2 = B2;
+      if (k !== 'elipseImag') {
+        A = Math.sqrt(A2); Bq = Math.sqrt(B2); m.A = A; m.B = Bq;
+        c2 = Math.abs(A2 - B2); m.c = Math.sqrt(c2); m.maj = A >= Bq ? 0 : 1;
+        m.pts.push({ n: 'C', p: O });
+        m.pts.push({ n: 'V', p: add2(O, u1, A) }, { n: 'V', p: add2(O, u1, -A) }, { n: 'V', p: add2(O, u2, Bq) }, { n: 'V', p: add2(O, u2, -Bq) });
+        if (m.c > 1e-9) { var um = m.maj === 0 ? u1 : u2; m.pts.push({ n: 'F', p: add2(O, um, m.c) }, { n: 'F', p: add2(O, um, -m.c) }); }
+        m.curves = function () { var cu = [], q; for (q = 0; q <= 240; q++) { var th = q * Math.PI / 120; cu.push(zx(A * Math.cos(th), Bq * Math.sin(th))); } return [cu]; };
+      }
+    } else if (k === 'hiperbola') {
+      t = (-d / l1 > 0) ? 0 : 1; o = 1 - t; m.t = t; m.o = o;
+      A2 = -d / l[t]; B2 = d / l[o]; A = Math.sqrt(A2); Bq = Math.sqrt(B2); m.A2 = A2; m.B2 = B2; m.A = A; m.B = Bq; m.c = Math.sqrt(A2 + B2);
+      var ut = m.u[t], uo = m.u[o];
+      m.pts.push({ n: 'C', p: O }, { n: 'V', p: add2(O, ut, A) }, { n: 'V', p: add2(O, ut, -A) }, { n: 'F', p: add2(O, ut, m.c) }, { n: 'F', p: add2(O, ut, -m.c) });
+      m.lines.push({ a: O, d: add2(ut, uo, Bq / A), s: 'as' }, { a: O, d: add2(ut, uo, -Bq / A), s: 'as' });
+      m.curves = function (R) {
+        var U = Math.min(8, Math.acosh(1 + 3 * R / Math.min(A, Bq))), out = [], sg, q;
+        for (sg = -1; sg <= 1; sg += 2) { var cu = []; for (q = -60; q <= 60; q++) { var uu = U * q / 60, zt = sg * A * Math.cosh(uu), zo = Bq * Math.sinh(uu), z = [0, 0]; z[t] = zt; z[o] = zo; cu.push(zx(z[0], z[1])); } out.push(cu); }
+        return out;
+      };
+    } else if (k === 'parabola') {
+      var twoP = m.twoP, pp = twoP / 2, uj = m.u[j], uk = m.u[kk];
+      m.p_ = pp; m.pts.push({ n: 'V', p: O }, { n: 'F', p: add2(O, uj, pp / 2) });
+      m.lines.push({ a: add2(O, uj, -pp / 2), d: uk, s: 'dir' }, { a: O, d: uj, s: 'axis' });
+      m.curves = function (R) {
+        var S = Math.min(80, Math.max(3 * R, Math.sqrt(6 * R * Math.abs(pp)))), cu = [], q;
+        for (q = -80; q <= 80; q++) { var s = S * q / 80, z = [0, 0]; z[kk] = s; z[j] = s * s / twoP; cu.push(zx(z[0], z[1])); }
+        return [cu];
+      };
+    } else if (k === 'secantes') {
+      var mm = Math.sqrt(-l1 / l2); m.mm = mm;
+      m.pts.push({ n: 'C', p: O }); m.lines.push({ a: O, d: add2(u1, u2, mm), s: 'ln' }, { a: O, d: add2(u1, u2, -mm), s: 'ln' });
+    } else if (k === 'punto') { m.pts.push({ n: 'C', p: O }); }
+    else if (k === 'paralelas' || k === 'paralelasImag' || k === 'doble' || k === 'paralelasX') {
+      var s2 = -e / l[kk]; m.s2 = s2; var s = k === 'paralelas' ? Math.sqrt(s2) : 0; m.s = s; var uj2 = m.u[j], uk2 = m.u[kk];
+      if (k === 'paralelas') { m.lines.push({ a: add2(O, uk2, s), d: uj2, s: 'ln' }, { a: add2(O, uk2, -s), d: uj2, s: 'ln' }); }
+      else if (k === 'doble') { m.lines.push({ a: O, d: uj2, s: 'ln' }); }
+      m.pts.push({ n: 'C', p: O });
+    }
+    return m;
+  }
+  /*FIN-CONICA-MODEL*/
+  var CN_NOM = { circunferencia: 'circunferencia', elipse: 'elipse real', elipseImag: 'elipse imaginaria (sin puntos reales)', hiperbola: 'hipérbola', parabola: 'parábola', secantes: 'dos rectas secantes reales', punto: 'rectas secantes imaginarias: un único punto real', paralelas: 'dos rectas paralelas reales', paralelasImag: 'dos rectas paralelas imaginarias (sin puntos reales)', doble: 'recta doble', paralelasX: 'rectas paralelas (caso A₁₁ + A₂₂ = 0, imposible)', noconica: 'no es una cónica' };
+  function buildConica(root) {
+    var a0 = (root.getAttribute('data-a') || '1,0,4,-4,-16,19').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var body = el('div', 'an-body');
+    var res = el('div', 'sar-res'), eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+    var NAMES = ['a₁₁', '2a₁₂', 'a₂₂', '2a₀₁', '2a₀₂', 'a₀₀'];
+    var inp = a0.map(function (x, k) { var i = numInput(x, 1, '3.4em'); i.setAttribute('aria-label', 'coeficiente ' + NAMES[k]); return i; });
+    var TX = ['x₁² + ', 'x₁x₂ + ', 'x₂² + ', 'x₁ + ', 'x₂ + ', ' = 0'];
+    inp.forEach(function (i, k) { er.appendChild(i); er.appendChild(el('span', '', TX[k])); });
+    eq.appendChild(er);
+    var PRE = [['E 6.28 (elipse)', [1, 0, 4, -4, -16, 19]], ['E 6.27 B (parábola)', [1, 2, 1, 0, -4, -1]], ['E 6.32 con a=2, b=−1', [2, -2, 2, 0, 0, -2]], ['Feb. 2018 B', [5, -3, 1, -3, 2, -5]], ['Sept. 2017 A1', [1, 2, 1, 1, -2, 1]], ['U Ej. 6.31 (secantes)', [1, -6, -7, 10, 2, 9]], ['P2 hipérbola con giro', [1, 4, 1, -6, -6, 3]], ['P3 parábola con giro', [1, 2, 1, -8, 8, 0]], ['Secantes reales', [1, 0, -4, -2, 0, 1]], ['Un punto', [1, 0, 1, -2, 0, 1]], ['Paralelas reales', [1, 2, 1, 2, 2, 0]], ['Paralelas imaginarias', [1, 2, 1, 2, 2, 2]], ['Recta doble', [1, 2, 1, 2, 2, 1]], ['Feb. 2019 A, α = 1', [1, 2, 1, 0, 2, 1]], ['Feb. 2019 A, α = 0', [1, 2, 1, 0, 0, 1]], ['P5: k = 2', [2, 0, 1, 2, 0, 1]], ['P5: k = 1', [1, 0, 1, 2, 0, 1]], ['P5: k = ½ (×2)', [1, 0, 2, 4, 0, 2]], ['P5: k = 0', [0, 0, 1, 2, 0, 1]], ['P5: k = −1', [-1, 0, 1, 2, 0, 1]], ['Circunferencia', [1, 0, 1, -2, -4, 1]]];
+    var pre = btnRow(PRE.map(function (q) { return q[0]; }), function (i) { PRE[i][1].forEach(function (v, k) { inp[k].value = v; }); recalc(); });
+    var P = null, cur = null, Q = cnQ;
+    var bad = false;
+    function readP() { bad = false; return inp.map(function (i) { var v = parseFloat(i.value) || 0; if (Math.abs(v - Math.round(v)) > 1e-9) bad = true; return Math.round(v); }); }
+    function poly(terms) {
+      var out = '';
+      terms.forEach(function (t) {
+        var c = t[0]; if (Math.abs(c) < 1e-10) return;
+        var ng = c < 0, s = Q(Math.abs(c)), v = t[1];
+        if (v) { if (s === '1') s = ''; else if (/[ ]/.test(s)) s = '(' + s + ')'; else if (/[\/√≈]/.test(s)) s += '·'; }
+        out += (out ? (ng ? ' ' + MINUS + ' ' : ' + ') : (ng ? MINUS : '')) + s + v;
+      });
+      return out || '0';
+    }
+    function pol0(q) { return poly([[q[0], 'x₁²'], [q[1], 'x₁x₂'], [q[2], 'x₂²'], [q[3], 'x₁'], [q[4], 'x₂'], [q[5], '']]); }
+    function qd(x) { var t = Q(x); return /[\/√≈ ]/.test(t) ? '(' + t + ')' : t; }
+    function dec(x) { return (Math.round(x * 1000) / 1000).toString().replace('-', MINUS).replace('.', ','); }
+    function pt(p) { var a = Q(p[0]), b = Q(p[1]); if (a.charAt(0) === '≈' || b.charAt(0) === '≈') return '(≈' + dec(p[0]) + '; ≈' + dec(p[1]) + ')'; return '(' + a + '; ' + b + ')'; }
+    function vec(u) { return '(' + Q(u[0]) + '; ' + Q(u[1]) + ')'; }
+    function shift(name, y0) { return Math.abs(y0) < 1e-10 ? name : (y0 > 0 ? name + ' ' + MINUS + ' ' + Q(y0) : name + ' + ' + Q(-y0)); }
+    function ext(m) {
+      var mx = 1; (m.pts || []).forEach(function (q) { mx = Math.max(mx, Math.abs(q.p[0]), Math.abs(q.p[1])); });
+      (m.lines || []).forEach(function (L) { mx = Math.max(mx, Math.abs(L.a[0]), Math.abs(L.a[1])); });
+      return Math.max(4, Math.min(12, Math.ceil(mx * 1.3 + 0.5)));
+    }
+    function newPlane(R) { var q = plane(body, 340, 340, R); q.svg.setAttribute('aria-label', 'Plano con la cónica en azul, los ejes nuevos tras el giro y la traslación y sus puntos notables'); return q; }
+    function ln(x1, y1, x2, y2, col, w, dash) { var a = { x1: P.X(x1), y1: P.Y(y1), x2: P.X(x2), y2: P.Y(y2), stroke: col, 'stroke-width': w, 'stroke-linecap': 'round' }; if (dash) a['stroke-dasharray'] = dash; P.layer.appendChild(sv('line', a)); }
+    function line2(a, d, L, col, w, dash) { var n = Math.hypot(d[0], d[1]) || 1; ln(a[0] - L * d[0] / n, a[1] - L * d[1] / n, a[0] + L * d[0] / n, a[1] + L * d[1] / n, col, w, dash); }
+    function dot(p, col, r, lab) {
+      P.layer.appendChild(sv('circle', { cx: P.X(p[0]), cy: P.Y(p[1]), r: r, fill: col, stroke: 'var(--bg)', 'stroke-width': 1 }));
+      if (lab) { var t = sv('text', { x: P.X(p[0]) + 7, y: P.Y(p[1]) - 7 }); t.textContent = lab; t.setAttribute('style', 'fill:' + col + ';font:italic 700 13px var(--serif)'); P.layer.appendChild(t); }
+    }
+    var BLUE = '#2a6fd3', ORA = '#e07b1a', GRN = '#2e9e5b', RED = '#c0392b';
+    var pre2 = el('div'); pre2.style.display = 'none';
+    function render(s, text) {
+      var m = cur, R = ext(m), h = '', wn = bad ? '<b>Aviso: solo enteros.</b> Se han redondeado los coeficientes no enteros; para una ecuación con fracciones, multiplícala por el denominador (como en P5, k = ½ → ×2). ' : '';
+      if (!P || P.R !== R) { if (P && P.svg.parentNode) P.svg.parentNode.removeChild(P.svg); P = newPlane(R); body.insertBefore(P.svg, pre2); }
+      P.clear(); res.textContent = '';
+      var p = m.p, pl = pol0(p);
+      if (m.kind === 'noconica') {
+        html(text, '<b>Esto no es una cónica.</b> U Def. 6.16 exige que alguno de a₁₁, a₁₂, a₂₂ sea no nulo (para que la ecuación sea de segundo grado). Aquí los tres son 0: la ecuación es de primer grado o constante (' + pl + ' = 0). Cambia algún coeficiente de x₁², x₁x₂ o x₂².'); text.innerHTML = wn + text.innerHTML; return;
+      }
+      /* ---- dibujo ---- */
+      if (m.curves) m.curves(R).forEach(function (cu) { P.layer.appendChild(sv('polyline', { points: cu.map(function (q) { return P.X(q[0]) + ',' + P.Y(q[1]); }).join(' '), fill: 'none', stroke: BLUE, 'stroke-width': 2.6, 'stroke-linejoin': 'round' })); });
+      m.lines.forEach(function (L) { if (L.s === 'ln') line2(L.a, L.d, 4 * R, BLUE, 2.6); });
+      if (m.kind === 'punto') dot(m.O, BLUE, 5);
+      if (s === 2 && m.rot) [0, 1].forEach(function (i) { line2([0, 0], m.u[i], 4 * R, GRN, 1.6, '6 4'); arrow(P, 0, 0, 2.2 * m.u[i][0], 2.2 * m.u[i][1], 'w', ['x₁′', 'x₂′'][i]); });
+      if (s >= 3) {
+        [0, 1].forEach(function (i) { line2(m.O, m.u[i], 4 * R, ORA, 1.6, '6 4'); arrow(P, m.O[0], m.O[1], m.O[0] + 2 * m.u[i][0], m.O[1] + 2 * m.u[i][1], 'up', ['x₁″', 'x₂″'][i]); });
+        dot(m.O, ORA, 4.5);
+      }
+      if (s >= 4) {
+        m.lines.forEach(function (L) { if (L.s === 'as') line2(L.a, L.d, 4 * R, 'var(--mut)', 1.4, '3 4'); else if (L.s === 'dir') line2(L.a, L.d, 4 * R, RED, 1.8, '7 4'); else if (L.s === 'axis') line2(L.a, L.d, 4 * R, ORA, 1.2, '2 4'); });
+        m.pts.forEach(function (q) { if (q.n === 'F') dot(q.p, RED, 4.5, 'F'); else if (q.n === 'V') dot(q.p, BLUE, 4, ''); });
+      }
+      /* ---- texto ---- */
+      var a11 = p[0], a12 = p[1] / 2, a22 = p[2], a01 = p[3] / 2, a02 = p[4] / 2, a00 = p[5];
+      var matA = '(' + [[a00, a01, a02], [a01, a11, a12], [a02, a12, a22]].map(function (r) { return r.map(Q).join('  '); }).join(' ; ') + ')';
+      var invs = '|A| = ' + Q(m.det) + ',  a₁₁ + a₂₂ = ' + Q(m.tr) + ',  A₀₀ = a₁₁a₂₂ ' + MINUS + ' a₁₂² = ' + Q(m.A00);
+      var kn = CN_NOM[m.kind], pr = m.rot ? '′' : '';
+      var nm2 = function (i) { return ['x₁″', 'x₂″'][i]; }, xs = function (i) { return ['x₁', 'x₂'][i]; };
+      var vs = function () { return m.pts.filter(function (q) { return q.n === 'V'; }).map(function (q) { return pt(q.p); }).join(', '); };
+      var fs = function () { return m.pts.filter(function (q) { return q.n === 'F'; }).map(function (q) { return pt(q.p); }).join(', '); };
+      if (s === 0) {
+        h = '<b>Ecuación general</b> (U Def. 6.16): a₁₁x₁² + 2a₁₂x₁x₂ + a₂₂x₂² + 2a₀₁x₁ + 2a₀₂x₂ + a₀₀ = 0. Aquí <b>' + pl + ' = 0</b>, luego a₁₁ = ' + Q(a11) + ', a₁₂ = ' + Q(a12) + ', a₂₂ = ' + Q(a22) + ', a₀₁ = ' + Q(a01) + ', a₀₂ = ' + Q(a02) + ', a₀₀ = ' + Q(a00) + ' (los coeficientes de x₁x₂, x₁ y x₂ son el <b>doble</b> de a₁₂, a₀₁, a₀₂). <b>Matriz asociada</b> (Def. 6.17, con a₀₀ arriba a la izquierda): A = ' + matA + '. <b>Invariantes</b> (Def. 6.19): ' + invs + '; rang A = ' + m.rank + '. La curva azul son los puntos (x₁, x₂) que cumplen la ecuación.' + (m.curves || m.lines.length || m.kind === 'punto' ? '' : ' <i>(Esta ecuación no tiene ningún punto real: no hay nada que dibujar.)</i>');
+      } else if (s === 1) {
+        var why;
+        if (m.rank === 3) {
+          why = '|A| = ' + Q(m.det) + ' ≠ 0 ⇒ rang A = 3 ⇒ <b>no degenerada</b>. ' + (m.A00 > 0 ? 'A₀₀ = ' + Q(m.A00) + ' &gt; 0 ⇒ cónica con centro, de tipo <b>elipse</b>; que sea real o imaginaria lo decide el signo de (a₁₁ + a₂₂)·|A| = ' + Q(m.tr) + '·(' + Q(m.det) + ') = ' + Q(m.tr * m.det) + (m.tr * m.det < 0 ? ' &lt; 0 ⇒ <b>elipse real</b>' + (m.kind === 'circunferencia' ? ' (a₁₁ = a₂₂ y a₁₂ = 0: de hecho una <b>circunferencia</b>)' : '') + '.' : ' &gt; 0 ⇒ <b>elipse imaginaria</b> (ningún punto real).') : m.A00 < 0 ? 'A₀₀ = ' + Q(m.A00) + ' &lt; 0 ⇒ <b>hipérbola</b>' + (m.tr === 0 ? ' (a₁₁ + a₂₂ = 0: equilátera, asíntotas perpendiculares)' : '') + '.' : 'A₀₀ = 0 ⇒ sin centro: <b>parábola</b>.');
+        } else if (m.rank === 2) {
+          why = '|A| = 0 y rang A = 2 ⇒ <b>degenerada</b> (dos rectas). ' + (m.A00 < 0 ? 'A₀₀ = ' + Q(m.A00) + ' &lt; 0 ⇒ <b>dos rectas secantes reales</b>.' : m.A00 > 0 ? 'A₀₀ = ' + Q(m.A00) + ' &gt; 0 ⇒ rectas secantes <b>imaginarias</b>: lo único real es su punto de corte.' : 'A₀₀ = 0 ⇒ <b>dos rectas paralelas</b>. ¿Reales o imaginarias? A₁₁ = a₀₀a₂₂ ' + MINUS + ' a₀₂² = ' + Q(m.A11) + ' y A₂₂ = a₀₀a₁₁ ' + MINUS + ' a₀₁² = ' + Q(m.A22) + ': A₁₁ + A₂₂ = ' + Q(m.As) + (m.As < 0 ? ' &lt; 0 ⇒ <b>reales</b>.' : ' &gt; 0 ⇒ <b>imaginarias</b>.') + ' <i>(U p.286 usa solo A₁₁, que vale 0 en x₁² = ±1 y no decide; por eso se usa A₁₁ + A₂₂.)</i>');
+        } else why = '|A| = 0 y rang A = 1 ⇒ <b>recta doble</b>.';
+        h = '<b>1. Clasificación por invariantes</b> (cuadro de U p.286). ' + why + ' <b>Veredicto: ' + kn + '.</b>';
+      } else if (s === 2) {
+        if (!m.rot) h = '<b>2. Paso 1: giro.</b> a₁₂ = 0: no hay término x₁x₂, los ejes de la cónica ya son paralelos a los coordenados. <b>No hace falta giro</b> (P = I, x′ = x). La ecuación sigue siendo ' + pl + ' = 0.';
+        else {
+          h = '<b>2. Paso 1: giro.</b> a₁₂ ≠ 0 ⇒ hay que eliminar x₁x₂. La parte cuadrática tiene matriz simétrica M = (' + Q(a11) + ' ' + Q(a12) + ' ; ' + Q(a12) + ' ' + Q(a22) + '), diagonalizable con P ortogonal. |M ' + MINUS + ' λI| = λ² ' + MINUS + ' ' + Q(m.tr) + 'λ + ' + Q(m.A00) + ' = 0 ⇒ <b>λ₁ = ' + Q(m.l[0]) + ', λ₂ = ' + Q(m.l[1]) + '</b> (control: suma = traza, producto = A₀₀). Vectores propios unitarios <b>u₁ = ' + vec(m.u[0]) + '</b>, <b>u₂ = ' + vec(m.u[1]) + '</b> (elegidos con det P = 1, así que P es un giro de ángulo ≈ ' + (Math.round(m.theta * 100) / 100).toString().replace('.', ',').replace('-', MINUS) + '°). Con x = Px′, la parte lineal (2a₀₁, 2a₀₂) pasa a (2a₀₁, 2a₀₂)·P = (' + Q(m.b[0]) + ', ' + Q(m.b[1]) + ') y la ecuación es <b>' + poly([[m.l[0], 'x₁′²'], [m.l[1], 'x₂′²'], [m.b[0], 'x₁′'], [m.b[1], 'x₂′'], [p[5], '']]) + ' = 0</b>, sin x₁′x₂′. Las rectas verdes son los ejes nuevos x₁′, x₂′, con las direcciones de u₁, u₂.';
+        }
+      } else if (s === 3) {
+        if (m.center) {
+          h = '<b>3. Paso 2: traslación.</b> Se completan cuadrados en cada variable: λ₁(' + shift('x₁' + pr, m.yo[0]) + ')² + λ₂(' + shift('x₂' + pr, m.yo[1]) + ')² + d = 0, con d = a₀₀ ' + MINUS + ' b₁²/(4λ₁) ' + MINUS + ' b₂²/(4λ₂) = ' + Q(m.d) + ' (b₁, b₂ = coeficientes lineales). Cambio: x₁″ = ' + shift('x₁' + pr, m.yo[0]) + ', x₂″ = ' + shift('x₂' + pr, m.yo[1]) + '. El nuevo origen es el <b>centro</b> C = ' + pt(m.O) + ' (coordenadas originales). Ecuación: <b>' + poly([[m.l[0], 'x₁″²'], [m.l[1], 'x₂″²'], [m.d, '']]) + ' = 0</b>. Control con invariantes: d = |A|/A₀₀ = ' + Q(m.det) + '/' + Q(m.A00) + ' = ' + Q(m.det / m.A00) + '. Los ejes naranjas son x₁″, x₂″.';
+        } else if (m.kind === 'parabola') {
+          h = '<b>3. Paso 2: traslación.</b> Un valor propio es 0 (A₀₀ = 0): no hay centro, y el cuadrado se completa solo en la variable con λ ≠ 0: λ(' + shift(xs(m.k) + pr, m.yo[m.k]) + ')² = ' + MINUS + '(' + Q(m.b[m.j]) + ')(' + shift(xs(m.j) + pr, m.yo[m.j]) + '), con λ = ' + Q(m.l[m.k]) + '. El nuevo origen es el <b>vértice</b> V = ' + pt(m.O) + ' (coordenadas originales). Ecuación: <b>' + nm2(m.k) + '² = ' + Q(m.twoP) + '·' + nm2(m.j) + '</b> (de la forma x² = 2p·y con 2p = ' + Q(m.twoP) + '). Control (β = coeficiente lineal que queda en ' + nm2(m.j) + '): |A| = ' + MINUS + 'λ·β²/4 = ' + Q(-m.l[m.k] * m.b[m.j] * m.b[m.j] / 4) + ' = ' + Q(m.det) + '. Los ejes naranjas son x₁″, x₂″.';
+        } else {
+          h = '<b>3. Paso 2: traslación.</b> Un valor propio es 0 y la parte lineal en ' + xs(m.j) + pr + ' se anula (la cónica es degenerada): solo queda λ(' + shift(xs(m.k) + pr, m.yo[m.k]) + ')² + e = 0 con λ = ' + Q(m.l[m.k]) + ' y e = ' + Q(m.e) + '. Con ' + nm2(m.k) + ' = ' + shift(xs(m.k) + pr, m.yo[m.k]) + ': <b>' + poly([[m.l[m.k], nm2(m.k) + '²'], [m.e, '']]) + ' = 0</b>, es decir ' + nm2(m.k) + '² = ' + Q(m.s2) + ' (caso x² = p de U Def. 6.18). Los ejes naranjas son x₁″, x₂″.';
+        }
+      } else {
+        var el1 = '', fin = '';
+        if (m.kind === 'elipse' || m.kind === 'circunferencia') {
+          if (m.kind === 'circunferencia') el1 = '<b>Ecuación reducida</b> (U Def. 6.18, p = 1, a = b): x₁″² + x₂″² = r² con r² = ' + Q(m.A2) + ', es decir <b>radio r = ' + Q(m.A) + '</b>. Centro C = ' + pt(m.O) + ' (el punto naranja). Una circunferencia no tiene focos distintos.';
+          else el1 = '<b>Ecuación reducida</b> (U Def. 6.18, p = 1): x₁″²/a² + x₂″²/b² = 1 con a² = ' + Q(m.A2) + ' y b² = ' + Q(m.B2) + ' (semiejes a = ' + Q(m.A) + ' sobre u₁ y b = ' + Q(m.B) + ' sobre u₂). Semidistancia focal c = √|a² ' + MINUS + ' b²| = ' + Q(m.c) + ' sobre el eje mayor (' + ['u₁', 'u₂'][m.maj] + '). Centro C = ' + pt(m.O) + '; vértices ' + vs() + (m.c > 1e-9 ? '; focos (rojos) ' + fs() : '') + '. Control: la suma de distancias de cualquier punto de la elipse a los focos es 2·(semieje mayor).';
+          fin = m.kind === 'circunferencia' ? 'Circunferencia de centro C = ' + pt(m.O) + ' y radio r = ' + Q(m.A) : 'Elipse real: x₁″²/' + qd(m.A2) + ' + x₂″²/' + qd(m.B2) + ' = 1';
+        } else if (m.kind === 'elipseImag') {
+          el1 = '<b>Ecuación reducida</b> (p = ' + MINUS + '1): x₁″²/a² + x₂″²/b² = ' + MINUS + '1, o sea ' + poly([[m.l[0], 'x₁″²'], [m.l[1], 'x₂″²'], [m.d, '']]) + ' = 0 con λ₁, λ₂ y d del mismo signo: una suma de cuadrados no puede dar un número de signo contrario. <b>Ningún punto real</b> (centro C = ' + pt(m.O) + ', pero la curva es vacía).';
+          fin = 'Elipse imaginaria: ningún punto real';
+        } else if (m.kind === 'hiperbola') {
+          el1 = '<b>Ecuación reducida</b> (U Def. 6.18): ' + nm2(m.t) + '²/a² ' + MINUS + ' ' + nm2(m.o) + '²/b² = 1 con a² = ' + Q(m.A2) + ', b² = ' + Q(m.B2) + ' (eje transverso sobre ' + ['u₁', 'u₂'][m.t] + '). c = √(a² + b²) = ' + Q(m.c) + '. Centro C = ' + pt(m.O) + '; vértices ' + vs() + '; focos (rojos) ' + fs() + '. Asíntotas (rectas punteadas grises): ' + nm2(m.o) + ' = ±(b/a)·' + nm2(m.t) + ' = ±' + Q(m.B / m.A) + '·' + nm2(m.t) + ', por el centro.';
+          fin = 'Hipérbola: ' + nm2(m.t) + '²/' + qd(m.A2) + ' ' + MINUS + ' ' + nm2(m.o) + '²/' + qd(m.B2) + ' = 1';
+        } else if (m.kind === 'parabola') {
+          el1 = '<b>Ecuación reducida</b> (U Def. 6.18): ' + nm2(m.k) + '² = 2p·' + nm2(m.j) + ' con 2p = ' + Q(m.twoP) + ', p = ' + Q(m.p_) + ': abre hacia el sentido ' + (m.p_ > 0 ? 'positivo' : 'negativo') + ' de ' + ['u₁', 'u₂'][m.j] + '. <b>Vértice</b> V = ' + pt(m.O) + '; <b>foco</b> F = V + (p/2)·' + ['u₁', 'u₂'][m.j] + ' = ' + fs() + '; <b>directriz</b> (recta roja discontinua): perpendicular al eje, a distancia |p|/2 = ' + Q(Math.abs(m.p_) / 2) + ' del vértice y al lado opuesto del foco. El eje de simetría es la recta naranja punteada.';
+          fin = 'Parábola: ' + nm2(m.k) + '² = ' + Q(m.twoP) + '·' + nm2(m.j);
+        } else if (m.kind === 'secantes') {
+          el1 = '<b>Ecuación reducida</b> (p = 0 en x₁″²/a² ' + MINUS + ' x₂″²/b² = p): ' + poly([[m.l[0], 'x₁″²'], [m.l[1], 'x₂″²']]) + ' = 0 ⇒ x₂″ = ±' + Q(m.mm) + '·x₁″: <b>dos rectas reales</b> que se cortan en el centro C = ' + pt(m.O) + '.';
+          fin = 'Dos rectas secantes reales por ' + pt(m.O);
+        } else if (m.kind === 'punto') {
+          el1 = '<b>Ecuación reducida</b> (p = 0 en x₁″²/a² + x₂″²/b² = p): ' + poly([[m.l[0], 'x₁″²'], [m.l[1], 'x₂″²']]) + ' = 0 con los dos coeficientes del mismo signo: solo se anula en x₁″ = x₂″ = 0, el punto C = ' + pt(m.O) + '. (Son dos rectas imaginarias conjugadas que se cortan en ese punto real.)';
+          fin = 'Un único punto real: ' + pt(m.O);
+        } else if (m.kind === 'paralelas') {
+          el1 = '<b>Ecuación reducida</b> (U Def. 6.18, x² = p con p &gt; 0): ' + nm2(m.k) + '² = ' + Q(m.s2) + ' ⇒ ' + nm2(m.k) + ' = ±' + Q(m.s) + ': <b>dos rectas paralelas reales</b>, paralelas al eje ' + nm2(m.j) + ' y a distancia ' + Q(m.s) + ' de él.';
+          fin = 'Dos rectas paralelas reales (separadas ' + Q(2 * m.s) + ')';
+        } else if (m.kind === 'paralelasImag') {
+          el1 = '<b>Ecuación reducida</b> (x² = p con p &lt; 0): ' + nm2(m.k) + '² = ' + Q(m.s2) + ' &lt; 0: <b>rectas paralelas imaginarias</b>, ningún punto real.';
+          fin = 'Rectas paralelas imaginarias: ningún punto real';
+        } else {
+          el1 = '<b>Ecuación reducida</b> (x² = 0): ' + nm2(m.k) + '² = 0: <b>recta doble</b>, la recta ' + nm2(m.k) + ' = 0 contada dos veces, paralela a ' + ['u₁', 'u₂'][m.j] + '.';
+          fin = 'Recta doble';
+        }
+        h = '<b>4. Ecuación reducida y elementos.</b> ' + el1;
+        var f = el('div', 'sar-final'); f.textContent = fin + '  ·  |A| = ' + Q(m.det) + ', A₀₀ = ' + Q(m.A00); res.appendChild(f);
+      }
+      if (s > 0 && R === 12) h += ' <i>(La ventana muestra solo −12 ≤ x ≤ 12; si no ves la curva, está más lejos.)</i>';
+      html(text, wn + h);
+    }
+    var st = stepper(root, 4, render, null, 4200);
+    function recalc() { cur = conicModel(readP()); st.go(st.step); }
+    inp.forEach(function (q) { q.addEventListener('input', function () { cur = conicModel(readP()); st.go(st.step); }); });
+    body.appendChild(el('p', 'sar-text an-title', 'Escribe los coeficientes enteros de la ecuación general (o elige un caso) y recorre los pasos: matriz e invariantes, clasificación, giro, traslación y elementos de la cónica.'));
+    body.appendChild(eq); body.appendChild(pre2); body.appendChild(pre);
+    root.appendChild(body); st.mount(root, res);
+    cur = conicModel(readP()); st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(st.N); });
+  }
+
+  var REG = [['.anim-conica', buildConica], ['.anim-clasif', buildClasif], ['.anim-cuadratica', buildCuadratica], ['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
