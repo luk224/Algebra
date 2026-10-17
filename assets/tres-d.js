@@ -12,6 +12,8 @@
                matrices SIMETRICAS 3x3 (ejes principales): seis entradas editables (triangulo superior; el inferior se copia) y presets (tres valores distintos, valor doble con plano propio, singular, estilo E 5.33, A = lambda I); esfera unidad (gris) y su imagen (elipsoide morado) con slider t (M(t) = (1-t)I + tA), las rectas propias perpendiculares (o recta + plano propio perpendicular si hay un valor doble; todo R3 si A = lambda I) y flechas u1, u2, u3 de longitud |semieje|; valores propios por Jacobi (vectores ya ortonormales), P = (u1 u2 u3), PtP = I, det P, Pt A P = diag(l1, l2, l3), traza = suma y determinante = producto; sin WebGL queda el texto con los calculos
    .d3-minimos data-a1="1,0,1" data-a2="0,1,1" data-b="1,1,3"
                minimos cuadrados en R3: A = (C1 C2) de 3x2 con columnas y b editables. Plano Col A (translucido), C1, C2, b, p = A x^ (verde, camino x1 C1 + x2 C2), residuo b - A x^ (rojo) perpendicular al plano con cuadradito de angulo recto, recta gris = (Col A)^perp; calcula AtA, Atb, las ecuaciones normales, x^ unica (rango 2) y el error minimo; punto de prueba A x con x = x^ + (d1, d2) (sliders, morado) cuya distancia a b es sqrt(|b - A x^|^2 + |A d|^2) >= minimo; rango 1: Col A es una recta y las soluciones son una recta afin (todas con el mismo A x^ y el mismo error); rango 0 avisa; 6 presets (P1, E 5.37, Feb. 2023 A ej. 8, U Ej. 5.36, b en Col A, columnas dependientes); sin WebGL queda el texto con los calculos; break-inside:avoid en impresion
+   .d3-cuadrica data-a="1,0,0;0,2,0;0,0,3" data-b="0,0,0" data-c="-1"
+               cuadricas p(x)=x^tAx+b^tx+c=0 de R3 (tema 6.5): A (6 entradas), b y c editables, 18 presets; invariantes rang A^, |A^|, A00, Ia, Ja y cuadro de U p.300, centro (o vertice / recta de centros), giro y traslacion con dos sliders g y t, ecuacion reducida y superficie dibujada (elipsoide, hiperboloides, cono, paraboloides, cilindros, planos) con parametrizacion explicita; modelo puro en window.AlgD3.quadricModel. Sin WebGL queda el texto.
    .d3-nivel   data-a="1,0,0;0,2,0;0,0,3" data-c="1"
                superficies de nivel Q(x) = c de una forma cuadratica de R3 (tema 6.3): seis entradas editables de la matriz simetrica A (triangulo superior; el inferior se copia), slider c de -4 a 4 y 9 presets (elipsoide, una hoja, dos hojas, definida negativa, cilindro SP U Ej. 6.19, indefinida U Ej. 6.28, E 6.17, dos planos diag(0,0,1), cono); dibuja la superficie con parametrizacion explicita en ejes principales (elipsoide, hiperboloides con cosh/sinh, cilindros, planos, cono; malla y relleno translucido, azul si c>0, naranja si c<0, recortada a la esfera de radio 3,9), el cono Q = 0 en gris tenue y las flechas u1,u2,u3 (ejes principales, azul/naranja/gris segun el signo de lambda); calcula el polinomio, los menores de Sylvester (con la rama aplicable o 'no decide'), los valores propios por Jacobi, la forma canonica, signatura, rango, la clasificacion y el nombre de la superficie segun signatura y signo de c; sin WebGL queda el texto con los calculos; break-inside:avoid en impresion
    Arrastrar = girar, rueda / pellizco = zoom. */
@@ -1129,7 +1131,232 @@
   }
 
 
-  var REG = [['.d3-nivel', buildNivel], ['.d3-minimos', buildMinimos3], ['.d3-ejes', buildEjes], ['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
+  /* =====================================================================
+     10. CUADRICAS p(x) = xᵗAx + bᵗx + c = 0 (.d3-cuadrica, tema 6.5)
+         data-a="1,0,0;0,2,0;0,0,3" (A simétrica: triángulo superior) data-b="0,0,0" (b = 2·(a01,a02,a03)) data-c="-1"
+     ===================================================================== */
+  function det4(M) {
+    var s = 0, j;
+    for (j = 0; j < 4; j++) { var rows = [1, 2, 3].map(function (i) { return [0, 1, 2, 3].filter(function (q) { return q !== j; }).map(function (q) { return M[i][q]; }); }); s += (j % 2 ? -1 : 1) * M[0][j] * det3(rows[0], rows[1], rows[2]); }
+    return s;
+  }
+  function quadricModel(A, b, c) {                    // modelo puro: invariantes de U p.298-300, centro, giro, traslación y clasificación
+    var ev = jacobi3(A), mx = 0, k;
+    ev.forEach(function (e) { mx = Math.max(mx, Math.abs(e.l)); });
+    if (det3(ev[0].v, ev[1].v, ev[2].v) < 0) ev[2].v = mul3(-1, ev[2].v);      // P giro (det +1)
+    var tol = 1e-7 * (1 + mx), sg = ev.map(function (e) { return Math.abs(e.l) < tol ? 0 : (e.l > 0 ? 1 : -1); });
+    var p = sg.filter(function (s) { return s > 0; }).length, n = sg.filter(function (s) { return s < 0; }).length, z = 3 - p - n;
+    var Ah = [[c, b[0] / 2, b[1] / 2, b[2] / 2], [b[0] / 2, A[0][0], A[0][1], A[0][2]], [b[1] / 2, A[1][0], A[1][1], A[1][2]], [b[2] / 2, A[2][0], A[2][1], A[2][2]]];
+    var m = { A: A, b: b, c: c, ev: ev, sg: sg, p: p, n: n, z: z, Ah: Ah, rg: rankOf(Ah), detAh: det4(Ah), A00: det3(A[0], A[1], A[2]), Ia: A[0][0] + A[1][1] + A[2][2],
+      Ja: (A[1][1] * A[2][2] - A[1][2] * A[2][1]) + (A[0][0] * A[2][2] - A[0][2] * A[2][0]) + (A[0][0] * A[1][1] - A[0][1] * A[1][0]) };
+    if (p + n === 0) { m.valid = false; return m; }
+    m.valid = true;
+    var bp = ev.map(function (e) { return dot(e.v, b); }), tb = 1e-7 * (1 + norm(b) + mx), yc = [0, 0, 0], c0 = c, sc = 1 + Math.abs(c);
+    for (k = 0; k < 3; k++) if (sg[k]) { yc[k] = -bp[k] / (2 * ev[k].l); c0 -= bp[k] * bp[k] / (4 * ev[k].l); sc += bp[k] * bp[k] / (4 * Math.abs(ev[k].l)); }
+    var nullB = [0, 1, 2].filter(function (q) { return !sg[q] && Math.abs(bp[q]) > tb; });
+    var P0 = [0, 1, 2].map(function (r) { return yc[0] * ev[0].v[r] + yc[1] * ev[1].v[r] + yc[2] * ev[2].v[r]; });
+    m.bp = bp; m.yc = yc; m.c0 = Math.abs(c0) < 1e-9 * sc ? 0 : c0;
+    var sameSign = p === 3 || n === 3, Jpos = m.Ja > 1e-9, nm, br = '';
+    if (!nullB.length) {                              // existe un punto (o una recta/plano de puntos) donde se anula el gradiente: Σ λ y² = −c0
+      m.kind = 'level'; m.x0 = P0; m.frame = ev.map(function (e) { return e.v; }); m.cval = -m.c0; m.centers = z === 0 ? 'unico' : (z === 1 ? 'recta' : 'plano');
+    } else if (z === 1) {                             // paraboloide: la constante se absorbe desplazando el eje del valor propio nulo
+      m.kind = 'parab'; var z0 = sg.indexOf(0); m.z0 = z0; m.pa = [0, 1, 2].filter(function (q) { return q !== z0; });
+      m.x0 = add(P0, mul3(-m.c0 / bp[z0], ev[z0].v)); m.frame = ev.map(function (e) { return e.v; }); m.centers = 'ninguno';
+    } else {                                          // cilindro parabólico (z = 2)
+      m.kind = 'cilpar'; var k1 = sg.findIndex(function (s) { return s !== 0; }), zz = [0, 1, 2].filter(function (q) { return q !== k1; }), beta = Math.hypot(bp[zz[0]], bp[zz[1]]);
+      var e1 = mul3(1 / beta, add(mul3(bp[zz[0]], ev[zz[0]].v), mul3(bp[zz[1]], ev[zz[1]].v))), f1 = mul3(1 / beta, sub3(mul3(bp[zz[1]], ev[zz[0]].v), mul3(bp[zz[0]], ev[zz[1]].v)));
+      var fr = [ev[k1].v, e1, f1]; if (det3(fr[0], fr[1], fr[2]) < 0) fr[2] = mul3(-1, fr[2]);
+      m.k1 = k1; m.beta = beta; m.lam = ev[k1].l; m.x0 = add(P0, mul3(-m.c0 / beta, e1)); m.frame = fr; m.centers = 'ninguno';
+    }
+    // clasificación (cuadro de U p.300)
+    var rg = m.rg, real = true;
+    if (rg === 4) {
+      if (z === 0) {
+        br = 'rang A = 4 (ordinaria), A₀₀ ≠ 0 (con centro), raíces ' + (sameSign ? 'del mismo signo' : 'de signos mixtos') + ', |A| ' + (m.detAh > 0 ? '> 0' : '< 0');
+        if (sameSign) { nm = m.detAh > 0 ? 'elipsoide imaginario' : 'elipsoide real'; real = m.detAh < 0; } else nm = m.detAh > 0 ? 'hiperboloide hiperbólico (reglado, de una hoja)' : 'hiperboloide elíptico (no reglado, de dos hojas)';
+      } else { br = 'rang A = 4 (ordinaria), A₀₀ = 0 (paraboloide), Jₐ ' + (Jpos ? '> 0' : '< 0'); nm = Jpos ? 'paraboloide elíptico (no reglado)' : 'paraboloide hiperbólico (reglado)'; }
+    } else if (rg === 3) {
+      if (z === 0) { br = 'rang A = 3 (cono o cilindro), A₀₀ ≠ 0 ⇒ cono, raíces ' + (sameSign ? 'del mismo signo' : 'de signos mixtos'); nm = sameSign ? 'cono imaginario (solo el vértice es real)' : 'cono real'; real = !sameSign; }
+      else if (Jpos) { var lam1 = ev[sg.findIndex(function (s) { return s !== 0; })].l; real = m.cval / lam1 > 0; br = 'rang A = 3, A₀₀ = 0 ⇒ cilindro; Jₐ > 0 ⇒ elíptico'; nm = real ? 'cilindro elíptico real' : 'cilindro elíptico imaginario'; }
+      else if (m.Ja < -1e-9) { br = 'rang A = 3, A₀₀ = 0 ⇒ cilindro; Jₐ < 0 ⇒ hiperbólico'; nm = 'cilindro hiperbólico'; }
+      else { br = 'rang A = 3, A₀₀ = 0 ⇒ cilindro; Jₐ = 0 ⇒ parabólico'; nm = 'cilindro parabólico'; }
+    } else if (rg === 2) {
+      if (Jpos) { br = 'rang A = 2 (par de planos), Jₐ > 0'; nm = 'par de planos imaginarios secantes (real: solo la recta común)'; real = false; }
+      else if (m.Ja < -1e-9) { br = 'rang A = 2 (par de planos), Jₐ < 0'; nm = 'par de planos reales secantes'; }
+      else { var lam2 = ev[sg.findIndex(function (s) { return s !== 0; })].l; real = m.cval / lam2 > 0; br = 'rang A = 2 (par de planos), Jₐ = 0'; nm = real ? 'par de planos paralelos (reales)' : 'par de planos paralelos imaginarios'; }
+    } else { br = 'rang A = 1'; nm = 'plano doble'; }
+    m.name = nm; m.branch = br; m.real = real;
+    return m;
+  }
+  function paraPt(m, ph, r) {                         // paraboloide: punto local (ejes principales, origen en el vértice), parametrización explícita
+    var a = m.pa[0], bb = m.pa[1], la = m.ev[a].l, lb = m.ev[bb].l, y = [0, 0, 0], ca = Math.cos(ph), sa = Math.sin(ph);
+    y[a] = r * ca / Math.sqrt(Math.abs(la)); y[bb] = r * sa / Math.sqrt(Math.abs(lb));
+    y[m.z0] = -(Math.sign(la) * r * r * ca * ca + Math.sign(lb) * r * r * sa * sa) / m.bp[m.z0];
+    return y;
+  }
+  function cilparPt(m, s1, s3) {                      // cilindro parabólico: punto local en el marco [u1, e, f]
+    return [s1, -m.lam * s1 * s1 / m.beta, s3];
+  }
+  (window.AlgD3 = window.AlgD3 || {}).quadricModel = quadricModel; window.AlgD3.paraPt = paraPt; window.AlgD3.cilparPt = cilparPt;
+
+  function buildCuadrica(root) {
+    var a0 = (root.getAttribute('data-a') || '1,0,0;0,2,0;0,0,3').split(';').map(function (r) { return r.split(',').map(Number); });
+    var b0 = (root.getAttribute('data-b') || '0,0,0').split(',').map(Number), c0v = parseFloat(root.getAttribute('data-c') || '-1');
+    root.textContent = ''; root.classList.add('sarrus');
+    var nd = function (x) { var v = Math.round(x * 1000) / 1000; if (Math.abs(v) < 1e-9) v = 0; return String(v).replace('-', MINUS).replace('.', ','); };
+    var vt = function (v) { return '(' + v.map(nd).join('; ') + ')'; };
+    var R = 4, RL0 = 2.4, nmX = ['x₁', 'x₂', 'x₃'], nmY = ['y₁', 'y₂', 'y₃'];
+    html(root.appendChild(el('p', 'sar-text an-title')), 'Una <b>cuádrica</b> es el conjunto de puntos con p(x) = xᵗMx + bᵗx + c = 0 (M simétrica no nula, b = 2(a₀₁, a₀₂, a₀₃), c = a₀₀). Se reduce en dos pasos: un <b>giro</b> (ejes principales de M, flechas u₁, u₂, u₃) que elimina los términos cruzados y una <b>traslación</b> que lleva el centro (o el vértice) al origen. Con los deslizadores se recorre el camino al revés: con <b>g = 0 y t = 0</b> ves la superficie en su ecuación reducida, centrada en el origen y con los ejes en la dirección de los ejes coordenados; al subir g se gira hasta la posición de los ejes principales y al subir t se traslada a su posición real. El punto verde marca el centro C (el vértice V si no hay centro, o un punto P del eje si hay infinitos centros). Escribe M (seis números de arriba), b y c, o carga un ejemplo.');
+    var box = el('div', 'an-eqs'), er = el('div', 'an-eq down'), tbl = el('div', 'd3-mat'), inp = {}, ro = {};
+    er.appendChild(el('span', '', 'M = '));
+    for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) {
+      if (i <= j) { var x = numInput(a0[i][j], '3.6em'); x.step = 0.5; x.setAttribute('aria-label', 'M fila ' + (i + 1) + ' columna ' + (j + 1)); inp[i + '' + j] = x; tbl.appendChild(x); }
+      else { var r = el('span', 'an-ro'); r.setAttribute('aria-hidden', 'true'); ro[i + '' + j] = r; tbl.appendChild(r); }
+    }
+    er.appendChild(tbl); er.appendChild(el('span', '', '  (simétrica; valores de ' + MINUS + '5 a 5)')); box.appendChild(er);
+    var eb = el('div', 'an-eq w'), binp = [], cin;
+    eb.appendChild(el('span', '', 'b = ('));
+    for (var q = 0; q < 3; q++) { var bi = numInput(b0[q], '3.6em'); bi.step = 1; bi.setAttribute('aria-label', 'b' + (q + 1) + ' (coeficiente de x' + (q + 1) + ')'); binp.push(bi); eb.appendChild(bi); eb.appendChild(el('span', '', q < 2 ? ' ; ' : ')')); }
+    eb.appendChild(el('span', '', '   c = ')); cin = numInput(c0v, '3.6em'); cin.setAttribute('aria-label', 'c (término independiente)'); eb.appendChild(cin); eb.appendChild(el('span', '', '  (b y c de ' + MINUS + '20 a 20)')); box.appendChild(eb);
+    root.appendChild(box);
+    var S = makeScene(root, R, 0.85, 520);
+    if (S) S.renderer.domElement.setAttribute('aria-label', 'Figura 3D: la cuádrica p(x) = 0 con sus ejes principales y su centro, con deslizadores para el giro y la traslación');
+    var sl = el('div', 'an-sliders'), sg_ = slider(0, 1, 0.05, 1), st = slider(0, 1, 0.05, 1), lg = el('b'), lt = el('b');
+    sg_.setAttribute('aria-label', 'parámetro g del giro'); st.setAttribute('aria-label', 'parámetro t de la traslación');
+    [['g (giro) ', sg_, lg], ['t (traslación) ', st, lt]].forEach(function (a) { var rw = el('label', 'an-slrow'); rw.appendChild(el('span', '', a[0])); rw.appendChild(a[1]); rw.appendChild(a[2]); sl.appendChild(rw); });
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res'); text.setAttribute('aria-live', 'polite');
+    var PRE = [
+      ['Elipsoide: x₁² + 2x₂² + 3x₃² = 1', [[1, 0, 0], [0, 2, 0], [0, 0, 3]], [0, 0, 0], -1], ['Hiperboloide de una hoja: x₁² + x₂² − x₃² = 1', [[1, 0, 0], [0, 1, 0], [0, 0, -1]], [0, 0, 0], -1], ['Hiperboloide de dos hojas: x₁² − x₂² − x₃² = 1', [[1, 0, 0], [0, -1, 0], [0, 0, -1]], [0, 0, 0], -1],
+      ['Cono: x₁² + x₂² − x₃² = 0', [[1, 0, 0], [0, 1, 0], [0, 0, -1]], [0, 0, 0], 0], ['Paraboloide elíptico: x₃ = x₁² + 2x₂²', [[1, 0, 0], [0, 2, 0], [0, 0, 0]], [0, 0, -1], 0], ['Paraboloide hiperbólico: x₃ = x₁² − x₂²', [[1, 0, 0], [0, -1, 0], [0, 0, 0]], [0, 0, -1], 0],
+      ['Cilindro elíptico: x₁² + 2x₂² = 1', [[1, 0, 0], [0, 2, 0], [0, 0, 0]], [0, 0, 0], -1], ['Cilindro hiperbólico: x₁² − x₂² = 1', [[1, 0, 0], [0, -1, 0], [0, 0, 0]], [0, 0, 0], -1], ['Cilindro parabólico: x₂ = x₁²/2', [[1, 0, 0], [0, 0, 0], [0, 0, 0]], [0, -2, 0], 0],
+      ['Planos secantes: x₁² − x₂² = 0', [[1, 0, 0], [0, -1, 0], [0, 0, 0]], [0, 0, 0], 0], ['Planos paralelos: x₁² = 1', [[1, 0, 0], [0, 0, 0], [0, 0, 0]], [0, 0, 0], -1], ['Plano doble: x₁² = 0', [[1, 0, 0], [0, 0, 0], [0, 0, 0]], [0, 0, 0], 0],
+      ['U Ej. 6.40 p.296 (hiperboloide de dos hojas)', [[0, 1, 1], [1, 0, 1], [1, 1, 0]], [-6, -6, -4], 9], ['E 6.41: x₁² − x₂x₃ − 2x₁ + 4x₃ + 5 = 0', [[1, 0, 0], [0, 0, -0.5], [0, -0.5, 0]], [-2, 0, 4], 5],
+      ['Elipsoide trasladado (centro (1, 1, −1))', [[1, 0, 0], [0, 2, 0], [0, 0, 3]], [-2, -4, 6], 5], ['U Ej. 6.41 p.298 (hiperboloide de una hoja)', [[1, -2, 3], [-2, -2, -4], [3, -4, 1]], [6, 8, -2], 3],
+      ['U Ej. 6.50 p.304 (cilindro hiperbólico)', [[2, 0, -2], [0, -1, 1], [-2, 1, 1]], [0, 0, 0], -1], ['U Ej. 6.52 p.305 (cono trasladado)', [[1, 0, 0], [0, 1, 0], [0, 0, -1]], [0, 0, 2], -1]];
+    var pre = btnRow(PRE.map(function (pp) { return pp[0]; }), function (k) { var P1 = PRE[k]; for (var i2 = 0; i2 < 3; i2++) for (var j2 = i2; j2 < 3; j2++) inp[i2 + '' + j2].value = P1[1][i2][j2]; binp.forEach(function (bb, q2) { bb.value = P1[2][q2]; }); cin.value = P1[3]; draw(); });
+    var cl = function (v, lim) { var w = parseFloat(v); if (isNaN(w)) w = 0; return Math.max(-lim, Math.min(lim, w)); };
+
+    function draw() {
+      var C = COL(), A = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], clip = false, i2, j2, k;
+      for (i2 = 0; i2 < 3; i2++) for (j2 = i2; j2 < 3; j2++) { var v = parseFloat(inp[i2 + '' + j2].value); if (isNaN(v)) v = 0; if (Math.abs(v) > 5) { clip = true; v = Math.max(-5, Math.min(5, v)); } A[i2][j2] = v; A[j2][i2] = v; }
+      for (i2 = 1; i2 < 3; i2++) for (j2 = 0; j2 < i2; j2++) ro[i2 + '' + j2].textContent = nd(A[i2][j2]);
+      var b = binp.map(function (bb) { var w = parseFloat(bb.value); if (!isNaN(w) && Math.abs(w) > 20) clip = true; return cl(bb.value, 20); }), cc = parseFloat(cin.value); if (!isNaN(cc) && Math.abs(cc) > 20) clip = true; cc = cl(cin.value, 20);
+      var g = parseFloat(sg_.value), t = parseFloat(st.value); lg.textContent = nd(g); lt.textContent = nd(t);
+      var m = quadricModel(A, b, cc);
+      /* ---- polinomio ---- */
+      var poly = '', term = function (co, s) { if (Math.abs(co) < 1e-12) return; poly += (poly ? (co < 0 ? ' ' + MINUS + ' ' : ' + ') : (co < 0 ? MINUS : '')) + (s && Math.abs(Math.abs(co) - 1) < 1e-12 ? '' : nd(Math.abs(co))) + s; };
+      for (k = 0; k < 3; k++) term(A[k][k], nmX[k] + '²'); term(2 * A[0][1], 'x₁x₂'); term(2 * A[0][2], 'x₁x₃'); term(2 * A[1][2], 'x₂x₃'); for (k = 0; k < 3; k++) term(b[k], nmX[k]); term(cc, '');
+      var h = '<b>p(x) = ' + (poly || '0') + ' = 0</b>.<br>';
+      if (!m.valid) {
+        h += 'La parte cuadrática es nula (M = 0): la ecuación es de primer grado, no es una cuádrica (U Def. 6.20 exige algún aᵢⱼ ≠ 0 con i, j ≥ 1). Cambia A.';
+        if (S) { S.clearDyn(); S.render(); }
+        html(text, h); res.textContent = ''; var f0 = el('div', 'sar-final'); f0.textContent = 'No es una cuádrica (M = 0)'; res.appendChild(f0); return;
+      }
+      var Ahs = '(' + m.Ah.map(function (rw) { return rw.map(nd).join(' '); }).join(' / ') + ')';
+      h += '<b>Matriz asociada</b> A (4×4, la «A» de U p.290) = ' + Ahs + ' (primera fila y columna: c y b/2). <b>Invariantes</b> (U p.298): rang A = <b>' + m.rg + '</b>, |A| = <b>' + nd(m.detAh) + '</b>, A₀₀ = |M| = <b>' + nd(m.A00) + '</b>, Iₐ = tr M = <b>' + nd(m.Ia) + '</b>, Jₐ = suma de los menores principales de orden 2 de M = <b>' + nd(m.Ja) + '</b>. Polinomio de signos: p³ ' + MINUS + ' (' + nd(m.Ia) + ')p² + (' + nd(m.Ja) + ')p ' + MINUS + ' (' + nd(m.A00) + ') = 0, cuyas raíces son los valores propios de M: ' + m.ev.map(function (e) { return nd(e.l); }).join(', ') + ' (signos: ' + m.sg.map(function (s) { return s > 0 ? '+' : (s < 0 ? MINUS : '0'); }).join(' ') + ').<br>';
+      h += '<b>Clasificación</b> (cuadro de U p.300): ' + m.branch + ' ⇒ <b>' + m.name + '</b>.<br>';
+      /* ---- centro ---- */
+      var x0 = m.x0, lbl = m.z === 0 ? 'C' : (m.kind === 'level' ? 'P' : 'V');
+      if (m.z === 0) h += '<b>Centro</b>: M es regular, así que Mx = ' + MINUS + 'b/2 tiene solución única x₀ = ' + MINUS + '½M⁻¹b = <b>' + vt(x0) + '</b> (único centro; p(x₀) = c₀ = ' + nd(m.c0) + ').<br>';
+      else if (m.kind === 'level') h += '<b>Centro</b>: M es singular (A₀₀ = 0) pero Mx = ' + MINUS + 'b/2 es compatible (b ⊥ Nuc M): hay <b>' + (m.z === 1 ? 'una recta' : 'un plano') + ' de centros</b>, no uno solo. Se toma el punto P = ' + vt(x0) + ' de ' + (m.z === 1 ? 'esa recta (el eje)' : 'ese plano') + ' como referencia.<br>';
+      else h += '<b>Centro</b>: M es singular y Mx = ' + MINUS + 'b/2 es <b>incompatible</b> (b no es ⊥ a Nuc M): <b>no tiene centro</b>. Se toma el vértice V = <b>' + vt(x0) + '</b> como punto de referencia.<br>';
+      /* ---- giro ---- */
+      var Pm = [0, 1, 2].map(function (rw) { return [0, 1, 2].map(function (cq) { return m.frame[cq][rw]; }); }), ev = m.ev;
+      var Lam = 'diag(' + ev.map(function (e) { return nd(e.l); }).join(', ') + ')', bpt = m.bp.map(nd);
+      if (m.kind !== 'cilpar') h += '<b>Giro</b>: P = (u₁ u₂ u₃) con columnas = vectores propios unitarios de M (det P = +1), PᵗMP = ' + Lam + '. Con x = Py desaparecen los términos cruzados y la parte lineal pasa a b′ = Pᵗb = (' + bpt.join('; ') + ').<br>';
+      else h += '<b>Giro</b>: se diagonaliza M (λ = ' + nd(m.lam) + ' en u₁; el valor propio 0 es doble) y en el plano propio del 0 se escoge u₂ en la dirección de la parte lineal (|b′| = ' + nd(m.beta) + ') y u₃ perpendicular; PᵗMP = diag(' + nd(m.lam) + ', 0, 0).<br>';
+      /* ---- ecuación reducida ---- */
+      var rd;
+      if (m.kind === 'level') {
+        var tl = [], sem = [];
+        ev.forEach(function (e, q2) { if (m.sg[q2]) { tl.push((tl.length ? (e.l < 0 ? ' ' + MINUS + ' ' : ' + ') : (e.l < 0 ? MINUS : '')) + (Math.abs(Math.abs(e.l) - 1) < 1e-9 ? '' : nd(Math.abs(e.l))) + nmY[q2] + '²'); if (m.cval !== 0 && m.cval / e.l > 0) sem.push('a' + '₁₂₃'[q2] + ' = ' + nd(Math.sqrt(m.cval / e.l))); } });
+        rd = tl.join('') + (m.c0 === 0 ? '' : (m.c0 < 0 ? ' ' + MINUS + ' ' : ' + ') + nd(Math.abs(m.c0))) + ' = 0';
+        h += '<b>Traslación</b>: se completan cuadrados en cada y con λ ≠ 0 (yᵢ → yᵢ + bᵢ′/(2λᵢ)); queda <b>' + rd + '</b>' + (m.c0 === 0 ? ' (sin término independiente: la superficie pasa por el nuevo origen)' : ', es decir, Σ λᵢ yᵢ² = ' + nd(m.cval)) + '. ' + (sem.length ? 'Dividiendo por ' + nd(Math.abs(m.c0)) + ', los semiejes reales son ' + sem.join(', ') + ' (a = √|c₀/λ|). ' : '') + '<br>';
+      } else if (m.kind === 'parab') {
+        var a1 = m.pa[0], a2 = m.pa[1], be = m.bp[m.z0];
+        var k1 = -ev[a1].l / be, k2 = -ev[a2].l / be, flip = false, i1 = a1, i2b = a2;
+        if (k1 * k2 > 0) { if (k1 < 0) { flip = true; k1 = -k1; k2 = -k2; } } else if (k1 < 0) { i1 = a2; i2b = a1; var kt = k1; k1 = k2; k2 = kt; }
+        rd = (flip ? MINUS : '') + nmY[m.z0] + ' = ' + nd(k1) + '·' + nmY[i1] + '² ' + (k2 < 0 ? MINUS : '+') + ' ' + nd(Math.abs(k2)) + '·' + nmY[i2b] + '²' + (flip ? ' (se ha cambiado ' + nmY[m.z0] + ' por ' + MINUS + nmY[m.z0] + ' para escribirla como x₃ = x₁²/a² + x₂²/b²)' : '');
+        h += '<b>Traslación</b>: se completan cuadrados en ' + nmY[a1] + ' e ' + nmY[a2] + ' y el resto se absorbe desplazando ' + nmY[m.z0] + ' (b′ = ' + nd(be) + ' ≠ 0 en la dirección del valor propio nulo). Ecuación reducida: <b>' + rd + '</b>, de un paraboloide ' + (ev[a1].l * ev[a2].l > 0 ? 'elíptico' : 'hiperbólico (silla de montar)') + ' con vértice V.<br>';
+      } else {
+        rd = nd(m.lam) + '·y₁² + ' + nd(m.beta) + '·y₂ = 0';
+        h += '<b>Traslación</b>: se completa el cuadrado en y₁ y el término independiente se absorbe desplazando y₂. Ecuación reducida: <b>' + rd + '</b> (y₂ = ' + nd(-m.lam / m.beta) + '·y₁²: una parábola en el plano y₁y₂, repetida a lo largo de u₃): <b>cilindro parabólico</b>.<br>';
+      }
+      h += '<b>Resultado</b>: ' + m.name + (m.kind === 'level' && !m.real && m.cval !== 0 ? ' (sin puntos reales: no se dibuja nada)' : '') + '. ';
+      if (!S) h += '<br><i>Sin gráfico 3D: se muestran solo los cálculos.</i>';
+      /* ---- escena ---- */
+      var K = 1, x0n = norm(x0);
+      var RL = RL0, msx = 0;
+      if (m.kind === 'level' && m.cval !== 0) m.ev.forEach(function (e2, k5) { if (m.sg[k5] && m.cval / e2.l > 0) msx = Math.max(msx, Math.sqrt(Math.abs(m.cval / e2.l))); });
+      RL = Math.max(RL0, 1.6 * msx);
+      if (x0n + RL > 3.9) K = 3.9 / (x0n + RL);
+      if (S) {
+        S.clearDyn(); var T = S.T, col = m.kind !== 'level' || m.cval > 0 ? C.a : C.b, TP = 2 * Math.PI;
+        var qP = new T.Quaternion().setFromRotationMatrix(new T.Matrix4().set(Pm[0][0], Pm[0][1], Pm[0][2], 0, Pm[1][0], Pm[1][1], Pm[1][2], 0, Pm[2][0], Pm[2][1], Pm[2][2], 0, 0, 0, 0, 1));
+        var qg = new T.Quaternion().slerp(qP, g), Fg = [[1, 0, 0], [0, 1, 0], [0, 0, 1]].map(function (e) { var w = new T.Vector3(e[0], e[1], e[2]).applyQuaternion(qg); return [w.x, w.y, w.z]; });
+        var Cn = mul3(K * t, x0);
+        var toX = function (y) { if (y[0] * y[0] + y[1] * y[1] + y[2] * y[2] > RL * RL * 1.0001) return null; return [0, 1, 2].map(function (r2) { return Cn[r2] + K * (y[0] * Fg[0][r2] + y[1] * Fg[1][r2] + y[2] * Fg[2][r2]); }); };
+        var lines = [], tri = [], ii, seg = function (a, b2) { if (a && b2) lines.push(new T.Vector3(a[0], a[1], a[2]), new T.Vector3(b2[0], b2[1], b2[2])); };
+        var bis = function (gg) { var lo = 0, hi = 14, k3; if (gg(0) > RL * RL) return 0; for (k3 = 0; k3 < 40; k3++) { var mid = (lo + hi) / 2; if (gg(mid) <= RL * RL) lo = mid; else hi = mid; } return lo; };
+        var build = function (NU, NV, lu, lv, f) {
+          var G = [], i3, j3;
+          for (i3 = 0; i3 <= NU; i3++) { G.push([]); for (j3 = 0; j3 <= NV; j3++) { var y = f(i3 / NU, j3 / NV); G[i3].push(y ? toX(y) : null); } }
+          for (i3 = 0; i3 <= NU; i3++) for (j3 = 0; j3 <= NV; j3++) { if (j3 < NV && i3 % lu === 0) seg(G[i3][j3], G[i3][j3 + 1]); if (i3 < NU && j3 % lv === 0) seg(G[i3][j3], G[i3 + 1][j3]); }
+          for (i3 = 0; i3 < NU; i3++) for (j3 = 0; j3 < NV; j3++) { var a3 = G[i3][j3], b3 = G[i3 + 1][j3], c3 = G[i3 + 1][j3 + 1], d3 = G[i3][j3 + 1]; if (a3 && b3 && c3 && d3) [a3, b3, c3, a3, c3, d3].forEach(function (pp) { tri.push(pp[0], pp[1], pp[2]); }); }
+        };
+        var disc = function (cen, u1, u2) { build(48, 10, 4, 1, function (u, v) { var ph = TP * u, r2 = v * RL * 0.985; return [0, 1, 2].map(function (r3) { return cen[r3] + r2 * (Math.cos(ph) * u1[r3] + Math.sin(ph) * u2[r3]); }); }); };
+        var E = function (k2) { var e = [0, 0, 0]; e[k2] = 1; return e; };
+        if (m.kind === 'level') {
+          var c = m.cval, s1 = c < 0 ? -1 : 1, C0 = Math.abs(c), sgv = m.sg, ix = { pos: [], neg: [], zer: [] };
+          sgv.forEach(function (gv, k2) { var mm = s1 * gv; (mm > 0 ? ix.pos : (mm < 0 ? ix.neg : ix.zer)).push(k2); });
+          var np = ix.pos.length, nn = ix.neg.length, nz = ix.zer.length, p0 = ix.pos[0], p1 = ix.pos[1], p2 = ix.pos[2], n0 = ix.neg[0], n1 = ix.neg[1], z0 = ix.zer[0], z1 = ix.zer[1];
+          var sq = function (k2) { return Math.sqrt(C0 / Math.abs(s1 * ev[k2].l)); }, mod = function (k2) { return 1 / Math.sqrt(Math.abs(ev[k2].l)); };
+          if (c !== 0) {
+            if (np === 3) build(48, 24, 4, 3, function (u, v) { var ph = TP * u, th = Math.PI * (v - 0.5), y = [0, 0, 0]; y[p0] = sq(p0) * Math.cos(th) * Math.cos(ph); y[p1] = sq(p1) * Math.cos(th) * Math.sin(ph); y[p2] = sq(p2) * Math.sin(th); return y; });
+            else if (np === 2 && nn === 1) build(48, 24, 4, 3, function (u, v) { var ph = TP * u, a = sq(p0), bb = sq(p1), d = sq(n0), Sm = bis(function (s) { return Math.cosh(s) * Math.cosh(s) * (a * a * Math.cos(ph) * Math.cos(ph) + bb * bb * Math.sin(ph) * Math.sin(ph)) + d * d * Math.sinh(s) * Math.sinh(s); }), s = (2 * v - 1) * Sm, y = [0, 0, 0]; y[p0] = a * Math.cosh(s) * Math.cos(ph); y[p1] = bb * Math.cosh(s) * Math.sin(ph); y[n0] = d * Math.sinh(s); return y; });
+            else if (np === 1 && nn === 2) [1, -1].forEach(function (sd) { build(48, 16, 4, 2, function (u, v) { var ph = TP * u, a = sq(p0), bb = sq(n0), d = sq(n1), Sm = bis(function (s) { return a * a * Math.cosh(s) * Math.cosh(s) + Math.sinh(s) * Math.sinh(s) * (bb * bb * Math.cos(ph) * Math.cos(ph) + d * d * Math.sin(ph) * Math.sin(ph)); }), s = v * Sm, y = [0, 0, 0]; y[p0] = sd * a * Math.cosh(s); y[n0] = bb * Math.sinh(s) * Math.cos(ph); y[n1] = d * Math.sinh(s) * Math.sin(ph); return y; }); });
+            else if (nz === 1 && np === 2) build(48, 16, 4, 2, function (u, v) { var ph = TP * u, a = sq(p0), bb = sq(p1), L = Math.sqrt(Math.max(0, RL * RL - a * a * Math.cos(ph) * Math.cos(ph) - bb * bb * Math.sin(ph) * Math.sin(ph))), y = [0, 0, 0]; y[p0] = a * Math.cos(ph); y[p1] = bb * Math.sin(ph); y[z0] = (2 * v - 1) * L; return y; });
+            else if (nz === 1 && np === 1 && nn === 1) [1, -1].forEach(function (sd) { build(24, 16, 3, 2, function (u, v) { var a = sq(p0), bb = sq(n0), Sm = bis(function (s) { return a * a * Math.cosh(s) * Math.cosh(s) + bb * bb * Math.sinh(s) * Math.sinh(s); }), s = (2 * u - 1) * Sm, L = Math.sqrt(Math.max(0, RL * RL - a * a * Math.cosh(s) * Math.cosh(s) - bb * bb * Math.sinh(s) * Math.sinh(s))), y = [0, 0, 0]; if (a >= RL) return null; y[p0] = sd * a * Math.cosh(s); y[n0] = bb * Math.sinh(s); y[z0] = (2 * v - 1) * L; return y; }); });
+            else if (nz === 2 && np === 1) { var a1s = sq(p0); if (a1s < RL) [1, -1].forEach(function (sd) { var cen = [0, 0, 0]; cen[p0] = sd * a1s; disc(cen, E(z0), E(z1)); }); }
+          } else {
+            if (nz === 0 && np > 0 && nn > 0) { var dd = np === 2 ? ix.pos : ix.neg, ee = np === 2 ? n0 : p0; [1, -1].forEach(function (sd) { build(48, 12, 4, 2, function (u, v) { var ph = TP * u, a = mod(dd[0]), bb = mod(dd[1]), d = mod(ee), Rm = Math.sqrt(RL * RL / (a * a * Math.cos(ph) * Math.cos(ph) + bb * bb * Math.sin(ph) * Math.sin(ph) + d * d)), r2 = v * Rm, y = [0, 0, 0]; y[dd[0]] = a * r2 * Math.cos(ph); y[dd[1]] = bb * r2 * Math.sin(ph); y[ee] = sd * d * r2; return y; }); }); }
+            else if (nz === 1 && np === 1 && nn === 1) [1, -1].forEach(function (sd) { var d1 = [0, 0, 0]; d1[p0] = mod(p0); d1[n0] = sd * mod(n0); var nrm = Math.hypot(d1[0], d1[1], d1[2]); disc([0, 0, 0], [d1[0] / nrm, d1[1] / nrm, d1[2] / nrm], E(z0)); });
+            else if (nz === 1) { var ya = [0, 0, 0], yb = [0, 0, 0]; ya[z0] = -RL * 0.99; yb[z0] = RL * 0.99; S.tube(toX(ya), toX(yb), C.b, 0.06); }
+            else if (nz === 2) disc([0, 0, 0], E(z0), E(z1));
+            else S.sphere(Cn, C.b, 0.12);
+          }
+        } else if (m.kind === 'parab') {
+          build(48, 14, 4, 2, function (u, v) {
+            var ph = TP * u, rm = bis(function (r2) { var y = paraPt(m, ph, r2); return y[0] * y[0] + y[1] * y[1] + y[2] * y[2]; });
+            return paraPt(m, ph, v * rm);
+          });
+        } else {
+          var Sm1 = bis(function (s) { var y = cilparPt(m, s, 0); return y[0] * y[0] + y[1] * y[1]; });
+          build(32, 12, 4, 2, function (u, v) { var s = (2 * u - 1) * Sm1, y0 = cilparPt(m, s, 0), L = Math.sqrt(Math.max(0, RL * RL - y0[0] * y0[0] - y0[1] * y0[1])); return cilparPt(m, s, (2 * v - 1) * L); });
+        }
+        if (lines.length) S.dyn.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(lines), new T.LineBasicMaterial({ color: col, transparent: true, opacity: 0.9 })));
+        if (tri.length) { var gg = new T.BufferGeometry(); gg.setAttribute('position', new T.Float32BufferAttribute(tri, 3)); S.dyn.add(new T.Mesh(gg, new T.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.2, side: T.DoubleSide, depthWrite: false }))); }
+        // ejes principales desde el centro/vértice, trayectoria de la traslación y marca del punto de referencia
+        if (x0n * K * t > 0.05) S.tube([0, 0, 0], Cn, C.m, 0.025);
+        Fg.forEach(function (f, k2) { var cs = m.kind === 'cilpar' ? [C.a, C.b, C.m][k2] : (m.sg[k2] > 0 ? C.a : (m.sg[k2] < 0 ? C.b : C.m)), L1 = 1.7; S.arrow([Cn[0] + L1 * f[0], Cn[1] + L1 * f[1], Cn[2] + L1 * f[2]], cs, 'u' + (k2 + 1), Cn); });
+        S.sphere(Cn, C.c, 0.15); S.dyn.add(S.label(lbl, [Cn[0] - 0.1, Cn[1] - 0.1, Cn[2] + 0.45], C.c, 0.75));
+        S.render();
+      }
+      if (S && Math.abs(K - 1) > 1e-9) h += ' <i>(Dibujo a escala ' + nd(K) + ' para que quepa.)</i>';
+      var bounded = m.kind === 'level' && m.z === 0 && m.cval !== 0 && (m.p === 3 || m.n === 3), empty = m.kind === 'level' && !m.real && m.cval !== 0;
+      if (S && !bounded && !empty) h += ' <i>(Se dibuja solo la parte contenida en una esfera de radio ' + nd(RL * K) + ' alrededor del punto de referencia; las superficies no acotadas siguen más allá.)</i>';
+      if (clip) h += ' <i>(Los valores se recortan a los intervalos indicados.)</i>';
+      html(text, h); res.textContent = '';
+      var fin = el('div', 'sar-final'); fin.textContent = m.name + ' · rang A = ' + m.rg + ', A₀₀ = ' + nd(m.A00); res.appendChild(fin);
+    }
+    root.appendChild(sl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    if (S) root.insertBefore(S.wrap, sl);
+    Object.keys(inp).map(function (k) { return inp[k]; }).concat(binp, [cin, sg_, st]).forEach(function (q) { q.addEventListener('input', draw); });
+    if (S) S.onTheme = draw; draw();
+  }
+
+
+  var REG = [['.d3-cuadrica', buildCuadrica], ['.d3-nivel', buildNivel], ['.d3-minimos', buildMinimos3], ['.d3-ejes', buildEjes], ['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
   function init() {
     var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n, false]); }); });
     if (!todo.length) return;
