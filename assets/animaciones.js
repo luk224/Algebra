@@ -22,6 +22,7 @@
    .anim-minimos data-p="2,3;4,2;5,1;7,0.5"   (recta de minimos cuadrados y = m x + n para 2 a 8 puntos editables [filas (x_i, y_i); botones +/- punto]: sistema AX=B con una fila (x_i,1) por dato, sumas, ecuaciones normales y su determinante, solucion por Cramer, residuos verticales (segmentos naranjas) con control de que son ortogonales a las columnas (sum e_i = 0, sum x_i e_i = 0), error ||AX-B||, pronostico en un x editable y recta de prueba con sliders dm, dn (discontinua) cuyo error crece por Pitagoras ||AX'-B||^2 = ||AX-B||^2 + ||A(X'-X)||^2; si todos los x coinciden AtA es singular y avisa de solucion no unica; 7 presets: U Ej. 5.41, E 5.40, Lay 6.6 Ej. 1, P2, E 5.44 D, alineados, misma x; break-inside:avoid en impresion)
    .anim-cuadratica data-m="1,4,0,3" data-p="1,0,0,1" data-x="2,1"   (forma cuadratica 2x2, tema 6.2: M editable [cualquier matriz, Q(x)=x^t M x], P editable [columnas = base nueva B'], x con sliders enteros; stepper en 4 pasos: evaluar Q(x) y su polinomio con la curva de nivel Q=Q(x); parte simetrica S=(M+M^t)/2 [el termino cruzado se reparte a medias] y antisimetrica K con x^t K x = 0, rango; homogeneidad Q(2x)=4Q(x), Q(-x)=Q(x); cambio de base S'=P^t S P con comprobacion x'^t S' x' = Q(x); 6 presets)
    .anim-lu      data-a="2,2,2;4,7,7;6,18,22" data-b="2,2,1"   (factorizacion LU n x n paso a paso: reemplazos sin normalizar, multiplicador m que pasa a L, aviso de pivote 0 [hace falta PA=LU]; despues LY=B progresiva y UX=Y retrosustitucion; A y B editables)
+   .anim-clasif data-a="1,2,1"   (clasificacion de una forma cuadratica 2x2, tema 6.3: a11, a12 y a22 editables [A simetrica], 8 presets [E 6.18, E 6.19, U Ej. 6.26, U Ej. 6.24, DN, SN, D1 = 0, Q = 0]; stepper en 5 pasos: polinomio y matriz; Sylvester con la rama aplicable [definida: "<=>", semidefinida: "=>", o "no decide"] y zonas Q>0 azul / Q<0 naranja; valores propios con control de traza y determinante y ejes principales; forma canonica, signatura, rango, cuadro de invariantes y curvas Q = 1 y Q = -1 [elipse, hiperbolas, rectas]; vectores testigo y veredicto; break-inside:avoid en impresion)
 */
 (function () {
   'use strict';
@@ -1982,7 +1983,97 @@
     window.addEventListener('beforeprint', function () { st.go(steps.length - 1); });
   }
 
-  var REG = [['.anim-cuadratica', buildCuadratica], ['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  /* =====================================================================
+     Clasificacion de formas cuadraticas 2x2: Sylvester, valores propios e invariantes (.anim-clasif)
+     ===================================================================== */
+  function buildClasif(root) {
+    var a0 = (root.getAttribute('data-a') || '1,2,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var body = el('div', 'an-body');
+    var P = plane(body, 340, 340, 5);
+    P.svg.setAttribute('aria-label', 'Plano con las zonas donde Q es positiva (azul) y negativa (naranja), las curvas de nivel Q = 1 y Q = −1 y los ejes principales');
+    var res = el('div', 'sar-res'), eq = el('div', 'an-eqs'), er = el('div', 'an-eq down');
+    var inp = a0.map(function (x, k) { var i = numInput(x, 0.5, '3.6em'); i.setAttribute('aria-label', ['a₁₁', 'a₁₂ = a₂₁', 'a₂₂'][k]); return i; });
+    er.appendChild(el('span', '', 'A = ( ')); er.appendChild(inp[0]); er.appendChild(inp[1]); er.appendChild(el('span', '', ' ; ')); var ro = el('span', 'an-ro'); ro.setAttribute('aria-hidden', 'true'); er.appendChild(ro); er.appendChild(inp[2]); er.appendChild(el('span', '', ' )   Q = a₁₁x₁² + 2a₁₂x₁x₂ + a₂₂x₂²')); eq.appendChild(er);
+    var PRE = [['E 6.18: x₁² + 4x₁x₂ + x₂²', [1, 2, 1]], ['E 6.19: matriz (1 −2; −2 3)', [1, -2, 3]], ['U Ej. 6.26 (DP)', [2, 1.5, 6]], ['U Ej. 6.24 (SP)', [1, -1, 1]], ['Definida negativa', [-1, 0, -2]], ['Semidefinida negativa', [-1, 1, -1]], ['Δ₁ = 0: Sylvester no decide', [0, 1, 1]], ['Q ≡ 0', [0, 0, 0]]];
+    var pre = btnRow(PRE.map(function (p) { return p[0]; }), function (i) { PRE[i][1].forEach(function (v, k) { inp[k].value = v; }); recalc(); });
+    var nd = function (x) { var v = Math.round(x * 1000) / 1000; if (Math.abs(v) < 1e-9) v = 0; return String(v).replace('-', MINUS).replace('.', ','); };
+    var cur = null, EP = 1e-9;
+    function model() {
+      var a = parseFloat(inp[0].value) || 0, b = parseFloat(inp[1].value) || 0, c = parseFloat(inp[2].value) || 0;
+      var tr = a + c, dt = a * c - b * b, ds = Math.sqrt((a - c) * (a - c) + 4 * b * b), l1 = (tr + ds) / 2, l2 = (tr - ds) / 2, tol = 1e-9 * (1 + Math.abs(l1) + Math.abs(l2));
+      var sg = [l1, l2].map(function (l) { return Math.abs(l) < tol ? 0 : (l > 0 ? 1 : -1); });
+      var p = sg.filter(function (s) { return s > 0; }).length, n = sg.filter(function (s) { return s < 0; }).length, z = 2 - p - n;
+      var cls = z === 2 ? 'nula' : (z === 0 ? (p === 2 ? 'definida positiva' : (n === 2 ? 'definida negativa' : 'indefinida')) : (n === 0 ? 'semidefinida positiva' : (p === 0 ? 'semidefinida negativa' : 'indefinida')));
+      var v1, v2;
+      if (Math.abs(b) > 1e-12) { v1 = [l1 - c, b]; v2 = [l2 - c, b]; } else if (a >= c) { v1 = [1, 0]; v2 = [0, 1]; } else { v1 = [0, 1]; v2 = [1, 0]; }
+      var n1 = Math.hypot(v1[0], v1[1]), n2 = Math.hypot(v2[0], v2[1]); v1 = [v1[0] / n1, v1[1] / n1]; v2 = [v2[0] / n2, v2[1] / n2];
+      return { a: a, b: b, c: c, tr: tr, dt: dt, l: [l1, l2], sg: sg, p: p, n: n, z: z, cls: cls, v: [v1, v2] };
+    }
+    function poly(a, b2, c) {
+      var out = '';
+      [[a, 'x₁²'], [b2, 'x₁x₂'], [c, 'x₂²']].forEach(function (t) { if (Math.abs(t[0]) < 1e-12) return; var ng = t[0] < 0, ab = Math.abs(t[0]); out += (out ? (ng ? ' ' + MINUS + ' ' : ' + ') : (ng ? MINUS : '')) + (Math.abs(ab - 1) < 1e-12 ? '' : nd(ab)) + t[1]; });
+      return out || '0';
+    }
+    function level(m, lev, color) {
+      var seg = [], cu = [];
+      for (var k = 0; k <= 720; k++) {
+        var th = k * Math.PI / 360, u1 = Math.cos(th), u2 = Math.sin(th), q = m.a * u1 * u1 + 2 * m.b * u1 * u2 + m.c * u2 * u2, ok = q * lev > 1e-9, r = ok ? Math.sqrt(lev / q) : 99;
+        if (r <= 9) cu.push([r * u1, r * u2]); else { if (cu.length > 1) seg.push(cu); cu = []; }
+      }
+      if (cu.length > 1) seg.push(cu);
+      seg.forEach(function (pl) { P.layer.appendChild(sv('polyline', { points: pl.map(function (p) { return P.X(p[0]) + ',' + P.Y(p[1]); }).join(' '), fill: 'none', stroke: color, 'stroke-width': 2, opacity: 0.95 })); });
+    }
+    function render(s, text) {
+      var m = cur; P.clear(); res.textContent = '';
+      ro.textContent = nd(m.b);
+      var C = 60, step = 10 / C;
+      if (s >= 1) for (var i = 0; i < C; i++) for (var j = 0; j < C; j++) {
+        var x = -5 + (i + 0.5) * step, y = -5 + (j + 0.5) * step, q = m.a * x * x + 2 * m.b * x * y + m.c * y * y;
+        if (Math.abs(q) < 1e-9) continue;
+        P.layer.appendChild(sv('rect', { x: P.X(-5 + i * step), y: P.Y(-5 + (j + 1) * step), width: P.X(-5 + step) - P.X(-5) + 0.5, height: P.Y(-5) - P.Y(-5 + step) + 0.5, fill: q > 0 ? '#2a6fd3' : '#e07b1a', opacity: 0.16 }));
+      }
+      if (s >= 3) { level(m, 1, '#2a6fd3'); level(m, -1, '#e07b1a'); }
+      if (s >= 2 && m.z < 2) {
+        [0, 1].forEach(function (k) { if (m.l[k] === undefined) return; var v = m.v[k]; P.layer.appendChild(sv('line', { x1: P.X(-9 * v[0]), y1: P.Y(-9 * v[1]), x2: P.X(9 * v[0]), y2: P.Y(9 * v[1]), stroke: m.sg[k] > 0 ? '#2a6fd3' : (m.sg[k] < 0 ? '#e07b1a' : '#8a93a3'), 'stroke-width': 1.5, 'stroke-dasharray': '6 4' })); });
+        [0, 1].forEach(function (k) { arrow(P, 0, 0, 3 * m.v[k][0], 3 * m.v[k][1], 'w', 'u' + (k + 1)); });
+      }
+      arrow(P, 0, 0, 1, 0, 'gr', 'e₁'); arrow(P, 0, 0, 0, 1, 'gr', 'e₂');
+      var h = '', pl = poly(m.a, 2 * m.b, m.c), d1 = m.a, d2 = m.dt, syl, sylc;
+      if (d1 > EP && d2 > EP) { syl = 'Δ₁ &gt; 0 y |A| &gt; 0 ⇒ <b>definida positiva</b> (rama «⇔»).'; }
+      else if (d1 < -EP && d2 > EP) { syl = 'Δ₁ &lt; 0 y |A| &gt; 0 (signos alternos: − , +) ⇒ <b>definida negativa</b> (rama «⇔»).'; }
+      else if (Math.abs(d2) < EP && d1 > EP) { syl = '|A| = 0 y Δ₁ &gt; 0 ⇒ <b>semidefinida positiva</b> (rama «⇒»).'; }
+      else if (Math.abs(d2) < EP && d1 < -EP) { syl = '|A| = 0 y Δ₁ &lt; 0 ⇒ <b>semidefinida negativa</b> (rama «⇒»).'; }
+      else if (d2 < -EP) { syl = '|A| &lt; 0: <b>no encaja en ninguna rama</b> de U («en otros casos se usan los valores propios»). En 2×2 se sabe además que |A| = λ₁λ₂ &lt; 0 ⇒ signos opuestos ⇒ indefinida.'; }
+      else { syl = 'Δ₁ = 0 con |A| = 0: <b>Sylvester no decide</b> (p. ej. diag(0, 1) y diag(0, −1) tienen Δ₁ = 0 = |A| y son una SP y otra SN). Hay que usar valores propios.'; }
+      if (s === 0) h = '<b>Forma cuadrática</b> Q = <b>' + pl + '</b> con matriz simétrica A = (' + nd(m.a) + ' ' + nd(m.b) + ' ; ' + nd(m.b) + ' ' + nd(m.c) + ') (el cruzado se parte a medias). Clasificar Q es decidir el <b>signo de Q(x) para x ≠ 0</b>. Tres herramientas, que deben coincidir: (1) <b>Sylvester</b> (menores), (2) <b>valores propios</b>, (3) <b>invariantes</b> (rango y signatura).';
+      else if (s === 1) h = '<b>1. Sylvester.</b> Δ₁ = a₁₁ = ' + nd(d1) + '; Δ₂ = |A| = ' + nd(m.a) + '·' + nd(m.c) + ' ' + MINUS + ' ' + nd(m.b) + '² = ' + nd(d2) + '. ' + syl + ' El dibujo sombrea en azul donde Q &gt; 0 y en naranja donde Q &lt; 0 (en blanco, Q = 0).';
+      else if (s === 2) h = '<b>2. Valores propios.</b> |A − λI| = λ² ' + MINUS + ' ' + nd(m.tr) + 'λ + ' + nd(m.dt) + ' = 0 ⇒ λ = (' + nd(m.tr) + ' ± √' + nd((m.a - m.c) * (m.a - m.c) + 4 * m.b * m.b) + ') / 2 ⇒ <b>λ₁ = ' + nd(m.l[0]) + ', λ₂ = ' + nd(m.l[1]) + '</b> (siempre reales: A es simétrica). Control: λ₁ + λ₂ = ' + nd(m.l[0] + m.l[1]) + ' = traza y λ₁λ₂ = ' + nd(m.l[0] * m.l[1]) + ' = |A|. Signos: ' + (m.p ? m.p + ' positivo' + (m.p > 1 ? 's' : '') : 'ningún positivo') + ', ' + (m.n ? m.n + ' negativo' + (m.n > 1 ? 's' : '') : 'ningún negativo') + ', ' + m.z + ' nulo' + (m.z === 1 ? '' : 's') + ' ⇒ <b>' + m.cls + '</b>. Las rectas discontinuas son los ejes principales (vectores propios u₁ = (' + nd(m.v[0][0]) + '; ' + nd(m.v[0][1]) + ') y u₂ = (' + nd(m.v[1][0]) + '; ' + nd(m.v[1][1]) + ')), perpendiculares.';
+      else if (s === 3) {
+        var can = nd(m.l[0]) + '·y₁² + ' + nd(m.l[1]) + '·y₂²'; can = can.replace('+ ' + MINUS, MINUS + ' ');
+        h = '<b>3. Forma canónica e invariantes.</b> En la base ortonormal {u₁, u₂}: Q = <b>' + can + '</b>. <b>Signatura</b> sig(Q) = nº de coeficientes positivos = <b>' + m.p + '</b>; <b>rango</b> = nº de no nulos = <b>' + (m.p + m.n) + '</b>; n = 2. Cuadro de U: ' + (m.cls === 'definida positiva' ? 'rg = sig = n ⇒ DP' : m.cls === 'definida negativa' ? 'rg = n y sig = 0 ⇒ DN' : m.cls === 'semidefinida positiva' ? 'rg = sig &lt; n ⇒ SP' : m.cls === 'semidefinida negativa' ? 'rg &lt; n y sig = 0 ⇒ SN' : m.cls === 'indefinida' ? 'rg ≠ sig y sig ≠ 0 ⇒ indefinida' : 'Q es la forma nula') + '. Las curvas Q = 1 (azul) y Q = −1 (naranja) son ' + (m.p === 2 ? 'una elipse (y Q = −1 vacía)' : m.n === 2 ? 'una elipse (Q = −1; Q = 1 vacía)' : (m.p === 1 && m.n === 1) ? 'dos hipérbolas conjugadas' : (m.z === 1 && m.p === 1) ? 'dos rectas paralelas (Q = 1; Q = −1 vacía)' : (m.z === 1 && m.n === 1) ? 'dos rectas paralelas (Q = −1; Q = 1 vacía)' : 'vacías') + '.';
+      } else {
+        var pos = null, ng = null, zr = null, cand = [[1, 0], [0, 1], [1, 1], [1, -1], [2, 1], [1, 2], [2, -1], [1, -2]].concat([m.v[0], m.v[1]].map(function (v) { return [Math.round(v[0] * 1000) / 1000, Math.round(v[1] * 1000) / 1000]; }));
+        cand.forEach(function (v) { var q = m.a * v[0] * v[0] + 2 * m.b * v[0] * v[1] + m.c * v[1] * v[1]; if (q > 1e-6 && !pos) pos = [v, q]; if (q < -1e-6 && !ng) ng = [v, q]; if (Math.abs(q) < 1e-6 && !zr && (v[0] || v[1])) zr = [v, q]; });
+        function tv(t) { return t ? 'Q(' + nd(t[0][0]) + '; ' + nd(t[0][1]) + ') = ' + nd(t[1]) : null; }
+        var zv = m.z === 1 ? m.v[m.sg[0] === 0 ? 0 : 1] : null;
+        h = '<b>4. Testigos (comprobación con la definición).</b> ' + (pos ? tv(pos) + ' &gt; 0' : 'Ningún vector probado da Q &gt; 0') + '; ' + (ng ? tv(ng) + ' &lt; 0' : 'ninguno da Q &lt; 0') + (zv ? '; y en el vector propio del valor 0, u = (' + nd(zv[0]) + '; ' + nd(zv[1]) + '), Q(u) = 0 con u ≠ 0' : '') + '. ' + (m.cls === 'indefinida' ? 'Hay vectores de ambos signos: <b>indefinida</b> (Def. 6.12).' : m.cls === 'definida positiva' ? 'Q &gt; 0 en todo x ≠ 0: la forma canónica es suma de cuadrados con coeficientes positivos.' : m.cls === 'definida negativa' ? 'Q &lt; 0 en todo x ≠ 0.' : m.cls === 'semidefinida positiva' ? 'Q ≥ 0 en todas partes y se anula en un vector no nulo: <b>semidefinida positiva</b>.' : m.cls === 'semidefinida negativa' ? 'Q ≤ 0 en todas partes y se anula en un vector no nulo: <b>semidefinida negativa</b>.' : 'Q es nula.') + ' <b>Veredicto: ' + m.cls + '</b>, por las tres vías.';
+      }
+      html(text, h);
+      if (s === st.N) { var fin = el('div', 'sar-final'); fin.textContent = 'Q ' + m.cls + '  ·  λ = ' + nd(m.l[0]) + ', ' + nd(m.l[1]) + '  ·  sig = ' + m.p + ', rango = ' + (m.p + m.n); res.appendChild(fin); }
+    }
+    var st = stepper(root, 4, render, null, 3800);
+    function recalc() { cur = model(); st.go(st.N); }
+    inp.forEach(function (q) { q.addEventListener('input', function () { cur = model(); st.go(st.step); }); });
+    body.appendChild(el('p', 'sar-text an-title', 'Escribe a₁₁, a₁₂ y a₂₂ (la matriz es simétrica) o elige un caso, y recorre los pasos: Sylvester, valores propios, forma canónica con invariantes y vectores testigo.'));
+    body.appendChild(eq); body.appendChild(P.svg); body.appendChild(pre);
+    root.appendChild(body); st.mount(root, res);
+    cur = model(); st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(st.N); });
+  }
+
+
+  var REG = [['.anim-clasif', buildClasif], ['.anim-cuadratica', buildCuadratica], ['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
