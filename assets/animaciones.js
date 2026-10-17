@@ -20,6 +20,7 @@
    .anim-simet   data-a="3,1,3"   (matriz 2x2 de filas (a b; d c) con a, b, c editables y casilla "simetrica" [d = b]; deslizador de angulo phi para un punto x de la circunferencia unidad: x frente a Ax, la elipse imagen de la circunferencia unidad y presets. Si es simetrica: discriminante (a-c)^2+4b^2 >= 0 (valores propios siempre reales), valores propios l1 >= l2, ejes principales u1, u2 perpendiculares (rectas punteadas) con los semiejes |l1|, |l2| de la elipse, angulo theta = 1/2 atan2(2b, a-c) de la matriz de paso P (giro de det 1), P^t A P = diag(l1, l2) calculado numericamente y aviso cuando x esta sobre un eje principal. Si se desmarca la casilla: valores y vectores propios de una A cualquiera, angulo entre los ejes propios (distinto de 90 grados) y por que no hay P ortogonal; presets: matrices del tema 5.3, singular, diagonal, valor doble, contrastes no simetricos)
    .anim-bilineal data-a="1,1,1,2" data-p="-1,-1,1,2" data-x="2,1" data-y="1,3"   (forma bilineal 2x2: A editable [matriz de f en la base B], P editable [columnas = vectores de B' en coordenadas de B], x e y con sliders enteros; stepper en 5 pasos: A·y; x^t(Ay) = suma a_ij x_i y_j con aviso de que el orden importa [f(y,x)]; base nueva B' con su rejilla; A' = P^t A P con control a'_12 = f(v1,v2); comprobacion x'^t A' y' = f(x,y) con x' = P^-1 x, que se conserva [rango, simetria, signo de det; det A' = det A (det P)^2] y la semejanza P^-1 A P por contraste; avisa si P es singular; 6 presets: U Ej. 6.7 / Sept. 2018, Feb. 2026, Feb. 2025 B, no simetrica, antisimetrica, P singular; break-inside:avoid en impresion)
    .anim-minimos data-p="2,3;4,2;5,1;7,0.5"   (recta de minimos cuadrados y = m x + n para 2 a 8 puntos editables [filas (x_i, y_i); botones +/- punto]: sistema AX=B con una fila (x_i,1) por dato, sumas, ecuaciones normales y su determinante, solucion por Cramer, residuos verticales (segmentos naranjas) con control de que son ortogonales a las columnas (sum e_i = 0, sum x_i e_i = 0), error ||AX-B||, pronostico en un x editable y recta de prueba con sliders dm, dn (discontinua) cuyo error crece por Pitagoras ||AX'-B||^2 = ||AX-B||^2 + ||A(X'-X)||^2; si todos los x coinciden AtA es singular y avisa de solucion no unica; 7 presets: U Ej. 5.41, E 5.40, Lay 6.6 Ej. 1, P2, E 5.44 D, alineados, misma x; break-inside:avoid en impresion)
+   .anim-cuadratica data-m="1,4,0,3" data-p="1,0,0,1" data-x="2,1"   (forma cuadratica 2x2, tema 6.2: M editable [cualquier matriz, Q(x)=x^t M x], P editable [columnas = base nueva B'], x con sliders enteros; stepper en 4 pasos: evaluar Q(x) y su polinomio con la curva de nivel Q=Q(x); parte simetrica S=(M+M^t)/2 [el termino cruzado se reparte a medias] y antisimetrica K con x^t K x = 0, rango; homogeneidad Q(2x)=4Q(x), Q(-x)=Q(x); cambio de base S'=P^t S P con comprobacion x'^t S' x' = Q(x); 6 presets)
    .anim-lu      data-a="2,2,2;4,7,7;6,18,22" data-b="2,2,1"   (factorizacion LU n x n paso a paso: reemplazos sin normalizar, multiplicador m que pasa a L, aviso de pivote 0 [hace falta PA=LU]; despues LY=B progresiva y UX=Y retrosustitucion; A y B editables)
 */
 (function () {
@@ -1738,6 +1739,116 @@
 
 
   /* =====================================================================
+     Formas cuadraticas 2x2: Q(x) = x^t M x, parte simetrica y cambio de base (.anim-cuadratica)
+     ===================================================================== */
+  function buildCuadratica(root) {
+    var m0 = (root.getAttribute('data-m') || '1,4,0,3').split(',').map(Number), p0 = (root.getAttribute('data-p') || '1,-2,0,1').split(',').map(Number);
+    var x0 = (root.getAttribute('data-x') || '2,1').split(',').map(Number);
+    root.textContent = ''; root.classList.add('sarrus');
+    var body = el('div', 'an-body');
+    var P = plane(body, 340, 340, 5);
+    P.svg.setAttribute('aria-label', 'Plano con el vector x, su múltiplo, la curva de nivel Q = Q(x) y la rejilla de la base nueva B′');
+    var res = el('div', 'sar-res'), ctrl = el('div', 'an-sliders');
+    function row(txt, s, lb) { var r = el('label', 'an-slrow'); r.appendChild(el('span', '', txt)); r.appendChild(s); r.appendChild(lb); ctrl.appendChild(r); }
+    var im = m0.map(function (x, k) { var i = numInput(x, 1, '3.2em'); i.setAttribute('aria-label', 'M entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); return i; });
+    var ip = p0.map(function (x, k) { var i = numInput(x, 1, '3.2em'); i.setAttribute('aria-label', 'P entrada ' + (k < 2 ? 1 : 2) + ',' + (k % 2 + 1)); return i; });
+    var eq = el('div', 'an-eqs');
+    function mrow(lbl, ins, note) { var r = el('div', 'an-eq down'); r.appendChild(el('span', '', lbl + ' = ( ')); r.appendChild(ins[0]); r.appendChild(ins[1]); r.appendChild(el('span', '', ' ; ')); r.appendChild(ins[2]); r.appendChild(ins[3]); r.appendChild(el('span', '', ' )')); r.appendChild(el('span', 'an-note', note)); eq.appendChild(r); }
+    mrow('M', im, '   cualquier matriz con Q(x) = xᵗMx'); mrow('P', ip, '   columnas = base nueva B′ en coordenadas de B');
+    var sl = [x0[0], x0[1]].map(function (v) { return slider(-4, 4, 1, v); }), lb = sl.map(function () { return el('b'); });
+    ['x₁', 'x₂'].forEach(function (t, k) { sl[k].setAttribute('aria-label', 'coordenada ' + t); row(t + ' ', sl[k], lb[k]); });
+    var pre = btnRow(['E 6.15', 'No simétrica (propio)', 'Triangular', 'Antisimétrica (Q ≡ 0)', 'x₁x₂ → diagonal', 'P singular'], function (i) {
+      var p = [[1, 1, 1, 1, 1, 1, 0, -1, 2, 1], [1, 4, 0, 3, 1, -2, 0, 1, 2, 1], [1, -2, 0, 0, 1, 1, 0, 1, 2, 1], [0, -1, 1, 0, 1, 0, 0, 1, 2, 1], [0, 1, 0, 0, 1, 1, 1, -1, 2, 1], [1, 1, 1, 2, 1, 2, 1, 2, 2, 1]][i];
+      im.forEach(function (q, j) { q.value = p[j]; }); ip.forEach(function (q, j) { q.value = p[4 + j]; }); sl.forEach(function (q, j) { q.value = p[8 + j]; }); recalc(true);
+    });
+    function mm(x, y) { return [add(mul(x[0], y[0]), mul(x[1], y[2])), add(mul(x[0], y[1]), mul(x[1], y[3])), add(mul(x[2], y[0]), mul(x[3], y[2])), add(mul(x[2], y[1]), mul(x[3], y[3]))]; }
+    function tp(m) { return [m[0], m[2], m[1], m[3]]; }
+    function mv(m, v) { return [add(mul(m[0], v[0]), mul(m[1], v[1])), add(mul(m[2], v[0]), mul(m[3], v[1]))]; }
+    function dot(u, v) { return add(mul(u[0], v[0]), mul(u[1], v[1])); }
+    function dt(m) { return sub(mul(m[0], m[3]), mul(m[1], m[2])); }
+    function inv(m) { var d = dt(m); return [div(m[3], d), div(neg(m[1]), d), div(neg(m[2]), d), div(m[0], d)]; }
+    function mt(m) { return '(' + ftxt(m[0]) + ' ' + ftxt(m[1]) + ' ; ' + ftxt(m[2]) + ' ' + ftxt(m[3]) + ')'; }
+    function vt(v) { return '(' + ftxt(v[0]) + ', ' + ftxt(v[1]) + ')'; }
+    function rank(m) { return isz(dt(m)) ? (m.every(isz) ? 0 : 1) : 2; }
+    function poly(a, b, c, u, v) {
+      var out = '';
+      [[a, u + '²'], [b, u + v], [c, v + '²']].forEach(function (t) {
+        if (isz(t[0])) return;
+        var neg0 = t[0].n < 0, ab = F(Math.abs(t[0].n), t[0].d), co = ise(ab, 1) ? '' : ftxt(ab);
+        out += (out ? (neg0 ? ' ' + MINUS + ' ' : ' + ') : (neg0 ? MINUS : '')) + co + t[1];
+      });
+      return out || '0';
+    }
+    function rd(i) { var f = parseFloat(i.value), r = Math.round(f); if (isNaN(f)) return 0; if (f !== r) i.value = r; return r; }
+    var cur = null;
+    function model() {
+      var M = im.map(function (i) { return F(rd(i), 1); }), Pm = ip.map(function (i) { return F(rd(i), 1); });
+      return { M: M, P: Pm, x: [F(parseInt(sl[0].value, 10), 1), F(parseInt(sl[1].value, 10), 1)], dp: dt(Pm), ok: !isz(dt(Pm)) };
+    }
+    function same(u, v) { return u.n === v.n && u.d === v.d; }
+    function render(s, text) {
+      var Mm = cur.M, Pm = cur.P, X = cur.x; P.clear(); res.textContent = '';
+      lb.forEach(function (l, k) { l.textContent = String(X[k].n).replace('-', MINUS); });
+      var half = F(Mm[1].n * Mm[2].d + Mm[2].n * Mm[1].d, 2 * Mm[1].d * Mm[2].d);
+      var S = [Mm[0], half, half, Mm[3]];
+      var K = [F(0), sub(Mm[1], half), sub(Mm[2], half), F(0)];
+      var Mx = mv(Mm, X), q = dot(X, Mx), qS = dot(X, mv(S, X)), cc = add(Mm[1], Mm[2]);
+      var qf = q.n / q.d, a = Mm[0].n / Mm[0].d, d = Mm[3].n / Mm[3].d, b2 = half.n / half.d;
+      var lam = Math.max(Math.abs(X[0].n / X[0].d), Math.abs(X[1].n / X[1].d)) * 2 <= 5 ? F(2) : F(1, 2), lamf = lam.n / lam.d;
+      function curve(level, op, dash) {
+        var seg = [], cur2 = [];
+        for (var k = 0; k <= 720; k++) {
+          var th = k * Math.PI / 360, u1 = Math.cos(th), u2 = Math.sin(th), qq = a * u1 * u1 + 2 * b2 * u1 * u2 + d * u2 * u2, ok2 = qq * level > 1e-9;
+          var r = ok2 ? Math.sqrt(level / qq) : 99;
+          if (r <= 9) cur2.push([r * u1, r * u2]); else { if (cur2.length > 1) seg.push(cur2); cur2 = []; }
+        }
+        if (cur2.length > 1) seg.push(cur2);
+        seg.forEach(function (pl) { var at = { points: pl.map(function (p) { return P.X(p[0]) + ',' + P.Y(p[1]); }).join(' '), fill: 'none', stroke: '#8e5bd0', 'stroke-width': 1.6, opacity: op }; if (dash) at['stroke-dasharray'] = '6 4'; P.layer.appendChild(sv('polyline', at)); });
+      }
+      if (s >= 1 && Math.abs(qf) > 1e-9) { curve(qf, 0.85, false); if (s === 3) curve(qf * lamf * lamf, 0.6, true); }
+      if (cur.ok && s >= 4) {
+        var uu = [Pm[0].n, Pm[2].n], w = [Pm[1].n, Pm[3].n];
+        for (var kk = -14; kk <= 14; kk++) {
+          [[kk * uu[0], kk * uu[1], w[0], w[1]], [kk * w[0], kk * w[1], uu[0], uu[1]]].forEach(function (z) {
+            P.layer.appendChild(sv('line', { x1: P.X(z[0] - 14 * z[2]), y1: P.Y(z[1] - 14 * z[3]), x2: P.X(z[0] + 14 * z[2]), y2: P.Y(z[1] + 14 * z[3]), stroke: '#2e9e5b', 'stroke-width': kk === 0 ? 1.2 : 0.6, 'stroke-dasharray': '4 3', opacity: kk === 0 ? 0.7 : 0.35 }));
+          });
+        }
+      }
+      arrow(P, 0, 0, 1, 0, 'gr', 'e₁'); arrow(P, 0, 0, 0, 1, 'gr', 'e₂');
+      arrow(P, 0, 0, X[0].n, X[1].n, 'down', 'x');
+      if (s === 3) { arrow(P, 0, 0, lamf * X[0].n / X[0].d, lamf * X[1].n / X[1].d, 'up', lam.d === 1 ? '2x' : '½x'); arrow(P, 0, 0, -X[0].n / X[0].d, -X[1].n / X[1].d, 'up', '−x'); }
+      if (s >= 4 && cur.ok) { arrow(P, 0, 0, Pm[0].n, Pm[2].n, 'w', 'v₁'); arrow(P, 0, 0, Pm[1].n, Pm[3].n, 'w', 'v₂'); }
+      var h = '', sym = same(Mm[1], Mm[2]);
+      if (s === 0) h = '<b>Forma cuadrática</b> en ℝ²: Q(x) = f(x, x) = <b>xᵗSx</b> con S simétrica (U Def. 6.7-6.8). En el examen te dan Q como <b>polinomio</b> (todos sus términos de grado 2) y debes hallar S. Aquí puedes partir de <b>cualquier</b> matriz M = ' + mt(Mm) + ': Q(x) = xᵗMx = <b>' + poly(Mm[0], cc, Mm[3], 'x₁', 'x₂') + '</b>. Pasos: (1) evaluar Q(x); (2) la matriz simétrica S = ½(M + Mᵗ); (3) homogeneidad Q(λx) = λ²Q(x); (4) cambio de base S′ = PᵗSP.';
+      else if (s === 1 && S.every(isz)) h = '<b>1. Q ≡ 0:</b> la parte simétrica de M es la matriz nula (M es antisimétrica), así que <b>todos los vectores dan Q(x) = 0</b>: xᵗMx = 0 para todo x. No hay curva de nivel que dibujar.';
+      else if (s === 1) h = '<b>1. Evaluar Q(x).</b> Mx = ' + vt(Mx) + ' y Q(x) = xᵗ(Mx) = ' + fpar(X[0]) + '·' + fpar(Mx[0]) + ' + ' + fpar(X[1]) + '·' + fpar(Mx[1]) + ' = <b>' + ftxt(q) + '</b> (un <b>escalar</b>, no un vector). Con el polinomio ' + poly(Mm[0], cc, Mm[3], 'x₁', 'x₂') + ' en x = ' + vt(X) + ' sale lo mismo. La curva violeta es Q(z) = ' + ftxt(q) + ' (el «nivel» que pasa por x)' + (Math.abs(qf) < 1e-9 ? ': aquí Q(x) = 0 y el nivel 0 son rectas o un punto, no se dibuja' : '') + '.';
+      else if (s === 2) h = '<b>2. La matriz de Q es la parte simétrica.</b> S = ½(M + Mᵗ) = <b>' + mt(S) + '</b>' + (sym ? ' (M ya era simétrica)' : '') + ': el coeficiente del término cruzado, ' + ftxt(cc) + ', se <b>reparte a medias</b> (' + ftxt(S[1]) + ' en cada posición), nunca entero en las dos. La parte antisimétrica K = ½(M − Mᵗ) = ' + mt(K) + ' no aporta nada: xᵗKx = 0. Comprobación: xᵗSx = <b>' + ftxt(qS) + '</b> ' + (same(qS, q) ? '= xᵗMx ✓.' : '≠ xᵗMx ✗.') + ' Rango de Q = rango de S = <b>' + rank(S) + '</b> (U Def. 6.9).';
+      else if (s === 3) {
+        var l2 = mul(lam, lam), ql = mul(l2, q), lt = lam.d === 1 ? '2' : '1/2';
+        h = '<b>3. Homogeneidad de grado 2.</b> Q(' + (lam.d === 1 ? '2x' : '½x') + ') = f(' + lt + '·x, ' + lt + '·x) = ' + lt + '·' + lt + '·f(x, x) = <b>' + ftxt(l2) + '·Q(x)</b> = ' + ftxt(l2) + '·' + fpar(q) + ' = <b>' + ftxt(ql) + '</b>, no ' + lt + '·Q(x)' + (lam.d === 1 ? '' : ' (se usa ½x porque 2x se saldría del plano)') + '. Y Q(−x) = (−1)²Q(x) = <b>' + ftxt(q) + '</b>: el signo no cambia.' + (Math.abs(qf) > 1e-9 ? ' La curva violeta continua es Q = ' + ftxt(q) + ' (pasa por x) y la discontinua es Q = ' + ftxt(ql) + ' (pasa por ' + (lam.d === 1 ? '2x' : '½x') + '); ambas son simétricas respecto del origen.' : ' Aquí Q(x) = 0, luego también Q(' + (lam.d === 1 ? '2x' : '½x') + ') = 0 y no se dibujan curvas.') + ' Es la clave de E 6.10 y de X «Q(3v) = 9Q(v)».';
+      } else if (!cur.ok) {
+        h = '<b>4. Con estas columnas det P = 0:</b> v₁ y v₂ están alineados, no son base y no hay cambio de base. P tiene que ser <b>regular</b>. Cambia P.';
+      } else {
+        var Sp = mm(tp(Pm), mm(S, Pm)), Pi = inv(Pm), x2 = mv(Pi, X), q3 = dot(x2, mv(Sp, x2)), pp = poly(Sp[0], add(Sp[1], Sp[2]), Sp[3], 'x₁′', 'x₂′');
+        h = '<b>4. Cambio de base.</b> Base nueva B′ = {v₁, v₂} = columnas de P = ' + mt(Pm) + ' (rejilla verde), det P = ' + ftxt(cur.dp) + ' ≠ 0. La matriz de Q en B′ es <b>S′ = PᵗSP</b> (¡no P⁻¹SP!) = <b>' + mt(Sp) + '</b>, es decir, Q = <b>' + pp + '</b> en coordenadas de B′. Coordenadas de x en B′: x′ = P⁻¹x = ' + vt(x2) + ' y x′ᵗS′x′ = <b>' + ftxt(q3) + '</b> ' + (same(q3, q) ? '= Q(x) ✓: el valor no depende de la base.' : '≠ Q(x) ✗.') + ' Se conserva el rango (' + rank(Sp) + '), la simetría y el signo del determinante; en general no se conservan det S′ = det S·(det P)² = ' + ftxt(dt(Sp)) + ' (' + (isz(dt(S)) || same(mul(cur.dp, cur.dp), F(1)) ? 'aquí coincide con det S porque ' + (isz(dt(S)) ? 'det S = 0' : '(det P)² = 1') : 'distinto de det S = ' + ftxt(dt(S))) + '), la traza ni los valores propios.' + (isz(Sp[1]) ? ' <i>Aquí S′ es diagonal: Q no tiene término cruzado en B′ (forma canónica, tema 6.3).</i>' : '');
+      }
+      html(text, h);
+      if (s === st.N) { var fin = el('div', 'sar-final'); fin.textContent = cur.ok ? 'Q(x) = ' + ftxt(q) + '  ·  S = ' + mt(S) + '  ·  S′ = PᵗSP = ' + mt(mm(tp(Pm), mm(S, Pm))) : 'Q(x) = ' + ftxt(q) + '  ·  S = ' + mt(S) + '  ·  (P no es regular: no hay cambio de base)'; res.appendChild(fin); }
+    }
+    var st = stepper(root, 4, render, null, 3600);
+    function recalc(jump) { cur = model(); st.go(jump ? st.N : Math.min(st.step, st.N)); }
+    im.concat(ip).forEach(function (q) { q.addEventListener('input', function () { recalc(true); }); });
+    var tmr = null;
+    sl.forEach(function (q) { q.addEventListener('input', function () { cur = model(); clearTimeout(tmr); tmr = setTimeout(function () { st.text.setAttribute('aria-live', 'off'); st.go(st.step); setTimeout(function () { st.text.setAttribute('aria-live', 'polite'); }, 50); }, 200); }); });
+    body.appendChild(el('p', 'sar-text an-title', 'Edita una matriz M cualquiera (enteros), la matriz de paso P y el vector x (deslizadores), o elige un caso. Recorre los pasos: Q(x) = xᵗMx, la matriz simétrica de Q, Q(λx) = λ²Q(x) y el cambio de base S′ = PᵗSP.'));
+    body.appendChild(eq); body.appendChild(P.svg); body.appendChild(ctrl); body.appendChild(pre);
+    root.appendChild(body); st.mount(root, res);
+    cur = model(); st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(st.N); });
+  }
+
+
+  /* =====================================================================
      LU. FACTORIZACION A = LU Y RESOLUCION DE AX = B (tema 1.4)
      ===================================================================== */
   function buildLU(root) {
@@ -1871,7 +1982,7 @@
     window.addEventListener('beforeprint', function () { st.go(steps.length - 1); });
   }
 
-  var REG = [['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  var REG = [['.anim-cuadratica', buildCuadratica], ['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
