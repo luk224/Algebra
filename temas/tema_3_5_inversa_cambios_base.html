@@ -357,19 +357,29 @@
 <details class="sol" id="ej3-32"><summary>Ejercicio 3.32 — $e'_3$ a partir de un vector con dos descripciones (hay dos respuestas correctas) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.32, p. 110">E p.110</span></summary>
   <p class="enun">Sean $B=\{e_1,e_2,e_3\}$ y $B'=\{e'_1,e'_2,e'_3\}$ bases de $\mathbb R^3$ relacionadas por $e'_1=e_1+e_2$ y $e'_2=e_2+e_3$. Si $x$ es un vector tal que $x=(6,5,7)_B=(2,3,4)_{B'}$, entonces $e'_3$ es: A) $(0,0,1)_{B'}$. B) $(1,0,1)_B$. C) $(0,0,1)_B$. D) Ninguna de las anteriores.</p>
   <p><b>Qué se pide.</b> Las bases son <b>abstractas</b> (no sabemos qué vectores son $e_1,e_2,e_3$): solo trabajamos con coeficientes. Conocemos dos vectores de $B'$ en función de $B$, pero no el tercero. El dato que falta lo da un vector $x$ con sus coordenadas en las dos bases. Hay que decidir qué descripciones de $e'_3$ son correctas. <b>Atención: hay dos ciertas.</b></p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Dados dos descripciones del mismo vector $x$ (en $B$ y en $B'$) y la relación parcial entre las bases, hallar las coordenadas de $e'_3$.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. Las coordenadas de un vector en una base son únicas.</dd>
+    <dt>Plan</dt><dd>Dejo $e'_3=(\alpha,\beta,\gamma)_B$ como incógnita, paso $x=(2,3,4)_{B'}$ a la base $B$ sustituyendo los $e'_j$ y igualo con $x=(6,5,7)_B$ coordenada a coordenada.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Opción A (sin cálculos).</b> $e'_3=0e'_1+0e'_2+1e'_3$, luego $e'_3=(0,0,1)_{B'}$ por la Def. 2.10. Es cierto para el tercer vector de <b>cualquier</b> base (E p.109). <b>A es cierta.</b></li>
-    <li><b>Incógnita.</b> $e'_3=\alpha e_1+\beta e_2+\gamma e_3=(\alpha,\beta,\gamma)_B$ (la 3.ª columna de $Q$).</li>
-    <li><b>Dos expresiones de $x$:</b> (i) $x=6e_1+5e_2+7e_3$; (ii) $x=2e'_1+3e'_2+4e'_3$.</li>
+    <li><b>Incógnita.</b>
+      $$e'_3=\alpha e_1+\beta e_2+\gamma e_3=(\alpha,\beta,\gamma)_B\quad\text{(la 3.ª columna de }Q).$$</li>
+    <li><b>Dos expresiones de $x$:</b>
+      $$\text{(i) }x=6e_1+5e_2+7e_3;\qquad\text{(ii) }x=2e'_1+3e'_2+4e'_3.$$</li>
     <li><b>Pasar (ii) a la base $B$</b> sustituyendo los $e'_j$:
-    $$2(e_1+e_2)+3(e_2+e_3)+4(\alpha e_1+\beta e_2+\gamma e_3)=(2+4\alpha)e_1+(5+4\beta)e_2+(3+4\gamma)e_3.$$
-    (Equivale a $x_B=Qx_{B'}$ con $Q=\begin{pmatrix}1&0&\alpha\cr1&1&\beta\cr0&1&\gamma\end{pmatrix}$ y $x_{B'}=(2,3,4)$.)</li>
+      $$2(e_1+e_2)+3(e_2+e_3)+4(\alpha e_1+\beta e_2+\gamma e_3)=(2+4\alpha)e_1+(5+4\beta)e_2+(3+4\gamma)e_3.$$
+      <p>(Equivale a $x_B=Qx_{B'}$ con $Q=\begin{pmatrix}1&0&\alpha\\1&1&\beta\\0&1&\gamma\end{pmatrix}$ y $x_{B'}=(2,3,4)$.)</p></li>
     <li><b>Igualar coordenadas.</b> Son el mismo vector en la misma base $B$; las coordenadas son únicas, luego los coeficientes coinciden:
-    $$\begin{cases}2+4\alpha=6\cr5+4\beta=5\cr3+4\gamma=7\end{cases}\Rightarrow\ \alpha=1,\ \beta=0,\ \gamma=1.$$
-    El sistema tiene solución única porque el coeficiente de $e'_3$ en $x$ es $4\neq0$ (si fuera 0, el dato $x$ no diría nada sobre $e'_3$).</li>
+      $$\begin{cases}2+4\alpha=6\\5+4\beta=5\\3+4\gamma=7\end{cases}\ \Rightarrow\ \alpha=1,\ \beta=0,\ \gamma=1.$$
+      <p>El sistema tiene solución única porque el coeficiente de $e'_3$ en $x$ es $4\neq0$ (si fuera 0, el dato $x$ no diría nada sobre $e'_3$).</p></li>
     <li><b>Opción B.</b> $e'_3=e_1+e_3=(1,0,1)_B$. <b>B es cierta.</b></li>
-    <li><b>Comprobación de que $B'$ es base:</b> $Q=\begin{pmatrix}1&0&1\cr1&1&0\cr0&1&1\end{pmatrix}$, $\det Q=1\cdot1-0+1\cdot1=2\neq0$ ✓.</li>
-    <li><b>Opción C, falsa (contraejemplo).</b> Si fuera $e'_3=e_3=(0,0,1)_B$, entonces $2e'_1+3e'_2+4e'_3=2e_1+5e_2+7e_3=(2,5,7)_B\neq(6,5,7)_B$. C confunde la descripción en $B'$ de la opción A con la descripción en $B$.</li>
+    <li><b>Comprobación de que $B'$ es base:</b>
+      $$Q=\begin{pmatrix}1&0&1\\1&1&0\\0&1&1\end{pmatrix},\qquad\det Q=1\cdot1-0+1\cdot1=2\neq0\ ✓$$</li>
+    <li><b>Opción C, falsa (contraejemplo).</b> Si fuera $e'_3=e_3=(0,0,1)_B$, entonces
+      $$2e'_1+3e'_2+4e'_3=2e_1+5e_2+7e_3=(2,5,7)_B\neq(6,5,7)_B.$$
+      <p>C confunde la descripción en $B'$ de la opción A con la descripción en $B$.</p></li>
     <li><b>Opción D, falsa</b>, porque A y B son ciertas.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> bases abstractas con un vector desconocido: (1) pon el desconocido como $(\alpha,\beta,\gamma)$ en la base antigua; (2) escribe el vector dato en la base nueva y sustituye; (3) iguala coeficientes con su expresión en la antigua (unicidad de coordenadas).</div>
@@ -380,9 +390,18 @@
 <details class="sol" id="ej3-33"><summary>Ejercicio 3.33 — coordenadas canónicas a partir de las de $B'$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.33, p. 111">E p.111</span></summary>
   <p class="enun">Si $B'=\{(1,0,1),(0,1,1),(-1,0,0)\}$ es base de $\mathbb R^3$ y $x_{B'}=(1,2,3)_{B'}$, las coordenadas de $x$ en la base canónica $B$ son: A) $(-1,2,-3)_B$. B) $(-2,2,3)_B$. C) $(2,1,3)_B$. D) Ninguna de las anteriores.</p>
   <p><b>Qué se pide.</b> Nos dan $x$ «descrito» en la base nueva: $(1,2,3)_{B'}$ significa $x=1e'_1+2e'_2+3e'_3$. Hay que obtener su descripción en la canónica, es decir, sus componentes. Es el sentido «de nueva a antigua», el fácil.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Pasar un vector de coordenadas en $B'$ a coordenadas en la base canónica.</dd>
+    <dt>Qué se usa</dt><dd><b>Coordenadas (Def. 2.10):</b> $x_{B'}=(1,2,3)$ significa $x=1\,b'_1+2\,b'_2+3\,b'_3$, con los $b'_j$ ya escritos en la canónica.</dd>
+    <dt>Plan</dt><dd>Hacer esa combinación lineal y comparar el resultado con las opciones.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Significado de las coordenadas</b> (Def. 2.10): $x=1\,(1,0,1)+2\,(0,1,1)+3\,(-1,0,0)$. Los vectores de $B'$ vienen dados por sus componentes, es decir, ya escritos en la canónica.</li>
-    <li><b>Operar:</b> $x=(1+0-3,\ 0+2+0,\ 1+2+0)=(-2,2,3)$. Luego $x=(-2,2,3)_B$.</li>
+    <li><b>Significado de las coordenadas</b> (Def. 2.10):
+      $$x=1\,(1,0,1)+2\,(0,1,1)+3\,(-1,0,0).$$
+      <p>Los vectores de $B'$ vienen dados por sus componentes, es decir, ya escritos en la canónica.</p></li>
+    <li><b>Operar:</b>
+      $$x=(1+0-3,\ 0+2+0,\ 1+2+0)=(-2,2,3),$$
+      <p>luego $x=(-2,2,3)_B$.</p></li>
     <li><b>Opciones.</b> <b>B es la correcta.</b> A y C no coinciden con el cálculo; basta la primera coordenada $x_1=x'_1-x'_3=-2$ (ver E 3.35) para descartar A ($-1$) y C ($2$). D es falsa porque B es cierta.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> de base nueva a canónica, $x=\sum x'_j\,e'_j$: multiplica las coordenadas por los vectores de la base y suma (equivale a $Q\,x_{B'}$).</div>
@@ -392,11 +411,19 @@
 <details class="sol" id="ej3-34"><summary>Ejercicio 3.34 — la matriz $Q_{B'B}$ de cambio de $B'$ a $B$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.34, p. 111">E p.111</span></summary>
   <p class="enun">Utilizando las bases dadas en el Ejercicio 3.33, calcular la matriz $Q_{B'B}$ (para pasar de las coordenadas de un vector cualquiera respecto a $B'$ a las coordenadas respecto a $B$).</p>
   <p><b>Qué se pide.</b> En vez de hacer la cuenta de 3.33 para un vector, la <b>matriz</b> que la hace para cualquier vector: $x_B=Qx_{B'}$. En nuestra notación $Q_{B'B}=Q$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Hallar la matriz de cambio de base de $B'$ a la canónica $B$.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$.</dd>
+    <dt>Plan</dt><dd>Escribir cada vector de $B'$ como columna; no hay nada que resolver porque ya están dados en la canónica.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Interpretación:</b> $Q$ es la matriz de la identidad $i:(\mathbb R^3,B')\to(\mathbb R^3,B)$ (E p.111; autoevaluación U, ítem 9).</li>
-    <li><b>Columnas</b> (Def. 3.14): la columna $j$ es $e'_j$ escrito en $B$. Como $e'_1=(1,0,0)_{B'}=(1,0,1)_B$, $e'_2=(0,1,0)_{B'}=(0,1,1)_B$ y $e'_3=(0,0,1)_{B'}=(-1,0,0)_B$:
-    $$Q=Q_{B'B}=\begin{pmatrix}1&0&-1\cr0&1&0\cr1&1&0\end{pmatrix}.$$</li>
-    <li><b>Control:</b> $\det Q=\begin{vmatrix}1&-1\cr1&0\end{vmatrix}=1\neq0$ (desarrollo por la 2.ª fila): es regular y $B'$ es base. Y $Q\,(1,2,3)^t=(-2,2,3)^t$ reproduce el 3.33.</li>
+    <li><b>Columnas</b> (Def. 3.14): la columna $j$ es $e'_j$ escrito en $B$. Como
+      $$e'_1=(1,0,0)_{B'}=(1,0,1)_B,\quad e'_2=(0,1,0)_{B'}=(0,1,1)_B,\quad e'_3=(0,0,1)_{B'}=(-1,0,0)_B,$$
+      $$Q=Q_{B'B}=\begin{pmatrix}1&0&-1\\0&1&0\\1&1&0\end{pmatrix}.$$</li>
+    <li><b>Control:</b> desarrollando por la 2.ª fila,
+      $$\det Q=\begin{vmatrix}1&-1\\1&0\end{vmatrix}=1\neq0:$$
+      <p>es regular y $B'$ es base. Y $Q\,(1,2,3)^t=(-2,2,3)^t$ reproduce el 3.33.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> si la base antigua es la canónica, $Q$ = los vectores de la base nueva <b>puestos en columnas</b>, tal cual.</div>
   <p><b>Error típico:</b> ponerlos en filas ($Q^t$): $Q^t(1,2,3)^t=(4,5,-1)\neq(-2,2,3)$. <b>Teoría:</b> Def. 3.14, U p.132.</p>
@@ -405,10 +432,16 @@
 <details class="sol" id="ej3-35"><summary>Ejercicio 3.35 — resolver el 3.33 con las ecuaciones del cambio <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.35, p. 112">E p.112</span></summary>
   <p class="enun">Resuélvase el Ejercicio 3.33 utilizando las ecuaciones del cambio de base.</p>
   <p><b>Qué se pide.</b> Lo mismo que 3.33, pero escribiendo primero las <b>ecuaciones</b> $x_B=Qx_{B'}$ y sustituyendo después.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Resolver el 3.33 con las ecuaciones del cambio, $x_B=Qx_{B'}$.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$.</dd>
+    <dt>Plan</dt><dd>Escribir $x_B=Qx_{B'}$ con la $Q$ del 3.34 y sustituir.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Ecuaciones</b> (fila $i$ de $Q$ por $x_{B'}$):
-    $$\begin{pmatrix}x_1\cr x_2\cr x_3\end{pmatrix}=\begin{pmatrix}1&0&-1\cr0&1&0\cr1&1&0\end{pmatrix}\begin{pmatrix}x'_1\cr x'_2\cr x'_3\end{pmatrix}\iff\begin{cases}x_1=x'_1-x'_3\cr x_2=x'_2\cr x_3=x'_1+x'_2\end{cases}$$</li>
-    <li><b>Sustituir</b> $(x'_1,x'_2,x'_3)=(1,2,3)$: $x_1=1-3=-2$, $x_2=2$, $x_3=1+2=3$.</li>
+      $$\begin{pmatrix}x_1\\x_2\\x_3\end{pmatrix}=\begin{pmatrix}1&0&-1\\0&1&0\\1&1&0\end{pmatrix}\begin{pmatrix}x'_1\\x'_2\\x'_3\end{pmatrix}\iff\begin{cases}x_1=x'_1-x'_3\\x_2=x'_2\\x_3=x'_1+x'_2\end{cases}$$</li>
+    <li><b>Sustituir</b> $(x'_1,x'_2,x'_3)=(1,2,3)$:
+      $$x_1=1-3=-2,\qquad x_2=2,\qquad x_3=1+2=3.$$</li>
     <li>$x=(1,2,3)_{B'}=(-2,2,3)_B$: opción B, como en 3.33.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> ecuaciones del cambio = filas de $x_B=Qx_{B'}$; sirven para cualquier vector.</div>
@@ -418,14 +451,24 @@
 <details class="sol" id="ej3-36"><summary>Ejercicio 3.36 — el cambio contrario es la inversa: $Q_{BB'}=Q_{B'B}^{-1}$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.36, p. 112-113">E p.112-113</span></summary>
   <p class="enun">En las mismas condiciones del Ejercicio 3.33, se pide: A) Demostrar que la matriz $Q_{BB'}$ utilizada para pasar de $B$ a $B'$ es la inversa de la matriz $Q_{B'B}$, utilizada para pasar de $B'$ a $B$. B) Encontrar $Q_{BB'}$. C) Escribir las ecuaciones de cambio de base $B$ a base $B'$.</p>
   <p><b>Qué se pide.</b> Ahora el sentido es el difícil: dado un vector por sus componentes, hallar sus coordenadas en $B'$. A) justificar que la matriz de ese cambio es $Q^{-1}$; B) calcularla; C) escribir sus ecuaciones.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Probar que el cambio de $B$ a $B'$ es la inversa del de $B'$ a $B$, calcularlo y escribir sus ecuaciones.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. Si dos matrices cumplen $RQx=x$ para todo $x$, entonces $RQ=I$.</dd>
+    <dt>Plan</dt><dd>Para A, encadenar los dos cambios; para B, despejar la base antigua en función de la nueva (cada $e_i$ como combinación de los $e'_j$) y colocar por columnas; para C, leer las filas.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>A) Demostración.</b> Sea $R=Q_{BB'}$, con $x_{B'}=Rx_B$ para todo $x$. Encadenando: $x_{B'}\xrightarrow{Q}x_B=Qx_{B'}\xrightarrow{R}RQ\,x_{B'}$; como volvemos al mismo vector en la misma base, $RQ\,x_{B'}=x_{B'}$ para <b>todo</b> $x_{B'}$; con los tres vectores de la base canónica de $\mathbb R^3$ se obtiene $RQ=I$. Igual en el otro orden: $QR=I$. Por la definición de inversa, $R=Q^{-1}$. $\square$</li>
-    <li><b>B) Cálculo.</b> Se usa el camino 1 del apartado 3 (despejar): $e_1=-e'_3$, $e_3=e'_1+e'_3$, $e_2=-e'_1+e'_2-e'_3$. Por columnas:
-    $$Q_{BB'}=Q^{-1}=\begin{pmatrix}0&-1&1\cr0&1&0\cr-1&-1&1\end{pmatrix}.$$
-    (El libro resuelve cada columna como un sistema; p. ej. $(1,0,0)=\alpha(1,0,1)+\beta(0,1,1)+\gamma(-1,0,0)$ da $(\alpha,\beta,\gamma)=(0,0,-1)$: son tres sistemas con la misma matriz $Q$. También sirve Gauss-Jordan o la adjunta, con el mismo resultado.)</li>
-    <li><b>Comprobación $Q^{-1}Q=I$</b> (ver apartado 3) y con el vector de 3.33: $Q^{-1}(-2,2,3)^t=(0-2+3,\ 2,\ 2-2+3)=(1,2,3)$ ✓.</li>
+    <li><b>A) Demostración.</b> Sea $R=Q_{BB'}$, con $x_{B'}=Rx_B$ para todo $x$. Encadenando:
+      $$x_{B'}\xrightarrow{Q}x_B=Qx_{B'}\xrightarrow{R}RQ\,x_{B'}.$$
+      <p>Como volvemos al mismo vector en la misma base, $RQ\,x_{B'}=x_{B'}$ para <b>todo</b> $x_{B'}$; con los tres vectores de la base canónica de $\mathbb R^3$ se obtiene $RQ=I$. Igual en el otro orden: $QR=I$. Por la definición de inversa, $R=Q^{-1}$. $\square$</p></li>
+    <li><b>B) Cálculo.</b> Se usa el camino 1 del apartado 3 (despejar):
+      $$e_1=-e'_3,\qquad e_3=e'_1+e'_3,\qquad e_2=-e'_1+e'_2-e'_3.$$
+      <p>Por columnas:</p>
+      $$Q_{BB'}=Q^{-1}=\begin{pmatrix}0&-1&1\\0&1&0\\-1&-1&1\end{pmatrix}.$$
+      <p>(El libro resuelve cada columna como un sistema; p. ej. $(1,0,0)=\alpha(1,0,1)+\beta(0,1,1)+\gamma(-1,0,0)$ da $(\alpha,\beta,\gamma)=(0,0,-1)$: son tres sistemas con la misma matriz $Q$. También sirve Gauss-Jordan o la adjunta, con el mismo resultado.)</p></li>
+    <li><b>Comprobación $Q^{-1}Q=I$</b> (ver apartado 3) y con el vector de 3.33:
+      $$Q^{-1}(-2,2,3)^t=(0-2+3,\ 2,\ 2-2+3)=(1,2,3)\ ✓$$</li>
     <li><b>C) Ecuaciones de $B$ a $B'$</b> (filas de $x_{B'}=Q^{-1}x_B$):
-    $$x'_1=-x_2+x_3,\qquad x'_2=x_2,\qquad x'_3=-x_1-x_2+x_3.$$</li>
+      $$x'_1=-x_2+x_3,\qquad x'_2=x_2,\qquad x'_3=-x_1-x_2+x_3.$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> de antigua a nueva, <b>invierte</b> $Q$. En la práctica, despeja los vectores antiguos en función de los nuevos (U p.137) y pon sus coordenadas en columnas; comprueba siempre $Q^{-1}Q=I$.</div>
   <p><b>Error típico:</b> (a) usar la misma $Q$ para ir de $B$ a $B'$ ($Q(-2,2,3)^t=(-5,2,0)\neq(1,2,3)$); (b) poner las coordenadas del despeje en filas: sale $(Q^{-1})^t$. <b>Teoría:</b> U p.135.</p>
@@ -434,17 +477,29 @@
 <details class="sol" id="ej3-37"><summary>Ejercicio 3.37 — ecuaciones de un endomorfismo respecto de $B'$: $A'=Q^{-1}AQ$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.37, p. 114">E p.114</span></summary>
   <p class="enun">Si $f(x_1,x_2,x_3)=(x_1,\ x_1-x_2,\ x_2-x_1)$ son las ecuaciones de una aplicación lineal referidas a la base canónica $B$, se pide calcular sus ecuaciones referidas a la base $B'=\{(1,0,1),(0,1,1),(-1,0,0)\}$ de ejercicios anteriores.</p>
   <p><b>Qué se pide.</b> $f$ es un <b>endomorfismo</b> de $\mathbb R^3$. «Ecuaciones referidas a $B'$» significa: si un vector tiene coordenadas $(x'_1,x'_2,x'_3)$ en $B'$, qué coordenadas $(y'_1,y'_2,y'_3)$ tiene su imagen <b>también en $B'$</b>. Es decir, la matriz $A'$ de $f$ con $B'$ en la salida y en la llegada.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Pasar las ecuaciones de un endomorfismo de la base canónica a la base $B'$.</dd>
+    <dt>Qué se usa</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Plan</dt><dd>Calcular $A$ en la canónica, tomar $Q$ y $Q^{-1}$ de los ejercicios anteriores, multiplicar en el orden $Q^{-1}AQ$ y comprobar una columna con la Def. 3.4.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Matriz en la canónica</b> (Def. 3.4): $f(1,0,0)=(1,1,-1)$, $f(0,1,0)=(0,-1,1)$, $f(0,0,1)=(0,0,0)$, en columnas:
-    $$A=\begin{pmatrix}1&0&0\cr1&-1&0\cr-1&1&0\end{pmatrix}.$$</li>
-    <li><b>Diagrama</b> (Def. 3.15 con $P=Q$): $x_{B'}\xrightarrow{Q}x_B\xrightarrow{A}(f(x))_B\xrightarrow{Q^{-1}}(f(x))_{B'}$, luego $A'=Q^{-1}AQ$. (En E: $Q_{BB'}\,A\,Q_{B'B}$.)</li>
-    <li><b>Matrices de cambio</b> (de 3.34 y 3.36): $Q=\begin{pmatrix}1&0&-1\cr0&1&0\cr1&1&0\end{pmatrix}$, $Q^{-1}=\begin{pmatrix}0&-1&1\cr0&1&0\cr-1&-1&1\end{pmatrix}$.</li>
+    <li><b>Matriz en la canónica</b> (Def. 3.4):
+      $$f(1,0,0)=(1,1,-1),\quad f(0,1,0)=(0,-1,1),\quad f(0,0,1)=(0,0,0),$$
+      $$A=\begin{pmatrix}1&0&0\\1&-1&0\\-1&1&0\end{pmatrix}.$$</li>
+    <li><b>Diagrama</b> (Def. 3.15 con $P=Q$):
+      $$x_{B'}\xrightarrow{Q}x_B\xrightarrow{A}(f(x))_B\xrightarrow{Q^{-1}}(f(x))_{B'}\ \Rightarrow\ A'=Q^{-1}AQ.$$
+      <p>(En E: $Q_{BB'}\,A\,Q_{B'B}$.)</p></li>
+    <li><b>Matrices de cambio</b> (de 3.34 y 3.36):
+      $$Q=\begin{pmatrix}1&0&-1\\0&1&0\\1&1&0\end{pmatrix},\qquad Q^{-1}=\begin{pmatrix}0&-1&1\\0&1&0\\-1&-1&1\end{pmatrix}.$$</li>
     <li><b>Producto</b> (asociativo, pero sin cambiar el orden). Primero $Q^{-1}A$:
-    $$Q^{-1}A=\begin{pmatrix}-1-1&1+1&0\cr1&-1&0\cr-1-1-1&1+1&0\end{pmatrix}=\begin{pmatrix}-2&2&0\cr1&-1&0\cr-3&2&0\end{pmatrix}.$$
-    Después por $Q$ (columnas $(1,0,1)$, $(0,1,1)$, $(-1,0,0)$):
-    $$A'=(Q^{-1}A)Q=\begin{pmatrix}-2&2&2\cr1&-1&-1\cr-3&2&3\end{pmatrix}.$$</li>
-    <li><b>Ecuaciones en $B'$</b> ($Y'=A'X'$): $y'_1=-2x'_1+2x'_2+2x'_3$, $\ y'_2=x'_1-x'_2-x'_3$, $\ y'_3=-3x'_1+2x'_2+3x'_3$.</li>
-    <li><b>Comprobación por la Def. 3.4</b> (columna $j$ de $A'$ = $f(e'_j)$ en $B'$): $f(e'_1)=f(1,0,1)=(1,1,-1)$ y, con las ecuaciones de 3.36 C, sus coordenadas en $B'$ son $x'_1=-1-1=-2$, $x'_2=1$, $x'_3=-1-1-1=-3$: columna $(-2,1,-3)$ ✓. Igual $f(e'_2)=(0,-1,1)\mapsto(2,-1,2)_{B'}$ ✓ y $f(e'_3)=(-1,-1,1)\mapsto(2,-1,3)_{B'}$ ✓.</li>
+      $$Q^{-1}A=\begin{pmatrix}-1-1&1+1&0\\1&-1&0\\-1-1-1&1+1&0\end{pmatrix}=\begin{pmatrix}-2&2&0\\1&-1&0\\-3&2&0\end{pmatrix}.$$
+      <p>Después por $Q$ (columnas $(1,0,1)$, $(0,1,1)$, $(-1,0,0)$):</p>
+      $$A'=(Q^{-1}A)Q=\begin{pmatrix}-2&2&2\\1&-1&-1\\-3&2&3\end{pmatrix}.$$</li>
+    <li><b>Ecuaciones en $B'$</b> ($Y'=A'X'$):
+      $$y'_1=-2x'_1+2x'_2+2x'_3,\qquad y'_2=x'_1-x'_2-x'_3,\qquad y'_3=-3x'_1+2x'_2+3x'_3.$$</li>
+    <li><b>Comprobación por la Def. 3.4</b> (columna $j$ de $A'$ = $f(e'_j)$ en $B'$): $f(e'_1)=f(1,0,1)=(1,1,-1)$ y, con las ecuaciones de 3.36 C, sus coordenadas en $B'$ son
+      $$x'_1=-1-1=-2,\qquad x'_2=1,\qquad x'_3=-1-1-1=-3:$$
+      <p>columna $(-2,1,-3)$ ✓. Igual $f(e'_2)=(0,-1,1)\mapsto(2,-1,2)_{B'}$ ✓ y $f(e'_3)=(-1,-1,1)\mapsto(2,-1,3)_{B'}$ ✓.</p></li>
     <li><b>Control:</b> $\det A=0$ (columna nula) y $\det A'=0$ (la fila 1 es $-2$ veces la fila 2), como debe ser.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> endomorfismo en una base nueva: $A'=Q^{-1}AQ$ («entro con $Q$, aplico $A$, salgo con $Q^{-1}$»). Comprueba una columna con la Def. 3.4.</div>
@@ -454,22 +509,33 @@
 <details class="sol" id="ej3-38"><summary>Ejercicio 3.38 — $f:\mathbb R^2\to\mathbb R^3$ con cambio de bases en salida y llegada <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.38, p. 115-116">E p.115-116</span></summary>
   <p class="enun">$B=\{e_1,e_2\}$ y $B'=\{e'_1,e'_2\}$ son bases de $\mathbb R^2$ con $e'_1=e_1+e_2$, $e'_2=e_1-e_2$; $U=\{u_1,u_2,u_3\}$ y $U'=\{u'_1,u'_2,u'_3\}$ son bases de $\mathbb R^3$ con $u'_1=u_1+u_3$, $u'_2=u_1-u_2$, $u'_3=u_2$; $f:(\mathbb R^2,B)\to(\mathbb R^3,U)$ es la aplicación lineal tal que $f(1,2)_B=(1,0,1)_U$ y $f(0,1)_B=(2,1,0)_U$. Se pide: A) matriz $A$ asociada a $f$. B) matriz $Q_{B'B}$ del cambio de base $B'$ a $B$. C) matriz $P_{U'U}$ del cambio de $U'$ a $U$. D) matriz $P_{UU'}$ del cambio de $U$ a $U'$. E) matriz $A'$ asociada a $f:(\mathbb R^2,B')\to(\mathbb R^3,U')$.</p>
   <p><b>Qué se pide.</b> El caso general: $f$ va de un espacio a <b>otro</b> y se cambian las bases en los dos. En nuestra notación: B) $Q$, C) $P$, D) $P^{-1}$, E) $A'=P^{-1}AQ$. Es la versión de E del Ej. 3.31 de U, con un dato distinto: $(1,0,1)$ en vez de $(1,0,-1)$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Con cuatro bases (dos en $\mathbb R^2$ y dos en $\mathbb R^3$) y una $f$ dada en las antiguas, hallar $A$, los cuatro cambios de base y la matriz en las bases nuevas.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. <b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Plan</dt><dd>Matriz $A$ por columnas (usando linealidad); $Q$ y $P$ por columnas desde las relaciones; $P^{-1}$ despejando; y $A'=P^{-1}AQ$ comprobando tamaños.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>A) $A$</b> (Def. 3.4: columnas $f(e_1)$, $f(e_2)$ en $U$). $(0,1)_B=e_2$, luego $f(e_2)=(2,1,0)_U$. $(1,2)_B=e_1+2e_2$ y por linealidad $f(e_1)+2f(e_2)=(1,0,1)_U$, así que $f(e_1)=(1,0,1)-2(2,1,0)=(-3,-2,1)_U$:
-    $$A=\begin{pmatrix}-3&2\cr-2&1\cr1&0\end{pmatrix}\ (3\times2).$$
-    Comprobación: $A\binom12=(1,0,1)$ y $A\binom01=(2,1,0)$ ✓.</li>
-    <li><b>B) $Q=Q_{B'B}$</b> (columnas = $e'_j$ en $B$): $e'_1=(1,1)_B$, $e'_2=(1,-1)_B$, luego $Q=\begin{pmatrix}1&1\cr1&-1\end{pmatrix}$.</li>
+    <li><b>A) $A$</b> (Def. 3.4: columnas $f(e_1)$, $f(e_2)$ en $U$). $(0,1)_B=e_2$, luego $f(e_2)=(2,1,0)_U$. $(1,2)_B=e_1+2e_2$ y por linealidad $f(e_1)+2f(e_2)=(1,0,1)_U$, así que
+      $$f(e_1)=(1,0,1)-2(2,1,0)=(-3,-2,1)_U,\qquad A=\begin{pmatrix}-3&2\\-2&1\\1&0\end{pmatrix}\ (3\times2).$$
+      <p>Comprobación: $A\binom12=(1,0,1)$ y $A\binom01=(2,1,0)$ ✓.</p></li>
+    <li><b>B) $Q=Q_{B'B}$</b> (columnas = $e'_j$ en $B$): $e'_1=(1,1)_B$, $e'_2=(1,-1)_B$, luego
+      $$Q=\begin{pmatrix}1&1\\1&-1\end{pmatrix}.$$</li>
     <li><b>C) $P=P_{U'U}$</b> (columnas = $u'_j$ en $U$): $u'_1=(1,0,1)_U$, $u'_2=(1,-1,0)_U$, $u'_3=(0,1,0)_U$:
-    $$P=\begin{pmatrix}1&1&0\cr0&-1&1\cr1&0&0\end{pmatrix},\qquad\det P=1\neq0.$$</li>
-    <li><b>D) $P^{-1}=P_{UU'}$</b> despejando la base antigua (U p.137): $u_2=u'_3$; $u_1=u'_2+u_2=u'_2+u'_3$; $u_3=u'_1-u_1=u'_1-u'_2-u'_3$. Por columnas:
-    $$P^{-1}=\begin{pmatrix}0&0&1\cr1&0&-1\cr1&1&-1\end{pmatrix}.$$
-    Es la misma $P^{-1}$ que en U Ej. 3.31 (mismas relaciones entre $U$ y $U'$).</li>
+      $$P=\begin{pmatrix}1&1&0\\0&-1&1\\1&0&0\end{pmatrix},\qquad\det P=1\neq0.$$</li>
+    <li><b>D) $P^{-1}=P_{UU'}$</b> despejando la base antigua (U p.137):
+      $$u_2=u'_3,\qquad u_1=u'_2+u_2=u'_2+u'_3,\qquad u_3=u'_1-u_1=u'_1-u'_2-u'_3.$$
+      <p>Por columnas:</p>
+      $$P^{-1}=\begin{pmatrix}0&0&1\\1&0&-1\\1&1&-1\end{pmatrix}.$$
+      <p>Es la misma $P^{-1}$ que en U Ej. 3.31 (mismas relaciones entre $U$ y $U'$).</p></li>
     <li><b>E) $A'=P^{-1}AQ$.</b> Tamaños: $(3\times3)(3\times2)(2\times2)=3\times2$ ✓. Primero $AQ$ (sus columnas son $f(e'_1)$, $f(e'_2)$ en $U$):
-    $$AQ=\begin{pmatrix}-3+2&-3-2\cr-2+1&-2-1\cr1&1\end{pmatrix}=\begin{pmatrix}-1&-5\cr-1&-3\cr1&1\end{pmatrix}.$$
-    Luego $P^{-1}$ las pasa a $U'$:
-    $$A'=P^{-1}(AQ)=\begin{pmatrix}1&1\cr-1-1&-5-1\cr-1-1-1&-5-3-1\end{pmatrix}=\begin{pmatrix}1&1\cr-2&-6\cr-3&-9\end{pmatrix}.$$</li>
-    <li><b>Comprobación por la Def. 3.4</b> (columna 1): $f(e'_1)=-u_1-u_2+u_3$ y $1u'_1-2u'_2-3u'_3=(u_1+u_3)-2(u_1-u_2)-3u_2=-u_1-u_2+u_3$ ✓.</li>
-    <li><b>Comprobación con un vector:</b> $(2,3)_{B'}=2e'_1+3e'_2=5e_1-e_2=(5,-1)_B$; $A\binom5{-1}=(-17,-11,5)_U$. Con $A'$: $A'\binom23=(5,-22,-33)_{U'}$ y $P\,(5,-22,-33)^t=(-17,-11,5)_U$ ✓.</li>
+      $$AQ=\begin{pmatrix}-3+2&-3-2\\-2+1&-2-1\\1&1\end{pmatrix}=\begin{pmatrix}-1&-5\\-1&-3\\1&1\end{pmatrix}.$$
+      <p>Luego $P^{-1}$ las pasa a $U'$:</p>
+      $$A'=P^{-1}(AQ)=\begin{pmatrix}1&1\\-1-1&-5-1\\-1-1-1&-5-3-1\end{pmatrix}=\begin{pmatrix}1&1\\-2&-6\\-3&-9\end{pmatrix}.$$</li>
+    <li><b>Comprobación por la Def. 3.4</b> (columna 1): $f(e'_1)=-u_1-u_2+u_3$ y
+      $$1u'_1-2u'_2-3u'_3=(u_1+u_3)-2(u_1-u_2)-3u_2=-u_1-u_2+u_3\ ✓$$</li>
+    <li><b>Comprobación con un vector:</b>
+      $$(2,3)_{B'}=2e'_1+3e'_2=5e_1-e_2=(5,-1)_B;\qquad A\binom5{-1}=(-17,-11,5)_U.$$
+      <p>Con $A'$: $A'\binom23=(5,-22,-33)_{U'}$ y $P\,(5,-22,-33)^t=(-17,-11,5)_U$ ✓.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> $A'=P^{-1}AQ$: $Q$ (vectores nuevos de la <b>salida</b> en columnas) a la derecha; $P^{-1}$ (inversa del cambio de la <b>llegada</b>) a la izquierda. Primero $AQ$, luego $P^{-1}$. Si el producto no «cuadra» en tamaños, has cambiado los papeles de $P$ y $Q$.</div>
   <p><b>Error típico:</b> (a) $Q^{-1}AP$ ni siquiera se puede multiplicar ($2\times2$ por $3\times2$); (b) $PAQ$ tiene el tamaño correcto pero es falso: solo lo detecta una comprobación con un vector; (c) copiar el $A'$ de U Ej. 3.31, que tiene otro dato ($\begin{pmatrix}-1&-1\cr0&-4\cr-1&-7\end{pmatrix}$). <b>Teoría:</b> Def. 3.15, U p.136.</p>
@@ -478,10 +544,17 @@
 <details class="sol" id="ej3-39"><summary>Ejercicio 3.39 — cambio de base en polinomios ($P_3$): se piden las filas <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.39, p. 117">E p.117</span></summary>
   <p class="enun">Si en el espacio vectorial $P_3$ de polinomios de grado menor que cuatro se consideran las bases $B'=\{1,\ x+1,\ (x+1)^2,\ x^3\}$ y la canónica $B=\{1,x,x^2,x^3\}$, es cierto que las <b>filas</b> de la matriz de cambio de base $B'$ a la base $B$ son: A) $(1,1,1,0),(0,1,2,0),(0,0,1,0),(0,0,0,1)$. B) $(1,0,0,0),(1,1,0,0),(1,2,1,0),(0,0,0,1)$. C) $(1,1,0,0),(1,1,0,0),(1,2,1,0),(0,1,0,1)$.</p>
   <p><b>Qué se pide.</b> El mismo método que en $\mathbb R^n$, pero los «vectores» son polinomios. La matriz de cambio de $B'$ a $B$ es nuestra $Q$ ($x_B=Qx_{B'}$), cuyas <b>columnas</b> son los polinomios de $B'$ escritos en $B$. Ojo: se preguntan sus <b>filas</b>.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Decidir cuál de tres matrices es la de cambio de base entre polinomios, dada por filas.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. Atención: las coordenadas van por <b>columnas</b>; leídas por filas son otra cosa.</dd>
+    <dt>Plan</dt><dd>Escribir cada polinomio de $B'$ en coordenadas de la canónica, colocarlo como columna y leer las filas de la matriz resultante.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Coordenadas en la canónica</b> (coeficientes de $1,x,x^2,x^3$ en ese orden, con los ceros): $1=(1,0,0,0)_B$; $x+1=(1,1,0,0)_B$; $(x+1)^2=1+2x+x^2=(1,2,1,0)_B$ (desarrollo del cuadrado); $x^3=(0,0,0,1)_B$.</li>
+    <li><b>Coordenadas en la canónica</b> (coeficientes de $1,x,x^2,x^3$ en ese orden, con los ceros):
+      $$1=(1,0,0,0)_B,\qquad x+1=(1,1,0,0)_B,$$
+      $$(x+1)^2=1+2x+x^2=(1,2,1,0)_B,\qquad x^3=(0,0,0,1)_B.$$</li>
     <li><b>Por columnas</b> (Def. 3.14):
-    $$Q=\begin{pmatrix}1&1&1&0\cr0&1&2&0\cr0&0&1&0\cr0&0&0&1\end{pmatrix}.$$</li>
+      $$Q=\begin{pmatrix}1&1&1&0\\0&1&2&0\\0&0&1&0\\0&0&0&1\end{pmatrix}.$$</li>
     <li><b>Filas:</b> $(1,1,1,0)$, $(0,1,2,0)$, $(0,0,1,0)$, $(0,0,0,1)$: <b>A es cierta</b>.</li>
     <li><b>B es falsa:</b> sus filas son las <b>columnas</b> de $Q$; la matriz de B es $Q^t$ (error de poner las coordenadas por filas). Contraejemplo: $(0,1,0,0)_{B'}=x+1$ tiene coordenadas canónicas $(1,1,0,0)$, la 2.ª columna de $Q$; con la matriz de B saldría su 2.ª columna, $(0,1,2,0)$, es decir $x+2x^2\neq x+1$.</li>
     <li><b>C es falsa:</b> tiene dos filas iguales, luego determinante 0. Una matriz de cambio de base es siempre regular (U p.135): C no puede serlo.</li>
@@ -494,25 +567,39 @@
 <details class="sol" id="ej3-40"><summary>Ejercicio 3.40 — matriz canónica de $f$ conocidas las imágenes de una base no canónica (frontera con 3.3) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.40, p. 118">E p.118</span></summary>
   <p class="enun">Si $f:\mathbb R^3\to\mathbb R^2$ es la aplicación lineal definida por $f(1,0,-1)=(0,3)$, $f(1,-2,3)=(6,-4)$, $f(0,-2,1)=(-3,2)$, se pide calcular la matriz asociada a $f$ respecto las bases canónicas.</p>
   <p><b>Qué se pide.</b> Conocemos las imágenes de una base <b>no canónica</b> $V=\{v_1,v_2,v_3\}$ y queremos la matriz canónica $M$ ($2\times3$), cuyas columnas son $f(e_1)$, $f(e_2)$, $f(e_3)$ (Def. 3.4). El método «de 3.3» (<a href="tema_3_3_ecuaciones_matriz_asociada.html">tema 3.3</a>) es escribir los $e_i$ en función de los $v_j$ y aplicar la linealidad; el «de 3.5» es la fórmula de cambio de base. Se dan los dos.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Hallar la matriz canónica de $f$ conociendo sus valores sobre una base no canónica.</dd>
+    <dt>Qué se usa</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$. Equivalente: si $F$ es la matriz con $V$ en la salida y $Q$ el cambio de $V$ a la canónica, entonces $F=MQ$ y $M=FQ^{-1}$.</dd>
+    <dt>Plan</dt><dd>Comprobar que $V$ es base, obtener $Q^{-1}$ (Gauss-Jordan) y calcular $M=FQ^{-1}$; después comprobar con los tres datos.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>$V$ es base.</b> $Q=\begin{pmatrix}1&1&0\cr0&-2&-2\cr-1&3&1\end{pmatrix}$ (los $v_j$ en columnas). Desarrollo por la 1.ª columna: $\det Q=1\cdot\begin{vmatrix}-2&-2\cr3&1\end{vmatrix}+(-1)\begin{vmatrix}1&0\cr-2&-2\end{vmatrix}=4+2=6\neq0$ ✓. $Q$ es el cambio de $V$ a la canónica: $x_C=Q\,x_V$.</li>
+    <li><b>$V$ es base.</b> Los $v_j$ en columnas:
+      $$Q=\begin{pmatrix}1&1&0\\0&-2&-2\\-1&3&1\end{pmatrix}.$$
+      <p>Desarrollo por la 1.ª columna:</p>
+      $$\det Q=1\cdot\begin{vmatrix}-2&-2\\3&1\end{vmatrix}+(-1)\begin{vmatrix}1&0\\-2&-2\end{vmatrix}=4+2=6\neq0\ ✓$$
+      <p>$Q$ es el cambio de $V$ a la canónica: $x_C=Q\,x_V$.</p></li>
     <li><b>Coordenadas de $e_1,e_2,e_3$ en $V$ = columnas de $Q^{-1}$</b> (U p.135), por Gauss-Jordan (U p.18). Se anula la columna 1 con $F_3+F_1$, se normaliza el pivote de la 2.ª fila con $-\tfrac12F_2$, se anula con $F_3-4F_2$, se normaliza con $-\tfrac13F_3$ y se limpia hacia arriba:
-    $$\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&-2&-2&0&1&0\cr-1&3&1&0&0&1\end{array}\right)\xrightarrow{F_3+F_1}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&-2&-2&0&1&0\cr0&4&1&1&0&1\end{array}\right)\xrightarrow{-\frac12F_2}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&1&1&0&-\frac12&0\cr0&4&1&1&0&1\end{array}\right)$$
-    $$\xrightarrow{F_3-4F_2}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&1&1&0&-\frac12&0\cr0&0&-3&1&2&1\end{array}\right)\xrightarrow{-\frac13F_3}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&1&1&0&-\frac12&0\cr0&0&1&-\frac13&-\frac23&-\frac13\end{array}\right)$$
-    $$\xrightarrow{F_2-F_3}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&1&0&\frac13&\frac16&\frac13\cr0&0&1&-\frac13&-\frac23&-\frac13\end{array}\right)\xrightarrow{F_1-F_2}\left(\begin{array}{ccc|ccc}1&0&0&\frac23&-\frac16&-\frac13\cr0&1&0&\frac13&\frac16&\frac13\cr0&0&1&-\frac13&-\frac23&-\frac13\end{array}\right).$$
-    Es decir, $e_1=\tfrac23v_1+\tfrac13v_2-\tfrac13v_3$, $e_2=-\tfrac16v_1+\tfrac16v_2-\tfrac23v_3$, $e_3=-\tfrac13v_1+\tfrac13v_2-\tfrac13v_3$, las combinaciones que da E.</li>
+      $$\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\\0&-2&-2&0&1&0\\-1&3&1&0&0&1\end{array}\right)\xrightarrow{F_3+F_1}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\\0&-2&-2&0&1&0\\0&4&1&1&0&1\end{array}\right)\xrightarrow{-\frac12F_2}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\\0&1&1&0&-\frac12&0\\0&4&1&1&0&1\end{array}\right)$$
+      $$\xrightarrow{F_3-4F_2}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\\0&1&1&0&-\frac12&0\\0&0&-3&1&2&1\end{array}\right)\xrightarrow{-\frac13F_3}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\\0&1&1&0&-\frac12&0\\0&0&1&-\frac13&-\frac23&-\frac13\end{array}\right)$$
+      $$\xrightarrow{F_2-F_3}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\\0&1&0&\frac13&\frac16&\frac13\\0&0&1&-\frac13&-\frac23&-\frac13\end{array}\right)\xrightarrow{F_1-F_2}\left(\begin{array}{ccc|ccc}1&0&0&\frac23&-\frac16&-\frac13\\0&1&0&\frac13&\frac16&\frac13\\0&0&1&-\frac13&-\frac23&-\frac13\end{array}\right).$$
+      <p>Es decir:</p>
+      $$e_1=\tfrac23v_1+\tfrac13v_2-\tfrac13v_3,\quad e_2=-\tfrac16v_1+\tfrac16v_2-\tfrac23v_3,\quad e_3=-\tfrac13v_1+\tfrac13v_2-\tfrac13v_3,$$
+      <p>las combinaciones que da E.</p></li>
     <li><b>Método de 3.3 (linealidad):</b>
-      <ul>
-        <li>$f(e_1)=\tfrac23(0,3)+\tfrac13(6,-4)-\tfrac13(-3,2)=(3,0)$;</li>
-        <li>$f(e_2)=-\tfrac16(0,3)+\tfrac16(6,-4)-\tfrac23(-3,2)=(3,-\tfrac52)$;</li>
-        <li>$f(e_3)=-\tfrac13(0,3)+\tfrac13(6,-4)-\tfrac13(-3,2)=(3,-3)$.</li>
-      </ul>
-    $$M=\begin{pmatrix}3&3&3\cr0&-\frac52&-3\end{pmatrix}.$$</li>
-    <li><b>Método de 3.5 (Def. 3.15).</b> Sea $F=\begin{pmatrix}0&6&-3\cr3&-4&2\end{pmatrix}$ (columnas $f(v_j)$ en la canónica de $\mathbb R^2$): es la matriz de $f$ con $V$ en la salida y la canónica en la llegada. Tomando como «antiguas» las canónicas (matriz $M$), como «nueva» $V$ en la salida (cambio $Q$) y la canónica en la llegada (cambio $P=I$), la fórmula da $F=I^{-1}MQ=MQ$. Despejando ($Q$ regular):
-    $$M=F\,Q^{-1}=\begin{pmatrix}0&6&-3\cr3&-4&2\end{pmatrix}\begin{pmatrix}\frac23&-\frac16&-\frac13\cr\frac13&\frac16&\frac13\cr-\frac13&-\frac23&-\frac13\end{pmatrix}=\begin{pmatrix}3&3&3\cr0&-\frac52&-3\end{pmatrix}.$$
-    Es el producto «$AB$» de E p.118 (allí $A=F$ y $B=Q^{-1}$).</li>
-    <li><b>Comprobación:</b> $M(1,0,-1)^t=(0,3)$ ✓; $M(1,-2,3)^t=(3-6+9,\ 5-9)=(6,-4)$ ✓; $M(0,-2,1)^t=(-6+3,\ 5-3)=(-3,2)$ ✓.</li>
-    <li><b>Observación de E.</b> Con $V$ en la salida y $S'=\{(0,3),(-3,2)\}$ en la llegada, $P=\begin{pmatrix}0&-3\cr3&2\end{pmatrix}$ ($\det P=9$) y la matriz es $P^{-1}MQ=P^{-1}F=\begin{pmatrix}1&0&0\cr0&-2&1\end{pmatrix}$. Directamente: $f(v_1)=(0,3)=1\cdot(0,3)+0\cdot(-3,2)$; $f(v_2)=(6,-4)=0\cdot(0,3)-2\cdot(-3,2)$; $f(v_3)=(-3,2)=0\cdot(0,3)+1\cdot(-3,2)$ ✓.</li>
+      $$f(e_1)=\tfrac23(0,3)+\tfrac13(6,-4)-\tfrac13(-3,2)=(3,0),$$
+      $$f(e_2)=-\tfrac16(0,3)+\tfrac16(6,-4)-\tfrac23(-3,2)=(3,-\tfrac52),$$
+      $$f(e_3)=-\tfrac13(0,3)+\tfrac13(6,-4)-\tfrac13(-3,2)=(3,-3).$$
+      $$M=\begin{pmatrix}3&3&3\\0&-\frac52&-3\end{pmatrix}.$$</li>
+    <li><b>Método de 3.5 (Def. 3.15).</b> Sea
+      $$F=\begin{pmatrix}0&6&-3\\3&-4&2\end{pmatrix}$$
+      <p>(columnas $f(v_j)$ en la canónica de $\mathbb R^2$): es la matriz de $f$ con $V$ en la salida y la canónica en la llegada. Tomando como «antiguas» las canónicas (matriz $M$), como «nueva» $V$ en la salida (cambio $Q$) y la canónica en la llegada (cambio $P=I$), la fórmula da $F=I^{-1}MQ=MQ$. Despejando ($Q$ regular):</p>
+      $$M=F\,Q^{-1}=\begin{pmatrix}0&6&-3\\3&-4&2\end{pmatrix}\begin{pmatrix}\frac23&-\frac16&-\frac13\\\frac13&\frac16&\frac13\\-\frac13&-\frac23&-\frac13\end{pmatrix}=\begin{pmatrix}3&3&3\\0&-\frac52&-3\end{pmatrix}.$$
+      <p>Es el producto «$AB$» de E p.118 (allí $A=F$ y $B=Q^{-1}$).</p></li>
+    <li><b>Comprobación:</b>
+      $$M(1,0,-1)^t=(0,3)\ ✓,\qquad M(1,-2,3)^t=(3-6+9,\ 5-9)=(6,-4)\ ✓,\qquad M(0,-2,1)^t=(-6+3,\ 5-3)=(-3,2)\ ✓$$</li>
+    <li><b>Observación de E.</b> Con $V$ en la salida y $S'=\{(0,3),(-3,2)\}$ en la llegada,
+      $$P=\begin{pmatrix}0&-3\\3&2\end{pmatrix}\ (\det P=9),\qquad P^{-1}MQ=P^{-1}F=\begin{pmatrix}1&0&0\\0&-2&1\end{pmatrix}.$$
+      <p>Directamente: $f(v_1)=(0,3)=1\cdot(0,3)+0\cdot(-3,2)$; $f(v_2)=(6,-4)=0\cdot(0,3)-2\cdot(-3,2)$; $f(v_3)=(-3,2)=0\cdot(0,3)+1\cdot(-3,2)$ ✓.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> imágenes de una base no canónica $V$ $\Rightarrow$ matriz canónica $M=F\,Q^{-1}$, con $F$ = imágenes en columnas y $Q$ = vectores de $V$ en columnas. Alternativa que evita fracciones intermedias: resolver $MQ=F$ fila a fila (cada fila de $M$ cumple un sistema $3\times3$ con matriz $Q^t$).</div>
   <p><b>Error típico:</b> (a) tomar $F$ como si fuese la matriz canónica; (b) multiplicar $FQ$ en vez de $FQ^{-1}$; (c) llamar a $Q^{-1}$ «cambio de $V$ a la canónica», como hace E: con el convenio de la Def. 3.14 ese nombre corresponde a $Q$. <b>Teoría:</b> Def. 3.4 (U p.116), U p.135-136.</p>
@@ -523,10 +610,23 @@
 <details class="sol" id="ej-propio-1"><summary>Ejemplo propio 1 (fácil) — coordenadas en los dos sentidos, con $Q$ y $Q^{-1}$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <p class="enun">En $\mathbb R^2$, sea $C$ la base canónica y $B'=\{(2,1),(1,1)\}$. (a) Matriz de cambio de $B'$ a $C$. (b) Componentes del vector $x=(1,3)_{B'}$. (c) Coordenadas en $B'$ de $y=(3,1)$. (d) Interpreta las columnas de $Q^{-1}$.</p>
   <p><b>Qué se pide.</b> Practicar los dos sentidos: nueva $\to$ antigua (multiplicar) y antigua $\to$ nueva (invertir).</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Calcular coordenadas en los dos sentidos con $Q$ y $Q^{-1}$.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. De nueva a antigua se multiplica por $Q$; de antigua a nueva, por $Q^{-1}$.</dd>
+    <dt>Plan</dt><dd>Construir $Q$ con los vectores de $B'$, multiplicar para (b), invertir para (c) e interpretar las columnas de $Q^{-1}$.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>$Q$:</b> columnas = vectores de $B'$ (Def. 3.14): $Q=\begin{pmatrix}2&1\cr1&1\end{pmatrix}$, $\det Q=2-1=1\neq0$ (dos vectores con rango 2 son base de $\mathbb R^2$).</li>
-    <li><b>(b) De nueva a antigua, multiplicar:</b> $x_C=Q\binom13=\binom{2+3}{1+3}=\binom54$. Comprobación: $1(2,1)+3(1,1)=(5,4)$ ✓.</li>
-    <li><b>(c) De antigua a nueva, invertir.</b> Fórmula $2\times2$: $Q^{-1}=\frac11\begin{pmatrix}1&-1\cr-1&2\end{pmatrix}$. $y_{B'}=Q^{-1}\binom31=\binom{3-1}{-3+2}=\binom2{-1}$. Comprobación: $2(2,1)-1(1,1)=(3,1)$ ✓.</li>
+    <li><b>$Q$:</b> columnas = vectores de $B'$ (Def. 3.14):
+      $$Q=\begin{pmatrix}2&1\\1&1\end{pmatrix},\qquad\det Q=2-1=1\neq0$$
+      <p>(dos vectores con rango 2 son base de $\mathbb R^2$).</p></li>
+    <li><b>(b) De nueva a antigua, multiplicar:</b>
+      $$x_C=Q\binom13=\binom{2+3}{1+3}=\binom54.$$
+      <p>Comprobación: $1(2,1)+3(1,1)=(5,4)$ ✓.</p></li>
+    <li><b>(c) De antigua a nueva, invertir.</b> Fórmula $2\times2$:
+      $$Q^{-1}=\frac11\begin{pmatrix}1&-1\\-1&2\end{pmatrix}.$$
+      <p>Entonces:</p>
+      $$y_{B'}=Q^{-1}\binom31=\binom{3-1}{-3+2}=\binom2{-1}.$$
+      <p>Comprobación: $2(2,1)-1(1,1)=(3,1)$ ✓.</p></li>
     <li><b>(d)</b> La 2.ª columna de $Q^{-1}$ es $(-1,2)$: es $e_2=(0,1)$ escrito en $B'$, pues $-(2,1)+2(1,1)=(0,1)$ ✓. Las columnas de $Q^{-1}$ son la base <b>antigua</b> escrita en la <b>nueva</b>.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> nueva $\to$ antigua: $Q\,x'$. Antigua $\to$ nueva: $Q^{-1}x$ (o resolver el sistema $Qx'=x$). Comprueba siempre con la combinación lineal.</div>
@@ -535,13 +635,25 @@
 <details class="sol" id="ej-propio-2"><summary>Ejemplo propio 2 (medio) — endomorfismo, $A'=Q^{-1}AQ$, y por qué el orden importa <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <p class="enun">Sea $f(x,y)=(3x+y,\ 2x)$ y $B'=\{(1,1),(2,1)\}$. Halla la matriz de $f$ en la base $B'$ con la fórmula y compruébala con la Def. 3.4 y con un vector.</p>
   <p><b>Qué se pide.</b> Matriz $A'$ de un endomorfismo de $\mathbb R^2$ en una base nueva, con comprobación.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Hallar la matriz de un endomorfismo en una base nueva y ver que el orden $Q^{-1}AQ$ importa.</dd>
+    <dt>Qué se usa</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Plan</dt><dd>Calcular $A$, $Q$, $Q^{-1}$; multiplicar primero $AQ$ y luego $Q^{-1}(AQ)$; comprobar con la Def. 3.4 y con un vector.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Matrices:</b> $A=\begin{pmatrix}3&1\cr2&0\end{pmatrix}$ (canónica) y $Q=\begin{pmatrix}1&2\cr1&1\end{pmatrix}$, $\det Q=1-2=-1\neq0$, $Q^{-1}=\frac1{-1}\begin{pmatrix}1&-2\cr-1&1\end{pmatrix}=\begin{pmatrix}-1&2\cr1&-1\end{pmatrix}$.</li>
-    <li><b>$AQ$</b> (columnas $f(1,1)=(4,2)$ y $f(2,1)=(7,4)$): $AQ=\begin{pmatrix}3+1&6+1\cr2&4\end{pmatrix}=\begin{pmatrix}4&7\cr2&4\end{pmatrix}$.</li>
-    <li><b>$A'=Q^{-1}(AQ)$:</b> $A'=\begin{pmatrix}-4+4&-7+8\cr4-2&7-4\end{pmatrix}=\begin{pmatrix}0&1\cr2&3\end{pmatrix}$.</li>
-    <li><b>Comprobación con la Def. 3.4:</b> $f(1,1)=(4,2)=a(1,1)+b(2,1)$: $a+2b=4$, $a+b=2$ $\Rightarrow b=2$, $a=0$: columna $(0,2)$ ✓. $f(2,1)=(7,4)$: $a+2b=7$, $a+b=4\Rightarrow b=3$, $a=1$: columna $(1,3)$ ✓.</li>
-    <li><b>Con un vector:</b> $(1,1)_{B'}=(1,1)+(2,1)=(3,2)$ y $f(3,2)=(11,6)$. Con $A'$: $A'\binom11=\binom15_{B'}$, y $1(1,1)+5(2,1)=(11,6)$ ✓.</li>
-    <li><b>Controles y trampa:</b> $\det A'=-2=\det A$ y traza $3=3$. Pero el orden equivocado $QAQ^{-1}=\begin{pmatrix}-6&13\cr-4&9\end{pmatrix}$ <b>también</b> tiene determinante $-2$ y traza 3: esos controles no detectan el error, los pasos 4 o 5 sí.</li>
+    <li><b>Matrices:</b>
+      $$A=\begin{pmatrix}3&1\\2&0\end{pmatrix}\ (\text{canónica}),\qquad Q=\begin{pmatrix}1&2\\1&1\end{pmatrix},\qquad\det Q=1-2=-1\neq0,$$
+      $$Q^{-1}=\frac1{-1}\begin{pmatrix}1&-2\\-1&1\end{pmatrix}=\begin{pmatrix}-1&2\\1&-1\end{pmatrix}.$$</li>
+    <li><b>$AQ$</b> (columnas $f(1,1)=(4,2)$ y $f(2,1)=(7,4)$):
+      $$AQ=\begin{pmatrix}3+1&6+1\\2&4\end{pmatrix}=\begin{pmatrix}4&7\\2&4\end{pmatrix}.$$</li>
+    <li><b>$A'=Q^{-1}(AQ)$:</b>
+      $$A'=\begin{pmatrix}-4+4&-7+8\\4-2&7-4\end{pmatrix}=\begin{pmatrix}0&1\\2&3\end{pmatrix}.$$</li>
+    <li><b>Comprobación con la Def. 3.4:</b> $f(1,1)=(4,2)=a(1,1)+b(2,1)$ da $a+2b=4$, $a+b=2$, luego $b=2$, $a=0$: columna $(0,2)$ ✓. $f(2,1)=(7,4)$ da $a+2b=7$, $a+b=4$, luego $b=3$, $a=1$: columna $(1,3)$ ✓.</li>
+    <li><b>Con un vector:</b> $(1,1)_{B'}=(1,1)+(2,1)=(3,2)$ y $f(3,2)=(11,6)$. Con $A'$:
+      $$A'\binom11=\binom15_{B'},\qquad1(1,1)+5(2,1)=(11,6)\ ✓$$</li>
+    <li><b>Controles y trampa:</b> $\det A'=-2=\det A$ y traza $3=3$. Pero el orden equivocado
+      $$QAQ^{-1}=\begin{pmatrix}-6&13\\-4&9\end{pmatrix}$$
+      <p><b>también</b> tiene determinante $-2$ y traza 3: esos controles no detectan el error, los pasos 4 o 5 sí.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> $A'=Q^{-1}AQ$; comprueba una columna con la Def. 3.4 y un vector. $\det$ y traza solo son controles débiles.</div>
 </details>
@@ -549,14 +661,24 @@
 <details class="sol" id="ej-propio-3"><summary>Ejemplo propio 3 (tipo examen) — $f:\mathbb R^2\to\mathbb R^3$ con bases distintas, $A'=P^{-1}AQ$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <p class="enun">Sea $f(x,y)=(x+y,\ 2x,\ x-y)$. En $\mathbb R^2$ se toma $B'=\{(1,1),(0,1)\}$ y en $\mathbb R^3$, $S'=\{(1,0,0),(1,1,0),(0,1,1)\}$. (a) Matriz $A'$ de $f$ en $B'$ y $S'$. (b) Imagen en $S'$ del vector $(2,-1)_{B'}$, con comprobación.</p>
   <p><b>Qué se pide.</b> Aplicar la Def. 3.15 con espacios de salida y llegada distintos, y comprobar con un vector.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Matriz de $f:\mathbb R^2\to\mathbb R^3$ cuando se cambian las bases de partida y de llegada.</dd>
+    <dt>Qué se usa</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Plan</dt><dd>Matriz canónica $A$, cambios $Q$ (salida) y $P$ (llegada), $P^{-1}$ despejando, $A'=P^{-1}AQ$ y comprobación de una columna y de un vector.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Canónicas:</b> $A=\begin{pmatrix}1&1\cr2&0\cr1&-1\end{pmatrix}$ ($3\times2$).</li>
-    <li><b>Cambios:</b> salida $Q=\begin{pmatrix}1&0\cr1&1\end{pmatrix}$; llegada $P=\begin{pmatrix}1&1&0\cr0&1&1\cr0&0&1\end{pmatrix}$ (triangular, $\det P=1$).</li>
-    <li><b>$P^{-1}$ despejando</b> (U p.137): $e_1=s'_1$; $e_2=s'_2-s'_1$; $e_3=s'_3-e_2=s'_1-s'_2+s'_3$. Por columnas, $P^{-1}=\begin{pmatrix}1&-1&1\cr0&1&-1\cr0&0&1\end{pmatrix}$ ($PP^{-1}=I$ ✓).</li>
-    <li><b>$AQ$</b> (columnas $f(1,1)$, $f(0,1)$): $AQ=\begin{pmatrix}2&1\cr2&0\cr0&-1\end{pmatrix}$, y
-    $$A'=P^{-1}AQ=\begin{pmatrix}2-2+0&1-0-1\cr2-0&0+1\cr0&-1\end{pmatrix}=\begin{pmatrix}0&0\cr2&1\cr0&-1\end{pmatrix}.$$</li>
-    <li><b>Def. 3.4 (columna 2):</b> $f(0,1)=(1,0,-1)=\alpha(1,0,0)+\beta(1,1,0)+\gamma(0,1,1)$: $\gamma=-1$, $\beta+\gamma=0\Rightarrow\beta=1$, $\alpha+\beta=1\Rightarrow\alpha=0$: $(0,1,-1)$ ✓.</li>
-    <li><b>(b)</b> $A'\binom2{-1}=\begin{pmatrix}0\cr3\cr1\end{pmatrix}_{S'}$, que en canónicas es $3(1,1,0)+1(0,1,1)=(3,4,1)$. Directamente: $(2,-1)_{B'}=2(1,1)-(0,1)=(2,1)$ y $f(2,1)=(3,4,1)$ ✓.</li>
+    <li><b>Canónicas:</b>
+      $$A=\begin{pmatrix}1&1\\2&0\\1&-1\end{pmatrix}\ (3\times2).$$</li>
+    <li><b>Cambios:</b> salida y llegada,
+      $$Q=\begin{pmatrix}1&0\\1&1\end{pmatrix},\qquad P=\begin{pmatrix}1&1&0\\0&1&1\\0&0&1\end{pmatrix}\ (\text{triangular},\ \det P=1).$$</li>
+    <li><b>$P^{-1}$ despejando</b> (U p.137): $e_1=s'_1$; $e_2=s'_2-s'_1$; $e_3=s'_3-e_2=s'_1-s'_2+s'_3$. Por columnas:
+      $$P^{-1}=\begin{pmatrix}1&-1&1\\0&1&-1\\0&0&1\end{pmatrix}\quad(PP^{-1}=I\ ✓).$$</li>
+    <li><b>$AQ$</b> (columnas $f(1,1)$, $f(0,1)$):
+      $$AQ=\begin{pmatrix}2&1\\2&0\\0&-1\end{pmatrix},\qquad A'=P^{-1}AQ=\begin{pmatrix}2-2+0&1-0-1\\2-0&0+1\\0&-1\end{pmatrix}=\begin{pmatrix}0&0\\2&1\\0&-1\end{pmatrix}.$$</li>
+    <li><b>Def. 3.4 (columna 2):</b> $f(0,1)=(1,0,-1)=\alpha(1,0,0)+\beta(1,1,0)+\gamma(0,1,1)$ da $\gamma=-1$, $\beta+\gamma=0\Rightarrow\beta=1$, $\alpha+\beta=1\Rightarrow\alpha=0$: $(0,1,-1)$ ✓.</li>
+    <li><b>(b)</b>
+      $$A'\binom2{-1}=\begin{pmatrix}0\\3\\1\end{pmatrix}_{S'},$$
+      <p>que en canónicas es $3(1,1,0)+1(0,1,1)=(3,4,1)$. Directamente: $(2,-1)_{B'}=2(1,1)-(0,1)=(2,1)$ y $f(2,1)=(3,4,1)$ ✓.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> $A$ en canónicas; $Q$ y $P$ por columnas; $P^{-1}$ despejando; $A'=P^{-1}AQ$; comprueba con un vector (como $A'$ no es cuadrada no sirve comparar determinantes).</div>
   <p><b>Error típico:</b> $Q^{-1}AP$ no existe ($2\times2$ por $3\times2$): si el producto «no cuadra», se han cambiado los papeles de $P$ y $Q$.</p>
@@ -565,13 +687,28 @@
 <details class="sol" id="ej-propio-4"><summary>Ejemplo propio 4 (anticipo) — la matriz inversa como cambio de base inverso y la aplicación inversa <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; anticipo no incluido en U">propio</span></summary>
   <p class="enun">Sea $f(x,y,z)=(x+2y,\ y,\ x+z)$ con matriz canónica $A$. (a) Calcula $A^{-1}$ interpretando $A$ como una matriz de cambio de base (método de U p.137). (b) Deduce una aplicación lineal $g$ con $g\circ f=f\circ g=\mathrm{id}$. (c) ¿Qué pasa con $h(x,y)=(x+y,\ 2x+2y)$?</p>
   <p><b>Qué se pide.</b> Ver que «invertir una matriz» es «cambiar de base en sentido contrario», y que eso deshace la aplicación. <b>(Anticipo marcado: U no trata la aplicación inversa.)</b></p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Calcular $A^{-1}$ viendo $A$ como matriz de cambio de base, y deducir la aplicación inversa.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. La inversa de una matriz de cambio de base es el cambio contrario. $g\circ f=f\circ g=\mathrm{id}\iff$ sus matrices son inversas.</dd>
+    <dt>Plan</dt><dd>Interpretar las columnas de $A$ como una base $B'$; despejar los vectores canónicos en función de ella (columnas de $A^{-1}$); definir $g$ con esa matriz.</dd>
+  </dl></div>
   <ol class="steps">
-    <li>$A=\begin{pmatrix}1&2&0\cr0&1&0\cr1&0&1\end{pmatrix}$. Desarrollo por la 2.ª fila: $\det A=1\neq0$. Sus columnas $b_1=(1,0,1)$, $b_2=(2,1,0)$, $b_3=(0,0,1)$ son 3 vectores de rango 3: forman una base $B'$, y $A$ es exactamente la matriz de cambio de $B'$ a la canónica.</li>
-    <li><b>(a)</b> $A^{-1}$ es el cambio contrario: sus columnas son $e_1,e_2,e_3$ escritos en $B'$. Despejando: $e_3=b_3$; $e_1=b_1-e_3=b_1-b_3$; $e_2=b_2-2e_1=-2b_1+b_2+2b_3$. Por columnas:
-    $$A^{-1}=\begin{pmatrix}1&-2&0\cr0&1&0\cr-1&2&1\end{pmatrix},\qquad AA^{-1}=I\ ✓.$$
-    Es el objetivo de U p.131: «calcular la matriz inversa como la matriz asociada al cambio de base inverso».</li>
-    <li><b>(b)</b> Sea $g$ la aplicación de matriz $A^{-1}$: $g(a,b,c)=(a-2b,\ b,\ -a+2b+c)$. La matriz de $f\circ g$ es $AA^{-1}=I$ y la de $g\circ f$ es $A^{-1}A=I$ (Def. 3.12): ambas son la identidad. Comprobación: $f(g(a,b,c))=\big((a-2b)+2b,\ b,\ (a-2b)+(-a+2b+c)\big)=(a,b,c)$ ✓ y $g(f(x,y,z))=(x,y,z)$ ✓. Esa $g$ es la <b>aplicación inversa</b> $f^{-1}$.</li>
-    <li><b>(c)</b> $H=\begin{pmatrix}1&1\cr2&2\end{pmatrix}$, $\det H=0$: no es regular y sus columnas no forman base. Además $h(1,-1)=(0,0)=h(0,0)$: dos vectores distintos con la misma imagen ($\operatorname{Nuc}h=\langle(-1,1)\rangle\neq\{0\}$, tema 3.2); ninguna $g$ puede «deshacer» $h$.</li>
+    <li>La matriz y su determinante (desarrollo por la 2.ª fila):
+      $$A=\begin{pmatrix}1&2&0\\0&1&0\\1&0&1\end{pmatrix},\qquad\det A=1\neq0.$$
+      <p>Sus columnas $b_1=(1,0,1)$, $b_2=(2,1,0)$, $b_3=(0,0,1)$ son 3 vectores de rango 3: forman una base $B'$, y $A$ es exactamente la matriz de cambio de $B'$ a la canónica.</p></li>
+    <li><b>(a)</b> $A^{-1}$ es el cambio contrario: sus columnas son $e_1,e_2,e_3$ escritos en $B'$. Despejando:
+      $$e_3=b_3,\qquad e_1=b_1-e_3=b_1-b_3,\qquad e_2=b_2-2e_1=-2b_1+b_2+2b_3.$$
+      <p>Por columnas:</p>
+      $$A^{-1}=\begin{pmatrix}1&-2&0\\0&1&0\\-1&2&1\end{pmatrix},\qquad AA^{-1}=I\ ✓$$
+      <p>Es el objetivo de U p.131: «calcular la matriz inversa como la matriz asociada al cambio de base inverso».</p></li>
+    <li><b>(b)</b> Sea $g$ la aplicación de matriz $A^{-1}$:
+      $$g(a,b,c)=(a-2b,\ b,\ -a+2b+c).$$
+      <p>La matriz de $f\circ g$ es $AA^{-1}=I$ y la de $g\circ f$ es $A^{-1}A=I$ (Def. 3.12): ambas son la identidad. Comprobación:</p>
+      $$f(g(a,b,c))=\big((a-2b)+2b,\ b,\ (a-2b)+(-a+2b+c)\big)=(a,b,c)\ ✓$$
+      <p>y $g(f(x,y,z))=(x,y,z)$ ✓. Esa $g$ es la <b>aplicación inversa</b> $f^{-1}$.</p></li>
+    <li><b>(c)</b>
+      $$H=\begin{pmatrix}1&1\\2&2\end{pmatrix},\qquad\det H=0:$$
+      <p>no es regular y sus columnas no forman base. Además $h(1,-1)=(0,0)=h(0,0)$: dos vectores distintos con la misma imagen ($\operatorname{Nuc}h=\langle(-1,1)\rangle\neq\{0\}$, tema 3.2); ninguna $g$ puede «deshacer» $h$.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> $f$ endomorfismo de $\mathbb R^n$ con matriz $A$: tiene inversa $\iff\det A\neq0$, y entonces la matriz de $f^{-1}$ es $A^{-1}$; $A^{-1}$ = coordenadas de la base canónica en la base formada por las columnas de $A$.</div>
 </details>
@@ -587,14 +724,23 @@
 <details class="sol" id="ex-feb17a-3"><summary>Feb. 2017 (2.ª sem., tipo A), ejercicio 3 — determinante de la matriz de cambio de $U$ a $U'$ <span class="src" data-l="X" data-ref="Feb. 2017 (2.ª sem., tipo A), ejercicio 3">X Feb. 2017 (A) ej. 3</span></summary>
   <p class="enun">Si $U=\{\bar u_1,\bar u_2,\bar u_3\}$ y $U'=\{\bar u'_1,\bar u'_2,\bar u'_3\}$ son bases de $\mathbb R^3$, cuyos vectores están relacionados por $\bar u'_1=\bar u_1+\bar u_3$; $\bar u'_2=\bar u_1-\bar u_2$ y $\bar u'_3=\bar u_2$, es cierto que el determinante de la matriz asociada al cambio de la base $U$ a la base $U'$ es: A) 1; B) $-1$; C) 0; D) Otro diferente.</p>
   <p><b>Qué se pide.</b> Hay dos bases de $\mathbb R^3$, una «antigua» $U$ y una «nueva» $U'$, y se dice cómo se escribe cada vector nuevo con los antiguos. No sabemos qué vectores son, y no hace falta: la matriz de cambio solo usa <b>coeficientes</b>. Hay que construir la matriz de cambio y calcular su determinante.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Determinante de la matriz de cambio de $U$ a $U'$.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. El determinante de una matriz de cambio de base nunca es cero.</dd>
+    <dt>Plan</dt><dd>Escribir los $\bar u'_j$ en coordenadas de $U$ (columnas), calcular el determinante y analizar si la lectura inversa cambia el resultado.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Coordenadas de los vectores nuevos en la base antigua</b> (Def. 2.10), contando los coeficientes de $\bar u_1,\bar u_2,\bar u_3$ en ese orden, con los ceros: $\bar u'_1=(1,0,1)_U$, $\bar u'_2=(1,-1,0)_U$, $\bar u'_3=(0,1,0)_U$.</li>
+    <li><b>Coordenadas de los vectores nuevos en la base antigua</b> (Def. 2.10), contando los coeficientes de $\bar u_1,\bar u_2,\bar u_3$ en ese orden, con los ceros:
+      $$\bar u'_1=(1,0,1)_U,\qquad\bar u'_2=(1,-1,0)_U,\qquad\bar u'_3=(0,1,0)_U.$$</li>
     <li><b>Matriz de cambio</b> (Def. 3.14), esas coordenadas por columnas: $x_U=Qx_{U'}$ con
-    $$Q=\begin{pmatrix}1&1&0\cr0&-1&1\cr1&0&0\end{pmatrix}.$$
-    Es exactamente la matriz $P$ del Ej. 3.31 de U (mismas relaciones).</li>
-    <li><b>Determinante.</b> Desarrollo por la 3.ª fila (un solo elemento no nulo, el $1$ de la posición $(3,1)$, signo $(-1)^{3+1}=+1$): $\det Q=1\cdot\begin{vmatrix}1&0\cr-1&1\end{vmatrix}=1$. Es distinto de 0, como debe ser: descarta C sin más cuentas.</li>
-    <li><b>¿Y si «de $U$ a $U'$» significa la matriz inversa?</b> (la frase es ambigua: con el título de la Def. 3.14, «de $U$ a $U'$» sería $x_{U'}=Px_U$ con matriz $R=Q^{-1}$). Entonces $\det R=1/\det Q=1$. Comprobación directa despejando (U p.137): $\bar u_2=\bar u'_3$; $\bar u_1=\bar u'_2+\bar u'_3$; $\bar u_3=\bar u'_1-\bar u'_2-\bar u'_3$, y
-    $$R=Q^{-1}=\begin{pmatrix}0&0&1\cr1&0&-1\cr1&1&-1\end{pmatrix},\qquad\det R=1.$$</li>
+      $$Q=\begin{pmatrix}1&1&0\\0&-1&1\\1&0&0\end{pmatrix}.$$
+      <p>Es exactamente la matriz $P$ del Ej. 3.31 de U (mismas relaciones).</p></li>
+    <li><b>Determinante.</b> Desarrollo por la 3.ª fila (un solo elemento no nulo, el $1$ de la posición $(3,1)$, signo $(-1)^{3+1}=+1$):
+      $$\det Q=1\cdot\begin{vmatrix}1&0\\-1&1\end{vmatrix}=1.$$
+      <p>Es distinto de 0, como debe ser: descarta C sin más cuentas.</p></li>
+    <li><b>¿Y si «de $U$ a $U'$» significa la matriz inversa?</b> (la frase es ambigua: con el título de la Def. 3.14, «de $U$ a $U'$» sería $x_{U'}=Px_U$ con matriz $R=Q^{-1}$). Entonces $\det R=1/\det Q=1$. Comprobación directa despejando (U p.137):
+      $$\bar u_2=\bar u'_3,\qquad\bar u_1=\bar u'_2+\bar u'_3,\qquad\bar u_3=\bar u'_1-\bar u'_2-\bar u'_3,$$
+      $$R=Q^{-1}=\begin{pmatrix}0&0&1\\1&0&-1\\1&1&-1\end{pmatrix},\qquad\det R=1.$$</li>
     <li><b>Respuesta: A) 1</b>, con cualquiera de las dos lecturas.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> (1) escribe cada vector <b>nuevo</b> como combinación de los <b>antiguos</b> y lee sus coordenadas, con los ceros; (2) ponlas <b>en columnas</b>: esa es $Q$, con $x_{\text{antigua}}=Q\,x_{\text{nueva}}$; (3) $\det Q\neq0$ siempre; el cambio contrario tiene matriz $Q^{-1}$ y determinante $1/\det Q$.</div>
@@ -604,13 +750,20 @@
 <details class="sol" id="ex-feb25a-p2"><summary>Feb. 2025 (1.ª sem.), pregunta 2 — determinante de la matriz de cambio de $\mathcal B'$ a $\mathcal B$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), pregunta 2">X Feb. 2025 (1.ª) P2</span></summary>
   <p class="enun">Si $\mathcal B=\{\bar v_1,\bar v_2,\bar v_3\}$ y $\mathcal B'=\{\bar u_1,\bar u_2,\bar u_3\}$ son bases de $\mathbb R^3$, cuyos vectores están relacionados por $\bar u_1=2\bar v_1-\bar v_2$, $\bar u_2=5\bar v_1-\bar v_3$ y $\bar u_3=4\bar v_2$, calcule el determinante de la matriz de cambio de coordenadas respecto de $\mathcal B'$ a coordenadas respecto de $\mathcal B$.</p>
   <p><b>Qué se pide.</b> Ahora el sentido está claro: se parte de coordenadas en $\mathcal B'$ y se quieren las de $\mathcal B$: la $Q$ de $x_{\mathcal B}=Qx_{\mathcal B'}$ (Def. 3.14). Como el resultado no será $\pm1$, el sentido <b>sí</b> importa.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Determinante de la matriz de cambio de coordenadas de $\mathcal B'$ a $\mathcal B$.</dd>
+    <dt>Qué se usa</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$.</dd>
+    <dt>Plan</dt><dd>Sustituir los $\bar u_j$ en $w=\sum\alpha_j\bar u_j$ para hallar $\beta=Q\alpha$, y calcular $\det Q$.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Por qué la matriz se construye así.</b> Sea $w=\alpha_1\bar u_1+\alpha_2\bar u_2+\alpha_3\bar u_3$, con coordenadas $(\alpha_1,\alpha_2,\alpha_3)_{\mathcal B'}$. Sustituyendo los $\bar u_j$:
-    $$w=(2\alpha_1+5\alpha_2)\bar v_1+(-\alpha_1+4\alpha_3)\bar v_2+(-\alpha_2)\bar v_3.$$
-    Las coordenadas en $\mathcal B$ son $\beta_1=2\alpha_1+5\alpha_2$, $\beta_2=-\alpha_1+4\alpha_3$, $\beta_3=-\alpha_2$.</li>
+      $$w=(2\alpha_1+5\alpha_2)\bar v_1+(-\alpha_1+4\alpha_3)\bar v_2+(-\alpha_2)\bar v_3.$$
+      <p>Las coordenadas en $\mathcal B$ son</p>
+      $$\beta_1=2\alpha_1+5\alpha_2,\qquad\beta_2=-\alpha_1+4\alpha_3,\qquad\beta_3=-\alpha_2.$$</li>
     <li><b>Matriz.</b> Los coeficientes fila a fila; sus columnas son las coordenadas de $\bar u_1,\bar u_2,\bar u_3$ en $\mathcal B$:
-    $$\begin{pmatrix}\beta_1\cr\beta_2\cr\beta_3\end{pmatrix}=\underbrace{\begin{pmatrix}2&5&0\cr-1&0&4\cr0&-1&0\end{pmatrix}}_{Q}\begin{pmatrix}\alpha_1\cr\alpha_2\cr\alpha_3\end{pmatrix}.$$</li>
-    <li><b>Determinante.</b> Desarrollo por la 3.ª fila, cuyo único elemento no nulo es el $-1$ de la posición $(3,2)$, con signo $(-1)^{3+2}=-1$ y menor $\begin{vmatrix}2&0\cr-1&4\end{vmatrix}=8$: $\det Q=(-1)\cdot(-1)\cdot8=8$.</li>
+      $$\begin{pmatrix}\beta_1\\\beta_2\\\beta_3\end{pmatrix}=\underbrace{\begin{pmatrix}2&5&0\\-1&0&4\\0&-1&0\end{pmatrix}}_{Q}\begin{pmatrix}\alpha_1\\\alpha_2\\\alpha_3\end{pmatrix}.$$</li>
+    <li><b>Determinante.</b> Desarrollo por la 3.ª fila, cuyo único elemento no nulo es el $-1$ de la posición $(3,2)$, con signo $(-1)^{3+2}=-1$ y menor $\begin{vmatrix}2&0\\-1&4\end{vmatrix}=8$:
+      $$\det Q=(-1)\cdot(-1)\cdot8=8.$$</li>
     <li><b>Comprobación de sentido.</b> El cambio contrario, de $\mathcal B$ a $\mathcal B'$, tendría determinante $1/8$. La respuesta pedida es $|Q|=\mathbf{8}$.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> igual que el ejercicio anterior. Si dice «de coordenadas en $\mathcal B'$ a coordenadas en $\mathcal B$», la matriz es la de los vectores de $\mathcal B'$ <b>escritos en</b> $\mathcal B$, por columnas. Para no equivocarte de sentido: $Q\,(1,0,0)^t$ debe ser $\bar u_1$ en $\mathcal B$, es decir $(2,-1,0)$.</div>
@@ -623,15 +776,30 @@
 <details class="sol" id="ex-feb26-2p8-35"><summary>Feb. 2026 (2.ª sem.), problema 8, 1.er apartado, por la vía $Q^{-1}AQ$ <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), problema 8, 1.er apartado">X Feb. 2026 (2.ª) P8</span></summary>
   <p class="enun">Sea $f(x_1,x_2)=(-7x_1+6x_2,\ -9x_1+8x_2)$ una aplicación lineal de $\mathbb R^2$ en $\mathbb R^2$ respecto a la base canónica. Halle la matriz asociada a $f$ con respecto a la base $B=\{(1,-1),(1,1)\}$. <i>(El 2.º apartado, «estudie si $f$ es diagonalizable…», es del tema 4.3.)</i></p>
   <p><b>Qué se pide.</b> $f$ es un endomorfismo. «La matriz respecto a la base $B$» significa $B$ <b>en la salida y en la llegada</b>. Conocemos la matriz en la canónica $C$ y queremos la de $B$. El 1.er apartado ya se resolvió por la Def. 3.4 en el <a href="tema_3_3_ecuaciones_matriz_asociada.html#ex-feb26-2p8">tema 3.3</a>; aquí se rehace por la fórmula $Q^{-1}AQ$ y se comparan las dos vías.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Matriz de un endomorfismo de $\mathbb R^2$ en la base $B=\{(1,-1),(1,1)\}$ por la fórmula $Q^{-1}AQ$.</dd>
+    <dt>Qué se usa</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Plan</dt><dd>$A$ canónica, $Q$ con los vectores de $B$, $Q^{-1}$ por la adjunta, producto en el orden correcto y comprobación.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Matriz en la canónica</b> (Def. 3.4): $A=\begin{pmatrix}-7&6\cr-9&8\end{pmatrix}$.</li>
-    <li><b>Matriz de cambio $Q$ de $B$ (nueva) a $C$ (antigua):</b> columnas = vectores de $B$, $Q=\begin{pmatrix}1&1\cr-1&1\end{pmatrix}$, $\det Q=1+1=2\neq0$ (confirma que $B$ es base).</li>
+    <li><b>Matriz en la canónica</b> (Def. 3.4):
+      $$A=\begin{pmatrix}-7&6\\-9&8\end{pmatrix}.$$</li>
+    <li><b>Matriz de cambio $Q$ de $B$ (nueva) a $C$ (antigua):</b> columnas = vectores de $B$,
+      $$Q=\begin{pmatrix}1&1\\-1&1\end{pmatrix},\qquad\det Q=1+1=2\neq0$$
+      <p>(confirma que $B$ es base).</p></li>
     <li><b>Fórmula</b> (Def. 3.15 con $P=Q$): $A_B=Q^{-1}AQ$.</li>
-    <li><b>Inversa</b> (adjunta, $2\times2$): $Q^{-1}=\frac12\begin{pmatrix}1&-1\cr1&1\end{pmatrix}$. Comprobación: $\frac12\begin{pmatrix}1&-1\cr1&1\end{pmatrix}\begin{pmatrix}1&1\cr-1&1\end{pmatrix}=\frac12\begin{pmatrix}2&0\cr0&2\end{pmatrix}=I$ ✓.</li>
+    <li><b>Inversa</b> (adjunta, $2\times2$):
+      $$Q^{-1}=\frac12\begin{pmatrix}1&-1\\1&1\end{pmatrix}.$$
+      <p>Comprobación:</p>
+      $$\frac12\begin{pmatrix}1&-1\\1&1\end{pmatrix}\begin{pmatrix}1&1\\-1&1\end{pmatrix}=\frac12\begin{pmatrix}2&0\\0&2\end{pmatrix}=I\ ✓$$</li>
     <li><b>Producto</b> (asociativo, pero sin cambiar el orden):
-    $$Q^{-1}A=\frac12\begin{pmatrix}-7+9&6-8\cr-7-9&6+8\end{pmatrix}=\begin{pmatrix}1&-1\cr-8&7\end{pmatrix},\qquad A_B=\begin{pmatrix}1&-1\cr-8&7\end{pmatrix}\begin{pmatrix}1&1\cr-1&1\end{pmatrix}=\begin{pmatrix}2&0\cr-15&-1\end{pmatrix}.$$</li>
-    <li><b>Comparación con la otra vía.</b> Las columnas $(2,-15)_B$ y $(0,-1)_B$ de $A_B$ son las mismas que se obtienen en el tema 3.3 por la Def. 3.4. Aquí $AQ=\begin{pmatrix}-13&-1\cr-17&-1\end{pmatrix}$ junta las imágenes $f(1,-1)$ y $f(1,1)$, y $Q^{-1}$ las pasa a coordenadas en $B$.</li>
-    <li><b>Comprobación con un vector.</b> $v=(2,1)_B=2(1,-1)+1(1,1)=(3,-1)$. Directamente $f(3,-1)=(-27,-35)$. Con la nueva matriz, $A_B\binom21=\binom4{-31}$, que en $B$ es $4(1,-1)-31(1,1)=(-27,-35)$ ✓.</li>
+      $$Q^{-1}A=\frac12\begin{pmatrix}-7+9&6-8\\-7-9&6+8\end{pmatrix}=\begin{pmatrix}1&-1\\-8&7\end{pmatrix},$$
+      $$A_B=\begin{pmatrix}1&-1\\-8&7\end{pmatrix}\begin{pmatrix}1&1\\-1&1\end{pmatrix}=\begin{pmatrix}2&0\\-15&-1\end{pmatrix}.$$</li>
+    <li><b>Comparación con la otra vía.</b> Las columnas $(2,-15)_B$ y $(0,-1)_B$ de $A_B$ son las mismas que se obtienen en el tema 3.3 por la Def. 3.4. Aquí
+      $$AQ=\begin{pmatrix}-13&-1\\-17&-1\end{pmatrix}$$
+      <p>junta las imágenes $f(1,-1)$ y $f(1,1)$, y $Q^{-1}$ las pasa a coordenadas en $B$.</p></li>
+    <li><b>Comprobación con un vector.</b> $v=(2,1)_B=2(1,-1)+1(1,1)=(3,-1)$. Directamente $f(3,-1)=(-27,-35)$. Con la nueva matriz,
+      $$A_B\binom21=\binom4{-31},\qquad4(1,-1)-31(1,1)=(-27,-35)\ ✓$$</li>
     <li><b>Control rápido.</b> Traza ($2-1=1$) y determinante ($-2$) coinciden con los de $A$ ($-7+8=1$; $-56+54=-2$): $\det(Q^{-1}AQ)=\det A$.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> (1) $A$ en la canónica; (2) $Q$ = vectores de la base nueva <b>en columnas</b>; (3) $A'=Q^{-1}AQ$, con la inversa a la <b>izquierda</b>; (4) comprueba con un vector o con $\det A'=\det A$ (débil). Si las bases de salida y de llegada son distintas: $A'=P^{-1}AQ$.</div>
