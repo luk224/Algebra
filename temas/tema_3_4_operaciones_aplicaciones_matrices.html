@@ -343,20 +343,33 @@
     <dt>Plan</dt><dd>Calcular $A$ y $B$; después $A+2B$, $2B$, $AB$ y $BA$. Para no fallar con el orden, comprobar cada resultado sustituyendo en un vector sencillo.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Matriz de $f_A$</b> (Def. 3.4, U p.116; columna $j$ = $f_A(e_j)$): $f_A(1,0)=(1,0)$, $f_A(0,1)=(0,2)$, luego $A=\begin{pmatrix}1&0\cr0&2\end{pmatrix}$.</li>
-    <li><b>Matriz de $f_B$:</b> $f_B(1,0)=(1,-1)$, $f_B(0,1)=(-1,1)$, luego $B=\begin{pmatrix}1&-1\cr-1&1\end{pmatrix}$. Comprobación con $Y=BX$: $\begin{pmatrix}1&-1\cr-1&1\end{pmatrix}\binom{x_1}{x_2}=\binom{x_1-x_2}{-x_1+x_2}$ ✓.</li>
+    <li><b>Matriz de $f_A$</b> (Def. 3.4, U p.116; columna $j$ = $f_A(e_j)$):
+      $$f_A(1,0)=(1,0),\quad f_A(0,1)=(0,2)\ \Rightarrow\ A=\begin{pmatrix}1&0\\0&2\end{pmatrix}.$$</li>
+    <li><b>Matriz de $f_B$:</b>
+      $$f_B(1,0)=(1,-1),\quad f_B(0,1)=(-1,1)\ \Rightarrow\ B=\begin{pmatrix}1&-1\\-1&1\end{pmatrix}.$$
+      <p>Comprobación con $Y=BX$:</p>
+      $$\begin{pmatrix}1&-1\\-1&1\end{pmatrix}\binom{x_1}{x_2}=\binom{x_1-x_2}{-x_1+x_2}\ ✓$$</li>
     <li><b>Opción A: $f_A+2f_B$.</b> Ambas van de $\mathbb R^2$ a $\mathbb R^2$, así que se pueden sumar (Def. 3.5). Su matriz es $A+2B$ (Def. 3.7 y 3.10):
-    $$A+2B=\begin{pmatrix}1&0\cr0&2\end{pmatrix}+\begin{pmatrix}2&-2\cr-2&2\end{pmatrix}=\begin{pmatrix}3&-2\cr-2&4\end{pmatrix}.$$
-    Filas $(3,-2)$ y $(-2,4)$: <b>A es cierta</b>. Con la definición: $(f_A+2f_B)(x_1,x_2)=(x_1,2x_2)+2(x_1-x_2,-x_1+x_2)=(3x_1-2x_2,\,-2x_1+4x_2)$ ✓.</li>
-    <li><b>Opción B: $2f_B$.</b> Se multiplica <b>cada</b> elemento por 2: $2B=\begin{pmatrix}2&-2\cr-2&2\end{pmatrix}$. Filas $(2,-2)$ y $(-2,2)$, no $(2,-1)$ y $(-2,1)$: <b>B es falsa</b>. (Error de la opción: multiplicar por 2 solo la primera columna. Contraejemplo: $2f_B(0,1)=(-2,2)$, pero la matriz propuesta envía $(0,1)$ a $(-1,1)$.)</li>
+      $$A+2B=\begin{pmatrix}1&0\\0&2\end{pmatrix}+\begin{pmatrix}2&-2\\-2&2\end{pmatrix}=\begin{pmatrix}3&-2\\-2&4\end{pmatrix}.$$
+      <p>Filas $(3,-2)$ y $(-2,4)$: <b>A es cierta</b>. Con la definición:</p>
+      $$(f_A+2f_B)(x_1,x_2)=(x_1,2x_2)+2(x_1-x_2,-x_1+x_2)=(3x_1-2x_2,\ -2x_1+4x_2)\ ✓$$</li>
+    <li><b>Opción B: $2f_B$.</b> Se multiplica <b>cada</b> elemento por 2:
+      $$2B=\begin{pmatrix}2&-2\\-2&2\end{pmatrix}.$$
+      <p>Filas $(2,-2)$ y $(-2,2)$, no $(2,-1)$ y $(-2,1)$: <b>B es falsa</b>. (Error de la opción: multiplicar por 2 solo la primera columna. Contraejemplo: $2f_B(0,1)=(-2,2)$, pero la matriz propuesta envía $(0,1)$ a $(-1,1)$.)</p></li>
     <li><b>Opción C: $f_A\circ f_B$.</b> Primero actúa $f_B$ y después $f_A$, así que la matriz es $AB$ (la de $f_A$ a la izquierda):
-    $$AB=\begin{pmatrix}1&0\cr0&2\end{pmatrix}\begin{pmatrix}1&-1\cr-1&1\end{pmatrix}=\begin{pmatrix}1&-1\cr-2&2\end{pmatrix}.$$
-    Filas $(1,-1)$ y $(-2,2)$, no $(1,-2)$ y $(-1,2)$: <b>C es falsa</b>. Con la definición: $f_A(f_B(x_1,x_2))=f_A(x_1-x_2,-x_1+x_2)=(x_1-x_2,\,-2x_1+2x_2)$ ✓. <i>De dónde sale la opción C:</i> sus filas son las de $BA$ (siguiente paso), la matriz de $f_B\circ f_A$: es la trampa del orden.</li>
+      $$AB=\begin{pmatrix}1&0\\0&2\end{pmatrix}\begin{pmatrix}1&-1\\-1&1\end{pmatrix}=\begin{pmatrix}1&-1\\-2&2\end{pmatrix}.$$
+      <p>Filas $(1,-1)$ y $(-2,2)$, no $(1,-2)$ y $(-1,2)$: <b>C es falsa</b>. Con la definición:</p>
+      $$f_A(f_B(x_1,x_2))=f_A(x_1-x_2,-x_1+x_2)=(x_1-x_2,\ -2x_1+2x_2)\ ✓$$
+      <p><i>De dónde sale la opción C:</i> sus filas son las de $BA$ (siguiente paso), la matriz de $f_B\circ f_A$: es la trampa del orden.</p></li>
     <li><b>Opción D: $f_B\circ f_A$.</b> Primero $f_A$, luego $f_B$; matriz $BA$:
-    $$BA=\begin{pmatrix}1&-1\cr-1&1\end{pmatrix}\begin{pmatrix}1&0\cr0&2\end{pmatrix}=\begin{pmatrix}1&-2\cr-1&2\end{pmatrix}.$$
-    Comprobación: $f_B(f_A(x_1,x_2))=f_B(x_1,2x_2)=(x_1-2x_2,\,-x_1+2x_2)$ ✓. La opción D da <b>una sola fila</b> $(1,-1)$: sería una matriz $1\times2$, una aplicación $\mathbb R^2\to\mathbb R$, pero $f_B\circ f_A$ va de $\mathbb R^2$ a $\mathbb R^2$ y su matriz es $2\times2$. Además la primera fila de $BA$ es $(1,-2)$. <b>D es falsa</b>.</li>
+      $$BA=\begin{pmatrix}1&-1\\-1&1\end{pmatrix}\begin{pmatrix}1&0\\0&2\end{pmatrix}=\begin{pmatrix}1&-2\\-1&2\end{pmatrix}.$$
+      <p>Comprobación:</p>
+      $$f_B(f_A(x_1,x_2))=f_B(x_1,2x_2)=(x_1-2x_2,\ -x_1+2x_2)\ ✓$$
+      <p>La opción D da <b>una sola fila</b> $(1,-1)$: sería una matriz $1\times2$, una aplicación $\mathbb R^2\to\mathbb R$, pero $f_B\circ f_A$ va de $\mathbb R^2$ a $\mathbb R^2$ y su matriz es $2\times2$. Además la primera fila de $BA$ es $(1,-2)$. <b>D es falsa</b>.</p></li>
     <li><b>Conclusión:</b> solo <b>A</b> es cierta (coincide con E pp.106-107).</li>
-    <li><b>Observación (no conmutatividad):</b> $AB=\begin{pmatrix}1&-1\cr-2&2\end{pmatrix}\neq\begin{pmatrix}1&-2\cr-1&2\end{pmatrix}=BA$: $f_A\circ f_B\neq f_B\circ f_A$ aunque ambas existan y sean del mismo tamaño (U p.128). <i>(Verificado con sympy.)</i></li>
+    <li><b>Observación (no conmutatividad):</b>
+      $$AB=\begin{pmatrix}1&-1\\-2&2\end{pmatrix}\neq\begin{pmatrix}1&-2\\-1&2\end{pmatrix}=BA:$$
+      <p>$f_A\circ f_B\neq f_B\circ f_A$ aunque ambas existan y sean del mismo tamaño (U p.128). <i>(Verificado con sympy.)</i></p></li>
   </ol>
   <div class="box ex"><span class="h">Animación: $AB$ de este ejercicio</span>
     <div class="anim-prod" data-a="1,0;0,2" data-b="1,-1;-1,1"></div>
@@ -378,13 +391,21 @@
   <ol class="steps">
     <li><b>Opción A (conmutativa): falsa.</b> Conmutativa significaría $f\circ g=g\circ f$ para <b>todo</b> par. Hay dos formas de que falle:
       <ul>
-        <li><b>(a) Una composición no existe</b> (ejemplo de E). Sean $f_A:\mathbb R^2\to\mathbb R^2$ y $f_B:\mathbb R^3\to\mathbb R^2$ con $A=\begin{pmatrix}1&0\cr0&0\end{pmatrix}$ y $B=\begin{pmatrix}0&0&0\cr0&1&2\end{pmatrix}$. $f_A\circ f_B$ existe ($\mathbb R^3\to\mathbb R^2\to\mathbb R^2$), pero $f_B\circ f_A$ <b>no</b>: $f_A$ devuelve vectores de $\mathbb R^2$ y $f_B$ solo actúa sobre $\mathbb R^3$ (con matrices, $BA$ no se puede calcular: $B$ tiene 3 columnas y $A$ tiene 2 filas).</li>
-        <li><b>(b) Ambas existen y son distintas</b> (añadido; más convincente). Con los endomorfismos del Ej. 3.30: $AB=\begin{pmatrix}1&-1\cr-2&2\end{pmatrix}\neq BA=\begin{pmatrix}1&-2\cr-1&2\end{pmatrix}$. Numéricamente: $(f_A\circ f_B)(1,0)=f_A(1,-1)=(1,-2)$ pero $(f_B\circ f_A)(1,0)=f_B(1,0)=(1,-1)$.</li>
+        <li><b>(a) Una composición no existe</b> (ejemplo de E). Sean $f_A:\mathbb R^2\to\mathbb R^2$ y $f_B:\mathbb R^3\to\mathbb R^2$ con
+          $$A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad B=\begin{pmatrix}0&0&0\\0&1&2\end{pmatrix}.$$
+          $f_A\circ f_B$ existe ($\mathbb R^3\to\mathbb R^2\to\mathbb R^2$), pero $f_B\circ f_A$ <b>no</b>: $f_A$ devuelve vectores de $\mathbb R^2$ y $f_B$ solo actúa sobre $\mathbb R^3$ (con matrices, $BA$ no se puede calcular: $B$ tiene 3 columnas y $A$ tiene 2 filas).</li>
+        <li><b>(b) Ambas existen y son distintas</b> (añadido; más convincente). Con los endomorfismos del Ej. 3.30:
+          $$AB=\begin{pmatrix}1&-1\\-2&2\end{pmatrix}\neq BA=\begin{pmatrix}1&-2\\-1&2\end{pmatrix}.$$
+          Numéricamente: $(f_A\circ f_B)(1,0)=f_A(1,-1)=(1,-2)$ pero $(f_B\circ f_A)(1,0)=f_B(1,0)=(1,-1)$.</li>
       </ul></li>
     <li><b>Opción B (dos no nulas pueden dar la nula): cierta.</b> Con el ejemplo (a): $f_A\neq0$ (envía $(1,0)$ a $(1,0)$) y $f_B\neq0$ (envía $(0,1,0)$ a $(0,1)$), pero
-    $$AB=\begin{pmatrix}1&0\cr0&0\end{pmatrix}\begin{pmatrix}0&0&0\cr0&1&2\end{pmatrix}=\begin{pmatrix}0&0&0\cr0&0&0\end{pmatrix}.$$
-    Con aplicaciones: $f_A(f_B(x_1,x_2,x_3))=f_A(0,\,x_2+2x_3)=(0,0)$ para todo vector. <b>Por qué ocurre:</b> todo lo que sale de $f_B$ está en el eje $x_2$ ($\operatorname{Im}f_B$) y ese eje es justo lo que $f_A$ anula ($\operatorname{Nuc}f_A$). En general, $f\circ g=0\iff\operatorname{Im}g\subseteq\operatorname{Nuc}f$. Ejemplo más corto: $N=\begin{pmatrix}0&1\cr0&0\end{pmatrix}$, $f_N(x_1,x_2)=(x_2,0)$ es no nula pero $N^2=0$. <b>Consecuencia:</b> con matrices no vale «si $AB=0$ entonces $A=0$ o $B=0$».</li>
-    <li><b>Opción C (existe neutro): cierta, con un matiz.</b> Para $f:V\to W$ se cumple $f\circ i_V=f$ e $i_W\circ f=f$ (U p.128), porque $f(i_V(x))=f(x)$ e $i_W(f(x))=f(x)$. Con matrices, $AI_m=A$ e $I_nA=A$ si $A$ es $n\times m$. Por ejemplo con $B$ del apartado (a) ($2\times3$): $BI_3=B$, $I_2B=B$, mientras que $BI_2$ ni siquiera está definida. <b>Matiz:</b> si $V\neq W$ las dos identidades son distintas; en endomorfismos de un mismo $V$ hay un único neutro $i_V$ (matriz $I$).</li>
+      $$AB=\begin{pmatrix}1&0\\0&0\end{pmatrix}\begin{pmatrix}0&0&0\\0&1&2\end{pmatrix}=\begin{pmatrix}0&0&0\\0&0&0\end{pmatrix}.$$
+      <p>Con aplicaciones:</p>
+      $$f_A(f_B(x_1,x_2,x_3))=f_A(0,\,x_2+2x_3)=(0,0)\quad\text{para todo vector.}$$
+      <p><b>Por qué ocurre:</b> todo lo que sale de $f_B$ está en el eje $x_2$ ($\operatorname{Im}f_B$) y ese eje es justo lo que $f_A$ anula ($\operatorname{Nuc}f_A$). En general, $f\circ g=0\iff\operatorname{Im}g\subseteq\operatorname{Nuc}f$. Ejemplo más corto: $N=\begin{pmatrix}0&1\\0&0\end{pmatrix}$, $f_N(x_1,x_2)=(x_2,0)$ es no nula pero $N^2=0$. <b>Consecuencia:</b> con matrices no vale «si $AB=0$ entonces $A=0$ o $B=0$».</p></li>
+    <li><b>Opción C (existe neutro): cierta, con un matiz.</b> Para $f:V\to W$ se cumple $f\circ i_V=f$ e $i_W\circ f=f$ (U p.128), porque
+      $$f(i_V(x))=f(x),\qquad i_W(f(x))=f(x).$$
+      <p>Con matrices, $AI_m=A$ e $I_nA=A$ si $A$ es $n\times m$. Por ejemplo con $B$ del apartado (a) ($2\times3$): $BI_3=B$, $I_2B=B$, mientras que $BI_2$ ni siquiera está definida. <b>Matiz:</b> si $V\neq W$ las dos identidades son distintas; en endomorfismos de un mismo $V$ hay un único neutro $i_V$ (matriz $I$).</p></li>
     <li><b>Conclusión:</b> <b>B y C son ciertas, A es falsa</b> (coincide con E p.108). <i>(Verificado con sympy.)</i></li>
   </ol>
   <div class="recipe"><b>Receta:</b> para preguntas de propiedades de la composición piensa en matrices: conmutativa ↔ $AB=BA$ (falla en general); «no nulas con producto nulo» ↔ $\operatorname{Im}g\subseteq\operatorname{Nuc}f$ (busca matrices con ceros tipo $\begin{pmatrix}0&1\cr0&0\end{pmatrix}$); neutro ↔ $I$ del tamaño adecuado a cada lado.</div>
@@ -412,13 +433,18 @@
   </dl></div>
   <ol class="steps">
     <li><b>Se puede operar:</b> $f$ y $g$ tienen el mismo espacio inicial ($\mathbb R^2$) y final ($\mathbb R^3$) (Def. 3.5): ambas matrices son $3\times2$.</li>
-    <li><b>Matrices</b> (columnas $f(e_1)$, $f(e_2)$): $f(1,0)=(1,0,-1)$, $f(0,1)=(2,1,1)$; $g(1,0)=(1,2,0)$, $g(0,1)=(0,-1,3)$:
-    $$F=\begin{pmatrix}1&2\cr0&1\cr-1&1\end{pmatrix},\qquad G=\begin{pmatrix}1&0\cr2&-1\cr0&3\end{pmatrix}.$$</li>
+    <li><b>Matrices</b> (columnas $f(e_1)$, $f(e_2)$):
+      $$f(1,0)=(1,0,-1),\ f(0,1)=(2,1,1);\qquad g(1,0)=(1,2,0),\ g(0,1)=(0,-1,3),$$
+      $$F=\begin{pmatrix}1&2\\0&1\\-1&1\end{pmatrix},\qquad G=\begin{pmatrix}1&0\\2&-1\\0&3\end{pmatrix}.$$</li>
     <li><b>Combinación</b> (Def. 3.7 y 3.10):
-    $$3F-2G=\begin{pmatrix}3&6\cr0&3\cr-3&3\end{pmatrix}-\begin{pmatrix}2&0\cr4&-2\cr0&6\end{pmatrix}=\begin{pmatrix}1&6\cr-4&5\cr-3&-3\end{pmatrix}.$$
-    Ecuaciones: $(3f-2g)(x,y)=(x+6y,\ -4x+5y,\ -3x-3y)$.</li>
-    <li><b>Imagen de $(1,-1)$</b> con $Y=(3F-2G)X$: $\begin{pmatrix}1-6\cr-4-5\cr-3+3\end{pmatrix}=\begin{pmatrix}-5\cr-9\cr0\end{pmatrix}$.</li>
-    <li><b>Comprobación por la definición:</b> $f(1,-1)=(-1,-1,-2)$, $g(1,-1)=(1,3,-3)$ y $3(-1,-1,-2)-2(1,3,-3)=(-5,-9,0)$ ✓.</li>
+      $$3F-2G=\begin{pmatrix}3&6\\0&3\\-3&3\end{pmatrix}-\begin{pmatrix}2&0\\4&-2\\0&6\end{pmatrix}=\begin{pmatrix}1&6\\-4&5\\-3&-3\end{pmatrix}.$$
+      <p>Ecuaciones:</p>
+      $$(3f-2g)(x,y)=(x+6y,\ -4x+5y,\ -3x-3y).$$</li>
+    <li><b>Imagen de $(1,-1)$</b> con $Y=(3F-2G)X$:
+      $$\begin{pmatrix}1-6\\-4-5\\-3+3\end{pmatrix}=\begin{pmatrix}-5\\-9\\0\end{pmatrix}.$$</li>
+    <li><b>Comprobación por la definición:</b>
+      $$f(1,-1)=(-1,-1,-2),\qquad g(1,-1)=(1,3,-3),$$
+      $$3(-1,-1,-2)-2(1,3,-3)=(-5,-9,0)\ ✓$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> combinación lineal de aplicaciones = la misma combinación de sus matrices (mismas bases), elemento a elemento.</div>
   <p><b>Error típico:</b> intentar sumar $f:\mathbb R^2\to\mathbb R^3$ con $h:\mathbb R^3\to\mathbb R^2$: ni la suma de aplicaciones ni la de matrices ($3\times2$ y $2\times3$) está definida.</p>
@@ -433,17 +459,25 @@
     <dt>Plan</dt><dd>Dibujar la cadena de espacios para saber qué composiciones existen y de qué tamaño son; multiplicar en el orden correcto.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Diagramas</b> (Def. 3.11): $\mathbb R^2\xrightarrow{g}\mathbb R^3\xrightarrow{f}\mathbb R^2$, luego $f\circ g:\mathbb R^2\to\mathbb R^2$; $\mathbb R^3\xrightarrow{f}\mathbb R^2\xrightarrow{g}\mathbb R^3$, luego $g\circ f:\mathbb R^3\to\mathbb R^3$. Existen las dos.</li>
-    <li><b>Matrices:</b> $A=\begin{pmatrix}1&0&1\cr0&1&-1\end{pmatrix}$ ($f$, $2\times3$), $B=\begin{pmatrix}1&0\cr1&1\cr0&1\end{pmatrix}$ ($g$, $3\times2$).</li>
+    <li><b>Diagramas</b> (Def. 3.11):
+      $$\mathbb R^2\xrightarrow{g}\mathbb R^3\xrightarrow{f}\mathbb R^2\ \Rightarrow\ f\circ g:\mathbb R^2\to\mathbb R^2;\qquad\mathbb R^3\xrightarrow{f}\mathbb R^2\xrightarrow{g}\mathbb R^3\ \Rightarrow\ g\circ f:\mathbb R^3\to\mathbb R^3.$$
+      <p>Existen las dos.</p></li>
+    <li><b>Matrices:</b>
+      $$A=\begin{pmatrix}1&0&1\\0&1&-1\end{pmatrix}\ (f,\ 2\times3),\qquad B=\begin{pmatrix}1&0\\1&1\\0&1\end{pmatrix}\ (g,\ 3\times2).$$</li>
     <li><b>$f\circ g$</b>, matriz $AB$ ($(2\times3)(3\times2)=2\times2$):
-    $$AB=\begin{pmatrix}1+0+0&0+0+1\cr0+1+0&0+1-1\end{pmatrix}=\begin{pmatrix}1&1\cr1&0\end{pmatrix},\qquad (f\circ g)(x,y)=(x+y,\ x).$$
-    Comprobación: $f(g(x,y))=f(x,\,x+y,\,y)=(x+y,\ (x+y)-y)=(x+y,\ x)$ ✓.</li>
+      $$AB=\begin{pmatrix}1+0+0&0+0+1\\0+1+0&0+1-1\end{pmatrix}=\begin{pmatrix}1&1\\1&0\end{pmatrix},\qquad(f\circ g)(x,y)=(x+y,\ x).$$
+      <p>Comprobación:</p>
+      $$f(g(x,y))=f(x,\,x+y,\,y)=(x+y,\ (x+y)-y)=(x+y,\ x)\ ✓$$</li>
     <li><b>$g\circ f$</b>, matriz $BA$ ($(3\times2)(2\times3)=3\times3$):
-    $$BA=\begin{pmatrix}1&0&1\cr1&1&0\cr0&1&-1\end{pmatrix},\qquad (g\circ f)(x,y,z)=(x+z,\ x+y,\ y-z).$$
-    Comprobación: $g(x+z,\ y-z)=(x+z,\ x+z+y-z,\ y-z)$ ✓. $AB$ y $BA$ ni siquiera tienen el mismo tamaño.</li>
-    <li><b>b) Mismo espacio, aun así distintas.</b> $P=\begin{pmatrix}1&1\cr0&1\end{pmatrix}$, $Q=\begin{pmatrix}1&0\cr1&0\end{pmatrix}$:
-    $$PQ=\begin{pmatrix}2&0\cr1&0\end{pmatrix}\ (p\circ q),\qquad QP=\begin{pmatrix}1&1\cr1&1\end{pmatrix}\ (q\circ p).$$
-    Contraejemplo numérico: $(p\circ q)(0,1)=p(0,0)=(0,0)$, pero $(q\circ p)(0,1)=q(1,1)=(1,1)$.</li>
+      $$BA=\begin{pmatrix}1&0&1\\1&1&0\\0&1&-1\end{pmatrix},\qquad(g\circ f)(x,y,z)=(x+z,\ x+y,\ y-z).$$
+      <p>Comprobación:</p>
+      $$g(x+z,\ y-z)=(x+z,\ x+z+y-z,\ y-z)\ ✓$$
+      <p>$AB$ y $BA$ ni siquiera tienen el mismo tamaño.</p></li>
+    <li><b>b) Mismo espacio, aun así distintas.</b>
+      $$P=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad Q=\begin{pmatrix}1&0\\1&0\end{pmatrix},$$
+      $$PQ=\begin{pmatrix}2&0\\1&0\end{pmatrix}\ (p\circ q),\qquad QP=\begin{pmatrix}1&1\\1&1\end{pmatrix}\ (q\circ p).$$
+      <p>Contraejemplo numérico:</p>
+      $$(p\circ q)(0,1)=p(0,0)=(0,0),\qquad(q\circ p)(0,1)=q(1,1)=(1,1).$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> dibuja el diagrama de espacios; la matriz de la composición es (dim. final)$\times$(dim. inicial); es «la de la última aplicación» por «la de la primera».</div>
   <p><b>Error típico:</b> pensar que si las dos composiciones existen y son del mismo tamaño entonces coinciden.</p>
@@ -458,17 +492,29 @@
     <dt>Plan</dt><dd>Comprobar la relación con $A^2-3A+I=O$; despejar $f\circ(3i-f)=i$; reducir $f^3,f^4$ usando $f\circ f=3f-i$.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Matriz de $f$:</b> $f(1,0)=(2,1)$, $f(0,1)=(1,1)$, $A=\begin{pmatrix}2&1\cr1&1\end{pmatrix}$; la de $i$ es $I$.</li>
-    <li><b>a) $f\circ f$:</b> matriz $A\cdot A=A^2=\begin{pmatrix}4+1&2+1\cr2+1&1+1\end{pmatrix}=\begin{pmatrix}5&3\cr3&2\end{pmatrix}$. La matriz de $f\circ f-3f+i$ es
-    $$A^2-3A+I=\begin{pmatrix}5&3\cr3&2\end{pmatrix}-\begin{pmatrix}6&3\cr3&3\end{pmatrix}+\begin{pmatrix}1&0\cr0&1\end{pmatrix}=\begin{pmatrix}0&0\cr0&0\end{pmatrix}.$$
-    Matriz nula $\Rightarrow$ aplicación nula (la correspondencia es biyectiva, U p.118). Comprobación: $f(f(1,0))=f(2,1)=(5,3)$ y $(5,3)-3(2,1)+(1,0)=(0,0)$ ✓.</li>
-    <li><b>b) Factorizar.</b> De a), $3f-f\circ f=i$. Por la distributiva, $f\circ(\lambda g)=\lambda(f\circ g)$ (para sacar el 3) y las identidades (U p.128): $f\circ(3i-f)=3(f\circ i)-f\circ f=3f-f\circ f=i$; e igual por la otra distributiva, $(3i-f)\circ f=3f-f\circ f=i$. Fórmula: $(3i-f)(x,y)=(3x,3y)-(2x+y,\ x+y)=(x-y,\ -x+2y)$, con matriz $3I-A=\begin{pmatrix}1&-1\cr-1&2\end{pmatrix}$. Comprobación: $A(3I-A)=\begin{pmatrix}2-1&-2+2\cr1-1&-1+2\end{pmatrix}=I$ ✓. <i>(Anticipo de §3.5: $3i-f$ «deshace» $f$; será la aplicación inversa, y $3I-A$ la matriz inversa de $A$.)</i></li>
+    <li><b>Matriz de $f$:</b>
+      $$f(1,0)=(2,1),\quad f(0,1)=(1,1)\ \Rightarrow\ A=\begin{pmatrix}2&1\\1&1\end{pmatrix};$$
+      <p>la de $i$ es $I$.</p></li>
+    <li><b>a) $f\circ f$:</b> matriz
+      $$A\cdot A=A^2=\begin{pmatrix}4+1&2+1\\2+1&1+1\end{pmatrix}=\begin{pmatrix}5&3\\3&2\end{pmatrix}.$$
+      <p>La matriz de $f\circ f-3f+i$ es</p>
+      $$A^2-3A+I=\begin{pmatrix}5&3\\3&2\end{pmatrix}-\begin{pmatrix}6&3\\3&3\end{pmatrix}+\begin{pmatrix}1&0\\0&1\end{pmatrix}=\begin{pmatrix}0&0\\0&0\end{pmatrix}.$$
+      <p>Matriz nula $\Rightarrow$ aplicación nula (la correspondencia es biyectiva, U p.118). Comprobación:</p>
+      $$f(f(1,0))=f(2,1)=(5,3),\qquad(5,3)-3(2,1)+(1,0)=(0,0)\ ✓$$</li>
+    <li><b>b) Factorizar.</b> De a), $3f-f\circ f=i$. Por la distributiva, $f\circ(\lambda g)=\lambda(f\circ g)$ (para sacar el 3) y las identidades (U p.128):
+      $$f\circ(3i-f)=3(f\circ i)-f\circ f=3f-f\circ f=i;$$
+      <p>e igual por la otra distributiva, $(3i-f)\circ f=3f-f\circ f=i$. Fórmula:</p>
+      $$(3i-f)(x,y)=(3x,3y)-(2x+y,\ x+y)=(x-y,\ -x+2y),\qquad3I-A=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}.$$
+      <p>Comprobación:</p>
+      $$A(3I-A)=\begin{pmatrix}2-1&-2+2\\1-1&-1+2\end{pmatrix}=I\ ✓$$
+      <p><i>(Anticipo de §3.5: $3i-f$ «deshace» $f$; será la aplicación inversa, y $3I-A$ la matriz inversa de $A$.)</i></p></li>
     <li><b>c) Potencias.</b> Con $f\circ f=3f-i$ y la distributiva:
-      <ul>
-        <li>$f^3=f\circ(3f-i)=3\,f\circ f-f=3(3f-i)-f=8f-3i$.</li>
-        <li>$f^4=f\circ f^3=8\,f\circ f-3f=8(3f-i)-3f=21f-8i$.</li>
-      </ul>
-      Matrices: $A^3=8A-3I=\begin{pmatrix}13&8\cr8&5\end{pmatrix}$ y $A^4=21A-8I=\begin{pmatrix}34&21\cr21&13\end{pmatrix}$. $f^3(1,0)=8(2,1)-3(1,0)=(13,8)$; directo: $f(1,0)=(2,1)$, $f(2,1)=(5,3)$, $f(5,3)=(13,8)$ ✓.</li>
+      $$f^3=f\circ(3f-i)=3\,f\circ f-f=3(3f-i)-f=8f-3i,$$
+      $$f^4=f\circ f^3=8\,f\circ f-3f=8(3f-i)-3f=21f-8i.$$
+      <p>Matrices:</p>
+      $$A^3=8A-3I=\begin{pmatrix}13&8\\8&5\end{pmatrix},\qquad A^4=21A-8I=\begin{pmatrix}34&21\\21&13\end{pmatrix}.$$
+      <p>$f^3(1,0)=8(2,1)-3(1,0)=(13,8)$; directo:</p>
+      $$f(1,0)=(2,1),\quad f(2,1)=(5,3),\quad f(5,3)=(13,8)\ ✓$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> si un endomorfismo cumple una relación polinómica ($f\circ f=\alpha f+\beta i$), úsala para reducir potencias y, si el término independiente no es cero, para despejar un «inverso» sacando $f$ factor común con la distributiva.</div>
   <p><b>Error típico:</b> confundir $f\circ f$ (matriz $A^2$, producto de matrices) con «elevar al cuadrado cada elemento» de $A$ ($\begin{pmatrix}4&1\cr1&1\end{pmatrix}\neq A^2$).</p>
@@ -492,12 +538,16 @@
   </dl></div>
   <ol class="steps">
     <li><b>¿Se puede componer?</b> $g$ llega a $\mathbb R$ y $f$ sale de $\mathbb R$: sí (Def. 3.11).</li>
-    <li><b>Matriz de $g$:</b> $g(1,0)=1$, $g(0,1)=-1$, $B=\begin{pmatrix}1&-1\end{pmatrix}$ ($1\times2$).</li>
-    <li><b>Matriz de $f$:</b> la base canónica de $\mathbb R$ es $\{1\}$ y $f(1)=(1,0,2)$: $A=\begin{pmatrix}1\cr0\cr2\end{pmatrix}$ ($3\times1$).</li>
+    <li><b>Matriz de $g$:</b>
+      $$g(1,0)=1,\quad g(0,1)=-1\ \Rightarrow\ B=\begin{pmatrix}1&-1\end{pmatrix}\ (1\times2).$$</li>
+    <li><b>Matriz de $f$:</b> la base canónica de $\mathbb R$ es $\{1\}$ y $f(1)=(1,0,2)$:
+      $$A=\begin{pmatrix}1\\0\\2\end{pmatrix}\ (3\times1).$$</li>
     <li><b>Tamaños:</b> $(3\times1)(1\times2)=3\times2$ ✓.</li>
     <li><b>Producto</b> (Def. 3.12):
-    $$C=AB=\begin{pmatrix}1\cr0\cr2\end{pmatrix}\begin{pmatrix}1&-1\end{pmatrix}=\begin{pmatrix}1\cdot1&1\cdot(-1)\cr0\cdot1&0\cdot(-1)\cr2\cdot1&2\cdot(-1)\end{pmatrix}=\begin{pmatrix}1&-1\cr0&0\cr2&-2\end{pmatrix}.$$</li>
-    <li><b>Comprobación por sustitución:</b> $(f\circ g)(x_1,x_2)=f(x_1-x_2)=(x_1-x_2,\ 0,\ 2x_1-2x_2)$, cuya matriz es la misma ✓.</li>
+      $$C=AB=\begin{pmatrix}1\\0\\2\end{pmatrix}\begin{pmatrix}1&-1\end{pmatrix}=\begin{pmatrix}1\cdot1&1\cdot(-1)\\0\cdot1&0\cdot(-1)\\2\cdot1&2\cdot(-1)\end{pmatrix}=\begin{pmatrix}1&-1\\0&0\\2&-2\end{pmatrix}.$$</li>
+    <li><b>Comprobación por sustitución:</b>
+      $$(f\circ g)(x_1,x_2)=f(x_1-x_2)=(x_1-x_2,\ 0,\ 2x_1-2x_2),$$
+      <p>cuya matriz es la misma ✓.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> (1) dibuja la cadena $V\xrightarrow{g}W\xrightarrow{f}U$; (2) matrices $A_f$ ($n\times p$) y $A_g$ ($p\times m$); (3) multiplica $A_fA_g$; (4) comprueba por sustitución.</div>
   <p><b>Error típico:</b> calcular $BA=\begin{pmatrix}1&-1\end{pmatrix}\begin{pmatrix}1\cr0\cr2\end{pmatrix}$: con estos tamaños ni se puede ($1\times2$ por $3\times1$), y $g\circ f$ no existe.</p>
@@ -514,11 +564,15 @@
   </dl></div>
   <ol class="steps">
     <li><b>Cadena:</b> $\mathbb R^2\xrightarrow{g}\mathbb R\xrightarrow{f}\mathbb R^3$: se puede componer.</li>
-    <li><b>Matrices:</b> $g(1,0)=2$, $g(0,1)=1$: $A_g=\begin{pmatrix}2&1\end{pmatrix}$ ($1\times2$). $f(1)=(0,5,1)$: $A_f=\begin{pmatrix}0\cr5\cr1\end{pmatrix}$ ($3\times1$).</li>
+    <li><b>Matrices:</b>
+      $$g(1,0)=2,\ g(0,1)=1\ \Rightarrow\ A_g=\begin{pmatrix}2&1\end{pmatrix}\ (1\times2),$$
+      $$f(1)=(0,5,1)\ \Rightarrow\ A_f=\begin{pmatrix}0\\5\\1\end{pmatrix}\ (3\times1).$$</li>
     <li><b>Producto</b> ($g$ actúa primero, va a la derecha):
-    $$C=A_fA_g=\begin{pmatrix}0\cr5\cr1\end{pmatrix}\begin{pmatrix}2&1\end{pmatrix}=\begin{pmatrix}0&0\cr10&5\cr2&1\end{pmatrix}.$$</li>
-    <li><b>Representación matricial:</b> $(f\circ g)(x,y)=\begin{pmatrix}0&0\cr10&5\cr2&1\end{pmatrix}\binom xy=\begin{pmatrix}0\cr10x+5y\cr2x+y\end{pmatrix}$.</li>
-    <li><b>Comprobación:</b> $f(g(x,y))=f(2x+y)=(0,\ 5(2x+y),\ 2x+y)$ ✓.</li>
+      $$C=A_fA_g=\begin{pmatrix}0\\5\\1\end{pmatrix}\begin{pmatrix}2&1\end{pmatrix}=\begin{pmatrix}0&0\\10&5\\2&1\end{pmatrix}.$$</li>
+    <li><b>Representación matricial:</b>
+      $$(f\circ g)(x,y)=\begin{pmatrix}0&0\\10&5\\2&1\end{pmatrix}\binom xy=\begin{pmatrix}0\\10x+5y\\2x+y\end{pmatrix}.$$</li>
+    <li><b>Comprobación:</b>
+      $$f(g(x,y))=f(2x+y)=(0,\ 5(2x+y),\ 2x+y)\ ✓$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> igual que el anterior. Si una aplicación va a $\mathbb R$ o sale de $\mathbb R$, su matriz es una fila o una columna, y el producto columna$\times$fila da una matriz de rango 1 (columnas proporcionales).</div>
   <p><b>Error típico:</b> escribir $A_f$ como fila $(0\ 5\ 1)$: tiene <b>3 filas</b> (dimensión de llegada) y 1 columna. <b>Sobre la oficial:</b> correcta.</p>
@@ -534,12 +588,17 @@
   </dl></div>
   <ol class="steps">
     <li><b>¿Se puede componer?</b> $f$ llega a $\mathbb R^3$, donde sale $g$: sí. (Al revés, $f\circ g$ <b>no</b> existe: $g$ llega a $\mathbb R$ y $f$ sale de $\mathbb R^2$.)</li>
-    <li><b>Matrices:</b> $f(1,0)=(1,0,-2)$, $f(0,1)=(1,5,0)$: $A_f=\begin{pmatrix}1&1\cr0&5\cr-2&0\end{pmatrix}$ ($3\times2$). $A_g=\begin{pmatrix}3&-1&1\end{pmatrix}$ ($1\times3$).</li>
+    <li><b>Matrices:</b>
+      $$f(1,0)=(1,0,-2),\ f(0,1)=(1,5,0)\ \Rightarrow\ A_f=\begin{pmatrix}1&1\\0&5\\-2&0\end{pmatrix}\ (3\times2),$$
+      $$A_g=\begin{pmatrix}3&-1&1\end{pmatrix}\ (1\times3).$$</li>
     <li><b>Producto</b> ($f$ actúa primero, $A_f$ a la derecha): $(1\times3)(3\times2)=1\times2$:
-    $$A_gA_f=\begin{pmatrix}3&-1&1\end{pmatrix}\begin{pmatrix}1&1\cr0&5\cr-2&0\end{pmatrix}=\begin{pmatrix}3-0-2&\ 3-5+0\end{pmatrix}=\begin{pmatrix}1&-2\end{pmatrix}.$$</li>
-    <li><b>Representación:</b> $(g\circ f)(x,y)=\begin{pmatrix}1&-2\end{pmatrix}\binom xy=x-2y$.</li>
-    <li><b>Valor:</b> $(g\circ f)(3,2)=3-4=-1$.</li>
-    <li><b>Comprobación sin matrices:</b> $f(3,2)=(5,10,-6)$ y $g(5,10,-6)=15-10-6=-1$ ✓.</li>
+      $$A_gA_f=\begin{pmatrix}3&-1&1\end{pmatrix}\begin{pmatrix}1&1\\0&5\\-2&0\end{pmatrix}=\begin{pmatrix}3-0-2&\ 3-5+0\end{pmatrix}=\begin{pmatrix}1&-2\end{pmatrix}.$$</li>
+    <li><b>Representación:</b>
+      $$(g\circ f)(x,y)=\begin{pmatrix}1&-2\end{pmatrix}\binom xy=x-2y.$$</li>
+    <li><b>Valor:</b>
+      $$(g\circ f)(3,2)=3-4=-1.$$</li>
+    <li><b>Comprobación sin matrices:</b>
+      $$f(3,2)=(5,10,-6),\qquad g(5,10,-6)=15-10-6=-1\ ✓$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> lee la composición de derecha a izquierda para saber qué actúa primero; esa matriz va a la derecha. Para un valor concreto, comprueba aplicando $f$ y luego $g$.</div>
   <p><b>Error típico:</b> calcular $A_fA_g$ ($3\times2$ por $1\times3$: no se puede) o confundir $g\circ f$ con $f\circ g$. <b>Sobre la oficial:</b> correcta.</p>
@@ -556,10 +615,11 @@
   <ol class="steps">
     <li><b>¿Se puede componer?</b> $g$ llega a $\mathbb R^2$ y $f$ sale de $\mathbb R^2$: sí.</li>
     <li><b>Sustitución</b> (Def. 3.11): $(x_1,x_2)=g(y_1,y_2)=(2y_1-y_2,\ 0)$ y se lleva a $f$ (componentes $x_1$, $x_2-x_1$, $3x_1$):
-    $$h(y_1,y_2)=f(2y_1-y_2,\ 0)=\big(2y_1-y_2,\ -(2y_1-y_2),\ 3(2y_1-y_2)\big)=(2y_1-y_2,\ -2y_1+y_2,\ 6y_1-3y_2).$$</li>
-    <li><b>Comprobación con matrices:</b> $A_f=\begin{pmatrix}1&0\cr-1&1\cr3&0\end{pmatrix}$, $A_g=\begin{pmatrix}2&-1\cr0&0\end{pmatrix}$:
-    $$A_fA_g=\begin{pmatrix}2&-1\cr-2&1\cr6&-3\end{pmatrix},$$
-    cuyas filas son los coeficientes de las tres componentes de $h$ ✓.</li>
+      $$h(y_1,y_2)=f(2y_1-y_2,\ 0)=\big(2y_1-y_2,\ -(2y_1-y_2),\ 3(2y_1-y_2)\big)$$
+      $$=(2y_1-y_2,\ -2y_1+y_2,\ 6y_1-3y_2).$$</li>
+    <li><b>Comprobación con matrices:</b>
+      $$A_f=\begin{pmatrix}1&0\\-1&1\\3&0\end{pmatrix},\quad A_g=\begin{pmatrix}2&-1\\0&0\end{pmatrix},\quad A_fA_g=\begin{pmatrix}2&-1\\-2&1\\6&-3\end{pmatrix},$$
+      <p>cuyas filas son los coeficientes de las tres componentes de $h$ ✓.</p></li>
     <li><b>Observación.</b> $g\circ f$ no se puede formar ($f$ llega a $\mathbb R^3$ y $g$ sale de $\mathbb R^2$). Y $h$ tiene rango 1 (columnas proporcionales) porque ya la imagen de $g$ es $\langle(1,0)\rangle$.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> por sustitución, pon la fórmula de la de dentro ($g$) <b>en el lugar de cada variable</b> de la de fuera ($f$), respetando qué componente es $x_1$ y cuál $x_2$ (las letras son solo nombres: importa la posición).</div>
@@ -623,9 +683,12 @@
     <dt>Plan</dt><dd>Matrices, combinación elemento a elemento, comprobación.</dd>
   </dl></div>
   <ol class="steps">
-    <li>Mismos espacios: se pueden combinar. $A_f=\begin{pmatrix}1&2\cr3&0\end{pmatrix}$, $A_g=\begin{pmatrix}0&1\cr1&-1\end{pmatrix}$.</li>
-    <li>$2A_f-3A_g=\begin{pmatrix}2&4\cr6&0\end{pmatrix}-\begin{pmatrix}0&3\cr3&-3\end{pmatrix}=\begin{pmatrix}2&1\cr3&3\end{pmatrix}$.</li>
-    <li>Comprobación: $f(1,1)=(3,3)$, $g(1,1)=(1,0)$, $2(3,3)-3(1,0)=(3,6)$; y $\begin{pmatrix}2&1\cr3&3\end{pmatrix}\binom11=\binom36$ ✓.</li>
+    <li>Mismos espacios: se pueden combinar.
+      $$A_f=\begin{pmatrix}1&2\\3&0\end{pmatrix},\qquad A_g=\begin{pmatrix}0&1\\1&-1\end{pmatrix}.$$</li>
+    <li>Combino las matrices:
+      $$2A_f-3A_g=\begin{pmatrix}2&4\\6&0\end{pmatrix}-\begin{pmatrix}0&3\\3&-3\end{pmatrix}=\begin{pmatrix}2&1\\3&3\end{pmatrix}.$$</li>
+    <li>Comprobación en $(1,1)$:
+      $$f(1,1)=(3,3),\quad g(1,1)=(1,0),\quad2(3,3)-3(1,0)=(3,6);\qquad\begin{pmatrix}2&1\\3&3\end{pmatrix}\binom11=\binom36\ ✓$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> matriz de cada aplicación, combina las matrices y comprueba en un vector.</div>
 </details>
@@ -640,9 +703,14 @@
   </dl></div>
   <ol class="steps">
     <li><b>Cadenas:</b> $g\circ f:\mathbb R^2\to\mathbb R^2$ (matriz $2\times2$); $f\circ g:\mathbb R^3\to\mathbb R^3$ (matriz $3\times3$). Ambas existen (como en U Ej. 3.27).</li>
-    <li>$A_f=\begin{pmatrix}1&0\cr1&1\cr0&2\end{pmatrix}$, $A_g=\begin{pmatrix}1&0&-1\cr0&1&0\end{pmatrix}$.</li>
-    <li>$A_{g\circ f}=A_gA_f=\begin{pmatrix}1&-2\cr1&1\end{pmatrix}$. Sustitución: $g(x,\ x+y,\ 2y)=(x-2y,\ x+y)$ ✓.</li>
-    <li>$A_{f\circ g}=A_fA_g=\begin{pmatrix}1&0&-1\cr1&1&-1\cr0&2&0\end{pmatrix}$. Sustitución: $f(x-z,\ y)=(x-z,\ x-z+y,\ 2y)$ ✓.</li>
+    <li>Matrices:
+      $$A_f=\begin{pmatrix}1&0\\1&1\\0&2\end{pmatrix},\qquad A_g=\begin{pmatrix}1&0&-1\\0&1&0\end{pmatrix}.$$</li>
+    <li>$g\circ f$:
+      $$A_{g\circ f}=A_gA_f=\begin{pmatrix}1&-2\\1&1\end{pmatrix}.$$
+      <p>Sustitución: $g(x,\ x+y,\ 2y)=(x-2y,\ x+y)$ ✓.</p></li>
+    <li>$f\circ g$:
+      $$A_{f\circ g}=A_fA_g=\begin{pmatrix}1&0&-1\\1&1&-1\\0&2&0\end{pmatrix}.$$
+      <p>Sustitución: $f(x-z,\ y)=(x-z,\ x-z+y,\ 2y)$ ✓.</p></li>
     <li><b>No son iguales</b>: ni siquiera tienen el mismo tamaño. Además $\det A_{g\circ f}=3\neq0$ mientras que $\det A_{f\circ g}=0$ ($f\circ g$ pasa por $\mathbb R^2$, así que su imagen tiene dimensión $\le2$).</li>
   </ol>
   <div class="recipe"><b>Receta:</b> cadena de espacios, matrices en el orden «la última a la izquierda», y comprueba sustituyendo.</div>
