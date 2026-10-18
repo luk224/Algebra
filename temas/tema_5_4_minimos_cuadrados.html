@@ -406,9 +406,15 @@
 
 <details class="sol" id="ej5-35"><summary>Ejercicio 5.35 — error cuadrático al sustituir $X_0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.35, p. 192">E p.192</span></summary>
   <p class="enun">Calcúlese el error cuadrático cometido en $AX=B$, si $A=\begin{pmatrix}2&1\\1&-2\\3&1\end{pmatrix}$ y $B=\begin{pmatrix}3\\-1\\2\end{pmatrix}$, al sustituir $X$ por $X_0=\begin{pmatrix}1\\-1\end{pmatrix}$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Calcular el error cuadrático al sustituir un vector $X_0$.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>Calcular $AX_0-B$ y su norma al cuadrado.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Qué se pide.</b> Por la Definición 5.14 (U p.227), el error cuadrático es la norma de $AX_0-B$: mide «cuánto falla» $X_0$ como solución.</li>
-    <li><b>Calcular $AX_0$:</b> $AX_0=\begin{pmatrix}2\cdot1+1\cdot(-1)\\1\cdot1+(-2)(-1)\\3\cdot1+1\cdot(-1)\end{pmatrix}=\begin{pmatrix}1\\3\\2\end{pmatrix}$.</li>
+    <li><p><b>Calcular $AX_0$:</b></p>
+      $$AX_0=\begin{pmatrix}2\cdot1+1\cdot(-1)\\1\cdot1+(-2)(-1)\\3\cdot1+1\cdot(-1)\end{pmatrix}=\begin{pmatrix}1\\3\\2\end{pmatrix}.$$</li>
     <li><b>Restar $B$:</b> $AX_0-B=(1-3,\ 3+1,\ 2-2)=(-2,4,0)$.</li>
     <li><b>Norma:</b> $\sqrt{4+16+0}=\sqrt{20}=2\sqrt5\approx4{,}4721$.</li>
   </ol>
@@ -419,6 +425,11 @@
 
 <details class="sol" id="ej5-36"><summary>Ejercicio 5.36 — verdadero/falso: definición y unicidad <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.36, p. 192">E p.192</span></summary>
   <p class="enun">Si $A\in\mathcal M_{m\times n}$, se pide decidir si es cierto: A) La solución por mínimos cuadrados de $Ax=b$ es un vector $x_0$ tal que es solución del problema $\min_{x\in\mathbb R^n}\|Ax-b\|$. B) Si $AX=B$ es compatible determinado, la solución por mínimos cuadrados de $AX=B$ es única y es la solución de $AX=B$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>V/F sobre la definición y la unicidad de la solución por mínimos cuadrados.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>Si $AX=B$ es compatible, el mínimo es $0$ y se alcanza en la solución exacta.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>A) Cierto.</b> Es literalmente la Definición 5.15 (U p.227): $x_0$ es solución por mínimos cuadrados si $\|Ax_0-b\|\le\|Ax-b\|$ para todo $x$, es decir, si $x_0$ minimiza $\|Ax-b\|$.</li>
     <li><b>B) Cierto.</b> Sea $X_0$ la (única) solución de $AX=B$. Su error es $\|AX_0-B\|=\|0\|=0$. Como una norma nunca es negativa, $0\le\|AX-B\|$ para todo $X$: $X_0$ alcanza el mínimo y es solución por mínimos cuadrados.</li>
@@ -430,12 +441,21 @@
 
 <details class="sol" id="ej5-44"><summary>Ejercicio 5.44 — cinco afirmaciones sobre mínimos cuadrados <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.44, p. 200">E p.200</span></summary>
   <p class="enun">Justifíquese si son ciertas o no: A) En la práctica, al modelizar problemas reales aparecen sistemas de ecuaciones que son inconsistentes. B) Si $X_0$ es solución por mínimos cuadrados del sistema inconsistente $AX=B$, entonces $AX_0-B=0$. C) A diferencia del polinomio de mínimos cuadrados, la interpolación polinómica pasa exactamente por los puntos $(x_i,y_i)$ dados. D) Si $y=mx+n$ es la recta por mínimos cuadrados asociada a los datos $(x_i,y_i)$, entonces existe $i$ tal que $y_i=mx_i+n$. E) Si $X_1$ y $X_2$ son soluciones por mínimos cuadrados de $AX=B$, entonces $\|AX_1-B\|=\|AX_2-B\|$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Cinco afirmaciones sobre mínimos cuadrados.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>Contrastar cada una con la definición: residuo $AX_0-B\neq0$ en general, y ajuste frente a interpolación.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>A) Cierto.</b> Los datos medidos tienen errores y hay más ecuaciones (observaciones) que incógnitas (parámetros): lo normal es que no haya solución exacta. Es la motivación de U §5.4 (p.225); p. ej. 5 puntos no alineados (E 5.40).</li>
     <li><b>B) Falso.</b> Si $AX_0-B=0$, entonces $AX_0=B$ y $X_0$ sería solución exacta, contra «inconsistente». Luego $\|AX_0-B\|>0$ (en E 5.37 vale $\frac2{\sqrt3}$).</li>
     <li><b>C) Cierto.</b> El polinomio de interpolación se define imponiendo $p(x_i)=y_i$ en todos los datos (grado $N-1$ con $N$ datos de abscisas distintas); el de mínimos cuadrados, de menor grado, solo minimiza $\sum(p(x_i)-y_i)^2$ y en general no pasa por ninguno. (La razón es la <i>definición</i> de interpolación; la que da E, «no minimiza el error en puntos distintos de los observados», no es el argumento.)</li>
-    <li><b>D) Falso.</b> Contraejemplo: datos $(0,0),(1,1),(2,0)$. Normales $\begin{pmatrix}5&3\\3&3\end{pmatrix}\binom mn=\binom11$ ⇒ $m=0$, $n=\frac13$: la recta $y=\frac13$ no pasa por ninguno de los tres puntos (en la animación de la sección 5, preset «E 5.44 D»).</li>
-    <li><b>E) Cierto.</b> Ambas minimizan $\|AX-B\|$, y el mínimo es un único número: $\|AX_1-B\|=\|AX_2-B\|$. Más aún, $AX_1=AX_2=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}B$ (U p.229; ejemplo en la sección 3).</li>
+    <li><p><b>D) Falso.</b> Contraejemplo: datos $(0,0),(1,1),(2,0)$. Normales</p>
+      $$\begin{pmatrix}5&3\\3&3\end{pmatrix}\binom mn=\binom11$$
+      <p>⇒ $m=0$, $n=\frac13$: la recta $y=\frac13$ no pasa por ninguno de los tres puntos (en la animación de la sección 5, preset «E 5.44 D»).</p></li>
+    <li><p><b>E) Cierto.</b> Ambas minimizan $\|AX-B\|$, y el mínimo es un único número: $\|AX_1-B\|=\|AX_2-B\|$. Más aún,</p>
+      $$AX_1=AX_2=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}B$$
+      <p>(U p.229; ejemplo en la sección 3).</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> V/F: definición (Def. 5.15), «el error es $0$ solo si el sistema es compatible» y «la proyección es única aunque $X_0$ no lo sea».</div>
   <p><b>Error típico:</b> confundir «la solución $X_0$ puede no ser única» con «el error puede ser distinto»: el error mínimo (y el vector $AX_0$) es siempre único. <b>Teoría:</b> U §5.4, p.225-229.</p>
@@ -444,6 +464,11 @@
 <details class="sol" id="ej5-34"><summary>Ejercicio 5.34 — el problema $\min_{u\in U}\|v-u\|$ (frontera con 5.1) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.34, p. 191">E p.191</span></summary>
   <p class="enun">Si $E$ es un espacio euclídeo, $U\subset E$ es un subespacio de dimensión $m$ y $v\in E$ pero $v\notin U$, se pide estudiar la solución del problema $\min_{u\in U}\|v-u\|^2$.</p>
   <p><b>Idea.</b> Es el Teorema 5.4 de U (tema 5.1) demostrado «a mano». Es la base de todo el tema: con $U=\langle\operatorname{Col}A\rangle$ y $v=b$, el $u_0$ que sale es $Ax_0$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Resolver el problema $\min_{u\in U}\|v-u\|$ en un espacio euclídeo.</dd>
+    <dt>Qué se usa</dt><dd><b>Teorema de la mejor aproximación:</b> el mínimo se alcanza en $u=\operatorname{Proy}_Uv$ y es único; $v-u\perp U$.</dd>
+    <dt>Plan</dt><dd>Descomponer $v=u+w$ con $u\in U$, $w\in U^\perp$ y aplicar Pitágoras.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Reformular.</b> Buscamos $u_0\in U$ con $\|v-u_0\|^2\le\|v-u\|^2$ para todo $u\in U$. Minimizar la norma o su cuadrado es lo mismo ($t\mapsto t^2$ crece para $t\ge0$).</li>
     <li><b>Coordenadas.</b> Sea $\{u_1,\dots,u_m\}$ una base <b>ortonormal</b> de $U$ (existe por Gram-Schmidt, U p.207). Todo $u\in U$ es $u=\sum x_iu_i$: hay que hallar los $x_i$.</li>
@@ -461,10 +486,19 @@
 
 <details class="sol" id="ej5-37"><summary>Ejercicio 5.37 — mínimos cuadrados del sistema de E 5.35 y su error <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.37, p. 193">E p.193</span></summary>
   <p class="enun">Hállese la solución por mínimos cuadrados del sistema del Ejercicio 5.35 y su error cuadrático asociado.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Solución por mínimos cuadrados del sistema del 5.35 y su error.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>Formar $A^tA$ y $A^tB$, resolver y calcular $\|AX_0-B\|^2$.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>¿Incompatible?</b> Ampliada $\left(\begin{array}{cc|c}2&1&3\\1&-2&-1\\3&1&2\end{array}\right)$: $\det=2(-4+1)-1(2+3)+3(1+6)=-6-5+21=10\neq0$. El rango de la ampliada es $3$ y el de $A$, a lo sumo $2$: incompatible. Por eso tiene sentido buscar una solución aproximada.</li>
+    <li><p><b>¿Incompatible?</b> Ampliada</p>
+      $$\left(\begin{array}{cc|c}2&1&3\\1&-2&-1\\3&1&2\end{array}\right):$$
+      <p>$\det=2(-4+1)-1(2+3)+3(1+6)=-6-5+21=10\neq0$. El rango de la ampliada es $3$ y el de $A$, a lo sumo $2$: incompatible. Por eso tiene sentido buscar una solución aproximada.</p></li>
     <li><b>¿Única?</b> Las columnas $(2,1,3)$ y $(1,-2,1)$ no son proporcionales ⇒ independientes ⇒ $A^tA$ regular y solución por mínimos cuadrados <b>única</b> (U p.229).</li>
-    <li><b>Ecuaciones normales</b> (productos escalares de columnas): $A^tA=\begin{pmatrix}4+1+9&2-2+3\\3&1+4+1\end{pmatrix}=\begin{pmatrix}14&3\\3&6\end{pmatrix}$, $A^tB=\begin{pmatrix}6-1+6\\3+2+2\end{pmatrix}=\begin{pmatrix}11\\7\end{pmatrix}$.</li>
+    <li><p><b>Ecuaciones normales</b> (productos escalares de columnas):</p>
+      $$A^tA=\begin{pmatrix}4+1+9&2-2+3\\3&1+4+1\end{pmatrix}=\begin{pmatrix}14&3\\3&6\end{pmatrix},$$
+      $$A^tB=\begin{pmatrix}6-1+6\\3+2+2\end{pmatrix}=\begin{pmatrix}11\\7\end{pmatrix}.$$</li>
     <li><b>Resolver</b> $14x_1+3x_2=11,\ 3x_1+6x_2=7$. $\det=84-9=75$. Cramer: $x_1=\frac{66-21}{75}=\frac35$, $x_2=\frac{98-33}{75}=\frac{13}{15}$.</li>
     <li><b>Error.</b> $AX_0=\left(\frac{31}{15},-\frac{17}{15},\frac83\right)$, $AX_0-B=\left(-\frac{14}{15},-\frac2{15},\frac23\right)$,
     $$\|AX_0-B\|=\sqrt{\tfrac{196+4+100}{225}}=\sqrt{\tfrac43}=\tfrac2{\sqrt3}=\tfrac{2\sqrt3}3\approx1{,}1547.$$</li>
@@ -478,14 +512,24 @@
 <details class="sol" id="ej5-38"><summary>Ejercicio 5.38 — mínimos cuadrados con la factorización $QR$ de E 5.23 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.38, p. 194 (matriz leída del PDF de E)">E p.194</span></summary>
   <p class="enun">Utilizando la factorización $QR$ del Ejercicio 5.23 (tema 5.2), se pide calcular la solución por mínimos cuadrados del sistema asociado a $\begin{pmatrix}1&0&1\\0&1&2\\-1&2&1\\0&1&1\end{pmatrix}\begin{pmatrix}x\\y\\z\end{pmatrix}=\begin{pmatrix}0\\1\\1\\1\end{pmatrix}$. (La factorización es la de la matriz $A$ de este sistema.)</p>
   <p><b>Datos</b> (E 5.23 del tema <a href="tema_5_2_matrices_ortogonales.html#ej5-23">5.2</a>, Gram-Schmidt de las columnas de esta misma $A$): $Q=\begin{pmatrix}\frac1{\sqrt2}&\frac12&-\frac1{2\sqrt3}\\0&\frac12&\frac{\sqrt3}2\\-\frac1{\sqrt2}&\frac12&-\frac1{2\sqrt3}\\0&\frac12&-\frac1{2\sqrt3}\end{pmatrix}$, $R=\begin{pmatrix}\sqrt2&-\sqrt2&0\\0&2&\frac52\\0&0&\frac{\sqrt3}2\end{pmatrix}$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Resolver un problema de mínimos cuadrados con la factorización $QR$.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$. <b>Con $QR$:</b> $A=QR$ da $RX=Q^tB$ (triangular superior).</dd>
+    <dt>Plan</dt><dd>Calcular $Q^tB$ y resolver $RX=Q^tB$ hacia atrás.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Incompatible.</b> $\det(A\mid B)=-1\neq0$ (como matriz $4\times4$ la ampliada): rango $4$ frente a $\operatorname{rang}A=3$ ⇒ incompatible. Se busca la solución por mínimos cuadrados.</li>
     <li><b>Por qué vale $RX=Q^tB$</b> (sección 4): $A^tA=R^tR$ y $A^tB=R^tQ^tB$; se cancela $R^t$ (regular). La solución es única (columnas independientes).</li>
-    <li><b>Calcular $Q^tB$</b> (cada columna de $Q$ por $B=(0,1,1,1)$): $q_1\cdot B=-\frac1{\sqrt2}$; $q_2\cdot B=\frac12+\frac12+\frac12=\frac32$; $q_3\cdot B=\frac{\sqrt3}2-\frac1{2\sqrt3}-\frac1{2\sqrt3}=\frac{\sqrt3}2-\frac1{\sqrt3}=\frac1{2\sqrt3}=\frac{\sqrt3}6$.</li>
+    <li><p><b>Calcular $Q^tB$</b> (cada columna de $Q$ por $B=(0,1,1,1)$): $q_1\cdot B=-\frac1{\sqrt2}$; $q_2\cdot B=\frac12+\frac12+\frac12=\frac32$;</p>
+      $$q_3\cdot B=\frac{\sqrt3}2-\frac1{2\sqrt3}-\frac1{2\sqrt3}=\frac{\sqrt3}2-\frac1{\sqrt3}=\frac1{2\sqrt3}=\frac{\sqrt3}6.$$</li>
     <li><b>Sistema triangular</b> $RX=Q^tB$:
     $$\begin{cases}\sqrt2\,x-\sqrt2\,y=-\frac1{\sqrt2}\\[2pt]2y+\frac52z=\frac32\\[2pt]\frac{\sqrt3}2z=\frac{\sqrt3}6\end{cases}$$</li>
-    <li><b>Sustitución regresiva</b> (de abajo arriba): $z=\frac{\sqrt3/6}{\sqrt3/2}=\frac13$. $2y=\frac32-\frac52\cdot\frac13=\frac32-\frac56=\frac23\Rightarrow y=\frac13$. $\sqrt2(x-y)=-\frac1{\sqrt2}\Rightarrow x-y=-\frac12\Rightarrow x=\frac13-\frac12=-\frac16$.</li>
-    <li><b>Comprobación con las normales:</b> $A^tA=\begin{pmatrix}2&-2&0\\-2&6&5\\0&5&7\end{pmatrix}$, $A^tB=(-1,4,4)^t$; con $\left(-\frac16,\frac13,\frac13\right)$: $-\frac13-\frac23=-1$ ✓, $\frac13+2+\frac53=4$ ✓, $\frac53+\frac73=4$ ✓. Residuo $B-AX=\left(-\frac16,0,-\frac16,\frac13\right)$, error $\frac1{\sqrt6}\approx0{,}408$.</li>
+    <li><p><b>Sustitución regresiva</b> (de abajo arriba): $z=\frac{\sqrt3/6}{\sqrt3/2}=\frac13$.</p>
+      $$2y=\frac32-\frac52\cdot\frac13=\frac32-\frac56=\frac23\Rightarrow y=\frac13.$$
+      $$\sqrt2(x-y)=-\frac1{\sqrt2}\Rightarrow x-y=-\frac12\Rightarrow x=\frac13-\frac12=-\frac16.$$</li>
+    <li><p><b>Comprobación con las normales:</b></p>
+      $$A^tA=\begin{pmatrix}2&-2&0\\-2&6&5\\0&5&7\end{pmatrix},$$
+      <p>$A^tB=(-1,4,4)^t$; con $\left(-\frac16,\frac13,\frac13\right)$: $-\frac13-\frac23=-1$ ✓, $\frac13+2+\frac53=4$ ✓, $\frac53+\frac73=4$ ✓. Residuo $B-AX=\left(-\frac16,0,-\frac16,\frac13\right)$, error $\frac1{\sqrt6}\approx0{,}408$.</p></li>
   </ol>
   <p><b>Resultado:</b> $x=-\frac16,\ y=\frac13,\ z=\frac13$ (coincide con E).</p>
   <div class="recipe"><b>Receta:</b> con $A=QR$: calcula $Q^tB$ (producto escalar de cada columna de $Q$ con $B$) y resuelve $RX=Q^tB$ de abajo arriba; no hace falta formar $A^tA$.</div>
@@ -494,9 +538,16 @@
 
 <details class="sol" id="ej5-39"><summary>Ejercicio 5.39 — columnas dependientes: conjunto de soluciones (la oficial falla) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.39, p. 195">E p.195</span></summary>
   <p class="enun">Hállese la solución del problema de mínimos cuadrados $\begin{cases}x_1+x_2+x_3+x_4=4\\x_1+x_2+x_3+x_4=-1\\x_2+x_4=2\\x_1+x_3=1\end{cases}$ y estúdiese el conjunto obtenido en términos de espacios vectoriales.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Conjunto de soluciones por mínimos cuadrados con columnas dependientes.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$. <b>Columnas dependientes:</b> $A^tA$ es singular y hay infinitas soluciones, que forman una recta/plano afín $X_p+\operatorname{Nuc}A$.</dd>
+    <dt>Plan</dt><dd>Resolver las ecuaciones normales (indeterminadas) y describir el conjunto de soluciones.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Incompatible:</b> las dos primeras ecuaciones piden que el mismo número $x_1+x_2+x_3+x_4$ valga $4$ y $-1$. (Rangos: $\operatorname{rang}A=2$, $\operatorname{rang}(A\mid B)=3$.)</li>
-    <li><b>Matrices.</b> $A=\begin{pmatrix}1&1&1&1\\1&1&1&1\\0&1&0&1\\1&0&1&0\end{pmatrix}$, $B=(4,-1,2,1)^t$. Columnas: $C_1=C_3=(1,1,0,1)$, $C_2=C_4=(1,1,1,0)$: <b>dependientes</b> (rango $2$) ⇒ la solución por mínimos cuadrados <b>no es única</b>.</li>
+    <li><p><b>Matrices.</b></p>
+      $$A=\begin{pmatrix}1&1&1&1\\1&1&1&1\\0&1&0&1\\1&0&1&0\end{pmatrix},$$
+      <p>$B=(4,-1,2,1)^t$. Columnas: $C_1=C_3=(1,1,0,1)$, $C_2=C_4=(1,1,1,0)$: <b>dependientes</b> (rango $2$) ⇒ la solución por mínimos cuadrados <b>no es única</b>.</p></li>
     <li><b>Ecuaciones normales</b> (productos escalares de columnas): $C_1\cdot C_1=3$, $C_1\cdot C_2=2$, $C_2\cdot C_2=3$; $C_1\cdot B=4-1+0+1=4$, $C_2\cdot B=4-1+2+0=5$:
     $$A^tA=\begin{pmatrix}3&2&3&2\\2&3&2&3\\3&2&3&2\\2&3&2&3\end{pmatrix},\ A^tB=\begin{pmatrix}4\\5\\4\\5\end{pmatrix}\ \Longrightarrow\ \begin{cases}3x_1+2x_2+3x_3+2x_4=4\\2x_1+3x_2+2x_3+3x_4=5\end{cases}$$
     (las ecuaciones 3.ª y 4.ª repiten la 1.ª y la 2.ª). Hasta aquí E es correcto.</li>
@@ -504,7 +555,9 @@
     <li><b>Conjunto de soluciones:</b> $x_1=\frac25-x_3$, $x_2=\frac75-x_4$, con $x_3,x_4$ libres:
     $$(x_1,x_2,x_3,x_4)=\left(\tfrac25,\tfrac75,0,0\right)+\lambda(-1,0,1,0)+\mu(0,-1,0,1).$$</li>
     <li><b>En términos de espacios vectoriales.</b> Es $x_p+\operatorname{Nuc}(A)$ con $x_p=(\frac25,\frac75,0,0)$ y $\operatorname{Nuc}A=\langle(-1,0,1,0),(0,-1,0,1)\rangle$ (dimensión $4-2=2$). Es un <b>plano afín (variedad lineal de dimensión 2) de $\mathbb R^4$</b> que <b>no es un subespacio</b>: no contiene al $0$ (porque $A^tA\cdot0=0\neq A^tB$).</li>
-    <li><b>Comprobación.</b> Todas comparten $Ax_0=\left(\frac95,\frac95,\frac75,\frac25\right)=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}B$ y el residuo $B-Ax_0=\left(\frac{11}5,-\frac{14}5,\frac35,\frac35\right)$ es ortogonal a $C_1$ ($\frac{11-14+3}5=0$) y a $C_2$ ($\frac{11-14+3}5=0$) ✓. Error común $\frac{\sqrt{335}}5\approx3{,}661$.</li>
+    <li><p><b>Comprobación.</b> Todas comparten</p>
+      $$Ax_0=\left(\frac95,\frac95,\frac75,\frac25\right)=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}B$$
+      <p>y el residuo $B-Ax_0=\left(\frac{11}5,-\frac{14}5,\frac35,\frac35\right)$ es ortogonal a $C_1$ ($\frac{11-14+3}5=0$) y a $C_2$ ($\frac{11-14+3}5=0$) ✓. Error común $\frac{\sqrt{335}}5\approx3{,}661$.</p></li>
   </ol>
   <div class="box warn"><span class="h">Fallo de la solución oficial de E</span>
     <p>E da $(-\alpha,0,\alpha,-1)$ y dice que es «una recta de $\mathbb R^4$». Para esa familia $u=x_1+x_3=0$, $v=x_2+x_4=-1$ y $3u+2v=-2\neq4$: <b>no son soluciones</b> de las normales. Además el número de parámetros es $4-\operatorname{rang}(A^tA)=2$, no $1$.</p>
@@ -517,13 +570,20 @@
 
 <details class="sol" id="ej5-40"><summary>Ejercicio 5.40 — recta por cinco puntos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.40, p. 196">E p.196</span></summary>
   <p class="enun">Se pide calcular la recta que ajusta por mínimos cuadrados los datos $x=1,2,3,4,5$; $\ y=2,\,1{,}5,\,2{,}5,\,1,\,2$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Recta de mínimos cuadrados por cinco puntos.</dd>
+    <dt>Qué se usa</dt><dd><b>Ajuste:</b> recta $y=mx+n$: $A$ tiene filas $(x_i,1)$, $B=(y_i)$; parábola: filas $(x_i^2,x_i,1)$; plano $z=ax+by+c$: filas $(x_i,y_i,1)$. Se resuelven las ecuaciones normales.</dd>
+    <dt>Plan</dt><dd>Formar $A$ y $B$, resolver $A^tAX=A^tB$.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Modelo.</b> Se busca $y=mx+n$. Si pasara por los $5$ puntos: $mx_i+n=y_i$, una fila $(x_i,1)$ por dato:
     $$\underbrace{\begin{pmatrix}1&1\\2&1\\3&1\\4&1\\5&1\end{pmatrix}}_{A}\begin{pmatrix}m\\n\end{pmatrix}=\underbrace{\begin{pmatrix}2\\1{,}5\\2{,}5\\1\\2\end{pmatrix}}_{B}.$$
     Los puntos no están alineados: incompatible. Minimizar $\sum e_i^2$ (U p.233) es minimizar $\|AX-B\|^2$.</li>
     <li><b>Normales.</b> Las columnas son independientes (los $x_i$ no son todos iguales) ⇒ solución única. Sumas: $\sum x=15$, $\sum x^2=55$, $\sum y=9$, $\sum xy=2+3+7{,}5+4+10=26{,}5$:
     $$A^tA=\begin{pmatrix}55&15\\15&5\end{pmatrix},\qquad A^tB=\begin{pmatrix}26{,}5\\9\end{pmatrix}.$$</li>
-    <li><b>Resolver.</b> $\det=275-225=50$; $m=\frac{5\cdot26{,}5-15\cdot9}{50}=\frac{132{,}5-135}{50}=-\frac1{20}$; $n=\frac{55\cdot9-15\cdot26{,}5}{50}=\frac{495-397{,}5}{50}=\frac{39}{20}$.</li>
+    <li><p><b>Resolver.</b> $\det=275-225=50$;</p>
+      $$m=\frac{5\cdot26{,}5-15\cdot9}{50}=\frac{132{,}5-135}{50}=-\frac1{20};$$
+      $$n=\frac{55\cdot9-15\cdot26{,}5}{50}=\frac{495-397{,}5}{50}=\frac{39}{20}.$$</li>
     <li><b>Recta:</b> $y=-\frac1{20}x+\frac{39}{20}$. <b>Comprobación:</b> la 2.ª normal dice $\sum(y_i-mx_i-n)=0$: $9+\frac{15}{20}-5\cdot\frac{39}{20}=9+0{,}75-9{,}75=0$ ✓. (Con la forma centrada: $\bar x=3$, $\sum(x-3)y=-4-1{,}5+0+1+4=-0{,}5$, $\sum(x-3)^2=10$, $m=-0{,}05$ ✓.)</li>
   </ol>
   <p><b>Resultado:</b> $y=-0{,}05x+1{,}95$.</p>
@@ -533,11 +593,23 @@
 
 <details class="sol" id="ej5-41"><summary>Ejercicio 5.41 — recta y pronóstico del IPC (la oficial falla) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.41, p. 197">E p.197</span></summary>
   <p class="enun">Los datos mensuales del INE del índice general de precios al consumo (IPC) en la Comunidad de Madrid son: nov. 2011: $101{,}120$; dic. 2011: $101{,}512$; ene. 2012: $100{,}423$; feb. 2012: $100{,}567$; mar. 2012: $101{,}119$. Utilizando la línea de mínimos cuadrados asociada, estímese el IPC de julio de 2012 suponiendo que continúe la tendencia.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Recta de mínimos cuadrados y pronóstico a medio plazo.</dd>
+    <dt>Qué se usa</dt><dd><b>Ajuste:</b> recta $y=mx+n$: $A$ tiene filas $(x_i,1)$, $B=(y_i)$; parábola: filas $(x_i^2,x_i,1)$; plano $z=ax+by+c$: filas $(x_i,y_i,1)$. Se resuelven las ecuaciones normales.</dd>
+    <dt>Plan</dt><dd>Recta con $x$ numerado por meses; evaluar en el mes pedido.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Variable $x$.</b> Numeramos los meses: nov. 2011 $\to x=1$, …, mar. 2012 $\to x=5$. Julio 2012 es $x=9$ (abr. 6, may. 7, jun. 8, jul. 9).</li>
-    <li><b>Sistema.</b> Mismas $x_i$ que en E 5.40, luego $A^tA=\begin{pmatrix}55&15\\15&5\end{pmatrix}$ y $A^tB=\begin{pmatrix}\sum x_iy_i\\\sum y_i\end{pmatrix}$ con $\sum y_i=504{,}741$ y $\sum x_iy_i=101{,}120+203{,}024+301{,}269+402{,}268+505{,}595=1513{,}276$.</li>
-    <li><b>Solución por Cramer</b> ($\det=50$): $m=\frac{5\cdot1513{,}276-15\cdot504{,}741}{50}=\frac{7566{,}38-7571{,}115}{50}=\frac{-4{,}735}{50}=-0{,}0947$.</li>
-    <li><b>Atajo (centrar).</b> $\bar x=3$: $\sum(x_i-3)y_i=-2(101{,}120)-101{,}512+0+100{,}567+2(101{,}119)=-0{,}947$ y $\sum(x_i-3)^2=10$ ⇒ $m=-0{,}0947$ (mismo valor, sin restar números grandes).</li>
+    <li><p><b>Sistema.</b> Mismas $x_i$ que en E 5.40, luego</p>
+      $$A^tA=\begin{pmatrix}55&15\\15&5\end{pmatrix}$$
+      $$A^tB=\begin{pmatrix}\sum x_iy_i\\\sum y_i\end{pmatrix}$$
+      <p>con $\sum y_i=504{,}741$ y</p>
+      $$\sum x_iy_i=101{,}120+203{,}024+301{,}269+402{,}268+505{,}595=1513{,}276.$$</li>
+    <li><p><b>Solución por Cramer</b> ($\det=50$):</p>
+      $$m=\frac{5\cdot1513{,}276-15\cdot504{,}741}{50}=\frac{7566{,}38-7571{,}115}{50}=\frac{-4{,}735}{50}=-0{,}0947.$$</li>
+    <li><p><b>Atajo (centrar).</b> $\bar x=3$:</p>
+      $$\sum(x_i-3)y_i=-2(101{,}120)-101{,}512+0+100{,}567+2(101{,}119)=-0{,}947$$
+      <p>y $\sum(x_i-3)^2=10$ ⇒ $m=-0{,}0947$ (mismo valor, sin restar números grandes).</p></li>
     <li><b>$n$</b> de la 2.ª normal $15m+5n=\sum y_i$: $n=\bar y-3m=100{,}9482+0{,}2841=101{,}2323$.</li>
     <li><b>Recta:</b> $y=-0{,}0947x+101{,}2323$. <b>Pronóstico</b> julio 2012: $y(9)=101{,}2323-0{,}8523=100{,}38$.</li>
   </ol>
@@ -551,13 +623,22 @@
 
 <details class="sol" id="ej5-42"><summary>Ejercicio 5.42 — parábola y punto de impacto (la raíz oficial falla) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.42, p. 198">E p.198</span></summary>
   <p class="enun">Los datos observados de la trayectoria de un proyectil son $x=1;\,2{,}5;\,3{,}5;\,4;\,5{,}5$ e $y=5,\,8,\,12,\,6,\,5$. Considerando que la trayectoria es parabólica, estímese mediante mínimos cuadrados dónde toca el suelo.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Parábola de mínimos cuadrados y punto donde toca el suelo.</dd>
+    <dt>Qué se usa</dt><dd><b>Ajuste:</b> recta $y=mx+n$: $A$ tiene filas $(x_i,1)$, $B=(y_i)$; parábola: filas $(x_i^2,x_i,1)$; plano $z=ax+by+c$: filas $(x_i,y_i,1)$. Se resuelven las ecuaciones normales.</dd>
+    <dt>Plan</dt><dd>Ajustar $ax^2+bx+c$ y buscar la raíz positiva más lejana.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Modelo.</b> $y=ax^2+bx+c$ es <b>lineal en las incógnitas</b> $a,b,c$: cada dato da $a x_i^2+b x_i+c=y_i$, fila $(x_i^2,x_i,1)$:
     $$\begin{pmatrix}1&1&1\\6{,}25&2{,}5&1\\12{,}25&3{,}5&1\\16&4&1\\30{,}25&5{,}5&1\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}5\\8\\12\\6\\5\end{pmatrix}.$$
     Incompatible (rango $A=3$, ampliada $4$). Cinco abscisas distintas ⇒ columnas independientes ⇒ solución única.</li>
-    <li><b>Normales</b> (sumas de potencias de $x$): $A^tA=\begin{pmatrix}\sum x^4&\sum x^3&\sum x^2\\\sum x^3&\sum x^2&\sum x\\\sum x^2&\sum x&5\end{pmatrix}=\begin{pmatrix}1361{,}1875&289{,}875&65{,}75\\289{,}875&65{,}75&16{,}5\\65{,}75&16{,}5&5\end{pmatrix}$, $A^tB=\begin{pmatrix}449{,}25\\118{,}5\\36\end{pmatrix}$.</li>
+    <li><p><b>Normales</b> (sumas de potencias de $x$):</p>
+      $$A^tA=\begin{pmatrix}\sum x^4&\sum x^3&\sum x^2\\\sum x^3&\sum x^2&\sum x\\\sum x^2&\sum x&5\end{pmatrix}=\begin{pmatrix}1361{,}1875&289{,}875&65{,}75\\289{,}875&65{,}75&16{,}5\\65{,}75&16{,}5&5\end{pmatrix},$$
+      $$A^tB=\begin{pmatrix}449{,}25\\118{,}5\\36\end{pmatrix}.$$</li>
     <li><b>Solución</b> (exacta, con Gauss o sympy): $a=-\frac{6694}{7917}\approx-0{,}8455$, $b=\frac{14325}{2639}\approx5{,}4282$, $c=\frac{247}{609}\approx0{,}4056$. Coinciden con E.</li>
-    <li><b>Dónde toca el suelo:</b> $y=0$: $-0{,}8455x^2+5{,}4282x+0{,}4056=0$, $x=\dfrac{-5{,}4282\pm\sqrt{5{,}4282^2+4\cdot0{,}8455\cdot0{,}4056}}{2(-0{,}8455)}=\dfrac{-5{,}4282\pm5{,}5531}{-1{,}6910}$. Raíces: $x\approx-0{,}0739$ y $x\approx6{,}4938$.</li>
+    <li><p><b>Dónde toca el suelo:</b> $y=0$: $-0{,}8455x^2+5{,}4282x+0{,}4056=0$,</p>
+      $$x=\dfrac{-5{,}4282\pm\sqrt{5{,}4282^2+4\cdot0{,}8455\cdot0{,}4056}}{2(-0{,}8455)}=\dfrac{-5{,}4282\pm5{,}5531}{-1{,}6910}.$$
+      <p>Raíces: $x\approx-0{,}0739$ y $x\approx6{,}4938$.</p></li>
     <li><b>Elegir la raíz.</b> El proyectil avanza hacia $x$ crecientes (datos de $x=1$ a $5{,}5$); la raíz negativa es el otro corte de la parábola completa. Toca el suelo en $x\approx6{,}494$.</li>
   </ol>
   <div class="box warn"><span class="h">Fallo de la solución oficial de E</span>
@@ -569,6 +650,11 @@
 
 <details class="sol" id="ej5-43"><summary>Ejercicio 5.43 — plano de mínimos cuadrados y estimación en $(7,8)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.43, p. 199">E p.199</span></summary>
   <p class="enun">Calcúlese el plano que mejor se ajuste, por mínimos cuadrados, a los puntos $(x,y,z)=(1,3,1),(2,2,3),(3,1,-1),(5,4,2),(6,5,2)$, y estímese el valor de $z$ para $(x,y)=(7,8)$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Plano de mínimos cuadrados y estimación en un punto.</dd>
+    <dt>Qué se usa</dt><dd><b>Ajuste:</b> recta $y=mx+n$: $A$ tiene filas $(x_i,1)$, $B=(y_i)$; parábola: filas $(x_i^2,x_i,1)$; plano $z=ax+by+c$: filas $(x_i,y_i,1)$. Se resuelven las ecuaciones normales.</dd>
+    <dt>Plan</dt><dd>Filas $(x,y,1)$, ecuaciones normales y evaluación en $(7,8)$.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Modelo</b> (U p.237): $z=ax+by+c$; fila $(x_i,y_i,1)$ por punto:
     $$\begin{pmatrix}1&3&1\\2&2&1\\3&1&1\\5&4&1\\6&5&1\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}1\\3\\-1\\2\\2\end{pmatrix}.$$
@@ -576,7 +662,8 @@
     <li><b>Normales</b> (productos escalares de columnas): $\sum x^2=75$, $\sum xy=3+4+3+20+30=60$, $\sum x=17$, $\sum y^2=55$, $\sum y=15$, $N=5$; $\sum xz=1+6-3+10+12=26$, $\sum yz=3+6-1+8+10=26$, $\sum z=7$:
     $$\begin{pmatrix}75&60&17\\60&55&15\\17&15&5\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}26\\26\\7\end{pmatrix}.$$</li>
     <li><b>Resolver por Cramer</b> ($\det A^tA=455$; $\Delta_a,\Delta_b,\Delta_c$ = determinantes con la columna correspondiente cambiada por $(26,26,7)^t$): $\Delta_a=-115$, $\Delta_b=331$, $\Delta_c=35$ ⇒ $a=-\frac{115}{455}=-\frac{23}{91}$, $b=\frac{331}{455}$, $c=\frac{35}{455}=\frac1{13}$.</li>
-    <li><b>Estimación</b> en $(7,8)$: $z=-\frac{23}{91}\cdot7+\frac{331}{455}\cdot8+\frac1{13}=\frac{-805+2648+35}{455}=\frac{1878}{455}\approx4{,}1275$.</li>
+    <li><p><b>Estimación</b> en $(7,8)$:</p>
+      $$z=-\frac{23}{91}\cdot7+\frac{331}{455}\cdot8+\frac1{13}=\frac{-805+2648+35}{455}=\frac{1878}{455}\approx4{,}1275.$$</li>
   </ol>
   <p><b>Resultado:</b> $z=-\frac{23}{91}x+\frac{331}{455}y+\frac1{13}$; $z(7,8)\approx4{,}128$.</p>
   <div class="recipe"><b>Receta:</b> plano de m.c.: fila $(x_i,y_i,1)$, normales con $\sum x^2,\sum xy,\sum x,\sum y^2,\sum y,N$ y segundo miembro $\sum xz,\sum yz,\sum z$.</div>
@@ -587,9 +674,17 @@
 
 <details class="sol" id="ej-propio-1"><summary>Propio P1 — tres medidas contradictorias: dos métodos <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 5.15 p. 227 y ecuaciones normales p. 228">propio</span></summary>
   <p class="enun">Halla la solución por mínimos cuadrados de $x=1,\ y=1,\ x+y=3$ y su error. (Es la animación 3D de la sección 1, preset «Propio P1».)</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Resolver un sistema contradictorio por dos métodos.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>Ecuaciones normales y proyección sobre $\operatorname{Col}A$.</dd>
+  </dl></div>
   <ol class="steps">
-    <li>$A=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}$, $B=(1,1,3)^t$. Incompatible: de las dos primeras $x+y=2\neq3$.</li>
-    <li>Columnas independientes ⇒ solución única. $A^tA=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $A^tB=\begin{pmatrix}4\\4\end{pmatrix}$.</li>
+    <li>$$A=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix},$$
+      <p>$B=(1,1,3)^t$. Incompatible: de las dos primeras $x+y=2\neq3$.</p></li>
+    <li><p>Columnas independientes ⇒ solución única.</p>
+      $$A^tA=\begin{pmatrix}2&1\\1&2\end{pmatrix},$$
+      $$A^tB=\begin{pmatrix}4\\4\end{pmatrix}.$$</li>
     <li>$2x+y=4,\ x+2y=4$ ⇒ (restando) $x=y$; $3x=4$: $x=y=\frac43$.</li>
     <li>$AX_0=\left(\frac43,\frac43,\frac83\right)$; residuo $B-AX_0=\left(-\frac13,-\frac13,\frac13\right)$, ortogonal a $(1,0,1)$ y a $(0,1,1)$ ✓. Error $=\frac1{\sqrt3}$.</li>
     <li><b>Interpretación:</b> la medida $x+y=3$ «tira» de la solución; cada ecuación falla en $\frac13$: el reparto más equilibrado posible.</li>
@@ -599,9 +694,16 @@
 
 <details class="sol" id="ej-propio-2"><summary>Propio P2 — recta de regresión, error y pronóstico <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 5.16 p. 233">propio</span></summary>
   <p class="enun">Recta de mínimos cuadrados para $(0,1),(1,1),(2,2),(3,4)$; error cuadrático y pronóstico en $x=4$. (Preset «Propio P2» de la animación.)</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Recta de regresión, error y pronóstico.</dd>
+    <dt>Qué se usa</dt><dd><b>Ajuste:</b> recta $y=mx+n$: $A$ tiene filas $(x_i,1)$, $B=(y_i)$; parábola: filas $(x_i^2,x_i,1)$; plano $z=ax+by+c$: filas $(x_i,y_i,1)$. Se resuelven las ecuaciones normales.</dd>
+    <dt>Plan</dt><dd>Ecuaciones normales y evaluación.</dd>
+  </dl></div>
   <ol class="steps">
     <li>Filas $(x_i,1)$: $\sum x=6$, $\sum x^2=14$, $\sum y=8$, $\sum xy=0+1+4+12=17$, $N=4$.</li>
-    <li>Normales $\begin{pmatrix}14&6\\6&4\end{pmatrix}\binom mn=\binom{17}8$; $\det=56-36=20$; $m=\frac{4\cdot17-6\cdot8}{20}=1$, $n=\frac{14\cdot8-6\cdot17}{20}=\frac12$.</li>
+    <li><p>Normales</p>
+      $$\begin{pmatrix}14&6\\6&4\end{pmatrix}\binom mn=\binom{17}8;$$
+      <p>$\det=56-36=20$; $m=\frac{4\cdot17-6\cdot8}{20}=1$, $n=\frac{14\cdot8-6\cdot17}{20}=\frac12$.</p></li>
     <li>Recta $y=x+\frac12$. Residuos $y_i-(x_i+\frac12)$: $\frac12,-\frac12,-\frac12,\frac12$ (suman $0$ ✓); error $=\sqrt{4\cdot\frac14}=1$.</li>
     <li>Pronóstico: $y(4)=4{,}5$.</li>
   </ol>
@@ -610,8 +712,15 @@
 
 <details class="sol" id="ej-propio-3"><summary>Propio P3 — parábola por cuatro puntos <span class="src" data-l="P" data-ref="Ejemplo propio; modelo polinómico como en E 5.42 p. 198">propio</span></summary>
   <p class="enun">Ajusta $y=ax^2+bx+c$ a $(-1,2),(0,1),(1,0),(2,3)$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Ajuste de una parábola por cuatro puntos.</dd>
+    <dt>Qué se usa</dt><dd><b>Ajuste:</b> recta $y=mx+n$: $A$ tiene filas $(x_i,1)$, $B=(y_i)$; parábola: filas $(x_i^2,x_i,1)$; plano $z=ax+by+c$: filas $(x_i,y_i,1)$. Se resuelven las ecuaciones normales.</dd>
+    <dt>Plan</dt><dd>Matriz $4\times3$ y ecuaciones normales.</dd>
+  </dl></div>
   <ol class="steps">
-    <li>Filas $(x_i^2,x_i,1)$: $A=\begin{pmatrix}1&-1&1\\0&0&1\\1&1&1\\4&2&1\end{pmatrix}$, $B=(2,1,0,3)^t$. Incompatible (rango $3$, ampliada $4$).</li>
+    <li><p>Filas $(x_i^2,x_i,1)$:</p>
+      $$A=\begin{pmatrix}1&-1&1\\0&0&1\\1&1&1\\4&2&1\end{pmatrix},$$
+      <p>$B=(2,1,0,3)^t$. Incompatible (rango $3$, ampliada $4$).</p></li>
     <li>Sumas: $\sum x^4=18$, $\sum x^3=8$, $\sum x^2=6$, $\sum x=2$, $N=4$; $\sum x^2y=2+0+0+12=14$, $\sum xy=-2+0+0+6=4$, $\sum y=6$. Normales (dividiendo por $2$):
     $$\begin{pmatrix}18&8&6\\8&6&2\\6&2&4\end{pmatrix}\begin{pmatrix}a\\b\\c\end{pmatrix}=\begin{pmatrix}14\\4\\6\end{pmatrix}\ \xrightarrow{\ \div2\ }\ \left(\begin{array}{ccc|c}9&4&3&7\\4&3&1&2\\3&1&2&3\end{array}\right).$$</li>
     <li>Gauss: de la 3.ª, $b=3-3a-2c$. En la 2.ª: $4a+3(3-3a-2c)+c=2\Rightarrow-5a-5c=-7$. En la 1.ª: $9a+4(3-3a-2c)+3c=7\Rightarrow-3a-5c=-5$. Restando, $-2a=-2$: $a=1$; $c=\frac{7-5}5=\frac25$; $b=3-3-\frac45=-\frac45$.</li>
@@ -622,25 +731,46 @@
 
 <details class="sol" id="ej-propio-4"><summary>Propio P4 — columnas dependientes: recta de soluciones <span class="src" data-l="P" data-ref="Ejemplo propio; unicidad U p. 229 y Ej. 5.39 p. 231-232">propio</span></summary>
   <p class="enun">Halla todas las soluciones por mínimos cuadrados de $A=\begin{pmatrix}1&0&1\\0&1&1\\1&1&2\end{pmatrix}$, $B=(1,1,1)^t$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Todas las soluciones por mínimos cuadrados con columnas dependientes.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$. <b>Columnas dependientes:</b> $A^tA$ es singular y hay infinitas soluciones, que forman una recta/plano afín $X_p+\operatorname{Nuc}A$.</dd>
+    <dt>Plan</dt><dd>Resolver el sistema normal y expresar la recta de soluciones.</dd>
+  </dl></div>
   <ol class="steps">
     <li>$C_3=C_1+C_2$ ⇒ $\operatorname{rang}A=2$ ⇒ <b>no hay solución única</b> (U p.229) y $A^tA$ es singular.</li>
     <li>Incompatible: en $(A\mid B)$, $F_3-F_1-F_2$ da $(0\ 0\ 0\mid-1)$.</li>
-    <li>Normales: $A^tA=\begin{pmatrix}2&1&3\\1&2&3\\3&3&6\end{pmatrix}$, $A^tB=\begin{pmatrix}2\\2\\4\end{pmatrix}$. La 3.ª ecuación es suma de las dos primeras. De $2x_1+x_2+3x_3=2$ y $x_1+2x_2+3x_3=2$: restando, $x_1=x_2$; luego $3x_1+3x_3=2$.</li>
+    <li><p>Normales:</p>
+      $$A^tA=\begin{pmatrix}2&1&3\\1&2&3\\3&3&6\end{pmatrix},$$
+      $$A^tB=\begin{pmatrix}2\\2\\4\end{pmatrix}.$$
+      <p>La 3.ª ecuación es suma de las dos primeras. De $2x_1+x_2+3x_3=2$ y $x_1+2x_2+3x_3=2$: restando, $x_1=x_2$; luego $3x_1+3x_3=2$.</p></li>
     <li>Soluciones: $(x_1,x_2,x_3)=\left(\frac23,\frac23,0\right)+t(-1,-1,1)$, $t\in\mathbb R$: una <b>recta afín</b> $=x_p+\operatorname{Nuc}A$, con $\operatorname{Nuc}A=\langle(-1,-1,1)\rangle$.</li>
-    <li>Todas dan el mismo $AX=\left(\frac23,\frac23,\frac43\right)=\operatorname{Proy}B$ y el mismo error $\frac1{\sqrt3}$ (residuo $(\frac13,\frac13,-\frac13)$).</li>
-    <li><i>Método geométrico (U p.229):</i> $\langle\operatorname{Col}A\rangle=\langle(1,0,1),(0,1,1)\rangle$ es el plano $x+y-z=0$, de normal $n=(1,1,-1)$. $\operatorname{Proy}B=B-\frac{B\cdot n}{\|n\|^2}n=(1,1,1)-\frac13(1,1,-1)=\left(\frac23,\frac23,\frac43\right)$ ✓. Después se resuelve el sistema compatible $Ax=\operatorname{Proy}B$.</li>
+    <li><p>Todas dan el mismo</p>
+      $$AX=\left(\frac23,\frac23,\frac43\right)=\operatorname{Proy}B$$
+      <p>y el mismo error $\frac1{\sqrt3}$ (residuo $(\frac13,\frac13,-\frac13)$).</p></li>
+    <li><p><i>Método geométrico (U p.229):</i></p>
+      $$\langle\operatorname{Col}A\rangle=\langle(1,0,1),(0,1,1)\rangle$$
+      <p>es el plano $x+y-z=0$, de normal $n=(1,1,-1)$.</p>
+      $$\operatorname{Proy}B=B-\frac{B\cdot n}{\|n\|^2}n=(1,1,1)-\frac13(1,1,-1)=\left(\frac23,\frac23,\frac43\right)$$
+      <p>✓. Después se resuelve el sistema compatible $Ax=\operatorname{Proy}B$.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> dependencia de columnas ⇒ normales indeterminadas ⇒ $x_p+\operatorname{Nuc}A$; el error y $Ax_0$ no cambian.</div>
 </details>
 
 <details class="sol" id="ej-propio-5"><summary>Propio P5 — mínimos cuadrados con $QR$ calculada a mano <span class="src" data-l="P" data-ref="Ejemplo propio; U p. 232 (RX = QᵗB) y QR de U §5.2.2, p. 218">propio</span></summary>
   <p class="enun">$A=\begin{pmatrix}1&0\\1&1\\1&1\\1&0\end{pmatrix}$, $B=(1,2,4,3)^t$. Halla la $QR$ de $A$ y la solución por mínimos cuadrados con $RX=Q^tB$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Mínimos cuadrados con $QR$ calculada a mano.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$. <b>Con $QR$:</b> $A=QR$ da $RX=Q^tB$ (triangular superior).</dd>
+    <dt>Plan</dt><dd>Gram-Schmidt sobre las columnas, $R$ y $RX=Q^tB$.</dd>
+  </dl></div>
   <ol class="steps">
     <li>Gram-Schmidt: $\|a_1\|=2$, $q_1=\frac12(1,1,1,1)$. $a_2\cdot q_1=1$; $e_2=a_2-q_1=\left(-\frac12,\frac12,\frac12,-\frac12\right)$, $\|e_2\|=1$, $q_2=e_2$.</li>
-    <li>$R=Q^tA=\begin{pmatrix}q_1\cdot a_1&q_1\cdot a_2\\0&q_2\cdot a_2\end{pmatrix}=\begin{pmatrix}2&1\\0&1\end{pmatrix}$.</li>
+    <li>$$R=Q^tA=\begin{pmatrix}q_1\cdot a_1&q_1\cdot a_2\\0&q_2\cdot a_2\end{pmatrix}=\begin{pmatrix}2&1\\0&1\end{pmatrix}.$$</li>
     <li>$Q^tB=\left(\frac{1+2+4+3}2,\ \frac{-1+2+4-3}2\right)=(5,1)$.</li>
     <li>$RX=Q^tB$: $y=1$; $2x+1=5\Rightarrow x=2$. Solución $(2,1)$.</li>
-    <li><b>Comprobación con normales:</b> $A^tA=\begin{pmatrix}4&2\\2&2\end{pmatrix}$, $A^tB=(10,6)^t$: $8+2=10$ ✓, $4+2=6$ ✓. Residuo $B-AX=(-1,-1,1,1)$ (ortogonal a $C_1$ y a $C_2$), error $2$.</li>
+    <li><p><b>Comprobación con normales:</b></p>
+      $$A^tA=\begin{pmatrix}4&2\\2&2\end{pmatrix},$$
+      <p>$A^tB=(10,6)^t$: $8+2=10$ ✓, $4+2=6$ ✓. Residuo $B-AX=(-1,-1,1,1)$ (ortogonal a $C_1$ y a $C_2$), error $2$.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> Gram-Schmidt → $Q$; $R=Q^tA$; $Q^tB$; sustitución regresiva. Comprueba con normales.</div>
 </details>
@@ -649,8 +779,15 @@
 
 <details class="sol" id="autoeval-10"><summary>Cuestión 10 — «La solución de un sistema $AX=B$ mediante mínimos cuadrados está relacionada con la proyección de un vector sobre un subespacio» <span class="src" data-l="U" data-ref="U Ejercicios de Autoevaluación, cuestión 10, p. 239">U p.239</span></summary>
   <p class="enun">Determínese si es verdadera la afirmación.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Relación entre mínimos cuadrados y la proyección ortogonal.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>$AX_0$ es la proyección de $B$ sobre $\operatorname{Col}A$.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Verdadera.</b> $x_0$ es solución por mínimos cuadrados si y solo si $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$ (U p.229): se proyecta $b$ sobre el subespacio generado por las columnas y después se resuelve el sistema compatible $Ax=\operatorname{Proy}b$. Las ecuaciones normales no son más que «el residuo es ortogonal al subespacio».</li>
+    <li><p><b>Verdadera.</b> $x_0$ es solución por mínimos cuadrados si y solo si</p>
+      $$Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$$
+      <p>(U p.229): se proyecta $b$ sobre el subespacio generado por las columnas y después se resuelve el sistema compatible $Ax=\operatorname{Proy}b$. Las ecuaciones normales no son más que «el residuo es ortogonal al subespacio».</p></li>
   </ol>
   <p>Las demás cuestiones de la autoevaluación de ese capítulo son de <a href="tema_5_1_producto_escalar.html">5.1</a> (1-5, 7, 8), <a href="tema_5_2_matrices_ortogonales.html">5.2</a> (6) y <a href="tema_5_3_matrices_simetricas.html">5.3</a> (9).</p>
 </details>
@@ -672,11 +809,20 @@
 
 <details class="sol" id="ex-feb23a-8"><summary>Feb. 2023 (1.ª semana), pregunta 8 (2 puntos) — mínimos cuadrados de $AX=B$ incompatible <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª semana), pregunta 8">X Feb. 2023 (1.ª) P8</span></summary>
   <p class="enun">Sean $A=\begin{pmatrix}2&1\\1&2\\1&1\end{pmatrix}$ y $B=\begin{pmatrix}2\\0\\-3\end{pmatrix}$. El sistema $AX=B$ es incompatible. Aplique el método de mínimos cuadrados para obtener el $X=\begin{pmatrix}x_1\\x_2\end{pmatrix}$ que hace mínima la distancia de $AX$ a $B$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Mínimos cuadrados de un sistema incompatible $3\times2$.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>$A^tAX=A^tB$ y resolver.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>Comprobar lo que dice el enunciado.</b> $\det(A\mid B)=\left|\begin{array}{cc|c}2&1&2\\1&2&0\\1&1&-3\end{array}\right|=2(-6)-1(-3)+2(-1)=-11\neq0$ ⇒ rango de la ampliada $3>\operatorname{rang}A$ ⇒ incompatible.</li>
+    <li><p><b>Comprobar lo que dice el enunciado.</b></p>
+      $$\det(A\mid B)=\left|\begin{array}{cc|c}2&1&2\\1&2&0\\1&1&-3\end{array}\right|=2(-6)-1(-3)+2(-1)=-11\neq0$$
+      <p>⇒ rango de la ampliada $3>\operatorname{rang}A$ ⇒ incompatible.</p></li>
     <li><b>Qué se minimiza.</b> «La distancia de $AX$ a $B$» es $\|AX-B\|$: la Def. 5.15 (U p.227). Su solución es la de las ecuaciones normales (U p.228-229).</li>
     <li><b>Unicidad.</b> Las columnas $(2,1,1)$ y $(1,2,1)$ no son proporcionales ⇒ independientes ⇒ $A^tA$ regular y solución única (U p.229).</li>
-    <li><b>Normales</b> $A^tAX=A^tB$: $A^tA=\begin{pmatrix}4+1+1&2+2+1\\5&1+4+1\end{pmatrix}=\begin{pmatrix}6&5\\5&6\end{pmatrix}$, $A^tB=\begin{pmatrix}4+0-3\\2+0-3\end{pmatrix}=\begin{pmatrix}1\\-1\end{pmatrix}$.</li>
+    <li><p><b>Normales</b> $A^tAX=A^tB$:</p>
+      $$A^tA=\begin{pmatrix}4+1+1&2+2+1\\5&1+4+1\end{pmatrix}=\begin{pmatrix}6&5\\5&6\end{pmatrix},$$
+      $$A^tB=\begin{pmatrix}4+0-3\\2+0-3\end{pmatrix}=\begin{pmatrix}1\\-1\end{pmatrix}.$$</li>
     <li><b>Resolver</b> $6x_1+5x_2=1,\ 5x_1+6x_2=-1$: restando, $x_1-x_2=2$; sumando, $11(x_1+x_2)=0$. Luego $x_1=1$, $x_2=-1$.</li>
     <li><b>Comprobación:</b> $AX=(1,-1,0)$, residuo $B-AX=(1,1,-3)$, ortogonal a $(2,1,1)$ ($2+1-3=0$ ✓) y a $(1,2,1)$ ($1+2-3=0$ ✓). Distancia mínima $\sqrt{11}$.</li>
   </ol>
@@ -687,9 +833,15 @@
 
 <details class="sol" id="ex-feb19a-5"><summary>Feb. 2019 (tipo A), ejercicio 5 — error cuadrático al sustituir un $X$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), ejercicio 5">X Feb. 2019 (A) ej. 5</span></summary>
   <p class="enun">Calcular el error cuadrático cometido en $AX=B$ al sustituir $X$ por $\begin{pmatrix}1\\2\end{pmatrix}$, siendo $A=\begin{pmatrix}1&2\\2&-1\\3&3\end{pmatrix}$ y $B=\begin{pmatrix}1\\2\\-3\end{pmatrix}$.</p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Error cuadrático al sustituir un $X$ dado.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>Calcular $AX-B$ y sumar los cuadrados.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Definición</b> (U Def. 5.14, p.227): el error es $\|AX-B\|$. No hay que minimizar nada: solo evaluar.</li>
-    <li><b>$AX$:</b> $\begin{pmatrix}1\cdot1+2\cdot2\\2\cdot1-1\cdot2\\3\cdot1+3\cdot2\end{pmatrix}=\begin{pmatrix}5\\0\\9\end{pmatrix}$.</li>
+    <li><p><b>$AX$:</b></p>
+      $$\begin{pmatrix}1\cdot1+2\cdot2\\2\cdot1-1\cdot2\\3\cdot1+3\cdot2\end{pmatrix}=\begin{pmatrix}5\\0\\9\end{pmatrix}.$$</li>
     <li><b>$AX-B$:</b> $(5-1,\ 0-2,\ 9+3)=(4,-2,12)$.</li>
     <li><b>Norma:</b> $\sqrt{4^2+(-2)^2+12^2}=\sqrt{164}=2\sqrt{41}\approx12{,}8$. (La oficial indica que basta dejarlo sin desarrollar, al no haber calculadora, y remite al Ejemplo 5.35 de U.)</li>
   </ol>
@@ -702,8 +854,15 @@
 <details class="sol" id="ex-sep18a-5"><summary>Sept. 2018 (tipo A), ejercicio 5 — escribir las ecuaciones normales <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 5">X Sept. 2018 (A) ej. 5</span></summary>
   <p class="enun">Escribir las ecuaciones normales asociadas al sistema $AX=B$ que sirven para hallar su solución por mínimos cuadrados. (Es una pregunta de teoría: sin matrices concretas.)</p>
   <p><b>La oficial dice solo</b> «las ecuaciones normales son $A^tAX=A^tB$». Con la advertencia de que lo que no se justifica no se puntúa, conviene argumentar. <b>Modelo de respuesta, en pasos:</b></p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Escribir las ecuaciones normales.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>$A^tAX=A^tB$ con justificación.</dd>
+  </dl></div>
   <ol class="steps">
-    <li>Si $A\in\mathcal M_{m\times n}$, $Ax=x_1C_1+\dots+x_nC_n$ recorre $\langle\operatorname{Col}A\rangle$. La solución por mínimos cuadrados $x_0$ hace mínima $\|Ax-b\|$, y por el Teorema 5.4 (U p.213) esto ocurre cuando $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$, es decir, cuando $b-Ax_0$ es ortogonal a $\langle\operatorname{Col}A\rangle$.</li>
+    <li><p>Si $A\in\mathcal M_{m\times n}$, $Ax=x_1C_1+\dots+x_nC_n$ recorre $\langle\operatorname{Col}A\rangle$. La solución por mínimos cuadrados $x_0$ hace mínima $\|Ax-b\|$, y por el Teorema 5.4 (U p.213) esto ocurre cuando</p>
+      $$Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b,$$
+      <p>es decir, cuando $b-Ax_0$ es ortogonal a $\langle\operatorname{Col}A\rangle$.</p></li>
     <li>Ortogonal a $\langle\operatorname{Col}A\rangle$ ⇔ ortogonal a cada columna: $C_i^t(B-AX_0)=0$ para $i=1,\dots,n$. Como las $C_i^t$ son las filas de $A^t$: $A^t(B-AX_0)=0$.</li>
     <li><b>Ecuaciones normales:</b> $\boxed{A^tAX=A^tB}$. Es un sistema $n\times n$, <b>siempre compatible</b>; tiene solución única si y solo si las columnas de $A$ son independientes ($A^tA$ regular), U p.229.</li>
   </ol>
@@ -715,14 +874,22 @@
 
 <details class="sol" id="ex-feb20b-pb"><summary>Feb. 2020 (tipo B), problema, apartado b) (1,5 puntos) — $RX=Q^tB$ <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B), problema, apartado b)">X Feb. 2020 (B) pb. b)</span></summary>
   <p class="enun">a) (1,5 ptos.) Hallar la factorización $QR$ de $A=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\\\frac1{\sqrt2}&0\\0&0\end{pmatrix}$. b) (1,5 ptos.) Resolver el siguiente problema de mínimos cuadrados $AX=B$ siendo $A$ la matriz del apartado a) y $B=\begin{pmatrix}1\\1\\1\end{pmatrix}$. <i>(El apartado a) es del tema 5.2; se resume lo necesario.)</i></p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Resolver $RX=Q^tB$ para un problema de mínimos cuadrados.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$. <b>Con $QR$:</b> $A=QR$ da $RX=Q^tB$ (triangular superior).</dd>
+    <dt>Plan</dt><dd>Usar la $Q,R$ del apartado anterior.</dd>
+  </dl></div>
   <ol class="steps">
-    <li><b>QR del apartado a)</b> (resumen; detalle en <a href="tema_5_2_matrices_ortogonales.html#ex-feb20b-pa">5.2</a>): Gram-Schmidt sobre $a_1=\left(\frac1{\sqrt2},\frac1{\sqrt2},0\right)$, $a_2=(\sqrt2,0,0)$. $\|a_1\|=1\Rightarrow q_1=a_1$. $a_2\cdot q_1=1$, $e_2=a_2-q_1=\left(\frac1{\sqrt2},-\frac1{\sqrt2},0\right)$, $\|e_2\|=1\Rightarrow q_2=e_2$. $R=Q^tA=\begin{pmatrix}1&1\\0&1\end{pmatrix}$.</li>
+    <li><p><b>QR del apartado a)</b> (resumen; detalle en <a href="tema_5_2_matrices_ortogonales.html#ex-feb20b-pa">5.2</a>): Gram-Schmidt sobre $a_1=\left(\frac1{\sqrt2},\frac1{\sqrt2},0\right)$, $a_2=(\sqrt2,0,0)$. $\|a_1\|=1\Rightarrow q_1=a_1$. $a_2\cdot q_1=1$, $e_2=a_2-q_1=\left(\frac1{\sqrt2},-\frac1{\sqrt2},0\right)$, $\|e_2\|=1\Rightarrow q_2=e_2$.</p>
+      $$R=Q^tA=\begin{pmatrix}1&1\\0&1\end{pmatrix}.$$</li>
     <li><b>Incompatible:</b> la tercera ecuación es $0\cdot x+0\cdot y=1$. Por eso se pide mínimos cuadrados.</li>
     <li><b>Por qué se usa $RX=Q^tB$:</b> $A^tA=R^tR$, $A^tB=R^tQ^tB$, $R^t$ regular (sección 4; U p.232). Y el enunciado pide «el problema de mínimos cuadrados con la $QR$ de a)»: hay que usarla.</li>
     <li><b>$Q^tB$:</b> $q_1\cdot B=\frac2{\sqrt2}=\sqrt2$, $q_2\cdot B=0$.</li>
     <li><b>Sistema triangular:</b> $x+y=\sqrt2,\ y=0$ ⇒ $y=0$, $x=\sqrt2$.</li>
     <li><b>Interpretación:</b> $AX=(1,1,0)$ es la proyección de $(1,1,1)$ sobre $\langle\operatorname{Col}A\rangle$, que es el plano $z=0$; el residuo $(0,0,1)$ es perpendicular a ese plano ✓. Error $=1$.</li>
-    <li><b>Comprobación con las normales</b> (solo como control): $A^tA=\begin{pmatrix}1&1\\1&2\end{pmatrix}$, $A^tB=(\sqrt2,\sqrt2)^t$ ⇒ $x+y=\sqrt2$, $x+2y=\sqrt2$ ⇒ $y=0$, $x=\sqrt2$ ✓.</li>
+    <li><p><b>Comprobación con las normales</b> (solo como control):</p>
+      $$A^tA=\begin{pmatrix}1&1\\1&2\end{pmatrix},$$
+      <p>$A^tB=(\sqrt2,\sqrt2)^t$ ⇒ $x+y=\sqrt2$, $x+2y=\sqrt2$ ⇒ $y=0$, $x=\sqrt2$ ✓.</p></li>
   </ol>
   <p><b>Resultado:</b> $X=(\sqrt2,0)^t$ (coincide con la oficial y con el Ejemplo 5.40 de U, que usa la misma $Q$, $R$ y $B$).</p>
   <div class="recipe"><b>Receta:</b> $Q^tB$ (productos escalares de las columnas de $Q$ con $B$), sistema triangular, sustitución regresiva. Si piden $QR$, no las normales (solo como comprobación).</div>
@@ -734,12 +901,21 @@
 <details class="sol" id="ex-teoria"><summary>Feb. 2018 (tipo B), problema c) y Feb. 2017 (2.ª sem.), problema b) — «explicar en qué consiste el método y cómo se halla la solución» <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), problema c) (0,5 + 0,5 puntos) y Feb. 2017 (tipo A2, 2.ª semana), problema b) (1 punto)">X Feb. 2018 (B) pb. c) · Feb. 2017 pb. b)</span></summary>
   <p class="enun"><b>Feb. 2018 (B):</b> «Explicar en qué consiste el método de los mínimos cuadrados (0,5 ptos.) y decir cómo se halla su solución (0,5 ptos.).» <b>Feb. 2017:</b> «Explicar en qué consiste el problema de los mínimos cuadrados y presentar cómo se puede obtener una solución por mínimos cuadrados (1 pto.).» Las dos soluciones oficiales son «véase la bibliografía básica / la teoría».</p>
   <p><b>Modelo de respuesta (resumen de todo el tema, en cinco pasos):</b></p>
+  <div class="plan"><span class="h">Antes de calcular</span><dl>
+    <dt>Qué se pide</dt><dd>Explicar el problema de mínimos cuadrados y cómo se obtiene una solución.</dd>
+    <dt>Qué se usa</dt><dd><b>Mínimos cuadrados (Def. 5.14, Teor. 5.12, U p.225):</b> para $AX=B$ sin solución, $X_0$ minimiza $\|AX-B\|$ $\iff$ $A X_0=\operatorname{Proy}_{\operatorname{Col}A}B$ $\iff$ cumple las <b>ecuaciones normales</b> $A^tAX=A^tB$. Es única si las columnas de $A$ son independientes ($A^tA$ regular). El <b>error cuadrático</b> es $\|AX_0-B\|^2$.</dd>
+    <dt>Plan</dt><dd>Enunciar el problema, la ortogonalidad del residuo y las ecuaciones normales.</dd>
+  </dl></div>
   <ol class="steps">
     <li><b>Planteamiento.</b> Si $AX=B$ es incompatible (caso habitual con datos reales: más ecuaciones que incógnitas), se busca un $x_0$ que lo resuelva «lo mejor posible»: el que <b>minimiza el error cuadrático</b> $\|Ax-b\|$ (Def. 5.14-5.15, U p.227). El nombre viene de que la norma es la raíz de una suma de cuadrados.</li>
-    <li><b>Geometría.</b> Como $Ax$ recorre $\langle\operatorname{Col}A\rangle$, por el teorema de mejor aproximación (U p.213) $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$ y $b-Ax_0$ es ortogonal a cada columna de $A$.</li>
+    <li><p><b>Geometría.</b> Como $Ax$ recorre $\langle\operatorname{Col}A\rangle$, por el teorema de mejor aproximación (U p.213)</p>
+      $$Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$$
+      <p>y $b-Ax_0$ es ortogonal a cada columna de $A$.</p></li>
     <li><b>Ecuaciones normales.</b> Eso equivale a $A^tAX=A^tB$, que siempre tiene solución; es única si y solo si las columnas de $A$ son independientes (⇔ $A^tA$ regular); si no, hay infinitas ($x_p+\operatorname{Nuc}A$) y todas dan el mismo $Ax_0$ y el mismo error (U p.229).</li>
     <li><b>Cómo se calcula.</b> (a) Resolver las normales; (b) proyectar $b$ sobre $\langle\operatorname{Col}A\rangle$ y resolver $Ax=\operatorname{Proy}b$; (c) si $A=QR$, resolver el sistema triangular $RX=Q^tB$ (U p.232).</li>
-    <li><b>Aplicación y ejemplo breve.</b> Recta $y=mx+n$ de mínimos cuadrados a los datos $(x_i,y_i)$ (U p.233). Ejemplo: $x=1,\ y=1,\ x+y=3$ (Propio P1): $A^tA=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $A^tB=\binom44$ ⇒ $x=y=\frac43$, error $\frac1{\sqrt3}$.</li>
+    <li><p><b>Aplicación y ejemplo breve.</b> Recta $y=mx+n$ de mínimos cuadrados a los datos $(x_i,y_i)$ (U p.233). Ejemplo: $x=1,\ y=1,\ x+y=3$ (Propio P1):</p>
+      $$A^tA=\begin{pmatrix}2&1\\1&2\end{pmatrix},$$
+      <p>$A^tB=\binom44$ ⇒ $x=y=\frac43$, error $\frac1{\sqrt3}$.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> definición (minimiza $\|Ax-b\|$) → geometría (proyección, residuo ⟂) → normales → cuándo es única → un ejemplo numérico de $2\times2$.</div>
   <p><b>Error típico:</b> contestar solo «$A^tAX=A^tB$» sin decir <i>qué</i> se minimiza ni <i>por qué</i> son esas las ecuaciones. <b>Teoría:</b> U §5.4.2, p.226-232.</p>
