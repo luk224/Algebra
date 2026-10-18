@@ -424,13 +424,20 @@
   </dl></div>
   <ol class="steps">
     <li><b>Qué hay que comprobar.</b> Por la Def. 2.3 (U p.70), $(2,3,0)$ es combinación lineal de $u,v$ si <b>existen</b> $\alpha,\beta$ con $(2,3,0)=\alpha u+\beta v$. Se plantea esa igualdad en cada apartado y se mira si el sistema tiene solución.</li>
-    <li><b>A.</b> $(2,3,0)=\alpha(0,0,1)+\beta(0,1,0)=(0,\beta,\alpha)$:
+    <li><b>A.</b>
+      <p>Planteo la igualdad:</p>
+      $$(2,3,0)=\alpha(0,0,1)+\beta(0,1,0)=(0,\beta,\alpha).$$
+      <p>Igualando componentes:</p>
       $$\begin{cases}2=0\\ 3=\beta\\ 0=\alpha\end{cases}$$
-      La 1.ª ecuación dice $2=0$, falsa <b>para cualquier</b> $\alpha,\beta$: sistema incompatible, <b>no</b> es combinación lineal. <i>Por qué:</i> los dos vectores tienen primera componente $0$ y cualquier mezcla de ellos también; $(2,3,0)$ tiene un $2$. <b>A es falsa.</b></li>
-    <li><b>B.</b> $(2,3,0)=\alpha(1,0,0)+\beta(0,1,0)=(\alpha,\beta,0)$:
-      $$\begin{cases}2=\alpha\\ 3=\beta\\ 0=0\end{cases}$$
-      La 3.ª se cumple siempre y las otras dan $\alpha=2,\ \beta=3$. <b>B es cierta:</b> $(2,3,0)=2(1,0,0)+3(0,1,0)$ (comprobación: $(2,0,0)+(0,3,0)=(2,3,0)$ ✓).</li>
-    <li><b>C.</b> $(2,3,0)=\alpha(1,0,0)+\beta(0,0,1)=(\alpha,0,\beta)$: la 2.ª ecuación es $3=0$, imposible (los dos vectores tienen segunda componente $0$). <b>C es falsa.</b></li>
+      <p>La 1.ª ecuación dice $2=0$, falsa <b>para cualquier</b> $\alpha,\beta$: sistema incompatible, <b>no</b> es combinación lineal. <i>Por qué:</i> los dos vectores tienen primera componente $0$ y cualquier mezcla de ellos también; $(2,3,0)$ tiene un $2$. <b>A es falsa.</b></p></li>
+    <li><b>B.</b>
+      $$(2,3,0)=\alpha(1,0,0)+\beta(0,1,0)=(\alpha,\beta,0)\ \Longrightarrow\ \begin{cases}2=\alpha\\ 3=\beta\\ 0=0\end{cases}$$
+      <p>La 3.ª se cumple siempre y las otras dan $\alpha=2$, $\beta=3$. <b>B es cierta:</b></p>
+      $$(2,3,0)=2(1,0,0)+3(0,1,0).$$
+      <p>Comprobación: $(2,0,0)+(0,3,0)=(2,3,0)$ ✓.</p></li>
+    <li><b>C.</b>
+      $$(2,3,0)=\alpha(1,0,0)+\beta(0,0,1)=(\alpha,0,\beta).$$
+      <p>La 2.ª ecuación es $3=0$, imposible (los dos vectores tienen segunda componente $0$). <b>C es falsa.</b></p></li>
   </ol>
   <p><b>Resultado:</b> solo B. <i>(Verificado con sympy: sin solución en A y C, solución $(2,3)$ en B.)</i></p>
   <div class="recipe"><b>Receta:</b> para saber si $w$ es combinación lineal de $u_1,\dots,u_p$: escribe $w=\lambda_1u_1+\dots+\lambda_pu_p$, iguala componente a componente y resuelve. Si sale una ecuación imposible ($2=0$) no lo es; si hay solución, los $\lambda_i$ son los coeficientes.</div>
@@ -448,13 +455,39 @@
   </dl></div>
   <ol class="steps">
     <li><b>Planteamiento.</b> En cada opción, ¿existen coeficientes con $w$ igual a la combinación? (Def. 2.3, U p.70).</li>
-    <li><b>Apartado A.</b> $w=\alpha u_1+\beta u_2+\gamma u_3$ da
+    <li><b>Apartado A.</b>
+      <p>Planteo $w=\alpha u_1+\beta u_2+\gamma u_3$:</p>
       $$\begin{cases}\alpha+2\beta+3\gamma=2\\ \alpha+4\gamma=3\\ \alpha+2\beta+3\gamma=2\end{cases}$$
-      La 3.ª es idéntica a la 1.ª, quedan 2 ecuaciones independientes y 3 incógnitas: compatible indeterminado (Rouché, U p.30: $\operatorname{rang}A=\operatorname{rang}(A\mid b)=2\lt3$, 1 parámetro). De la 2.ª, $\alpha=3-4\gamma$; en la 1.ª, $3-4\gamma+2\beta+3\gamma=2\Rightarrow\beta=\frac{\gamma-1}{2}$. Solución general $(\alpha,\beta,\gamma)=\big(3-4\gamma,\ \tfrac{\gamma-1}{2},\ \gamma\big)$. Con $\gamma=-1$: $(2,3,2)=7u_1-u_2-u_3$ (comprobación: $(7-2-3,\ 7-0-4,\ 7-2-3)=(2,3,2)$ ✓). <b>A genera $w$</b>, de infinitas maneras.</li>
-    <li><b>Apartado B.</b> $w=\alpha u_1+\gamma u_3$: $\alpha+3\gamma=2,\ \alpha+4\gamma=3$ (la 3.ª repite la 1.ª). Restando: $\gamma=1$, $\alpha=-1$. $(2,3,2)=-u_1+u_3$ (comprobación $(-1+3,-1+4,-1+3)$ ✓). <b>B genera $w$.</b> <i>(E lo obtiene tomando $\gamma=1$ en la solución general de A, que da $\beta=0$; es correcto, pero conviene saber resolverlo directamente.)</i></li>
-    <li><b>Apartado C.</b> $w=\beta u_2+\gamma u_3$: $2\beta+3\gamma=2,\ 4\gamma=3$. $\gamma=\frac34$, $2\beta=2-\frac94=-\frac14$, $\beta=-\frac18$. $(2,3,2)=-\frac18u_2+\frac34u_3$ (comprobación: $\big(-\frac14+\frac94,\ 3,\ -\frac14+\frac94\big)=(2,3,2)$ ✓). <b>C genera $w$.</b></li>
+      <p>La 3.ª es idéntica a la 1.ª: quedan 2 ecuaciones independientes y 3 incógnitas. Es compatible indeterminado (Rouché, U p.30): $\operatorname{rang}A=\operatorname{rang}(A\mid b)=2<3$, con 1 parámetro. De la 2.ª:</p>
+      $$\alpha=3-4\gamma.$$
+      <p>Sustituyendo en la 1.ª:</p>
+      $$3-4\gamma+2\beta+3\gamma=2\ \Longrightarrow\ \beta=\frac{\gamma-1}{2}.$$
+      <p>Solución general:</p>
+      $$(\alpha,\beta,\gamma)=\Big(3-4\gamma,\ \tfrac{\gamma-1}{2},\ \gamma\Big).$$
+      <p>Con $\gamma=-1$ queda $(2,3,2)=7u_1-u_2-u_3$. Comprobación:</p>
+      $$(7-2-3,\ 7-0-4,\ 7-2-3)=(2,3,2)\ ✓$$
+      <p><b>A genera $w$</b>, de infinitas maneras.</p></li>
+    <li><b>Apartado B.</b>
+      <p>Planteo $w=\alpha u_1+\gamma u_3$:</p>
+      $$\alpha+3\gamma=2,\qquad\alpha+4\gamma=3$$
+      <p>(la 3.ª ecuación repite la 1.ª). Restando: $\gamma=1$ y $\alpha=-1$. Luego</p>
+      $$(2,3,2)=-u_1+u_3.$$
+      <p>Comprobación: $(-1+3,\ -1+4,\ -1+3)=(2,3,2)$ ✓. <b>B genera $w$.</b> <i>(E lo obtiene tomando $\gamma=1$ en la solución general de A, que da $\beta=0$; es correcto, pero conviene saber resolverlo directamente.)</i></p></li>
+    <li><b>Apartado C.</b>
+      <p>Planteo $w=\beta u_2+\gamma u_3$:</p>
+      $$2\beta+3\gamma=2,\qquad 4\gamma=3.$$
+      <p>De la segunda, $\gamma=\tfrac34$. En la primera:</p>
+      $$2\beta=2-\tfrac94=-\tfrac14\ \Longrightarrow\ \beta=-\tfrac18.$$
+      <p>Luego $(2,3,2)=-\tfrac18u_2+\tfrac34u_3$. Comprobación:</p>
+      $$\Big(-\tfrac14+\tfrac94,\ 3,\ -\tfrac14+\tfrac94\Big)=(2,3,2)\ ✓$$
+      <p><b>C genera $w$.</b></p></li>
     <li><b>Conclusión:</b> las <b>tres</b> opciones generan $(2,3,2)$.</li>
-    <li><b>Consecuencia: $\{u_1,u_2,u_3\}$ es ligado.</b> En A hay <b>dos</b> expresiones distintas de $w$, con $(\alpha,\beta,\gamma)=(7,-1,-1)$ y $(-1,0,1)$. Restándolas: $0=8u_1-u_2-2u_3$, con coeficientes no todos nulos (comprobación: $8(1,1,1)-(2,0,2)-2(3,4,3)=(0,0,0)$ ✓). Por la caracterización de ligado (U p.73) el sistema es dependiente; por ejemplo $u_2=8u_1-2u_3$.</li>
+    <li><b>Consecuencia: $\{u_1,u_2,u_3\}$ es ligado.</b>
+      <p>En A hay <b>dos</b> expresiones distintas de $w$, con $(\alpha,\beta,\gamma)=(7,-1,-1)$ y $(-1,0,1)$. Restándolas:</p>
+      $$0=8u_1-u_2-2u_3,$$
+      <p>con coeficientes no todos nulos. Comprobación:</p>
+      $$8(1,1,1)-(2,0,2)-2(3,4,3)=(0,0,0)\ ✓$$
+      <p>Por la caracterización de ligado (U p.73) el sistema es dependiente; por ejemplo $u_2=8u_1-2u_3$.</p></li>
   </ol>
   <div class="recipe"><b>Receta:</b> si al resolver $w=\sum\lambda_iu_i$ el sistema es compatible <b>indeterminado</b>, $w$ se escribe de infinitas maneras y $\{u_i\}$ es ligado; la diferencia de dos soluciones da una relación $0=\sum c_iu_i$ no trivial.</div>
   <p><b>Error típico:</b> creer que los coeficientes de una combinación lineal son únicos; solo lo están cuando los vectores son libres.</p>
@@ -474,13 +507,29 @@
         <li>(i) $\langle T\rangle\subset U$: basta ver que <b>cada vector de $T$ está en $U$</b> (como $U$ es subespacio y $\langle T\rangle$ es el más pequeño que contiene a $T$, U p.72).</li>
         <li>(ii) $U\subset\langle T\rangle$: todo vector de $U$ es combinación lineal de los de $T$.</li>
       </ul></li>
-    <li><b>Parametrizar $U$.</b> Despejando $x_3=-x_1-x_2$: $(x_1,x_2,x_3)=(x_1,\ x_2,\ -x_1-x_2)$ con $x_1,x_2$ libres.</li>
-    <li><b>B (verdadero).</b> (i) $(1,0,-1)$: $1+0-1=0$ ✓; $(0,1,-1)$: $0+1-1=0$ ✓. (ii) Separando lo que multiplica a cada parámetro:
+    <li><b>Parametrizar $U$.</b>
+      <p>Despejando $x_3=-x_1-x_2$, con $x_1,x_2$ libres:</p>
+      $$(x_1,x_2,x_3)=(x_1,\ x_2,\ -x_1-x_2).$$</li>
+    <li><b>B (verdadero).</b>
+      <p>(i) Los dos vectores están en $U$:</p>
+      $$(1,0,-1):\ 1+0-1=0\ ✓,\qquad(0,1,-1):\ 0+1-1=0\ ✓.$$
+      <p>(ii) Separando lo que multiplica a cada parámetro:</p>
       $$\begin{pmatrix}x_1\\x_2\\-x_1-x_2\end{pmatrix}=x_1\begin{pmatrix}1\\0\\-1\end{pmatrix}+x_2\begin{pmatrix}0\\1\\-1\end{pmatrix}.$$
-      Luego $U=\langle(1,0,-1),(0,1,-1)\rangle$. <b>B es verdadera.</b></li>
-    <li><b>A (falso).</b> $(1,0,-1)\in U$, pero $\langle(1,0,-1)\rangle=\{(\alpha,0,-\alpha)\}$ tiene todas las segundas componentes nulas. Contraejemplo: $(0,1,-1)\in U$ ($0+1-1=0$) y $(0,1,-1)=\alpha(1,0,-1)$ exigiría $1=0$: imposible. Falla (ii): se queda corto (genera una recta dentro del plano). <b>A es falsa.</b></li>
-    <li><b>C (falso).</b> $(0,1,0)\notin U$ ($0+1+0=1\neq0$): falla ya (i). Un generador de $U$ tiene que estar en $U$. De $\langle(0,1,0)\rangle=\{(0,\alpha,0)\}$ solo el vector nulo está en $U$. <b>C es falsa.</b></li>
-    <li><b>Argumento alternativo (contando vectores).</b> $S=\{(1,0,-1),(0,1,-1)\}$ es libre ($\lambda(1,0,-1)+\mu(0,1,-1)=(\lambda,\mu,-\lambda-\mu)=0\Rightarrow\lambda=\mu=0$) y genera $U$; por la relación libres–generadores (U p.81), cualquier sistema generador de $U$ tiene <b>al menos 2</b> vectores. A y C tienen uno: no pueden generar $U$.</li>
+      <p>Luego $U=\langle(1,0,-1),(0,1,-1)\rangle$. <b>B es verdadera.</b></p></li>
+    <li><b>A (falso).</b>
+      <p>$(1,0,-1)\in U$, pero</p>
+      $$\langle(1,0,-1)\rangle=\{(\alpha,0,-\alpha)\}$$
+      <p>tiene todas las segundas componentes nulas. Contraejemplo: $(0,1,-1)\in U$ ($0+1-1=0$) y</p>
+      $$(0,1,-1)=\alpha(1,0,-1)\ \Longrightarrow\ 1=0,$$
+      <p>imposible. Falla (ii): se queda corto (genera una recta dentro del plano). <b>A es falsa.</b></p></li>
+    <li><b>C (falso).</b>
+      <p>$(0,1,0)\notin U$, porque</p>
+      $$0+1+0=1\neq0.$$
+      <p>Falla ya (i): un generador de $U$ tiene que estar en $U$. De $\langle(0,1,0)\rangle=\{(0,\alpha,0)\}$ solo el vector nulo está en $U$. <b>C es falsa.</b></p></li>
+    <li><b>Argumento alternativo (contando vectores).</b>
+      <p>$S=\{(1,0,-1),(0,1,-1)\}$ es libre:</p>
+      $$\lambda(1,0,-1)+\mu(0,1,-1)=(\lambda,\mu,-\lambda-\mu)=0\ \Longrightarrow\ \lambda=\mu=0,$$
+      <p>y genera $U$. Por la relación libres–generadores (U p.81), cualquier sistema generador de $U$ tiene <b>al menos 2</b> vectores. A y C tienen uno: no pueden generar $U$.</p></li>
   </ol>
   <p><i>(sympy: $x_1+x_2+x_3$ vale $0$ en los vectores de B y $1$ en $(0,1,0)$; $\operatorname{rang}(S)=2$ y $\operatorname{rang}(S\cup\{(0,1,0)\})=3$, luego $(0,1,0)\notin\langle S\rangle=U$.)</i> E en C solo dice que «en general» no estarán en $U$; la razón decisiva es que el propio generador $(0,1,0)\notin U$.</p>
   <div class="recipe"><b>Receta:</b> para ver si $T$ genera un subespacio $U$ dado por ecuaciones: (i) comprueba que cada vector de $T$ cumple las ecuaciones de $U$; (ii) escribe el vector genérico de $U$ con parámetros, sepáralo como combinación de vectores fijos y comprueba que esos son combinación de los de $T$.</div>
@@ -497,17 +546,24 @@
     <dt>Plan</dt><dd>En vez de rehacer el cálculo cada vez, <b>transformar</b> un sistema conocido en el nuevo con operaciones que no cambian $\langle\ \rangle$: añadir/quitar vectores dependientes, o sustituir con coeficiente no nulo. Cada paso se justifica escribiendo explícitamente la combinación lineal.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>A: $S\to S_1$ por sustitución.</b> $(0,2,-2)=0\cdot u_1+2u_2$; $u_2$ aparece con coeficiente $2\neq0$, luego por el Teor. 2.2 puede sustituirse $u_2$ por $(0,2,-2)$. <b>$S_1$ genera $U$.</b> <i>(En cambio $(0,2,-2)$ no podría sustituir a $u_1$, cuyo coeficiente es $0$: saldría $\{(0,2,-2),u_2\}$, que solo genera una recta; es el aviso del Ej. U 2.23.)</i></li>
-    <li><b>B: $S\to S_2$ añadiendo un vector dependiente.</b> $(1,1,-2)=u_1+u_2$ ($(1+0,\,0+1,\,-1-1)$ ✓). Por el Teor. 2.1 puede suprimirse: $\langle S_2\rangle=\langle S\rangle=U$. <b>$S_2$ genera $U$.</b></li>
-    <li><b>C: $S\to S_3$.</b> $(1,1,-2)=u_1+u_2$ y $(3,0,-3)=3u_1$. Se suprimen, uno a uno, ambos (cada uno depende de los que se quedan): $\langle S_3\rangle=\langle S\rangle=U$. <b>$S_3$ genera $U$.</b></li>
+    <li><b>A: $S\to S_1$ por sustitución.</b>
+      <p>Expreso el vector nuevo con los de $S$:</p>
+      $$(0,2,-2)=0\cdot u_1+2u_2.$$
+      <p>$u_2$ aparece con coeficiente $2\neq0$, luego por el Teor. 2.2 puede sustituirse $u_2$ por $(0,2,-2)$. <b>$S_1$ genera $U$.</b> <i>(En cambio $(0,2,-2)$ no podría sustituir a $u_1$, cuyo coeficiente es $0$: saldría $\{(0,2,-2),u_2\}$, que solo genera una recta; es el aviso del Ej. U 2.23.)</i></p></li>
+    <li><b>B: $S\to S_2$ añadiendo un vector dependiente.</b>
+      $$(1,1,-2)=u_1+u_2\quad\big((1+0,\ 0+1,\ -1-1)\big).$$
+      <p>Por el Teor. 2.1 puede suprimirse: $\langle S_2\rangle=\langle S\rangle=U$. <b>$S_2$ genera $U$.</b></p></li>
+    <li><b>C: $S\to S_3$.</b>
+      $$(1,1,-2)=u_1+u_2,\qquad(3,0,-3)=3u_1.$$
+      <p>Se suprimen, uno a uno, ambos (cada uno depende de los que se quedan): $\langle S_3\rangle=\langle S\rangle=U$. <b>$S_3$ genera $U$.</b></p></li>
     <li><b>D: $S_3\to S_4$ suprimiendo $u_1$ y $u_2$, de uno en uno.</b>
-      <ul>
-        <li>$u_1=(1,0,-1)=\tfrac13(3,0,-3)$ ✓: se suprime $u_1$ y queda $\{u_2,(1,1,-2),(3,0,-3)\}$, que sigue generando $U$.</li>
-        <li>$u_2=(0,1,-1)=(1,1,-2)-\tfrac13(3,0,-3)=(1-1,\ 1-0,\ -2+1)$ ✓: se suprime $u_2$ y queda $S_4$.</li>
-      </ul>
-      <b>$S_4$ genera $U$.</b></li>
+      <p>Primero $u_1$:</p>
+      $$u_1=(1,0,-1)=\tfrac13(3,0,-3)\ ✓$$
+      <p>Se suprime $u_1$ y queda $\{u_2,(1,1,-2),(3,0,-3)\}$, que sigue generando $U$. Después $u_2$:</p>
+      $$u_2=(0,1,-1)=(1,1,-2)-\tfrac13(3,0,-3)=(1-1,\ 1-0,\ -2+1)\ ✓$$
+      <p>Se suprime $u_2$ y queda $S_4$. <b>$S_4$ genera $U$.</b></p></li>
     <li><b>E.</b> Dos sistemas son equivalentes si generan el mismo subespacio (U p.73). Por A–D, $\langle S\rangle=\langle S_1\rangle=\dots=\langle S_4\rangle=U$. <b>E es correcta.</b></li>
-    <li><b>Comprobación alternativa para el examen.</b> Todos los vectores de todos los $S_i$ cumplen $x_1+x_2+x_3=0$, luego $\langle S_i\rangle\subset U$; y la matriz con los vectores de $S_i$ junto con $u_1,u_2$ tiene rango 2, igual que $S_i$ solo, así $u_1,u_2\in\langle S_i\rangle$ y $U\subset\langle S_i\rangle$. <i>(Rango de un sistema = rango de la matriz de sus coordenadas, U p.88.)</i></li>
+    <li><b>Comprobación alternativa para el examen.</b> Todos los vectores de todos los $S_i$ cumplen $x_1+x_2+x_3=0$, luego $\langle S_i\rangle\subset U$. Además la matriz con los vectores de $S_i$ junto con $u_1,u_2$ tiene rango 2, igual que $S_i$ solo; así $u_1,u_2\in\langle S_i\rangle$ y $U\subset\langle S_i\rangle$. <i>(Rango de un sistema = rango de la matriz de sus coordenadas, U p.88.)</i></li>
   </ol>
   <div class="recipe"><b>Receta:</b> para decidir si un sistema nuevo genera lo mismo que uno conocido, transfórmalo con las tres operaciones permitidas: <b>añadir</b> o <b>quitar</b> vectores que sean combinación lineal de los restantes (Teor. 2.1) y <b>sustituir</b> un vector por una combinación en la que él tenga coeficiente $\neq0$ (Teor. 2.2).</div>
   <p><b>Error típico:</b> (1) sustituir con coeficiente $0$; (2) quitar varios vectores a la vez, comprobando cada uno con los que también se van a quitar. Hay que ir de uno en uno y usar los que quedan.</p>
@@ -524,12 +580,18 @@
     <dt>Plan</dt><dd>Simplificar el problema quitando el generador dependiente (así hay solo 2 incógnitas $\alpha,\beta$ y 4 ecuaciones). Las ecuaciones <b>sin parámetros</b> fijan $\alpha,\beta$; las que contienen $m,n$ obligan a que $m,n$ tomen el valor que las hace ciertas. Se muestra después la vía alternativa por Gauss.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Detectar un vector dependiente.</b> $u_1-u_2=(1,-1,4,2)=u_3$. Por el Teor. 2.1 (supresión), $\langle S\rangle=\langle u_1,u_2\rangle$. Ahora hay solo dos incógnitas.</li>
-    <li><b>Plantear la pertenencia.</b> $w=\alpha u_1+\beta u_2$ (Def. 2.4):
+    <li><b>Detectar un vector dependiente.</b>
+      $$u_1-u_2=(1,-1,4,2)=u_3.$$
+      <p>Por el Teor. 2.1 (supresión), $\langle S\rangle=\langle u_1,u_2\rangle$. Ahora hay solo dos incógnitas.</p></li>
+    <li><b>Plantear la pertenencia</b> $w=\alpha u_1+\beta u_2$ (Def. 2.4):
       $$\begin{cases}2\alpha+\beta=1\\ \alpha+2\beta=-1\\ 3\alpha-\beta=m\\ 4\alpha+2\beta=n\end{cases}$$</li>
-    <li><b>Las dos primeras ecuaciones (sin $m,n$) fijan $\alpha,\beta$.</b> De la 1.ª, $\beta=1-2\alpha$; en la 2.ª, $\alpha+2-4\alpha=-1\Rightarrow\alpha=1$, $\beta=-1$ (solución única: $\begin{vmatrix}2&1\\1&2\end{vmatrix}=3\neq0$).</li>
-    <li><b>Las otras dos deben cumplirse</b> con esos valores (si no, sistema incompatible): $m=3\cdot1-(-1)=4$, $n=4\cdot1+2\cdot(-1)=2$.</li>
-    <li><b>Conclusión.</b> $w\in\langle S\rangle\iff m=4,\ n=2$; entonces $w=(1,-1,4,2)=u_1-u_2$ (que es justamente $u_3$).</li>
+    <li><b>Las dos primeras ecuaciones (sin $m,n$) fijan $\alpha,\beta$.</b>
+      <p>De la 1.ª, $\beta=1-2\alpha$. En la 2.ª:</p>
+      $$\alpha+2-4\alpha=-1\ \Longrightarrow\ \alpha=1,\quad\beta=-1.$$
+      <p>La solución es única: $\begin{vmatrix}2&1\\1&2\end{vmatrix}=3\neq0$.</p></li>
+    <li><b>Las otras dos deben cumplirse</b> con esos valores (si no, sistema incompatible):
+      $$m=3\cdot1-(-1)=4,\qquad n=4\cdot1+2\cdot(-1)=2.$$</li>
+    <li><b>Conclusión.</b> $w\in\langle S\rangle\iff m=4,\ n=2$. Entonces $w=(1,-1,4,2)=u_1-u_2$, que es justamente $u_3$.</li>
   </ol>
   <p><b>Solución alternativa (Gauss, sin ver la dependencia).</b> Matriz ampliada de $\alpha u_1+\beta u_2+\gamma u_3=w$ (vectores en columnas):
   $$\left(\begin{array}{ccc|c}2&1&1&1\\1&2&-1&-1\\3&-1&4&m\\4&2&2&n\end{array}\right)$$
@@ -552,15 +614,23 @@
     <dt>Plan</dt><dd>Comprobar que $B,C$ son libres (para poder usar el lema), plantear $A=\alpha B+\beta C$ (4 ecuaciones, una por entrada), usar las dos que no contienen $x,y$ para hallar $\alpha,\beta$ y sustituir en las otras dos para obtener $x,y$.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>$B$ y $C$ son independientes</b> (E lo afirma sin comprobarlo; hay que justificarlo). Si $\lambda B+\mu C=0$:
+    <li><b>$B$ y $C$ son independientes</b> (E lo afirma sin comprobarlo; hay que justificarlo).
+      <p>Si $\lambda B+\mu C=0$:</p>
       $$\begin{pmatrix}\lambda+\mu&4\lambda+2\mu\\5\lambda+3\mu&2\lambda+4\mu\end{pmatrix}=\begin{pmatrix}0&0\\0&0\end{pmatrix}.$$
-      Entrada $(1,1)$: $\mu=-\lambda$; entrada $(1,2)$: $4\lambda-2\lambda=2\lambda=0$. Luego $\lambda=\mu=0$ y $\{B,C\}$ es libre (U p.74).</li>
+      <p>Entrada $(1,1)$: $\mu=-\lambda$. Entrada $(1,2)$:</p>
+      $$4\lambda-2\lambda=2\lambda=0.$$
+      <p>Luego $\lambda=\mu=0$ y $\{B,C\}$ es libre (U p.74).</p></li>
     <li><b>Reducción.</b> Como $\{B,C\}$ es libre, por el lema práctico de §3: $\{A,B,C\}$ ligado $\iff A\in\langle B,C\rangle$. (E lo usa sin decirlo.)</li>
     <li><b>Plantear $A=\alpha B+\beta C$</b> entrada a entrada:
       $$\begin{cases}\alpha+\beta=3&(1,1)\\ 4\alpha+2\beta=2&(1,2)\\ 5\alpha+3\beta=x&(2,1)\\ 2\alpha+4\beta=y&(2,2)\end{cases}$$</li>
-    <li><b>Las dos primeras (sin $x,y$) dan $\alpha,\beta$.</b> Restando a la 2.ª el doble de la 1.ª: $2\alpha=2-6=-4\Rightarrow\alpha=-2$, y $\beta=3-(-2)=5$.</li>
-    <li><b>Las dos últimas dan $x,y$:</b> $x=5(-2)+3\cdot5=5$; $y=2(-2)+4\cdot5=16$.</li>
-    <li><b>Comprobación.</b> $-2B+5C=\begin{pmatrix}-2+5&-8+10\\-10+15&-4+20\end{pmatrix}=\begin{pmatrix}3&2\\5&16\end{pmatrix}=A$ ✓. <b>$x=5$, $y=16$</b> (para cualquier otro par las tres son independientes).</li>
+    <li><b>Las dos primeras (sin $x,y$) dan $\alpha,\beta$.</b>
+      <p>Restando a la 2.ª el doble de la 1.ª:</p>
+      $$2\alpha=2-6=-4\ \Longrightarrow\ \alpha=-2,\qquad\beta=3-(-2)=5.$$</li>
+    <li><b>Las dos últimas dan $x,y$:</b>
+      $$x=5(-2)+3\cdot5=5,\qquad y=2(-2)+4\cdot5=16.$$</li>
+    <li><b>Comprobación.</b>
+      $$-2B+5C=\begin{pmatrix}-2+5&-8+10\\-10+15&-4+20\end{pmatrix}=\begin{pmatrix}3&2\\5&16\end{pmatrix}=A\ ✓$$
+      <p><b>$x=5$, $y=16$</b> (para cualquier otro par las tres son independientes).</p></li>
   </ol>
   <p><b>Alternativa con rango.</b> Identificando cada matriz con $(a_{11},a_{12},a_{21},a_{22})$, son dependientes $\iff\operatorname{rang}\begin{pmatrix}3&2&x&y\\1&4&5&2\\1&2&3&4\end{pmatrix}\lt3$. Con $F_2\to3F_2-F_1$ y $F_3\to3F_3-F_1$ sale $\begin{pmatrix}3&2&x&y\\0&10&15-x&6-y\\0&4&9-x&12-y\end{pmatrix}$ (cada una anula la 1.ª entrada con el pivote $3$), y con $F_3\to10F_3-4F_2$ (anula el $4$ con el pivote $10$) queda $\begin{pmatrix}3&2&x&y\\0&10&15-x&6-y\\0&0&30-6x&96-6y\end{pmatrix}$, pues $10(9-x)-4(15-x)=30-6x$ y $10(12-y)-4(6-y)=96-6y$. El rango es 2 $\iff30-6x=0$ y $96-6y=0$: $x=5,\ y=16$.</p>
   <div class="recipe"><b>Receta:</b> con $B,C$ libres, $\{A,B,C\}$ ligado $\iff A=\alpha B+\beta C$: usa las ecuaciones sin parámetros para hallar $\alpha,\beta$ y sustitúyelos en las que contienen los parámetros.</div>
@@ -576,14 +646,17 @@
     <dt>Plan</dt><dd>Plantear $\lambda u_1+\mu u_2=0$ y discutir por <b>casos</b> según los valores de $a,b$; el caso peligroso es el que anula el vector. Después contestar cada afirmación diciendo para qué valores es cierta.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Estudio de la independencia (U p.74).</b> $\lambda(-1,1,2)+\mu(a,0,b)=(0,0,0)$:
+    <li><b>Estudio de la independencia (U p.74).</b>
+      <p>Planteo $\lambda(-1,1,2)+\mu(a,0,b)=(0,0,0)$:</p>
       $$\begin{cases}-\lambda+a\mu=0\\ \lambda=0\\ 2\lambda+b\mu=0\end{cases}$$
-      La 2.ª da $\lambda=0$. Quedan $a\mu=0$ y $b\mu=0$.
+      <p>La 2.ª da $\lambda=0$. Quedan $a\mu=0$ y $b\mu=0$.</p>
       <ul>
-        <li>Si $(a,b)\neq(0,0)$: alguno de $a,b$ es no nulo, luego $\mu=0$: solo la solución trivial, <b>libre</b>.</li>
+        <li>Si $(a,b)\neq(0,0)$: alguno de $a,b$ es no nulo, luego $\mu=0$. Solo la solución trivial: <b>libre</b>.</li>
         <li>Si $a=b=0$: el segundo vector es $0$ y $0\cdot(-1,1,2)+1\cdot(0,0,0)=0$ con coeficiente $1\neq0$: <b>ligado</b> (U p.74: si $0$ está en el sistema, es ligado).</li>
       </ul>
-      <i>Con rango (como E):</i> los menores de orden 2 de $\begin{pmatrix}-1&1&2\\a&0&b\end{pmatrix}$ son $\begin{vmatrix}-1&1\\a&0\end{vmatrix}=-a$, $\begin{vmatrix}-1&2\\a&b\end{vmatrix}=-b-2a$ y $\begin{vmatrix}1&2\\0&b\end{vmatrix}=b$; todos se anulan $\iff a=b=0$. Rango 2 $\iff(a,b)\neq(0,0)$.</li>
+      <p><i>Con rango (como E):</i> los menores de orden 2 de $\begin{pmatrix}-1&1&2\\a&0&b\end{pmatrix}$ son</p>
+      $$\begin{vmatrix}-1&1\\a&0\end{vmatrix}=-a,\qquad\begin{vmatrix}-1&2\\a&b\end{vmatrix}=-b-2a,\qquad\begin{vmatrix}1&2\\0&b\end{vmatrix}=b.$$
+      <p>Todos se anulan $\iff a=b=0$. Rango 2 $\iff(a,b)\neq(0,0)$.</p></li>
     <li><b>A) Falsa.</b> No es libre «para valores cualesquiera»: con $a=b=0$ es ligado (basta un contraejemplo).</li>
     <li><b>B) Verdadera.</b> Puede ser ligado: exactamente cuando $a=b=0$.</li>
     <li><b>C) Falsa como afirmación general.</b> El subespacio generado tiene por dimensión el rango del sistema (Teor. 2.5, U p.88; aquí basta leer «dimensión 1 = recta, dimensión 2 = plano»):
@@ -591,7 +664,7 @@
         <li>si $(a,b)\neq(0,0)$: rango 2, genera un <b>plano</b> (dimensión 2);</li>
         <li>si $a=b=0$: $(0,0,0)=0\cdot(-1,1,2)$ se suprime (Teor. 2.1) y $\langle S\rangle=\langle(-1,1,2)\rangle$ es una <b>recta</b> (dimensión 1).</li>
       </ul>
-      Así que C solo es cierta en el caso particular $a=b=0$.</li>
+      <p>Así que C solo es cierta en el caso particular $a=b=0$.</p></li>
   </ol>
   <div class="box warn"><span class="h">Aviso sobre la solución de E</span><p>E declara C «falso» sin matizar. Es correcto si C se lee como A («para valores cualesquiera de $a$ y $b$»), pero la justificación de E solo trata el caso $(a,b)\neq(0,0)$ y omite que con $a=b=0$ la dimensión <b>sí</b> es 1. En un examen conviene responder completo: «Dim $=1\iff a=b=0$; en otro caso Dim $=2$». Además E afirma que el rango es 2 si $a$ o $b$ son no nulos sin dar el menor; arriba se dan los menores $-a$ y $b$ que lo justifican.</p></div>
   <div class="recipe"><b>Receta:</b> con parámetros, plantea $\sum\lambda_iu_i=0$ (o calcula los menores de la matriz de coordenadas) y <b>separa casos</b> según los valores que anulan los menores. Responde a cada afirmación diciendo <b>para qué valores</b> es cierta.</div>
@@ -607,11 +680,16 @@
     <dt>Plan</dt><dd>Escribir el sistema (3 ecuaciones, incógnitas $\lambda,\mu$). Las dos ecuaciones sin $c$ fijan $\lambda,\mu$; la que contiene $c$ da su valor. Como comprobación, el determinante igualado a 0 da la misma $c$.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Planteamiento (Def. 2.4).</b> $(1,-2,c)=\lambda(3,0,-2)+\mu(2,-1,-5)$:
-      $$\begin{cases}1=3\lambda+2\mu\\ -2=-\mu\\ c=-2\lambda-5\mu\end{cases}$$</li>
-    <li><b>Las dos primeras (sin $c$) determinan $\lambda,\mu$.</b> De la 2.ª, $\mu=2$; en la 1.ª, $3\lambda=1-4=-3\Rightarrow\lambda=-1$.</li>
-    <li><b>La 3.ª debe cumplirse:</b> $c=-2(-1)-5\cdot2=2-10=-8$.</li>
-    <li><b>Conclusión.</b> $c=-8$ y $(1,-2,-8)=-(3,0,-2)+2(2,-1,-5)$ (comprobación: $(-3+4,\ 0-2,\ 2-10)=(1,-2,-8)$ ✓).</li>
+    <li><b>Planteamiento (Def. 2.4).</b>
+      $$(1,-2,c)=\lambda(3,0,-2)+\mu(2,-1,-5)\ \Longrightarrow\ \begin{cases}1=3\lambda+2\mu\\ -2=-\mu\\ c=-2\lambda-5\mu\end{cases}$$</li>
+    <li><b>Las dos primeras (sin $c$) determinan $\lambda,\mu$.</b>
+      <p>De la 2.ª, $\mu=2$. En la 1.ª:</p>
+      $$3\lambda=1-4=-3\ \Longrightarrow\ \lambda=-1.$$</li>
+    <li><b>La 3.ª debe cumplirse:</b>
+      $$c=-2(-1)-5\cdot2=2-10=-8.$$</li>
+    <li><b>Conclusión.</b>
+      <p>$c=-8$ y $(1,-2,-8)=-(3,0,-2)+2(2,-1,-5)$. Comprobación:</p>
+      $$(-3+4,\ 0-2,\ 2-10)=(1,-2,-8)\ ✓$$</li>
   </ol>
   <p><b>Alternativa con determinante.</b> Los dos generadores no son proporcionales (el primero tiene un $0$ en la 2.ª componente y el segundo un $-1$), luego $S_1$ es libre. Por el lema práctico de §3, $w\in\langle S_1\rangle\iff\{(3,0,-2),(2,-1,-5),w\}$ es ligado $\iff$ rango $\lt3$ $\iff$
   $$\begin{vmatrix}3&0&-2\\2&-1&-5\\1&-2&c\end{vmatrix}=3\big((-1)c-(-5)(-2)\big)-0+(-2)\big(2(-2)-(-1)\cdot1\big)=3(-c-10)-2(-3)=-3c-24=0,$$
@@ -631,10 +709,14 @@
     <dt>Plan</dt><dd>Un sistema de 3 ecuaciones con 2 incógnitas: usar dos ecuaciones para hallar $\alpha,\beta$ y <b>comprobar la tercera</b>. Si no se cumple, no es combinación lineal.</dd>
   </dl></div>
   <ol class="steps">
-    <li>$w=\alpha u_1+\beta u_2$: $\alpha+\beta=3,\ \beta=1,\ \alpha+2\beta=5$.</li>
-    <li>De la 2.ª, $\beta=1$; de la 1.ª, $\alpha=2$.</li>
-    <li>La 3.ª exigiría $2+2=5$: falso, sistema incompatible. <b>$w$ no es combinación lineal.</b></li>
-    <li>Para $w'$ la 3.ª es $\alpha+2\beta=4$ y $2+2=4$ ✓. <b>$w'=2u_1+u_2$</b> (comprobación: $(2+1,\ 0+1,\ 2+2)=(3,1,4)$ ✓).</li>
+    <li><b>Planteo</b> $w=\alpha u_1+\beta u_2$:
+      $$\alpha+\beta=3,\qquad\beta=1,\qquad\alpha+2\beta=5.$$</li>
+    <li>De la 2.ª, $\beta=1$. De la 1.ª, $\alpha=2$.</li>
+    <li>La 3.ª exigiría
+      $$2+2\cdot1=5,$$
+      <p>falso: sistema incompatible. <b>$w$ no es combinación lineal.</b></p></li>
+    <li>Para $w'$ la 3.ª es $\alpha+2\beta=4$ y $2+2=4$ ✓. <b>$w'=2u_1+u_2$.</b> Comprobación:
+      $$(2+1,\ 0+1,\ 2+2)=(3,1,4)\ ✓$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> halla los coeficientes con las ecuaciones más sencillas y <b>comprueba las que sobran</b>.</div>
 </details>
@@ -651,7 +733,10 @@
     <li>Desarrollando por la 1.ª fila:
       $$\begin{vmatrix}1&2&1\\0&1&k\\2&3&1\end{vmatrix}=1(1-3k)-2(0-2k)+1(0-2)=1-3k+4k-2=k-1.$$</li>
     <li>Ligado $\iff k-1=0\iff k=1$.</li>
-    <li>Con $k=1$ se busca $(2,3,1)=\alpha(1,2,1)+\beta(0,1,1)$: de la 1.ª componente $\alpha=2$; la 2.ª, $2\alpha+\beta=3\Rightarrow\beta=-1$; la 3.ª, $\alpha+\beta=1$ ✓. Así $(2,3,1)=2(1,2,1)-(0,1,1)$.</li>
+    <li>Con $k=1$ busco $(2,3,1)=\alpha(1,2,1)+\beta(0,1,1)$. La 1.ª componente da $\alpha=2$. La 2.ª:
+      $$2\alpha+\beta=3\ \Longrightarrow\ \beta=-1.$$
+      <p>La 3.ª, $\alpha+\beta=1$ ✓. Así:</p>
+      $$(2,3,1)=2(1,2,1)-(0,1,1).$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> $n$ vectores de $\mathbb R^n$ con parámetro: determinante $=0$ da los valores críticos; después, para cada valor, resuelve la relación concreta.</div>
 </details>
@@ -666,13 +751,19 @@
   <ol class="steps">
     <li><b>Escalonar</b> la matriz con los vectores en filas (las operaciones de fila no cambian el rango, U p.22). Primero $F_2\to F_2-2F_1$ y $F_4\to F_4-F_1$:
       $$\begin{pmatrix}1&1&0&2\\2&1&1&3\\0&1&-1&1\\1&0&1&1\end{pmatrix}\ \longrightarrow\ \begin{pmatrix}1&1&0&2\\0&-1&1&-1\\0&1&-1&1\\0&-1&1&-1\end{pmatrix}.$$
-      Después $F_3\to F_3+F_2$ y $F_4\to F_4-F_2$:
+      <p>Después $F_3\to F_3+F_2$ y $F_4\to F_4-F_2$:</p>
       $$\longrightarrow\ \begin{pmatrix}1&1&0&2\\0&-1&1&-1\\0&0&0&0\\0&0&0&0\end{pmatrix}.$$
-      <b>Rango 2</b>. Con 4 vectores y rango 2, $S$ es ligado.</li>
-    <li><b>Relaciones explícitas.</b> Las filas anuladas indican que $u_3$ y $u_4$ dependen de $u_1,u_2$: $u_3=2u_1-u_2$ (comprobación: $(2-2,\ 2-1,\ 0-1,\ 4-3)=(0,1,-1,1)$ ✓) y $u_4=u_2-u_1$ ($(1,0,1,1)$ ✓).</li>
-    <li><b>Suprimir</b> $u_3$ y luego $u_4$ (Teor. 2.1; cada uno es combinación de $u_1,u_2$, que se quedan): $\langle S\rangle=\langle u_1,u_2\rangle$. $\{u_1,u_2\}$ es libre ($u_2=k\,u_1$ exigiría en la 3.ª componente $1=k\cdot0$, imposible, y $u_1\neq0$). <b>Respuesta (a):</b> rango 2 y sistema libre generador $\{u_1,u_2\}$.</li>
-    <li><b>(b)</b> $(1,2,-1,3)=\alpha u_1+\beta u_2$: $\alpha+2\beta=1,\ \alpha+\beta=2,\ \beta=-1,\ 2\alpha+3\beta=3$. De la 3.ª, $\beta=-1$; de la 2.ª, $\alpha=3$; 1.ª: $3-2=1$ ✓; 4.ª: $6-3=3$ ✓. <b>Sí:</b> $(1,2,-1,3)=3u_1-u_2$.</li>
-    <li>Para $(1,2,-1,4)$ las tres primeras ecuaciones dan lo mismo ($\alpha=3,\beta=-1$), pero la 4.ª exigiría $2\alpha+3\beta=4$ y vale $3$. <b>No pertenece.</b></li>
+      <p><b>Rango 2</b>. Con 4 vectores y rango 2, $S$ es ligado.</p></li>
+    <li><b>Relaciones explícitas.</b> Las filas anuladas indican que $u_3$ y $u_4$ dependen de $u_1,u_2$:
+      $$u_3=2u_1-u_2:\ (2-2,\ 2-1,\ 0-1,\ 4-3)=(0,1,-1,1)\ ✓$$
+      $$u_4=u_2-u_1:\ (1,0,1,1)\ ✓$$</li>
+    <li><b>Suprimir</b> $u_3$ y luego $u_4$ (Teor. 2.1; cada uno es combinación de $u_1,u_2$, que se quedan): $\langle S\rangle=\langle u_1,u_2\rangle$. $\{u_1,u_2\}$ es libre: $u_2=k\,u_1$ exigiría en la 3.ª componente $1=k\cdot0$, imposible, y $u_1\neq0$. <b>Respuesta (a):</b> rango 2 y sistema libre generador $\{u_1,u_2\}$.</li>
+    <li><b>(b)</b> Planteo $(1,2,-1,3)=\alpha u_1+\beta u_2$:
+      $$\alpha+2\beta=1,\qquad\alpha+\beta=2,\qquad\beta=-1,\qquad2\alpha+3\beta=3.$$
+      <p>De la 3.ª, $\beta=-1$. De la 2.ª, $\alpha=3$. Compruebo la 1.ª ($3-2=1$ ✓) y la 4.ª ($6-3=3$ ✓). <b>Sí:</b> $(1,2,-1,3)=3u_1-u_2$.</p></li>
+    <li>Para $(1,2,-1,4)$ las tres primeras ecuaciones dan lo mismo ($\alpha=3$, $\beta=-1$), pero la 4.ª exigiría
+      $$2\alpha+3\beta=4,$$
+      <p>y vale $3$. <b>No pertenece.</b></p></li>
   </ol>
   <div class="recipe"><b>Receta global del tema:</b> escalonar la matriz de coordenadas da a la vez el <b>rango</b>, <b>qué vectores sobran</b> (supresión) y, resolviendo $\sum\lambda_iu_i=w$, <b>si un vector pertenece</b> al subespacio generado.</div>
 </details>
@@ -691,12 +782,17 @@
     <dt>Plan</dt><dd>Estudiar cada propiedad por separado: la libertad con el sistema homogéneo; el generador buscando un vector (p. ej. $e_3$) que no sea combinación. La base se concluye de las otras dos.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>C) ¿es libre $\{\bar u,\bar v\}$?</b> Por la caracterización (U p.74), ver si $\lambda\bar u+\mu\bar v=0$ obliga a $\lambda=\mu=0$:
+    <li><b>C) ¿es libre $\{\bar u,\bar v\}$?</b>
+      <p>Por la caracterización (U p.74), miro si $\lambda\bar u+\mu\bar v=0$ obliga a $\lambda=\mu=0$:</p>
       $$\lambda(1,2,-1)+\mu(3,1,0)=(0,0,0)\iff\begin{cases}\lambda+3\mu=0\\ 2\lambda+\mu=0\\ -\lambda=0\end{cases}$$
-      La 3.ª da $\lambda=0$; en la 1.ª, $3\mu=0$, o sea $\mu=0$. Solo la solución nula: <b>libre. C) es cierta.</b> <i>Atajo para dos vectores:</i> son ligados solo si uno es múltiplo del otro; $\bar v=c\bar u$ exigiría $0=-c$ (3.ª componente), $c=0$ y $\bar v=0$, falso.</li>
-    <li><b>A) ¿generan $\mathbb R^3$?</b> Habría que probar que <b>todo</b> vector de $\mathbb R^3$ es combinación suya; para refutarlo basta un contraejemplo. Con $e_3=(0,0,1)$:
+      <p>La 3.ª da $\lambda=0$; en la 1.ª, $3\mu=0$, o sea $\mu=0$. Solo la solución nula: <b>libre. C) es cierta.</b></p>
+      <p><i>Atajo para dos vectores:</i> son ligados solo si uno es múltiplo del otro. $\bar v=c\bar u$ exigiría $0=-c$ (3.ª componente), $c=0$ y $\bar v=0$, falso.</p></li>
+    <li><b>A) ¿generan $\mathbb R^3$?</b>
+      <p>Habría que probar que <b>todo</b> vector de $\mathbb R^3$ es combinación suya; para refutarlo basta un contraejemplo. Con $e_3=(0,0,1)$:</p>
       $$\lambda(1,2,-1)+\mu(3,1,0)=(0,0,1)\iff\begin{cases}\lambda+3\mu=0\\ 2\lambda+\mu=0\\ -\lambda=1\end{cases}$$
-      De la 3.ª, $\lambda=-1$; de la 1.ª, $\mu=\frac13$; en la 2.ª: $2(-1)+\frac13=-\frac53\neq0$. Incompatible, luego $(0,0,1)\notin\langle\bar u,\bar v\rangle$. <b>A) es falsa.</b> <i>Razonamiento general:</i> $\{e_1,e_2,e_3\}$ es libre y genera $\mathbb R^3$; por la relación libres–generadores (U p.81) cualquier sistema generador de $\mathbb R^3$ tiene al menos 3 vectores.</li>
+      <p>De la 3.ª, $\lambda=-1$. De la 1.ª, $\mu=\frac13$. En la 2.ª:</p>
+      $$2(-1)+\tfrac13=-\tfrac53\neq0.$$
+      <p>Incompatible, luego $(0,0,1)\notin\langle\bar u,\bar v\rangle$. <b>A) es falsa.</b> <i>Razonamiento general:</i> $\{e_1,e_2,e_3\}$ es libre y genera $\mathbb R^3$; por la relación libres–generadores (U p.81) cualquier sistema generador de $\mathbb R^3$ tiene al menos 3 vectores.</p></li>
     <li><b>B) ¿base?</b> Una base es un sistema libre <b>y</b> generador (se define en §2.3). Como falla «generador», <b>B) es falsa</b>.</li>
   </ol>
   <p><b>Resultado:</b> A) falsa, B) falsa, C) cierta. <i>(sympy: $\operatorname{rang}\{\bar u,\bar v\}=2$; $\det(\bar u,\bar v,e_3)=-5\neq0$.)</i></p>
@@ -714,10 +810,16 @@
   </dl></div>
   <ol class="steps">
     <li><b>Qué se pide.</b> Un $S$ con $\langle S\rangle=U$ (Def. 2.4): los vectores de $S$ han de estar en $U$ y todo vector de $U$ ha de ser combinación suya. Es pasar de <b>ecuaciones cartesianas a paramétricas</b>.</li>
-    <li><b>Resolver el sistema homogéneo.</b> La matriz $\begin{pmatrix}1&1&-1\\1&2&0\end{pmatrix}$ tiene rango 2 (el menor $\begin{vmatrix}1&1\\1&2\end{vmatrix}=1\neq0$) y hay 3 incógnitas: compatible indeterminado con $3-2=1$ parámetro (Rouché, U p.30).</li>
-    <li><b>Despejar.</b> De la 2.ª, $x=-2y$; en la 1.ª, $-2y+y-z=0\Rightarrow z=-y$. Con $y=\alpha$:
+    <li><b>Resolver el sistema homogéneo.</b>
+      <p>La matriz de coeficientes es</p>
+      $$\begin{pmatrix}1&1&-1\\1&2&0\end{pmatrix},\qquad\begin{vmatrix}1&1\\1&2\end{vmatrix}=1\neq0.$$
+      <p>Tiene rango 2 y hay 3 incógnitas: compatible indeterminado con $3-2=1$ parámetro (Rouché, U p.30).</p></li>
+    <li><b>Despejar.</b>
+      <p>De la 2.ª, $x=-2y$. En la 1.ª:</p>
+      $$-2y+y-z=0\ \Longrightarrow\ z=-y.$$
+      <p>Con $y=\alpha$:</p>
       $$(x,y,z)=(-2\alpha,\ \alpha,\ -\alpha)=\alpha(-2,1,-1),\qquad\alpha\in\mathbb R.$$</li>
-    <li><b>Conclusión.</b> Todo vector de $U$ es múltiplo de $(-2,1,-1)$, y $(-2,1,-1)\in U$ ($-2+1-(-1)=0$ y $-2+2=0$ ✓). Luego $S=\{(-2,1,-1)\}$ y $U=\langle(-2,1,-1)\rangle$: $U$ es una recta (intersección de dos planos no paralelos).</li>
+    <li><b>Conclusión.</b> Todo vector de $U$ es múltiplo de $(-2,1,-1)$, y este vector está en $U$ ($-2+1-(-1)=0$ y $-2+2=0$ ✓). Luego $S=\{(-2,1,-1)\}$ y $U=\langle(-2,1,-1)\rangle$: $U$ es una recta (intersección de dos planos no paralelos).</li>
     <li><b>No es la única respuesta.</b> Un subespacio tiene infinitos sistemas generadores (U p.72): valen $\{(2,-1,1)\}$ (lo que da sympy con <code>nullspace</code>), $\{(-2,1,-1),(4,-2,2)\}$ (el segundo sobra por supresión), etc. Todos son <b>equivalentes</b> (U p.73).</li>
   </ol>
   <div class="recipe"><b>Receta:</b> subespacio dado por ecuaciones $\Rightarrow$ resuelve el sistema homogéneo, escribe la solución general como $\alpha_1v_1+\dots+\alpha_kv_k$ (un vector por parámetro): $\{v_1,\dots,v_k\}$ lo genera.</div>
@@ -732,14 +834,23 @@
     <dt>Plan</dt><dd>Plantear el sistema de 4 ecuaciones, resolver las que no tienen $t$ para obtener $\alpha,\beta,\gamma$, y sustituir en la que tiene $t$.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Traducir la definición</b> (Def. 2.3): existen $\alpha,\beta,\gamma$ con $\alpha(3,0,1,5)+\beta(1,1,1,0)+\gamma(0,-4,0,t)=(1,-14,-1,11)$.</li>
+    <li><b>Traducir la definición</b> (Def. 2.3): existen $\alpha,\beta,\gamma$ con
+      $$\alpha(3,0,1,5)+\beta(1,1,1,0)+\gamma(0,-4,0,t)=(1,-14,-1,11).$$</li>
     <li><b>Igualar componente a componente:</b>
       $$\begin{cases}3\alpha+\beta=1&(1)\\ \beta-4\gamma=-14&(2)\\ \alpha+\beta=-1&(3)\\ 5\alpha+t\gamma=11&(4)\end{cases}$$</li>
     <li><b>Estructura.</b> Las ecuaciones (1)-(3) no contienen $t$ y tienen 3 incógnitas: se resuelven primero; la (4) decide $t$.</li>
-    <li><b>(1) y (3).</b> Restando: $2\alpha=2\Rightarrow\alpha=1$; de (3), $\beta=-2$.</li>
-    <li><b>(2).</b> $-2-4\gamma=-14\Rightarrow\gamma=3$. Estos valores son los únicos que cumplen (1)-(3).</li>
-    <li><b>Imponer (4).</b> $5\cdot1+3t=11\Rightarrow t=2$. Si $t\neq2$ la única terna posible no cumple (4): $w\notin\langle v_1,v_2,v_3\rangle$.</li>
-    <li><b>Comprobación.</b> Con $t=2$: $(3,0,1,5)-2(1,1,1,0)+3(0,-4,0,2)=(3-2,\ -2-12,\ 1-2,\ 5+6)=(1,-14,-1,11)$ ✓.</li>
+    <li><b>(1) y (3).</b>
+      <p>Restando:</p>
+      $$2\alpha=2\ \Longrightarrow\ \alpha=1.$$
+      <p>De (3), $\beta=-2$.</p></li>
+    <li><b>(2).</b>
+      $$-2-4\gamma=-14\ \Longrightarrow\ \gamma=3.$$
+      <p>Estos valores son los únicos que cumplen (1)-(3).</p></li>
+    <li><b>Imponer (4).</b>
+      $$5\cdot1+3t=11\ \Longrightarrow\ t=2.$$
+      <p>Si $t\neq2$ la única terna posible no cumple (4): $w\notin\langle v_1,v_2,v_3\rangle$.</p></li>
+    <li><b>Comprobación.</b> Con $t=2$:
+      $$(3,0,1,5)-2(1,1,1,0)+3(0,-4,0,2)=(3-2,\ -2-12,\ 1-2,\ 5+6)=(1,-14,-1,11)\ ✓$$</li>
   </ol>
   <p><b>Resultado:</b> $t=2$, con $w=v_1-2v_2+3v_3$.</p>
   <p><b>Otra vía (por determinantes).</b> $\{v_1,v_2,v_3\}$ es libre para todo $t$: el menor de las 3 primeras componentes $\begin{vmatrix}3&1&0\\0&1&-4\\1&1&0\end{vmatrix}=8\neq0$ (U p.27). Por el lema práctico, $w\in\langle v_1,v_2,v_3\rangle\iff\det(v_1,v_2,v_3,w)=0$; sympy da $-24(t-2)$, luego $t=2$.</p>
@@ -757,15 +868,22 @@
   </dl></div>
   <ol class="steps">
     <li><b>Plan.</b> Por el lema práctico de §3: si $\{u_1,u_2,u_3\}$ es <b>libre</b>, $w\in\langle u_1,u_2,u_3\rangle\iff\{u_1,u_2,u_3,w\}$ es ligado $\iff$ la matriz $4\times4$ tiene $\det=0$ (U p.27).</li>
-    <li><b>Comprobar la hipótesis: $\{u_1,u_2,u_3\}$ libre.</b> Con las tres primeras componentes, desarrollando por la 3.ª fila (solo tiene un elemento no nulo, $-1$ en la posición $(3,2)$, signo $(-1)^{3+2}=-1$):
+    <li><b>Comprobar la hipótesis: $\{u_1,u_2,u_3\}$ libre.</b>
+      <p>Con las tres primeras componentes, desarrollando por la 3.ª fila (solo tiene un elemento no nulo, $-1$ en la posición $(3,2)$, signo $(-1)^{3+2}=-1$):</p>
       $$\begin{vmatrix}0&1&1\\3&2&0\\0&-1&0\end{vmatrix}=(-1)(-1)\begin{vmatrix}0&1\\3&0\end{vmatrix}=0-3=-3\neq0.$$
-      Rango 3 = nº de vectores: libre (Def. 2.7).</li>
+      <p>Rango 3 = nº de vectores: libre (Def. 2.7).</p></li>
     <li><b>Determinante de los cuatro</b> (columnas $w,u_1,u_2,u_3$; el orden no afecta a que valga 0):
       $$D=\begin{vmatrix}1&0&1&1\\1&3&2&0\\-2&0&-1&0\\k&-2&-5&0\end{vmatrix}=-\begin{vmatrix}1&3&2\\-2&0&-1\\k&-2&-5\end{vmatrix},$$
-      pues la 4.ª columna solo tiene un $1$ en la posición $(1,4)$, de signo $(-1)^{1+4}=-1$.</li>
-    <li><b>El $3\times3$</b> (por la 1.ª fila): $1\cdot(0\cdot(-5)-(-1)(-2))-3\cdot((-2)(-5)-(-1)k)+2\cdot((-2)(-2)-0\cdot k)=-2-3(10+k)+8=-3k-24$. Luego $D=3k+24$.</li>
+      <p>pues la 4.ª columna solo tiene un $1$ en la posición $(1,4)$, de signo $(-1)^{1+4}=-1$.</p></li>
+    <li><b>El $3\times3$</b> (por la 1.ª fila):
+      $$1\cdot(0\cdot(-5)-(-1)(-2))-3\cdot((-2)(-5)-(-1)k)+2\cdot((-2)(-2)-0\cdot k)=-2-3(10+k)+8=-3k-24.$$
+      <p>Luego $D=3k+24$.</p></li>
     <li><b>Imponer $D=0$:</b> $k=-8$. Para $k\neq-8$ los cuatro son libres y $w$ no es combinación lineal.</li>
-    <li><b>Comprobación.</b> $\lambda_1u_1+\lambda_2u_2+\lambda_3u_3=(1,1,-2,-8)$: 3.ª componente $-\lambda_2=-2\Rightarrow\lambda_2=2$; 2.ª, $3\lambda_1+4=1\Rightarrow\lambda_1=-1$; 1.ª, $\lambda_2+\lambda_3=1\Rightarrow\lambda_3=-1$; 4.ª: $-2(-1)-5\cdot2=-8$ ✓. Así $(1,1,-2,-8)=-u_1+2u_2-u_3$.</li>
+    <li><b>Comprobación.</b>
+      <p>Planteo $\lambda_1u_1+\lambda_2u_2+\lambda_3u_3=(1,1,-2,-8)$. La 3.ª componente da $-\lambda_2=-2$, o sea $\lambda_2=2$. La 2.ª:</p>
+      $$3\lambda_1+4=1\ \Longrightarrow\ \lambda_1=-1.$$
+      <p>La 1.ª, $\lambda_2+\lambda_3=1$, da $\lambda_3=-1$. La 4.ª: $-2(-1)-5\cdot2=-8$ ✓. Así:</p>
+      $$(1,1,-2,-8)=-u_1+2u_2-u_3.$$</li>
   </ol>
   <p><b>Resultado:</b> $k=-8$.</p>
   <div class="box warn"><span class="h">Omisión en la solución oficial</span><p>La solución publicada dice que para que los cuatro vectores sean linealmente dependientes se debe cumplir $3k+24=0$, por lo que $k=-8$, y <b>no comprueba</b> que $\{u_1,u_2,u_3\}$ sea libre. Sin esa comprobación el razonamiento no es completo: «los cuatro son ligados» no implica en general que <b>el cuarto</b> dependa de los otros tres. Aquí funciona porque el paso 2 da rango 3; en el examen hay que escribirlo.</p></div>
@@ -786,9 +904,15 @@
     <li><b>Reducir a pertenencia.</b> Por el lema práctico de §3: $\{A,B,C\}$ ligado $\iff A=\alpha B+\beta C$ para ciertos $\alpha,\beta$. <i>(Este es el paso que la solución oficial resume en una línea.)</i></li>
     <li><b>Plantear el sistema</b> entrada a entrada:
       $$\begin{cases}x=\alpha&(1,1)\\ y=2\alpha+\beta&(1,2)\\ 5=-\alpha+2\beta&(2,1)\\ -18=3\alpha-7\beta&(2,2)\end{cases}$$</li>
-    <li><b>Las entradas sin $x,y$ fijan $\alpha,\beta$.</b> De $5=-\alpha+2\beta$: $\alpha=2\beta-5$; en la última, $-18=3(2\beta-5)-7\beta=-\beta-15\Rightarrow\beta=3$ y $\alpha=1$. (Determinante $\begin{vmatrix}-1&2\\3&-7\end{vmatrix}=1\neq0$: solución única.)</li>
-    <li><b>Obtener $x,y$:</b> $x=\alpha=1$, $y=2\cdot1+3=5$.</li>
-    <li><b>Comprobación.</b> $B+3C=\begin{pmatrix}1&2+3\\-1+6&3-21\end{pmatrix}=\begin{pmatrix}1&5\\5&-18\end{pmatrix}=A$ ✓. Así $A-B-3C=0$ es una combinación nula no trivial: ligado.</li>
+    <li><b>Las entradas sin $x,y$ fijan $\alpha,\beta$.</b>
+      <p>De $5=-\alpha+2\beta$: $\alpha=2\beta-5$. En la última:</p>
+      $$-18=3(2\beta-5)-7\beta=-\beta-15\ \Longrightarrow\ \beta=3,\quad\alpha=1.$$
+      <p>(Determinante $\begin{vmatrix}-1&2\\3&-7\end{vmatrix}=1\neq0$: solución única.)</p></li>
+    <li><b>Obtener $x,y$:</b>
+      $$x=\alpha=1,\qquad y=2\cdot1+3=5.$$</li>
+    <li><b>Comprobación.</b>
+      $$B+3C=\begin{pmatrix}1&2+3\\-1+6&3-21\end{pmatrix}=\begin{pmatrix}1&5\\5&-18\end{pmatrix}=A\ ✓$$
+      <p>Así $A-B-3C=0$ es una combinación nula no trivial: ligado.</p></li>
   </ol>
   <p><b>Resultado:</b> $x=1$, $y=5$ (y son los únicos valores).</p>
   <div class="recipe"><b>Receta:</b> en $\mathcal M_{m\times n}$ (o en polinomios) se trabaja igual que en $\mathbb R^{mn}$: cada matriz es la lista de sus entradas. Si el sistema fijo es libre, «ligado» = «el nuevo es combinación lineal de los fijos».</div>
@@ -803,16 +927,22 @@
     <dt>Plan</dt><dd>Escalonar con $a,b$ sin sustituir, y buscar cuándo la última fila es toda de ceros.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Criterio.</b> Son 3 vectores: ligado $\iff$ rango $\lt3$ (Def. 2.7). Se calcula escalonando la matriz con los vectores por filas (las operaciones de fila no cambian el rango, U p.22):
+    <li><b>Criterio.</b>
+      <p>Son 3 vectores: ligado $\iff$ rango $<3$ (Def. 2.7). Se calcula escalonando la matriz con los vectores por filas (las operaciones de fila no cambian el rango, U p.22):</p>
       $$\begin{pmatrix}1&1&0&a\\3&-1&b&-1\\-3&5&a&-4\end{pmatrix}$$</li>
     <li><b>Anular la 1.ª columna:</b> $F_2\to F_2-3F_1$ y $F_3\to F_3+3F_1$:
       $$\begin{pmatrix}1&1&0&a\\0&-4&b&-1-3a\\0&8&a&-4+3a\end{pmatrix}$$</li>
     <li><b>Anular la 2.ª columna bajo el pivote $-4$:</b> $F_3\to F_3+2F_2$ (porque $8+2(-4)=0$):
       $$\begin{pmatrix}1&1&0&a\\0&-4&b&-1-3a\\0&0&a+2b&-6-3a\end{pmatrix}$$
-      (4.ª entrada de $F_3$: $(-4+3a)+2(-1-3a)=-6-3a$.)</li>
-    <li><b>Discutir.</b> Las dos primeras filas tienen pivotes $1$ y $-4$, independientes de los parámetros: el rango es al menos 2. Es exactamente 2 (ligado) $\iff$ la 3.ª fila es <b>nula</b>: $a+2b=0$ <b>y</b> $-6-3a=0$, es decir $a=-2,\ b=1$. En otro caso, rango 3 y libre.</li>
+      <p>(4.ª entrada de $F_3$: $(-4+3a)+2(-1-3a)=-6-3a$.)</p></li>
+    <li><b>Discutir.</b>
+      <p>Las dos primeras filas tienen pivotes $1$ y $-4$, independientes de los parámetros: el rango es al menos 2. Es exactamente 2 (ligado) $\iff$ la 3.ª fila es <b>nula</b>:</p>
+      $$a+2b=0\quad\text{y}\quad-6-3a=0\ \Longrightarrow\ a=-2,\quad b=1.$$
+      <p>En otro caso, rango 3 y libre.</p></li>
     <li><b>Elegir opción.</b> A) cierta. B) falsa: con $a=-2$, $b=0$ la 3.ª fila es $(0,0,-2,0)\neq0$, libre. C) falsa (con $a=b=0$ rango 3). D) falsa porque A es cierta.</li>
-    <li><b>Comprobación.</b> Con $a=-2,\ b=1$: $(-3,5,-2,-4)=c_1(1,1,0,-2)+c_2(3,-1,1,-1)$; de la 3.ª componente $c_2=-2$, de la 1.ª $c_1=3$; 2.ª: $3+2=5$ ✓; 4.ª: $-6+2=-4$ ✓. Así $v_3=3v_1-2v_2$.</li>
+    <li><b>Comprobación.</b>
+      <p>Con $a=-2$, $b=1$ busco $(-3,5,-2,-4)=c_1(1,1,0,-2)+c_2(3,-1,1,-1)$. De la 3.ª componente, $c_2=-2$; de la 1.ª, $c_1=3$. La 2.ª: $3+2=5$ ✓. La 4.ª: $-6+2=-4$ ✓. Así:</p>
+      $$v_3=3v_1-2v_2.$$</li>
   </ol>
   <p><b>Resultado:</b> opción <b>A</b> ($a=-2$ <b>y</b> $b=1$, y solo entonces).</p>
   <div class="recipe"><b>Receta:</b> sistema con parámetros: escalona dejando los parámetros para el final; es ligado cuando alguna fila se anula <b>entera</b>, lo que da <b>varias condiciones simultáneas</b> («y», no «o»).</div>
@@ -827,11 +957,17 @@
     <dt>Plan</dt><dd>Elegir un $u$ concreto, escribir las paramétricas, eliminar $\lambda$ para la cartesiana y comprobar.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Qué objeto es.</b> «Dimensión 1» significa, a este nivel, generado por <b>un</b> vector no nulo: $U=\langle u\rangle=\{\lambda u:\lambda\in\mathbb R\}$ (Def. 2.4). Un solo vector no nulo es libre (Def. 2.5: $\lambda u=\bar0$ con $u\neq\bar0$ obliga a $\lambda=0$). Geométricamente es una <b>recta por el origen</b>. Hace falta $u\neq\bar0$: $\langle\bar0\rangle=\{\bar0\}$ no es una recta.</li>
-    <li><b>Paramétricas.</b> Elegimos $u=(1,-2)$: $(x_1,x_2)=\lambda(1,-2)$, es decir
+    <li><b>Qué objeto es.</b> «Dimensión 1» significa, a este nivel, generado por <b>un</b> vector no nulo:
+      $$U=\langle u\rangle=\{\lambda u:\lambda\in\mathbb R\}\quad\text{(Def. 2.4)}.$$
+      <p>Un solo vector no nulo es libre (Def. 2.5: $\lambda u=\bar0$ con $u\neq\bar0$ obliga a $\lambda=0$). Geométricamente es una <b>recta por el origen</b>. Hace falta $u\neq\bar0$: $\langle\bar0\rangle=\{\bar0\}$ no es una recta.</p></li>
+    <li><b>Paramétricas.</b>
+      <p>Elijo $u=(1,-2)$: $(x_1,x_2)=\lambda(1,-2)$, es decir,</p>
       $$U:\ \begin{cases}x_1=\lambda\\ x_2=-2\lambda\end{cases}\qquad\lambda\in\mathbb R.$$</li>
-    <li><b>Cartesianas.</b> Un generador libre en $\mathbb R^2$ deja $2-1=1$ ecuación. Por rango, $(x_1,x_2)\in U\iff\begin{vmatrix}1&x_1\\-2&x_2\end{vmatrix}=x_2+2x_1=0$. También se ve eliminando: $\lambda=x_1\Rightarrow x_2=-2x_1$. Luego $U:\ 2x_1+x_2=0$.</li>
-    <li><b>Comprobación.</b> $(1,-2)$ cumple $2-2=0$ ✓; y si $2x_1+x_2=0$, entonces $(x_1,x_2)=x_1(1,-2)\in U$ ✓.</li>
+    <li><b>Cartesianas.</b>
+      <p>Un generador libre en $\mathbb R^2$ deja $2-1=1$ ecuación. Por rango, $(x_1,x_2)\in U\iff$</p>
+      $$\begin{vmatrix}1&x_1\\-2&x_2\end{vmatrix}=x_2+2x_1=0.$$
+      <p>También se ve eliminando: $\lambda=x_1\Rightarrow x_2=-2x_1$. Luego $U:\ 2x_1+x_2=0$.</p></li>
+    <li><b>Comprobación.</b> $(1,-2)$ cumple $2-2=0$ ✓. Y si $2x_1+x_2=0$, entonces $(x_1,x_2)=x_1(1,-2)\in U$ ✓.</li>
   </ol>
   <p><b>Resultado:</b> $U=\{(x_1,x_2):2x_1+x_2=0\}=\langle(1,-2)\rangle$. Vale cualquier $ax_1+bx_2=0$ con $(a,b)\neq(0,0)$.</p>
   <div class="recipe"><b>Receta:</b> recta de $\mathbb R^2$ por el origen $=\langle(p,q)\rangle$ con $(p,q)\neq(0,0)$; paramétricas $x_1=p\lambda,\ x_2=q\lambda$; cartesiana $qx_1-px_2=0$ (el determinante $\begin{vmatrix}p&x_1\\q&x_2\end{vmatrix}=0$).</div>
@@ -847,12 +983,21 @@
     <dt>Plan</dt><dd>Elegir dos generadores libres, escribir las paramétricas, eliminar los parámetros y comprobar con los generadores.</dd>
   </dl></div>
   <ol class="steps">
-    <li><b>Elegir el subespacio.</b> $U=\langle(1,0,2),(0,1,-1)\rangle$. Los dos generadores no son proporcionales: libres, rango 2.</li>
-    <li><b>Paramétricas.</b> $(x,y,z)=\alpha(1,0,2)+\beta(0,1,-1)$:
+    <li><b>Elegir el subespacio.</b>
+      $$U=\langle(1,0,2),(0,1,-1)\rangle.$$
+      <p>Los dos generadores no son proporcionales: libres, rango 2.</p></li>
+    <li><b>Paramétricas.</b>
+      <p>$(x,y,z)=\alpha(1,0,2)+\beta(0,1,-1)$, es decir,</p>
       $$x=\alpha,\quad y=\beta,\quad z=2\alpha-\beta,\qquad\alpha,\beta\in\mathbb R.$$</li>
     <li><b>Cuántas ecuaciones.</b> $n-r=3-2=1$.</li>
-    <li><b>Eliminar los parámetros.</b> Con $\alpha=x$ y $\beta=y$ la tercera da $z=2x-y$, es decir $2x-y-z=0$. Por determinante: $(x,y,z)\in U\iff\begin{vmatrix}1&0&x\\0&1&y\\2&-1&z\end{vmatrix}=0$; desarrollando por la 1.ª fila, $1\cdot(z+y)-0+x\cdot(0-2)=-2x+y+z=0$, la misma ecuación.</li>
-    <li><b>Comprobación.</b> $(1,0,2)$: $2-0-2=0$ ✓; $(0,1,-1)$: $0-1+1=0$ ✓.</li>
+    <li><b>Eliminar los parámetros.</b>
+      <p>Con $\alpha=x$ y $\beta=y$ la tercera da $z=2x-y$, es decir,</p>
+      $$2x-y-z=0.$$
+      <p>Por determinante: $(x,y,z)\in U\iff$</p>
+      $$\begin{vmatrix}1&0&x\\0&1&y\\2&-1&z\end{vmatrix}=1\cdot(z+y)-0+x\cdot(0-2)=-2x+y+z=0,$$
+      <p>la misma ecuación.</p></li>
+    <li><b>Comprobación.</b>
+      $$(1,0,2):\ 2-0-2=0\ ✓,\qquad(0,1,-1):\ 0-1+1=0\ ✓$$</li>
   </ol>
   <p><b>Resultado:</b> $U:\ 2x-y-z=0$.</p>
   <div class="recipe"><b>Receta:</b> (1) rango $r$ de los generadores: saldrán $n-r$ ecuaciones; (2) elimina parámetros o impón $\operatorname{rang}(\text{generadores}\mid x)=r$; (3) comprueba los generadores en las ecuaciones.</div>
@@ -871,16 +1016,23 @@
     <li><b>(i) Criterio.</b> Un sistema de $p$ vectores es libre $\iff$ su rango es $p$ (Def. 2.7). Aquí $p=3$.</li>
     <li><b>Escalonar</b> con los vectores por filas (las operaciones de fila no cambian el rango):
       $$\begin{pmatrix}1&3&1\\3&8&2\\2&9&5\end{pmatrix}\xrightarrow[F_3\to F_3-2F_1]{F_2\to F_2-3F_1}\begin{pmatrix}1&3&1\\0&-1&-1\\0&3&3\end{pmatrix}\xrightarrow{F_3\to F_3+3F_2}\begin{pmatrix}1&3&1\\0&-1&-1\\0&0&0\end{pmatrix}.$$
-      Cada operación anula lo que hay bajo un pivote. Dos filas no nulas: rango $2\lt3$, luego $E$ es <b>ligado</b>.</li>
-    <li><b>La dependencia explícita.</b> Buscamos $w_3=\lambda w_1+\mu w_2$: $\lambda+3\mu=2$, $3\lambda+8\mu=9$; restando 3 veces la 1.ª a la 2.ª, $-\mu=3$, $\mu=-3$, $\lambda=11$. Tercera componente: $11\cdot1-3\cdot2=5$ ✓. Así $w_3=11w_1-3w_2$, es decir $11w_1-3w_2-w_3=\bar0$ con coeficientes no todos nulos.</li>
+      <p>Cada operación anula lo que hay bajo un pivote. Dos filas no nulas: rango $2<3$, luego $E$ es <b>ligado</b>.</p></li>
+    <li><b>La dependencia explícita.</b>
+      <p>Busco $w_3=\lambda w_1+\mu w_2$:</p>
+      $$\lambda+3\mu=2,\qquad3\lambda+8\mu=9.$$
+      <p>Restando 3 veces la 1.ª a la 2.ª, $-\mu=3$, así $\mu=-3$ y $\lambda=11$. Tercera componente: $11\cdot1-3\cdot2=5$ ✓. Así:</p>
+      $$w_3=11w_1-3w_2\iff11w_1-3w_2-w_3=\bar0,$$
+      <p>con coeficientes no todos nulos.</p></li>
     <li><b>(ii) Suprimir lo que sobra.</b> Por el Teorema 2.1 (U p.79), como $w_3$ es c.l. de $w_1,w_2$: $U=\langle w_1,w_2\rangle$, y $\{w_1,w_2\}$ es libre (no proporcionales, $3/1\neq8/3$).</li>
-    <li><b>Paramétricas.</b> $(x_1,x_2,x_3)=\alpha(1,3,1)+\beta(3,8,2)$:
+    <li><b>Paramétricas.</b>
+      <p>$(x_1,x_2,x_3)=\alpha(1,3,1)+\beta(3,8,2)$:</p>
       $$x_1=\alpha+3\beta,\quad x_2=3\alpha+8\beta,\quad x_3=\alpha+2\beta,\qquad\alpha,\beta\in\mathbb R.$$
-      (Con los tres vectores también serían paramétricas, pero con un parámetro redundante: lo esperado es usar un generador libre.)</li>
+      <p>(Con los tres vectores también serían paramétricas, pero con un parámetro redundante: lo esperado es usar un generador libre.)</p></li>
     <li><b>(iii) Cuántas implícitas.</b> $n-r=3-2=1$ ecuación.</li>
     <li><b>Imponer pertenencia.</b> $x\in U\iff\{w_1,w_2,x\}$ es ligado (lema «libre + 1» de §3, pues $\{w_1,w_2\}$ es libre) $\iff$
       $$\begin{vmatrix}x_1&1&3\\x_2&3&8\\x_3&1&2\end{vmatrix}=x_1(6-8)-x_2(2-3)+x_3(8-9)=-2x_1+x_2-x_3=0.$$</li>
-    <li><b>Comprobación con los tres vectores de $E$:</b> $w_1$: $-2+3-1=0$ ✓; $w_2$: $-6+8-2=0$ ✓; $w_3$: $-4+9-5=0$ ✓.</li>
+    <li><b>Comprobación con los tres vectores de $E$:</b>
+      $$w_1:\ -2+3-1=0\ ✓,\qquad w_2:\ -6+8-2=0\ ✓,\qquad w_3:\ -4+9-5=0\ ✓$$</li>
   </ol>
   <p><b>Resultado:</b> (i) ligado, $w_3=11w_1-3w_2$; (ii) las paramétricas de arriba; (iii) $2x_1-x_2+x_3=0$ ($U$ es un plano). <i>(sympy: rango 2; $\det=-2x_1+x_2-x_3$.)</i></p>
   <div class="recipe"><b>Receta:</b> sistema $\to$ rango (escalonar) $\to$ suprimir los dependientes (Teor. 2.1) $\to$ paramétricas con los que quedan $\to$ implícitas con $\det(\text{generadores libres}\mid x)=0$ (o menores orlados si hay más de una ecuación) $\to$ comprobar con <b>todos</b> los vectores originales.</div>
