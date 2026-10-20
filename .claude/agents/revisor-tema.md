@@ -17,3 +17,5 @@ Comprueba:
 6. **Animaciones y 3D**: ¿lleva componente interactivo adecuado (regla 15)? Si el tema trata conceptos en $\mathbb R^3$ (proyección, planos, rotaciones, cuádricas, ejes principales), ¿se ha considerado un componente three.js (política 3D de CLAUDE.md)? Si lo hay: sin WebGL no rompe, 390 px, modo oscuro, impresión y documentación en CLAUDE.md.
 
 No edites ningún archivo: devuelve solo el informe.
+
+- **Sin erratas ni comparativas entre fuentes** (CLAUDE.md regla 8 bis): no escribas erratas de libros/solucionarios/exámenes, ni diferencias o incoherencias entre fuentes (U vs Lay/Stewart/Larson…), ni cajas «Aviso sobre el libro»/«Cómo lo cuenta Lay»/«Tabla Lay ↔ U». Si una fuente falla, escribe lo correcto sin mencionarlo.

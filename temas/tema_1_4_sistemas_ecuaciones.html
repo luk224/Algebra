@@ -400,10 +400,6 @@
   <span class="src" data-l="U" data-ref="U §1.4.3, p. 45-46 (PASO 1-2, fórmulas 1.6-1.7)">U p.45-46</span>
 </div>
 
-<div class="box tip"><span class="h">La misma idea, con las cifras de Lay</span>
-  <p>Lay (p.127), contando todas las operaciones con más detalle, estima que factorizar $A=LU$ cuesta aproximadamente <b>lo mismo</b> que un Gauss completo; en ambos casos, cada sistema adicional con la misma $A$ cuesta solo $\sim n^2$. No mezcles esta cifra con la de U (arriba): son dos formas distintas de contar operaciones, pero la conclusión práctica es la misma: la ventaja de $LU$ aparece en cuanto hay más de un sistema que resolver con la misma matriz.</p>
-  <span class="src" data-l="L" data-ref="Lay §2.5, factorización LU, coste comparable a Gauss + ~n² por sistema adicional, p. 124-127">L p.124-127</span>
-</div>
 
 <div class="box intu"><span class="h">La idea de $L$ en una frase</span>
   <p>Al escalonar, cada vez que haces $F_i\to F_i-m\,F_j$ estás <i>gastando</i> información de $A$. $L$ es el <b>cuaderno donde apuntas esos $m$</b>: si algún día quieres deshacer todo el proceso (volver de $U$ a $A$), basta volver a <i>sumar</i> esos múltiplos en orden inverso, y eso es justo multiplicar por $L$. Por eso $A=LU$: «$U$» es el resultado y «$L$» el registro de cómo llegaste.</p>
@@ -633,8 +629,7 @@
     $$L=\begin{pmatrix}1&0&0\\-1&1&0\\3&-\frac74&1\end{pmatrix}.$$</li>
   </ol>
   <p><b>Respuesta: A.</b> (Comprobación: la fila 3 de $LU$ da $(3,-1,-2)$, la fila 3 de $A$ ✓.)</p>
-  <div class="box warn" style="margin-top:.6em"><span class="h">Erratas de E</span><p>En el texto explicativo de E hay dos erratas de signo al describir las operaciones inversas (dice «multiplicada por $-3$» donde debería ser «por $3$», y «multiplicada por $\frac74$» donde debería ser «por $-\frac74$»); las matrices $E_2^{-1},E_3^{-1}$ y $L$ que da E sí son correctas.</p></div>
-  <div class="recipe"><b>Receta:</b> $LU$ sin intercambios: triangulariza $A$ con reemplazos $F_i\to F_i+\lambda F_j$ ($j\lt i$, sin normalizar) para obtener $U$; en $L$ (unos en la diagonal) coloca $-\lambda$ en la posición $(i,j)$ correspondiente.</div>
+    <div class="recipe"><b>Receta:</b> $LU$ sin intercambios: triangulariza $A$ con reemplazos $F_i\to F_i+\lambda F_j$ ($j\lt i$, sin normalizar) para obtener $U$; en $L$ (unos en la diagonal) coloca $-\lambda$ en la posición $(i,j)$ correspondiente.</div>
   <p><b>Error típico:</b> poner en $L$ el multiplicador con su mismo signo, o normalizar los pivotes (entonces $U$ ya no coincide con la de esta factorización).</p>
 </details>
 
@@ -703,7 +698,7 @@
     <li><b>C es cierta:</b> $\det A=\det L\det U=1\cdot\det U$, y $\det U$ es el producto de su diagonal.</li>
   </ol>
   <p><b>Respuesta: B y C</b> (varias ciertas). D es falsa.</p>
-  <div class="box warn" style="margin-top:.6em"><span class="h">Aviso sobre E</span><p>E escribe la operación de reemplazo como «$F_i\leftrightarrow F_i+\lambda F_j$»; la notación correcta es $F_i\to F_i+\lambda F_j$ (la flecha $\leftrightarrow$ se reserva para intercambios de filas, un tipo de operación distinto).</p></div>
+  <div class="box warn" style="margin-top:.6em"><span class="h">Aviso sobre E</span></div>
   <div class="recipe"><b>Receta:</b> recuerda los usos de $LU$: resolver $AX=B$ con dos sistemas triangulares, $\det A=\det U$, $A^{-1}=U^{-1}L^{-1}$; y que puede no existir sin permutar filas.</div>
   <p><b>Error típico:</b> pensar que toda matriz regular tiene factorización $LU$ (el contraejemplo del paso 1 es regular y no la tiene).</p>
 </details>
@@ -764,7 +759,7 @@
 <!-- ============================ EXAMENES ============================ -->
 <h2 id="examenes"><span class="n">12</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
-<p>Preguntas de exámenes de otros años que caen en este tema, agrupadas por método: (A) Rouché-Frobenius razonado, (B) sistemas equivalentes y paramétricas ↔ cartesianas, (C) sistemas con parámetro, (D) $LU$ y métodos numéricos. Las soluciones oficiales son muy breves; aquí se desarrolla el razonamiento completo (el examen puntúa el <b>proceso</b>). Dos errores recurrentes que los correctores señalan: <b>(1)</b> al anotar operaciones elementales hay que decir sobre qué fila se actúa: escribir $F_1\to F_1+F_2$, no «$F_1+F_2$» <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), problema 7 (comentario de la solución)">X Feb. 2026 (2.ª)</span>; <b>(2)</b> en las preguntas «resuelva», la solución debe darse <b>en función del parámetro</b>, no para un valor concreto <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), problema 8 (comentario de la solución)">X Feb. 2023 (2.ª)</span>.</p>
+<p>Preguntas de exámenes de otros años que caen en este tema, agrupadas por método: (A) Rouché-Frobenius razonado, (B) sistemas equivalentes y paramétricas ↔ cartesianas, (C) sistemas con parámetro, (D) $LU$ y métodos numéricos. Dos errores recurrentes que los correctores señalan: <b>(1)</b> al anotar operaciones elementales hay que decir sobre qué fila se actúa: escribir $F_1\to F_1+F_2$, no «$F_1+F_2$» <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), problema 7 (comentario de la solución)">X Feb. 2026 (2.ª)</span>; <b>(2)</b> en las preguntas «resuelva», la solución debe darse <b>en función del parámetro</b>, no para un valor concreto <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), problema 8 (comentario de la solución)">X Feb. 2023 (2.ª)</span>.</p>
 
 <h3>A. Rouché-Frobenius razonado (V/F y clasificación)</h3>
 
@@ -839,10 +834,7 @@
 
 <details class="sol" id="ex-sep18e1"><summary>Sept. 2018 (tipo A), ejercicio 1 — escribir dos sistemas equivalentes con ampliada $3\times4$ <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 1">X Sept. 2018</span></summary>
   <p class="enun">Escribir dos sistemas de ecuaciones lineales equivalentes entre sí tales que las matrices ampliadas asociadas sean de dimensión $3\times4$, justificando la equivalencia.</p>
-  <div class="box warn"><span class="h">Error en la solución oficial</span>
-    <p>La solución oficial parte de $S:\ 2x_1+x_2-x_3=1,\ 2x_1-x_2+x_3=2,\ x_1-3x_2=3$ y da como segundo sistema uno con la fila $-5x_2+x_3=5$. Pero la operación correcta $F_3\to2F_3-F_1$ da $-7x_2+x_3=5$. Comprobado: la única solución de $S$ es $(\tfrac34,-\tfrac34,-\tfrac14)$, mientras que los sistemas de la solución oficial tienen por solución $(\tfrac34,-\tfrac98,-\tfrac58)$, que no cumple la 3.ª ecuación de $S$ ($\tfrac34+\tfrac{27}8=\tfrac{33}8\neq3$). Es decir, el ejemplo oficial <b>no</b> es un par de sistemas equivalentes. Abajo, la versión corregida.</p>
-  </div>
-  <ol class="steps">
+    <ol class="steps">
     <li><b>Sistema de partida</b> y su ampliada ($3\times4$: 3 ecuaciones, 3 incógnitas y la columna de términos independientes, U p.29):
       $$S:\ \begin{cases}2x_1+x_2-x_3=1\\2x_1-x_2+x_3=2\\x_1-3x_2=3\end{cases}\qquad(A\mid B)=\left(\begin{array}{ccc|c}2&1&-1&1\\2&-1&1&2\\1&-3&0&3\end{array}\right).$$</li>
     <li><b>Por qué basta con operaciones elementales.</b> Por el Teorema 1.5 (U p.32), toda matriz obtenida de $(A\mid B)$ por operaciones elementales por filas es la ampliada de un sistema equivalente (Def. 1.7, p.31).</li>
@@ -859,12 +851,12 @@
   </ol>
   <p><b>Respuesta mínima válida:</b> intercambiar dos ecuaciones ($E_1\leftrightarrow E_2$) ya da un sistema equivalente; basta citar el Teorema 1.5.</p>
   <div class="recipe"><b>Receta:</b> para fabricar un sistema equivalente, aplica a la ampliada operaciones elementales anotando cada una («$F_3\to2F_3-F_1$») y cita el Teorema 1.5. Comprueba al final que la solución satisface el sistema original.</div>
-  <p><b>Error típico:</b> equivocarse en una operación (como la propia solución oficial) y no comprobarlo: sustituir la solución en el sistema original lo detecta en segundos.</p>
+  <p><b>Error típico:</b> equivocarse en una operación y no comprobarlo: sustituir la solución en el sistema original lo detecta en segundos.</p>
 </details>
 
 <details class="sol" id="ex-feb22e1"><summary>Feb. 2022 (tipo A), ejercicio 1 — unas paramétricas de «un sistema» y sus cartesianas <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A), ejercicio 1">X Feb. 2022 (A)</span></summary>
   <p class="enun">Escriba unas ecuaciones paramétricas de un sistema y halle las ecuaciones cartesianas de dicho sistema. Considere 3 incógnitas.</p>
-  <p>La solución oficial es mínima ($x=\alpha,\ y=-\alpha,\ z=0\Rightarrow x+y=0,\ z=0$). Aquí, un ejemplo más completo, con dos parámetros y término independiente (U §1.4.2, Ej. 1.28, p.34-36).</p>
+  <p>Aquí, un ejemplo más completo, con dos parámetros y término independiente (U §1.4.2, Ej. 1.28, p.34-36).</p>
   <ol class="steps">
     <li><b>Elegimos paramétricas</b> (3 incógnitas, 2 parámetros): $x=1+\alpha+\beta,\ y=\alpha,\ z=2-\beta$, con $\alpha,\beta\in\mathbb R$.</li>
     <li><b>Qué es «hallar las cartesianas».</b> Es eliminar los parámetros: un punto $(x,y,z)$ es de esa forma si y solo si el sistema en las incógnitas $\alpha,\beta$
@@ -893,7 +885,7 @@
 <h3>C. Sistemas con parámetro</h3>
 
 <details class="sol" id="ex-feb20a"><summary>Ene. 2020 (tipo A), ejercicio 1 — soluciones de un sistema homogéneo según $m$ <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 1">X Ene. 2020 (A)</span></summary>
-  <p class="enun">Calcular las soluciones del sistema $\begin{cases}mx+y+z=0\\x+my+z=0\\x+y+mz=0\end{cases}$ para los distintos valores de $m\in\mathbb R$. (La solución oficial aclara: se piden <b>soluciones</b>, no la clasificación.)</p>
+  <p class="enun">Calcular las soluciones del sistema $\begin{cases}mx+y+z=0\\x+my+z=0\\x+y+mz=0\end{cases}$ para los distintos valores de $m\in\mathbb R$.</p>
   <ol class="steps">
     <li><b>Es homogéneo</b>, luego siempre compatible: $(0,0,0)$ es solución (U p.30). La cuestión es cuándo hay <b>más</b>.</li>
     <li><b>Criterio:</b> solo la solución nula $\iff\operatorname{rang}A=3\iff\det A\neq0$ (U p.22 y p.30).</li>
@@ -977,7 +969,7 @@
 </details>
 
 <details class="sol" id="ex-feb18c"><summary>Feb. 2018 (tipo A), problema, apartado c) — explicar la factorización $LU$ y enunciar una aplicación <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), problema, apartado c)">X Feb. 2018 (A)</span></summary>
-  <p class="enun">Explicar la factorización $LU$ para matrices regulares (0,5 ptos.) y enunciar una aplicación (0,5 ptos.). (La solución oficial solo dice «teoría del primer tema».)</p>
+  <p class="enun">Explicar la factorización $LU$ para matrices regulares (0,5 ptos.) y enunciar una aplicación (0,5 ptos.).</p>
   <ol class="steps">
     <li><b>Qué es</b> (U p.45-46). Si $A\in\mathcal M_n$ es regular y se puede llevar a triangular superior por Gauss <b>sin normalizar pivotes y solo con reemplazos</b> $F_i\to F_i+\lambda F_j$, entonces $A=LU$ de modo <b>único</b>, con $U$ la triangular superior obtenida y $L$ triangular inferior con unos en la diagonal que guarda las operaciones.</li>
     <li><b>Por qué funciona.</b> Si $E_1,\dots,E_p$ son las matrices elementales usadas, $U=E_p\cdots E_1A=EA$ y $L=E^{-1}=E_1^{-1}\cdots E_p^{-1}$ (U p.46). Cada $E_k^{-1}$ es triangular inferior con unos en la diagonal, y el producto también.</li>
@@ -991,7 +983,7 @@
 </details>
 
 <details class="sol" id="ex-feb19pb"><summary>Feb. 2019 (tipo A), problema, apartado b) — enunciar un método numérico y mostrar sus pasos <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), problema, apartado b)">X Feb. 2019 (A)</span></summary>
-  <p class="enun">Enunciar algún método numérico para resolver un sistema de ecuaciones lineales y mostrar sus pasos, es decir, cómo se aplica. (Solución oficial: «pueden explicarse método LU, QR…»). Modelo con el <b>método de Gauss</b> (U §1.4.3, p.38-39); también valdría $LU$.</p>
+  <p class="enun">Enunciar algún método numérico para resolver un sistema de ecuaciones lineales y mostrar sus pasos, es decir, cómo se aplica.. Modelo con el <b>método de Gauss</b> (U §1.4.3, p.38-39); también valdría $LU$.</p>
   <ol class="steps">
     <li><b>Idea.</b> Transformar $(A\mid B)$, con operaciones elementales por filas, en una matriz escalonada; el sistema obtenido es equivalente (Teorema 1.5, U p.32) y se resuelve por sustitución hacia atrás.</li>
     <li><b>Pasos</b> (U p.39). PASO 1: localizar el pivote de la primera fila (si $a_{11}=0$, intercambiar con una fila con elemento no nulo en esa columna). PASO 2: normalizar el pivote si se desea y anular todo lo que hay debajo. PASOS 3-5: repetir con la fila siguiente hasta obtener una escalonada. PASO 6: sustitución hacia atrás. Comparando rangos en la escalonada se <b>clasifica</b> el sistema (Rouché-Frobenius).</li>
