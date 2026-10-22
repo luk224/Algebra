@@ -23,6 +23,7 @@
    .anim-cuadratica data-m="1,4,0,3" data-p="1,0,0,1" data-x="2,1"   (forma cuadratica 2x2, tema 6.2: M editable [cualquier matriz, Q(x)=x^t M x], P editable [columnas = base nueva B'], x con sliders enteros; stepper en 4 pasos: evaluar Q(x) y su polinomio con la curva de nivel Q=Q(x); parte simetrica S=(M+M^t)/2 [el termino cruzado se reparte a medias] y antisimetrica K con x^t K x = 0, rango; homogeneidad Q(2x)=4Q(x), Q(-x)=Q(x); cambio de base S'=P^t S P con comprobacion x'^t S' x' = Q(x); 6 presets)
    .anim-lu      data-a="2,2,2;4,7,7;6,18,22" data-b="2,2,1"   (factorizacion LU n x n paso a paso: reemplazos sin normalizar, multiplicador m que pasa a L, aviso de pivote 0 [hace falta PA=LU]; despues LY=B progresiva y UX=Y retrosustitucion; A y B editables)
    .anim-clasif data-a="1,2,1"   (clasificacion de una forma cuadratica 2x2, tema 6.3: a11, a12 y a22 editables [A simetrica], 8 presets [E 6.18, E 6.19, U Ej. 6.26, U Ej. 6.24, DN, SN, D1 = 0, Q = 0]; stepper en 5 pasos: polinomio y matriz; Sylvester con la rama aplicable [definida: "<=>", semidefinida: "=>", o "no decide"] y zonas Q>0 azul / Q<0 naranja; valores propios con control de traza y determinante y ejes principales; forma canonica, signatura, rango, cuadro de invariantes y curvas Q = 1 y Q = -1 [elipse, hiperbolas, rectas]; vectores testigo y veredicto; break-inside:avoid en impresion)
+   .anim-baseinc data-v="1,2,0,1;2,4,1,1"   (base incompleta en R^n: vectores libres en filas editables; escalona con pivotes resaltados, marca columnas sin pivote, anade e_j de esas columnas, reordena a n x n escalonada con n pivotes y comprueba det != 0; avisa si los vectores no son libres)
    .anim-conica data-a="1,0,4,-4,-16,19"   (conicas, tema 6.4: los 6 coeficientes enteros de a11 x1^2 + 2a12 x1x2 + a22 x2^2 + 2a01 x1 + 2a02 x2 + a00 = 0 [orden: a11, 2a12, a22, 2a01, 2a02, a00] editables y 21 presets [E 6.28, E 6.27 B, E 6.32, Feb. 2018 B, Sept. 2017 A1, U Ej. 6.31, hiperbola y parabola con giro, degeneradas, Feb. 2019 A, familia P5 con parametro k, circunferencia]; stepper en 5 pasos: matriz asociada e invariantes |A|, a11+a22, A00 y rango; clasificacion por el cuadro de U p.286 [con el criterio A11+A22 para las rectas paralelas, que corrige el uso de solo A11 del libro]; giro [valores propios de la parte cuadratica, u1 y u2 unitarios con det P = 1, angulo, nueva ecuacion]; traslacion [completar cuadrados, centro o vertice en coordenadas originales, control d = |A|/A00 o |A| = -lambda b^2/4]; ecuacion reducida con semiejes, focos, vertices, asintotas, directriz y eje; dibuja la conica original [elipse, hiperbola, parabola, rectas, punto] con los ejes de cada paso; 0 puntos reales se avisa; break-inside:avoid en impresion)
 */
 (function () {
@@ -1985,6 +1986,107 @@
   }
 
   /* =====================================================================
+     Base incompleta (.anim-baseinc): completar un sistema libre de R^n con canonicos e_j
+     ===================================================================== */
+  function buildBaseInc(root) {
+    var V0 = parseM(root.getAttribute('data-v') || '1,2,0,1;0,0,1,-1');
+    var p = V0.length, n = V0[0].length;
+    var steps = [];
+    root.textContent = ''; root.classList.add('sarrus', 'an-gauss');
+    function vtxt(v) { return '(' + v.map(ftxt).join(', ') + ')'; }
+    function canon(j) { var v = []; for (var q = 0; q < n; q++) v.push(F(q === j ? 1 : 0)); return v; }
+    function eIdx(v) { for (var q = 0; q < v.length; q++) if (!isz(v[q])) return q; return 0; }
+    function buildSteps() {
+      steps = [];
+      var M = cloneM(V0), r = 0, piv = [], c, i, j, free = [], extra = [];
+      function push(txt, hi, op, tag) { steps.push({ M: cloneM(M), ex: extra.slice(), txt: txt, hi: hi || {}, op: op || '', tag: tag || '' }); }
+      push('Queremos <b>completar a una base de ℝ<sup>' + n + '</sup></b> el sistema formado por ' + (p === 1 ? 'el vector' : 'los ' + p + ' vectores') + ' de la tabla (cada vector es una <b>fila</b>). Faltan ' + (n - p) + ' vector' + (n - p === 1 ? '' : 'es') + ' si son libres. Primero <b>escalonamos</b> la matriz para ver en qué columnas hay pivote.');
+      for (c = 0; c < n && r < p; c++) {
+        var k = -1; for (i = r; i < p; i++) if (!isz(M[i][c])) { k = i; break; }
+        if (k < 0) continue;
+        if (k !== r) { var t = M[r]; M[r] = M[k]; M[k] = t; push('El elemento de la fila ' + (r + 1) + ' en la columna ' + (c + 1) + ' es 0: <b>intercambiamos F' + (r + 1) + ' ↔ F' + (k + 1) + '</b> para tener pivote.', { pivs: piv.concat([[r, c]]) }, 'F' + (r + 1) + ' ↔ F' + (k + 1)); }
+        for (i = r + 1; i < p; i++) {
+          if (isz(M[i][c])) continue;
+          var f = div(M[i][c], M[r][c]), old = M[i][c];
+          for (j = 0; j < n; j++) M[i][j] = sub(M[i][j], mul(f, M[r][j]));
+          var sg = f.n < 0 ? '+ ' + ftxt(neg(f)) : MINUS + ' ' + ftxt(f);
+          push('Anulamos el <b>' + ftxt(old) + '</b> de la columna ' + (c + 1) + ' en la fila ' + (i + 1) + ': <b>F' + (i + 1) + ' → F' + (i + 1) + ' ' + sg + '·F' + (r + 1) + '</b>.', { pivs: piv.concat([[r, c]]), rows: [i], zero: [i, c] }, 'F' + (i + 1) + ' → F' + (i + 1) + ' ' + sg + '·F' + (r + 1));
+        }
+        piv.push([r, c]); r++;
+      }
+      var rk = r;
+      for (c = 0; c < n; c++) if (!piv.some(function (q) { return q[1] === c; })) free.push(c);
+      var pc = piv.map(function (q) { return q[1] + 1; }), fc = free.map(function (q) { return q + 1; });
+      var indep = rk === p;
+      push('<b>Matriz escalonada.</b> Pivotes (resaltados) en ' + (pc.length === 1 ? 'la columna ' : 'las columnas ') + pc.join(', ') + '; <b>sin pivote</b>: ' + (fc.length === 1 ? 'la columna ' : 'las columnas ') + (fc.length ? fc.join(', ') : '—') + '. ' + (indep
+        ? 'Hay ' + rk + ' filas no nulas = ' + p + ' vectores: el sistema es <b>libre</b> (rango ' + rk + '). Quedan ' + (n - rk) + ' columnas sin pivote, justo los ' + (n - p) + ' vectores que faltan.'
+        : '<b>Ojo:</b> hay ' + (p - rk) + ' fila' + (p - rk === 1 ? '' : 's') + ' nula' + (p - rk === 1 ? '' : 's') + ', luego los vectores <b>no son libres</b> (rango ' + rk + ' &lt; ' + p + '). El método sigue valiendo con las ' + rk + ' filas no nulas, que sí son una base de lo que generan.'), { pivs: piv, cols: free }, '');
+      if (!free.length) { push('No hay columnas sin pivote: ya tenemos ' + n + ' vectores libres, que son <b>base</b> de ℝ<sup>' + n + '</sup>. No hay que añadir nada.', { pivs: piv }, '', 'fin'); return; }
+      free.forEach(function (fj, idx) {
+        extra.push(fj);
+        push('Columna ' + (fj + 1) + ' sin pivote ⇒ añadimos <b>e<sub>' + (fj + 1) + '</sub> = ' + vtxt(canon(fj)) + '</b> (un 1 justo en esa columna). Así la columna ' + (fj + 1) + ' tendrá su pivote' + (idx < free.length - 1 ? '; seguimos con la siguiente sin pivote.' : '.'), { pivs: piv, cols: free }, '');
+      });
+      var rows = []; for (i = 0; i < n; i++) rows.push(null);
+      piv.forEach(function (q) { rows[q[1]] = M[q[0]]; });
+      free.forEach(function (fj) { rows[fj] = canon(fj); });
+      steps.push({ M: rows, ex: [], full: true, txt: '<b>Reordenamos las filas</b> para que el pivote de cada una caiga en su columna (fila j ↔ columna j). Queda una matriz ' + n + '×' + n + ' <b>escalonada con ' + n + ' pivotes</b> (todos ≠ 0 en la diagonal): rango ' + n + '. Como las operaciones de fila no cambian el rango, también tiene rango ' + n + ' la formada por los vectores <b>de partida</b> y los e<sub>j</sub>.', hi: { diag: true }, op: '', tag: '' });
+      var keep = indep ? V0 : M.slice(0, rk);
+      var all = keep.concat(free.map(canon));
+      var d = jDet(all);
+      steps.push({ M: all, ex: [], full: true, tag: 'fin', txt: '<b>Resultado.</b> La base de ℝ<sup>' + n + '</sup> es {' + all.map(vtxt).join(', ') + '}. Comprobación: su determinante vale <b>' + ftxt(d) + ' ≠ 0</b>, así que los ' + n + ' vectores son libres y, por el Teor. 2.6, <b>base</b>. (' + (indep ? 'Los ' + p + ' primeros son los dados' : 'Los primeros ' + rk + ' son las filas no nulas de la escalonada') + ' y los otros ' + free.length + ' son los canónicos añadidos.)', hi: { split: keep.length }, op: '' });
+    }
+    var tableWrap = el('div', 'gj-wrap'), opLine = el('div', 'gj-op');
+    var detail = el('details', 'gj-edit');
+    detail.appendChild(el('summary', '', '✎ Cambiar los vectores'));
+    var edGrid = el('div', 'gj-grid'), applyBtn = el('button', 'gj-apply', 'Aplicar'); applyBtn.type = 'button';
+    detail.appendChild(edGrid); detail.appendChild(applyBtn);
+    var inputs = [];
+    edGrid.style.gridTemplateColumns = 'repeat(' + n + ',3.2em)';
+    for (var ii = 0; ii < p; ii++) for (var jj = 0; jj < n; jj++) {
+      var inp = el('input'); inp.type = 'number'; inp.step = 1; inp.value = V0[ii][jj].n; inp.setAttribute('aria-label', 'vector ' + (ii + 1) + ' componente ' + (jj + 1)); edGrid.appendChild(inp); inputs.push(inp);
+    }
+    function render(s, text) {
+      var S = steps[s], hi = S.hi || {}; tableWrap.textContent = '';
+      var tb = el('table', 'gj-m'), all = S.M.concat(S.ex.map(canon)), i, j;
+      for (i = 0; i < all.length; i++) {
+        var tr = el('tr'), isEx = i >= S.M.length;
+        var lab = el('th', 'gj-lab');
+        if (S.tag === 'fin' && S.full) html(lab, i < (hi.split || 0) ? 'v' + (i + 1) : 'e<sub>' + (eIdx(all[i]) + 1) + '</sub>');
+        else if (isEx) html(lab, 'e<sub>' + (S.ex[i - S.M.length] + 1) + '</sub>');
+        else html(lab, 'F' + (i + 1));
+        tr.appendChild(lab);
+        for (j = 0; j < n; j++) {
+          var td = el('td'); html(td, fhtml(all[i][j]));
+          if (j === 0) td.classList.add('lb');
+          if (j === n - 1) td.classList.add('rb');
+          if (hi.rows && hi.rows.indexOf(i) >= 0) td.classList.add('chg');
+          if (hi.pivs && hi.pivs.some(function (q) { return q[0] === i && q[1] === j; })) td.classList.add('piv');
+          if (hi.zero && hi.zero[0] === i && hi.zero[1] === j) td.classList.add('zer');
+          if (hi.cols && hi.cols.indexOf(j) >= 0 && !isEx) td.classList.add('colhi');
+          if (isEx) td.classList.add('inv');
+          if (hi.diag && i === j) td.classList.add('piv');
+          if (S.tag === 'fin' && S.full && i >= (hi.split || 0)) td.classList.add('inv');
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      }
+      tableWrap.appendChild(tb);
+      opLine.textContent = S.op ? 'Operación: ' + S.op : '';
+      html(text, S.txt);
+    }
+    buildSteps();
+    var st = stepper(root, steps.length - 1, render, null, 2800);
+    root.appendChild(tableWrap); root.appendChild(opLine);
+    st.mount(root); root.appendChild(detail);
+    applyBtn.addEventListener('click', function () {
+      var k = 0; for (var i = 0; i < p; i++) for (var j = 0; j < n; j++) V0[i][j] = F(parseInt(inputs[k++].value, 10) || 0, 1);
+      st.stop(); buildSteps(); st.setN(steps.length - 1); st.go(0);
+    });
+    st.go(0);
+    window.addEventListener('beforeprint', function () { st.go(steps.length - 1); });
+  }
+
+  /* =====================================================================
      Clasificacion de formas cuadraticas 2x2: Sylvester, valores propios e invariantes (.anim-clasif)
      ===================================================================== */
   function buildClasif(root) {
@@ -2342,7 +2444,7 @@
     window.addEventListener('beforeprint', function () { st.go(st.N); });
   }
 
-  var REG = [['.anim-conica', buildConica], ['.anim-clasif', buildClasif], ['.anim-cuadratica', buildCuadratica], ['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
+  var REG = [['.anim-baseinc', buildBaseInc], ['.anim-conica', buildConica], ['.anim-clasif', buildClasif], ['.anim-cuadratica', buildCuadratica], ['.anim-lu', buildLU], ['.anim-bilineal', buildBilineal], ['.anim-minimos', buildMinimos], ['.anim-simet', buildSimet], ['.anim-ortog', buildOrtog], ['.anim-gram', buildGram], ['.anim-jordan', buildJordan], ['.anim-diag', buildDiag],['.anim-propios', buildPropios], ['.anim-semej', buildSemej], ['.anim-gauss', buildGauss], ['.anim-prod', buildProd], ['.anim-adj', buildAdj], ['.anim-rectas', buildRectas], ['.anim-area', buildArea], ['.anim-combo', buildCombo], ['.anim-union', buildUnion], ['.anim-oper', buildOper], ['.anim-lineal', buildLineal], ['.anim-matriz', buildMatriz], ['.anim-cambio', buildCambio]];
   function init() { REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { try { r[1](n); } catch (e) { console.error(r[0], e); } }); }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
