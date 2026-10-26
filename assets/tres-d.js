@@ -1,6 +1,7 @@
 /* Figuras 3D interactivas (three.js r147 local, assets/vendor/). Se cargan solo en las páginas que las usan.
    .d3-planos  data-n="3" data-v="1,1,1,3;1,-1,0,0;0,1,-1,1" [data-hom="1"]     sistemas de planos (ax+by+cz=d)
    .d3-vect    data-modo="span|det" data-u="1,0,0" data-v="0,1,0" data-w="0,0,1"  vectores de R3: subespacio generado / volumen
+   .d3-suma    data-n="0,0,1" data-d="0,0,1" data-v="2,1,3"   plano n·x=0 y recta <d> de R3 (tema 2.4, U Ej. 2.40-2.42): ¿suma directa? (n·d != 0), descomposición única v=u1+u2 en un paralelogramo; si d está en el plano, infinitas (slider s); 4 presets
    .d3-nuc     data-m="1,0,0;0,1,0;0,0,0"                                         núcleo e imagen de f(x)=A·x, R3 -> R3
    .d3-propios data-a="1,0,3;-1,2,0;0,0,2"                                       esfera unidad frente a su imagen por A (3x3 entera editable, slider t = deformacion gradual), rectas/planos propios y cadenas de Jordan (presets: distintos, doble d=2, doble d=1, triple d=2, triple bloque 3x3, complejos); sin WebGL queda el texto
    .d3-proy    data-modo="recta|plano|gs" data-v="1,2,3" data-a="1,1,1" data-b="0,1,1" data-c="0,0,2"
@@ -1356,7 +1357,61 @@
   }
 
 
-  var REG = [['.d3-cuadrica', buildCuadrica], ['.d3-nivel', buildNivel], ['.d3-minimos', buildMinimos3], ['.d3-ejes', buildEjes], ['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
+  /* =====================================================================
+     SUMA DE UN PLANO Y UNA RECTA (tema 2.4, U Ejs. 2.40-2.42)
+     ===================================================================== */
+  function buildSuma(root) {
+    var g = function (k, d) { return (root.getAttribute('data-' + k) || d).split(',').map(Number); };
+    var N0 = g('n', '0,0,1'), D0 = g('d', '0,0,1'), V0 = g('v', '2,1,3');
+    root.textContent = ''; root.classList.add('sarrus');
+    var S = makeScene(root, 4, 0.85); if (!S) return;
+    function vecRow(cls, label, v0, w) {
+      var d = el('div', 'an-eq ' + cls), r = []; d.appendChild(el('span', '', label + ' = ('));
+      for (var j = 0; j < 3; j++) { var x = numInput(v0[j], w || '2.8em'); r.push(x); d.appendChild(x); if (j < 2) d.appendChild(el('span', '', ', ')); }
+      d.appendChild(el('span', '', ')')); return [d, r];
+    }
+    var box = el('div', 'an-eqs'), rn = vecRow('down', 'U₁: plano n·x = 0, n', N0), rd = vecRow('up', 'U₂ = ⟨d⟩, d', D0), rv = vecRow('w', 'v', V0);
+    box.appendChild(rn[0]); box.appendChild(rd[0]); box.appendChild(rv[0]);
+    var sl = el('div', 'an-sliders'), s = slider(-2, 2, 0.5, 1), sb = el('b'), sr = el('label', 'an-slrow');
+    sr.appendChild(el('span', '', 'Otra descomposición: u₂ = s·d, s = ')); sr.appendChild(s); sr.appendChild(sb); sl.appendChild(sr);
+    var text = el('p', 'sar-text'), res = el('div', 'sar-res');
+    var rd_ = function (r) { return r.map(function (x) { return parseFloat(x.value) || 0; }); };
+    function sc(a, k) { return [a[0] * k, a[1] * k, a[2] * k]; }
+    function sub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+    function fv(a) { return '(' + a.map(num).join(', ') + ')'; }
+    var presets = [['Plano x₃=0 y eje x₃ (Ej. 2.40-2.41)', [0, 0, 1], [0, 0, 1], [2, 1, 3]], ['Recta oblicua fuera del plano', [0, 0, 1], [1, 0, 1], [2, 1, 3]], ['La recta está en el plano', [0, 0, 1], [1, 1, 0], [2, 1, 0]], ['Plano x₁+x₂+x₃=0 y eje x₁', [1, 1, 1], [1, 0, 0], [1, 2, -3]]];
+    var pre = btnRow(presets.map(function (p) { return p[0]; }), function (k) { var p = presets[k]; [[rn[1], p[1]], [rd[1], p[2]], [rv[1], p[3]]].forEach(function (q) { q[1].forEach(function (v, j) { q[0][j].value = v; }); }); draw(); });
+    function draw() {
+      var C = COL(), n = rd_(rn[1]), d = rd_(rd[1]), v = rd_(rv[1]), sv = parseFloat(s.value); sb.textContent = num(sv);
+      S.clearDyn();
+      if (isZero(n) || isZero(d)) { html(text, 'Necesito n ≠ 0 (para el plano) y d ≠ 0 (para la recta).'); S.render(); return; }
+      var nd = dot(n, d);
+      S.plane(n, 0, C.a, 0.28); S.line([0, 0, 0], d, C.b, 0.07);
+      var h;
+      if (Math.abs(nd) > 1e-9) {
+        var t = dot(n, v) / nd, u2 = sc(d, t), u1 = sub(v, u2);
+        S.arrow(u1, C.a, 'u₁'); S.arrow(u2, C.b, 'u₂'); S.arrow(v, C.c, 'v');
+        S.tube(u1, v, C.m, 0.025); S.tube(u2, v, C.m, 0.025);
+        h = '<b>La recta NO está en el plano</b> (n·d = ' + num(nd) + ' ≠ 0): <b>U₁ ∩ U₂ = {0}</b> y Dim U₁ + Dim U₂ = 2 + 1 = 3, así que <b>U₁ + U₂ = ℝ³ y la suma es directa</b>.<br>' +
+          'Para este v hay <b>una única</b> descomposición v = u₁ + u₂ con u₁ ∈ U₁ y u₂ ∈ U₂: u₂ = t·d con t = (n·v)/(n·d) = ' + num(t) + ', u₂ = ' + fv(u2) + ', u₁ = v − u₂ = ' + fv(u1) + '. No hay otra: el paralelogramo se cierra de una sola forma.';
+        sl.style.display = 'none';
+      } else {
+        var vp = sub(v, sc(n, dot(n, v) / dot(n, n))), a2 = sc(d, sv), a1 = sub(vp, a2), b1 = vp;
+        S.arrow(vp, C.c, 'v'); S.arrow(a1, C.a, 'u₁'); S.arrow(a2, C.b, 'u₂'); S.tube(a1, vp, C.m, 0.025); S.tube(a2, vp, C.m, 0.025);
+        h = '<b>La recta está contenida en el plano</b> (n·d = 0): <b>U₁ ∩ U₂ = U₂</b>, de dimensión 1, y U₁ + U₂ = U₁ (un plano, no ℝ³). <b>La suma NO es directa</b>.<br>' +
+          'Con v = ' + fv(vp) + ' (v proyectado sobre el plano para que esté en la suma), mueve s: v = ' + fv(sub(vp, a2)) + ' + ' + fv(a2) + ' para s = ' + num(sv) + ', y también para cualquier otro s. Hay <b>infinitas</b> descomposiciones, como en el Ej. 2.42.';
+        sl.style.display = '';
+      }
+      html(text, h); S.render();
+    }
+    root.appendChild(el('p', 'sar-text an-title', 'U₁ es un plano por el origen y U₂ una recta por el origen. La suma U₁ + U₂ es directa si y solo si la recta no está dentro del plano. Cambia n, d y v, y mira cómo se reparte v.'));
+    root.appendChild(box); root.appendChild(S.wrap); root.appendChild(sl); root.appendChild(text); root.appendChild(res); root.appendChild(pre);
+    [rn[1], rd[1], rv[1]].forEach(function (r) { r.forEach(function (x) { x.addEventListener('input', draw); }); });
+    s.addEventListener('input', draw);
+    S.onTheme = draw; draw();
+  }
+
+  var REG = [['.d3-suma', buildSuma], ['.d3-cuadrica', buildCuadrica], ['.d3-nivel', buildNivel], ['.d3-minimos', buildMinimos3], ['.d3-ejes', buildEjes], ['.d3-rot', buildRot], ['.d3-proy', buildProy], ['.d3-planos', buildPlanos], ['.d3-vect', buildVect], ['.d3-nuc', buildNuc], ['.d3-propios', buildPropios]];
   function init() {
     var todo = []; REG.forEach(function (r) { document.querySelectorAll(r[0]).forEach(function (n) { todo.push([r[1], n, false]); }); });
     if (!todo.length) return;
