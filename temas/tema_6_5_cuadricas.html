@@ -26,7 +26,7 @@
   <div class="kick">Módulo 6 · Formas bilineales y cuadráticas · Tema 6.5</div>
   <h1>Cuádricas</h1>
   <p>Una <b>cuádrica</b> es la «cónica del espacio»: la superficie de $\mathbb R^3$ que cumple una ecuación de segundo grado en $x_1,x_2,x_3$ (elipsoides, hiperboloides, paraboloides, conos, cilindros…). Aprenderás los dos caminos que ya conoces de las cónicas, ahora con una matriz $4\times4$: <b>mover los ejes</b> (un giro que elimina los productos cruzados y una traslación que elimina los términos lineales, hasta la <i>ecuación reducida</i>) y <b>clasificar sin dibujar</b>, con cuatro números que no cambian al mover los ejes (los <i>invariantes</i> $\operatorname{rang}A$, $I_a$, $A_{00}$, $J_a$).</p>
-  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §6.5 (pp. 288-306)</span><span>Ejercicios: E Ej. 6.33–6.42 (pp. 228-238)</span><span>Lay no trata cuádricas</span><span>⏱ ~8 h de estudio</span></div>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §6.5 (pp. 288-306)</span><span>Ejercicios: E Ej. 6.33–6.42 (pp. 228-238)</span><span>⏱ ~8 h de estudio</span></div>
   <div class="legend">
     <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
     <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
@@ -99,7 +99,7 @@
 <div class="box def"><span class="h">Las tres partes de la ecuación</span>
   <p>La ecuación tiene una <b>parte cuadrática</b> $f_2=a_{11}x_1^2+a_{22}x_2^2+a_{33}x_3^2+2a_{12}x_1x_2+2a_{13}x_1x_3+2a_{23}x_2x_3=x^tMx$ (una forma cuadrática, tema 6.2), una <b>parte lineal</b> $f_1=2a_{01}x_1+2a_{02}x_2+2a_{03}x_3$ (una aplicación lineal) y una <b>constante</b> $a_{00}$. La matriz de la parte cuadrática es
   $$M=\begin{pmatrix}a_{11}&a_{12}&a_{13}\\a_{12}&a_{22}&a_{23}\\a_{13}&a_{23}&a_{33}\end{pmatrix},$$
-  es decir, <b>$A$ sin su primera fila y su primera columna</b> (en U se llama $\overline A$). Dos matrices distintas: $A$ es $4\times4$ (toda la cuádrica) y $M$ es $3\times3$ (solo la parte cuadrática).</p>
+  es decir, <b>$A$ sin su primera fila y su primera columna</b>. Dos matrices distintas: $A$ es $4\times4$ (toda la cuádrica) y $M$ es $3\times3$ (solo la parte cuadrática).</p>
   <span class="src" data-l="U" data-ref="U §6.5.2, descomposición en parte cuadrática, lineal y constante, p. 290; matriz de f2 en p. 295">U p.290</span>
 </div>
 
@@ -305,7 +305,7 @@
     <li><b>Signos de las raíces.</b> Sin resolver: $J_a=-32<0$ ⇒ no pueden ser los tres del mismo signo (si lo fueran, los productos dos a dos serían positivos y $J_a>0$) y $I_a=0$ también lo dice. Como el producto de las raíces es $A_{00}=44>0$, o son $(+,+,+)$ (imposible) o hay <b>dos negativas y una positiva</b>: «$--+$». Comprobación numérica: $\approx-4{,}77;\ -1{,}48;\ +6{,}25$ (suma $0$, producto $44$).</li>
     <li>Signos mezclados ⇒ <b>hiperboloide</b>; $|A|=736>0$ ⇒ <b>hiperbólico, reglado o de una hoja</b>.</li>
   </ol>
-  <p><b>Atención:</b> U escribe «dos raíces positivas y una negativa, al ser $\det A>0$»; es erróneo (son dos <i>negativas</i> y una positiva) y el argumento del signo de $|A|$ tampoco vale. La conclusión sí es correcta.</p>
+  <p><b>Signos:</b> las raíces son dos <i>negativas</i> y una positiva (hay que calcularlas; el signo de $|A|$ no basta).</p>
   <span class="src" data-l="U" data-ref="U §6.5.4, Ejemplo 6.42, p. 300-301">U p.300-301</span>
   <span class="src" data-l="P" data-ref="Razonamiento propio de los signos con Ia, Ja y A00; raíces calculadas con sympy">propio</span>
 </div>
@@ -324,8 +324,8 @@
   <span class="src" data-l="P" data-ref="Razonamiento propio sobre U p. 300; comprobado con sympy en U Ej. 6.40, U Ej. 6.42 y E 6.41">propio</span>
 </div>
 
-<div class="box warn"><span class="h">Cilindro elíptico: ¿real o imaginario? (el criterio de U falla)</span>
-  <p>Rango 3, $A_{00}=0$ y $J_a>0$ ⇒ cilindro elíptico. Pero el cuadro de U dice que es «imaginario si las raíces tienen el mismo signo, real si tienen signo distinto», y eso no distingue nada (una raíz es 0 y las otras dos tienen el mismo signo porque su producto es $J_a>0$). <b>Criterio correcto (propio):</b> se toma un punto $c$ del eje (cualquier solución de $Mc=-(a_{01},a_{02},a_{03})^t$) y se calcula la constante $d=F(c)$ (el valor de la ecuación en ese punto). La superficie queda $\lambda_1y_1^2+\lambda_2y_2^2+d=0$: es <b>real</b> si $d$ tiene signo opuesto al de $\lambda_1,\lambda_2$ e <b>imaginario</b> si tiene el mismo. Ejemplo (Propio 2, más abajo): $c_0=-3$ da real, $c_0=5$ imaginario, con el mismo $J_a$.</p>
+<div class="box warn"><span class="h">Cilindro elíptico: ¿real o imaginario?</span>
+  <p>Rango 3, $A_{00}=0$ y $J_a>0$ ⇒ cilindro elíptico. Los signos de las raíces no distinguen real de imaginario (una raíz es 0 y las otras dos tienen el mismo signo porque su producto es $J_a>0$). <b>Criterio (propio):</b> se toma un punto $c$ del eje (cualquier solución de $Mc=-(a_{01},a_{02},a_{03})^t$) y se calcula la constante $d=F(c)$ (el valor de la ecuación en ese punto). La superficie queda $\lambda_1y_1^2+\lambda_2y_2^2+d=0$: es <b>real</b> si $d$ tiene signo opuesto al de $\lambda_1,\lambda_2$ e <b>imaginario</b> si tiene el mismo. Ejemplo (Propio 2, más abajo): $c_0=-3$ da real, $c_0=5$ imaginario, con el mismo $J_a$.</p>
   <span class="src" data-l="U" data-ref="U §6.5.4, cuadro de clasificación, rama «Ja > 0 ⇒ elíptico», p. 300">U p.300</span>
   <span class="src" data-l="P" data-ref="Corrección propia: criterio con la constante d = F(c) en un punto del eje; verificado con sympy en E 6.39 (λ = 4) y propio 2">propio</span>
 </div>
@@ -344,7 +344,7 @@
 
 <div class="box ex"><span class="h">Ejemplos 6.46-6.54 de U — degeneradas y secciones, resumen</span>
   <ul>
-    <li><b>Ej. 6.46 (p.302):</b> $x_1^2-x_2^2+x_1x_3-x_2x_3=0$. Rango 2 y $J_a=-\tfrac32<0$ ⇒ <b>par de planos reales secantes</b> (de hecho $(x_1-x_2)(x_1+x_2+x_3)=0$). Ej. 6.47 (p.303): su sección con $x_1=0$ es $-x_2^2-x_2x_3=-x_2(x_2+x_3)=0$, el par de rectas $x_2=0$ y $x_2=-x_3$ (U escribe «$-x_2(-x_2+x_3)=0$», que es erróneo).</li>
+    <li><b>Ej. 6.46 (p.302):</b> $x_1^2-x_2^2+x_1x_3-x_2x_3=0$. Rango 2 y $J_a=-\tfrac32<0$ ⇒ <b>par de planos reales secantes</b> (de hecho $(x_1-x_2)(x_1+x_2+x_3)=0$). Ej. 6.47 (p.303): su sección con $x_1=0$ es $-x_2^2-x_2x_3=-x_2(x_2+x_3)=0$, el par de rectas $x_2=0$ y $x_2=-x_3$.</li>
     <li><b>Ej. 6.48 (p.303):</b> $x_1^2+x_2^2+x_3^2=1$. $|A|=-1$, rango 4, $A_{00}=1$, $I_a=3$, $J_a=3$, $(p-1)^3$ ⇒ signos $+++$, $|A|<0$ ⇒ <b>elipsoide real (esfera)</b>. Ej. 6.49 (p.304): sus secciones por los planos coordenados son circunferencias.</li>
     <li><b>Ej. 6.50 (p.304):</b> $2x_1^2-x_2^2+x_3^2-4x_1x_3+2x_2x_3-1=0$. Rango 3, $A_{00}=0$, $I_a=2$, $J_a=-6<0$ ⇒ <b>cilindro hiperbólico</b>. Ej. 6.51 (p.304-305): su sección con $x_1=0$ es una hipérbola ($A_{00}=-2<0$).</li>
     <li><b>Ej. 6.52 (p.305):</b> $x_1^2+x_2^2-x_3^2+2x_3-1=0$. Rango 3 y $A_{00}=-1\neq0$ ⇒ cono; $I_a=1$, $J_a=-1$, $p^3-p^2-p+1=(p-1)^2(p+1)$ ⇒ raíces $+1,+1,-1$ ⇒ <b>cono real</b> (con vértice en $(0,0,1)$). Ej. 6.53 (p.305): su sección con $x_3=0$ es la circunferencia $x_1^2+x_2^2=1$. Ej. 6.54 (p.305-306): con $x_1=0$ es el par de rectas $x_2+x_3-1=0$ y $x_2-x_3+1=0$ (rango 2, $A_{00}=-1<0$).</li>
@@ -395,7 +395,7 @@
 <!-- ============================ 6 ============================ -->
 <h2 id="ejercicios"><span class="n">6</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ejercicios 6.33-6.42, p. 228-238">E p.228-238</span></h2>
 
-<p>E §6.5 empieza en la p.228 (presentación) y contiene los <b>Ejercicios 6.33 a 6.42</b> (pp. 229-238, los últimos del libro); el 6.32 (p.227) es de cónicas. Todos usan la matriz $4\times4$. Se dan en el orden de E. Casi todos son <b>tests</b> con un parámetro: la clave es la receta del apartado 5. Los enunciados se han leído en el PDF; las soluciones de E tienen varios errores, señalados en cada caso.</p>
+<p>E §6.5 empieza en la p.228 (presentación) y contiene los <b>Ejercicios 6.33 a 6.42</b> (pp. 229-238, los últimos del libro); el 6.32 (p.227) es de cónicas. Todos usan la matriz $4\times4$. Se dan en el orden de E. Casi todos son <b>tests</b> con un parámetro: la clave es la receta del apartado 5. </p>
 
 <details class="sol" id="ej6-33"><summary>Ejercicio 6.33 — ¿para qué $\lambda$ es un cono $x_1^2-x_2^2+2\lambda x_1x_3-x_2x_3=0$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.33, p. 229">E p.229</span></summary>
   <p class="enun">Para que $x_1^2-x_2^2+2\lambda x_1x_3-x_2x_3=0$ sea la ecuación de un cono, el valor de $\lambda$ debe ser: A) $\lambda=\tfrac12$. B) $\lambda=-1$. C) $\lambda=\tfrac12$ ó $\lambda=-\tfrac12$.</p>
@@ -437,7 +437,6 @@
 
 <details class="sol" id="ej6-35"><summary>Ejercicio 6.35 — $x_1^2-2x_2^2+x_3^2-2x_1x_2+3x_1x_3-4x_2x_3+\lambda=0$ con $\lambda=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.35, p. 230">E p.230</span></summary>
   <p class="enun">Si $\lambda=0$, la cuádrica de ecuación $x_1^2-2x_2^2+x_3^2-2x_1x_2+3x_1x_3-4x_2x_3+\lambda=0$ es: A) Un paraboloide. B) Un cono. C) Un par de planos.</p>
-  <div class="box warn"><span class="h">Aviso</span><p>E pone $a_{00}=-\lambda$ (es $+\lambda$) y escribe $|A|=\lambda\cdot\tfrac72$ de forma incoherente con ello; tampoco justifica que $A_{00}\neq0$ (vale $\tfrac72$). La respuesta B es correcta.</p></div>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar una cuádrica concreta con $\lambda=0$.</dd>
     <dt>Qué se usa</dt><dd><b>Ecuación matricial de una cuádrica (U p.288-300):</b> $(1\ x_1\ x_2\ x_3)A\,(1\ x_1\ x_2\ x_3)^t=0$ con $A$ simétrica $4\times4$ y parte cuadrática $A_{00}=M$ ($3\times3$). <b>Invariantes:</b> $\operatorname{rang}A$, $|A|$, $|A_{00}|$, $I_a=\operatorname{tr}A_{00}$ y $J_a$ (suma de menores principales $2\times2$ de $A_{00}$). <b>Clasificación (cuadro de U p.300):</b> si $|A_{00}|\neq0$ hay centro (elipsoide, hiperboloides, cono); si $|A_{00}|=0$ no hay centro único (paraboloides, cilindros, planos). Con $|A|=0$ es cono, cilindro o planos (degenerada); con $|A|\neq0$ y $|A_{00}|=0$ es paraboloide.</dd>
@@ -548,7 +547,7 @@
 
 <details class="sol" id="ej6-40"><summary>Ejercicio 6.40 — dos parámetros $a,b$: paraboloide, hiperboloide, cono <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.40, p. 235">E p.235</span></summary>
   <p class="enun">Sea la cuádrica $3x^2+2y^2+az^2+4xy+2x+2bz+1=0$, con $a,b\in\mathbb R$. Entonces: A) Si $a=0$ y $b\neq0$ se trata de un paraboloide elíptico. B) Si $a=0$ y $b=0$ se trata de un hiperboloide elíptico. C) Si $a=2$ y $b\neq0$ se trata de un cono imaginario.</p>
-  <div class="box warn"><span class="h">Nota</span><p>El libro responde correctamente: A <b>verdadera</b>, B y C <b>falsas</b>. (El enunciado del PDF dice $b\neq0$ en A y C.)</p></div>
+  <div class="box warn"><span class="h">Nota</span><p>Resultado: A <b>verdadera</b>, B y C <b>falsas</b>.</p></div>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Dos parámetros: paraboloide, hiperboloide, cono.</dd>
     <dt>Qué se usa</dt><dd><b>Familias con parámetros:</b> calcular $|A|$, $|A_{00}|$ y los signos de los valores propios de $M$ en función del parámetro; los valores críticos son las raíces de esos determinantes. <b>Clasificación (cuadro de U p.300):</b> si $|A_{00}|\neq0$ hay centro (elipsoide, hiperboloides, cono); si $|A_{00}|=0$ no hay centro único (paraboloides, cilindros, planos). Con $|A|=0$ es cono, cilindro o planos (degenerada); con $|A|\neq0$ y $|A_{00}|=0$ es paraboloide.</dd>
@@ -584,7 +583,7 @@
     <li><b>Por qué hace falta un giro:</b> el término $x_2x_3$ impide completar cuadrados variable a variable.</li>
     <li><b>Valores propios:</b> $|M-\lambda I|=(1-\lambda)\big(\lambda^2-\tfrac14\big)$ ⇒ $\lambda=1,\ \tfrac12,\ -\tfrac12$.</li>
     <li><b>Vectores propios.</b> $\lambda=-\tfrac12$: $\tfrac32x_1=0$, $\tfrac12x_2-\tfrac12x_3=0$ ⇒ $(0,1,1)$. $\lambda=\tfrac12$: $x_1=0$, $-\tfrac12x_2-\tfrac12x_3=0$ ⇒ $(0,1,-1)$. $\lambda=1$: $x_2=x_3=0$ ⇒ $(1,0,0)$. Ortogonales dos a dos (valores propios distintos).</li>
-    <li><b>Matriz de paso ortonormal</b> (orden $-\tfrac12,\tfrac12,1$): $$P=\begin{pmatrix}0&0&1\\\tfrac1{\sqrt2}&\tfrac1{\sqrt2}&0\\\tfrac1{\sqrt2}&-\tfrac1{\sqrt2}&0\end{pmatrix},\qquad P^tMP=\operatorname{diag}\big(-\tfrac12,\tfrac12,1\big).$$ ($\det P=-1$, como en el libro.)</li>
+    <li><b>Matriz de paso ortonormal</b> (orden $-\tfrac12,\tfrac12,1$): $$P=\begin{pmatrix}0&0&1\\\tfrac1{\sqrt2}&\tfrac1{\sqrt2}&0\\\tfrac1{\sqrt2}&-\tfrac1{\sqrt2}&0\end{pmatrix},\qquad P^tMP=\operatorname{diag}\big(-\tfrac12,\tfrac12,1\big).$$ ($\det P=-1$.)</li>
     <li><p><b>Parte lineal girada:</b></p>
       $$2(-1,0,2)P=2\big(\tfrac2{\sqrt2},-\tfrac2{\sqrt2},-1\big)=(2\sqrt2,-2\sqrt2,-2).$$
       <p>Con $X=PX'$:</p>$$-\tfrac12x_1'^2+\tfrac12x_2'^2+x_3'^2+2\sqrt2\,x_1'-2\sqrt2\,x_2'-2x_3'+5=0.$$</li>
@@ -595,7 +594,7 @@
     <li><b>Traslación</b> $x_1''=x_1'-2\sqrt2$, $x_2''=x_2'-2\sqrt2$, $x_3''=x_3'-1$:
     $$-\tfrac12x_1''^2+\tfrac12x_2''^2+x_3''^2+4=0.$$
     <b>Controles.</b> $d=|A|/A_{00}=(-1)/(-\tfrac14)=4$ ✓. Centro en coordenadas originales: $X=P(2\sqrt2,2\sqrt2,1)^t=(1,4,0)$, que anula las derivadas parciales ($2x_1-2=0$, $-x_3=0$, $-x_2+4=0$) ✓.</li>
-    <li><b>Qué superficie es</b> (el libro no lo dice): pasando la constante y dividiendo entre $-4$, $\dfrac{x_2''^2}{8}+\dfrac{x_3''^2}{4}-\dfrac{x_1''^2}{8}=-1$ ⇒ <b>hiperboloide de dos hojas</b> (elíptico, no reglado), con eje en la dirección $(0,1,1)$ (el vector propio de $\lambda=-\tfrac12$). Por invariantes: rango 4 ($|A|=-1$), $A_{00}=-\tfrac14\neq0$, signos $(-,+,+)$ ⇒ hiperboloide; $|A|<0$ ⇒ dos hojas ✓.</li>
+    <li><b>Qué superficie es:</b> pasando la constante y dividiendo entre $-4$, $\dfrac{x_2''^2}{8}+\dfrac{x_3''^2}{4}-\dfrac{x_1''^2}{8}=-1$ ⇒ <b>hiperboloide de dos hojas</b> (elíptico, no reglado), con eje en la dirección $(0,1,1)$ (el vector propio de $\lambda=-\tfrac12$). Por invariantes: rango 4 ($|A|=-1$), $A_{00}=-\tfrac14\neq0$, signos $(-,+,+)$ ⇒ hiperboloide; $|A|<0$ ⇒ dos hojas ✓.</li>
   </ol>
   <div class="recipe"><b>Receta (reducida):</b> (1) valores y vectores propios de $M$ ⇒ $P$ ortonormal ($\det P=1$); (2) parte lineal $\times P$; (3) completar cuadrados sacando el coeficiente; (4) trasladar; (5) dividir por la constante y comparar con U Def. 6.22; (6) controlar con $d=|A|/A_{00}$.</div>
   <p><b>Error típico:</b> multiplicar la parte lineal por $P^t$ en vez de por $P$; olvidar el factor 2 de la parte lineal; o equivocarse al completar cuadrados con coeficiente negativo ($-\tfrac12(\dots)^2$ <i>suma</i> $+4$).</p>
@@ -617,7 +616,7 @@
       $$\begin{vmatrix}3&-1\\-1&3\end{vmatrix}+\begin{vmatrix}6&-2\\-2&3\end{vmatrix}+\begin{vmatrix}6&2\\2&3\end{vmatrix}=8+14+14=36.$$</li>
     <li><b>$|A|$.</b> Hacer ceros en la 4.ª columna: $F_2\leftarrow F_2-2F_3$ da $(6,2,-4,0)$; $F_4\leftarrow F_4+3F_3$ da $(-12,4,8,0)$ (no cambian el determinante). Ahora la 4.ª columna solo tiene el $-1$ de la fila 3, de signo $(-1)^{3+4}=-1$: $$|A|=(-1)(-1)\begin{vmatrix}9&-2&-4\\6&2&-4\\-12&4&8\end{vmatrix}=4\begin{vmatrix}9&-2&-4\\6&2&-4\\-3&1&2\end{vmatrix}=4\,[9(4+4)+2(12-12)-4(6+6)]=4\cdot24=96.$$</li>
     <li><b>Valores propios de $M$:</b> $p^3-12p^2+36p-32=0$. $p=2$ lo anula ($8-48+72-32=0$) y $p^3-12p^2+36p-32=(p-2)(p^2-10p+16)=(p-2)^2(p-8)$. <b>Valores propios: $2$ (doble) y $8$.</b></li>
-    <li><p><b>Qué superficie es</b> (el libro no lo dice): $|A|\neq0$ ⇒ rango 4; $A_{00}\neq0$ ⇒ con centro; signos $+++$ ⇒ elipsoide; <b>$|A|=96>0$ ⇒ elipsoide imaginario</b>. <i>Comprobación con el centro:</i> $Mc=-(a_{01},a_{02},a_{03})^t=(2,4,0)^t$ tiene solución $c=(0,\tfrac32,\tfrac12)$; el valor en el centro es $d=3$ y $|A|/A_{00}=96/32=3$ ✓. En ejes principales: $2x_1''^2+2x_2''^2+8x_3''^2+3=0$, imposible en $\mathbb R$ (suma de términos $\ge0$ más 3); en la forma de U:</p>
+    <li><p><b>Qué superficie es:</b> $|A|\neq0$ ⇒ rango 4; $A_{00}\neq0$ ⇒ con centro; signos $+++$ ⇒ elipsoide; <b>$|A|=96>0$ ⇒ elipsoide imaginario</b>. <i>Comprobación con el centro:</i> $Mc=-(a_{01},a_{02},a_{03})^t=(2,4,0)^t$ tiene solución $c=(0,\tfrac32,\tfrac12)$; el valor en el centro es $d=3$ y $|A|/A_{00}=96/32=3$ ✓. En ejes principales: $2x_1''^2+2x_2''^2+8x_3''^2+3=0$, imposible en $\mathbb R$ (suma de términos $\ge0$ más 3); en la forma de U:</p>
       $$\frac{x_1''^2}{3/2}+\frac{x_2''^2}{3/2}+\frac{x_3''^2}{3/8}=-1.$$</li>
   </ol>
   <div class="recipe"><b>Receta:</b> $I_a$ = traza de $M$; $A_{00}=|M|$; $J_a$ = suma de los tres menores principales $2\times2$; $|A|$ haciendo ceros en la columna que ya tenga uno. Control: $|A|=d\cdot A_{00}$ con $d$ = valor en el centro.</div>
@@ -657,7 +656,7 @@
         <li>$c_0=-3$: $d=-4$, signo opuesto al de los valores propios ⇒ <b>cilindro elíptico real</b>: $(x_1-1)^2+(x_2+x_3)^2=4$.</li>
         <li>$c_0=5$: $d=4$ ⇒ $(x_1-1)^2+(x_2+x_3)^2=-4$: <b>cilindro elíptico imaginario</b> (vacío).</li>
       </ul></li>
-    <li><b>Moraleja:</b> el cuadro de U (con $J_a$) no distingue estos dos casos; hay que mirar la constante en el eje.</li>
+    <li><b>Moraleja:</b> $J_a$ no distingue estos dos casos; hay que mirar la constante en el eje.</li>
   </ol>
   <div class="recipe"><b>Receta:</b> cilindro elíptico ⇒ punto del eje ($Mc=-(a_{0i})$) ⇒ $d=F(c)$ ⇒ real si $d$ tiene signo opuesto a $\lambda_1,\lambda_2$.</div>
 </details>
@@ -686,8 +685,8 @@
 
 <div class="box warn"><span class="h">Resultado del barrido: ninguna cuádrica en los 24 exámenes</span>
   <p>Se han revisado los 24 exámenes (feb. 2017 – feb. 2026 y sept. 2017–2025), con y sin acentos mal extraídos, buscando «cuádrica», «superficie», «elipsoide», «hiperboloide», «paraboloide», «cono», «cilindro», «esfera», «par de planos», «invariante», «reducida», etc. <b>No hay ningún ejercicio de cuádricas</b> (las cónicas aparecen en 6 ítems; las formas cuadráticas de $\mathbb R^3$, en varios). Es materia del programa y de E (6.33-6.42), pero el examen no la ha pedido en este periodo. Por eso, en lugar de ejemplos de examen reales, aquí van <b>tres modelos propios en formato examen</b>, construidos sobre el patrón de las preguntas de cónicas que sí han caído (clasificar por invariantes, reducida con giro y traslación, familia con parámetro).</p>
-  <p><b>Único aviso de examen sobre cuádricas.</b> La solución oficial de <b>Sept. 2022, ejercicio 6</b> (una pregunta de formas cuadráticas, tema 6.2) dice: «Atención: no se debe confundir <b>forma cuadrática</b> (es una aplicación) con <b>cuádrica</b> (es una superficie)». Una forma cuadrática es un polinomio de segundo grado <i>homogéneo</i> $Q(x)=x^tMx$ de $\mathbb R^3$ en $\mathbb R$; una cuádrica es el <i>conjunto de soluciones</i> de una ecuación de grado $\le2$ (con términos lineales y constante) en $\mathbb R^3$. Las superficies $Q(x)=c$ de 6.3 son cuádricas particulares.</p>
-  <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 6 (solución oficial)">X Sept. 2022 ej. 6</span>
+  <p><b>Aviso de examen (Sept. 2022, ejercicio 6, tema 6.2):</b> no se debe confundir <b>forma cuadrática</b> (es una aplicación) con <b>cuádrica</b> (es una superficie). Una forma cuadrática es un polinomio de segundo grado <i>homogéneo</i> $Q(x)=x^tMx$ de $\mathbb R^3$ en $\mathbb R$; una cuádrica es el <i>conjunto de soluciones</i> de una ecuación de grado $\le2$ (con términos lineales y constante) en $\mathbb R^3$. Las superficies $Q(x)=c$ de 6.3 son cuádricas particulares.</p>
+  <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 6">X Sept. 2022 ej. 6</span>
 </div>
 
 <h3 id="modelos">Modelos de pregunta en formato examen (propios)</h3>
@@ -829,10 +828,10 @@
     <li><b>Girar solo la parte cuadrática</b>, olvidar el factor 2 de la parte lineal o multiplicar por $P^t$ en vez de $P$.</li>
     <li><b>$P$ sin normalizar, sin ortogonalizar (valor propio doble) o con $\det P=-1$</b> llamada «giro».</li>
     <li><b>Completar mal un cuadrado con coeficiente negativo</b> y <b>dar la reducida sin decir el cambio de variables</b>.</li>
-    <li><b>Fiarse del criterio de U para cilindros elípticos real/imaginario</b> y de las claves de E sin comprobarlas (6.34, 6.37, 6.39, 6.42).</li>
+    <li><b>Decidir real/imaginario en cilindros elípticos solo con los signos de las raíces</b> (6.34, 6.37, 6.39, 6.42).</li>
     <li><b>Confundir forma cuadrática con cuádrica</b> (X Sept. 2022): la primera es una aplicación; la segunda, una superficie.</li>
   </ol>
-  <span class="src" data-l="P" data-ref="Errores recopilados de U §6.5, E §6.5 y el aviso de la solución oficial de Sept. 2022 ej. 6">propio</span>
+  <span class="src" data-l="P" data-ref="Errores recopilados de U §6.5, E §6.5 y X Sept. 2022 ej. 6">propio</span>
 </div>
 
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
