@@ -93,6 +93,7 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
 - [x] **4.3** Generar desde datos: tabla «Qué cae en el examen», enlaces de las fichas «Por tipo», `prioridades.html` y `index.html`. *(hecho para «Qué cae» y los enlaces de las fichas del 2.3 —marcadores `{{que_cae}}` y `{{vinculos:ID}}`— y para `prioridades.html`. `index.html` se deja manual: sus tarjetas llevan miniaturas SVG propias)*
 
 ### F5 — Capa pedagógica en el resto de temas (ya con datos)
+**Cómo se hace F5.1 (proceso montado):** un agente por tema (sonnet) lee `herramientas/prompt_capa.md` y escribe `datos/X_Y/capa_propuesta.yaml` (niveles, pistas, tipos, esencial, quiz); se valida con `aplicar_capa.py X.Y --solo-validar`; después `aplicar_capa.py X.Y` lo aplica (mueve el enunciado, añade pistas, copia esencial/tipos/quiz a `tema.yaml`, pone `capa: true` y reconstruye). Revisar a mano una muestra de pistas por tema antes de commit. Estado por tema: ver la tabla de arriba (columna **P** = capa aplicada).
 - [ ] **5.1** Por tema: `nivel` y `pista` de cada ejercicio, fichas de método por tipo de problema, «Lo esencial en 5 minutos» y autoevaluación con el porqué de cada opción errónea. Se escribe en datos; el piloto 2.3 es el modelo.
 - [ ] **5.1b** Mejoras de contenido del piloto aún no aplicadas ni siquiera al 2.3 (decidir primero en el 2.3, luego extender):
   - Teoría en tarjetas cortas (idea, definición, ejemplo mínimo, error típico) y el resto en «Ampliación» plegada (`details.ampl`). En el 2.3 solo se plegaron 2 bloques.

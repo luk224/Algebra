@@ -243,6 +243,266 @@
     };
   };
 
+  /* ====== Generadores de los demás temas ====== */
+  function pm(rows) { return '\\begin{pmatrix}' + rows.map(function (r) { return r.join('&'); }).join('\\\\') + '\\end{pmatrix}'; }
+  function fr(n, d) { var g = gcd(n, d) || 1; n /= g; d /= g; if (d < 0) { n = -n; d = -d; } return d === 1 ? String(n) : (n < 0 ? '-' : '') + '\\frac{' + Math.abs(n) + '}{' + d + '}'; }
+  function matmul(A, B) { return A.map(function (r) { return B[0].map(function (_, j) { var t = 0; r.forEach(function (x, k) { t += x * B[k][j]; }); return t; }); }); }
+  function flat(M) { return [].concat.apply([], M); }
+  function randMat(R, n, m, lo, hi) { var M = []; for (var i = 0; i < n; i++) { var r = []; for (var j = 0; j < m; j++) r.push(R.ri(lo, hi)); M.push(r); } return M; }
+  function dist(a, b) { return a.some(function (x, i) { return !eq(x, b[i]); }); }
+  function rmat(M) { return pm(M); }
+
+  /* 1.2 · producto de matrices 2×2 */
+  G.prod22 = function (seed) {
+    var R = Rnd(seed), A, B, AB, BA, H, T;
+    do { A = randMat(R, 2, 2, -3, 3); B = randMat(R, 2, 2, -3, 3); AB = matmul(A, B); BA = matmul(B, A);
+      H = [[A[0][0] * B[0][0], A[0][1] * B[0][1]], [A[1][0] * B[1][0], A[1][1] * B[1][1]]]; T = [[AB[0][0], AB[1][0]], [AB[0][1], AB[1][1]]];
+    } while (!dist(flat(AB), flat(BA)) || !dist(flat(AB), flat(H)) || !dist(flat(AB), flat(T)));
+    return {
+      tipo: 'nums', n: 4, ans: flat(AB), data: { A: A, B: B, ans: flat(AB) },
+      enun: 'Calcula $AB$ con $A=' + rmat(A) + '$ y $B=' + rmat(B) + '$. Escribe las 4 entradas por filas: $(ab_{11},ab_{12},ab_{21},ab_{22})$.',
+      sol: 'La entrada $(i,j)$ es la fila $i$ de $A$ por la columna $j$ de $B$: $AB=' + rmat(AB) + '$.',
+      diag: function (a) {
+        if (!dist(a, flat(BA))) return 'Has calculado $BA$. El producto de matrices no es conmutativo: $AB$ es filas de $A$ por columnas de $B$.';
+        if (!dist(a, flat(H))) return 'Has multiplicado entrada a entrada. El producto de matrices es fila × columna (suma de productos), no entrada por entrada.';
+        if (!dist(a, flat(T))) return 'Tienes la traspuesta de $AB$: la entrada $(1,2)$ es fila 1 de $A$ por columna 2 de $B$.';
+        return 'Revisa cada entrada: fila $i$ de $A$ por columna $j$ de $B$ (suma de productos).';
+      }
+    };
+  };
+
+  /* 1.2 · inversa de una 2×2 */
+  G.inv22 = function (seed) {
+    var R = Rnd(seed), A, D;
+    do { A = randMat(R, 2, 2, -3, 3); D = det2(A[0][0], A[0][1], A[1][0], A[1][1]); } while (!(Math.abs(D) === 1 || Math.abs(D) === 2));
+    var adj = [A[1][1], -A[0][1], -A[1][0], A[0][0]], inv = adj.map(function (x) { return x / D; });
+    var sinSig = [A[1][1], A[0][1], A[1][0], A[0][0]].map(function (x) { return x / D; });
+    return {
+      tipo: 'nums', n: 4, ans: inv, data: { A: A, det: D, ans: inv },
+      enun: 'Calcula $A^{-1}$ para $A=' + rmat(A) + '$. Escribe las 4 entradas por filas (admite fracciones, p. ej. $1/2$).',
+      sol: '$\\det A=' + D + '$ y $A^{-1}=\\frac{1}{\\det A}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}=\\frac{1}{' + D + '}' + rmat([[adj[0], adj[1]], [adj[2], adj[3]]]) + '=' + rmat([[fr(adj[0], D), fr(adj[1], D)], [fr(adj[2], D), fr(adj[3], D)]]) + '$.',
+      diag: function (a) {
+        if (!dist(a, adj)) return 'Has dado la adjunta, pero falta dividir entre $\\det A=' + D + '$.';
+        if (!dist(a, sinSig)) return 'En la inversa de una $2\\times2$ se intercambian $a$ y $d$ y se <b>cambia el signo</b> de $b$ y $c$.';
+        if (!dist(a, flat(A))) return 'Esa es la propia $A$, no su inversa.';
+        var P = matmul(A, [[a[0], a[1]], [a[2], a[3]]]);
+        return 'Comprueba: $A\\cdot(\\text{tu matriz})=' + rmat(P.map(function (r) { return r.map(function (x) { return Math.round(x * 1000) / 1000; }); })) + '$ y debería ser la identidad.';
+      }
+    };
+  };
+
+  /* 1.2 / 3.2 · rango de una 3×4 */
+  function matRango(R, n, m, r) {
+    var w, i, rows = [];
+    for (;;) { w = randMat(R, r, m, -2, 2); if (rank(w) === r) break; }
+    rows = w.slice();
+    while (rows.length < n) { var co = []; for (i = 0; i < r; i++) co.push(R.ri(-2, 2)); if (co.every(function (x) { return x === 0; })) continue; rows.push(lin(co, w)); }
+    return R.shuf(rows);
+  }
+  G.rango34 = function (seed) {
+    var R = Rnd(seed), r = R.ri(1, 3), A = matRango(R, 3, 4, r), rk = rank(A);
+    return {
+      tipo: 'nums', n: 1, ans: [rk], data: { A: A, ans: rk },
+      enun: '¿Cuál es el rango de $A=' + rmat(A) + '$?',
+      sol: 'Al escalonar quedan $' + rk + '$ filas no nulas: $\\operatorname{rang}A=' + rk + '$ (' + (rk < 3 ? 'alguna fila es combinación de las otras' : 'las tres filas son independientes') + ').',
+      diag: function (a) {
+        if (eq(a[0], 3) && rk < 3) return 'Has contado las filas. El rango es el nº de filas <b>independientes</b>; aquí alguna se anula al escalonar.';
+        if (eq(a[0], 4)) return 'Un rango no puede superar el nº de filas (3).';
+        return 'Escalona de nuevo: ¿cuántas filas distintas de cero quedan?';
+      }
+    };
+  };
+
+  /* 1.3 · determinante 3×3 por Sarrus */
+  G.det3 = function (seed) {
+    var R = Rnd(seed), M, D, pos, neg;
+    do { M = randMat(R, 3, 3, -2, 3); D = det3(M[0], M[1], M[2]);
+      pos = M[0][0] * M[1][1] * M[2][2] + M[0][1] * M[1][2] * M[2][0] + M[0][2] * M[1][0] * M[2][1];
+      neg = M[0][2] * M[1][1] * M[2][0] + M[0][0] * M[1][2] * M[2][1] + M[0][1] * M[1][0] * M[2][2];
+    } while (D === 0 || D === pos + neg || D === -D);
+    return {
+      tipo: 'nums', n: 1, ans: [D], data: { M: M, ans: D },
+      enun: 'Calcula $\\det\\begin{pmatrix}' + M.map(function (r) { return r.join('&'); }).join('\\\\') + '\\end{pmatrix}$ con la regla de Sarrus.',
+      sol: 'Diagonales positivas: $' + pos + '$; negativas: $' + neg + '$. $\\det=' + pos + '-(' + neg + ')=' + D + '$.',
+      diag: function (a) {
+        if (eq(a[0], pos + neg)) return 'Has <b>sumado</b> las tres diagonales negativas. Se restan: $\\det=(\\text{positivas})-(\\text{negativas})$.';
+        if (eq(a[0], -D)) return 'Tienes el signo cambiado: $\\det=(\\text{diagonales principales})-(\\text{diagonales secundarias})$.';
+        return 'Revisa los seis productos: positivas $' + pos + '$ y negativas $' + neg + '$ (según Sarrus).';
+      }
+    };
+  };
+
+  /* 1.3 · propiedades del determinante */
+  G.detprop = function (seed) {
+    var R = Rnd(seed), f = R.ri(0, 3), n = R.ri(2, 4), k = R.pick([2, 3, -2, 4, -1, 5]), c = R.pick([2, 3, -2]), ans, enun, diag, sol;
+    if (f === 0) { ans = Math.pow(c, n) * k; enun = 'Si $A$ es $' + n + '\\times' + n + '$ y $\\det A=' + k + '$, ¿cuánto vale $\\det(' + c + 'A)$?';
+      sol = 'El factor $' + c + '$ sale de <b>cada fila</b>: $\\det(' + c + 'A)=' + c + '^{' + n + '}\\det A=' + ans + '$.';
+      diag = function (a) { return eq(a[0], c * k) ? 'Has sacado el factor una sola vez. Sale una vez por cada una de las $' + n + '$ filas: $' + c + '^{' + n + '}$.' : null; }; }
+    else if (f === 1) { ans = 1 / k; enun = 'Si $A$ es invertible y $\\det A=' + k + '$, ¿cuánto vale $\\det(A^{-1})$? (admite fracciones)';
+      sol = '$\\det(A^{-1})=1/\\det A=' + fr(1, k) + '$ (porque $\\det(AA^{-1})=\\det I=1$).';
+      diag = function (a) { return eq(a[0], -k) ? 'No es el opuesto: $\\det(A^{-1})$ es el <b>inverso</b> de $\\det A$.' : (eq(a[0], k) ? '$\\det(A^{-1})=1/\\det A$, no $\\det A$.' : null); }; }
+    else if (f === 2) { ans = k * k; enun = 'Si $\\det A=' + k + '$, ¿cuánto vale $\\det(A^2)$?';
+      sol = '$\\det(A^2)=\\det(A\\cdot A)=(\\det A)^2=' + ans + '$.';
+      diag = function (a) { return eq(a[0], 2 * k) ? 'Has duplicado. $\\det(AB)=\\det A\\cdot\\det B$, así que $\\det(A^2)=(\\det A)^2$.' : null; }; }
+    else { ans = k; enun = 'Si $\\det A=' + k + '$, ¿cuánto vale $\\det(A^t)$?';
+      sol = 'La traspuesta tiene el mismo determinante: $' + k + '$.';
+      diag = function (a) { return eq(a[0], -k) ? 'La traspuesta <b>no</b> cambia el signo: $\\det A^t=\\det A$.' : null; }; }
+    return { tipo: 'nums', n: 1, ans: [ans], data: { f: f, n: n, k: k, c: c, ans: ans }, enun: enun, sol: sol, diag: function (a) { return diag(a); } };
+  };
+
+  /* 1.4 · sistema 2×2 */
+  G.sist2 = function (seed) {
+    var R = Rnd(seed), a, b, c, d, D, x, y;
+    do { a = R.ri(-3, 3); b = R.ri(-3, 3); c = R.ri(-3, 3); d = R.ri(-3, 3); D = det2(a, b, c, d); } while (D === 0);
+    x = R.ri(-4, 4); y = R.ri(-4, 4);
+    var e1 = a * x + b * y, e2 = c * x + d * y;
+    var eqs = function (u, v) { return comb([a, b], ['x', 'y']) + '=' + e1; };
+    return {
+      tipo: 'nums', n: 2, ans: [x, y], data: { M: [[a, b], [c, d]], rhs: [e1, e2], ans: [x, y] },
+      enun: 'Resuelve $\\begin{cases}' + comb([a, b], ['x', 'y']) + '=' + e1 + '\\\\ ' + comb([c, d], ['x', 'y']) + '=' + e2 + '\\end{cases}$. Escribe $(x,y)$.',
+      sol: '$\\det=' + D + '\\neq0$: solución única. Por Cramer o por Gauss: $x=' + x + ',\\ y=' + y + '$. Comprobación: ' + e1 + ' y ' + e2 + ' ✓.',
+      diag: function (u) {
+        if (eq(u[0], y) && eq(u[1], x)) return 'Tienes los valores cambiados de orden: $x$ va primero.';
+        var r1 = a * u[0] + b * u[1], r2 = c * u[0] + d * u[1], o1 = eq(r1, e1), o2 = eq(r2, e2);
+        if (o1 && !o2) return 'Cumple la 1.ª ecuación pero no la 2.ª (da $' + r2 + '$ y debe dar $' + e2 + '$).';
+        if (!o1 && o2) return 'Cumple la 2.ª ecuación pero no la 1.ª (da $' + r1 + '$ y debe dar $' + e1 + '$).';
+        return 'Sustituye en las dos ecuaciones: te da $' + r1 + '$ y $' + r2 + '$, y debe dar $' + e1 + '$ y $' + e2 + '$.';
+      }
+    };
+  };
+
+  /* 1.4 · clasificar un sistema 3×3 con Rouché–Frobenius */
+  G.clasifica = function (seed) {
+    var R = Rnd(seed), tipo = R.ri(0, 2), A, b, i, co, r0, r1;
+    for (;;) {
+      A = randMat(R, 3, 3, -2, 3); b = [R.ri(-3, 3), R.ri(-3, 3), R.ri(-3, 3)];
+      if (tipo > 0) { var c = [R.ri(-2, 2), R.ri(-2, 2)]; if (c[0] === 0 && c[1] === 0) continue; A[2] = lin(c, [A[0], A[1]]); b[2] = c[0] * b[0] + c[1] * b[1] + (tipo === 2 ? R.pick([-2, -1, 1, 2]) : 0); }
+      r0 = rank(A); r1 = rank(A.map(function (r, k) { return r.concat([b[k]]); }));
+      if (tipo === 0 && r0 !== 3) continue; if (tipo === 1 && !(r0 === 2 && r1 === 2)) continue; if (tipo === 2 && !(r0 === 2 && r1 === 3)) continue;
+      break;
+    }
+    var nom = ['Compatible determinado', 'Compatible indeterminado', 'Incompatible'], cat = r0 < r1 ? 2 : (r0 === 3 ? 0 : 1);
+    var M = '\\left(\\begin{array}{ccc|c}' + A.map(function (r, k) { return r.concat([b[k]]).join('&'); }).join('\\\\') + '\\end{array}\\right)';
+    return {
+      tipo: 'choice', data: { A: A, b: b, r0: r0, r1: r1, cat: cat },
+      enun: 'Clasifica el sistema de matriz ampliada $(A\\mid b)=' + M + '$.',
+      opts: nom.map(function (t, i) {
+        return { t: t, ok: i === cat, why: i === cat ? '' : 'Aquí $\\operatorname{rang}A=' + r0 + '$ y $\\operatorname{rang}(A\\mid b)=' + r1 + '$ con 3 incógnitas: ' + (cat === 0 ? 'los dos rangos valen 3, solución única.' : cat === 1 ? 'los rangos coinciden ($' + r0 + '<3$), hay infinitas soluciones.' : 'los rangos son distintos, no hay solución.') };
+      }),
+      sol: '$\\operatorname{rang}A=' + r0 + '$, $\\operatorname{rang}(A\\mid b)=' + r1 + '$, $n=3$. ' + (cat === 0 ? 'Rangos iguales a $n$: ' : cat === 1 ? 'Rangos iguales y menores que $n$: ' : 'Rangos distintos: ') + nom[cat] + '.'
+    };
+  };
+
+  /* 3.2 · teorema de la dimensión: núcleo e imagen */
+  G.dimnuc = function (seed) {
+    var R = Rnd(seed), r = R.ri(1, 3), A = matRango(R, 3, 4, r), rk = rank(A);
+    return {
+      tipo: 'nums', n: 2, ans: [4 - rk, rk], data: { A: A, ans: [4 - rk, rk] },
+      enun: 'Sea $f:\\mathbb R^4\\to\\mathbb R^3$ con matriz $A=' + rmat(A) + '$. Calcula $(\\operatorname{Dim}\\operatorname{Nuc}f,\\ \\operatorname{Dim}\\operatorname{Im}f)$.',
+      sol: '$\\operatorname{Dim}\\operatorname{Im}f=\\operatorname{rang}A=' + rk + '$ y, por el teorema de la dimensión, $\\operatorname{Dim}\\operatorname{Nuc}f=4-' + rk + '=' + (4 - rk) + '$.',
+      diag: function (a) {
+        if (eq(a[0], rk) && eq(a[1], 4 - rk)) return 'Los tienes intercambiados: la imagen tiene dimensión igual al <b>rango</b> y el núcleo $n-\\operatorname{rang}$.';
+        if (eq(a[0] + a[1], 3)) return 'La suma debe ser $4$ (nº de columnas, dimensión del espacio de salida de partida), no $3$.';
+        return 'Calcula primero el rango de $A$ (escalona) y usa $\\operatorname{Dim}\\operatorname{Nuc}+\\operatorname{Dim}\\operatorname{Im}=4$.';
+      }
+    };
+  };
+
+  /* 4.2 · valores propios de una 2×2 */
+  G.polcar22 = function (seed) {
+    var R = Rnd(seed), l1, l2, k, m, P, Pi, A;
+    do { l1 = R.ri(-3, 4); l2 = R.ri(-3, 4); } while (l1 >= l2);
+    k = R.pick([-1, 0, 1, 2]); m = R.pick([-1, 1, 2]);
+    P = [[1, k], [m, 1 + k * m]]; Pi = [[1 + k * m, -k], [-m, 1]];
+    A = matmul(matmul(P, [[l1, 0], [0, l2]]), Pi);
+    var tr = l1 + l2, dt = l1 * l2;
+    return {
+      tipo: 'nums', n: 2, ans: [l1, l2], data: { A: A, ans: [l1, l2] },
+      enun: 'Halla los valores propios de $A=' + rmat(A) + '$. Escríbelos de menor a mayor.',
+      sol: '$\\operatorname{tr}A=' + tr + '$, $\\det A=' + dt + '$. $|A-\\lambda I|=\\lambda^2-' + (tr < 0 ? '(' + tr + ')' : tr) + '\\lambda+(' + dt + ')=0\\Rightarrow\\lambda=' + l1 + ',\\ ' + l2 + '$.',
+      diag: function (a) {
+        if (eq(a[0], -l2) && eq(a[1], -l1)) return 'Tienes los signos cambiados: las raíces de $\\lambda^2-(\\operatorname{tr})\\lambda+\\det$ son $\\lambda$, no $-\\lambda$ (se resuelve $|A-\\lambda I|=0$).';
+        if (eq(a[0], Math.min(tr, dt)) && eq(a[1], Math.max(tr, dt))) return 'Esos son la traza y el determinante, no los valores propios: estos son las raíces de $\\lambda^2-\\operatorname{tr}\\,\\lambda+\\det$.';
+        if (eq(a[0], l2) && eq(a[1], l1)) return 'Escríbelos de menor a mayor.';
+        return 'Comprueba: su suma debe ser la traza ($' + tr + '$) y su producto el determinante ($' + dt + '$).';
+      }
+    };
+  };
+
+  /* 4.3 · ¿es diagonalizable una 2×2? */
+  G.diag22 = function (seed) {
+    var R = Rnd(seed), caso = R.ri(0, 3), A, why;
+    if (caso === 0) { var l1 = R.ri(-2, 2), l2 = l1 + R.ri(1, 3), k = R.pick([1, 2]); A = [[l1, k], [0, l2]]; }
+    else if (caso === 1) { var l = R.ri(-3, 3); A = [[l, 0], [0, l]]; }
+    else if (caso === 2) { var l = R.ri(-3, 3), k = R.pick([1, 2, -1]); A = [[l, k], [0, l]]; }
+    else { var a = R.ri(-2, 2), b = R.pick([1, 2, 3]); A = [[a, -b], [b, a]]; }
+    var tr = A[0][0] + A[1][1], dt = det2(A[0][0], A[0][1], A[1][0], A[1][1]), disc = tr * tr - 4 * dt;
+    var si = disc > 0 ? true : (disc === 0 ? (A[0][1] === 0 && A[1][0] === 0) : false);
+    var razon = disc > 0 ? 'Tiene dos valores propios reales distintos (discriminante $' + disc + '>0$): siempre diagonalizable.' :
+      disc === 0 ? (si ? 'Es $\\lambda I$: ya es diagonal.' : 'Valor propio doble $\\lambda=' + tr / 2 + '$ con $\\alpha=2$, pero $A-\\lambda I\\neq0$ tiene rango 1, luego $d=1<\\alpha$: no diagonalizable.') :
+      'Discriminante $' + disc + '<0$: los valores propios no son reales, no se puede diagonalizar en $\\mathbb R$.';
+    return {
+      tipo: 'choice', data: { A: A, disc: disc, si: si },
+      enun: '¿Es $A=' + rmat(A) + '$ diagonalizable en $\\mathbb R$?',
+      opts: [{ t: 'Sí', ok: si, why: si ? '' : razon }, { t: 'No', ok: !si, why: !si ? '' : razon }],
+      sol: '$\\operatorname{tr}A=' + tr + '$, $\\det A=' + dt + '$, discriminante $' + disc + '$. ' + razon
+    };
+  };
+
+  /* 5.1 · proyección ortogonal sobre una recta */
+  G.proy = function (seed) {
+    var R = Rnd(seed), u, v, uu, uv;
+    do { u = [R.ri(-2, 3), R.ri(-2, 3), R.ri(-2, 3)]; v = [R.ri(-3, 3), R.ri(-3, 3), R.ri(-3, 3)]; uu = u[0] * u[0] + u[1] * u[1] + u[2] * u[2]; uv = u[0] * v[0] + u[1] * v[1] + u[2] * v[2]; } while (uu === 0 || uv === 0 || uu === 1 || uv === uu);
+    var pr = u.map(function (x) { return x * uv / uu; });
+    var sin = u.map(function (x) { return x * uv; });
+    return {
+      tipo: 'nums', n: 3, ans: pr, data: { u: u, v: v, ans: pr },
+      enun: 'Calcula la proyección ortogonal de $v=' + V(v) + '$ sobre la recta $\\langle u\\rangle$, con $u=' + V(u) + '$ (producto escalar usual). Escribe las 3 componentes (admite fracciones).',
+      sol: '$\\operatorname{proy}_u v=\\dfrac{u\\bullet v}{u\\bullet u}\\,u=\\dfrac{' + uv + '}{' + uu + '}' + V(u) + '=(' + pr.map(function (x, i) { return fr(u[i] * uv, uu); }).join(',') + ')$.',
+      diag: function (a) {
+        if (!dist(a, sin)) return 'Has multiplicado $(u\\bullet v)\\,u$ sin dividir entre $u\\bullet u=' + uu + '$.';
+        if (!dist(a, v)) return 'Esa es $v$ entera. La proyección es el múltiplo de $u$ más cercano a $v$.';
+        var p = a[0] * u[0] + a[1] * u[1] + a[2] * u[2];
+        return 'La proyección debe ser múltiplo de $u$ y $v-\\operatorname{proy}$ ortogonal a $u$; con tu respuesta no se cumple.';
+      }
+    };
+  };
+
+  /* 6.2 · matriz simétrica de una forma cuadrática */
+  G.qmat = function (seed) {
+    var R = Rnd(seed), a = R.ri(-3, 3), b = R.ri(-3, 3), c = R.ri(-3, 3), d, e, f;
+    do { d = R.ri(-4, 4); e = R.ri(-4, 4); f = R.ri(-4, 4); } while (d % 2 === 0 && e % 2 === 0 && f % 2 === 0);
+    var S = [a, d / 2, e / 2, b, f / 2, c];
+    var Q = [[a, 'x_1^2'], [b, 'x_2^2'], [c, 'x_3^2'], [d, 'x_1x_2'], [e, 'x_1x_3'], [f, 'x_2x_3']];
+    var txt = comb(Q.map(function (t) { return t[0]; }), Q.map(function (t) { return t[1]; }));
+    return {
+      tipo: 'nums', n: 6, ans: S, data: { co: [a, b, c, d, e, f], ans: S },
+      enun: 'La forma cuadrática $Q(x)=' + txt + '$ tiene matriz simétrica $S=(a_{ij})$. Escribe $(a_{11},a_{12},a_{13},a_{22},a_{23},a_{33})$ (admite decimales o fracciones).',
+      sol: 'Los coeficientes de $x_i^2$ van a la diagonal y cada término cruzado $x_ix_j$ se reparte <b>a medias</b> entre $a_{ij}$ y $a_{ji}$: $(' + S.join(',') + ')$.',
+      diag: function (u) {
+        if (!dist(u, [a, d, e, b, f, c])) return 'No has partido los términos cruzados por la mitad: el coeficiente de $x_ix_j$ es $2a_{ij}$.';
+        if (!dist(u, [a, d / 2, e / 2, c, f / 2, b])) return 'Revisa el orden: $a_{22}$ es el coeficiente de $x_2^2$ y $a_{33}$ el de $x_3^2$.';
+        return 'Revisa: $a_{ii}$ = coeficiente de $x_i^2$ y $a_{ij}=\\tfrac12\\cdot(\\text{coef. de }x_ix_j)$.';
+      }
+    };
+  };
+
+  /* 6.3 · clasificación con Sylvester (2×2) */
+  G.sylv = function (seed) {
+    var R = Rnd(seed), a, b, c, D;
+    do { a = R.ri(-3, 3); b = R.ri(-3, 3); c = R.ri(-3, 3); D = a * c - b * b; } while (a === 0 && c === 0 && b === 0);
+    var cat = D > 0 ? (a > 0 ? 0 : 1) : D < 0 ? 2 : 3;
+    var nom = ['Definida positiva', 'Definida negativa', 'Indefinida', 'Semidefinida (positiva o negativa)'];
+    var rz = D > 0 ? '$\\Delta_1=' + a + '$ y $\\Delta_2=' + D + '>0$: ' + (a > 0 ? 'ambos positivos, definida positiva.' : '$\\Delta_1<0$ y $\\Delta_2>0$: definida negativa.') :
+      D < 0 ? '$\\Delta_2=' + D + '<0$: autovalores de distinto signo, indefinida.' : '$\\Delta_2=0$: algún autovalor es $0$, semidefinida (o nula).';
+    return {
+      tipo: 'choice', data: { a: a, b: b, c: c, cat: cat },
+      enun: 'Clasifica la forma cuadrática de matriz $S=' + rmat([[a, b], [b, c]]) + '$.',
+      opts: nom.map(function (t, i) { return { t: t, ok: i === cat, why: i === cat ? '' : rz }; }),
+      sol: rz
+    };
+  };
+
   /* ---------- interfaz ---------- */
   var DELIM = [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }];
   function math(el) { try { if (window.renderMathInElement) renderMathInElement(el, { delimiters: DELIM, throwOnError: false }); } catch (e) {} }
