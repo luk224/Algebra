@@ -11,6 +11,7 @@ tmp = pathlib.Path(tempfile.mkdtemp()) / 'p.html'
 tmp.write_text(f'<html><head><meta charset="utf-8"></head><body><script src="{(RAIZ/"assets/practica.js").as_uri()}"></script></body></html>')
 
 TIPOS = ['base3', 'cuenta', 'dimension', 'coord2', 'coordpol', 'rango', 'completar',
+         'libre3', 'subesp', 'grass', 'lineal', 'matf', 'comb22', 'semej', 'jordan3', 'ortog2', 'simet2', 'recta3', 'bilin', 'conica', 'cuadrica', 'neutro',
          'prod22', 'inv22', 'rango34', 'det3', 'detprop', 'sist2', 'clasifica', 'dimnuc', 'polcar22', 'diag22', 'proy', 'qmat', 'sylv']
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(); pg.goto(tmp.as_uri())
@@ -72,6 +73,63 @@ for t, lista in datos.items():
             if sp.expand(sum(l*e for l, e in zip(lam, E)) - p) != 0 or q['ans'] != lam: fallo(t, s, 'polinomio')
         elif t == 'rango':
             if sp.Matrix(d['rows']).rank() != d['ans'] or q['ans'] != [d['ans']]: fallo(t, s, 'rango')
+        elif t == 'libre3':
+            if (sp.Matrix(d['u']).det() != 0) != d['libre'] or q['opts'][0] != d['libre']: fallo(t, s, 'libre3')
+        elif t == 'subesp':
+            k, ok = d['k'], d['ok']; a, b_, c = d['c']
+            ex = {0: True, 4: True}
+            if k in (1, 2, 3, 5) and ok: fallo(t, s, 'subesp: marcado subespacio')
+            if k in (0, 4) and not ok: fallo(t, s, 'subesp: marcado no subespacio')
+            if k == 2:   # (1,0,0)+(0,1,0) rompe x1*x2=0
+                if (1*1) == 0: fallo(t, s, 'subesp k2')
+            if k == 5:   # (1,1,0) en W y 2*(1,1,0) no
+                if not (1 == 1**2 and 2 != 2**2): fallo(t, s, 'subesp k5')
+        elif t == 'grass':
+            n, dU, dW, kk = d['n'], d['dU'], d['dW'], d['k']
+            if not (max(0, dU + dW - n) <= kk <= min(dU, dW)) or d['ans'] != dU + dW - kk or d['ans'] > n: fallo(t, s, 'grass')
+        elif t == 'lineal':
+            if (d['k'] in (0,)) != d['ok'] or q['opts'].index(True) != (0 if d['ok'] else 1): fallo(t, s, 'lineal')
+        elif t == 'matf':
+            M = sp.Matrix(d['M']); v = M * sp.Matrix([1, 2])
+            if M.shape != (3, 2) or list(M) != d['ans']: fallo(t, s, 'matf')
+        elif t == 'comb22':
+            C = d['l'] * sp.Matrix(d['A']) + d['m'] * sp.Matrix(d['B'])
+            if list(C) != d['ans']: fallo(t, s, 'comb22')
+        elif t == 'semej':
+            A = sp.Matrix(d['A']); B = sp.Matrix(d['B']); x = sp.symbols('x')
+            igual = sp.expand(A.charpoly(x).as_expr() - B.charpoly(x).as_expr()) == 0
+            dist_ev = len(A.eigenvals()) == 2
+            if igual != d['sim'] or (d['sim'] and not dist_ev): fallo(t, s, 'semej')
+            if d['sim'] and not (A.is_diagonalizable() and B.is_diagonalizable()): fallo(t, s, 'semej diag')
+        elif t == 'jordan3':
+            if d['d'] != 3 - d['r'] or q['opts'].index(True) != {1: 0, 2: 1, 3: 2}[d['d']]: fallo(t, s, 'jordan3')
+            # comprobación con sympy: bloque de tamaños dados tiene rang(J-lI)=3-d
+            tam = {1: [3], 2: [2, 1], 3: [1, 1, 1]}[d['d']]
+            J = sp.diag(*[sp.jordan_cell(0, n) for n in tam])
+            if J.rank() != d['r']: fallo(t, s, 'jordan3 rango')
+        elif t == 'ortog2':
+            M = sp.Matrix(d['M']) / d['den']
+            if (M.T * M == sp.eye(2)) != d['ok'] or q['opts'][0] != d['ok']: fallo(t, s, 'ortog2')
+        elif t == 'simet2':
+            A = sp.Matrix([[d['a'], d['b']], [d['b'], d['a']]]); ev = sorted(int(x) for x in A.eigenvals().keys())
+            if ev != d['ans']: fallo(t, s, 'simet2')
+        elif t == 'recta3':
+            X = sp.Matrix([[1, 1], [2, 1], [3, 1]]); Bv = sp.Matrix(d['y']); sol = (X.T * X).LUsolve(X.T * Bv)
+            if any(abs(float(a_) - b_) > 1e-9 for a_, b_ in zip(sol, d['ans'])): fallo(t, s, 'recta3')
+        elif t == 'bilin':
+            A = sp.Matrix(d['A']); v = (sp.Matrix([d['x']]) * A * sp.Matrix(d['y']))[0]
+            if v != d['ans']: fallo(t, s, 'bilin')
+        elif t == 'conica':
+            a, b_, c, dd, e, f = d['co']; M3 = sp.Matrix([[f, dd/sp.Integer(2), e/sp.Integer(2)], [dd/sp.Integer(2), a, b_/sp.Integer(2)], [e/sp.Integer(2), b_/sp.Integer(2), c]])
+            disc = b_*b_ - 4*a*c; cat = 0 if disc < 0 else (1 if disc == 0 else 2)
+            if cat != d['cat'] or M3.det() == 0 or q['opts'].index(True) != cat: fallo(t, s, 'conica')
+        elif t == 'cuadrica':
+            if q['opts'].index(True) is None or sum(q['opts']) != 1: fallo(t, s, 'cuadrica')
+        elif t == 'neutro':
+            a_ = sp.symbols('a'); k, c = d['k'], d['c']
+            ops = {0: lambda x, y: x + y + c, 1: lambda x, y: x*y - x - y + 2, 2: lambda x, y: x + y - 2*x*y}
+            e = d['ans']
+            if sp.expand(ops[k](a_, e) - a_) != 0 or sp.expand(ops[k](e, a_) - a_) != 0: fallo(t, s, 'neutro')
         elif t == 'prod22':
             if list(sp.Matrix(d['A']) * sp.Matrix(d['B'])) != d['ans'] or q['ans'] != d['ans']: fallo(t, s, 'producto')
         elif t == 'inv22':

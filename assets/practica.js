@@ -503,6 +503,199 @@
     };
   };
 
+  /* ====== Generadores (lote 3) ====== */
+  function opcs(lista, cat, razon) { return lista.map(function (t, i) { return { t: t, ok: i === cat, why: i === cat ? '' : razon }; }); }
+
+  /* 2.2 · ¿libres o ligados? (tres vectores de ℝ³) */
+  G.libre3 = function (seed) {
+    var q = G.base3(seed), d = q.data, D = d.det, li = D !== 0, u = d.u;
+    return { tipo: 'choice', data: { u: u, det: D, libre: li },
+      enun: '¿Son linealmente independientes (libres) los vectores $u_1=' + V(u[0]) + '$, $u_2=' + V(u[1]) + '$, $u_3=' + V(u[2]) + '$ de $\\mathbb R^3$?',
+      opts: [{ t: 'Libres', ok: li, why: li ? '' : '$\\det=0$: alguno es combinación de los otros, así que son ligados.' }, { t: 'Ligados', ok: !li, why: !li ? '' : '$\\det=' + D + '\\neq0$: la única combinación nula es la trivial, son libres.' }],
+      sol: 'Tres vectores de $\\mathbb R^3$: $\\det=' + D + (li ? '\\neq0$, libres.' : '=0$, ligados.') };
+  };
+
+  /* 2.1 · ¿es subespacio? */
+  G.subesp = function (seed) {
+    var R = Rnd(seed), k = R.ri(0, 5), a = R.pick([1, 2, -1, 3]), b = R.pick([1, -2, 2]), c = R.pick([1, -1, 3]), ok = false, txt, why;
+    var cj = function (s) { return '$W=\\{x\\in\\mathbb R^3:\\ ' + s + '\\}$'; };
+    if (k === 0) { txt = cj(comb([a, b, c], ['x_1', 'x_2', 'x_3']) + '=0'); ok = true; why = 'Ecuación lineal homogénea: contiene $0$ y es cerrado para suma y producto por escalares.'; }
+    else if (k === 1) { var h = R.pick([1, 2, 3]); txt = cj(comb([a, b, c], ['x_1', 'x_2', 'x_3']) + '=' + h); why = 'No contiene el vector nulo: $0$ no cumple la ecuación (vale $0\\neq' + h + '$).'; }
+    else if (k === 2) { txt = cj('x_1x_2=0'); why = 'No es cerrado para la suma: $(1,0,0)$ y $(0,1,0)$ están en $W$ pero su suma $(1,1,0)$ no.'; }
+    else if (k === 3) { txt = cj('x_1\\ge0'); why = 'No es cerrado para el producto por escalares: $(1,0,0)\\in W$ pero $(-1)(1,0,0)=(-1,0,0)\\notin W$.'; }
+    else if (k === 4) { txt = cj('x_1=x_2,\\ x_3=0'); ok = true; why = 'Es la recta $\\langle(1,1,0)\\rangle$: contiene $0$ y es cerrado.'; }
+    else { txt = cj('x_1=x_2^2'); why = 'No es cerrado para el producto: $(1,1,0)\\in W$ pero $2(1,1,0)=(2,2,0)\\notin W$ ($2\\neq4$).'; }
+    return { tipo: 'choice', data: { k: k, ok: ok, c: [a, b, c] }, enun: '¿Es subespacio de $\\mathbb R^3$ el conjunto ' + txt + '?',
+      opts: [{ t: 'Sí, es subespacio', ok: ok, why: ok ? '' : why }, { t: 'No es subespacio', ok: !ok, why: !ok ? '' : why }], sol: why };
+  };
+
+  /* 2.4 · fórmula de Grassmann */
+  G.grass = function (seed) {
+    var R = Rnd(seed), n = R.ri(4, 6), dU = R.ri(2, n - 1), dW = R.ri(2, n - 1), lo = Math.max(0, dU + dW - n), hi = Math.min(dU, dW), k = R.ri(lo, hi), s = dU + dW - k;
+    return { tipo: 'nums', n: 1, ans: [s], data: { n: n, dU: dU, dW: dW, k: k, ans: s },
+      enun: 'En $\\mathbb R^' + n + '$ hay subespacios $U$ y $W$ con $\\operatorname{Dim}U=' + dU + '$, $\\operatorname{Dim}W=' + dW + '$ y $\\operatorname{Dim}(U\\cap W)=' + k + '$. ¿Cuánto vale $\\operatorname{Dim}(U+W)$?',
+      sol: 'Fórmula de Grassmann: $\\operatorname{Dim}(U+W)=' + dU + '+' + dW + '-' + k + '=' + s + '$ (y no puede pasar de ' + n + ').',
+      diag: function (a) {
+        if (eq(a[0], dU + dW)) return 'Has sumado las dimensiones sin restar la intersección: $\\operatorname{Dim}(U+W)=\\operatorname{Dim}U+\\operatorname{Dim}W-\\operatorname{Dim}(U\\cap W)$.';
+        if (a[0] > n) return 'No puede superar la dimensión del espacio total ($' + n + '$).';
+        return 'Aplica Grassmann: $' + dU + '+' + dW + '-' + k + '$.';
+      } };
+  };
+
+  /* 3.1 · ¿es lineal? */
+  G.lineal = function (seed) {
+    var R = Rnd(seed), k = R.ri(0, 4), a = R.ri(1, 3), b = R.ri(-2, 2), c = R.ri(-2, 2), d = R.ri(1, 3), ok = false, f, why;
+    var lin2 = function (p, q) { return comb([p, q], ['x', 'y']); };
+    if (k === 0) { f = '(' + lin2(a, b) + ',\\ ' + lin2(c, d) + ')'; ok = true; why = 'Cada componente es una combinación lineal de $x,y$ sin término independiente: es lineal.'; }
+    else if (k === 1) { var h = R.pick([1, 2, 3]); f = '(' + lin2(a, b) + '+' + h + ',\\ ' + lin2(c, d) + ')'; why = 'El término constante $' + h + '$ hace $f(0,0)=(' + h + ',0)\\neq(0,0)$: no es lineal.'; }
+    else if (k === 2) { f = '(xy,\\ ' + lin2(c, d) + ')'; why = 'Aparece el producto $xy$: $f(2x,2y)$ da $4xy$ y no $2xy$, no conserva el producto por escalares.'; }
+    else if (k === 3) { f = '(x^2,\\ ' + lin2(c, d) + ')'; why = 'Con $x^2$: $f(2,0)=(4,\\ldots)$ y $2f(1,0)=(2,\\ldots)$, no conserva el producto por escalares.'; }
+    else { f = '(' + lin2(a, b) + ',\\ |y|)'; why = 'Con $|y|$: $f(0,-1)$ y $(-1)f(0,1)$ no coinciden, no es lineal.'; }
+    return { tipo: 'choice', data: { k: k, ok: ok }, enun: '¿Es lineal $f:\\mathbb R^2\\to\\mathbb R^2$, $f(x,y)=' + f + '$?',
+      opts: [{ t: 'Sí', ok: ok, why: ok ? '' : why }, { t: 'No', ok: !ok, why: !ok ? '' : why }], sol: why };
+  };
+
+  /* 3.3 · matriz asociada en bases canónicas (ℝ² → ℝ³) */
+  G.matf = function (seed) {
+    var R = Rnd(seed), M = randMat(R, 3, 2, -3, 3), f = '(' + [0, 1, 2].map(function (i) { return comb(M[i], ['x', 'y']); }).join(',\\ ') + ')';
+    var Mt = [[M[0][0], M[1][0], M[2][0]], [M[0][1], M[1][1], M[2][1]]];
+    return { tipo: 'nums', n: 6, ans: flat(M), data: { M: M, ans: flat(M) },
+      enun: 'Para $f:\\mathbb R^2\\to\\mathbb R^3$, $f(x,y)=' + f + '$, escribe por filas la matriz asociada en las bases canónicas (3 filas, 2 columnas: $a_{11},a_{12},a_{21},a_{22},a_{31},a_{32}$).',
+      sol: 'Las columnas son $f(1,0)$ y $f(0,1)$: $A=' + pm(M) + '$.',
+      diag: function (a) {
+        if (a.length === 6 && !dist(a, flat(Mt))) return 'Has escrito la traspuesta. Las <b>columnas</b> de $A$ son las imágenes $f(e_1)$ y $f(e_2)$, y $A$ tiene 3 filas.';
+        return 'Calcula $f(1,0)$ y $f(0,1)$ y ponlos como columnas.';
+      } };
+  };
+
+  /* 3.4 · matriz de una combinación λf + μg */
+  G.comb22 = function (seed) {
+    var R = Rnd(seed), A = randMat(R, 2, 2, -3, 3), B = randMat(R, 2, 2, -3, 3), l = R.pick([2, 3, -1, -2]), m = R.pick([2, -1, 3, -2]);
+    var C = A.map(function (r, i) { return r.map(function (x, j) { return l * x + m * B[i][j] + 0; }); });
+    var sinB = A.map(function (r, i) { return r.map(function (x, j) { return l * x + B[i][j]; }); });
+    var sinA = A.map(function (r, i) { return r.map(function (x, j) { return x + m * B[i][j]; }); });
+    var tx = function (k, s) { return (k === 1 ? '' : k === -1 ? '-' : k) + s; };
+    return { tipo: 'nums', n: 4, ans: flat(C), data: { A: A, B: B, l: l, m: m, ans: flat(C) },
+      enun: 'Si $f$ y $g$ tienen matrices $A=' + pm(A) + '$ y $B=' + pm(B) + '$, calcula la matriz de $' + l + 'f' + (m < 0 ? m : '+' + m) + 'g$ (por filas).',
+      sol: 'La matriz de $\\lambda f+\\mu g$ es $\\lambda A+\\mu B$: $' + l + 'A+(' + m + ')B=' + pm(C) + '$.',
+      diag: function (a) {
+        if (!dist(a, flat(sinB))) return 'Has olvidado multiplicar $B$ por $' + m + '$: la combinación es $' + l + 'A+(' + m + ')B$.';
+        if (!dist(a, flat(sinA))) return 'Has olvidado multiplicar $A$ por $' + l + '$.';
+        return 'Calcula entrada a entrada $' + l + 'a_{ij}+(' + m + ')b_{ij}$.';
+      } };
+  };
+
+  /* 4.1 · ¿son semejantes? (2×2 con valores propios distintos) */
+  G.semej = function (seed) {
+    var R = Rnd(seed), l1, l2, k, m, k2, m2, A, B, sim = R.p(0.5), mk = function (l1, l2, k, m) { return matmul(matmul([[1, k], [m, 1 + k * m]], [[l1, 0], [0, l2]]), [[1 + k * m, -k], [-m, 1]]); };
+    do { l1 = R.ri(-3, 4); l2 = R.ri(-3, 4); } while (l1 >= l2);
+    k = R.pick([0, 1, 2]); m = R.pick([1, -1, 2]); A = mk(l1, l2, k, m);
+    do { k2 = R.pick([-1, 0, 1, 2]); m2 = R.pick([1, 2, -1]); } while (k2 === k && m2 === m);
+    if (sim) B = mk(l1, l2, k2, m2);
+    else { var m3 = l1 + R.pick([1, 2, 3]); B = mk(m3, l2, k2, m2); }
+    var tA = A[0][0] + A[1][1], dA = det2(A[0][0], A[0][1], A[1][0], A[1][1]), tB = B[0][0] + B[1][1], dB = det2(B[0][0], B[0][1], B[1][0], B[1][1]);
+    var razon = sim ? 'Tienen la misma traza ($' + tA + '$) y el mismo determinante ($' + dA + '$): mismo polinomio característico con raíces distintas $\\Rightarrow$ ambas se diagonalizan a $\\operatorname{diag}(' + l1 + ',' + l2 + ')$ y son semejantes.' :
+      'No tienen el mismo polinomio característico: traza $' + tA + '$ frente a $' + tB + '$ y determinante $' + dA + '$ frente a $' + dB + '$. Matrices semejantes comparten traza y determinante.';
+    return { tipo: 'choice', data: { A: A, B: B, sim: sim }, enun: '¿Son semejantes $A=' + pm(A) + '$ y $B=' + pm(B) + '$?',
+      opts: [{ t: 'Sí', ok: sim, why: sim ? '' : razon }, { t: 'No', ok: !sim, why: !sim ? '' : razon }], sol: razon };
+  };
+
+  /* 4.4 · tamaños de los bloques de Jordan (3×3, un único valor propio) */
+  G.jordan3 = function (seed) {
+    var R = Rnd(seed), l = R.ri(-2, 3), r = R.ri(0, 2), d = 3 - r, cat = d === 3 ? 2 : d === 2 ? 1 : 0;
+    var nom = ['Un bloque $3\\times3$', 'Dos bloques: uno $2\\times2$ y uno $1\\times1$', 'Tres bloques $1\\times1$ (diagonal)'];
+    var razon = 'El nº de bloques es $d=n-\\operatorname{rang}(A-\\lambda I)=3-' + r + '=' + d + '$; con $\\alpha=3$ los tamaños suman 3: ' + ['una cadena de longitud 3', 'tamaños $2+1$', 'tamaños $1+1+1$'][cat] + '.';
+    return { tipo: 'choice', data: { l: l, r: r, d: d, cat: cat },
+      enun: '$A$ es $3\\times3$ con un único valor propio $\\lambda=' + l + '$ de multiplicidad algebraica $3$ y $\\operatorname{rang}(A-' + (l < 0 ? '(' + l + ')' : l) + 'I)=' + r + '$. ¿Cómo es su forma de Jordan?',
+      opts: nom.map(function (t, i) { return { t: t, ok: i === cat, why: i === cat ? '' : razon }; }), sol: razon };
+  };
+
+  /* 5.2 · ¿es ortogonal una 2×2? */
+  G.ortog2 = function (seed) {
+    var R = Rnd(seed), t = R.pick([[3, 4, 5], [5, 12, 13], [8, 15, 17], [20, 21, 29]]), a = t[0], b = t[1], c = t[2], caso = R.ri(0, 2), M, den = c, ok = false, razon;
+    if (caso === 0) { M = [[a, -b], [b, a]]; ok = true; razon = 'Las columnas $(' + a + ',' + b + ')/' + c + '$ y $(' + (-b) + ',' + a + ')/' + c + '$ son ortogonales y de norma $1$ ($' + a + '^2+' + b + '^2=' + c + '^2$): $A^tA=I$.'; }
+    else if (caso === 1) { M = [[a, b], [b, a]]; razon = 'Las columnas $(' + a + ',' + b + ')$ y $(' + b + ',' + a + ')$ no son ortogonales: su producto escalar es $' + 2 * a * b + '\\neq0$.'; }
+    else { M = [[a, -b], [b, a]]; den = c + 1; razon = 'Las columnas son ortogonales, pero su norma es $' + c + '/' + den + '\\neq1$: no está normalizada.'; }
+    return { tipo: 'choice', data: { M: M, den: den, ok: ok }, enun: '¿Es ortogonal $A=\\dfrac1{' + den + '}' + pm(M) + '$?',
+      opts: [{ t: 'Sí', ok: ok, why: ok ? '' : razon }, { t: 'No', ok: !ok, why: !ok ? '' : razon }], sol: razon };
+  };
+
+  /* 5.3 · valores propios de una simétrica 2×2 */
+  G.simet2 = function (seed) {
+    var R = Rnd(seed), a = R.ri(-3, 4), b = R.pick([1, 2, 3, -1, -2]), l1 = a - Math.abs(b), l2 = a + Math.abs(b);
+    return { tipo: 'nums', n: 2, ans: [l1, l2], data: { a: a, b: b, ans: [l1, l2] },
+      enun: 'Halla los valores propios de la matriz simétrica $A=' + pm([[a, b], [b, a]]) + '$ (de menor a mayor). Se diagonaliza ortogonalmente con $P=\\tfrac1{\\sqrt2}\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$.',
+      sol: '$(a-\\lambda)^2-b^2=0\\Rightarrow\\lambda=a\\pm|b|=' + l1 + ',\\ ' + l2 + '$ (autovectores $(1,1)$ y $(1,-1)$).',
+      diag: function (u) {
+        if (eq(u[0], l2) && eq(u[1], l1)) return 'Escríbelos de menor a mayor.';
+        if (eq(u[0], a) && eq(u[1], b)) return 'Esos son los datos de la matriz; los valores propios son $a\\pm|b|$.';
+        return 'Comprueba: su suma es la traza ($' + 2 * a + '$) y su producto el determinante ($' + (a * a - b * b) + ').';
+      } };
+  };
+
+  /* 5.4 · recta de mínimos cuadrados por tres puntos (1,y1), (2,y2), (3,y3) */
+  G.recta3 = function (seed) {
+    var R = Rnd(seed), y, m, n;
+    do { y = [R.ri(0, 6), R.ri(0, 6), R.ri(0, 6)]; } while (y[0] - 2 * y[1] + y[2] === 0);
+    m = (y[2] - y[0]) / 2; n = (y[0] + y[1] + y[2]) / 3 - 2 * m;
+    var m2 = (y[2] - y[0]) / 2, n2 = y[0] - m2;
+    return { tipo: 'nums', n: 2, ans: [m, n], data: { y: y, ans: [m, n] },
+      enun: 'Ajusta por mínimos cuadrados una recta $y=mx+n$ a los puntos $(1,' + y[0] + ')$, $(2,' + y[1] + ')$, $(3,' + y[2] + ')$. Escribe $(m,n)$ (admite fracciones).',
+      sol: 'Ecuaciones normales $A^tAX=A^tB$ con $A=\\begin{pmatrix}1&1\\\\2&1\\\\3&1\\end{pmatrix}$: $14m+6n=' + (y[0] + 2 * y[1] + 3 * y[2]) + '$, $6m+3n=' + (y[0] + y[1] + y[2]) + '$ $\\Rightarrow m=' + fr(y[2] - y[0], 2) + ',\\ n=' + fr(4 * y[0] + y[1] - 2 * y[2], 3) + '$.',
+      diag: function (u) {
+        if (eq(u[0], m2) && eq(u[1], n2)) return 'Esa es la recta por el primer y el último punto: no usa el del medio. Por mínimos cuadrados salen las ecuaciones normales.';
+        if (eq(u[0], n) && eq(u[1], m)) return 'Tienes la pendiente y el término independiente cambiados de orden.';
+        return 'Plantea $A^tAX=A^tB$: $14m+6n=' + (y[0] + 2 * y[1] + 3 * y[2]) + '$ y $6m+3n=' + (y[0] + y[1] + y[2]) + '$.';
+      } };
+  };
+
+  /* 6.1 · evaluar una forma bilineal x^t A y */
+  G.bilin = function (seed) {
+    var R = Rnd(seed), A, x, y, v, vt;
+    do { A = randMat(R, 2, 2, -3, 3); x = [R.ri(-3, 3), R.ri(-3, 3)]; y = [R.ri(-3, 3), R.ri(-3, 3)];
+      v = x[0] * (A[0][0] * y[0] + A[0][1] * y[1]) + x[1] * (A[1][0] * y[0] + A[1][1] * y[1]);
+      vt = y[0] * (A[0][0] * x[0] + A[0][1] * x[1]) + y[1] * (A[1][0] * x[0] + A[1][1] * x[1]);
+    } while (v === vt || A[0][1] === A[1][0]);
+    v = v + 0;
+    return { tipo: 'nums', n: 1, ans: [v], data: { A: A, x: x, y: y, ans: v },
+      enun: 'La forma bilineal $f$ tiene matriz $A=' + pm(A) + '$ en la base canónica. Calcula $f(x,y)$ para $x=' + V(x) + '$, $y=' + V(y) + '$.',
+      sol: '$f(x,y)=x^tAy=' + v + '$ (primero $Ay$, luego se multiplica por $x^t$).',
+      diag: function (a) { return eq(a[0], vt) ? 'Has calculado $f(y,x)$: como $A$ no es simétrica, el orden importa. Es $x^tAy$.' : 'Calcula $Ay$ y luego $x^t(Ay)$.'; } };
+  };
+
+  /* 6.4 · tipo de cónica por la parte cuadrática */
+  G.conica = function (seed) {
+    var R = Rnd(seed), caso = R.ri(0, 2), p, q, a, b, c, d, e, f, nom = ['Elipse', 'Parábola', 'Hipérbola'], cat, txt;
+    if (caso === 0) { a = R.pick([1, 2, 3]); c = R.pick([1, 2, 3]); b = R.pick([-1, 0, 1]); while (b * b - 4 * a * c >= 0) { c++; } d = 0; e = 0; f = -1; cat = 0; }
+    else if (caso === 1) { p = R.pick([1, 2]); q = R.pick([1, -1, 2]); a = p * p; b = 2 * p * q; c = q * q; d = R.pick([1, 2, -1]); e = R.pick([1, -2, 3]); while (d * q - e * p === 0) e++; f = 0; cat = 1; }
+    else { a = R.pick([1, 2]); c = -R.pick([1, 2]); b = R.pick([-1, 0, 1]); d = R.pick([0, 2]); e = 0; f = -1; cat = 2; }
+    txt = comb([a, b, c, d, e], ['x^2', 'xy', 'y^2', 'x', 'y']) + (f === 0 ? '' : (f < 0 ? '-' : '+') + Math.abs(f)) + '=0';
+    var disc = b * b - 4 * a * c, razon = 'El discriminante de la parte cuadrática es $b^2-4ac=' + b + '^2-4(' + a + ')(' + c + ')=' + disc + '$: ' + (disc < 0 ? 'negativo $\\Rightarrow$ elipse.' : disc === 0 ? 'cero $\\Rightarrow$ parábola.' : 'positivo $\\Rightarrow$ hipérbola.');
+    return { tipo: 'choice', data: { co: [a, b, c, d, e, f], cat: cat }, enun: 'Clasifica la cónica $' + txt + '$ (no degenerada).',
+      opts: nom.map(function (t, i) { return { t: t, ok: i === cat, why: i === cat ? '' : razon }; }), sol: razon };
+  };
+
+  /* 6.5 · nombre de una cuádrica en forma canónica */
+  G.cuadrica = function (seed) {
+    var R = Rnd(seed), L = [['x_1^2+x_2^2+x_3^2=1', 'Elipsoide'], ['x_1^2+x_2^2-x_3^2=1', 'Hiperboloide de una hoja'], ['x_1^2-x_2^2-x_3^2=1', 'Hiperboloide de dos hojas'], ['x_1^2+x_2^2-x_3^2=0', 'Cono'], ['x_1^2+x_2^2=1', 'Cilindro elíptico'], ['x_1^2+x_2^2+x_3^2=-1', 'Elipsoide imaginario'], ['x_1^2+x_2^2=x_3', 'Paraboloide elíptico'], ['x_1^2-x_2^2=x_3', 'Paraboloide hiperbólico']];
+    var i = R.ri(0, L.length - 1), pool = R.shuf(L.filter(function (_, j) { return j !== i; })).slice(0, 3).map(function (x) { return x[1]; });
+    var nombres = R.shuf([L[i][1]].concat(pool)), cat = nombres.indexOf(L[i][1]);
+    var razon = '$' + L[i][0] + '$ es un ' + L[i][1].toLowerCase() + ': ' + (i === 0 ? 'tres cuadrados positivos igualados a $1$.' : i === 1 ? 'dos signos $+$ y uno $-$ con $=1$: una hoja.' : i === 2 ? 'un $+$ y dos $-$ con $=1$: dos hojas.' : i === 3 ? 'signos $(+,+,-)$ con $=0$.' : i === 4 ? 'falta $x_3$: es un cilindro sobre una elipse.' : i === 5 ? 'tres cuadrados positivos igualados a un número negativo: no hay puntos reales.' : i === 6 ? 'un término lineal y dos cuadrados del mismo signo.' : 'un término lineal y dos cuadrados de signo opuesto.');
+    return { tipo: 'choice', data: { i: i, nombre: L[i][1] }, enun: '¿Qué cuádrica es $' + L[i][0] + '$?',
+      opts: nombres.map(function (t, j) { return { t: t, ok: j === cat, why: j === cat ? '' : razon }; }), sol: razon };
+  };
+
+  /* 1.5 / 2.1 · elemento neutro de una operación */
+  G.neutro = function (seed) {
+    var R = Rnd(seed), k = R.ri(0, 2), c = R.pick([1, 2, 3, -1]), op, e;
+    if (k === 0) { op = 'a*b=a+b+' + c; if (c < 0) op = 'a*b=a+b' + c; e = -c; }
+    else if (k === 1) { op = 'a*b=ab-a-b+2'; e = 2; }
+    else { op = 'a*b=a+b-2ab'; e = 0; }
+    var comprobar = k === 0 ? '$a*e=a+e+(' + c + ')=a\\Rightarrow e=' + (-c) + '$.' : k === 1 ? '$a*e=ae-a-e+2=a\\Rightarrow e(a-1)=2(a-1)\\Rightarrow e=2$.' : '$a*e=a+e-2ae=a\\Rightarrow e(1-2a)=0\\Rightarrow e=0$.';
+    return { tipo: 'nums', n: 1, ans: [e], data: { k: k, c: c, ans: e }, enun: 'En $\\mathbb R$ se define $' + op + '$. ¿Cuál es su elemento neutro $e$ (con $a*e=e*a=a$ para todo $a$)?',
+      sol: comprobar, diag: function (a) { return (k === 0 && eq(a[0], c)) ? 'Tienes el signo cambiado: despeja $e$ de $a*e=a$.' : 'Resuelve $a*e=a$ para todo $a$ y despeja $e$.'; } };
+  };
+
   /* ---------- interfaz ---------- */
   var DELIM = [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }];
   function math(el) { try { if (window.renderMathInElement) renderMathInElement(el, { delimiters: DELIM, throwOnError: false }); } catch (e) {} }
