@@ -33,15 +33,15 @@ Leyenda: `—` sin tocar · `E` ejercicios en datos (fase F2) · `C` carcasa y t
 
 | Tema | Estado | Tema | Estado | Tema | Estado |
 |---|---|---|---|---|---|
-| 1.2 | — | 3.1 | — | 5.1 | — |
-| 1.3 | — | 3.2 | — | 5.2 | — |
-| 1.4 | — | 3.3 | — | 5.3 | — |
-| 1.5 | — | 3.4 | — | 5.4 | — |
-| 2.1 | — | 3.5 | — | 6.1 | — |
-| 2.2 | — | 4.1 | — | 6.2 | — |
-| **2.3** | **E** (piloto, ida y vuelta OK) | 4.2 | — | 6.3 | — |
-| 2.4 | — | 4.3 | — | 6.4 | — |
-| | | 4.4 | — | 6.5 | — |
+| 1.2 | **E** | 3.1 | **E** | 5.1 | **E** |
+| 1.3 | **E** | 3.2 | **E** | 5.2 | **E** |
+| 1.4 | **E** | 3.3 | **E** | 5.3 | **E** |
+| 1.5 | **E** | 3.4 | **E** | 5.4 | **E** |
+| 2.1 | **E** | 3.5 | **E** | 6.1 | **E** |
+| 2.2 | **E** | 4.1 | **E** | 6.2 | **E** |
+| **2.3** | **E** (piloto, ida y vuelta OK) | 4.2 | **E** | 6.3 | **E** |
+| 2.4 | **E** | 4.3 | **E** | 6.4 | **E** |
+| | | 4.4 | **E** | 6.5 | **E** |
 
 ## Lo que se sabe del contenido actual (censo hecho antes de empezar)
 - 636 soluciones (`details.sol`) en 26 temas; 593 llevan `<p class="enun">` dentro de la solución. **Solo el 2.3 tiene el formato nuevo** (enunciado visible, pista, nivel ★) y los demás el antiguo.
@@ -59,14 +59,14 @@ Cada paso termina con commit. Orden estricto en F1-F4; F5 puede ir en paralelo a
 - [x] **1.4** Recordatorio: `datos/` **se sube a git** (es la fuente); no añadirlo al `.gitignore`.
 - [x] **1.5** Probar `extraer`+`verificar` sobre los 25 temas restantes **sin construir**, solo para ver cuáles pasan sin intervención. Anotar en la tabla los que fallan y por qué. Hecho cuando: lista de fallos documentada aquí. *(hecho: `datos_tema.py probar todos` → **26 de 26 temas pasan sin intervención**; 636 ejercicios, 235 de examen, 243 de libro, 158 propios)*
 
-### F2 — Migrar los ejercicios, tema a tema
+### F2 — Migrar los ejercicios, tema a tema *(HECHO: 26 de 26 temas; 636 soluciones, 235 ejercicios de examen intactos; `datos_tema.py migrar X.Y` automatiza la receta)*
 Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verificar X.Y` (OK) → `construir X.Y` → abrir el HTML en Chrome (sin errores) → marcar `E` en la tabla → commit «Tema X.Y: ejercicios en datos».
-- [ ] **2.1** Módulo 2: 2.1, 2.2, 2.4 (2.3 ya hecho).
-- [ ] **2.2** Módulo 3: 3.1 a 3.5.
-- [ ] **2.3** Módulo 4: 4.1 a 4.4.
-- [ ] **2.4** Módulo 5: 5.1 a 5.4.
-- [ ] **2.5** Módulo 6: 6.1 a 6.5.
-- [ ] **2.6** Módulo 1: 1.2 a 1.5 (los más irregulares, al final).
+- [x] **2.1** Módulo 2: 2.1, 2.2, 2.4 (2.3 ya hecho).
+- [x] **2.2** Módulo 3: 3.1 a 3.5.
+- [x] **2.3** Módulo 4: 4.1 a 4.4.
+- [x] **2.4** Módulo 5: 5.1 a 5.4.
+- [x] **2.5** Módulo 6: 6.1 a 6.5.
+- [x] **2.6** Módulo 1: 1.2 a 1.5 *(hecho; no fueron irregulares con el extractor v2)*.
 - Si un tema falla `verificar`: no tocar el HTML; corregir el extractor o escribir el bloque como `html` y volver a probar. Nunca «arreglar» el contenido a la vez que se migra.
 - Tras cada módulo: `validar` en todos los migrados y comprobar que el nº de `details.sol` y de `id="ex-…"` por tema no ha bajado (`grep -c`).
 
