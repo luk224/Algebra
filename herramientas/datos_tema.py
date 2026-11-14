@@ -5,6 +5,7 @@
     python herramientas/datos_tema.py verificar 2.3   construye en memoria y compara con el HTML actual (ida y vuelta):
                                                       1) mismas etiquetas, atributos y texto  2) mismo texto visible en Chrome (si hay Playwright)
     python herramientas/datos_tema.py validar 2.3     reglas de contenido (ids únicos, campos obligatorios, ejercicios de examen)
+    python herramientas/datos_tema.py migrar 2.2      extraer + validar + verificar + construir, comprobando que no se pierde ningún ejercicio
     python herramientas/datos_tema.py probar 2.2|todos   extrae y reconstruye EN MEMORIA (sin escribir nada) y compara etiquetas y texto
 
 Cada tema se guarda en `datos/X_Y/`:
@@ -345,7 +346,23 @@ def validar(codigo):
     return not err
 
 
-ORDENES = {'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar, 'probar': lambda c: probar_todos() if c == 'todos' else probar(c)}
+def contar(s): return dict(sol=len(re.findall(r'<details class="sol"', s)), ex=len(set(re.findall(r'id="(ex-[^"]+)"', s))), ids=len(re.findall(r'<details class="sol"[^>]* id=', s)))
+
+
+def migrar(codigo):
+    """extraer → validar → verificar (con Chrome) → construir → comprobar que no se pierde ningún ejercicio. Si algo falla restaura el HTML."""
+    ruta = archivo_tema(codigo); antes = ruta.read_text(encoding='utf8'); c0 = contar(antes)
+    extraer(codigo)
+    if not validar(codigo) or not verificar(codigo): print(f'{codigo}: MIGRACIÓN ABORTADA (el HTML no se ha tocado)'); return False
+    construir(codigo)
+    c1 = contar(ruta.read_text(encoding='utf8'))
+    if c1['sol'] != c0['sol'] or c1['ex'] != c0['ex']:
+        ruta.write_text(antes, encoding='utf8'); print(f'{codigo}: SE PERDERÍAN EJERCICIOS {c0} -> {c1}; HTML restaurado'); return False
+    print(f'{codigo}: MIGRADO. details.sol {c0["sol"]}→{c1["sol"]}, ejercicios de examen {c0["ex"]}→{c1["ex"]}, soluciones con id {c0["ids"]}→{c1["ids"]}')
+    return True
+
+
+ORDENES = {'migrar': migrar, 'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar, 'probar': lambda c: probar_todos() if c == 'todos' else probar(c)}
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or sys.argv[1] not in ORDENES: sys.exit(__doc__)
