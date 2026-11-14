@@ -37,3 +37,237 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Si el sistema $AX=B$ no tiene solución, se busca el $X$ que deja $AX$ lo más cerca posible de $B$. Esto es lo que debes llevarte del tema.
+  items:
+  - |-
+    <b>Mínimos cuadrados = proyección.</b> $X_0$ es solución por mínimos cuadrados si minimiza $\|AX-B\|$, y eso ocurre justo cuando $AX_0$ es la <b>proyección ortogonal</b> de $B$ sobre $\operatorname{Col}A$. Siempre existe, aunque $AX=B$ sea incompatible.
+  - |-
+    <b>Ecuaciones normales:</b> $A^tAX=A^tB$. Son compatibles siempre; la solución es <b>única</b> si las columnas de $A$ son independientes ($A^tA$ regular) y, si no, hay infinitas (una recta o plano de soluciones) pero con el mismo $AX_0$.
+  - |-
+    <b>Error cuadrático</b> $=\|AX_0-B\|^2$. Vale $0$ solo si el sistema era compatible. El vector $AX_0$ y el error son únicos aunque $X_0$ no lo sea.
+  - |-
+    <b>Ajuste de datos:</b> recta $y=mx+n$ (filas $(x_i,1)$), parábola (filas $(x_i^2,x_i,1)$), plano (filas $(x_i,y_i,1)$); se plantea $AX=B$ y se resuelven las normales. Con $A=QR$ el atajo es $RX=Q^tB$.
+tipos:
+- id: normales
+  nombre: |-
+    Hallar la solución por mínimos cuadrados
+  receta: |-
+    Resuelve $A^tAX=A^tB$; si $A^tA$ es singular, deja parámetros libres.
+  senal: |-
+    «Hállese la solución por mínimos cuadrados de $AX=B$», «sistema incompatible, aplique mínimos cuadrados».
+  pasos:
+  - |-
+    Escribe la matriz $A$ y el vector $B$ del sistema (una fila por ecuación).
+  - |-
+    Calcula $A^tA$ y $A^tB$.
+  - |-
+    Resuelve el sistema $A^tAX=A^tB$ (Gauss o Cramer).
+  - |-
+    Si las columnas de $A$ son dependientes, $A^tA$ no es regular: el resultado es una recta o plano de soluciones, escrito con parámetros.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}$, $B=\begin{pmatrix}1\\1\\3\end{pmatrix}$: $A^tA=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $A^tB=\begin{pmatrix}4\\4\end{pmatrix}$, luego $X_0=\left(\tfrac43,\tfrac43\right)$.
+  fallos: |-
+    resolver $AX=B$ directamente · calcular $AA^t$ en vez de $A^tA$ · afirmar que la solución es única sin comprobar que las columnas son independientes.
+- id: error
+  nombre: |-
+    Calcular el error cuadrático
+  receta: |-
+    Evalúa el residuo $AX-B$ y calcula su norma al cuadrado.
+  senal: |-
+    «Calcule el error cuadrático al sustituir $X$ por…», «error asociado a la solución».
+  pasos:
+  - |-
+    Calcula $AX$ con el $X$ que te dan (o con $X_0$).
+  - |-
+    Resta $B$ para obtener el residuo $AX-B$.
+  - |-
+    Suma los cuadrados de sus componentes: es $\|AX-B\|^2$.
+  ejemplo: |-
+    Con $A$ y $B$ de antes y $X=(1,1)$: $AX=(1,1,2)$, residuo $(0,0,-1)$, error cuadrático $1$. Con $X_0=(\tfrac43,\tfrac43)$ el residuo es $-(\tfrac13,\tfrac13,\tfrac13)$ y el error es $\tfrac13$, menor que $1$.
+  fallos: |-
+    dar la norma sin elevar al cuadrado (o al revés) · restar $B-AX$ y quedarse con un signo sin importancia al sumar mal · creer que el error de la solución por mínimos cuadrados es cero.
+- id: ajuste
+  nombre: |-
+    Ajustar una recta, parábola o plano a datos
+  receta: |-
+    Una fila de $A$ por dato con las funciones del modelo; resuelve las normales.
+  senal: |-
+    «Recta (parábola, plano) que ajusta por mínimos cuadrados los puntos…», «estímese el valor en…».
+  pasos:
+  - |-
+    Elige el modelo: $y=mx+n$ (filas $(x_i,1)$), $y=ax^2+bx+c$ (filas $(x_i^2,x_i,1)$) o $z=ax+by+c$ (filas $(x_i,y_i,1)$).
+  - |-
+    Construye $A$ (una fila por dato) y $B$ (los valores a ajustar).
+  - |-
+    Resuelve $A^tAX=A^tB$ para obtener los coeficientes.
+  - |-
+    Sustituye en el modelo para pronosticar (o resuelve $y=0$ si piden dónde corta).
+  ejemplo: |-
+    Datos $(0,1),(1,2),(2,2)$: $A^tA=\begin{pmatrix}5&3\\3&3\end{pmatrix}$, $A^tB=\begin{pmatrix}6\\5\end{pmatrix}$, luego $m=\tfrac12$, $n=\tfrac76$: $y=\tfrac12x+\tfrac76$.
+  fallos: |-
+    olvidar la columna de unos · poner la columna de $y_i$ en $A$ en vez de en $B$ · ordenar mal los coeficientes (la primera columna da el primer coeficiente).
+- id: qr
+  nombre: |-
+    Mínimos cuadrados con la factorización $QR$
+  receta: |-
+    Con $A=QR$ resuelve el sistema triangular $RX=Q^tB$.
+  senal: |-
+    «Utilizando la factorización $QR$…», «dada $A=QR$, resuelva por mínimos cuadrados».
+  pasos:
+  - |-
+    Si no te la dan, halla $Q$ y $R$ (Gram-Schmidt, tema 5.2).
+  - |-
+    Calcula $Q^tB$ (usa $Q$ rectangular con columnas ortonormales).
+  - |-
+    Resuelve $RX=Q^tB$ por sustitución hacia atrás.
+  ejemplo: |-
+    $A=\begin{pmatrix}3&1\\4&7\\0&0\end{pmatrix}$, $B=(1,2,3)^t$: $Q^tB=\left(\tfrac{11}5,\tfrac25\right)$, $R=\begin{pmatrix}5&\tfrac{31}5\\0&\tfrac{17}5\end{pmatrix}$, luego $X_0=\left(\tfrac5{17},\tfrac2{17}\right)$, igual que con las normales.
+  fallos: |-
+    multiplicar por $Q$ en lugar de $Q^t$ · invertir una $R$ no triangular · usar $Q$ cuadrada completando columnas sin necesidad.
+- id: teoria
+  nombre: |-
+    Preguntas de teoría y verdadero/falso
+  receta: |-
+    Reduce la pregunta a la definición: $X_0$ minimiza $\|AX-B\|$, equivale a $AX_0=\operatorname{Proy}_{\operatorname{Col}A}B$ y a las normales.
+  senal: |-
+    «Justifíquese si es cierto…», «explique en qué consiste…», «escriba las ecuaciones normales».
+  pasos:
+  - |-
+    Identifica de qué se habla: existencia, unicidad, error, relación con la proyección.
+  - |-
+    Aplica la definición y la equivalencia con las ecuaciones normales.
+  - |-
+    Si es falso, busca un contraejemplo pequeño.
+  ejemplo: |-
+    «Si $X_0$ es solución por mínimos cuadrados de un sistema incompatible, $AX_0=B$»: falso, porque entonces el sistema tendría solución exacta.
+  fallos: |-
+    confundir «$X_0$ puede no ser único» con «el error puede ser distinto» · decir que el error mínimo es siempre $0$ · olvidar que las normales son siempre compatibles.
+quiz:
+- p: |-
+    Para $AX=B$ con $A=\begin{pmatrix}1&1\\1&2\\1&3\end{pmatrix}$ y $B=\begin{pmatrix}1\\2\\2\end{pmatrix}$, ¿cuáles son las ecuaciones normales?
+  opciones:
+  - t: |-
+      $\begin{pmatrix}3&6\\6&14\end{pmatrix}X=\begin{pmatrix}5\\11\end{pmatrix}$
+    ok: true
+  - t: |-
+      $\begin{pmatrix}1&1\\1&2\\1&3\end{pmatrix}X=\begin{pmatrix}1\\2\\2\end{pmatrix}$
+    ok: false
+    why: |-
+      Es el sistema original, que no tiene solución; las normales lo multiplican por $A^t$.
+  - t: |-
+      $\begin{pmatrix}3&6\\6&14\end{pmatrix}X=\begin{pmatrix}1\\2\\2\end{pmatrix}$
+    ok: false
+    why: |-
+      Has multiplicado solo el lado izquierdo por $A^t$; también hay que calcular $A^tB$.
+  - t: |-
+      $\begin{pmatrix}6&6\\6&14\end{pmatrix}X=\begin{pmatrix}5\\11\end{pmatrix}$
+    ok: false
+    why: |-
+      Error al calcular $A^tA$: el primer elemento es $1+1+1=3$, no 6.
+  fb: |-
+    $A^tA=\begin{pmatrix}3&6\\6&14\end{pmatrix}$ y $A^tB=\begin{pmatrix}5\\11\end{pmatrix}$. Su solución es $X_0=(\tfrac23,\tfrac12)$.
+- p: |-
+    $A=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}$ y $B=(1,2,3)^t$. ¿Cuánto vale el error cuadrático de la solución por mínimos cuadrados?
+  opciones:
+  - t: |-
+      $0$
+    ok: true
+  - t: |-
+      $1$
+    ok: false
+    why: |-
+      Has supuesto que el error nunca es cero. Aquí $B=C_1+2C_2\in\operatorname{Col}A$, así que el sistema es compatible.
+  - t: |-
+      $\sqrt{14}$
+    ok: false
+    why: |-
+      Es $\|B\|$, no el error: has olvidado restar $AX_0$.
+  fb: |-
+    $B$ es combinación de las columnas ($X=(1,2)$ resuelve $AX=B$): el sistema es compatible y el mínimo es $0$.
+- p: |-
+    Para $A=\begin{pmatrix}1&2\\2&4\\3&6\end{pmatrix}$ se tiene $A^tA=\begin{pmatrix}14&28\\28&56\end{pmatrix}$. ¿Qué ocurre con la solución por mínimos cuadrados de $AX=B$?
+  opciones:
+  - t: |-
+      Hay infinitas soluciones, todas con el mismo $AX_0$.
+    ok: true
+  - t: |-
+      Hay una única solución, porque las normales siempre tienen solución única.
+    ok: false
+    why: |-
+      Solo es única si $A^tA$ es regular, y aquí $\det=0$ (columnas dependientes).
+  - t: |-
+      No hay solución, porque $A^tA$ no es invertible.
+    ok: false
+    why: |-
+      Las ecuaciones normales son siempre compatibles; que $A^tA$ sea singular solo significa que no es única.
+  fb: |-
+    Las normales son compatibles siempre; como $\operatorname{rang}A=1<2$, hay una recta de soluciones, todas con el mismo $AX_0$ (la proyección de $B$ sobre $\operatorname{Col}A$).
+- p: |-
+    Los puntos $(1,2),(2,3),(3,3)$ dan la recta de mínimos cuadrados $y=\tfrac12x+\tfrac53$. ¿Qué valor pronostica en $x=4$?
+  opciones:
+  - t: |-
+      $\tfrac{11}3$
+    ok: true
+  - t: |-
+      $\tfrac{41}6$
+    ok: false
+    why: |-
+      Has intercambiado la pendiente y el término independiente.
+  - t: |-
+      $3$
+    ok: false
+    why: |-
+      Has repetido el último dato en vez de usar la recta.
+  - t: |-
+      $\tfrac{5}3$
+    ok: false
+    why: |-
+      Es solo el término independiente: falta el término $\tfrac12\cdot4$.
+  fb: |-
+    $y(4)=\tfrac12\cdot4+\tfrac53=\tfrac{11}3$.
+- p: |-
+    Con los datos $(1,2),(2,3),(3,3)$ y la recta anterior, los residuos son $(\tfrac16,-\tfrac13,\tfrac16)$. ¿Cuál es el error cuadrático?
+  opciones:
+  - t: |-
+      $\tfrac16$
+    ok: true
+  - t: |-
+      $\tfrac1{\sqrt6}$
+    ok: false
+    why: |-
+      Es la norma $\|AX_0-B\|$; el error cuadrático es la norma <b>al cuadrado</b>.
+  - t: |-
+      $0$
+    ok: false
+    why: |-
+      Los puntos no están alineados, luego el error no es cero (el residuo es no nulo).
+  - t: |-
+      $\tfrac13$
+    ok: false
+    why: |-
+      Es la mayor componente en valor absoluto, no la suma de cuadrados.
+  fb: |-
+    $\tfrac1{36}+\tfrac19+\tfrac1{36}=\tfrac16$.
+- p: |-
+    $X_1$ y $X_2$ son dos soluciones por mínimos cuadrados de $AX=B$. ¿Cuál es siempre cierta?
+  opciones:
+  - t: |-
+      $AX_1=AX_2$.
+    ok: true
+  - t: |-
+      $X_1=X_2$.
+    ok: false
+    why: |-
+      Solo si las columnas de $A$ son independientes; en general hay infinitas.
+  - t: |-
+      $AX_1=B$.
+    ok: false
+    why: |-
+      Eso es solo si el sistema es compatible; en general $AX_1$ es la proyección de $B$.
+  fb: |-
+    Ambas cumplen $AX_i=\operatorname{Proy}_{\operatorname{Col}A}B$, un vector único; por eso también coinciden los errores.
+capa: true
+que_cae_nota: |-
+  Un mismo ejercicio mezcla a veces tipos (por ejemplo, el cálculo del error aparece junto a las normales, y la $QR$ viene ya dada en los exámenes).
