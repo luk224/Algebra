@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/2_1/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,9 +8,11 @@
 <title>Álgebra · 2.1 Espacios vectoriales. Subespacios</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -36,10 +38,41 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Si solo tienes un rato, esto es lo que tienes que llevarte. El resto de la página lo desarrolla con ejemplos.</p>
+  <ol>
+    <li><b>Espacio vectorial = grupo conmutativo + producto por escalares.</b> Una suma con S1-S4 (asociativa, neutro, simétrico, conmutativa) y un producto por escalares con E1-E4. Las operaciones no tienen por qué ser las usuales: el neutro y el simétrico <b>se despejan</b> ($a*e=a$, $a*a'=e$), no se suponen $0$ y $-a$.</li>
+    <li><b>Para negar basta un contraejemplo; para afirmar hace falta todo genérico.</b> Un ejemplo numérico que «sale bien» no demuestra nada, y un contraejemplo con vectores que no están en el conjunto tampoco.</li>
+    <li><b>Subespacio:</b> $U\neq\emptyset$ y $\lambda u+\mu v\in U$ para todo $u,v\in U$ y $\lambda,\mu\in\mathbb R$ (equivale a cerrado para suma y producto). <b>Filtro del cero:</b> si $\bar0\notin U$, no es subespacio; si $\bar0\in U$, todavía hay que comprobarlo.</li>
+    <li><b>Atajo de reconocimiento:</b> ecuaciones lineales homogéneas y combinaciones lineales de vectores dan subespacio; desigualdades, productos, cuadrados, «$\neq$», «grado exactamente» o «$\det=0$» casi nunca. En $\mathbb R^3$ los subespacios son $\{\bar0\}$, rectas y planos por el origen, y $\mathbb R^3$.</li>
+    <li><b>Intersección y unión:</b> $U\cap V$ siempre es subespacio; $U\cup V$ lo es solo si $U\subseteq V$ o $V\subseteq U$.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>6 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 8 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 4 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>¿Es subespacio? <small>(5 de 6)</small></td><td>Filtro del cero; si lo pasa, comprueba $\lambda u+\mu v\in W$ con elementos genéricos, o da un contraejemplo concreto.</td>
+      <td><a href="#ej2-6">2.6</a> · <a href="#ej2-5">2.5</a> · <a href="#ej2-10">2.10</a> · <a href="#ej2-14">2.14</a></td>
+      <td><a href="#ex-sep17a">Sept. 17 A ej. 2</a> · <a href="#ex-feb23a">Feb. 23 (1.ª) preg. 2</a> · <a href="#ex-feb23b">Feb. 23 (2.ª) preg. 2</a> · <a href="#ex-feb24b">Feb. 24 (2.ª) preg. 4</a> · <a href="#ex-feb26b">Feb. 26 (2.ª) preg. 2</a></td></tr>
+    <tr><td>¿Qué propiedades de espacio vectorial cumple? <small>(0 de 6)</small></td><td>Desarrolla por separado los dos miembros de cada axioma E1-E4 (o S1-S4) y compáralos; el que falle, refútalo con números.</td>
+      <td><a href="#ej2-2">2.2</a> · <a href="#ej2-3">2.3</a></td>
+      <td>—</td></tr>
+    <tr><td>Neutro, simétrico y grupo <small>(0 de 6)</small></td><td>Despeja $e$ de $a*e=a$ y $a'$ de $a*a'=e$; comprueba que están en el conjunto y que valen por los dos lados.</td>
+      <td><a href="#ej2-3">2.3</a></td>
+      <td>—</td></tr>
+    <tr><td>Intersección y unión de subespacios <small>(1 de 6)</small></td><td>La intersección siempre es subespacio (cada subespacio por separado); la unión solo si uno contiene al otro: contraejemplo con un vector de cada uno.</td>
+      <td><a href="#ej2-12">2.12</a> · <a href="#ej2-13">2.13</a></td>
+      <td><a href="#ex-sep24">Sept. 24 p. 7</a></td></tr>
+  </table>
+  <p><small>Lo más frecuente en examen es «¿es subespacio?» con un conjunto de $\mathbb R^n$, de matrices, de polinomios o de funciones; los problemas con una operación inventada (neutro, simétrico, grupo) salen en tipo test.</small></p>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §2.1.1 Elementos didácticos, p. 55">U p.55</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §2.1.1 Elementos didácticos, p. 55">U p.55</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>Un <b>espacio vectorial</b> es un conjunto donde se puede <b>sumar</b> y <b>multiplicar por números</b> sin salirse de él y con las reglas de siempre. Un <b>subespacio</b> es un trozo de un espacio vectorial que, él solo, sigue siendo un espacio vectorial: en $\mathbb R^2$ son las rectas que pasan por el origen; en $\mathbb R^3$, las rectas y los planos que pasan por el origen.</p>
@@ -70,7 +103,7 @@
 </div>
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>Vectores «de verdad»: qué se puede sumar y escalar <span class="src" data-l="U" data-ref="U §2.1.2, p. 55-56">U p.55-56</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>Vectores «de verdad»: qué se puede sumar y escalar <span class="src" data-l="U" data-ref="U §2.1.2, p. 55-56">U p.55-56</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Cuando decimos «vector» pensamos en una flecha o en una lista de coordenadas. Pero lo único que usamos de ellos es que podemos <b>sumarlos</b> (poner una flecha a continuación de otra) y <b>estirarlos</b> (multiplicarlos por un número). El álgebra lineal pregunta: ¿qué otros objetos se pueden sumar y estirar? Una <b>función</b> se puede sumar con otra y multiplicar por 3; un <b>polinomio</b> también; una <b>matriz</b> también. Todos ellos se comportan como «flechas» y se les llama vectores. Es como un juego: no importa de qué están hechas las piezas, solo qué movimientos permite el reglamento.</p>
@@ -124,7 +157,7 @@
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>Definición de espacio vectorial <span class="src" data-l="U" data-ref="U §2.1.2 Definición 2.1, p. 57-58">U p.57-58</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>Definición de espacio vectorial <span class="src" data-l="U" data-ref="U §2.1.2 Definición 2.1, p. 57-58">U p.57-58</span></h2>
 
 <div class="box intu"><span class="h">Por qué no basta con tener las dos operaciones</span>
   <p>Tener «suma» y «producto» definidos no garantiza que se comporten como esperamos. Es como tener un reglamento: hace falta que se cumplan ciertas reglas (la suma es conmutativa, hay un «cero», el doble de la suma es la suma de los dobles…). Esas reglas son exactamente las ocho propiedades siguientes. Si una sola falla, el conjunto <b>no</b> es espacio vectorial, aunque las operaciones estén bien definidas.</p>
@@ -193,7 +226,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>Subespacios vectoriales <span class="src" data-l="U" data-ref="U §2.1.3 Definición 2.2 y condiciones (2.1)-(2.2), p. 62-66">U p.62-66</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>Subespacios vectoriales <span class="src" data-l="U" data-ref="U §2.1.3 Definición 2.2 y condiciones (2.1)-(2.2), p. 62-66">U p.62-66</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Dentro de un espacio grande suele haber «trozos» que, por sí solos, vuelven a ser espacios vectoriales. En $\mathbb R^2$, una <b>recta que pasa por el origen</b> lo es: si sumas dos puntos de la recta caes en la recta, y si estiras un punto de la recta (o lo inviertes) sigues en ella. Una <b>recta que no pasa por el origen</b> no: ni siquiera contiene al $(0,0)$, y al sumar dos puntos de la recta te sales de ella. Un subespacio es un trozo «cerrado» para las dos operaciones: <b>no se puede salir de él ni sumando ni escalando</b>. Geométricamente (Lay §4.1, fig. 9): en $\mathbb R^3$ los subespacios distintos de $\{\bar0\}$ y de $\mathbb R^3$ son las rectas y los planos que pasan por el origen.</p>
@@ -249,7 +282,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Receta «¿es subespacio?» y ejemplos <span class="src" data-l="U" data-ref="U Ejemplos 2.7-2.13 y comentario final, p. 64-68">U p.64-68</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Receta «¿es subespacio?» y ejemplos <span class="src" data-l="U" data-ref="U Ejemplos 2.7-2.13 y comentario final, p. 64-68">U p.64-68</span></h2>
 
 <div class="recipe"><b>Receta «¿es subespacio?» para $W\subseteq V$:</b>
   <ol>
@@ -290,7 +323,7 @@
 </div>
 
 <!-- ============================ 5 ============================ -->
-<h2 id="s5"><span class="n">5</span>Dos formas de describir un subespacio; intersección y unión <span class="src" data-l="L" data-ref="Lay §4.1-4.2, p. 194-200">L p.194-200</span></h2>
+<h2 id="s5" data-vista="teoria"><span class="n">5</span>Dos formas de describir un subespacio; intersección y unión <span class="src" data-l="L" data-ref="Lay §4.1-4.2, p. 194-200">L p.194-200</span></h2>
 
 <div class="box intu"><span class="h">Dos formas de dar un subespacio de $\mathbb R^n$ (Lay)</span>
   <p>Los subespacios de $\mathbb R^n$ casi siempre aparecen de una de dos maneras: <b>(1) por ecuaciones homogéneas</b> (el conjunto de soluciones de $AX=0$) o <b>(2) por parámetros</b> (todas las combinaciones lineales de unos vectores). En ambos casos son subespacios:</p>
@@ -313,16 +346,77 @@
   <span class="src" data-l="L" data-ref="Lay §4.1, Ejercicio 32, p. 197 (intersección y contraejemplo para la unión)">L p.197</span>
 </div>
 
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 2.1»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-subesp">
+  <h3>Tipo 1 — ¿Es subespacio?</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «¿es subespacio vectorial?», «determine de manera razonada si $E$ es subespacio», un conjunto definido por una condición (ecuación, desigualdad, grado, determinante, valor de una función).</p>
+  <ol class="pasos">
+    <li><b>Filtro del cero:</b> sustituye $\bar0$ en la condición. Si no la cumple, <b>no es subespacio</b> y has terminado.</li>
+    <li><b>Mira el tipo de condición:</b> lineal homogénea te hace sospechar que sí; desigualdad, producto, cuadrado, «$\neq$» o «$\det=0$», que no.</li>
+    <li><b>Si crees que sí:</b> toma $u,v\in W$ genéricos y $\lambda,\mu\in\mathbb R$ y demuestra que $\lambda u+\mu v$ cumple la condición.</li>
+    <li><b>Si crees que no:</b> da vectores concretos <b>que estén en $W$</b> y un escalar concreto cuya combinación se salga. Comprueba antes que tus vectores cumplen la condición.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $W=\{(x,y,z):x+y-z=0\}$: $\bar0\in W$ y, para $u,v\in W$, $(\lambda u+\mu v)$ da $\lambda\cdot0+\mu\cdot0=0$, luego es subespacio. En cambio $W'=\{x+y=1\}$ no contiene a $\bar0$ ($0\neq1$): no lo es.</div>
+  <p class="fallos"><b>Dónde se falla:</b> creer que «contiene a $\bar0$» basta · comprobar con ejemplos numéricos y concluir «sí» · refutar con vectores que no están en el conjunto · olvidar escalares negativos en las desigualdades.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-6">2.6</a> · <a href="#ej2-5">2.5</a> · <a href="#ej2-10">2.10</a> · <a href="#ej2-14">2.14</a> · <a href="#sol-2_1-9">Ejemplo propio 1</a> · <a href="#sol-2_1-10">Ejemplo propio 2</a> · <a href="#sol-2_1-11">Ejemplo propio 3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep17a">Sept. 17 A ej. 2</a> · <a href="#ex-feb23a">Feb. 23 (1.ª) preg. 2</a> · <a href="#ex-feb23b">Feb. 23 (2.ª) preg. 2</a> · <a href="#ex-feb24b">Feb. 24 (2.ª) preg. 4</a> · <a href="#ex-sep24">Sept. 24 p. 7</a> · <a href="#ex-feb26b">Feb. 26 (2.ª) preg. 2</a></p>
+</section>
+
+<section class="ficha" id="tipo-axiomas">
+  <h3>Tipo 2 — ¿Qué propiedades de espacio vectorial cumple?</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «verifica la distributiva…», «¿existe escalar unidad?», «¿es espacio vectorial con estas operaciones?», una suma o un producto por escalares definidos de forma inusual.</p>
+  <ol class="pasos">
+    <li><b>Escribe la propiedad</b> con elementos genéricos ($\lambda,\mu$, vectores $u,v$).</li>
+    <li><b>Desarrolla cada miembro por separado</b> usando la definición de la operación, y compara los resultados.</li>
+    <li>Si coinciden siempre, la propiedad se cumple. Si no, <b>da valores concretos</b> donde difieran: basta un caso.</li>
+    <li>Con que falle un solo axioma, <b>no es espacio vectorial</b>; no hace falta revisar el resto.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> En $\mathbb R^2$ con $\lambda\bullet(x_1,x_2)=(\lambda^2x_1,\lambda x_2)$: E2 falla, pues con $u=(1,0)$ y $\lambda=\mu=1$, $(1+1)\bullet u=(4,0)$ pero $1\bullet u+1\bullet u=(2,0)$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> comprobar un axioma solo con un ejemplo que sale bien · desarrollar solo un miembro · decir «no es espacio vectorial» sin señalar qué axioma falla y con qué valores.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-2">2.2</a> · <a href="#ej2-3">2.3</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
+<section class="ficha" id="tipo-neutro">
+  <h3>Tipo 3 — Neutro, simétrico y grupo</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «existe elemento neutro», «todo elemento tiene simétrico», «es grupo conmutativo», con una operación $*$ definida por una fórmula.</p>
+  <ol class="pasos">
+    <li><b>Neutro:</b> plantea $a*e=a$ con $a$ genérico y despeja $e$. Debe salir independiente de $a$ y pertenecer al conjunto.</li>
+    <li><b>Simétrico:</b> con ese $e$, plantea $a*a'=e$ y despeja $a'$. Comprueba que $a'$ está en el conjunto para todo $a$.</li>
+    <li>Comprueba que ambos sirven <b>por los dos lados</b> (o prueba la conmutatividad) y revisa la asociatividad con tres elementos genéricos.</li>
+    <li><b>Concluye:</b> grupo si valen S1-S3, conmutativo si además S4; si falla algo, nómbralo.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $V=\{(x_1,x_2):x_1>0\}$ con $(x_1,x_2)*(y_1,y_2)=(x_1y_1,x_2+y_2)$: $(x_1,x_2)*(e_1,e_2)=(x_1,x_2)\Rightarrow e=(1,0)$ (¡no $(0,0)$, que ni está en $V$!). Simétrico de $(a,b)$: $(1/a,-b)$, que está en $V$ por ser $a>0$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> suponer neutro $(0,0)$ y simétrico $-a$ · no comprobar que el resultado pertenece al conjunto · usar un $e$ que depende de $a$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-3">2.3</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
+<section class="ficha" id="tipo-interunion">
+  <h3>Tipo 4 — Intersección y unión de subespacios</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «$U\cap V$ es subespacio», «$U\cup V$ es subespacio», «la suma de dos elementos de la unión está en la unión».</p>
+  <ol class="pasos">
+    <li><b>Intersección:</b> toma $u,v\in U\cap V$ y $\lambda,\mu$. Como $u,v\in U$ y $U$ es subespacio, $\lambda u+\mu v\in U$; lo mismo para $V$. Luego está en ambos.</li>
+    <li><b>Unión:</b> para ver si es subespacio, mira primero si $U\subseteq V$ o $V\subseteq U$ (entonces la unión es el mayor y sí lo es).</li>
+    <li>Si ninguno contiene al otro, toma $u\in U\setminus V$ y $v\in V\setminus U$: la suma $u+v$ no está en $U$ ni en $V$, y por tanto no está en la unión.</li>
+    <li>Si los subespacios vienen dados por generadores o ecuaciones, <b>comprueba si cada generador de uno cumple las ecuaciones del otro</b>.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $U=\{y=0\}$, $V=\{x=0\}$ en $\mathbb R^2$: $(1,0)\in U$, $(0,1)\in V$, pero $(1,0)+(0,1)=(1,1)\notin U\cup V$: la unión no es subespacio.</div>
+  <p class="fallos"><b>Dónde se falla:</b> confundir la unión $U\cup V$ con la suma $U+V$ · decir que la unión «nunca» es subespacio (lo es si uno contiene al otro) · demostrar la intersección con un ejemplo.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-12">2.12</a> · <a href="#ej2-13">2.13</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep24">Sept. 24 p. 7</a></p>
+</section>
+
 <!-- ============================ 6 ============================ -->
-<h2 id="ejercicios"><span class="n">6</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §2.1, p. 45-56">E p.45-56</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">6</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §2.1, p. 45-56">E p.45-56</span></h2>
 
 <p>E tiene 14 ejercicios en esta sección. Aquí se resuelven <b>8</b> (uno por cada tipo de método), y los otros 6 se dejan «para practicar» con la respuesta. Se ordenan de lo más abstracto (operaciones raras) a lo más práctico (subespacios).</p>
 
 <h3>A. Operaciones no estándar y axiomas</h3>
 <p>Orden: el 2.2 trabaja solo la operación externa (E1–E4) y el 2.3 la interna (S1–S4); si prefieres el orden de la definición, empieza por el 2.3.</p>
 
-<details class="sol" id="ej2-2"><summary>Ejercicio 2.2 — un producto por escalares que falla E4 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.2, p. 47">E p.47</span></summary>
-  <p class="enun">Compruébese si $\lambda\bullet(x_1,x_2)=(\lambda x_1,0)$ (escalares con pares de $\mathbb R^2$) verifica: A) Distributiva de los escalares respecto a los vectores. B) Distributiva de los vectores respecto a los escalares. C) Asociativa $(\lambda\mu)\bullet x=\lambda\bullet(\mu\bullet x)$. D) Existencia de escalar unidad.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Compruébese si $\lambda\bullet(x_1,x_2)=(\lambda x_1,0)$ (escalares con pares de $\mathbb R^2$) verifica: A) Distributiva de los escalares respecto a los vectores. B) Distributiva de los vectores respecto a los escalares. C) Asociativa $(\lambda\mu)\bullet x=\lambda\bullet(\mu\bullet x)$. D) Existencia de escalar unidad.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe cada propiedad con letras ($\lambda,\mu$, vectores genéricos), desarrolla por separado los dos miembros con la regla $\lambda\bullet(x_1,x_2)=(\lambda x_1,0)$ y compáralos. Para la que falle, busca el motivo mirando qué le pasa a la segunda coordenada.</p></details>
+<details class="sol" id="ej2-2"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 2.2 — un producto por escalares que falla E4 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.2, p. 47">E p.47</span></summary>
   <p>Se sobrentiende la suma estándar de $\mathbb R^2$. A–D son E1–E4 de U p.58.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Me dan un producto por escalares «raro» y me piden cuáles de las cuatro propiedades E1–E4 cumple.</dd>
@@ -361,8 +455,9 @@
   <p><b>Error típico:</b> comprobar la igualdad con un ejemplo que sale bien y concluir que se cumple.</p>
 </details>
 
-<details class="sol" id="ej2-3"><summary>Ejercicio 2.3 — grupo conmutativo con una «suma» rara <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.3, p. 48">E p.48</span></summary>
-  <p class="enun">$V=\{(x_1,x_2)\mid x_1\in\mathbb R^+,\ x_2\in\mathbb R\}$ con la operación $(x_1,x_2)*(y_1,y_2)=(x_1y_1,\ x_2+y_2)$ verifica: A) Es asociativo. B) Existe elemento neutro. C) Todo elemento tiene un simétrico. D) Es grupo conmutativo.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$V=\{(x_1,x_2)\mid x_1\in\mathbb R^+,\ x_2\in\mathbb R\}$ con la operación $(x_1,x_2)*(y_1,y_2)=(x_1y_1,\ x_2+y_2)$ verifica: A) Es asociativo. B) Existe elemento neutro. C) Todo elemento tiene un simétrico. D) Es grupo conmutativo.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Con una operación inventada el neutro no tiene por qué ser $(0,0)$: despéjalo de $x*e=x$ y luego el simétrico de $x*x'=e$. Antes de seguir, mira si lo que sale pertenece al conjunto $V$.</p></details>
+<details class="sol" id="ej2-3"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.3 — grupo conmutativo con una «suma» rara <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.3, p. 48">E p.48</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si un conjunto con una «suma» inventada es grupo conmutativo.</dd>
     <dt>Cómo lo pienso</dt><dd>Una operación inventada se estudia como un juego nuevo: <b>no vale lo de siempre</b>. El neutro no tiene por qué ser el $(0,0)$ ni el simétrico el opuesto; hay que descubrirlos. Intuyo que la operación multiplica en una coordenada y suma en la otra, así que el neutro será «1 en la primera, 0 en la segunda». Tengo que vigilar también que los resultados no se salgan del conjunto (la primera coordenada debe ser positiva).</dd>
@@ -406,8 +501,9 @@
 
 <h3>B. ¿Es subespacio? en $\mathbb R^n$</h3>
 
-<details class="sol" id="ej2-6"><summary>Ejercicio 2.6 — tres subconjuntos de $\mathbb R^4$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.6, p. 50">E p.50</span></summary>
-  <p class="enun">Se pide justificar si alguno de los siguientes subconjuntos es subespacio de $\mathbb R^4$: A) $A=\{x_1+x_2=1\}$. B) $B=\{x_1=x_2\}$. C) $C=\{x_1=x_2=1\}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide justificar si alguno de los siguientes subconjuntos es subespacio de $\mathbb R^4$: A) $A=\{x_1+x_2=1\}$. B) $B=\{x_1=x_2\}$. C) $C=\{x_1=x_2=1\}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Sustituye el vector nulo en la condición de cada conjunto: si no la cumple, ya has terminado. Si la cumple, ¿es la condición una ecuación lineal homogénea?</p></details>
+<details class="sol" id="ej2-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 2.6 — tres subconjuntos de $\mathbb R^4$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.6, p. 50">E p.50</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir cuáles de tres conjuntos de $\mathbb R^4$, dados por una condición sobre las coordenadas, son subespacio.</dd>
     <dt>Cómo lo pienso</dt><dd>Reflejo de examen: un subespacio siempre contiene al $\bar0$, así que sustituyo el cero en cada condición antes de nada. Si el cero no la cumple, ya está. Con una condición tipo $x_1+x_2=1$ el segundo miembro $\neq0$ es una señal de alarma; $x_1=x_2$ es una ecuación lineal homogénea y huele a subespacio.</dd>
@@ -433,8 +529,9 @@
   <p><b>Error típico:</b> decir «A no es subespacio porque no es una ecuación bonita» sin justificar; la justificación es «$\bar0\notin A$ porque $0+0\neq1$».</p>
 </details>
 
-<details class="sol" id="ej2-5"><summary>Ejercicio 2.5 — la unión de los dos ejes: falla la suma <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.5, p. 50">E p.50</span></summary>
-  <p class="enun">Se pide demostrar que $(U,+)$ no es subgrupo de $(\mathbb R^2,+)$ si $U=\{(x_1,x_2)\mid x_1x_2=0\}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide demostrar que $(U,+)$ no es subgrupo de $(\mathbb R^2,+)$ si $U=\{(x_1,x_2)\mid x_1x_2=0\}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$U$ es la unión de los dos ejes. Para negar que sea subgrupo basta un contraejemplo: busca dos vectores concretos de $U$ cuya suma se salga.</p></details>
+<details class="sol" id="ej2-5"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 2.5 — la unión de los dos ejes: falla la suma <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.5, p. 50">E p.50</span></summary>
   <p><i>Recuerda (Def. 2.1):</i> subgrupo = subconjunto que con la misma operación es grupo; todo subespacio es subgrupo, no al revés. $U$ es la unión de los ejes coordenados ($x_1=0$ o $x_2=0$). Probamos que no es cerrado para la suma, luego tampoco es subespacio.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Demostrar que $\{x_1x_2=0\}$ no es subgrupo de $(\mathbb R^2,+)$.</dd>
@@ -462,8 +559,9 @@
 
 <h3>C. Otros espacios: polinomios, progresiones</h3>
 
-<details class="sol" id="ej2-10"><summary>Ejercicio 2.10 (con el 2.11) — polinomios de grado cuatro <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.10, p. 52">E p.52</span> <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.11, p. 53">E p.53</span></summary>
-  <p class="enun">El conjunto de polinomios reales de <b>grado cuatro</b> con las operaciones estándar verifica: A) la suma de dos de sus elementos pertenece al conjunto; B) un escalar por un polinomio del conjunto pertenece al conjunto; C) es espacio vectorial.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">El conjunto de polinomios reales de <b>grado cuatro</b> con las operaciones estándar verifica: A) la suma de dos de sus elementos pertenece al conjunto; B) un escalar por un polinomio del conjunto pertenece al conjunto; C) es espacio vectorial.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Piensa en dos polinomios de grado exactamente 4 cuya suma pueda tener grado menor. ¿Qué polinomio sería el neutro de la suma y qué grado tiene?</p></details>
+<details class="sol" id="ej2-10"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.10 (con el 2.11) — polinomios de grado cuatro <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.10, p. 52">E p.52</span> <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.11, p. 53">E p.53</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Un conjunto de polinomios de grado <i>exactamente</i> 4: ¿es cerrado para suma y producto por escalar? ¿es espacio vectorial?</dd>
     <dt>Cómo lo pienso</dt><dd>Me fijo en lo que define el conjunto: el coeficiente de $x^4$ debe ser $\neq0$. Pregunta clave: ¿cómo puede un polinomio perder el grado 4? Solo si ese coeficiente se anula. Eso ocurre sumando dos polinomios con coeficientes principales opuestos, o multiplicando por $0$. Además el polinomio nulo, que sería el neutro de la suma, no tiene grado 4.</dd>
@@ -497,8 +595,9 @@
   <p><b>Error típico:</b> confundir «grado 4» con «grado $\le4$». El primero no contiene al polinomio nulo.</p>
 </details>
 
-<details class="sol" id="ej2-14"><summary>Ejercicio 2.14 — progresiones aritméticas en $\mathbb R^n$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.14, p. 56">E p.56</span></summary>
-  <p class="enun">Sea $P\subseteq\mathbb R^n$ el conjunto de las $n$-uplas cuyos elementos forman una progresión aritmética de $n$ términos. Se pide comprobar: A) la suma de dos elementos de $P$ está en $P$; B) un escalar por un elemento de $P$ está en $P$; C) $(P,+)$ no tiene elemento neutro; D) $(P,+,\mathbb R)$ es subespacio de $(\mathbb R^n,+,\mathbb R)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $P\subseteq\mathbb R^n$ el conjunto de las $n$-uplas cuyos elementos forman una progresión aritmética de $n$ términos. Se pide comprobar: A) la suma de dos elementos de $P$ está en $P$; B) un escalar por un elemento de $P$ está en $P$; C) $(P,+)$ no tiene elemento neutro; D) $(P,+,\mathbb R)$ es subespacio de $(\mathbb R^n,+,\mathbb R)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Una progresión aritmética es $(a,a+d,a+2d,\dots)$: se determina con dos números. Comprueba la suma y el producto por escalar con progresiones genéricas $(a,d)$ y $(a',d')$.</p></details>
+<details class="sol" id="ej2-14"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.14 — progresiones aritméticas en $\mathbb R^n$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.14, p. 56">E p.56</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Un conjunto de $n$-uplas «en progresión aritmética»: ¿es cerrado, tiene neutro, es subespacio?</dd>
     <dt>Cómo lo pienso</dt><dd>Una progresión aritmética queda fijada por dos números (primer término y diferencia), así que el conjunto <b>se describe con parámetros que aparecen de forma lineal</b>. Eso me hace pensar que sí es subespacio: sumar dos progresiones sumará sus parámetros. Lo compruebo en lugar de fiarme.</dd>
@@ -526,8 +625,9 @@
 
 <h3>D. Intersección y unión de subespacios</h3>
 
-<details class="sol" id="ej2-12"><summary>Ejercicio 2.12 — la intersección de subespacios es subespacio <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.12, p. 54">E p.54</span></summary>
-  <p class="enun">Si $U$ y $V$ son subespacios de $(\mathbb R^n,+,\mathbb R)$, se pide demostrar que $U\cap V$ es un subespacio.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $U$ y $V$ son subespacios de $(\mathbb R^n,+,\mathbb R)$, se pide demostrar que $U\cap V$ es un subespacio.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Toma $u,v\in U\cap V$ y $\lambda,\mu\in\mathbb R$. Pregunta a cada subespacio por separado dónde está $\lambda u+\mu v$ y reúne las dos respuestas.</p></details>
+<details class="sol" id="ej2-12"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 2.12 — la intersección de subespacios es subespacio <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.12, p. 54">E p.54</span></summary>
   <p>Recordemos: $w\in U\cap V$ significa $w\in U$ <b>y</b> $w\in V$. Aplicamos (2.1).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Probar, para subespacios cualesquiera $U,V$, que $U\cap V$ es subespacio.</dd>
@@ -553,8 +653,9 @@
   <p><b>Error típico:</b> «demostrarlo» con dos rectas concretas de $\mathbb R^2$: un ejemplo ilustra, no demuestra.</p>
 </details>
 
-<details class="sol" id="ej2-13"><summary>Ejercicio 2.13 — la unión de subespacios, en general, no lo es <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.13, p. 55">E p.55</span></summary>
-  <p class="enun">Si $U$ y $V$ son subespacios de $(\mathbb R^n,+,\mathbb R)$, se pide demostrar si se verifica: A) La suma de dos elementos de $U\cup V$ está en $U\cup V$. B) Un número real por un elemento de $U\cup V$ está en $U\cup V$. C) $U\cup V$ es un subespacio.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $U$ y $V$ son subespacios de $(\mathbb R^n,+,\mathbb R)$, se pide demostrar si se verifica: A) La suma de dos elementos de $U\cup V$ está en $U\cup V$. B) Un número real por un elemento de $U\cup V$ está en $U\cup V$. C) $U\cup V$ es un subespacio.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Para negar algo basta un ejemplo: dibuja dos rectas distintas por el origen en $\mathbb R^2$ y suma un vector de cada una. Después piensa qué ocurre si una contiene a la otra.</p></details>
+<details class="sol" id="ej2-13"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.13 — la unión de subespacios, en general, no lo es <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.13, p. 55">E p.55</span></summary>
   <p>Ahora $w\in U\cup V$ significa $w\in U$ <b>o</b> $w\in V$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Estudiar si $U\cup V$ es cerrado para suma, para escalares y si es subespacio.</dd>
@@ -597,8 +698,9 @@
 
 <h3>Ejemplos propios (de fácil a difícil)</h3>
 
-<details class="sol" id="sol-2_1-9"><summary>Ejemplo propio 1 (fácil) — dos planos de $\mathbb R^3$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
-  <p class="enun">¿Son subespacios de $\mathbb R^3$ los conjuntos $S_1=\{(x,y,z): x-2y+z=0\}$ y $S_2=\{(x,y,z): x-2y+z=1\}$?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">¿Son subespacios de $\mathbb R^3$ los conjuntos $S_1=\{(x,y,z): x-2y+z=0\}$ y $S_2=\{(x,y,z): x-2y+z=1\}$?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Mira primero si el vector nulo cumple cada ecuación. La que lo cumpla, ¿es lineal y sin término independiente?</p></details>
+<details class="sol" id="sol-2_1-9"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejemplo propio 1 (fácil) — dos planos de $\mathbb R^3$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir cuál de dos planos de $\mathbb R^3$ (misma ecuación, distinto segundo miembro) es subespacio.</dd>
     <dt>Cómo lo pienso</dt><dd>Se diferencian solo en el término independiente: $=0$ pasa por el origen, $=1$ no. Predicción: el primero sí, el segundo no. Lo justifico con el cero y con la caracterización.</dd>
@@ -621,8 +723,9 @@
   <div class="recipe"><b>Receta:</b> ecuación lineal homogénea $\Rightarrow$ subespacio; con término independiente $\neq0$ $\Rightarrow$ no.</div>
 </details>
 
-<details class="sol" id="sol-2_1-10"><summary>Ejemplo propio 2 (medio) — dos trampas en $\mathbb R^2$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
-  <p class="enun">¿Son subespacios de $\mathbb R^2$: (a) la parábola $T_1=\{(x,y): y=x^2\}$; (b) el primer cuadrante $T_2=\{(x,y): x\ge0,\ y\ge0\}$?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">¿Son subespacios de $\mathbb R^2$: (a) la parábola $T_1=\{(x,y): y=x^2\}$; (b) el primer cuadrante $T_2=\{(x,y): x\ge0,\ y\ge0\}$?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Las dos contienen al origen, así que el filtro del cero no decide. Busca en cada una un contraejemplo: en una falla la suma y en la otra el producto por un escalar (¿cuál escalar?).</p></details>
+<details class="sol" id="sol-2_1-10"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 2 (medio) — dos trampas en $\mathbb R^2$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si una parábola y el primer cuadrante de $\mathbb R^2$ son subespacios.</dd>
     <dt>Cómo lo pienso</dt><dd>Dos «trampas»: el cero está en ambos, así que ese filtro <b>no decide</b>. Hay que mirar el producto por escalares. Una ecuación con cuadrado ($y=x^2$) no es lineal: al duplicar un punto no sigue en la curva. Una desigualdad ($\ge0$) se rompe multiplicando por un número negativo.</dd>
@@ -643,8 +746,9 @@
   <div class="recipe"><b>Receta:</b> desigualdad homogénea ($\ge0$) $\Rightarrow$ contraejemplo con $\lambda=-1$; con término independiente ($x_1+x_2\le1$) $\Rightarrow$ escalar grande (Ejemplo 2.11 de U: $5(0,1,2)$); cuadrado o producto $\Rightarrow$ contraejemplo con $\lambda=2$ o con una suma.</div>
 </details>
 
-<details class="sol" id="sol-2_1-11"><summary>Ejemplo propio 3 (tipo examen) — matrices y polinomios <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
-  <p class="enun">(a) ¿Es $D_{2\times2}=\left\{\begin{pmatrix}a&0\\0&b\end{pmatrix}\right\}$ (matrices diagonales) subespacio de $\mathcal M_{2\times2}$? (b) ¿Y $N=\{A\in\mathcal M_{2\times2}:\det A=0\}$? (c) ¿Es $W=\{p\in\wp_2: p(1)=0\}$ subespacio de $\wp_2$?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">(a) ¿Es $D_{2\times2}=\left\{\begin{pmatrix}a&0\\0&b\end{pmatrix}\right\}$ (matrices diagonales) subespacio de $\mathcal M_{2\times2}$? (b) ¿Y $N=\{A\in\mathcal M_{2\times2}:\det A=0\}$? (c) ¿Es $W=\{p\in\wp_2: p(1)=0\}$ subespacio de $\wp_2$?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Cada apartado vive en un espacio distinto (matrices, polinomios): escribe un elemento genérico y traduce la condición a ecuaciones sobre sus coeficientes. Para $\det A=0$, busca dos matrices singulares cuya suma no lo sea.</p></details>
+<details class="sol" id="sol-2_1-11"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 3 (tipo examen) — matrices y polinomios <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si matrices diagonales, matrices de determinante nulo y polinomios con $p(1)=0$ son subespacios.</dd>
     <dt>Cómo lo pienso</dt><dd>Cambio de escenario: los «vectores» son matrices o polinomios. Primero identifico quién es el cero (matriz nula, polinomio nulo). Las matrices diagonales: sumar y escalar mantiene los ceros fuera de la diagonal, huele a sí. $\det=0$ no es lineal (el determinante no respeta la suma), huele a no. $p(1)=0$ es una condición lineal homogénea (evaluar es lineal), huele a sí.</dd>
@@ -671,7 +775,7 @@
 </details>
 
 <!-- ============================ 7 ============================ -->
-<h2 id="examenes"><span class="n">7</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">7</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>Preguntas de exámenes de otros años que caen en este tema. </p>
 
@@ -679,8 +783,9 @@
   <p>Los ejercicios de examen del tipo «estudiar si la operación $\diamond$ verifica las propiedades asociativa, conmutativa, elemento neutro y simétrico» se desarrollan, con explicación de qué se pide, en el <a href="tema_1_5_estructuras_algebraicas.html#examenes">tema 1.5 (estructuras algebraicas)</a>: <a href="tema_1_5_estructuras_algebraicas.html#ex-feb20a">Ene. 2020 (tipo A), ejercicio 2</a>; <a href="tema_1_5_estructuras_algebraicas.html#ex-prodsuma">Feb. 2019 (tipo A), ejercicio 2 y Sept. 2017 (tipo A), problema a)</a>. <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 2; Feb. 2019 (tipo A), ejercicio 2; Sept. 2017 (tipo A), problema a)">X</span></p>
 </div>
 
-<details class="sol" id="ex-feb23a"><summary>Feb. 2023 (1.ª sem.), pregunta 2 — una desigualdad en $\mathbb R^4$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª sem.), pregunta 2">X Feb. 2023 (1.ª)</span></summary>
-  <p class="enun">Sea $V=\mathbb R^4$ y $E=\{(x_1,x_2,x_3,x_4)\in V: x_1-x_3\ge0\}$. Determine de manera razonada si $E$ es un subespacio vectorial de $V$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $V=\mathbb R^4$ y $E=\{(x_1,x_2,x_3,x_4)\in V: x_1-x_3\ge0\}$. Determine de manera razonada si $E$ es un subespacio vectorial de $V$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Es una desigualdad, así que sospecha. El vector nulo sí la cumple; busca un vector de $E$ y un escalar que lo saque de $E$.</p></details>
+<details class="sol" id="ex-feb23a"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2023 (1.ª sem.), pregunta 2 — una desigualdad en $\mathbb R^4$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª sem.), pregunta 2">X Feb. 2023 (1.ª)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Razonar si $E=\{x_1-x_3\ge0\}$ es subespacio de $\mathbb R^4$.</dd>
     <dt>Cómo lo pienso</dt><dd>Es una <b>desigualdad</b>: describe medio espacio. El cero la cumple (da $0\ge0$), así que ese filtro no sirve. Sumar números $\ge0$ da $\ge0$, pero multiplicar por un negativo invierte el signo: ahí debe fallar.</dd>
@@ -703,8 +808,9 @@
   <p><b>Error típico:</b> comprobar solo la suma (que sí funciona) y concluir que es subespacio; o decir «no es subespacio porque es una desigualdad» sin dar el contraejemplo.</p>
 </details>
 
-<details class="sol" id="ex-feb24b"><summary>Feb. 2024 (2.ª sem.), pregunta 4 — ecuación con término independiente <span class="src" data-l="X" data-ref="Feb. 2024 (2.ª sem.), pregunta 4">X Feb. 2024 (2.ª)</span></summary>
-  <p class="enun">Sea $V=\mathbb R^5$ y $E=\{(x_1,\dots,x_5)\in V: x_5-3=-x_3\}$. Determine de manera razonada si $E$ es un subespacio vectorial de $V$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $V=\mathbb R^5$ y $E=\{(x_1,\dots,x_5)\in V: x_5-3=-x_3\}$. Determine de manera razonada si $E$ es un subespacio vectorial de $V$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Mira la ecuación con cuidado: lleva un término independiente. Sustituye el vector nulo.</p></details>
+<details class="sol" id="ex-feb24b"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2024 (2.ª sem.), pregunta 4 — ecuación con término independiente <span class="src" data-l="X" data-ref="Feb. 2024 (2.ª sem.), pregunta 4">X Feb. 2024 (2.ª)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Razonar si $E=\{x_5-3=-x_3\}$ es subespacio de $\mathbb R^5$.</dd>
     <dt>Cómo lo pienso</dt><dd>Reordeno la ecuación para ver el término independiente: $x_3+x_5=3$. Con un $3$ en el segundo miembro, el cero no la cumple. Es la señal más clara de «no es subespacio» y la justificación más corta.</dd>
@@ -729,8 +835,9 @@
   <div class="recipe"><b>Receta:</b> ecuación lineal con término independiente $\neq0$: basta con «$\bar0\notin E$ porque al sustituir sale $0=3$, falso; todo subespacio contiene a $\bar0$». Es la justificación más corta y más segura.</div>
 </details>
 
-<details class="sol" id="ex-feb26b"><summary>Feb. 2026 (2.ª sem.), pregunta 2 — verdadero o falso sobre la definición <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), pregunta 2">X Feb. 2026 (2.ª)</span></summary>
-  <p class="enun">Razone si es verdadera: sea $Z$ un subconjunto de $\mathcal M_{2\times2}$ (matrices reales de orden 2). Si para todos $A,B\in Z$ se tiene $A+B\in Z$, entonces $Z$ es subespacio vectorial de $\mathcal M_{2\times2}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Razone si es verdadera: sea $Z$ un subconjunto de $\mathcal M_{2\times2}$ (matrices reales de orden 2). Si para todos $A,B\in Z$ se tiene $A+B\in Z$, entonces $Z$ es subespacio vectorial de $\mathcal M_{2\times2}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Compara el enunciado con la definición completa de subespacio: ¿cuántas condiciones pide ésta y cuántas se dan aquí? Para negarlo, busca un conjunto de matrices cerrado para la suma al que le falle otra condición.</p></details>
+<details class="sol" id="ex-feb26b"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2026 (2.ª sem.), pregunta 2 — verdadero o falso sobre la definición <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), pregunta 2">X Feb. 2026 (2.ª)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Verdadero o falso: «si $Z$ es cerrado para la suma, entonces es subespacio».</dd>
     <dt>Cómo lo pienso</dt><dd>Comparo con la definición: un subespacio exige <b>dos</b> cierres (suma y escalares) y no ser vacío; aquí solo me dan uno. Eso me hace sospechar que es falso, y para refutarlo me basta un conjunto que sea cerrado para la suma y no para escalares.</dd>
@@ -752,8 +859,9 @@
   <p><b>Error típico:</b> contestar «verdadero, porque un subespacio es cerrado para la suma»: es el recíproco el que es cierto (subespacio $\Rightarrow$ cerrado para la suma, no al revés).</p>
 </details>
 
-<details class="sol" id="ex-feb23b"><summary>Feb. 2023 (2.ª sem.), pregunta 2 — espacio de funciones <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), pregunta 2">X Feb. 2023 (2.ª)</span></summary>
-  <p class="enun">Sea $V$ el espacio vectorial de las funciones $f:\mathbb R\to\mathbb R$ y $E=\{f\in V: f(4)=4\}$. Determine de manera razonada si $E$ es subespacio de $V$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $V$ el espacio vectorial de las funciones $f:\mathbb R\to\mathbb R$ y $E=\{f\in V: f(4)=4\}$. Determine de manera razonada si $E$ es subespacio de $V$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Los «vectores» son funciones. Sustituye la función nula en la condición $f(4)=4$ y decide.</p></details>
+<details class="sol" id="ex-feb23b"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2023 (2.ª sem.), pregunta 2 — espacio de funciones <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª sem.), pregunta 2">X Feb. 2023 (2.ª)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si las funciones con $f(4)=4$ forman subespacio del espacio de funciones.</dd>
     <dt>Cómo lo pienso</dt><dd>Lo importante es saber quién es el cero del espacio de funciones: la función que vale $0$ en todo punto. Si $f(4)$ debe valer $4$ y la función nula da $0$, ya falla. Es la misma idea de «ecuación con término independiente no nulo».</dd>
@@ -778,8 +886,9 @@
   <p><b>Error típico:</b> pensar que el neutro es «la función $f(x)=x$» o «la constante 1». El neutro de la suma de funciones vale 0 en todo punto.</p>
 </details>
 
-<details class="sol" id="ex-sep24"><summary>Sept. 2024, problema 7(c) — unión de dos subespacios de $\mathbb R^4$ <span class="src" data-l="X" data-ref="Sept. 2024, problema 7(c)">X Sept. 2024</span></summary>
-  <p class="enun">Sean $U_1=\langle(2,0,2,1),(0,3,1,0)\rangle$ y $U_2=\{(x,y,z,t)\in\mathbb R^4: x=0,\ y-3z=0\}$. Determine de manera razonada si $U_1\cup U_2$ es o no un subespacio de $\mathbb R^4$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $U_1=\langle(2,0,2,1),(0,3,1,0)\rangle$ y $U_2=\{(x,y,z,t)\in\mathbb R^4: x=0,\ y-3z=0\}$. Determine de manera razonada si $U_1\cup U_2$ es o no un subespacio de $\mathbb R^4$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La unión solo es subespacio si un subespacio contiene al otro. Comprueba si los generadores de cada uno están en el otro; si alguno falla en ambos sentidos, ya está.</p></details>
+<details class="sol" id="ex-sep24"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Sept. 2024, problema 7(c) — unión de dos subespacios de $\mathbb R^4$ <span class="src" data-l="X" data-ref="Sept. 2024, problema 7(c)">X Sept. 2024</span></summary>
   <p><b>Notación.</b> $\langle v_1,v_2\rangle$ es el conjunto de combinaciones lineales $\alpha v_1+\beta v_2$ (se verá en §2.2 de U). Así $w\in U_1\iff w=(2\alpha,\ 3\beta,\ 2\alpha+\beta,\ \alpha)$ para algunos $\alpha,\beta$. Seguimos la receta del Ej. 2.13.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si la unión de dos subespacios de $\mathbb R^4$ (uno dado por generadores y otro por ecuaciones) es subespacio.</dd>
@@ -806,8 +915,9 @@
   <p><b>Error típico:</b> afirmar «$(2,0,2,2)\notin U_1$» sin comprobarlo.</p>
 </details>
 
-<details class="sol" id="ex-sep17a"><summary>Sept. 2017 (tipo A), ejercicio 2 (test) — un conjunto de matrices con un 1 fijo <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A), ejercicio 2">X Sept. 2017 (A)</span></summary>
-  <p class="enun">El conjunto de matrices $W=\left\{\begin{pmatrix}1&0&a\\0&a&b\\0&c&a\end{pmatrix}: a,b,c\in\mathbb R\right\}$ verifica: <b>A)</b> es un espacio vectorial de dimensión 3; <b>B)</b> NO es un espacio vectorial; <b>C)</b> es un subespacio vectorial del espacio de las matrices reales $3\times3$; <b>D)</b> ninguna de las anteriores.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">El conjunto de matrices $W=\left\{\begin{pmatrix}1&0&a\\0&a&b\\0&c&a\end{pmatrix}: a,b,c\in\mathbb R\right\}$ verifica: <b>A)</b> es un espacio vectorial de dimensión 3; <b>B)</b> NO es un espacio vectorial; <b>C)</b> es un subespacio vectorial del espacio de las matrices reales $3\times3$; <b>D)</b> ninguna de las anteriores.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Mira la entrada fija igual a 1 en la primera fila: ¿puede la matriz nula ser de esa forma? Eso descarta una de las opciones.</p></details>
+<details class="sol" id="ex-sep17a"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2017 (tipo A), ejercicio 2 (test) — un conjunto de matrices con un 1 fijo <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A), ejercicio 2">X Sept. 2017 (A)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Un test: el conjunto de matrices $3\times3$ con un $1$ fijo en la esquina, ¿es espacio vectorial, subespacio...?</dd>
     <dt>Cómo lo pienso</dt><dd>Dos de las opciones dicen lo mismo con distintas palabras (espacio vectorial con esas operaciones $\equiv$ subespacio). Me fijo en la <b>entrada fija</b> $=1$: ninguna matriz de este conjunto puede ser la matriz nula. Eso condena al conjunto.</dd>
@@ -838,7 +948,7 @@
 </ul>
 
 <!-- ============================ CHULETA ============================ -->
-<h2 id="chuleta"><span class="n">8</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">8</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <table>
   <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
@@ -879,6 +989,27 @@
   </ol>
 </div>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>¿Cuál de estos subconjuntos de $\mathbb R^3$ es un subespacio?</p>
+    <ul class="opts"><li data-ok>$\{(x,y,z):x=y\}$</li><li>$\{(x,y,z):x+y=1\}$<span class="why">No contiene a $(0,0,0)$ ($0\neq1$): el filtro del cero lo descarta.</span></li><li>$\{(x,y,z):xy=0\}$<span class="why">Contiene a $\bar0$, pero $(1,0,0)+(0,1,0)=(1,1,0)$ no cumple $xy=0$.</span></li><li>$\{(x,y,z):x\ge0\}$<span class="why">No es cerrado para escalares negativos: $(1,0,0)\in W$ pero $-1\cdot(1,0,0)\notin W$.</span></li></ul>
+    <p class="fb">$x-y=0$ es una ecuación lineal homogénea: contiene a $\bar0$ y es cerrada para combinaciones lineales (es un plano por el origen).</p></div>
+  <div class="qp"><p>Sea $W=\{(x,y):x\ge0,\ y\ge0\}\subset\mathbb R^2$. ¿Qué afirmación es correcta?</p>
+    <ul class="opts"><li>Es subespacio: contiene a $\bar0$ y es cerrado para la suma<span class="why">Falta una condición: el producto por escalares. $-1\cdot(1,1)=(-1,-1)\notin W$.</span></li><li data-ok>No es subespacio: $(1,1)\in W$ pero $-(1,1)\notin W$</li><li>No es subespacio: no contiene a $\bar0$<span class="why">Sí lo contiene: $0\ge0$ en ambas coordenadas. El motivo de que falle es otro.</span></li><li>Es subespacio: las desigualdades no estrictas se conservan<span class="why">Se conservan al sumar, pero no al multiplicar por un escalar negativo.</span></li></ul>
+    <p class="fb">$W$ es cerrado para la suma y para escalares $\ge0$, pero no para escalares negativos. Con un solo contraejemplo concreto (con el vector en $W$) basta.</p></div>
+  <div class="qp"><p>En $\mathbb R$ se define $a*b=a+b-1$. ¿Cuál es el elemento neutro y el simétrico de $5$?</p>
+    <ul class="opts"><li>$e=0$, simétrico $-5$<span class="why">Es lo que sale con la suma usual. Aquí $5*0=4\neq5$, así que $0$ no es neutro.</span></li><li data-ok>$e=1$, simétrico $-3$</li><li>$e=1$, simétrico $-5$<span class="why">El neutro está bien, pero $5*(-5)=-1\neq1$. El simétrico se despeja de $5*a'=e$.</span></li><li>No hay neutro<span class="why">Sí hay: despejando $a*e=a$ sale $a+e-1=a$, luego $e=1$.</span></li></ul>
+    <p class="fb">$a*e=a+e-1=a\Rightarrow e=1$. Para $5$: $5+a'-1=1\Rightarrow a'=-3$. Comprobación: $5*(-3)=5-3-1=1$. En general $a'=2-a$.</p></div>
+  <div class="qp"><p>En $\mathbb R^2$ se define $\lambda\bullet(x_1,x_2)=(\lambda x_1,0)$ con la suma usual. ¿Qué axioma falla?</p>
+    <ul class="opts"><li data-ok>E4: $1\bullet a=a$</li><li>E1: $\lambda\bullet(a+b)=\lambda\bullet a+\lambda\bullet b$<span class="why">Sí se cumple: $(\lambda(x_1+y_1),0)=(\lambda x_1,0)+(\lambda y_1,0)$.</span></li><li>E3: $(\lambda\mu)\bullet a=\lambda\bullet(\mu\bullet a)$<span class="why">Sí se cumple: ambos miembros dan $(\lambda\mu x_1,0)$.</span></li><li>Ninguno: es espacio vectorial<span class="why">Falla E4: $1\bullet(1,1)=(1,0)\neq(1,1)$.</span></li></ul>
+    <p class="fb">Con $a=(1,1)$: $1\bullet a=(1,0)\neq a$. La segunda coordenada se pierde, y por eso no hay «escalar unidad».</p></div>
+  <div class="qp"><p>$U=\{y=0\}$ y $V=\{x=0\}$ son subespacios de $\mathbb R^2$. ¿Qué es verdad?</p>
+    <ul class="opts"><li>$U\cap V$ y $U\cup V$ son subespacios<span class="why">La intersección sí ($\{\bar0\}$), pero $(1,0)+(0,1)=(1,1)\notin U\cup V$.</span></li><li data-ok>$U\cap V$ es subespacio y $U\cup V$ no</li><li>Ninguno de los dos lo es<span class="why">La intersección de subespacios siempre es subespacio: aquí es $\{\bar0\}$.</span></li><li>$U\cup V$ es subespacio porque lo son $U$ y $V$<span class="why">La unión solo lo es si uno contiene al otro; aquí ninguno contiene al otro.</span></li></ul>
+    <p class="fb">La intersección es siempre subespacio. La unión de dos rectas distintas por el origen no es cerrada para la suma: $(1,0)+(0,1)=(1,1)$ queda fuera.</p></div>
+  <div class="qp"><p>¿Es $N=\{A\in\mathcal M_{2\times2}:\det A=0\}$ un subespacio de $\mathcal M_{2\times2}$?</p>
+    <ul class="opts"><li>Sí: contiene a la matriz nula y es cerrado para escalares<span class="why">Esas dos cosas son ciertas, pero falta la suma: no es cerrado para ella.</span></li><li data-ok>No: $\operatorname{diag}(1,0)$ y $\operatorname{diag}(0,1)$ están en $N$ pero su suma $I$ tiene $\det=1$</li><li>No: la matriz nula no tiene determinante cero<span class="why">$\det 0=0$: la matriz nula sí está en $N$.</span></li><li>Sí: $\det(A+B)=\det A+\det B$<span class="why">El determinante no es lineal para la suma; esa igualdad es falsa en general.</span></li></ul>
+    <p class="fb">La condición $\det=0$ no es lineal. Dos matrices singulares pueden sumar una regular: $\operatorname{diag}(1,0)+\operatorname{diag}(0,1)=I$, con $\det=1$.</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>

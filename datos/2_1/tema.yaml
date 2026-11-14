@@ -33,3 +33,240 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Si solo tienes un rato, esto es lo que tienes que llevarte. El resto de la página lo desarrolla con ejemplos.
+  items:
+  - |-
+    <b>Espacio vectorial = grupo conmutativo + producto por escalares.</b> Una suma con S1-S4 (asociativa, neutro, simétrico, conmutativa) y un producto por escalares con E1-E4. Las operaciones no tienen por qué ser las usuales: el neutro y el simétrico <b>se despejan</b> ($a*e=a$, $a*a'=e$), no se suponen $0$ y $-a$.
+  - |-
+    <b>Para negar basta un contraejemplo; para afirmar hace falta todo genérico.</b> Un ejemplo numérico que «sale bien» no demuestra nada, y un contraejemplo con vectores que no están en el conjunto tampoco.
+  - |-
+    <b>Subespacio:</b> $U\neq\emptyset$ y $\lambda u+\mu v\in U$ para todo $u,v\in U$ y $\lambda,\mu\in\mathbb R$ (equivale a cerrado para suma y producto). <b>Filtro del cero:</b> si $\bar0\notin U$, no es subespacio; si $\bar0\in U$, todavía hay que comprobarlo.
+  - |-
+    <b>Atajo de reconocimiento:</b> ecuaciones lineales homogéneas y combinaciones lineales de vectores dan subespacio; desigualdades, productos, cuadrados, «$\neq$», «grado exactamente» o «$\det=0$» casi nunca. En $\mathbb R^3$ los subespacios son $\{\bar0\}$, rectas y planos por el origen, y $\mathbb R^3$.
+  - |-
+    <b>Intersección y unión:</b> $U\cap V$ siempre es subespacio; $U\cup V$ lo es solo si $U\subseteq V$ o $V\subseteq U$.
+tipos:
+- id: subesp
+  nombre: |-
+    ¿Es subespacio?
+  receta: |-
+    Filtro del cero; si lo pasa, comprueba $\lambda u+\mu v\in W$ con elementos genéricos, o da un contraejemplo concreto.
+  senal: |-
+    «¿es subespacio vectorial?», «determine de manera razonada si $E$ es subespacio», un conjunto definido por una condición (ecuación, desigualdad, grado, determinante, valor de una función).
+  pasos:
+  - |-
+    <b>Filtro del cero:</b> sustituye $\bar0$ en la condición. Si no la cumple, <b>no es subespacio</b> y has terminado.
+  - |-
+    <b>Mira el tipo de condición:</b> lineal homogénea te hace sospechar que sí; desigualdad, producto, cuadrado, «$\neq$» o «$\det=0$», que no.
+  - |-
+    <b>Si crees que sí:</b> toma $u,v\in W$ genéricos y $\lambda,\mu\in\mathbb R$ y demuestra que $\lambda u+\mu v$ cumple la condición.
+  - |-
+    <b>Si crees que no:</b> da vectores concretos <b>que estén en $W$</b> y un escalar concreto cuya combinación se salga. Comprueba antes que tus vectores cumplen la condición.
+  ejemplo: |-
+    $W=\{(x,y,z):x+y-z=0\}$: $\bar0\in W$ y, para $u,v\in W$, $(\lambda u+\mu v)$ da $\lambda\cdot0+\mu\cdot0=0$, luego es subespacio. En cambio $W'=\{x+y=1\}$ no contiene a $\bar0$ ($0\neq1$): no lo es.
+  fallos: |-
+    creer que «contiene a $\bar0$» basta · comprobar con ejemplos numéricos y concluir «sí» · refutar con vectores que no están en el conjunto · olvidar escalares negativos en las desigualdades.
+- id: axiomas
+  nombre: |-
+    ¿Qué propiedades de espacio vectorial cumple?
+  receta: |-
+    Desarrolla por separado los dos miembros de cada axioma E1-E4 (o S1-S4) y compáralos; el que falle, refútalo con números.
+  senal: |-
+    «verifica la distributiva…», «¿existe escalar unidad?», «¿es espacio vectorial con estas operaciones?», una suma o un producto por escalares definidos de forma inusual.
+  pasos:
+  - |-
+    <b>Escribe la propiedad</b> con elementos genéricos ($\lambda,\mu$, vectores $u,v$).
+  - |-
+    <b>Desarrolla cada miembro por separado</b> usando la definición de la operación, y compara los resultados.
+  - |-
+    Si coinciden siempre, la propiedad se cumple. Si no, <b>da valores concretos</b> donde difieran: basta un caso.
+  - |-
+    Con que falle un solo axioma, <b>no es espacio vectorial</b>; no hace falta revisar el resto.
+  ejemplo: |-
+    En $\mathbb R^2$ con $\lambda\bullet(x_1,x_2)=(\lambda^2x_1,\lambda x_2)$: E2 falla, pues con $u=(1,0)$ y $\lambda=\mu=1$, $(1+1)\bullet u=(4,0)$ pero $1\bullet u+1\bullet u=(2,0)$.
+  fallos: |-
+    comprobar un axioma solo con un ejemplo que sale bien · desarrollar solo un miembro · decir «no es espacio vectorial» sin señalar qué axioma falla y con qué valores.
+- id: neutro
+  nombre: |-
+    Neutro, simétrico y grupo
+  receta: |-
+    Despeja $e$ de $a*e=a$ y $a'$ de $a*a'=e$; comprueba que están en el conjunto y que valen por los dos lados.
+  senal: |-
+    «existe elemento neutro», «todo elemento tiene simétrico», «es grupo conmutativo», con una operación $*$ definida por una fórmula.
+  pasos:
+  - |-
+    <b>Neutro:</b> plantea $a*e=a$ con $a$ genérico y despeja $e$. Debe salir independiente de $a$ y pertenecer al conjunto.
+  - |-
+    <b>Simétrico:</b> con ese $e$, plantea $a*a'=e$ y despeja $a'$. Comprueba que $a'$ está en el conjunto para todo $a$.
+  - |-
+    Comprueba que ambos sirven <b>por los dos lados</b> (o prueba la conmutatividad) y revisa la asociatividad con tres elementos genéricos.
+  - |-
+    <b>Concluye:</b> grupo si valen S1-S3, conmutativo si además S4; si falla algo, nómbralo.
+  ejemplo: |-
+    $V=\{(x_1,x_2):x_1>0\}$ con $(x_1,x_2)*(y_1,y_2)=(x_1y_1,x_2+y_2)$: $(x_1,x_2)*(e_1,e_2)=(x_1,x_2)\Rightarrow e=(1,0)$ (¡no $(0,0)$, que ni está en $V$!). Simétrico de $(a,b)$: $(1/a,-b)$, que está en $V$ por ser $a>0$.
+  fallos: |-
+    suponer neutro $(0,0)$ y simétrico $-a$ · no comprobar que el resultado pertenece al conjunto · usar un $e$ que depende de $a$.
+- id: interunion
+  nombre: |-
+    Intersección y unión de subespacios
+  receta: |-
+    La intersección siempre es subespacio (cada subespacio por separado); la unión solo si uno contiene al otro: contraejemplo con un vector de cada uno.
+  senal: |-
+    «$U\cap V$ es subespacio», «$U\cup V$ es subespacio», «la suma de dos elementos de la unión está en la unión».
+  pasos:
+  - |-
+    <b>Intersección:</b> toma $u,v\in U\cap V$ y $\lambda,\mu$. Como $u,v\in U$ y $U$ es subespacio, $\lambda u+\mu v\in U$; lo mismo para $V$. Luego está en ambos.
+  - |-
+    <b>Unión:</b> para ver si es subespacio, mira primero si $U\subseteq V$ o $V\subseteq U$ (entonces la unión es el mayor y sí lo es).
+  - |-
+    Si ninguno contiene al otro, toma $u\in U\setminus V$ y $v\in V\setminus U$: la suma $u+v$ no está en $U$ ni en $V$, y por tanto no está en la unión.
+  - |-
+    Si los subespacios vienen dados por generadores o ecuaciones, <b>comprueba si cada generador de uno cumple las ecuaciones del otro</b>.
+  ejemplo: |-
+    $U=\{y=0\}$, $V=\{x=0\}$ en $\mathbb R^2$: $(1,0)\in U$, $(0,1)\in V$, pero $(1,0)+(0,1)=(1,1)\notin U\cup V$: la unión no es subespacio.
+  fallos: |-
+    confundir la unión $U\cup V$ con la suma $U+V$ · decir que la unión «nunca» es subespacio (lo es si uno contiene al otro) · demostrar la intersección con un ejemplo.
+quiz:
+- p: |-
+    ¿Cuál de estos subconjuntos de $\mathbb R^3$ es un subespacio?
+  opciones:
+  - t: |-
+      $\{(x,y,z):x=y\}$
+    ok: true
+  - t: |-
+      $\{(x,y,z):x+y=1\}$
+    ok: false
+    why: |-
+      No contiene a $(0,0,0)$ ($0\neq1$): el filtro del cero lo descarta.
+  - t: |-
+      $\{(x,y,z):xy=0\}$
+    ok: false
+    why: |-
+      Contiene a $\bar0$, pero $(1,0,0)+(0,1,0)=(1,1,0)$ no cumple $xy=0$.
+  - t: |-
+      $\{(x,y,z):x\ge0\}$
+    ok: false
+    why: |-
+      No es cerrado para escalares negativos: $(1,0,0)\in W$ pero $-1\cdot(1,0,0)\notin W$.
+  fb: |-
+    $x-y=0$ es una ecuación lineal homogénea: contiene a $\bar0$ y es cerrada para combinaciones lineales (es un plano por el origen).
+- p: |-
+    Sea $W=\{(x,y):x\ge0,\ y\ge0\}\subset\mathbb R^2$. ¿Qué afirmación es correcta?
+  opciones:
+  - t: |-
+      Es subespacio: contiene a $\bar0$ y es cerrado para la suma
+    ok: false
+    why: |-
+      Falta una condición: el producto por escalares. $-1\cdot(1,1)=(-1,-1)\notin W$.
+  - t: |-
+      No es subespacio: $(1,1)\in W$ pero $-(1,1)\notin W$
+    ok: true
+  - t: |-
+      No es subespacio: no contiene a $\bar0$
+    ok: false
+    why: |-
+      Sí lo contiene: $0\ge0$ en ambas coordenadas. El motivo de que falle es otro.
+  - t: |-
+      Es subespacio: las desigualdades no estrictas se conservan
+    ok: false
+    why: |-
+      Se conservan al sumar, pero no al multiplicar por un escalar negativo.
+  fb: |-
+    $W$ es cerrado para la suma y para escalares $\ge0$, pero no para escalares negativos. Con un solo contraejemplo concreto (con el vector en $W$) basta.
+- p: |-
+    En $\mathbb R$ se define $a*b=a+b-1$. ¿Cuál es el elemento neutro y el simétrico de $5$?
+  opciones:
+  - t: |-
+      $e=0$, simétrico $-5$
+    ok: false
+    why: |-
+      Es lo que sale con la suma usual. Aquí $5*0=4\neq5$, así que $0$ no es neutro.
+  - t: |-
+      $e=1$, simétrico $-3$
+    ok: true
+  - t: |-
+      $e=1$, simétrico $-5$
+    ok: false
+    why: |-
+      El neutro está bien, pero $5*(-5)=-1\neq1$. El simétrico se despeja de $5*a'=e$.
+  - t: |-
+      No hay neutro
+    ok: false
+    why: |-
+      Sí hay: despejando $a*e=a$ sale $a+e-1=a$, luego $e=1$.
+  fb: |-
+    $a*e=a+e-1=a\Rightarrow e=1$. Para $5$: $5+a'-1=1\Rightarrow a'=-3$. Comprobación: $5*(-3)=5-3-1=1$. En general $a'=2-a$.
+- p: |-
+    En $\mathbb R^2$ se define $\lambda\bullet(x_1,x_2)=(\lambda x_1,0)$ con la suma usual. ¿Qué axioma falla?
+  opciones:
+  - t: |-
+      E4: $1\bullet a=a$
+    ok: true
+  - t: |-
+      E1: $\lambda\bullet(a+b)=\lambda\bullet a+\lambda\bullet b$
+    ok: false
+    why: |-
+      Sí se cumple: $(\lambda(x_1+y_1),0)=(\lambda x_1,0)+(\lambda y_1,0)$.
+  - t: |-
+      E3: $(\lambda\mu)\bullet a=\lambda\bullet(\mu\bullet a)$
+    ok: false
+    why: |-
+      Sí se cumple: ambos miembros dan $(\lambda\mu x_1,0)$.
+  - t: |-
+      Ninguno: es espacio vectorial
+    ok: false
+    why: |-
+      Falla E4: $1\bullet(1,1)=(1,0)\neq(1,1)$.
+  fb: |-
+    Con $a=(1,1)$: $1\bullet a=(1,0)\neq a$. La segunda coordenada se pierde, y por eso no hay «escalar unidad».
+- p: |-
+    $U=\{y=0\}$ y $V=\{x=0\}$ son subespacios de $\mathbb R^2$. ¿Qué es verdad?
+  opciones:
+  - t: |-
+      $U\cap V$ y $U\cup V$ son subespacios
+    ok: false
+    why: |-
+      La intersección sí ($\{\bar0\}$), pero $(1,0)+(0,1)=(1,1)\notin U\cup V$.
+  - t: |-
+      $U\cap V$ es subespacio y $U\cup V$ no
+    ok: true
+  - t: |-
+      Ninguno de los dos lo es
+    ok: false
+    why: |-
+      La intersección de subespacios siempre es subespacio: aquí es $\{\bar0\}$.
+  - t: |-
+      $U\cup V$ es subespacio porque lo son $U$ y $V$
+    ok: false
+    why: |-
+      La unión solo lo es si uno contiene al otro; aquí ninguno contiene al otro.
+  fb: |-
+    La intersección es siempre subespacio. La unión de dos rectas distintas por el origen no es cerrada para la suma: $(1,0)+(0,1)=(1,1)$ queda fuera.
+- p: |-
+    ¿Es $N=\{A\in\mathcal M_{2\times2}:\det A=0\}$ un subespacio de $\mathcal M_{2\times2}$?
+  opciones:
+  - t: |-
+      Sí: contiene a la matriz nula y es cerrado para escalares
+    ok: false
+    why: |-
+      Esas dos cosas son ciertas, pero falta la suma: no es cerrado para ella.
+  - t: |-
+      No: $\operatorname{diag}(1,0)$ y $\operatorname{diag}(0,1)$ están en $N$ pero su suma $I$ tiene $\det=1$
+    ok: true
+  - t: |-
+      No: la matriz nula no tiene determinante cero
+    ok: false
+    why: |-
+      $\det 0=0$: la matriz nula sí está en $N$.
+  - t: |-
+      Sí: $\det(A+B)=\det A+\det B$
+    ok: false
+    why: |-
+      El determinante no es lineal para la suma; esa igualdad es falsa en general.
+  fb: |-
+    La condición $\det=0$ no es lineal. Dos matrices singulares pueden sumar una regular: $\operatorname{diag}(1,0)+\operatorname{diag}(0,1)=I$, con $\det=1$.
+capa: true
+que_cae_nota: |-
+  Lo más frecuente en examen es «¿es subespacio?» con un conjunto de $\mathbb R^n$, de matrices, de polinomios o de funciones; los problemas con una operación inventada (neutro, simétrico, grupo) salen en tipo test.
