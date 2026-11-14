@@ -1,0 +1,53 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Permutaciones y la fórmula de Leibniz <span class="src" data-l="U" data-ref="U §1.3, p. 24-26">U p.24-26</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva antes de la definición formal</span>
+  <p>Piensa en un determinante $n\times n$ como una manera de <b>elegir un elemento de cada fila y de cada columna, sin repetir ninguna columna</b>, multiplicarlos todos, y sumar (con signo) sobre <b>todas las formas posibles</b> de hacer esa elección. En $2\times2$ solo hay dos formas de elegir «un elemento por fila y por columna sin repetir»: la diagonal principal $(a_{11},a_{22})$ y la diagonal secundaria $(a_{12},a_{21})$; por eso la fórmula tiene dos términos, uno con $+$ y otro con $-$. En $3\times3$ hay $3!=6$ formas, que son justamente los 6 términos de Sarrus. El «signo» de cada elección se llama <b>signo de la permutación</b> y depende solo de cómo estén desordenadas las columnas elegidas, no de los valores $a_{ij}$.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia para introducir la Definición 1.6">P</span>
+</div>
+
+<div class="box def"><span class="h">Permutaciones de $\{1,\dots,n\}$</span>
+  <p>Una <b>permutación</b> de $\{1,2,\dots,n\}$ es una reordenación $p=(p_1,p_2,\dots,p_n)$ de esos $n$ números. El conjunto de todas las permutaciones se denota $S_n$ y tiene $n!$ elementos.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 24-25">U p.24-25</span>
+</div>
+
+
+<div class="box ex"><span class="h">Ejemplo 1.18 de U — $S_3$</span>
+  <p>$S_3$ tiene $3!=6$ permutaciones de $\{1,2,3\}$: $(1,2,3)$, $(1,3,2)$, $(2,1,3)$, $(2,3,1)$, $(3,1,2)$, $(3,2,1)$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.18, p. 25">U p.25</span>
+</div>
+
+<div class="box def"><span class="h">Paridad y signo de una permutación</span>
+  <p>Toda permutación $p$ se puede obtener a partir de $(1,2,\dots,n)$ mediante una serie de <b>intercambios</b> de dos posiciones. El número de intercambios necesarios no es único, pero su <b>paridad</b> (par o impar) sí lo es. Se define
+  $$\operatorname{sig}(p)=\begin{cases}+1&\text{si el número de intercambios es par}\\-1&\text{si es impar.}\end{cases}$$</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 25">U p.25</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.19 de U — paridad contando intercambios</span>
+  <p>Para $S_4$: la permutación $(1,3,2,4)$ necesita <b>un</b> intercambio para llegar a la identidad (basta cambiar $3$ y $2$ de sitio): es <b>impar</b>. La permutación $(4,2,1,3)$ necesita <b>dos</b> intercambios: $(4,2,1,3)\to(1,2,4,3)\to(1,2,3,4)$ (se intercambian primero $4$ y $1$, luego $4$ y $3$): es <b>par</b>. El número de intercambios puede variar según el camino elegido, pero su paridad siempre coincide.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.19, p. 25">U p.25</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.20 de U — signos de las 6 permutaciones de $S_3$</span>
+  <p>$(1,2,3)$: 0 intercambios, $\operatorname{sig}=+1$ (identidad). $(2,1,3)$: 1 intercambio, $-1$. $(1,3,2)$: 1 intercambio, $-1$. $(3,2,1)$: 1 intercambio, $-1$. $(2,3,1)$: 2 intercambios ($(1,2,3)\to(2,1,3)\to(2,3,1)$), $+1$. $(3,1,2)$: 2 intercambios, $+1$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.20, p. 25">U p.25</span>
+</div>
+
+<div class="box def"><span class="h">Definición 1.6 (definición formal del determinante)</span>
+  <p>Para $A=(a_{ij})$ cuadrada de orden $n$:
+  $$\det(A)=\sum_{p\in S_n}\operatorname{sig}(p)\,a_{1p_1}a_{2p_2}\cdots a_{np_n}.$$
+  Cada sumando toma un elemento de cada fila (los primeros subíndices, en orden $1,\dots,n$) y un elemento de cada columna (los segundos subíndices $p_1,\dots,p_n$, una permutación), y se suman los $n!$ productos con el signo de su permutación. Esta suma tiene exactamente $n!$ términos, tantos como permutaciones hay en $S_n$; uno de ellos es siempre el producto de la <b>diagonal principal</b> $a_{11}a_{22}\cdots a_{nn}$, que corresponde a la permutación identidad $p=(1,2,\dots,n)$ y lleva signo $+$ (0 intercambios).</p>
+  <span class="src" data-l="U" data-ref="U Definición 1.6, p. 25">U p.25</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.21 de U — de la Definición 1.6 a la fórmula $2\times2$</span>
+  <p>Para $n=2$, $S_2=\{(1,2),(2,1)\}$ con $\operatorname{sig}(1,2)=+1$ y $\operatorname{sig}(2,1)=-1$ (un intercambio). Aplicando la Definición 1.6:
+  $$\det(A)=\operatorname{sig}(1,2)\,a_{11}a_{22}+\operatorname{sig}(2,1)\,a_{12}a_{21}=a_{11}a_{22}-a_{12}a_{21},$$
+  exactamente la fórmula del §1.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.21, p. 26">U p.26</span>
+</div>
+
+<div class="box tip"><span class="h">Para qué sirve la Definición 1.6 en la práctica</span>
+  <p>En el examen casi nunca se aplica la Definición 1.6 directamente para <b>calcular</b> un determinante (para eso están Sarrus y los adjuntos); sirve para <b>razonar sobre el signo de un término concreto</b> del desarrollo (ver Ejercicio 1.22) y para entender <b>por qué</b> funcionan las propiedades del §5: todas se demuestran a partir de esta suma sobre permutaciones.</p>
+</div>
+

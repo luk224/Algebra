@@ -1,0 +1,55 @@
+<!-- ============================ 7 ============================ -->
+<h2 id="s7"><span class="n">7</span>Determinante, regularidad, rango e inversa <span class="src" data-l="U" data-ref="U §1.3, p. 27-28">U p.27-28</span></h2>
+
+<div class="box thm"><span class="h">Regularidad</span>
+  <p>$A$ (cuadrada de orden $n$) es <b>regular</b> $\iff$ $\det(A)\neq0$. Enlaza con el Tema 1.2: $A$ regular $\iff\operatorname{rang}(A)=n$ (U p.22), así que también $\det(A)\neq0\iff\operatorname{rang}(A)=n$.</p>
+  <p><b>Por qué es cierto</b> (con lo visto en el §6): al escalonar, $\det A=c\cdot\det A_e$ con $c\neq0$ (el producto de los factores de permutar/escalar; el reemplazo no aporta factor). Por otro lado, $A$ es regular $\iff$ su escalonada $A_e$ es triangular <b>sin ceros en la diagonal</b> (U p.22, Tema 1.2). Y una triangular tiene determinante no nulo exactamente cuando su diagonal no tiene ceros (propiedad 2 del §5). Encadenando ambas cosas: $A$ regular $\iff\det A_e\neq0\iff\det A=c\cdot\det A_e\neq0$ (pues $c\neq0$).</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27">U p.27</span>
+</div>
+
+<div class="box def"><span class="h">Matriz adjunta y fórmula de la inversa</span>
+  <p>La <b>matriz adjunta</b> de $A$, $\operatorname{Adj}(A)$, es la matriz cuyo elemento $(i,j)$ es el adjunto $A_{ij}$ (definido en el §2). Si $\det(A)\neq0$:
+  $$A^{-1}=\frac{1}{\det(A)}\big(\operatorname{Adj}A\big)^t.$$
+  Nótese la <b>trasposición</b>: la columna $k$ de $A^{-1}$ se obtiene con los adjuntos de la <b>fila</b> $k$ de $A$, no de su columna $k$.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27-28 (Adj, p.28; fórmula, p.27)">U p.27-28</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico $2\times2$ — comparar con el Ejemplo 1.5 de 1.2</span>
+  <p>Con $A=\begin{pmatrix}2&3\\1&5\end{pmatrix}$ (Ejemplo 1.5 del Tema 1.2, calculado allí resolviendo un sistema): $\det A=2\cdot5-3\cdot1=7\neq0$, luego $A$ es regular. Los adjuntos son $A_{11}=5$, $A_{12}=-1$, $A_{21}=-3$, $A_{22}=2$, así que $\operatorname{Adj}A=\begin{pmatrix}5&-1\\-3&2\end{pmatrix}$ y
+  $$A^{-1}=\frac17\begin{pmatrix}5&-3\\-1&2\end{pmatrix}=\begin{pmatrix}\frac57&-\frac37\\-\frac17&\frac27\end{pmatrix},$$
+  el mismo resultado que en 1.2, pero sin plantear ningún sistema: para $2\times2$, «cruzar la diagonal, cambiar de signo la secundaria y dividir por $\det A$» es la versión rápida de esta fórmula.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, comparado con U Ejemplo 1.5 (Tema 1.2, p. 14)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.23 de U — inversa $3\times3$ completa por adjuntos</span>
+  <p>Con $A=\begin{pmatrix}1&2&1\\3&2&2\\5&4&3\end{pmatrix}$ (nótese: $a_{13}=1$, no es la matriz del Ejemplo 1.16, que tenía un $0$ ahí). Por Sarrus, $|A|=6+12+20-10-8-18=2\neq0$: $A$ es regular.</p>
+  <p>Los nueve adjuntos: $A_{11}=-2$, $A_{12}=1$, $A_{13}=2$, $A_{21}=-2$, $A_{22}=-2$, $A_{23}=6$, $A_{31}=2$, $A_{32}=1$, $A_{33}=-4$, así que
+  $$\operatorname{Adj}A=\begin{pmatrix}-2&1&2\\-2&-2&6\\2&1&-4\end{pmatrix},\qquad A^{-1}=\frac12\begin{pmatrix}-2&-2&2\\1&-2&1\\2&6&-4\end{pmatrix}=\begin{pmatrix}-1&-1&1\\\frac12&-1&\frac12\\1&3&-2\end{pmatrix}.$$</p>
+  <p>Comprobación: $AA^{-1}=I_3$ (verificado con sympy).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.23, p. 28">U p.28</span>
+</div>
+
+<div class="box intu"><span class="h">Interpretación geométrica</span>
+  <p>En $\mathbb R^2$, $|\det[v_1\ v_2]|$ es el <b>área</b> del paralelogramo que forman los vectores $v_1,v_2$ (colocados como columnas). Por ejemplo, con $v_1=(1,2)$ y $v_2=(3,0)$: $\left|\det\begin{pmatrix}1&3\\2&0\end{pmatrix}\right|=|0-6|=6$: el paralelogramo que forman tiene área 6. En $\mathbb R^3$, $|\det[v_1\ v_2\ v_3]|$ es el <b>volumen</b> del paralelepípedo que forman los tres vectores. Es coherente con la propiedad de que $\det=0$ cuando hay filas/columnas proporcionales: si dos vectores son paralelos (o uno es combinación de los otros), la figura se «aplasta» y su área/volumen es 0.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27 (interpretación geométrica)">U p.27</span>
+</div>
+
+
+<div class="box def"><span class="h">Rango por menores</span>
+  <p>El <b>rango</b> de $A\in\mathcal M_{m\times n}$ también se puede definir como el mayor orden $r$ para el que existe un menor (determinante de una submatriz cuadrada $r\times r$) <b>no nulo</b>. Coincide con la definición de 1.2 (número de filas no nulas de una escalonada), pero esta versión con menores es la que permite discutir el rango <b>según un parámetro</b> sin escalonar (ver Ejercicio 1.29).</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27-28">U p.27-28</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.24 de U — rango por menores de una matriz singular</span>
+  <p>La matriz del Ejemplo 1.16 (§1), $A=\begin{pmatrix}1&2&0\\3&2&2\\5&4&3\end{pmatrix}$, tiene $|A|=0$ (ya calculado), así que $\operatorname{rang}(A)\lt3$. El menor de filas 1-2 y columnas 1-2, $\begin{vmatrix}1&2\\3&2\end{vmatrix}=2-6=-4\neq0$, es de orden 2 y no nulo: por tanto $\operatorname{rang}(A)=2$. No hace falta escalonar para llegar a esta conclusión.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.24, p. 28">U p.28</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen</span>
+  <p>Para discutir el rango de una matriz cuadrada con parámetro: calcula primero $\det A$ (factorizado, si puedes). Donde $\det A\neq0$, el rango es máximo ($n$) sin más trabajo. En los valores que anulan $\det A$, sustituye ese valor y busca <b>un solo</b> menor de orden $n-1$ no nulo (basta uno); si todos son nulos, baja otra vez de orden.</p>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Concluir que $\det A=0$ implica rango $1$ o rango $0$: solo implica $\operatorname{rang}(A)\lt n$. Hay que seguir bajando de orden, comprobando menores, hasta encontrar uno no nulo (ver Ejercicio 1.29).</p>
+</div>
+

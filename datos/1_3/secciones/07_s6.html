@@ -1,0 +1,48 @@
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Efecto de las operaciones elementales en el determinante <span class="src" data-l="U" data-ref="U §1.3, p. 27">U p.27</span></h2>
+
+<div class="box intu"><span class="h">Aviso importante: aquí SÍ cambia (salvo un caso)</span>
+  <p>En el <a href="tema_1_2_algebra_matricial.html#s8">Tema 1.2</a> usábamos las tres operaciones elementales por filas para escalonar, sin preocuparnos de si «cambiaban» la matriz: el objetivo era llegar a una forma más simple equivalente. Aquí, en cambio, cada operación tiene un <b>efecto medible y distinto</b> sobre el determinante, y hay que llevar la cuenta de ese efecto para poder calcular $\det A$ a partir de una escalonada de $A$ (que es triangular, y por tanto su determinante es inmediato por la propiedad 2 del §5).</p>
+</div>
+
+<table>
+  <tr><th>Operación elemental (por filas o columnas)</th><th>Efecto en el determinante</th><th>¿Cambia el rango (1.2)?</th></tr>
+  <tr><td>$F_i\leftrightarrow F_j$ (permutar)</td><td>cambia de <b>signo</b>: $\times(-1)$</td><td>No</td></tr>
+  <tr><td>$F_i\to\alpha F_i$, $\alpha\neq0$ (escalar)</td><td>se multiplica por $\alpha$: $\times\alpha$</td><td>No</td></tr>
+  <tr><td>$F_i\to F_i+\alpha F_j$ (reemplazo)</td><td><b>no cambia</b></td><td>No</td></tr>
+</table>
+
+<div class="box tip"><span class="h">¿Y por columnas?</span>
+  <p>La tabla anterior está enunciada para filas. Las mismas tres reglas valen igual para <b>columnas</b>: hacer una operación sobre las columnas de $A$ es hacer la misma operación sobre las filas de $A^t$, y $\det(A)=\det(A^t)$ (propiedad 4 del §5), así que el efecto sobre el determinante es idéntico.</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico — escalonando con intercambio y reescalado</span>
+  <p>Calculemos $\det D$ con $D=\begin{pmatrix}0&4&2\\1&3&1\\2&5&3\end{pmatrix}$ escalonando, anotando cada factor.</p>
+  <ol class="steps">
+    <li>$a_{11}=0$: hace falta <b>permutar</b>. $F_1\leftrightarrow F_2$ (factor $-1$): $\begin{pmatrix}1&3&1\\0&4&2\\2&5&3\end{pmatrix}$.</li>
+    <li>Para trabajar con números más pequeños, $F_2\to\frac12F_2$ (factor $\frac12$): $\begin{pmatrix}1&3&1\\0&2&1\\2&5&3\end{pmatrix}$.</li>
+    <li>$F_3\to F_3-2F_1$ (reemplazo, factor $1$): $\begin{pmatrix}1&3&1\\0&2&1\\0&-1&1\end{pmatrix}$.</li>
+    <li>$F_3\to F_3+\frac12F_2$ (reemplazo, factor $1$): $\begin{pmatrix}1&3&1\\0&2&1\\0&0&1.5\end{pmatrix}=D_e$, ya triangular.</li>
+    <li>$\det D_e=1\cdot2\cdot1.5=3$. Factores acumulados: $(-1)\cdot\frac12\cdot1\cdot1=-\frac12$.</li>
+    <li>$\det D=\dfrac{\det D_e}{\text{producto de factores}}=\dfrac{3}{-\frac12}=-6$.</li>
+  </ol>
+  <p>Comprobación directa por Sarrus sobre $D$: $0+10+8-12-0-12=-6$ ✓ (verificado también con sympy).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.22 de U — determinantes de matrices elementales</span>
+  <p>Retomando las 4 matrices elementales del Ejemplo 1.7 de 1.2: $E_1$ (de $F_2\to2F_2$ en $I_3$) tiene $\det E_1=2$; $E_2$ (de $F_1\to F_1+5F_4$ en $I_4$, reemplazo) tiene $\det E_2=1$; $E_3$ (de $F_1\leftrightarrow F_2$ en $I_3$, permutación) tiene $\det E_3=-1$; $E_4$ (de $F_1\to F_1-F_2$ en $I_2$, reemplazo) tiene $\det E_4=1$. Coincide con «el determinante de una elemental es $\alpha$, $-1$ o $1$ según su tipo», porque toda elemental sale de aplicar <b>una</b> operación a $I_n$, cuyo determinante es 1.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.22, p. 27">U p.27</span>
+</div>
+
+<div class="box thm"><span class="h">Consecuencia práctica: calcular un determinante escalonando</span>
+  <p>Para calcular $\det A$ de cualquier orden: se lleva $A$ a una escalonada $A_e$ (triangular superior) anotando el factor de cada operación (permutar $\to\times(-1)$, escalar $\to\times\alpha$, reemplazo $\to\times1$); entonces
+  $$\det A=\frac{1}{\text{producto de los factores anotados}}\cdot\det A_e=\frac{1}{\text{producto de los factores}}\cdot(\text{producto de la diagonal de }A_e).$$
+  Es el método más rápido para órdenes altos, y el que conecta directamente con el escalonamiento de 1.2.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia, combinando U p.27 con el escalonamiento de 1.2">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Aplicar el reemplazo con un factor: pensar que $F_i\to F_i+\alpha F_j$ multiplica el determinante por $\alpha$ (o por $1+\alpha$). El reemplazo <b>nunca</b> cambia el determinante, sea cual sea $\alpha$; es justo la operación «gratis» que permite escalonar sin alterar $\det A$ salvo por los intercambios y los reescalados de filas.</p>
+</div>
+

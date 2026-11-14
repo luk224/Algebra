@@ -1,0 +1,45 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Desarrollo por adjuntos (o por cofactores) <span class="src" data-l="U" data-ref="U §1.3, p. 24">U p.24</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Sarrus solo funciona para $3\times3$. Para calcular un determinante de cualquier orden $n$, se «baja» el problema a $n$ determinantes de orden $n-1$: se elige una fila (o columna), y por cada elemento de esa fila se calcula el determinante que queda al tachar su fila y su columna (el <b>menor complementario</b>), con un signo que alterna en tablero de ajedrez. Se llama <b>desarrollo por adjuntos</b> (o por cofactores).</p>
+  <span class="src" data-l="L" data-ref="Lay §3.1, desarrollo por cofactores, definición recursiva, p. 165-166">L p.165-166</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: desarrollo por adjuntos paso a paso</span>
+  <p>Se elige una fila o columna; para cada elemento se tacha su fila y su columna (gris), se calcula el determinante $2\times2$ que queda (el <b>menor</b>, en azul) y se multiplica por el signo del «tablero de ajedrez». Prueba con distintas líneas: el resultado no cambia, pero con una línea con ceros hay menos trabajo.</p>
+  <div class="anim-adj" data-m="2,1,3;0,-1,4;1,2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
+<div class="box def"><span class="h">Menor complementario y adjunto (cofactor)</span>
+  <p>Dada $A=(a_{ij})$ de orden $n$, el <b>menor complementario</b> $M_{ij}$ es el determinante de orden $n-1$ que resulta de eliminar la fila $i$ y la columna $j$ de $A$. El <b>adjunto</b> (o cofactor) es
+  $$A_{ij}=(-1)^{i+j}\,M_{ij}.$$
+  El signo $(-1)^{i+j}$ forma un «tablero de ajedrez»: $+,-,+,-,\dots$ empezando en $+$ en la posición $(1,1)$. Más adelante (§7) se usa también la palabra <b>menor</b> en un sentido más general —el determinante de <b>cualquier</b> submatriz cuadrada, no solo la que sale de tachar una fila y una columna de una matriz cuadrada— para hablar del rango; no lo confundas con este menor complementario, que es un caso particular.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 24">U p.24</span>
+</div>
+
+
+<div class="box thm"><span class="h">Desarrollo por una fila o columna</span>
+  <p>Para cualquier fila $i$: $\displaystyle|A|=\sum_{j=1}^n a_{ij}A_{ij}=a_{i1}A_{i1}+a_{i2}A_{i2}+\cdots+a_{in}A_{in}$. Análogamente, para cualquier columna $j$: $\displaystyle|A|=\sum_{i=1}^n a_{ij}A_{ij}$. El resultado <b>no depende</b> de la fila o columna elegida.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 24 (y nota 11 para columnas)">U p.24</span>
+  <span class="src" data-l="L" data-ref="Lay §3.1, Teorema 1 (el desarrollo por cofactores no depende de la fila/columna elegida), p. 166">L p.166</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.17 de U — el Ejemplo 1.16 por adjuntos</span>
+  <p>Desarrollando $\begin{vmatrix}1&2&0\\3&2&2\\5&4&3\end{vmatrix}$ por la fila $F_1=(1,2,0)$:
+  $$|A|=1\cdot A_{11}+2\cdot A_{12}+0\cdot A_{13},\quad A_{11}=+\begin{vmatrix}2&2\\4&3\end{vmatrix}=-2,\quad A_{12}=-\begin{vmatrix}3&2\\5&3\end{vmatrix}=-(9-10)=1.$$
+  $$|A|=1(-2)+2(1)+0=0,$$
+  el mismo resultado que por Sarrus. Nótese que el elemento $a_{13}=0$ ahorra calcular $A_{13}$: conviene elegir la fila o columna con más ceros.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.17, p. 24">U p.24</span>
+</div>
+
+<div class="box tip"><span class="h">Estrategia — bajar de orden repetidamente (orden 4 o más)</span>
+  <p>Con un determinante $4\times4$ como $M=\begin{pmatrix}x&a&b&c\\a&x&0&0\\b&0&x&0\\c&0&0&x\end{pmatrix}$ (ver el desarrollo numérico completo en el <a href="#ej1-28">Ejercicio 1.28</a>), desarrollando por $F_3=(b,0,x,0)$ (dos ceros) se llega a dos determinantes $3\times3$, y uno de ellos vuelve a tener una fila con dos ceros: conviene <b>repetir</b> el desarrollo por adjuntos en vez de forzar Sarrus. Así, un determinante $4\times4$ se reduce a $3\times3$ y luego a $2\times2$, aplicando la misma idea las veces que haga falta (esta es exactamente la definición recursiva de Lay).</p>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Olvidar el signo $(-1)^{i+j}$ (confundir el <b>menor</b> $M_{ij}$ con el <b>adjunto</b> $A_{ij}=(-1)^{i+j}M_{ij}$), o tachar la fila/columna equivocada. Escribe siempre primero el «tablero de signos» de la fila o columna elegida antes de calcular ningún menor.</p>
+</div>
+
