@@ -1,0 +1,58 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>La ecuación general y su matriz asociada <span class="src" data-l="U" data-ref="U §6.4.3 Ecuación general de las cónicas, Definiciones 6.16-6.17, Ejemplos 6.29-6.30, p. 276-279">U p.276-279</span></h2>
+
+<div class="box intu"><span class="h">Idea: la ecuación cuando la curva no está «bien colocada»</span>
+  <p>Las ecuaciones de arriba suponen la cónica con el centro (o el vértice) en el origen y los ejes sobre los de coordenadas. En la práctica la curva está desplazada y torcida, y su ecuación es un polinomio de grado 2 completo. Lo importante es tener un <b>formato fijo</b> para leer los coeficientes sin equivocarse: aquí la clave es una <b>matriz $3\times3$ simétrica</b> $A$. El truco es poner delante un $1$: con $X=(1,x_1,x_2)^t$, el producto $X^tAX$ es un polinomio «homogéneo» de grado 2 en $(1,x_1,x_2)$ que, al multiplicar, reproduce <b>exactamente</b> los seis términos de la ecuación (el $1\cdot1$ da el término independiente, los $1\cdot x_i$ dan los lineales y los $x_ix_j$ los cuadráticos).</p>
+  <span class="src" data-l="U" data-ref="U §6.4.3, Definición 6.17, p. 277">U p.277</span>
+  <span class="src" data-l="P" data-ref="Explicación propia del truco del 1 delante; la definición es de U">propio</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.16 — ecuación analítica de una cónica</span>
+  <p>Una <b>cónica</b> es el lugar geométrico de los puntos del plano que verifican una ecuación de segundo grado en dos variables,
+  $$a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0\qquad(6.3)$$
+  con $a_{ij}\in\mathbb R$ y alguno de $a_{11},a_{12},a_{22}$ no nulo (para que sea de segundo grado). Esta ecuación se llama <b>ecuación analítica</b> de la cónica.</p>
+  <span class="src" data-l="U" data-ref="U §6.4.3, Definición 6.16, p. 276">U p.276</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.17 — ecuación matricial y matriz asociada</span>
+  <p>La <b>ecuación matricial</b> asociada a (6.3) es $X^tAX=0$, con $X=(1,x_1,x_2)^t$ y
+  $$A=\begin{pmatrix}a_{00}&a_{01}&a_{02}\\a_{01}&a_{11}&a_{12}\\a_{02}&a_{12}&a_{22}\end{pmatrix}.$$
+  $A$ se llama <b>matriz asociada a la cónica</b> y <b>es simétrica</b>.</p>
+  <p><b>Comprobación:</b> $X^tAX=a_{00}+2a_{01}x_1+2a_{02}x_2+a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2$, el polinomio de (6.3).</p>
+  <span class="src" data-l="U" data-ref="U §6.4.3, Definición 6.17, p. 277-278">U p.277-278</span>
+</div>
+
+<div class="box def"><span class="h">Las tres partes de la ecuación</span>
+  <p>La ecuación se descompone en una <b>parte cuadrática</b> $f_2(x_1,x_2)=a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2=(x_1\ x_2)\begin{pmatrix}a_{11}&a_{12}\\a_{12}&a_{22}\end{pmatrix}\begin{pmatrix}x_1\\x_2\end{pmatrix}$ (una forma cuadrática, tema 6.2), una <b>parte lineal</b> $f_1(x_1,x_2)=2a_{01}x_1+2a_{02}x_2$ (una aplicación lineal) y una <b>parte constante</b> $a_{00}$. Llamaremos $M=\begin{pmatrix}a_{11}&a_{12}\\a_{12}&a_{22}\end{pmatrix}$ a la matriz de la parte cuadrática: es la submatriz de $A$ que queda al quitar la primera fila y la primera columna.</p>
+  <span class="src" data-l="U" data-ref="U §6.4.3, descomposición en partes cuadrática, lineal y constante, p. 279">U p.279</span>
+</div>
+
+<div class="box ex"><span class="h">Casos particulares de (6.3) (U p.277)</span>
+  <table>
+    <tr><th>Cónica</th><th>Coeficientes</th></tr>
+    <tr><td>Circunferencia $x_1^2+x_2^2+k=0$</td><td>$a_{11}=a_{22}=1$, $a_{12}=a_{01}=a_{02}=0$, $a_{00}=k$</td></tr>
+    <tr><td>Elipse reducida</td><td>$a_{11}=\tfrac1{a^2}$, $a_{22}=\tfrac1{b^2}$, $a_{00}=-1$, resto $0$</td></tr>
+    <tr><td>Hipérbola reducida</td><td>$a_{11}=\tfrac1{a^2}$, $a_{22}=-\tfrac1{b^2}$, $a_{00}=-1$, resto $0$</td></tr>
+    <tr><td>Parábola $x_2^2=2px_1$</td><td>$a_{22}=1$, $a_{01}=-p$, resto $0$</td></tr>
+    <tr><td>Par de rectas $(x_1+n)(x_2+m)=0$; vacía $x_1^2+x_2^2=-1$</td><td>casos degenerados que también encajan en (6.3)</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §6.4.3, ecuaciones particulares, p. 277">U p.277</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 6.29 y 6.30 de U — la cónica $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$</span>
+  <ol class="steps">
+    <li><b>Comparar término a término</b> con (6.3): $a_{11}=5$; $2a_{12}=-3\Rightarrow a_{12}=-\tfrac32$; $a_{22}=1$; $2a_{01}=-3\Rightarrow a_{01}=-\tfrac32$; $2a_{02}=2\Rightarrow a_{02}=1$; $a_{00}=-5$.</li>
+    <li><b>Matriz</b> (con $a_{00}$ arriba a la izquierda): $A=\begin{pmatrix}-5&-\tfrac32&1\\-\tfrac32&5&-\tfrac32\\1&-\tfrac32&1\end{pmatrix}$ (Ej. 6.29, p.278).</li>
+    <li><b>Partes</b> (Ej. 6.30, p.279): $f_2=5x_1^2-3x_1x_2+x_2^2$, con $M=\begin{pmatrix}5&-\tfrac32\\-\tfrac32&1\end{pmatrix}$; $f_1=-3x_1+2x_2$; $a_{00}=-5$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.4.3, Ejemplo 6.29, p. 278 y Ejemplo 6.30, p. 279">U p.278-279</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>No dividir entre 2</b> los coeficientes de $x_1x_2$, $x_1$, $x_2$: con $-3x_1x_2$ hay que poner $a_{12}=-\tfrac32$ (no $-3$); con $-3x_1$, $a_{01}=-\tfrac32$. Es el fallo más frecuente del tema.</li>
+    <li><b>Poner $a_{00}$ abajo a la derecha</b> (como en una forma cuadrática ordinaria): en esta matriz va <b>arriba a la izquierda</b>, y cambiarlo cambia el valor de $|A|$ y la clasificación.</li>
+    <li>Olvidar que la matriz es de tamaño $3\times3$ para la cónica entera, pero que la parte cuadrática tiene matriz $2\times2$ ($M$): son dos matrices distintas.</li>
+  </ul>
+</div>
+
