@@ -25,7 +25,7 @@
     }
 
     /* ---- Vistas: cada elemento de main hereda la vista de su h2 ---- */
-    var cur = null, cuenta = { teoria: 0, ejercicios: 0, examen: 0 };
+    var cur = null, cuenta = { teoria: 0, tipos: 0, ejercicios: 0, examen: 0 };
     [].forEach.call(main.children, function (el) {
       if (el.tagName === 'H2') cur = el.dataset.vista || null;
       if (cur) {
@@ -33,7 +33,7 @@
         if (el.matches('details.sol')) cuenta[cur]++;
       }
     });
-    var defs = [['teoria', '📘 Teoría'], ['ejercicios', '✏️ Ejercicios'], ['examen', '🎯 Examen'], ['todo', 'Todo junto']];
+    var defs = [['teoria', '📘 Teoría'], ['tipos', '🧭 Por tipo'], ['ejercicios', '✏️ Ejercicios'], ['examen', '🎯 Examen'], ['todo', 'Todo junto']];
     var bar = d.createElement('div'); bar.className = 'vistas'; bar.setAttribute('role', 'tablist'); bar.setAttribute('aria-label', 'Vista del tema');
     defs.forEach(function (x) {
       var b = d.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.v = x[0];
@@ -52,9 +52,9 @@
       [].forEach.call(bar.children, function (b) { b.setAttribute('aria-selected', b.dataset.v === v ? 'true' : 'false'); });
     }
     function vistaDe(el) {
-      var m = (el.className || '').match && el.className.match(/vista-(teoria|ejercicios|examen)/);
+      var m = (el.className || '').match && el.className.match(/vista-(teoria|tipos|ejercicios|examen)/);
       if (m) return m[1];
-      var p = el.closest('[class*="vista-"]'); m = p && p.className.match(/vista-(teoria|ejercicios|examen)/);
+      var p = el.closest('[class*="vista-"]'); m = p && p.className.match(/vista-(teoria|tipos|ejercicios|examen)/);
       return m ? m[1] : null;
     }
     function irA(hash) {
@@ -90,7 +90,11 @@
             q.classList.add('hecha'); q.dataset.res = li.hasAttribute('data-ok') ? 'ok' : 'mal';
             li.classList.add(li.hasAttribute('data-ok') ? 'ok' : 'mal');
             var good = q.querySelector('li[data-ok]'); if (good) good.classList.add('ok');
-            if (fb) fb.hidden = false; pinta();
+            var why = li.querySelector('.why');
+            if (fb) { var old = fb.querySelector('.why-sel'); if (old) old.remove();
+              if (why && !li.hasAttribute('data-ok')) { var w = d.createElement('p'); w.className = 'why-sel'; w.innerHTML = '<b>Por qué falla:</b> ' + why.innerHTML; fb.insertBefore(w, fb.firstChild); }
+              fb.hidden = false; }
+            pinta();
           }
           li.addEventListener('click', pick);
           li.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
@@ -98,7 +102,7 @@
       });
       var rs = qz.querySelector('.reset');
       if (rs) rs.addEventListener('click', function () {
-        qs.forEach(function (q) { q.classList.remove('hecha'); delete q.dataset.res; var f = q.querySelector('.fb'); if (f) f.hidden = true;
+        qs.forEach(function (q) { q.classList.remove('hecha'); delete q.dataset.res; var f = q.querySelector('.fb'); if (f) f.hidden = true; var ws = q.querySelector('.why-sel'); if (ws) ws.remove();
           [].forEach.call(q.querySelectorAll('li'), function (li) { li.classList.remove('ok', 'mal'); }); });
         pinta();
       });
