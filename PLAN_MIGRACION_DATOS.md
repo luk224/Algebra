@@ -1,5 +1,7 @@
 # Plan: temas como datos + plantillas
 
+> **ESTADO AL CERRAR LA SESIÓN (14-nov-2026, límite de uso):** hechas F1, F2, F3, F4, F5.1 (los 26 temas con capa), F5.2 (series de práctica en 11 temas; 20 generadores verificados), F6 (CLAUDE.md, agentes, `construir_todo.py`). **Pendiente:** F5.3 (revisión: ver `CORRECCIONES_PENDIENTES.md`, nada aplicado; faltan por recoger los informes de 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 4.1-4.4, 5.1-5.4, 6.1-6.5), F5.1b (mejoras de contenido: teoría en tarjetas, pregunta motivadora, soluciones con resultado primero, consignas en animaciones), generadores de práctica para los demás temas, y F7/F8 (esperan aprobación). Antes de seguir: `git pull`, `~/venv/bin/python herramientas/construir_todo.py --sin-practica`.
+
 **Alcance:** uso personal, solo contenido estático. Las pestañas arrancan en «Todo».
 
 Objetivo: dejar de editar a mano 26 HTML de ~120 KB. El contenido vive en **datos** (YAML + fragmentos HTML con LaTeX) y el HTML de `temas/` se **genera**. Así un cambio de diseño se aplica a todos los temas, los agentes abren trozos pequeños en vez de ficheros enormes y un validador impide que se pierda un ejercicio de examen.
