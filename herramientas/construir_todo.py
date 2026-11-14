@@ -3,7 +3,7 @@
     ~/venv/bin/python herramientas/construir_todo.py [--sin-practica]
 
 Pasos: validar cada tema → construir su HTML → comprobar que el HTML coincide con los datos → regenerar `datos/examenes.yaml`
-y `prioridades.html` → (salvo --sin-practica) comprobar los generadores de práctica con sympy. Sale con código 1 si algo falla.
+`prioridades.html`, `repaso.html`, `ruta.html`, `chuletas.html`, `glosario.html` y `mapa.html` → (salvo --sin-practica) comprobar los generadores de práctica con sympy. Sale con código 1 si algo falla.
 """
 import sys, io, contextlib, pathlib, subprocess
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -23,6 +23,10 @@ if not ok: fallos.append('estado')
 r = subprocess.run([PY, str(D.RAIZ / 'herramientas' / 'examenes.py')], capture_output=True, text=True)
 print(r.stdout.splitlines()[0] if r.stdout else r.stderr[:200])
 if r.returncode: fallos.append('examenes')
+for extra in ('repaso.py', 'ruta.py', 'estudio.py'):
+    r = subprocess.run([PY, str(D.RAIZ / 'herramientas' / extra)], capture_output=True, text=True)
+    print(r.stdout.splitlines()[0] if r.stdout else r.stderr[:200])
+    if r.returncode: fallos.append(extra)
 r = subprocess.run([PY, str(D.RAIZ / 'herramientas' / 'prioridades.py')], capture_output=True, text=True)
 print(r.stdout.splitlines()[0] if r.stdout else r.stderr[:200])
 if r.returncode: fallos.append('prioridades')

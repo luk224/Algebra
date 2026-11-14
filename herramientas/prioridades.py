@@ -5,15 +5,9 @@ regla 14 de CLAUDE.md) y horas estimadas de la cabecera de cada tema («⏱ ~N h
 import re, glob, pathlib, html
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-ORDEN = ['1.2', '1.3', '1.4', '1.5', '2.1', '2.2', '2.3', '2.4', '3.1', '3.2', '3.3', '3.4', '3.5',
-         '4.1', '4.2', '4.3', '4.4', '5.1', '5.2', '5.3', '5.4', '6.1', '6.2', '6.3', '6.4', '6.5']
-# Dependencias orientativas (qué conviene dominar antes). Juicio del autor, no del libro.
-DEP = {'1.3': ['1.2'], '1.4': ['1.2', '1.3'], '2.1': ['1.4'], '2.2': ['2.1'], '2.3': ['2.2'], '2.4': ['2.3'],
-       '3.1': ['2.3'], '3.2': ['3.1'], '3.3': ['3.2'], '3.4': ['3.3'], '3.5': ['3.3'],
-       '4.1': ['3.5'], '4.2': ['1.3'], '4.3': ['4.2', '3.5'], '4.4': ['4.3'],
-       '5.1': ['2.3'], '5.2': ['5.1'], '5.3': ['4.3', '5.2'], '5.4': ['5.1', '1.4'],
-       '6.1': ['3.5'], '6.2': ['6.1'], '6.3': ['6.2', '5.3'], '6.4': ['6.3'], '6.5': ['6.3']}
 import yaml, collections
+_dep = yaml.safe_load((RAIZ / 'datos' / 'dependencias.yaml').read_text(encoding='utf8'))
+ORDEN, DEP = _dep['orden'], _dep['dep']   # dependencias orientativas: datos/dependencias.yaml
 # Datos: `datos/examenes.yaml` (registro global, lo genera herramientas/examenes.py) y `datos/X_Y/tema.yaml` (título y horas de la cabecera).
 reg = yaml.safe_load((RAIZ / 'datos' / 'examenes.yaml').read_text(encoding='utf8'))
 n_ex = collections.Counter(r['tema'] for r in reg if r['desarrollo'] == 'completo')   # solo las desarrolladas paso a paso

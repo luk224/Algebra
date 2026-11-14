@@ -20,7 +20,10 @@ Esquema en tema.yaml (todo HTML con LaTeX, en bloques literales):
       series: [{tipo, titulo, n}]     (opcional) series de práctica de assets/practica.js
   quiz:      [{p: HTML, opciones: [{t: HTML, ok: true|false, why: HTML}], fb: HTML}]
 """
-import re
+import pathlib, re
+import yaml
+
+RAIZ = pathlib.Path(__file__).resolve().parent.parent
 
 VISTA = {'ejercicios': 'ejercicios', 'examenes': 'examen', 'tipos': 'tipos'}   # el resto de <h2> es teoría
 
@@ -43,6 +46,24 @@ def con_vistas(cuerpo):
         v = VISTA.get(m.group(1), 'teoria')
         return f'<h2 id="{m.group(1)}" data-vista="{v}"{m.group(2)}>'
     return re.sub(r'<h2 id="([^"]+)"([^>]*)>', f, cuerpo)
+
+
+def atascas(cfg):
+    """Caja «Si te atascas, vuelve a…» (aprendizaje en espiral): de qué temas depende este y qué temas lo usan después. Datos: datos/dependencias.yaml."""
+    f = RAIZ / 'datos' / 'dependencias.yaml'
+    if not f.exists(): return ''
+    dep = yaml.safe_load(f.read_text(encoding='utf8'))['dep']
+    cod = cfg['codigo']
+    antes = dep.get(cod, [])
+    despues = [c for c, ds in dep.items() if cod in ds]
+    def enlace(c):
+        t = yaml.safe_load((RAIZ / 'datos' / c.replace('.', '_') / 'tema.yaml').read_text(encoding='utf8'))
+        return f'<a href="{pathlib.Path(t["archivo"]).name}"><b>{c}</b> {re.sub(r"^[0-9]+[.][0-9]+ ", "", t["titulo"])}</a>'
+    if not antes and not despues: return ''
+    o = '<div class="box tip"><span class="h">Si te atascas, vuelve a…</span>'
+    if antes: o += '\n  <p><b>Este tema usa lo de:</b> ' + ' · '.join(enlace(c) for c in antes) + '. Si un paso no lo entiendes, repasa primero ese tema.</p>'
+    if despues: o += '\n  <p><b>Después te servirá en:</b> ' + ' · '.join(enlace(c) for c in despues) + '.</p>'
+    return o + '\n</div>\n\n'
 
 
 def esencial(cfg):
@@ -95,7 +116,7 @@ def quiz(cfg):
 def aplicar(cfg, cuerpo, ejs, tabla):
     """Devuelve (cfg con carcasa de la capa, cuerpo con las piezas insertadas)."""
     cuerpo = con_vistas(cuerpo)
-    pre = esencial(cfg) + que_cae(cfg, ejs, tabla)
+    pre = atascas(cfg) + esencial(cfg) + que_cae(cfg, ejs, tabla)
     t = tipos(cfg)
     if t:
         m = re.search(r'(?:<!--[^\n]*-->[ \t]*\n(?:[ \t]*\n)*)?<h2 id="ejercicios"', cuerpo)

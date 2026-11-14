@@ -61,7 +61,7 @@ Leyenda: `—` sin tocar · `E` ejercicios en datos (fase F2) · `C` carcasa y t
 - Con el extractor actual, los temas donde más soluciones no se pueden leer son 1.2 (7 de 35), 1.3 (2 de 23), 1.4 (3 de 32), 1.5 (1 de 6) y 2.1 (1 de 17); en los demás pasan todas.
 
 ## Pasos
-Cada paso termina con commit. Orden estricto en F1-F4; F5 puede ir en paralelo a F3 por temas ya migrados; F7 y F8 son propuestas que el usuario debe aprobar antes de empezar.
+Cada paso termina con commit. Orden estricto en F1-F4; F5 puede ir en paralelo a F3 por temas ya migrados; F7 y F8: aprobadas por el usuario (14-nov-2026), hechas salvo 8.3.
 
 ### F1 — Generalizar el extractor al formato antiguo
 - [x] **1.1** Hacer opcionales `nivel` y `pista` en el esquema. El renderizador usa el formato antiguo (enunciado **dentro** de la solución, sin estrellas) cuando faltan, y el nuevo cuando existen. Hecho cuando: `verificar` pasa en un tema antiguo de prueba (propuesta: 2.2). *(hecho: `nivel`/`pista`/`enunciado` opcionales; formato antiguo = bloque `enun` dentro del cuerpo)*
@@ -111,16 +111,16 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
 - [ ] **6.2** Actualizar `.claude/agents/redactor-tema.md`, `revisor-tema.md`, `resolutor-ejercicios.md` y el skill `resumen-algebra`: los agentes escriben/revisan `datos/X_Y/`, no el HTML.
 - [ ] **6.3** Un script `construir_todo.py` que valida y construye todos los temas e imprime un resumen; usarlo antes de cada commit.
 
-### F7 — Producto de estudio (propuesto, **pendiente de aprobación**)
-- [ ] **7.1** Repaso espaciado: preguntas de temas anteriores a los 2 y 7 días y cuestionarios que mezclan temas; tarjetas de repaso (definiciones, «¿cuándo es diagonalizable?»).
-- [ ] **7.2** Ruta semanal ligada al cronograma (PEC1 27-30 nov 2026, PEC2 15-18 ene 2027).
-- [ ] **7.3** Chuleta global por módulo (descargable), glosario y tabla de notación con búsqueda, mapa conceptual por tema y global (dependencias entre temas).
-- [ ] **7.4** Aprendizaje en espiral: cada concepto aparece en versión intuitiva, formal y de examen; enlaces «si te atascas, vuelve a…».
+### F7 — Producto de estudio *(APROBADA y HECHA, salvo la tabla de notación)*
+- [x] **7.1** Repaso espaciado: preguntas de temas anteriores a los 2 y 7 días y cuestionarios que mezclan temas; tarjetas de repaso (definiciones, «¿cuándo es diagonalizable?»). *(hecho: `repaso.html` con 276 tarjetas —156 preguntas y 120 fichas—, caja de Leitner 1-2-4-7-14-30 días en `localStorage`, modos «repaso de hoy», «test mezclado» y «fichas»; lo genera `herramientas/repaso.py`)*
+- [x] **7.2** Ruta semanal ligada al cronograma (PEC1 27-30 nov 2026, PEC2 15-18 ene 2027). *(hecho: `ruta.html`; calcula qué temas caben antes de cada PEC según las horas semanales, por prioridad y dependencias, con casillas «estudiado»; `herramientas/ruta.py`)*
+- [x] **7.3** Chuleta global por módulo (descargable), glosario y tabla de notación con búsqueda, mapa conceptual por tema y global (dependencias entre temas). *(hecho: `chuletas.html` por módulo e imprimible, `glosario.html` con buscador (123 definiciones), `mapa.html` de dependencias; `herramientas/estudio.py`. La «tabla de notación» no se ha hecho)*
+- [x] **7.4** Aprendizaje en espiral: cada concepto aparece en versión intuitiva, formal y de examen; enlaces «si te atascas, vuelve a…». *(hecho: caja «Si te atascas, vuelve a…» en cada tema desde `datos/dependencias.yaml`; `capa.atascas`)*
 
-### F8 — Calidad (propuesto, **pendiente de aprobación**)
+### F8 — Calidad *(APROBADA; 8.3 pendiente de que el usuario revise dependencias y horas)*
 
-- [ ] **8.1** Tests automáticos antes de cada commit: sin errores de consola, enlaces internos válidos (`#id` y entre temas), buen aspecto a 390 px y en modo oscuro, nº de ejercicios de examen no baja, interactivos y 3D con fallback sin WebGL.
-- [ ] **8.2** Impresión/PDF con la capa nueva (pestañas, pistas y series ocultas; fichas visibles; todo abierto): `exportar_pdf.py` sobre el 2.3 y revisar el resultado.
+- [x] **8.1** Tests automáticos antes de cada commit: sin errores de consola, enlaces internos válidos (`#id` y entre temas), buen aspecto a 390 px y en modo oscuro, nº de ejercicios de examen no baja, interactivos y 3D con fallback sin WebGL. *(hecho: `herramientas/tests_sitio.py`: 28 páginas × 3 vistas sin errores de consola ni scroll horizontal, enlaces internos válidos, pestañas con contenido y recuentos de ejercicios; 0 fallos)*
+- [x] **8.2** Impresión/PDF con la capa nueva (pestañas, pistas y series ocultas; fichas visibles; todo abierto): `exportar_pdf.py` sobre el 2.3 y revisar el resultado. *(hecho: PDF de 2.3 y 4.3 revisados: se imprimen «Lo esencial», «Qué cae», fichas y «Si te atascas»; no se imprimen pistas, autoevaluación, series, pestañas ni el aviso «GENERADO»)*
 
 
 

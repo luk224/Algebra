@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · Chuletas por módulo</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/resumen.css">
+<script defer src="assets/katex/katex.min.js"></script>
+<script defer src="assets/katex/auto-render.min.js"></script>
+<script defer src="assets/resumen.js"></script>
+<style>
+.es main{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+.es table{width:100%;border-collapse:collapse;font:14.5px/1.45 var(--sans);margin:.6em 0}
+.es th,.es td{padding:6px 8px;border:1px solid var(--bd);text-align:left;vertical-align:top}
+.es th{background:var(--card);font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut)}
+.es .tema{margin:1.6em 0 .4em;font:700 1.15rem var(--sans)}.es .tema a{color:var(--acc);text-decoration:none}
+.es .modulo{margin-top:2.2em;border-bottom:3px solid var(--acc)}
+
+@media print{.es .modulo{break-before:page}.es .modulo:first-of-type{break-before:auto}.es table{font-size:9pt}.topbar,.es .no-print{display:none!important}}
+</style>
+</head>
+<body class="es">
+<div class="topbar"><div class="in"><a href="index.html">← Índice de temas</a><span><button id="btn-tema" type="button">Claro / oscuro</button></span></div></div>
+<main>
+
+<h1>Chuletas por módulo</h1>
+<p class="no-print">La chuleta de cada tema (fórmulas con sus hipótesis). Se imprime un módulo por página: usa «Imprimir / PDF» del navegador.</p>
+<h2 class="modulo">Módulo 1 · Herramientas</h2>
+<div class="tema"><a href="temas/tema_1_2_algebra_matricial.html">1.2 · Álgebra matricial</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula</th><th>Hipótesis</th></tr>
+  <tr><td>Suma / producto por escalar</td><td>$(A+B)+C=A+(B+C)$, $A+0=A$, $\alpha(A+B)=\alpha A+\alpha B$</td><td>$A,B,C\in\mathcal M_{m\times n}$, mismo tamaño</td></tr>
+  <tr><td>Producto de matrices</td><td>$p_{ij}=\sum_k a_{ik}b_{kj}$, $(AB)C=A(BC)$</td><td>$A\in\mathcal M_{m\times n}$, $B\in\mathcal M_{n\times r}$: columnas de $A$ = filas de $B$</td></tr>
+  <tr><td>No conmutatividad</td><td>$AB\ne BA$ en general</td><td>incluso si ambos productos existen (cuadradas, mismo orden)</td></tr>
+  <tr><td>Traspuesta</td><td>$(AB)^t=B^tA^t$, $(A+B)^t=A^t+B^t$</td><td>tamaños compatibles</td></tr>
+  <tr><td>Inversa</td><td>$AA^{-1}=A^{-1}A=I_n$; $(AB)^{-1}=B^{-1}A^{-1}$; $(A^{-1})^t=(A^t)^{-1}$</td><td>$A$ cuadrada regular (y $B$ regular para el producto)</td></tr>
+  <tr><td>Matriz elemental</td><td>$EA$ = operación por filas; $AF$ = operación por columnas</td><td>$E,F$ elementales del tamaño adecuado</td></tr>
+  <tr><td>Inversas de elementales</td><td>$F_i\leftrightarrow F_j\to$ ella misma; $F_i\to\alpha F_i\to F_i\to\frac1\alpha F_i$; $F_i\to F_i+\alpha F_j\to F_i\to F_i-\alpha F_j$</td><td>$\alpha\ne0$ en el tipo 2</td></tr>
+  <tr><td>Algoritmo de la inversa</td><td>$(A\mid I_n)\to(I_n\mid A^{-1})$</td><td>$A$ cuadrada regular; solo operaciones por filas</td></tr>
+  <tr><td>Rango</td><td>$\operatorname{rang}(A)=$ nº de filas no nulas de una escalonada</td><td>contar sobre una matriz <b>ya escalonada</b></td></tr>
+  <tr><td>Regularidad y rango</td><td>$A$ regular $\iff\operatorname{rang}(A)=n$</td><td>$A\in\mathcal M_{n\times n}$</td></tr>
+  <tr><td>Multiplicar por regulares</td><td>$\operatorname{rang}(A)=\operatorname{rang}(PA)=\operatorname{rang}(AQ)=\operatorname{rang}(PAQ)$</td><td>$P,Q$ regulares</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_1_3_determinantes.html">1.3 · Determinantes</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula</th><th>Hipótesis</th></tr>
+  <tr><td>Orden 2</td><td>$|A|=a_{11}a_{22}-a_{12}a_{21}$</td><td>$A$ cuadrada de orden 2</td></tr>
+  <tr><td>Orden 3 (Sarrus)</td><td>$a_{11}a_{22}a_{33}+a_{21}a_{32}a_{13}+a_{12}a_{23}a_{31}-a_{13}a_{22}a_{31}-a_{23}a_{32}a_{11}-a_{21}a_{12}a_{33}$</td><td>$A$ cuadrada de orden 3 (¡solo orden 3!)</td></tr>
+  <tr><td>Desarrollo por adjuntos</td><td>$|A|=\sum_j a_{ij}A_{ij}$ (fila $i$) o $\sum_i a_{ij}A_{ij}$ (columna $j$), $A_{ij}=(-1)^{i+j}M_{ij}$</td><td>cualquier orden $n$; elige la línea con más ceros</td></tr>
+  <tr><td>Definición 1.6 (Leibniz)</td><td>$\det A=\sum_{p\in S_n}\operatorname{sig}(p)\,a_{1p_1}\cdots a_{np_n}$</td><td>$n!$ sumandos; base teórica de todas las propiedades</td></tr>
+  <tr><td>Fila/columna de ceros</td><td>$\det A=0$</td><td>—</td></tr>
+  <tr><td>Triangular</td><td>$\det A=a_{11}\cdots a_{nn}$</td><td>triangular superior o inferior</td></tr>
+  <tr><td>Traspuesta</td><td>$\det A=\det A^t$</td><td>—</td></tr>
+  <tr><td>Escalar</td><td>$\det(\alpha A)=\alpha^n\det A$</td><td>$n$ = orden de $A$ (no confundir con escalar <b>una fila</b>)</td></tr>
+  <tr><td>Producto</td><td>$\det(AB)=\det A\det B$</td><td>$A,B$ cuadradas del mismo orden</td></tr>
+  <tr><td>Inversa (escalar)</td><td>$\det(A^{-1})=\dfrac1{\det A}$</td><td>$A$ regular (sale de $\det(AB)=\det A\det B$ con $B=A^{-1}$)</td></tr>
+  <tr><td>Permutar filas/columnas</td><td>$\times(-1)$</td><td>una permutación de dos líneas</td></tr>
+  <tr><td>Escalar una fila/columna</td><td>$\times\alpha$</td><td>$\alpha\neq0$</td></tr>
+  <tr><td>Reemplazo</td><td>no cambia</td><td>$F_i\to F_i+\alpha F_j$, cualquier $\alpha$</td></tr>
+  <tr><td>Regularidad</td><td>$A$ regular $\iff\det A\neq0\iff\operatorname{rang}A=n$</td><td>$A$ cuadrada de orden $n$</td></tr>
+  <tr><td>Inversa por adjuntos</td><td>$A^{-1}=\frac1{\det A}(\operatorname{Adj}A)^t$</td><td>$\det A\neq0$; ¡ojo a la trasposición!</td></tr>
+  <tr><td>Rango por menores</td><td>$\operatorname{rang}A=$ mayor orden de un menor no nulo</td><td>equivalente a la definición por escalonamiento (1.2)</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_1_4_sistemas_ecuaciones.html">1.4 · Sistemas de ecuaciones lineales</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Forma matricial</td><td>$AX=B$, ampliada $(A\mid B)$</td><td>$A\in\mathcal M_{m\times n}$</td></tr>
+  <tr><td>Teorema 1.4</td><td>más de una solución $\Rightarrow$ infinitas</td><td>combinación afín $\alpha X_0+\beta X_1$, $\alpha+\beta=1$</td></tr>
+  <tr><td>Incompatible</td><td>$\operatorname{rang}(A)\neq\operatorname{rang}(A\mid B)$</td><td>—</td></tr>
+  <tr><td>Compatible determinado</td><td>$\operatorname{rang}(A)=\operatorname{rang}(A\mid B)=n$</td><td>—</td></tr>
+  <tr><td>Compatible indeterminado</td><td>$\operatorname{rang}(A)=\operatorname{rang}(A\mid B)=k\lt n$, con $n-k$ parámetros</td><td>—</td></tr>
+  <tr><td>Homogéneo $AX=0$</td><td>siempre compatible; determinado $\iff\operatorname{rang}A=n$</td><td>—</td></tr>
+  <tr><td>Sistemas equivalentes</td><td>mismas soluciones; se preservan por operaciones elementales (Teorema 1.5)</td><td>—</td></tr>
+  <tr><td>Cramer</td><td>$x_i=\dfrac{\det A_i}{\det A}$</td><td>$A$ cuadrada, $\det A\neq0$</td></tr>
+  <tr><td>Paramétricas ↔ cartesianas</td><td>nº cartesianas $=n-$(parámetros independientes)</td><td>—</td></tr>
+  <tr><td>Gauss</td><td>pivote, normalizar, anular debajo, repetir, retrosustituir</td><td>coste $\sim n^3/3$</td></tr>
+  <tr><td>Gauss-Jordan</td><td>como Gauss + anular por encima → escalonada reducida = solución directa</td><td>coste $\sim n^3/2$; útil para $A^{-1}=(A\mid I)\to(I\mid A^{-1})$</td></tr>
+  <tr><td>Factorización $LU$</td><td>$A=LU$, $U$ por reemplazos sin normalizar, $L$ = multiplicadores con signo cambiado</td><td>se puede triangularizar sin intercambiar filas; si no, usar $PA=LU$</td></tr>
+  <tr><td>Resolver con $LU$</td><td>$LY=B$ (progresiva), luego $UX=Y$ (retrosustitución)</td><td>orden importa: primero $L$, luego $U$</td></tr>
+  <tr><td>$LU$ permutada</td><td>$PA=LU$; resolver $LY=PB$, $UX=Y$</td><td>hace falta intercambiar filas; ¡permutar también $B$!</td></tr>
+  <tr><td>Usos de $LU$</td><td>$A^{-1}=U^{-1}L^{-1}$; $\det A=\det U$ (porque $\det L=1$)</td><td>—</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_1_5_estructuras_algebraicas.html">1.5 · Estructuras algebraicas</a></div>
+<table>
+  <tr><th>Propiedad</th><th>Qué hay que demostrar</th><th>Método</th><th>Hipótesis / cuidado</th></tr>
+  <tr><td>Cierre</td><td>$a,b\in V\Rightarrow a\ast b\in V$</td><td>Una línea con la condición de $V$</td><td>Se pierde con $\mathbb R^+$, intervalos, matrices con condición</td></tr>
+  <tr><td>S1 Asociativa</td><td>$(a\ast b)\ast c=a\ast(b\ast c)$</td><td>Desarrollar los dos miembros y comparar</td><td>Para refutar: contraejemplo con números</td></tr>
+  <tr><td>S2 Neutro</td><td>$\exists e\in V:\ a\ast e=e\ast a=a\ \forall a$</td><td>Despejar $e$ de $a\ast e=a$; comprobar independencia de $a$, $e\in V$, y el otro lado</td><td>No existe si $e$ depende de $a$, queda fuera de $V$ o solo vale por un lado</td></tr>
+  <tr><td>S3 Simétrico</td><td>$\forall a\ \exists a'\in V:\ a\ast a'=a'\ast a=e$</td><td>Despejar $a'$ de $a\ast a'=e$; comprobar $a'\in V$</td><td><b>Requiere neutro.</b> Un elemento sin simétrico basta para que falle</td></tr>
+  <tr><td>S4 Conmutativa</td><td>$a\ast b=b\ast a$</td><td>Comparar $a\ast b$ y $b\ast a$</td><td>Si no es conmutativa, mirar los dos lados en S2 y S3</td></tr>
+  <tr><td>Grupo</td><td>S1 + S2 + S3</td><td>—</td><td>«Conmutativo» o «abeliano» si además S4</td></tr>
+  <tr><td>Espacio vectorial</td><td>$(V,\ast)$ grupo conmutativo $+$ E1–E4</td><td>tema 2.1</td><td>U p.58</td></tr>
+  <tr><td>Subgrupo</td><td>Contiene $e$, cerrado, con simétricos</td><td>Un fallo basta para refutar</td><td>E Ej. 2.5</td></tr>
+</table>
+<h2 class="modulo">Módulo 2 · Espacios vectoriales</h2>
+<div class="tema"><a href="temas/tema_2_1_espacios_vectoriales.html">2.1 · Espacios vectoriales. Subespacios</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Espacio vectorial</td><td>$(V,*)$ grupo conmutativo (S1–S4) $+$ E1–E4 con escalares reales</td><td>operaciones interna y externa bien definidas (cierre)</td></tr>
+  <tr><td>Espacios típicos</td><td>$\mathbb R^n$, funciones $F$, polinomios $\wp_n$ (grado $\le n$), matrices $\mathcal M_{n\times m}$</td><td>operaciones estándar; neutro = vector/función/polinomio/matriz nulos</td></tr>
+  <tr><td>Neutro y simétrico</td><td>Se despejan: $a*e=a$ y $a*a'=e$; no son «0» y «$-a$» en general</td><td>comprobar por los dos lados y que están en el conjunto</td></tr>
+  <tr><td>Subespacio (2.1)</td><td>$U\neq\emptyset$, $u+v\in U$, $\lambda u\in U$</td><td>$U\subseteq V$</td></tr>
+  <tr><td>Subespacio (2.2)</td><td>$\lambda u+\mu v\in U$ $\forall u,v\in U$, $\forall\lambda,\mu$ (forma reducida $u+\alpha v$)</td><td>$U\neq\emptyset$</td></tr>
+  <tr><td>Filtro del cero</td><td>$\bar0\notin U\Rightarrow U$ no es subespacio</td><td>necesario, <b>no</b> suficiente</td></tr>
+  <tr><td>Ecuaciones homogéneas</td><td>soluciones de $AX=0$ y conjuntos $\{\sum\alpha_iv_i\}$ son subespacios</td><td>$AX=0$ homogéneo; $v_i$ fijos de $V$</td></tr>
+  <tr><td>Impropios</td><td>$\{\bar0\}$ y $V$ (propios: el resto; $\{\bar0\}\neq\emptyset$)</td><td>—</td></tr>
+  <tr><td>$\mathbb R^3$</td><td>subespacios propios: rectas y planos <b>por el origen</b></td><td>—</td></tr>
+  <tr><td>Intersección</td><td>$U\cap V$ siempre es subespacio</td><td>$U,V$ subespacios</td></tr>
+  <tr><td>Unión</td><td>$U\cup V$ es subespacio $\iff U\subseteq V$ o $V\subseteq U$</td><td>$U,V$ subespacios</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_2_2_sistemas_generadores.html">2.2 · Sistemas de generadores</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Combinación lineal (Def. 2.3)</td><td>$v=\lambda_1u_1+\dots+\lambda_pu_p$; $v$ es c.l. $\iff$ el sistema $\sum\lambda_iu_i=v$ es compatible $\iff\operatorname{rang}A=\operatorname{rang}(A\mid v)$</td><td>$u_i$ como columnas de $A$; $\lambda_i\in\mathbb R$</td></tr>
+  <tr><td>Sistema generador (Def. 2.4)</td><td>$U=\langle S\rangle$: todo vector de $U$ es c.l. de $S$. $\langle S\rangle$ es el subespacio más pequeño que contiene a $S$</td><td>Los vectores de $S$ deben estar en $U$</td></tr>
+  <tr><td>Ligado (Def. 2.5)</td><td>$\exists\lambda_i$ no todos nulos con $\sum\lambda_iu_i=0$ $\iff$ algún $u_i$ es c.l. de los otros</td><td>Con $0\in S$ siempre es ligado</td></tr>
+  <tr><td>Libre (Def. 2.6)</td><td>$\sum\lambda_iu_i=0\Rightarrow$ todos $\lambda_i=0$ $\iff\operatorname{rang}=p$</td><td>$p$ = nº de vectores</td></tr>
+  <tr><td>Rango (Def. 2.7)</td><td>nº máximo de vectores independientes $=\operatorname{rang}$ de la matriz de coordenadas $=\operatorname{Dim}\langle S\rangle$ (§2.3)</td><td>Escalonar por filas no lo cambia</td></tr>
+  <tr><td>Más vectores que $n$</td><td>Más de $n$ vectores en $\mathbb R^n$ $\Rightarrow$ ligados</td><td>—</td></tr>
+  <tr><td>$n$ vectores en $\mathbb R^n$</td><td>libre $\iff\det\neq0$</td><td>matriz cuadrada</td></tr>
+  <tr><td>Supresión (Teor. 2.1)</td><td>Si $G$ genera $V$ y $u_i$ es c.l. de los otros, $G\setminus\{u_i\}$ genera $V$</td><td>Quitar de <b>uno en uno</b></td></tr>
+  <tr><td>Sustitución (Teor. 2.2)</td><td>Se puede sustituir $u_i$ por una c.l. en la que $u_i$ tenga coeficiente $\neq0$</td><td>Coeficiente $0$: no vale</td></tr>
+  <tr><td>Libres vs. generadores</td><td>$\{v_1..v_h\}$ libre y generador, $\{u_1..u_p\}$ generador $\Rightarrow h\le p$</td><td>—</td></tr>
+  <tr><td>Lema «libre + 1»</td><td>$S$ libre: $w\in\langle S\rangle\iff S\cup\{w\}$ ligado</td><td><b>$S$ libre</b> (si no, falso)</td></tr>
+  <tr><td>Cartesianas → generadores</td><td>Resolver $AX=0$ y separar un vector por parámetro</td><td>Sistema homogéneo</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_2_3_bases_dimension_coordenadas.html">2.3 · Bases. Dimensión. Coordenadas</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Base (Def. 2.9)</td><td>$B$ libre <b>y</b> $\langle B\rangle=V$ $\iff$ todo $v$ se escribe de forma <b>única</b> como c.l. de $B$</td><td>Si es base de un subespacio, los vectores deben estar en él</td></tr>
+  <tr><td>Coordenadas (Def. 2.10)</td><td>$v=x_1e_1+\dots+x_ne_n\Rightarrow v=(x_1,\dots,x_n)_B$; sistema $(e_1\cdots e_n\mid v)$</td><td>$B$ <b>base</b> y <b>ordenada</b>; vectores de la base en columnas</td></tr>
+  <tr><td>Existencia (Teor. 2.3)</td><td>Todo espacio finito $V\neq\{0\}$ tiene base</td><td>$V\neq\{0\}$</td></tr>
+  <tr><td>Dimensión (Teor. 2.4, Def. 2.11)</td><td>Todas las bases tienen el mismo nº de elementos $=\operatorname{Dim}V$; $\operatorname{Dim}\{0\}=0$</td><td>$V\neq\{0\}$ finito</td></tr>
+  <tr><td>Dimensiones usuales</td><td>$\operatorname{Dim}\mathbb R^n=n$; $\operatorname{Dim}\wp_n=n+1$; $\operatorname{Dim}\mathcal M_{m\times n}=mn$</td><td>—</td></tr>
+  <tr><td>Contar</td><td>Más de $n$ vectores: ligados. Menos de $n$: no generan. Base $\Rightarrow$ exactamente $n$</td><td>$\operatorname{Dim}V=n$; <b>necesario, no suficiente</b></td></tr>
+  <tr><td>Teor. 2.5</td><td>$\operatorname{rang}(S)=\operatorname{Dim}\langle S\rangle$ = rango de la matriz de coordenadas (filas o columnas)</td><td>Coordenadas respecto de una base fija</td></tr>
+  <tr><td>Teor. 2.6</td><td>$n$ libres $\Rightarrow$ base; $n$ generadores $\Rightarrow$ base. Con rangos: base $\iff$ rango $n$ $\iff\det\neq0$</td><td>$\operatorname{Dim}V=n$ y <b>exactamente $n$ vectores</b></td></tr>
+  <tr><td>Teor. 2.7 (base incompleta)</td><td>$p\lt n$ libres se completan con $n-p$ vectores (fuera de $\langle S\rangle$) hasta base; práctico: añadir $e_j$ de las columnas sin pivote</td><td>Sistema <b>libre</b></td></tr>
+  <tr><td>Extraer base</td><td>De un generador: quitar los vectores que dependen de los demás (Teor. 2.1) o elegir $n$ con $\det\neq0$</td><td>Generador de $V$ de dimensión $n$</td></tr>
+  <tr><td>Subespacio dado por ecuaciones</td><td>Cartesianas $\to$ paramétricas $\to$ base; $\operatorname{Dim}W=n-\operatorname{rang}(\text{coeficientes})$ (Rouché: la solución depende de $n-k$ parámetros, U p.30)</td><td>Sistema homogéneo</td></tr>
+  <tr><td>Cambio de base (tema 3.5, no de este tema)</td><td>$X_B=P\,X_{B'}$ (columnas de $P$ = coordenadas de $B'$ en $B$); ver tema 3.5</td><td>$B,B'$ bases</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_2_4_suma_directa.html">2.4 · Operaciones entre subespacios. Suma directa</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Teor. 2.8</td><td>$\langle S\rangle$ es el menor subespacio que contiene a $S$</td><td>—</td></tr>
+  <tr><td>Intersección</td><td>$U_1\cap U_2$ es subespacio; sus vectores cumplen las ecuaciones de los dos: se <b>juntan las cartesianas</b>. $\operatorname{Dim}=n-\operatorname{rang}$ del sistema conjunto</td><td>Siempre subespacio; ecuaciones <b>cartesianas</b> (si hay generadores, pasar antes a cartesianas)</td></tr>
+  <tr><td>Unión</td><td>$U_1\cup U_2$ en general <b>no</b> es subespacio; lo es solo si $U_1\subset U_2$ o $U_2\subset U_1$ (en ese caso es el mayor)</td><td>Contraejemplo: los dos ejes de $\mathbb R^2$</td></tr>
+  <tr><td>Suma (Def. 2.12)</td><td>$U_1+U_2=\{u_1+u_2\}$; generadores $=$ unión de bases de $U_1$ y $U_2$ (quitar sobrantes por rango)</td><td>La unión de bases genera, pero puede ser ligada</td></tr>
+  <tr><td>Contenido</td><td>$U_1\subset U_2\Rightarrow U_1\cap U_2=U_1,\ U_1+U_2=U_2$</td><td>Se comprueba con los generadores de $U_1$</td></tr>
+  <tr><td>Grassmann</td><td>$\operatorname{Dim}(U_1+U_2)+\operatorname{Dim}(U_1\cap U_2)=\operatorname{Dim}U_1+\operatorname{Dim}U_2$</td><td>Espacio de dimensión finita; <b>cuatro</b> dimensiones, probar tres para despejar la cuarta</td></tr>
+  <tr><td>Cotas</td><td>$\max(\operatorname{Dim}U_1,\operatorname{Dim}U_2)\le\operatorname{Dim}(U_1+U_2)\le\operatorname{Dim}V$; $\operatorname{Dim}(U_1\cap U_2)\le\min$; y $\operatorname{Dim}(U_1\cap U_2)\ge\operatorname{Dim}U_1+\operatorname{Dim}U_2-\operatorname{Dim}V$</td><td>Propio (consecuencia de que un subespacio de $W$ tiene dimensión $\le\operatorname{Dim}W$, y de Grassmann)</td></tr>
+  <tr><td>Suma directa (Def. 2.13)</td><td>Descomposición $v=u_1+u_2$ <b>única</b> $\iff U_1\cap U_2=\{0\}\iff\operatorname{Dim}(U_1+U_2)=\operatorname{Dim}U_1+\operatorname{Dim}U_2$</td><td>Exactamente <b>dos</b> sumandos (con tres o más no basta mirar parejas)</td></tr>
+  <tr><td>Suplementarios (Def. 2.14)</td><td>$V=U_1\oplus U_2\iff U_1\cap U_2=\{0\}$ y $\operatorname{Dim}U_1+\operatorname{Dim}U_2=\operatorname{Dim}V$</td><td>$\operatorname{Dim}V=n$ finita. El suplementario <b>no es único</b>; el de $V$ es $\{0\}$</td></tr>
+  <tr><td>Construir un suplementario</td><td>Completar una base de $U$ a una base de $V$ (Teor. 2.7); los vectores añadidos generan un suplementario</td><td>Comprobar con determinante/rango que la ampliada es base</td></tr>
+  <tr><td>Teor. 2.9</td><td>$B=\{e_1,\dots,e_n\}$ base de $V\Rightarrow V=\langle e_1\rangle\oplus\cdots\oplus\langle e_n\rangle$</td><td>$B$ base</td></tr>
+</table>
+<h2 class="modulo">Módulo 3 · Aplicaciones lineales y matrices</h2>
+<div class="tema"><a href="temas/tema_3_1_conceptos_propiedades.html">3.1 · Aplicaciones lineales: conceptos y propiedades</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Def. 3.1</td><td>$f(v+\lambda u)=f(v)+\lambda f(u)$ $\iff$ $f(u+v)=f(u)+f(v)$ <b>y</b> $f(\lambda u)=\lambda f(u)$</td><td>$V,W$ espacios vectoriales sobre $\mathbb R$; para <b>todos</b> $v,u,\lambda$</td></tr>
+  <tr><td>Endomorfismo</td><td>$f$ lineal con $V=W$ (E p.80)</td><td>Hay que verificar las <b>dos</b> condiciones</td></tr>
+  <tr><td>P1</td><td>$f(0)=0$. <b>Si $f(0)\neq0$, no es lineal</b></td><td>Condición <b>necesaria</b>, no suficiente: $f(0)=0$ no prueba linealidad</td></tr>
+  <tr><td>P2</td><td>$f(-v)=-f(v)$; $f(x-y)=f(x)-f(y)$</td><td>$f$ lineal</td></tr>
+  <tr><td>P3</td><td>$f(\sum a_iv_i)=\sum a_if(v_i)$ → calcular $f(w)$ si $w=\sum a_iv_i$</td><td>Los $a_i$ se calculan en el espacio <b>inicial</b>; con una <b>base</b> siempre se puede</td></tr>
+  <tr><td>P4</td><td>$v,u$ ligados $\Rightarrow$ $f(v),f(u)$ ligados (con la misma relación). Contrarrecíproca: imágenes libres $\Rightarrow$ originales libres</td><td>$f$ lineal</td></tr>
+  <tr><td>P5</td><td>Libres pueden ir a ligados (p. ej. proyecciones)</td><td>$f$ lleva todo libre a libre $\iff$ $f$ inyectiva ($\operatorname{Nuc}f=\{0\}$, 3.2); si no, unos libres se conservan y otros no</td></tr>
+  <tr><td>No lineales típicas</td><td>constante $\neq0$, traslación $x+c$, $x^2$, $xy$, $|x|$, $\sin x$, $\det$</td><td>Un solo contraejemplo basta</td></tr>
+  <tr><td>$f$ determinada por una base</td><td>Dadas $f(e_1),\dots,f(e_n)$ ($e_i$ base) $f(w)=\sum a_if(e_i)$ queda determinada (Teor. 3.2, U p.114); que exista una $f$ lineal para cualesquiera imágenes de la base es observación propia (P)</td><td>Los $e_i$ deben ser <b>base</b> (libres): sobre ligados las imágenes no son libres de elegir</td></tr>
+  <tr><td>$f(S)$</td><td>Si $S$ es subespacio, $f(S)$ es subespacio (E 3.13 D)</td><td>$f$ lineal</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_3_2_nucleo_imagen.html">3.2 · Imagen y núcleo</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
+  <tr><td>Imagen (Def. 3.2)</td><td>$\operatorname{Im}(f)=\{f(v):v\in V\}\subset W$, subespacio; $=\langle f(e_1),\dots,f(e_n)\rangle$ (columnas de $A$)</td><td>$f$ lineal; $\{e_j\}$ base de $V$</td></tr>
+  <tr><td>Núcleo (Def. 3.3)</td><td>$\operatorname{Nuc}(f)=\{v:f(v)=\bar0\}\subset V$, subespacio; se halla resolviendo $AX=0$</td><td>$f$ lineal</td></tr>
+  <tr><td>Dimensión de la imagen</td><td>$\operatorname{Dim}\operatorname{Im}(f)=\operatorname{rang}(A)$ (nº de generadores independientes)</td><td>no es el nº de columnas</td></tr>
+  <tr><td>Dimensión del núcleo</td><td>$\operatorname{Dim}\operatorname{Nuc}(f)=m-\operatorname{rang}(A)$ = nº de parámetros libres</td><td>$m=\operatorname{Dim}V$ = nº de columnas</td></tr>
+  <tr><td>Teor. 3.1</td><td>$\operatorname{Dim}\operatorname{Im}(f)+\operatorname{Dim}\operatorname{Nuc}(f)=\operatorname{Dim}V$</td><td>$V$ = espacio <b>inicial</b>; dimensión finita</td></tr>
+  <tr><td>Cartesianas de $\operatorname{Im}$</td><td>$y\in\operatorname{Im}(f)\iff$ el rango no sube al añadir $y$; hay $n-\operatorname{rang}A$ ecuaciones</td><td>$n=\operatorname{Dim}W$; si $\operatorname{Im}=W$ no hay ecuaciones</td></tr>
+  <tr><td>Dim. del núcleo cero</td><td>$\operatorname{Nuc}(f)=\{\bar0\}$, base vacía, $\operatorname{Dim}=0$ (convenio U p.112)</td><td>—</td></tr>
+  <tr><td>Inyectiva (Lay)</td><td>$\iff\operatorname{Nuc}(f)=\{\bar0\}\iff\operatorname{rang}A=m$; exige $\operatorname{Dim}V\le\operatorname{Dim}W$</td><td>vocabulario de Lay, no de U</td></tr>
+  <tr><td>Sobreyectiva (Lay)</td><td>$\iff\operatorname{Im}(f)=W\iff\operatorname{rang}A=n$; exige $\operatorname{Dim}V\ge\operatorname{Dim}W$</td><td>vocabulario de Lay, no de U</td></tr>
+  <tr><td>Endomorfismo</td><td>inyectiva $\iff$ sobreyectiva $\iff\det A\neq0$</td><td>$V=W$ (o $\operatorname{Dim}V=\operatorname{Dim}W$)</td></tr>
+  <tr><td>Soluciones de $f(v)=w$</td><td>$v_0+\operatorname{Nuc}(f)$ (una particular más el núcleo)</td><td>existe una particular, $w\in\operatorname{Im}(f)$</td></tr>
+  <tr><td>Núcleo de $\lambda f$</td><td>$\operatorname{Nuc}(\lambda f)=\operatorname{Nuc}(f)$</td><td>$\lambda\neq0$ (E 3.24)</td></tr>
+  <tr><td>Núcleo de $g\circ f$</td><td>$\operatorname{Nuc}(f)\subset\operatorname{Nuc}(g\circ f)$; si $\operatorname{Nuc}(f)=\operatorname{Nuc}(g)=\{0\}$, también $\operatorname{Nuc}(g\circ f)=\{0\}$</td><td>composición definida</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_3_3_ecuaciones_matriz_asociada.html">3.3 · Ecuaciones y matriz asociada</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Determinación (Teor. 3.2, U p.114)</td><td>$f(v)=v_1f(e_1)+\dots+v_mf(e_m)$ si $v=(v_1,\dots,v_m)_B$ <i>($\{e_j\}$ <b>base</b> de $V$ y se dan las $m$ imágenes)</i></td></tr>
+  <tr><td>Matriz asociada (Def. 3.4, U p.116)</td><td>columna $j$ = coordenadas en $S$ de $f(e_j)$ <i>(bases $B$ de $V$, $S$ de $W$, <b>ordenadas</b>)</i></td></tr>
+  <tr><td>Tamaño</td><td>$(\operatorname{Dim}W)\times(\operatorname{Dim}V)$: filas = llegada, columnas = partida</td></tr>
+  <tr><td>Unicidad (Teor. 3.3, U p.115)</td><td>una matriz por cada par de bases <i>(la matriz <b>depende</b> de $B$ y $S$)</i></td></tr>
+  <tr><td>Ecuaciones (U p.117)</td><td>$Y=AX$; $y_i=a_{i1}x_1+\dots+a_{im}x_m$ <i>($X$ en $B$, $Y$ en $S$)</i></td></tr>
+  <tr><td>Bases canónicas</td><td>columna $j$ = $f(e_j)$; fila $i$ = coeficientes de la componente $i$ de $f$ <i>(coordenadas = componentes)</i></td></tr>
+  <tr><td>Datos en base no canónica</td><td>despeja $f(e_j)$ por linealidad (o $A=FP^{-1}$) <i>(la base dada debe ser base)</i></td></tr>
+  <tr><td>Matriz en $B$, $S$ no canónicas</td><td>$f(b_j)$ y luego sus coordenadas en $S$ (sistema) <i>(no dejar las imágenes en canónicas)</i></td></tr>
+  <tr><td>Lo que no cambia con las bases</td><td>$\operatorname{rang}A=\operatorname{Dim}\operatorname{Im}f$; $\operatorname{Dim}\operatorname{Nuc}f=m-\operatorname{rang}A$ <i>($m$ = nº de columnas)</i></td></tr>
+  <tr><td>Polinomios y matrices</td><td>base canónica en orden: $1,x,x^2,\dots$ / $E_{11},E_{12},E_{21},E_{22}$; coordenadas = coeficientes / entradas por filas <i>(mismo orden en todas las columnas)</i></td></tr>
+</table>
+<div class="tema"><a href="temas/tema_3_4_operaciones_aplicaciones_matrices.html">3.4 · Operaciones con aplicaciones lineales y con matrices</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Suma (Def. 3.5-3.7, U p.118-119)</td><td>$(f+g)(v)=f(v)+g(v)$; matriz $A+B$ <i>($f,g\in\mathcal L(V,W)$; $A,B$ del mismo tamaño y en las <b>mismas bases</b>)</i></td></tr>
+  <tr><td>Escalar (Def. 3.8-3.10, U p.120-121)</td><td>$(\lambda f)(v)=\lambda f(v)$; matriz $\lambda A$ <i>(siempre)</i></td></tr>
+  <tr><td>Composición (Def. 3.11, U p.124)</td><td>$(f\circ g)(x)=f(g(x))$ <i>(llegada de $g$ = partida de $f$)</i>; «primero $g$, luego $f$»</td></tr>
+  <tr><td>Producto (Def. 3.12-3.13, U p.126)</td><td>matriz de $f\circ g$ = $A_fA_g$; $Y=(AB)X$ <i>(nº de columnas de $A_f$ = nº de filas de $A_g$)</i></td></tr>
+  <tr><td>Tamaño</td><td>$(n\times p)(p\times m)=n\times m$: se «cancela» la dimensión intermedia</td></tr>
+  <tr><td>Elemento del producto (U p.127)</td><td>$c_{ij}=a_{i1}b_{1j}+\dots+a_{ip}b_{pj}$ (fila $i$ de $A$ por columna $j$ de $B$)</td></tr>
+  <tr><td>Propiedades (U p.128)</td><td>asociativa, distributiva (a ambos lados), identidad a cada lado, $\lambda(AB)=(\lambda A)B=A(\lambda B)$</td></tr>
+  <tr><td>No conmutativa (U p.128)</td><td>$AB\neq BA$ en general; a veces $BA$ ni existe; puede ser $AB=0$ con $A,B\neq0$ ($\operatorname{Im}g\subseteq\operatorname{Nuc}f$)</td></tr>
+  <tr><td>Espacios vectoriales (U p.122-123)</td><td>$(\mathcal L(V,W),+,\mathbb R)$ y $(\mathcal M_{n\times m},+,\mathbb R)$, con neutro la aplicación/matriz nula</td></tr>
+  <tr><td>Correspondencia (U p.118)</td><td>$\mathcal L(V,W)\leftrightarrow\mathcal M_{n\times m}$ biyectiva <i>(bases fijadas)</i></td></tr>
+</table>
+<div class="tema"><a href="temas/tema_3_5_inversa_cambios_base.html">3.5 · Matriz inversa y cambios de base</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Cambio de coordenadas (Def. 3.14, U p.132)</td><td>$x_B=Q\,x_{B'}$; columna $j$ de $Q$ = $e'_j$ escrito en $B$ <i>($B,B'$ bases del mismo espacio, mismo orden)</i></td></tr>
+  <tr><td>Base antigua = canónica</td><td>$Q$ = vectores de $B'$ en columnas, sin más</td></tr>
+  <tr><td>Ninguna es la canónica</td><td>resolver sistemas, o $Q=M_B^{-1}M_{B'}$ (Lay p.242)</td></tr>
+  <tr><td>Cambio contrario (U p.135)</td><td>$x_{B'}=Q^{-1}x_B$; columnas de $Q^{-1}$ = vectores de $B$ escritos en $B'$</td></tr>
+  <tr><td>Regularidad (U p.135)</td><td>$\det Q\neq0$ siempre; $\det Q^{-1}=1/\det Q$; $Q$ es la matriz de la identidad</td></tr>
+  <tr><td>Calcular $Q^{-1}$</td><td>despejar (U p.137) · Gauss-Jordan $(Q\mid I)\sim(I\mid Q^{-1})$ · adjunta $\frac1{|Q|}(\operatorname{Adj}Q)^t$</td></tr>
+  <tr><td>Aplicación en otras bases (Def. 3.15, U p.136)</td><td>$A'=P^{-1}AQ$ <i>($Q$ en la salida, $P$ en la llegada; ambas de nueva a antigua)</i></td></tr>
+  <tr><td>Endomorfismo (misma base)</td><td>$P=Q$, $A'=Q^{-1}AQ$ (semejantes, U p.148); $\det A'=\det A$</td></tr>
+  <tr><td>Imágenes de una base $V$ no canónica</td><td>matriz canónica $M=F\,Q^{-1}$ ($F$: imágenes en columnas; $Q$: vectores de $V$ en columnas)</td></tr>
+  <tr><td>Autoevaluación (U p.311)</td><td>ítem 3: V (misma $A$, distintas $f$ según las bases); ítem 8: son regulares (F «singulares»); ítem 9: V (identidad); ítems 4 y 10: F</td></tr>
+  <tr><td>Anticipo (propio)</td><td>$f$ endomorfismo de $\mathbb R^n$ invertible $\iff\det A\neq0$; la matriz de $f^{-1}$ es $A^{-1}$</td></tr>
+</table>
+<h2 class="modulo">Módulo 4 · Diagonalización</h2>
+<div class="tema"><a href="temas/tema_4_1_relaciones_equivalencia.html">4.1 · Relaciones de equivalencia</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Relación binaria (Def. 4.1, U p.142)</td><td>$R\subset A\times A$, $A\neq\emptyset$</td></tr>
+  <tr><td>Equivalencia (Def. 4.2, U p.144)</td><td>reflexiva ($\forall a$), simétrica, transitiva; clases $[a]=\{x:xRa\}$ forman una <b>partición</b>; cociente $A/R$</td></tr>
+  <tr><td>Truco</td><td>«$f(x)=f(y)$» $\Rightarrow$ equivalencia; clases = valores de $f$</td></tr>
+  <tr><td>Equivalentes (Def. 4.3, p.146)</td><td>$B=MAN$, $M,N$ regulares $\iff$ <b>mismo rango</b> (Teor. 4.2, mismo tamaño); forma canónica $\begin{pmatrix}I_r&0\cr0&0\end{pmatrix}$</td></tr>
+  <tr><td>Cambio de base (Teor. 4.3: U lo enuncia para endomorfismos; vale para cualquier $f:V\to W$)</td><td>$A'=P^{-1}AQ$: equivalentes ($M=P^{-1}$, $N=Q$)</td></tr>
+  <tr><td>Congruentes (Def. 4.4, p.147)</td><td>$B=P^tAP$, $P$ regular <i>(solo cuadradas)</i>; $|B|=|P|^2|A|$: conserva rango y signo del det</td></tr>
+  <tr><td>Semejantes (Def. 4.5, p.148)</td><td>$A'=P^{-1}AP$, $P$ = matriz de paso <i>(solo cuadradas)</i>; matrices de un endomorfismo en distintas bases</td></tr>
+  <tr><td>Jerarquía</td><td>semejantes $\Rightarrow$ equivalentes $\Leftarrow$ congruentes; ningún recíproco; semejante y congruente a la vez si $P$ ortogonal</td></tr>
+  <tr><td>Invariantes de la semejanza</td><td>rango, det, traza, polinomio característico, valores propios (U p.153). <b>Necesarios, no suficientes</b> ($J$ e $I$)</td></tr>
+  <tr><td>Hallar la matriz de paso</td><td>$PB=AP$ (lineal) $+\ \det P\neq0$; nunca única ($kP$)</td></tr>
+  <tr><td>Potencias</td><td>$A=P\Lambda P^{-1}\Rightarrow A^n=P\Lambda^nP^{-1}$; control $\operatorname{tr}A^n=\sum\lambda_i^n$</td></tr>
+  <tr><td>Autoevaluación (U p.312)</td><td>ítem 1: V ($M=N^t$ = congruentes); ítem 2: V ($P^{-1}AP$ solo si $A$ cuadrada)</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_4_2_valores_vectores_propios.html">4.2 · Valores y vectores propios</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Vector propio (Def. 4.6, U p.151)</td><td>$AX=\lambda X$, $\lambda\in\mathbb R$, <b>$x\neq0$</b></td></tr>
+  <tr><td>Subespacio propio (Def. 4.8, p.152)</td><td>$L_\lambda=\operatorname{Nuc}(A-\lambda I)$ = vectores propios $\cup\{0\}$; ecuaciones: $(A-\lambda I)X=0$</td></tr>
+  <tr><td>Valores propios (Def. 4.9-4.10, p.152-153)</td><td>raíces reales de $|A-\lambda I|=0$ (polinomio de grado $n$); $|A-\mu I|=p(\mu)$</td></tr>
+  <tr><td>Polinomio, $n=2$ / general</td><td>$\lambda^2-(\operatorname{tr}A)\lambda+|A|$ / $(-1)^n\lambda^n+(-1)^{n-1}(\operatorname{tr}A)\lambda^{n-1}+\cdots+|A|$</td></tr>
+  <tr><td>Traza y determinante</td><td>$\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ con multiplicidades <i>(raíces reales contadas $\alpha$ veces)</i></td></tr>
+  <tr><td>Triangular / diagonal</td><td>valores propios = elementos de la diagonal</td></tr>
+  <tr><td>$0$ valor propio</td><td>$\iff|A|=0\iff A$ singular</td></tr>
+  <tr><td>Valores distintos</td><td>vectores propios libres; $L_\lambda\cap L_\mu=\{0\}$; suma directa</td></tr>
+  <tr><td>Teor. 4.4 (p.153)</td><td>semejantes $\Rightarrow$ mismo polinomio, traza, det, valores propios; <b>el recíproco es falso</b> (Ej. 4.10)</td></tr>
+  <tr><td>Multiplicidades (Def. 4.11, p.155)</td><td>$\alpha$ = veces raíz; $d=\dim L=n-\operatorname{rang}(A-\lambda I)$; <b>$1\le d\le\alpha$</b> (Teor. 4.5); $\alpha=1\Rightarrow d=1$</td></tr>
+  <tr><td>Con el mismo vector propio $v$</td><td>$A^k\to\lambda^k$; $A^{-1}\to1/\lambda$ <i>(solo si $A$ regular)</i>; $q(A)\to q(\lambda)$</td></tr>
+  <tr><td>$AB$ y $BA$</td><td>mismos valores propios (E 4.20)</td></tr>
+  <tr><td>Autoevaluación (U p.312)</td><td>3 V, 4 F, 5 F, 6 F, 8 V</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_4_3_diagonalizacion.html">4.3 · Diagonalización de matrices</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Diagonalizable (Def. 4.12, U p.161)</td><td>$\exists P$ regular con $\Lambda=P^{-1}AP$ diagonal <i>($A$ cuadrada; endomorfismo: su matriz)</i></td></tr>
+  <tr><td>Teor. 4.6 (p.162)</td><td>diagonalizable $\iff$ existe una <b>base de $V$</b> de vectores propios</td></tr>
+  <tr><td>Columnas de $P$, diagonal de $\Lambda$</td><td>$AP=P\Lambda\iff Ap_j=\lambda_jp_j$: $P$ = vectores propios en columnas, $\Lambda$ = valores propios <b>en el mismo orden</b></td></tr>
+  <tr><td>Criterio suficiente (p.163)</td><td>$n$ valores propios reales distintos $\Rightarrow$ diagonalizable (no es necesario: $3I_2$)</td></tr>
+  <tr><td>Teor. 4.7 (p.164)</td><td>diagonalizable $\iff d_i=\alpha_i$ $\forall i$ <i>(todas las raíces reales; «de orden $n$», no «de rango $n$»)</i></td></tr>
+  <tr><td>Cálculo de $d$</td><td>$d_i=n-\operatorname{rang}(A-\lambda_iI)$; $1\le d_i\le\alpha_i$; $\alpha_i=1\Rightarrow d_i=1$ (basta estudiar los repetidos)</td></tr>
+  <tr><td>Un solo valor propio $\lambda$</td><td>diagonalizable $\iff A=\lambda I$</td></tr>
+  <tr><td>Sin raíces reales</td><td>no diagonalizable en $\mathbb R$ (giro de $90^\circ$)</td></tr>
+  <tr><td>$P$ y $\Lambda$ no únicas</td><td>$\Lambda$ única salvo el orden; $P$: reordenar, escalar, otra base de $L_i$ con $d_i\gt1$; siempre juntas</td></tr>
+  <tr><td>Comprobar sin invertir</td><td>$AP=P\Lambda$</td></tr>
+  <tr><td>Reconstruir $A$</td><td>$A=P\Lambda P^{-1}$ (truco: $\Lambda P^{-1}$ escala las filas de $P^{-1}$)</td></tr>
+  <tr><td>Potencias (Lay p.281-282, E 4.10)</td><td>$A^k=P\Lambda^kP^{-1}$, $\Lambda^k=\operatorname{diag}(\lambda_i^k)$; $A^k$ diagonalizable con la misma $P$; <b>no</b> «elevar cada entrada»</td></tr>
+  <tr><td>Consecuencias</td><td>$|A|=\prod\lambda_i$, $\operatorname{tr}A=\sum\lambda_i$ (con multiplicidades)</td></tr>
+  <tr><td>Solo endomorfismos</td><td>$f:\mathbb R^2\to\mathbb R^3$ no se diagonaliza; $P^{-1}AP$ requiere $A$ cuadrada</td></tr>
+  <tr><td>Autoevaluación (U p.312)</td><td>2 V, 7 V, 9 F</td></tr>
+</table>
+<div class="tema"><a href="temas/tema_4_4_matrices_jordan.html">4.4 · Matrices de Jordan</a></div>
+<table>
+  <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
+  <tr><td>Teor. 4.8 (U p.168)</td><td>$\exists P$ regular con $J=P^{-1}AP$, $J=\operatorname{diag}(J_1,\dots,J_s)$ <i>(todas las raíces de $|A-\lambda I|$ reales; si no, solo sobre $\mathbb C$)</i></td></tr>
+  <tr><td>Bloque $J_s(\lambda)$</td><td>$\lambda$ en la diagonal, $1$ en la línea <b>justo encima</b>; $=\lambda I+N$ con $N^s=0$</td></tr>
+  <tr><td>Unicidad</td><td>$J$ única salvo el orden de los bloques; $P$ no es única</td></tr>
+  <tr><td>Nº de bloques</td><td>de $\lambda_i$: $d_i=n-\operatorname{rang}(A-\lambda_iI)$; total $\sum d_i$</td></tr>
+  <tr><td>Tamaños</td><td>suman $\alpha_i$; con $\alpha\le3$ los fija $d$; con $\alpha\ge4$ hacen falta los rangos de $N^k$</td></tr>
+  <tr><td>Nº de unos</td><td>$n-\sum d_i$ = nº de vectores no propios de la base</td></tr>
+  <tr><td>Regla de los rangos</td><td>nº de bloques de tamaño $\ge k$ $=r_{k-1}-r_k$, $r_k=\operatorname{rang}(A-\lambda I)^k$, hasta $n-r_k=\alpha$ <i>(por $\lambda$)</i></td></tr>
+  <tr><td>$A$ diagonalizable</td><td>$J=\Lambda$ (sin unos); $n$ valores distintos $\Rightarrow$ diagonal</td></tr>
+  <tr><td>Un único valor propio $\lambda$</td><td>$J=\lambda I$ solo si $A=\lambda I$; si no, hay algún bloque de tamaño $\ge2$</td></tr>
+  <tr><td>Subespacios propios generalizados (Def. 4.13)</td><td>$\operatorname{Nuc}(A-\lambda I)^i$, $i\ge1$; cadena creciente que se estabiliza en dim $=\alpha$</td></tr>
+  <tr><td>Cadena de un bloque de tamaño $k$</td><td>$v\in\operatorname{Nuc}N^k\setminus\operatorname{Nuc}N^{k-1}$; columnas $(N^{k-1}v\mid\cdots\mid Nv\mid v)$: <b>propio primero</b></td></tr>
+  <tr><td>Comprobar</td><td>$\det P\neq0$ y $AP=PJ$ (sin invertir)</td></tr>
+  <tr><td>Potencias de un bloque</td><td>$J_2(\lambda)^n=\begin{pmatrix}\lambda^n&n\lambda^{n-1}\cr0&\lambda^n\end{pmatrix}$; $A^n=PJ^nP^{-1}$ </td></tr>
+  <tr><td>Método de potencias (U p.185)</td><td>$x_{k+1}=Ax_k/\mu_k$, $\mu_k$ = coordenada de mayor $|\cdot|$ <b>con su signo</b>; $\mu_k\to\lambda_1$, $x_k\to v_1$ <i>(valor estrictamente dominante, $x_0$ con componente en $v_1$)</i>; con $A^{-1}$, el de menor módulo</td></tr>
+  <tr><td>Autoevaluación (U p.312-313)</td><td>9 F, 10 V</td></tr>
+</table>
+<h2 class="modulo">Módulo 5 · Ortogonalidad</h2>
+<div class="tema"><a href="temas/tema_5_1_producto_escalar.html">5.1 · Producto escalar</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Producto escalar</td><td>simétrico, bilineal, $u\bullet u\ge0$, $u\bullet u=0\iff u=0$ (Def. 5.1)</td><td>Para refutar: un $u\ne0$ con $u\bullet u\le0$</td></tr>
+    <tr><td>Matriz de Gram</td><td>$g_{ij}=e_i\bullet e_j$, $x\bullet y=X^tGY$</td><td>$G$ simétrica y <b>definida positiva</b> (Sylvester: $\Delta_k>0$); $g_{ii}>0$ no basta</td></tr>
+    <tr><td>Cambio de base</td><td>$G'=Q^tGQ$, $\det G'=(\det Q)^2\det G$</td><td>$Q$: columnas = vectores de $B'$ en $B$</td></tr>
+    <tr><td>Norma, normalizar</td><td>$\|v\|=\sqrt{X^tGX}$, $\hat v=v/\|v\|$</td><td>$v\ne0$; la diagonal de $G$ son normas <b>al cuadrado</b></td></tr>
+    <tr><td>Distancia, ángulo</td><td>$d(u,v)=\|u-v\|$, $\cos=\frac{u\bullet v}{\|u\|\|v\|}$</td><td>$u,v\ne0$; $|\cos|\le1$ por Cauchy-Schwarz (Lay)</td></tr>
+    <tr><td>Pitágoras</td><td>$u\perp v\Rightarrow\|u+v\|^2=\|u\|^2+\|v\|^2$</td><td>Solo con ortogonales</td></tr>
+    <tr><td>$v\perp U$</td><td>ortogonal a un sistema generador</td><td>Con $G$: $u_i^tGX=0$</td></tr>
+    <tr><td>Sistema ortogonal</td><td>$u_i\bullet u_j=0$ ($i\ne j$) <b>y</b> $u_i\ne0$ $\Rightarrow$ libre (Teor. 5.2)</td><td>ortonormal: además $\|u_i\|=1$; en base ortogonal $G$ es diagonal</td></tr>
+    <tr><td>Coordenadas</td><td>$c_i=\frac{x\bullet u_i}{u_i\bullet u_i}$ (Teor. 5.3)</td><td>Solo base <b>ortogonal</b>; ortonormal: $c_i=x\bullet u_i$</td></tr>
+    <tr><td>Gram-Schmidt</td><td>$e_k=u_k-\sum_{i\lt k}\frac{u_k\bullet e_i}{e_i\bullet e_i}e_i$</td><td>Sistema libre; proyecta sobre los $e_i$, no sobre los $u_i$</td></tr>
+    <tr><td>$U^\perp$</td><td>$U\oplus U^\perp=V$, $\dim U^\perp=n-\dim U$, $(U^\perp)^\perp=U$</td><td>Ortogonal $\ne$ suplementario: ortogonal $\iff\subseteq U^\perp$</td></tr>
+    <tr><td>Proyección</td><td>$\operatorname{Proy}_U v=\sum\frac{v\bullet e_i}{e_i\bullet e_i}e_i$ (Ec. 5.2), $v=u+w$, $w\in U^\perp$</td><td>Base <b>ortogonal</b> de $U$</td></tr>
+    <tr><td>Mejor aproximación</td><td>$d(v,U)=\|v-\operatorname{Proy}_Uv\|$ (Teor. 5.4)</td><td>Plano de $\mathbb R^3$ (estándar): $\frac{|v\cdot n|}{\|n\|}$</td></tr>
+  </table>
+<div class="tema"><a href="temas/tema_5_2_matrices_ortogonales.html">5.2 · Matrices ortogonales</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Matriz ortogonal</td><td>$\operatorname{Col}A$ ortonormal $\iff A^tA=I_n$ (Def. 5.13, Teor. 5.5)</td><td>$A\in\mathcal M_{m\times n}$; columnas <b>unitarias y perpendiculares</b>; necesariamente $n\le m$</td></tr>
+    <tr><td>Cuadrada</td><td>$A^{-1}=A^t$ (Teor. 5.6); filas también ortonormales; $A^t$ ortogonal</td><td>Solo en $m=n$; en rectangulares $AA^t\neq I_m$</td></tr>
+    <tr><td>Conserva</td><td>$Ax\cdot Ay=x\cdot y$, $\|Ax\|=\|x\|$, ángulos, distancias</td><td>Producto escalar <b>estándar</b> y base ortonormal</td></tr>
+    <tr><td>Determinante</td><td>$\det A=\pm1$</td><td>Necesario, <b>no suficiente</b></td></tr>
+    <tr><td>Valores propios</td><td>reales: $\pm1$; complejos: módulo $1$</td><td>Puede no haber reales (giros)</td></tr>
+    <tr><td>Producto, inversa</td><td>$AB$, $A^{-1}$, $A^t$ ortogonales</td><td>$A,B$ cuadradas del mismo orden; la <b>suma</b> no</td></tr>
+    <tr><td>Sistema</td><td>$AX=B$ compatible: $X=A^tB$; siempre compatible determinado o incompatible</td><td>Si es rectangular, comprobar $A(A^tB)=B$</td></tr>
+    <tr><td>Ortogonales $2\times2$</td><td>$R_\theta$ ($\det1$, giro $\theta$); $S_\theta$ ($\det-1$, simetría respecto de la recta de ángulo $\theta/2$)</td><td>$\theta$ sale de la 1.ª columna: $(\cos\theta,\sin\theta)$</td></tr>
+    <tr><td>Ortogonales $3\times3$</td><td>$\det1$: giro, eje $=\operatorname{Nuc}(A-I)$, $\cos\theta=\frac{\operatorname{tr}A-1}2$; con $\operatorname{tr}=-1$ es el giro de $180^\circ$ = simetría respecto de la recta-eje. $\det-1$: $\operatorname{tr}=1$ simetría respecto del plano de normal $n$ ($S=I-\frac{2nn^t}{n^tn}$); $\operatorname{tr}=-3$ es $-I$; si no, simetría rotatoria</td><td>Sentido del giro según la orientación del eje; desarrollo propio</td></tr>
+    <tr><td>Cambio entre ortonormales</td><td>$P$ ortogonal, $X'=P^tX$</td><td>Ambas bases ortonormales</td></tr>
+    <tr><td>$QR$</td><td>$A=QR$, $Q^tQ=I_n$, $R=Q^tA$ triangular superior, diagonal $r_{jj}=\|e_j\|\gt0$</td><td>Columnas de $A$ <b>linealmente independientes</b>; $Q$ $m\times n$; $QQ^t\neq I$ si $m\gt n$</td></tr>
+    <tr><td>Sistema con $QR$</td><td>$AX=B\Rightarrow RX=Q^tB$, sustitución regresiva</td><td>Comprobar compatibilidad si $m\gt n$</td></tr>
+  </table>
+<div class="tema"><a href="temas/tema_5_3_matrices_simetricas.html">5.3 · Diagonalización de matrices simétricas</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Simétrica</td><td>$A=A^t$, $a_{ij}=a_{ji}$</td><td>Cuadrada; el tema solo vale con elementos <b>reales</b></td></tr>
+    <tr><td>Valores propios</td><td>Todos reales (raíces de $|A-\lambda I|=0$); $\sum\lambda_i=\operatorname{tr}A$, $\prod\lambda_i=|A|$ (contando multiplicidades)</td><td>Simétrica real. En $2\times2$: $\Delta=(a-c)^2+4b^2\ge0$</td></tr>
+    <tr><td>Vectores propios</td><td>$\lambda_1\neq\lambda_2\Rightarrow v_1\cdot v_2=0$ ($L_{\lambda_1}\perp L_{\lambda_2}$)</td><td>Solo valores propios <b>distintos</b>; dentro de un $L_\lambda$ hay que aplicar Gram-Schmidt</td></tr>
+    <tr><td>Multiplicidades</td><td>$d_i=\alpha_i$ siempre</td><td>Una simétrica real nunca tiene $d\lt\alpha$</td></tr>
+    <tr><td>Diagonalización ortogonal</td><td>$P^tAP=\Lambda$, $P^{-1}=P^t$, $A=P\Lambda P^t$ (Teor. 5.8)</td><td>$P$ de columnas <b>ortonormales</b> (normalizar); $\Lambda$ con el mismo orden que $P$</td></tr>
+    <tr><td>Semejante y congruente</td><td>$A$ es semejante <b>y</b> congruente a $\Lambda$ a la vez</td><td>Porque $P^{-1}=P^t$ (Teor. 5.8)</td></tr>
+    <tr><td>Recíproco</td><td>diagonalizable ortogonalmente $\iff$ simétrica</td><td>Matriz real (E 5.27; Lay Teor. 2)</td></tr>
+    <tr><td>Simetría con el producto escalar</td><td>$Ax\cdot y=x\cdot Ay$</td><td>Producto escalar estándar (E 5.26 C)</td></tr>
+    <tr><td>Descomposición espectral</td><td>$A=\sum\lambda_ju_ju_j^t$; $A^k=\sum\lambda_j^ku_ju_j^t$</td><td>$u_j$ unitarios y ortogonales (Lay p.398)</td></tr>
+    <tr><td>$\det P$</td><td>$\pm1$: giro ($+1$) o giro + simetría ($-1$)</td><td>Cambiar el signo de una columna cambia el signo de $\det P$</td></tr>
+  </table>
+<div class="tema"><a href="temas/tema_5_4_minimos_cuadrados.html">5.4 · Mínimos cuadrados</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Error cuadrático</td><td>$\|Ax_0-b\|$ (Def. 5.14)</td><td>Es la <b>norma</b>, no su cuadrado; producto escalar estándar</td></tr>
+    <tr><td>Solución por mínimos cuadrados</td><td>$x_0$ con $\|Ax_0-b\|\le\|Ax-b\|$ para todo $x$ (Def. 5.15)</td><td><b>Siempre existe</b>. Si $AX=B$ es compatible, son sus soluciones exactas (error $0$)</td></tr>
+    <tr><td>Geometría</td><td>$Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$; $b-Ax_0\perp$ cada columna</td><td>Teor. 5.4. El vector $Ax_0$ y el error son <b>únicos</b></td></tr>
+    <tr><td>Ecuaciones normales</td><td>$A^tAX=A^tB$ ($n\times n$)</td><td>Siempre compatible. $(A^tA)_{ij}=C_i\cdot C_j$, $(A^tB)_i=C_i\cdot B$</td></tr>
+    <tr><td>Unicidad</td><td>solución única ⇔ columnas independientes ⇔ $A^tA$ regular; entonces $x_0=(A^tA)^{-1}A^tb$</td><td>Si no: $x_0\in x_p+\operatorname{Nuc}A$ (variedad afín de dimensión $n-\operatorname{rang}A$; en general no es subespacio: lo es, $=\operatorname{Nuc}A$, solo si $A^tB=0$)</td></tr>
+    <tr><td>Con $QR$</td><td>$A=QR\Rightarrow RX=Q^tB$ (regresiva)</td><td>Columnas de $A$ independientes; $Q^tQ=I$ pero $Q$ no es cuadrada</td></tr>
+    <tr><td>Error mínimo</td><td>$\|b-Ax_0\|^2=\|b\|^2-\|Ax_0\|^2$ (Pitágoras)</td><td>Porque $Ax_0\perp b-Ax_0$ (útil para comprobar)</td></tr>
+    <tr><td>Recta $y=mx+n$</td><td>filas $(x_i,1)$; $\begin{pmatrix}\sum x^2&\sum x\\\sum x&N\end{pmatrix}\binom mn=\binom{\sum xy}{\sum y}$</td><td>Al menos dos $x_i$ distintos. $\sum e_i=0$, $\sum x_ie_i=0$; pasa por $(\bar x,\bar y)$</td></tr>
+    <tr><td>Parábola / plano</td><td>filas $(x_i^2,x_i,1)$ / $(x_i,y_i,1)$</td><td>Lineal en los coeficientes. Solución única ⇔ columnas independientes (parábola: al menos 3 abscisas distintas; plano: puntos no alineados en $(x,y)$). Con más datos que incógnitas el sistema suele ser incompatible</td></tr>
+    <tr><td>Ajuste vs interpolación</td><td>$N$ puntos ⇒ polinomio de grado $N-1$ pasa por todos</td><td>El de mínimos cuadrados (menor grado) en general no pasa por ninguno</td></tr>
+  </table>
+<h2 class="modulo">Módulo 6 · Formas bilineales y cuadráticas</h2>
+<div class="tema"><a href="temas/tema_6_1_formas_bilineales.html">6.1 · Formas bilineales</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Bilineal</td><td>lineal en $x$ (con $y$ fijo) y lineal en $y$ (con $x$ fijo): 4 igualdades (Def. 6.1)</td><td>$f(\lambda x,\lambda y)=\lambda^2f(x,y)$; no es lineal en el par</td></tr>
+    <tr><td>Aplicaciones asociadas $f_1,f_2$</td><td>$f_1(y)=f(a,y)$ con $a$ fijo; $f_2(x)=f(x,b)$ con $b$ fijo</td><td>$f$ es bilineal ⇔ todas son lineales (p. ej. $a=(2,-1)$: $f_1(y)=2y_2-y_3$ en U Ej. 6.1)</td></tr>
+    <tr><td>Forma bilineal</td><td>$f:E\times E\to\mathbb R$ bilineal (Def. 6.2)</td><td>Mismo espacio en los dos factores y llegada en $\mathbb R$</td></tr>
+    <tr><td>Matriz asociada</td><td>$a_{ij}=f(e_i,e_j)$; $f(x,y)=X^tAY=\sum a_{ij}x_iy_j$ (Def. 6.3)</td><td>Depende de la base; fila = 1.er argumento, columna = 2.º. $A$ no tiene por qué ser simétrica</td></tr>
+    <tr><td>Leer $A$ de la analítica</td><td>$a_{ij}$ = coeficiente de $x_iy_j$</td><td>Solo en la base en que está escrita la expresión; no se reparte nada</td></tr>
+    <tr><td>Propiedades</td><td>$f(x,0)=f(0,y)=0$; $f(-x,y)=f(x,-y)=-f(x,y)$</td><td>Necesarias, no suficientes</td></tr>
+    <tr><td>Cambio de base (Teor. 6.1)</td><td>$A'=P^tAP$, $X=PX'$</td><td>$P$ regular, <b>matriz de paso de $B'$ a $B$</b>: columnas = vectores de $B'$ en coordenadas de $B$</td></tr>
+    <tr><td>Congruencia</td><td>$A'=P^tAP$ (Def. 6.4)</td><td>Conserva rango, simetría, signo de $\det$; <b>no</b> $\det$ ($\det A'=\det A(\det P)^2$), traza, valores propios</td></tr>
+    <tr><td>Semejanza (contraste)</td><td>$A'=P^{-1}AP$</td><td>Es para endomorfismos; no es la fórmula de este tema (coinciden si $P$ es ortogonal)</td></tr>
+    <tr><td>Valor de $f$</td><td>$X^tAY=X'^tA'Y'$</td><td>El número no depende de la base</td></tr>
+    <tr><td>Matriz de paso entre congruentes</td><td>$P^tAP=A'$</td><td>No es única (si $P$ sirve, $PU$ con $U^tA'U=A'$ también)</td></tr>
+  </table>
+<div class="tema"><a href="temas/tema_6_2_formas_cuadraticas.html">6.2 · Formas cuadráticas</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Simétrica / antisimétrica</td><td>$f(x,y)=\pm f(y,x)$; matriz $A=\pm A^t$ (Def. 6.5-6.6)</td><td>Se cumple en una base ⇔ en todas. Antisimétrica ⇒ $a_{ii}=0$ y $f(x,x)=0$</td></tr>
+    <tr><td>Forma cuadrática</td><td>$Q(x)=f(x,x)=X^tAX=\sum a_{ii}x_i^2+2\sum_{i&lt;j}a_{ij}x_ix_j$ (Def. 6.7-6.8)</td><td>$f$ <b>simétrica</b>, $A$ <b>simétrica</b>; $Q(x)$ es un escalar</td></tr>
+    <tr><td>¿Es forma cuadrática?</td><td>polinomio con todos los monomios de grado 2</td><td>Sin términos de grado 0, 1, $\ge3$ ni funciones no polinómicas (Ej. 6.17-6.18)</td></tr>
+    <tr><td>Polinomio → matriz</td><td>$a_{ii}$ = coef. de $x_i^2$; $a_{ij}=a_{ji}$ = <b>mitad</b> del coef. de $x_ix_j$</td><td>Comprobar con $X^tAX$; con $M$ cualquiera, $A=\tfrac12(M+M^t)$</td></tr>
+    <tr><td>Homogeneidad</td><td>$Q(\lambda x)=\lambda^2Q(x)$</td><td>Justificar con $f(\lambda x,\lambda x)$</td></tr>
+    <tr><td>Suma</td><td>$Q(x+y)=Q(x)+Q(y)+2f(x,y)$</td><td>$f$ simétrica</td></tr>
+    <tr><td>Polarización</td><td>$f(x,y)=\tfrac12[Q(x+y)-Q(x)-Q(y)]$; $a_{ii}=Q(e_i)$</td><td>$a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$</td></tr>
+    <tr><td>Cambio de base</td><td>$A'=P^tAP$, $X=PX'$</td><td>$P$ regular, columnas = vectores de $B'$ en $B$; <b>no</b> $P^{-1}AP$</td></tr>
+    <tr><td>Rango</td><td>$\operatorname{rang}Q=\operatorname{rang}A$ (Def. 6.9)</td><td>Invariante por cambio de base; con parámetro: $|A|$ y casos, con un menor no nulo</td></tr>
+    <tr><td>Truco</td><td>$Q(1,\dots,1)=$ suma de todas las entradas de $A$</td><td>Para evaluar rápido</td></tr>
+  </table>
+<div class="tema"><a href="temas/tema_6_3_clasificacion_formas_cuadraticas.html">6.3 · Clasificación de las formas cuadráticas</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula / regla</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Clasificación (Def. 6.12)</td><td>DP: $Q>0$ en $x\neq0$; DN: $&lt;0$; SP: $\ge0$ y se anula en $x\neq0$; SN: igual con $\le$; indefinida: ambos signos</td><td>Un solo testigo basta para refutar; para afirmar hay que probar todos (criterios)</td></tr>
+    <tr><td>Forma canónica</td><td>$Q=\sum\lambda_iy_i^2$ con $P$ ortogonal, $\Lambda=P^tAP=P^{-1}AP$</td><td>$A$ simétrica; vectores propios <b>ortonormales</b> (Gram-Schmidt en subespacios dobles); orden de $\Lambda$ = orden de $P$</td></tr>
+    <tr><td>No unicidad</td><td>Base ortogonal sin normalizar: coeficientes $\lambda_i\|v_i\|^2$</td><td>Los signos no cambian (ley de inercia)</td></tr>
+    <tr><td>Signatura, rango</td><td>sig = nº de coef. $>0$; rang = nº de coef. $\neq0$ de una forma canónica</td><td>Invariantes (no dependen de la base)</td></tr>
+    <tr><td>Por valores propios</td><td>DP: todos $>0$; DN: todos $&lt;0$; SP: todos $\ge0$ y algún $0$; SN: todos $\le0$ y algún $0$; indefinida: de ambos signos</td><td>$A$ <b>simétrica</b> (si $Q=X^tMX$, usar $\tfrac12(M+M^t)$)</td></tr>
+    <tr><td>Por invariantes ($n=\dim E$)</td><td>DP: rg = sig = $n$; DN: rg = $n$, sig = 0; SP: rg = sig $&lt;n$; SN: rg $&lt;n$, sig = 0; indef.: rg ≠ sig y sig ≠ 0</td><td>—</td></tr>
+    <tr><td>Sylvester: definidas</td><td>DP ⇔ todos $\Delta_k>0$; DN ⇔ $\Delta_1&lt;0,\Delta_2>0,\Delta_3&lt;0,\dots$</td><td>«⇔»: da el conjunto exacto de un parámetro</td></tr>
+    <tr><td>Sylvester: semidefinidas</td><td>$|A|=0$ y $\Delta_1,\dots,\Delta_{n-1}>0$ ⇒ SP; $|A|=0$ y signos alternos desde $\Delta_1&lt;0$ ⇒ SN</td><td>Sólo «⇒». Para «¿qué valores dan SP?»: <b>necesario</b> $|A|=0$, luego comprobar</td></tr>
+    <tr><td>Atajos</td><td>$\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$; 2×2: $|A|&lt;0$ ⇒ indefinida</td><td>$|A|=0$ <b>no</b> implica semidefinida</td></tr>
+    <tr><td>Descartar «definida»</td><td>algún $a_{ii}\le0$ (porque $Q(e_i)=a_{ii}$) o $|A|$ de signo incompatible</td><td>Rápido en tests</td></tr>
+  </table>
+<div class="tema"><a href="temas/tema_6_4_conicas.html">6.4 · Cónicas</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula / regla</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Ecuación general</td><td>$a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0$</td><td>Alguno de $a_{11},a_{12},a_{22}\neq0$. <b>Ojo a los «2»</b></td></tr>
+    <tr><td>Matriz asociada</td><td>$A=\begin{pmatrix}a_{00}&a_{01}&a_{02}\\a_{01}&a_{11}&a_{12}\\a_{02}&a_{12}&a_{22}\end{pmatrix}$, $X^tAX=0$, $X=(1,x_1,x_2)^t$</td><td>$a_{00}$ <b>arriba a la izquierda</b>; $A$ simétrica</td></tr>
+    <tr><td>Partes</td><td>$f_2$ (cuadrática, matriz $M$), $f_1=2(a_{01}\ a_{02})x$, $a_{00}$</td><td>$M$ es $2\times2$; $A$ es $3\times3$</td></tr>
+    <tr><td>Invariantes (Def. 6.19)</td><td>$|A|$, $a_{11}+a_{22}$, $A_{00}=a_{11}a_{22}-a_{12}^2$</td><td>No cambian por giros ni traslaciones</td></tr>
+    <tr><td>Clasificar (rango 3)</td><td>$A_{00}>0$: elipse (real si $(a_{11}+a_{22})|A|<0$); $A_{00}<0$: hipérbola; $A_{00}=0$: parábola</td><td>El criterio de la traza solo vale con $A_{00}>0$</td></tr>
+    <tr><td>Clasificar (degeneradas)</td><td>rango 2: $A_{00}<0$ secantes reales; $A_{00}>0$ un punto; $A_{00}=0$ paralelas (reales si $A_{11}+A_{22}<0$, imaginarias si $>0$). Rango 1: recta doble</td><td>U usa solo $A_{11}$: falla en $x_1^2\mp1=0$</td></tr>
+    <tr><td>Giro (Paso 1)</td><td>$P^tMP=\operatorname{diag}(\lambda_1,\lambda_2)$; $x=Px'$; parte lineal $2(a_{01}\ a_{02})P$</td><td>Solo si $a_{12}\neq0$; vectores propios <b>unitarios</b>; $\det P=1$</td></tr>
+    <tr><td>Traslación (Paso 2)</td><td>Completar cuadrados; $x_i''=x_i'-c_i$</td><td>Con centro: queda en el origen; sin centro: el vértice en el origen</td></tr>
+    <tr><td>Control</td><td>Con centro: constante reducida $=|A|/A_{00}$; parábola: $|A|=-\lambda\beta^2/4$ ($\beta$ = coeficiente lineal tras el giro)</td><td>Propio (consecuencia de los invariantes)</td></tr>
+    <tr><td>Elementos</td><td>Elipse $c^2=a^2-b^2$; hipérbola $c^2=a^2+b^2$, asíntotas $x_2=\pm\tfrac bax_1$; parábola $x_1^2=2px_2$: foco $(0,\tfrac p2)$, directriz $x_2=-\tfrac p2$</td><td>Focos sobre el eje mayor (elipse) o transverso (hipérbola)</td></tr>
+  </table>
+<div class="tema"><a href="temas/tema_6_5_cuadricas.html">6.5 · Cuádricas</a></div>
+<table>
+    <tr><th>Qué</th><th>Fórmula / regla</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Ecuación general</td><td>$\sum a_{ii}x_i^2+2\sum_{i&lt;j}a_{ij}x_ix_j+2\sum a_{0i}x_i+a_{00}=0$ (Def. 6.20)</td><td>Algún coeficiente de grado 2 no nulo. <b>Ojo a los «2»</b></td></tr>
+    <tr><td>Matriz asociada</td><td>$A=\begin{pmatrix}a_{00}&a_{0i}\\a_{0i}&M\end{pmatrix}$ ($4\times4$ simétrica), $X^tAX=0$, $X=(1,x_1,x_2,x_3)^t$</td><td>$a_{00}$ <b>arriba a la izquierda</b>; $M$ ($3\times3$) = parte cuadrática</td></tr>
+    <tr><td>Invariantes</td><td>$\operatorname{rang}A$; $I_a=\operatorname{tr}M$; $A_{00}=|M|$; $J_a$ = suma de los menores principales $2\times2$ de $M$</td><td>No cambian con giros ni traslaciones; $J_a$ NO es una suma de adjuntos de $A$</td></tr>
+    <tr><td>Polinomio de signos</td><td>$p^3-I_ap^2+J_ap-A_{00}=0$: sus raíces son los valores propios de $M$</td><td>Todas reales ($M$ simétrica); $A_{00}$ entra con signo cambiado</td></tr>
+    <tr><td>Rango y centro</td><td>$|A|\neq0$ ⇔ rango 4 (ordinaria); $A_{00}\neq0$ ⇔ centro único</td><td>$A_{00}\neq0$ ⇒ rango $\ge3$ (hecho (R))</td></tr>
+    <tr><td>Rango 4</td><td>$A_{00}\neq0$: $+++/---$: elipsoide (real si $|A|<0$); $++-/+--$: hiperboloide ($|A|>0$ una hoja; $|A|<0$ dos hojas). $A_{00}=0$: paraboloide ($J_a>0$ elíptico; $J_a<0$ hiperbólico)</td><td>Los signos salen de $I_a,J_a,A_{00}$ (hecho (S)); $|A|$ solo decide real/imaginario o una/dos hojas</td></tr>
+    <tr><td>Rango 3</td><td>$A_{00}\neq0$: cono (imaginario con $+++/---$; real con signos mezclados). $A_{00}=0$: cilindro ($J_a>0$ elíptico, $J_a<0$ hiperbólico, $J_a=0$ parabólico)</td><td>Cilindro elíptico real/imaginario: con $d=F(c)$, <b>no</b> con el criterio de U</td></tr>
+    <tr><td>Rango 2 / 1</td><td>Rango 2: $J_a>0$ planos imaginarios secantes; $J_a<0$ reales secantes; $J_a=0$ paralelos (reales o imaginarios: se ve completando el cuadrado, p. ej. $x_1^2=1$ frente a $x_1^2=-1$). Rango 1: plano doble</td><td>—</td></tr>
+    <tr><td>Giro (Paso 1)</td><td>$P^tMP=\operatorname{diag}(\lambda_i)$, $X=PX'$; parte lineal $2(a_{01}\,a_{02}\,a_{03})P$</td><td>Vectores propios <b>unitarios y ortogonales</b>; $\det P=1$; si $\lambda$ doble, Gram-Schmidt</td></tr>
+    <tr><td>Traslación (Paso 2)</td><td>Completar cuadrados; $x_i''=x_i'-c_i$</td><td>Si algún $\lambda_i=0$ queda un término lineal (paraboloide / cilindro parabólico)</td></tr>
+    <tr><td>Control</td><td>Con centro único, constante reducida $d=|A|/A_{00}$ ($|A|=d\,\lambda_1\lambda_2\lambda_3$)</td><td>Propio (consecuencia de que $|A|$ es invariante)</td></tr>
+    <tr><td>Secciones</td><td>Cortar con un plano ($x_i=0$) da una cónica; se clasifica con su matriz $3\times3$ (tema 6.4)</td><td>—</td></tr>
+  </table>
+</main>
+</body>
+</html>
