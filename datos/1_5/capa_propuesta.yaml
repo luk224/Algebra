@@ -1,0 +1,257 @@
+ejercicios:
+  - id: ej2-1
+    nivel: 1
+    pista: |-
+      Escribe $(a,b)\ast(c,d)=(a,b)$ con $(c,d)$ como incógnita y despeja coordenada a coordenada. Cuando salga un candidato, mira si está en $V$.
+    problema: [neutro]
+  - id: ej2-3
+    nivel: 2
+    pista: |-
+      Son cuatro preguntas seguidas. Ve en orden: asociativa (desarrolla los dos miembros), neutro (despeja), simétrico (con ese neutro) y, si todo va bien, conmutativa.
+    problema: [propiedades, neutro, simetrico]
+  - id: ej2-4
+    nivel: 2
+    pista: |-
+      Para cada propiedad decide primero si crees que se cumple. Si crees que no, busca números concretos que la rompan; si crees que sí, necesitas una cuenta con letras.
+    problema: [propiedades, neutro]
+    enunciado: |-
+      Se pide comprobar cuáles de las siguientes propiedades verifica la operación $x\ast y=xy+1$ en el conjunto $\mathbb Z$ de los números enteros: A) asociativa; B) existe elemento neutro; C) conmutativa.
+  - id: ej2-5
+    nivel: 2
+    pista: |-
+      Para refutar que algo es subgrupo basta que falle una condición. Prueba con dos elementos sencillos de $U$ (uno en cada eje) y mira dónde cae su suma.
+    problema: [subgrupo]
+  - id: ex-prodsuma
+    nivel: 2
+    pista: |-
+      Empieza comprobando que el resultado de operar sigue en $V$. Luego sigue el orden: asociativa, neutro (despejando $e$), simétrico (usando ese $e$) y conmutativa; y no olvides comprobar que $e$ y el simétrico pertenecen a $V$.
+    problema: [propiedades, neutro, simetrico]
+  - id: ex-feb20a
+    nivel: 3
+    pista: |-
+      La operación no es simétrica en $a$ y $b$, así que sospecha de lo que depende del orden. En el neutro, plantea las dos ecuaciones ($a\diamond e=a$ y $e\diamond a=a$) y mira si tienen una solución común.
+    problema: [propiedades, neutro, simetrico]
+esencial:
+  intro: |-
+    Todo el tema se reduce a cuatro preguntas sobre una operación y a saber justificarlas.
+  items:
+    - |-
+      <b>Demostrar vs. refutar.</b> Una propiedad «para todos» se demuestra con letras y una cuenta general; se refuta con <i>un</i> contraejemplo numérico escrito entero. Probar con unos números nunca demuestra que se cumple.
+    - |-
+      <b>Neutro:</b> un único $e\in V$ con $a\ast e=e\ast a=a$ para todo $a$. Se despeja de $a\ast e=a$ y se comprueba que no depende de $a$, que está en $V$ y que vale por los dos lados (si la operación no es conmutativa).
+    - |-
+      <b>Simétrico:</b> solo tiene sentido si hay neutro. Se despeja $a'$ de $a\ast a'=e$ con el $e$ de esa operación, y se comprueba $a'\in V$ y $a'\ast a=e$.
+    - |-
+      <b>Grupo</b> = asociativa + neutro + simétrico; <b>conmutativo</b> si además es conmutativa. Es la mitad de la definición de espacio vectorial (tema 2.1).
+    - |-
+      <b>Subgrupo:</b> contiene al neutro, es cerrado y contiene los simétricos. Tener el neutro es necesario pero no suficiente; un fallo basta para refutarlo.
+tipos:
+  - id: propiedades
+    nombre: |-
+      Estudiar si una operación es asociativa, conmutativa…
+    receta: |-
+      Cierre; asociativa y conmutativa desarrollando los dos miembros; si falla, contraejemplo numérico.
+    senal: |-
+      «Razonar si se cumplen las propiedades asociativa, conmutativa…» para una fórmula $a\ast b=\dots$ en un conjunto dado.
+    pasos:
+      - |-
+        Comprueba el cierre: el resultado de operar debe seguir en el conjunto (importa sobre todo si no es todo $\mathbb R$).
+      - |-
+        Asociativa: desarrolla $(a\ast b)\ast c$ y $a\ast(b\ast c)$ por separado, sustituyendo la fórmula dos veces, y compáralos.
+      - |-
+        Conmutativa: compara $a\ast b$ con $b\ast a$ (o calcula su diferencia).
+      - |-
+        Si una no coincide, resta los dos desarrollos para ver cuándo no se anula y escribe un contraejemplo con números y la cuenta completa.
+    ejemplo: |-
+      En $\mathbb Z$ con $a\ast b=a-b$: $(1\ast2)\ast3=(-1)\ast3=-4$ pero $1\ast(2\ast3)=1\ast(-1)=2$, luego no es asociativa; y $1\ast2=-1\neq1=2\ast1$ no es conmutativa.
+    fallos: |-
+      Declarar «se cumple» tras probar con unos números · desarrollar mal un doble producto y perder términos · dar un «no se cumple» sin la cuenta numérica del contraejemplo.
+  - id: neutro
+    nombre: |-
+      Hallar el elemento neutro
+    receta: |-
+      Despeja $e$ de $a\ast e=a$ y comprueba que no depende de $a$, que está en $V$ y que vale también por la izquierda.
+    senal: |-
+      «Existe elemento neutro», «hallar el neutro de $(V,\ast)$».
+    pasos:
+      - |-
+        Escribe $a\ast e=a$ con $e$ incógnita y despéjala (en cada coordenada, si los elementos son pares).
+      - |-
+        Si $e$ depende de $a$, o la ecuación no tiene solución, no hay neutro: ya has terminado.
+      - |-
+        Comprueba que $e\in V$.
+      - |-
+        Comprueba $e\ast a=a$: si la operación no es conmutativa puede fallar y entonces no hay neutro.
+    ejemplo: |-
+      En $\mathbb R$ con $a\ast b=a+b-3$: $a+e-3=a\Rightarrow e=3$, que no depende de $a$; y $3\ast a=a$ ✓. El neutro es $3$.
+    fallos: |-
+      Suponer que el neutro es $0$ o $1$ «como siempre» · dar un $e$ fuera del conjunto · comprobar solo un lado en una operación no conmutativa.
+  - id: simetrico
+    nombre: |-
+      Hallar el elemento simétrico
+    receta: |-
+      Con el neutro $e$ ya hallado, despeja $a'$ de $a\ast a'=e$ y comprueba que $a'\in V$.
+    senal: |-
+      «Todo elemento tiene simétrico», «hallar el simétrico de $(x_1,x_2)$».
+    pasos:
+      - |-
+        Asegúrate de que hay neutro; si no, la propiedad no se cumple.
+      - |-
+        Plantea $a\ast a'=e$ con el $e$ de <i>esa</i> operación y despeja $a'$.
+      - |-
+        Mira si hay algún $a$ para el que no se pueda despejar (división por cero…) o para el que $a'$ salga de $V$.
+      - |-
+        Comprueba el otro lado, $a'\ast a=e$.
+    ejemplo: |-
+      En $\mathbb R$ con $a\ast b=a+b-3$ (neutro $3$): $a+a'-3=3\Rightarrow a'=6-a$. Para $a=5$, $a'=1$ y $5\ast1=3$ ✓.
+    fallos: |-
+      Usar $-a$ o $1/a$ sin mirar el neutro · olvidar comprobar que $a'$ pertenece a $V$ · calcular el simétrico sin neutro.
+  - id: subgrupo
+    nombre: |-
+      ¿Es subgrupo?
+    receta: |-
+      Comprueba que contiene al neutro, que la operación es cerrada y que los simétricos están dentro; un fallo basta para negarlo.
+    senal: |-
+      «Demostrar que $(U,+)$ es / no es subgrupo de $(V,+)$» para un subconjunto $U$ definido por una condición.
+    pasos:
+      - |-
+        Identifica quién es $U$ (dibújalo o describe qué elementos tiene) y comprueba que el neutro de $V$ está en $U$.
+      - |-
+        Cierre: toma $a,b\in U$ genéricos y mira si $a\ast b$ cumple la condición de $U$.
+      - |-
+        Simétricos: ¿el simétrico de cada elemento de $U$ sigue en $U$?
+      - |-
+        Si quieres refutar, da un par concreto de elementos de $U$ cuya operación se salga.
+    ejemplo: |-
+      $U=\{(x,y):y=2x\}$ en $(\mathbb R^2,+)$: $(0,0)\in U$; $(x,2x)+(x',2x')=(x+x',2(x+x'))\in U$; el opuesto $(-x,-2x)\in U$. Es subgrupo.
+    fallos: |-
+      Creer que basta con que contenga al neutro · comprobar el cierre con un solo ejemplo para «demostrarlo» · olvidar los simétricos (p. ej. $\{x\ge0\}$ es cerrado pero no tiene opuestos).
+quiz:
+  - p: |-
+      En $\mathbb R$ con $a\ast b=a+b+2$, ¿cuál es el elemento neutro?
+    opciones:
+      - t: |-
+          $0$
+        ok: false
+        why: |-
+          Es suponer que el neutro es siempre $0$: $a\ast0=a+2\neq a$.
+      - t: |-
+          $-2$
+        ok: true
+      - t: |-
+          $2$
+        ok: false
+        why: |-
+          Has cambiado el signo: $a\ast2=a+4\neq a$.
+      - t: |-
+          No existe
+        ok: false
+        why: |-
+          Al despejar $e$ de $a+e+2=a$ sale un valor que no depende de $a$ y está en $\mathbb R$.
+    fb: |-
+      $a+e+2=a\Rightarrow e=-2$, independiente de $a$, y por conmutatividad vale por los dos lados.
+  - p: |-
+      En $\mathbb R$ con $a\ast b=a+2b$ se prueba $a=1,\ b=0,\ c=0$ en la asociativa y coinciden. ¿Qué concluyes?
+    opciones:
+      - t: |-
+          Que es asociativa
+        ok: false
+        why: |-
+          Un caso que coincide no demuestra una propiedad «para todos».
+      - t: |-
+          Nada: hay que probar con letras o buscar otro contraejemplo; con $(1,2,3)$ sale $11\neq17$ y no es asociativa
+        ok: true
+      - t: |-
+          Que no es asociativa
+        ok: false
+        why: |-
+          Coincidir en un caso no la refuta; para refutar hace falta un caso en que difieran.
+    fb: |-
+      Con $(1,2,3)$: $(1\ast2)\ast3=5\ast3=11$ y $1\ast(2\ast3)=1\ast8=17$. La asociativa falla.
+  - p: |-
+      En $\mathbb R$ con $a\ast b=a+2b$, se tiene $a\ast0=a$ para todo $a$. ¿Hay elemento neutro?
+    opciones:
+      - t: |-
+          Sí, $e=0$
+        ok: false
+        why: |-
+          Falta el otro lado: $0\ast a=2a\neq a$.
+      - t: |-
+          No: $0$ solo es neutro por la derecha
+        ok: true
+      - t: |-
+          No, porque la operación no es conmutativa
+        ok: false
+        why: |-
+          Que no sea conmutativa no impide tener neutro; lo que falla es que ninguna $e$ cumple las dos igualdades.
+    fb: |-
+      Un neutro debe cumplir $a\ast e=e\ast a=a$. Aquí $e\ast a=e+2a=a$ obliga a $e=-a$, que depende de $a$.
+  - p: |-
+      En $\mathbb R$ con $a\ast b=a+b-3$ (neutro $3$), ¿cuál es el simétrico de $5$?
+    opciones:
+      - t: |-
+          $-5$
+        ok: false
+        why: |-
+          Es el opuesto de la suma usual; aquí $5\ast(-5)=-3\neq3$.
+      - t: |-
+          $1/5$
+        ok: false
+        why: |-
+          Es el inverso del producto; aquí $5\ast\frac15=2{,}2\neq3$.
+      - t: |-
+          $1$
+        ok: true
+      - t: |-
+          $0$
+        ok: false
+        why: |-
+          Habría que tener $5\ast0=3$, y $5\ast0=2$.
+    fb: |-
+      $5+a'-3=3\Rightarrow a'=1$, y $5\ast1=3$ ✓. En general $a'=6-a$.
+  - p: |-
+      ¿Cuál de estos es un grupo?
+    opciones:
+      - t: |-
+          $(\mathbb N,+)$
+        ok: false
+        why: |-
+          No hay opuestos: $-2\notin\mathbb N$.
+      - t: |-
+          $(\mathbb Z,+)$
+        ok: true
+      - t: |-
+          $(\mathbb R,\cdot)$
+        ok: false
+        why: |-
+          El $0$ no tiene inverso; el neutro $1$ existe, pero falla el simétrico.
+      - t: |-
+          $(\mathbb Z,\cdot)$
+        ok: false
+        why: |-
+          Solo $\pm1$ tienen inverso entero: $2$ no lo tiene en $\mathbb Z$.
+    fb: |-
+      $(\mathbb Z,+)$ cumple asociativa, neutro $0$ y opuestos en $\mathbb Z$ (y es conmutativo).
+  - p: |-
+      ¿Cuál es un subgrupo de $(\mathbb R^2,+)$?
+    opciones:
+      - t: |-
+          $\{(x,y):x+y=1\}$
+        ok: false
+        why: |-
+          No contiene al neutro $(0,0)$.
+      - t: |-
+          $\{(x,y):x\ge0\}$
+        ok: false
+        why: |-
+          Es cerrado, pero $(1,0)$ no tiene opuesto dentro: $(-1,0)$ no cumple $x\ge0$.
+      - t: |-
+          $\{(x,y):y=2x\}$
+        ok: true
+      - t: |-
+          $\{(x,y):xy=0\}$
+        ok: false
+        why: |-
+          No es cerrado: $(1,0)+(0,1)=(1,1)$, con $xy=1\neq0$.
+    fb: |-
+      La recta $y=2x$ contiene $(0,0)$, es cerrada para la suma y contiene los opuestos.
