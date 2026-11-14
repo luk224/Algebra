@@ -1,0 +1,51 @@
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Combinación lineal <span class="src" data-l="U" data-ref="U §2.2.2 Definición 2.3 y Ejemplo 2.14, p. 70">U p.70</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una <b>combinación lineal</b> de unos vectores es «una mezcla» de ellos: cada vector se toma multiplicado por un número (cuánto de ese ingrediente se pone; puede ser negativo o cero) y se suman los resultados. Si tienes en la despensa $u_1=(1,0,1)$ y $u_2=(2,0,1)$, la mezcla «una parte de $u_1$ y dos de $u_2$» da $1\cdot(1,0,1)+2\cdot(2,0,1)=(5,0,3)$. La pregunta típica es la inversa: <i>si te piden fabricar un vector concreto $w$, ¿hay una receta (unos números) que lo consiga?</i></p>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: combinaciones lineales de dos vectores</span>
+  <p>Mueve $\alpha$ y $\beta$ para formar $w=\alpha u+\beta v$. La cuadrícula inclinada son las combinaciones con $\alpha,\beta$ enteros. Puedes cambiar $u$ y $v$ en las cajas.</p>
+  <div class="anim-combo" data-modo="combo" data-u="2,1" data-v="-1,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
+<div class="box def"><span class="h">Definición 2.3 — combinación lineal</span>
+  <p>Sea $(V,+,\mathbb R)$ un espacio vectorial y $S=\{u_1,u_2,\dots,u_p\}$ un sistema (conjunto) de vectores de $V$. Se dice que $v\in V$ es <b>combinación lineal</b> de $S$ (o <b>depende linealmente</b> de $S$) si
+  $$v=\lambda_1u_1+\lambda_2u_2+\dots+\lambda_pu_p,\qquad \lambda_1,\dots,\lambda_p\in\mathbb R.$$
+  Los números $\lambda_i$ se llaman <b>coeficientes</b> de la combinación.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.3, p. 70">U p.70</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.14 — combinaciones de dos vectores de $\mathbb R^3$</span>
+  <p>Sean $u_1=(1,0,1)$ y $u_2=(2,0,1)$. Cualquier $v=\lambda_1u_1+\lambda_2u_2$ es combinación lineal de ellos. En componentes:
+  $$(v_1,v_2,v_3)=\lambda(1,0,1)+\mu(2,0,1)=(\lambda+2\mu,\ 0,\ \lambda+\mu).$$
+  Esto es la forma <b>paramétrica</b> $\;v_1=\lambda+2\mu,\ v_2=0,\ v_3=\lambda+\mu$ ($\lambda,\mu\in\mathbb R$). Con $\lambda=1,\mu=2$ sale $(5,0,3)$. Observa lo que dice: la segunda componente es <b>siempre 0</b>, mientras que $v_1$ y $v_3$ pueden valer cualquier cosa (para cada pareja de valores deseados de $v_1,v_3$ hay $\lambda,\mu$ que los dan). Es decir, todas las mezclas viven en el plano $x_2=0$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.14, p. 70-71">U p.70-71</span>
+</div>
+
+<div class="box thm"><span class="h">Traducción clave «vector ↔ sistema de ecuaciones»</span>
+  <p>Decir que $w$ es combinación lineal de $u_1,\dots,u_p\in\mathbb R^n$ es decir que el sistema de $n$ ecuaciones (una por componente)
+  $$\lambda_1u_1+\dots+\lambda_pu_p=w,\qquad\text{incógnitas }\lambda_1,\dots,\lambda_p,$$
+  es <b>compatible</b>. Si pones los $u_i$ como <b>columnas</b> de una matriz $A$: $\;w\in\langle u_1,\dots,u_p\rangle\iff\operatorname{rang}A=\operatorname{rang}(A\mid w)$ (Rouché-Frobenius, U p.30). Si el sistema tiene solución única, la combinación es única; si tiene infinitas, hay infinitas maneras de escribir $w$.</p>
+  <span class="src" data-l="P" data-ref="Traducción de la Definición 2.3 (U p.70) al teorema de Rouché-Frobenius (U p.30); explicación propia">P</span>
+  <span class="src" data-l="U" data-ref="U §1.4, clasificación de sistemas por rangos, p. 30">U p.30</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.19 — mezcla de abonos (¿se puede fabricar tal mezcla?)</span>
+  <p>Tres abonos en pastillas de 300 g, con las cantidades (en gramos) de fósforo P, potasio K, nitrógeno N, calcio Ca y hierro Fe: $a=(100,50,100,50,0)$, $b=(90,50,105,45,10)$, $c=(60,50,120,30,10)$.</p>
+  <ol class="steps">
+    <li><b>a) ¿Se puede fabricar $(500,100,500,2500,150)$?</b> Hay que ver si es $\alpha a+\beta b+\gamma c$. La 1.ª ecuación es $500=100\alpha+90\beta+60\gamma$ y la 4.ª $2500=50\alpha+45\beta+30\gamma$. Pero los coeficientes de la 1.ª son <b>el doble</b> exactamente de los de la 4.ª, así que el lado izquierdo de la 1.ª vale el doble que el de la 4.ª; los términos independientes, en cambio, no cumplen $500=2\cdot2500$. <b>Sistema incompatible: no se puede</b> (ni rompiendo pastillas, porque $\alpha,\beta,\gamma$ pueden ser fracciones y sigue sin haber solución).</li>
+    <li><b>b) ¿Y bloques $(290,150,u_3,u_4,10)$ con $u_3,u_4$ libres?</b> Las ecuaciones 1.ª, 2.ª y 5.ª (que no contienen $u_3,u_4$) dan: de la 5.ª, $\beta+\gamma=1$; de la 2.ª, $\alpha+\beta+\gamma=3\Rightarrow\alpha=2$; en la 1.ª, $200+90\beta+60\gamma=290$, y con $\gamma=1-\beta$ queda $30\beta=30$: $\beta=1,\ \gamma=0$. Las ecuaciones 3.ª y 4.ª <b>definen</b> entonces $u_3=2\cdot100+105=305$ y $u_4=2\cdot50+45=145$.</li>
+    <li><b>c) Conclusión.</b> Cada bloque es $(290,150,305,145,10)$, pesa $290+150+305+145+10=900$ g y se forma con 2 pastillas de A y 1 de B ($2a+b=(290,150,305,145,10)$ ✓).</li>
+  </ol>
+  <p>Fíjate en la estrategia: resolver primero las ecuaciones «fáciles» y <b>sustituir en las demás</b>; es la misma que se usa en los Ejercicios 2.19, 2.20 y 2.22.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.19, p. 75-77">U p.75-77</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Resolver solo las ecuaciones «que tienen incógnitas» y olvidar la que no tiene ninguna (p. ej. $2=0\cdot\alpha+0\cdot\beta$). Una ecuación sin incógnitas también es una condición, y es la que decide si el sistema es compatible. Otro error: pensar que los coeficientes de una combinación lineal son únicos; solo lo son cuando los vectores son «independientes» (§3).</p>
+</div>
+

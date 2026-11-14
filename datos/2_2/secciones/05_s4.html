@@ -1,0 +1,36 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Rango de un sistema de vectores <span class="src" data-l="U" data-ref="U §2.2.3 Definición 2.7, p. 78">U p.78</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>El <b>rango</b> cuenta cuántos vectores «de verdad» hay en un sistema, es decir, cuántas direcciones independientes aporta, descontando los redundantes. En $\{(1,0,1),(2,0,1),(3,0,2)\}$ hay 3 vectores pero solo 2 aportan algo: el rango es 2.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 2.7 — rango de un sistema</span>
+  <p>El <b>rango</b> de $\{u_1,\dots,u_p\}\subset V$ es el <b>mayor número de vectores linealmente independientes</b> que contiene el sistema; se escribe $\operatorname{rang}\{u_1,\dots,u_p\}$. Su relación con la independencia es:
+  $$\text{Un sistema de }p\text{ vectores es libre}\iff\operatorname{rang}=p.$$
+  Ejemplo: $B$, $C$ y $W$ (Ej. 2.18 y 2.20) tienen rangos 4, 2 y 3.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.7 y caracterización por el rango, p. 78">U p.78</span>
+</div>
+
+<div class="box thm"><span class="h">Cómo se calcula (resultado de §2.3 que conviene adelantar)</span>
+  <p>El <b>rango del sistema</b> de vectores de $\mathbb R^n$ es el <b>rango de la matriz</b> que tiene por filas (o por columnas) las coordenadas de esos vectores (U p.88). Por tanto se calcula escalonando por Gauss (U p.22) o buscando el mayor menor no nulo (U p.27).</p>
+  <span class="src" data-l="U" data-ref="U §2.3.3, Teorema 2.5 y rango del sistema = rango de la matriz, p. 88 (adelanto de §2.3)">U p.88</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo — escalonar $\{(1,0,1),(2,0,1),(3,0,2)\}$</span>
+  <p>Vectores en <b>filas</b>, sin intercambiar filas:
+  $$\begin{pmatrix}1&0&1\\2&0&1\\3&0&2\end{pmatrix}\ \xrightarrow{F_2\to F_2-2F_1,\ F_3\to F_3-3F_1}\ \begin{pmatrix}1&0&1\\0&0&-1\\0&0&-1\end{pmatrix}\ \xrightarrow{F_3\to F_3-F_2}\ \begin{pmatrix}1&0&1\\0&0&-1\\0&0&0\end{pmatrix}.$$
+  Primero se resta a cada fila el múltiplo de $F_1$ que anula su primera entrada; después se resta $F_2$ de $F_3$ porque quedaron iguales. Hay 2 filas no nulas: <b>rango 2</b>, sistema ligado (3 vectores). La fila nula es la 3.ª: $v_3$ depende de $v_1,v_2$ (en efecto $v_3=v_1+v_2$) y $\langle S\rangle=\langle v_1,v_2\rangle$, el plano $x_2=0$.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio con los vectores de los Ej. U 2.14-2.16 (U p.70-72), verificado con sympy">P</span>
+</div>
+
+<div class="recipe"><b>Receta «¿libre o ligado?» y «rango» en $\mathbb R^n$:</b>
+  <ol>
+    <li>Escribe los vectores como <b>filas</b> de una matriz. Con filas o con columnas el <b>rango</b> es el mismo, pero para <b>leer el subespacio generado o qué vectores sobran</b> hay que poner los vectores en FILAS y <b>no permutar</b> filas (cada fila nula corresponde a su vector). Con columnas solo se conserva el rango: las operaciones de fila cambian las columnas (L p.212).</li>
+    <li>Escalona (las operaciones de fila no cambian el subespacio generado por las filas ni el rango). El rango es el número de filas no nulas.</li>
+    <li>Si rango $=p$ (nº de vectores): <b>libre</b>. Si rango $\lt p$: <b>ligado</b>, y las filas que se anulan señalan qué vectores dependen de los demás.</li>
+    <li>Si hay tantos vectores como la dimensión ($n$ vectores de $\mathbb R^n$) basta el determinante: libre $\iff\det\neq0$.</li>
+    <li>Con parámetros: escalona dejando los parámetros para el final; el rango baja cuando se anula una fila <b>entera</b> (ver Examen 6).</li>
+  </ol>
+</div>
+

@@ -1,0 +1,159 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Dependencia e independencia lineal <span class="src" data-l="U" data-ref="U §2.2.2-2.2.3 Definiciones 2.5 y 2.6, p. 73-75">U p.73-75</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>En el sistema $\{(1,0,1),(2,0,1),(3,0,2)\}$ el tercer vector no aporta nada: ya se obtiene como $(1,0,1)+(2,0,1)$. Es un <b>vector redundante</b>, un ingrediente que puedes preparar con los otros. Un sistema con algún vector redundante es <b>ligado</b> (linealmente dependiente); si cada vector aporta una dirección nueva y ninguno se obtiene con los demás, es <b>libre</b> (linealmente independiente). En $\mathbb R^2$: dos vectores son ligados si están sobre la <b>misma recta</b> por el origen; libres si no.</p>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: vectores dependientes no generan el plano</span>
+  <p>Con $u=(1,2)$ y $v=(2,4)$ (uno es múltiplo del otro) todas las combinaciones caen en la <b>misma recta</b>: el sistema es <b>ligado</b> y solo genera una recta. Cambia $v$ a $(2,5)$ y verás que ya generan todo $\mathbb R^2$ (independientes).</p>
+  <div class="anim-combo" data-modo="combo" data-u="1,2" data-v="2,4"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo 3D: qué generan tres vectores de $\mathbb R^3$</span>
+  <p>Según el rango, tres vectores generan el origen, una <b>recta</b>, un <b>plano</b> o todo $\mathbb R^3$. Prueba los casos preparados: cuando los tres quedan en un mismo plano son linealmente dependientes (uno es combinación lineal de los otros).</p>
+  <div class="d3-vect" data-modo="span" data-u="1,0,0" data-v="0,1,0" data-w="1,1,0"></div>
+  <span class="src" data-l="P" data-ref="Figura 3D propia (componente assets/tres-d.js, three.js)">P</span>
+</div>
+
+
+
+<figure>
+  <div class="figpair">
+  <svg class="fig" viewBox="0 0 230 210" role="img" aria-label="Dos vectores de R2 no alineados, u=(2,1) y v=(1,2): sistema libre; su suma forma un paralelogramo">
+    <line class="ax" x1="20" y1="180" x2="220" y2="180"></line><line class="ax" x1="20" y1="180" x2="20" y2="24"></line>
+    <line class="th" x1="120" y1="130" x2="170" y2="30" stroke-dasharray="6 5"></line><line class="th" x1="70" y1="80" x2="170" y2="30" stroke-dasharray="6 5"></line>
+    <line class="a" x1="20" y1="180" x2="120" y2="130"></line><line class="b" x1="20" y1="180" x2="70" y2="80"></line>
+    <circle class="pt" cx="120" cy="130" r="4"></circle><circle class="pt" cx="70" cy="80" r="4"></circle>
+    <text class="lg" x="126" y="152">u=(2,1)</text><text class="lg" x="62" y="72" text-anchor="end">v=(1,2)</text>
+    <text class="lg" x="115" y="16" text-anchor="middle">Libre: llegas a todo R²</text>
+  </svg>
+  <svg class="fig" viewBox="0 0 230 210" role="img" aria-label="Dos vectores de R2 sobre la misma recta, u=(1,1) y v=(2,2): sistema ligado, solo se llega a esa recta">
+    <line class="ax" x1="20" y1="180" x2="220" y2="180"></line><line class="ax" x1="20" y1="180" x2="20" y2="24"></line>
+    <line class="th" x1="20" y1="180" x2="190" y2="10" stroke-dasharray="3 5"></line>
+    <line class="b" x1="20" y1="180" x2="120" y2="80"></line><line class="a" x1="20" y1="180" x2="70" y2="130"></line>
+    <circle class="pt" cx="70" cy="130" r="4"></circle><circle class="pt" cx="120" cy="80" r="4"></circle>
+    <text class="lg" x="62" y="152" text-anchor="end">u=(1,1)</text><text class="lg" x="128" y="84">v=(2,2)=2u</text>
+    <text class="lg" x="115" y="16" text-anchor="middle">Ligado: solo una recta</text>
+  </svg>
+  </div>
+  <figcaption>Izquierda: $u=(2,1)$ y $v=(1,2)$ no están alineados; combinándolos se alcanza todo el plano. Derecha: $v=2u$ (ambos dibujados desde el origen: $u$ solapa la primera mitad de $v$); la combinación $2u-v=0$ es una relación de dependencia y todas las mezclas caen en la recta $y=x$. Figura propia. <span class="src" data-l="P" data-ref="Figura propia, ilustra las Definiciones 2.5 y 2.6 de U, p. 73-74">P</span></figcaption>
+</figure>
+
+<div class="box def"><span class="h">Definición 2.5 — sistema ligado (linealmente dependiente)</span>
+  <p>$S=\{u_1,\dots,u_p\}$ es <b>linealmente dependiente o ligado</b> si <b>al menos uno</b> de sus vectores es combinación lineal de los otros vectores de $S$.</p>
+  <p><b>Caracterización</b> (la que se usa en la práctica): $S$ es ligado si y solo si existen $\lambda_1,\dots,\lambda_p$ <b>no todos nulos</b> tales que
+  $$0=\lambda_1u_1+\lambda_2u_2+\dots+\lambda_pu_p.$$
+  <i>Por qué:</i> si $u_i=\sum_{j\neq i}\lambda_ju_j$, pasando $u_i$ al otro lado queda $0=\dots-u_i+\dots$ con el coeficiente de $u_i$ igual a $-1\neq0$. Al revés, si algún $\lambda_i\neq0$, se multiplica por $1/\lambda_i$ y se despeja $u_i$. Una igualdad así se llama una <b>relación de dependencia</b>.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.5 y caracterización de vectores linealmente dependientes, p. 73">U p.73</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, definición de dependencia lineal y relación de dependencia, p. 208">L p.208</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.17 — un sistema con el vector cero es ligado</span>
+  <p><b>Enunciado.</b> Demuestra que $A=\{(1,2,0),\,(0,0,0),\,(4,5,6)\}$ es ligado.</p>
+  <p><b>Qué hay que probar.</b> Por la caracterización de la Definición 2.5, basta encontrar coeficientes $\lambda_1,\lambda_2,\lambda_3$, <b>no todos cero</b>, tales que</p>
+  $$\lambda_1(1,2,0)+\lambda_2(0,0,0)+\lambda_3(4,5,6)=(0,0,0).$$
+  <p>No hace falta resolver ningún sistema: solo necesitamos <b>una</b> elección que funcione.</p>
+  <ol class="steps">
+    <li><b>Elegir los coeficientes.</b> Tomamos $\lambda_1=0$, $\lambda_2=1$, $\lambda_3=0$: un $1$ en el vector nulo y $0$ en los demás.</li>
+    <li><b>Comprobar que sale el vector nulo.</b>
+      $$0\cdot(1,2,0)+1\cdot(0,0,0)+0\cdot(4,5,6)=(0,0,0)+(0,0,0)+(0,0,0)=(0,0,0)\ \checkmark$$</li>
+    <li><b>Comprobar que no es la solución trivial.</b> El coeficiente $\lambda_2=1\neq0$, así que la elección es válida.</li>
+  </ol>
+  <p><b>Conclusión.</b> Hemos encontrado una relación de dependencia, luego $A$ es ligado.</p>
+  <p><b>¿Por qué funciona?</b> Porque el vector cero «absorbe» cualquier coeficiente:</p>
+  $$\mu\cdot(0,0,0)=(0,0,0)\quad\text{para todo }\mu.$$
+  <p>Así, $\mu$ puede valer $1$, $7$ o $-3$ y la combinación sigue dando $\vec 0$; los otros dos vectores van multiplicados por $0$ y no influyen. Cualquier $\mu\neq0$ sirve.</p>
+  <p><b>Lectura con la definición original.</b> El vector $(0,0,0)$ es combinación de los otros dos: $(0,0,0)=0\cdot(1,2,0)+0\cdot(4,5,6)$. Es el vector que «sobra».</p>
+  <p><b>Regla general.</b> Si $\vec 0\in S$, entonces $S$ es ligado: se pone coeficiente $1$ al vector nulo y $0$ al resto. Vale en cualquier espacio y con cualquier número de vectores.</p>
+  <p class="warn-inline"><b>Ojo.</b> $(1,2,0)$ y $(4,5,6)$ por sí solos son independientes, porque ninguno es múltiplo del otro. $A$ es ligado únicamente por incluir el vector cero.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.17 y observación «si 0 pertenece a un sistema S, éste es ligado», p. 73-74">U p.73-74</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, «cualquier conjunto que contenga al vector cero es linealmente dependiente», p. 208">L p.208</span>
+</div>
+
+<div class="box def"><span class="h">Definición 2.6 — sistema libre (linealmente independiente)</span>
+  <p>$S=\{u_1,\dots,u_p\}$ es <b>linealmente independiente o libre</b> si <b>no</b> es ligado, es decir, si ninguno de los $u_i$ depende linealmente de los otros.</p>
+  <p><b>Caracterización</b> (la más útil en los ejercicios): $S$ es libre si y solo si
+  $$0=\lambda_1u_1+\lambda_2u_2+\dots+\lambda_pu_p\ \Longrightarrow\ \lambda_1=\dots=\lambda_p=0,$$
+  es decir, el sistema homogéneo $\sum\lambda_iu_i=0$ solo tiene la solución nula.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.6 y caracterización de vectores linealmente independientes, p. 74">U p.74</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, definición de independencia lineal en un espacio vectorial, p. 208">L p.208</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.18 — dos sistemas libres</span>
+  <p><b>Método general.</b> Para probar que un sistema es libre se plantea la combinación lineal igual a $\vec 0$ y se comprueba que la <b>única</b> solución es la trivial ($\lambda_i=0$ para todo $i$). Si aparece alguna solución con un coeficiente distinto de cero, el sistema es ligado. Los pasos son siempre los mismos:</p>
+  <ol>
+    <li>Escribir $\lambda_1u_1+\dots+\lambda_pu_p=\vec 0$.</li>
+    <li>Operar el lado izquierdo para obtener un vector e igualarlo a $\vec 0$ componente a componente.</li>
+    <li>Resolver el sistema de ecuaciones resultante.</li>
+    <li>Si solo sale $\lambda_i=0$ para todo $i$, es libre.</li>
+  </ol>
+
+  <p><b>Apartado B: la base canónica de $\mathbb R^4$.</b> $B=\{(1,0,0,0),\,(0,1,0,0),\,(0,0,1,0),\,(0,0,0,1)\}$.</p>
+  <ol class="steps">
+    <li><b>Plantear la combinación</b> con coeficientes $\lambda,\mu,\gamma,\delta$:
+      $$\lambda(1,0,0,0)+\mu(0,1,0,0)+\gamma(0,0,1,0)+\delta(0,0,0,1)=(0,0,0,0).$$</li>
+    <li><b>Operar el lado izquierdo</b> (cada escalar multiplica a su vector y se suma componente a componente):
+      $$(\lambda,\ \mu,\ \gamma,\ \delta)=(0,0,0,0).$$</li>
+    <li><b>Igualar componente a componente:</b>
+      $$\lambda=0,\qquad \mu=0,\qquad \gamma=0,\qquad \delta=0.$$
+      No hay que resolver nada: cada coeficiente aparece solo en su propia coordenada, así que queda despejado directamente.</li>
+  </ol>
+  <p><b>Conclusión.</b> La única solución es la trivial, luego $B$ es <b>libre</b>.</p>
+  <p><b>Por qué es tan inmediato.</b> Cada vector tiene un $1$ en una posición donde todos los demás tienen $0$, de modo que cada coeficiente «ve» una coordenada para él solo. Por eso la base canónica se usa como referencia.</p>
+
+  <p><b>Apartado C: dos vectores de $\mathbb R^3$.</b> $C=\{(1,4,7),\,(5,-3,4)\}$.</p>
+  <ol class="steps">
+    <li><b>Plantear la combinación:</b>
+      $$\lambda(1,4,7)+\mu(5,-3,4)=(0,0,0).$$</li>
+    <li><b>Operar el lado izquierdo:</b>
+      $$(\lambda+5\mu,\ \ 4\lambda-3\mu,\ \ 7\lambda+4\mu)=(0,0,0).$$</li>
+    <li><b>Igualar componente a componente</b>: tres ecuaciones con dos incógnitas.
+      $$\begin{cases}\lambda+5\mu=0 & (1)\ 4\lambda-3\mu=0 & (2)\ 7\lambda+4\mu=0 & (3)\end{cases}$$</li>
+    <li><b>Resolver con las dos primeras.</b> De $(1)$, $\lambda=-5\mu$; sustituyendo en $(2)$:
+      $$4(-5\mu)-3\mu=-23\mu=0\ \Longrightarrow\ \mu=0,\qquad \lambda=-5\cdot0=0.$$</li>
+    <li><b>Comprobar con la tercera.</b> Con $\lambda=\mu=0$:
+      $$7\cdot0+4\cdot0=0\ \checkmark$$</li>
+  </ol>
+  <p><b>Conclusión.</b> Cualquier solución de las tres ecuaciones lo es de las dos primeras, y estas solo admiten $\lambda=\mu=0$; luego $C$ es <b>libre</b>.</p>
+  <p><b>Observaciones útiles.</b></p>
+  <ul>
+    <li>Hay más ecuaciones ($3$) que incógnitas ($2$). No es problema: con dos ecuaciones ya basta para forzar $\lambda=\mu=0$, y la tercera, al ser homogénea, la cumple la solución trivial. Un sistema homogéneo siempre tiene la solución trivial; la cuestión es si tiene <i>otras</i>.</li>
+    <li><b>Atajo para dos vectores:</b> son ligados si y solo si uno es múltiplo del otro. Aquí $(5,-3,4)$ no es múltiplo de $(1,4,7)$, pues $5\cdot(1,4,7)=(5,20,35)\neq(5,-3,4)$, lo que confirma que $C$ es libre sin resolver nada. Con tres o más vectores el atajo no vale: hay que plantear el sistema.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.18, p. 75">U p.75</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.20 — libre o ligado en un espacio de funciones</span>
+  <p>En $F=\{f:[0,2]\to\mathbb R\}$, ¿es libre $W=\{e^{3x},\,x^3,\,x\}$? Plantea $\lambda e^{3x}+\beta x^3+\gamma x=0$, igualdad que debe valer <b>para todo</b> $x\in[0,2]$; sustituyendo valores de $x$ salen ecuaciones en $\lambda,\beta,\gamma$:</p>
+  <ol class="steps">
+    <li>$x=0$: $\lambda e^0=\lambda=0$.</li>
+    <li>$x=1$ (con $\lambda=0$): $\beta+\gamma=0$. $x=2$: $8\beta+2\gamma=0$.</li>
+    <li>De las dos últimas, $\gamma=-\beta$ y $8\beta-2\beta=6\beta=0$, luego $\beta=\gamma=0$. Solo la solución trivial: <b>$W$ es libre</b> (rango 3).</li>
+  </ol>
+  <p>Cuando los «vectores» son funciones no hay columnas ni matriz: se usa directamente la caracterización de sistema libre, y se eligen valores de $x$ convenientes (basta con que den suficientes ecuaciones para forzar los coeficientes a cero).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.20, p. 77-78">U p.77-78</span>
+</div>
+
+<div class="box thm"><span class="h">Lema práctico: «libre + uno más ligado ⇒ ese uno depende»</span>
+  <p>Si $S=\{u_1,\dots,u_p\}$ es <b>libre</b> y $S\cup\{w\}$ es <b>ligado</b>, entonces $w\in\langle S\rangle$.</p>
+  <p><i>Demostración.</i> Hay $\alpha,\lambda_1,\dots,\lambda_p$ no todos nulos con $\alpha w+\lambda_1u_1+\dots+\lambda_pu_p=0$. Si fuese $\alpha=0$, quedaría $\sum\lambda_iu_i=0$ con algún $\lambda_i\neq0$, lo que contradice que $S$ sea libre. Luego $\alpha\neq0$ y $w=-\frac{\lambda_1}{\alpha}u_1-\dots-\frac{\lambda_p}{\alpha}u_p$. $\square$ El recíproco es inmediato (Def. 2.5).</p>
+  <p><b>Consecuencia:</b> con $S$ libre, «$w\in\langle S\rangle$» $\iff$ «$S\cup\{w\}$ ligado» $\iff$ rango de $S\cup\{w\}$ menor que el número de sus vectores. Cuando hay tantos vectores como dimensión del ambiente ($n$ vectores de $\mathbb R^n$) basta con <b>determinante $=0$</b>. <b>Ojo:</b> sin la hipótesis «$S$ libre» el lema es falso: $\{(1,0),(2,0),(0,1)\}$ es ligado y sin embargo $(0,1)\notin\langle(1,0),(2,0)\rangle$.</p>
+  <span class="src" data-l="P" data-ref="Lema demostrado con las caracterizaciones de U, p. 73-74; resultado propio, sin página">P</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Teorema 4 (resultado relacionado: conjunto dependiente ⇔ algún v_j es combinación de los anteriores), p. 208">L p.208</span>
+</div>
+
+<div class="box tip"><span class="h">Atajos para sistemas pequeños</span>
+  <ul>
+    <li><b>Un vector</b> $\{v\}$: libre $\iff v\neq0$.</li>
+    <li><b>Dos vectores</b>: ligados $\iff$ uno es múltiplo del otro (cuidado: si uno es $0$, es múltiplo del otro).</li>
+    <li><b>Más de $n$ vectores en $\mathbb R^n$ son siempre ligados</b>: el sistema homogéneo $\sum\lambda_iu_i=0$ tiene $n$ ecuaciones y más de $n$ incógnitas, luego por Rouché es compatible indeterminado y hay soluciones no nulas.</li>
+    <li><b>Con el vector $0$ dentro</b>: siempre ligado.</li>
+  </ul>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que «ligado» significa que <b>todo</b> vector depende de los demás: basta con que lo haga <b>uno</b> (en $\{(1,0),(2,0),(0,1)\}$, $(0,1)$ no depende de los otros dos, pero el sistema es ligado). Y confundir «libre» con «generador»: son propiedades independientes (§5).</p>
+</div>
+
