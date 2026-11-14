@@ -1,0 +1,40 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Tres ejemplos propios, de menos a más trampa <span class="src" data-l="P" data-ref="Ejemplos propios verificados con sympy; sin página en los libros">P</span></h2>
+
+<div class="box ex"><span class="h">Ejemplo A · en $\mathbb R$ con $a\ast b=a+b+ab$ (casi un grupo)</span>
+  <ol class="steps">
+    <li><b>Qué se pide:</b> decidir S1–S4 en $\mathbb R$. Es interna: el resultado es un real.</li>
+    <li><b>Conmutativa:</b> se comparan los dos órdenes (suma y producto de reales son conmutativos):
+      $$a\ast b=a+b+ab\qquad b\ast a=b+a+ba$$
+      Son iguales. <b>Sí.</b></li>
+    <li><b>Asociativa:</b> se desarrollan los dos miembros por separado:
+      $$\begin{aligned}(a\ast b)\ast c&=(a+b+ab)\ast c\\&=(a+b+ab)+c\\&\quad+(a+b+ab)\,c\\&=a+b+c+ab\\&\quad+ac+bc+abc,\end{aligned}$$
+      $$\begin{aligned}a\ast(b\ast c)&=a\ast(b+c+bc)\\&=a+(b+c+bc)\\&\quad+a(b+c+bc)\\&=a+b+c+ab\\&\quad+ac+bc+abc.\end{aligned}$$
+      Coinciden. <b>Sí.</b></li>
+    <li><b>Neutro:</b> se despeja $e$ de $a\ast e=a$:
+      $$\begin{aligned}a+e+ae&=a\\e+ae&=0\\e\,(1+a)&=0\end{aligned}$$
+      Para que valga para <b>todo</b> $a$ hace falta $e=0$ (no depende de $a$ y está en $\mathbb R$). Por la izquierda vale por la conmutatividad. <b>Sí, $e=0$.</b></li>
+    <li><b>Simétrico:</b> se despeja $a'$ de $a\ast a'=0$ (el neutro):
+      $$\begin{aligned}a+a'+aa'&=0\\a'\,(1+a)&=-a\\a'&=\frac{-a}{1+a}\end{aligned}$$
+      Esto solo es posible si <b>$a\neq-1$</b>. <b>Contraejemplo:</b> $a=-1$ no tiene simétrico, porque
+      $$(-1)\ast a'=-1+a'-a'=-1\neq0\quad\text{para cualquier }a'.$$
+      <b>No se cumple en todo $\mathbb R$.</b></li>
+  </ol>
+  <p><b>Resultado:</b> cumple S1, S2, S4 pero no S3: $(\mathbb R,\ast)$ <b>no</b> es grupo. Si quitamos el elemento problemático, $(\mathbb R\setminus\{-1\},\ast)$ <b>sí</b> es grupo conmutativo (hay que ver que sigue siendo cerrado: $a\ast b=(a+1)(b+1)-1$, que solo vale $-1$ si $a=-1$ o $b=-1$).</p>
+  <p><b>Moraleja:</b> el simétrico es la propiedad que falla «en un solo punto». <i>(Verificado con sympy.)</i></p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo B · en $\mathbb R$ con $a\ast b=a$ (neutro por un solo lado)</span>
+  <ol class="steps">
+    <li><b>Asociativa:</b> $(a\ast b)\ast c=a\ast c=a$ y $a\ast(b\ast c)=a\ast(b)=a$. Coinciden. <b>Sí.</b></li>
+    <li><b>Conmutativa:</b> $a\ast b=a$ pero $b\ast a=b$. Contraejemplo: $1\ast2=1$ y $2\ast1=2$. <b>No.</b></li>
+    <li><b>Neutro:</b> por la derecha, $a\ast e=a$ se cumple <b>para cualquier $e$</b>. Por la izquierda, $e\ast a=e$, que debería valer $a$ para <b>todo</b> $a$: imposible (con $e=3$, $a=5$: $3\ast5=3\neq5$). <b>No hay neutro.</b></li>
+    <li><b>Simétrico:</b> sin neutro, no tiene sentido. <b>No.</b></li>
+  </ol>
+  <p><b>Resultado:</b> solo cumple la asociativa. Ilustra que «neutro por la derecha» $\neq$ «neutro».</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo C · en $\mathbb R^+$ con $a\ast b=\sqrt{ab}$ (¿asociativa?)</span>
+  <p>Es interna ($\sqrt{ab}>0$) y conmutativa ($\sqrt{ab}=\sqrt{ba}$). <b>Asociativa:</b> $(a\ast b)\ast c=\sqrt{\sqrt{ab}\,c}$ y $a\ast(b\ast c)=\sqrt{a\sqrt{bc}}$. Contraejemplo con $a=1,\ b=1,\ c=16$: $(1\ast1)\ast16=\sqrt{1\cdot16}=4$; $1\ast(1\ast16)=1\ast4=\sqrt{4}=2$. $4\neq2$: <b>no es asociativa</b>. (Lección: parecerse a «un producto» no garantiza nada; hay que hacer las cuentas.)</p>
+</div>
+
