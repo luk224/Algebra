@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/4_4/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,11 +8,13 @@
 <title>Álgebra · 4.4 Matrices de Jordan</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
 <script defer src="../assets/animaciones.js"></script>
 <script defer src="../assets/tres-d.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -38,10 +40,44 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Cuando a una matriz le faltan vectores propios no se diagonaliza, pero sí se deja casi diagonal: esa es la forma de Jordan. Esto es lo que debes llevarte.</p>
+  <ol>
+    <li><b>$J$ es la «casi diagonal» de $A$.</b> Teorema 4.8: si todas las raíces de $|A-\lambda I|$ son reales, $A$ es semejante a $J=\operatorname{diag}(J_1,\dots,J_s)$, con $\lambda$ en la diagonal de cada bloque y unos justo encima. Si $A$ es diagonalizable, $J=\Lambda$ (sin unos).</li>
+    <li><b>Nº de bloques y unos.</b> Cada valor propio $\lambda_i$ tiene $d_i=n-\operatorname{rang}(A-\lambda_iI)$ bloques, de tamaños que suman $\alpha_i$. El nº de unos de $J$ es $n-\sum d_i$. No confundas «nº de bloques» con «nº de valores propios distintos».</li>
+    <li><b>Si $\alpha\le3$, $d$ decide; si $\alpha\ge4$, no siempre.</b> Entonces usa los rangos de $N^k=(A-\lambda I)^k$: nº de bloques de tamaño $\ge k$ $=r_{k-1}-r_k$, hasta que $n-r_k=\alpha$.</li>
+    <li><b>Matriz de paso por cadenas.</b> Para un bloque de tamaño $k$ toma $v\in\operatorname{Nuc}N^k\setminus\operatorname{Nuc}N^{k-1}$ y escribe las columnas $(N^{k-1}v\mid\cdots\mid Nv\mid v)$: primero el vector propio. Comprueba $\det P\neq0$ y $AP=PJ$ (sin invertir). $J$ es única salvo el orden de bloques; $P$ no.</li>
+    <li><b>Método de potencias</b> (poco examinable): $x_{k+1}=Ax_k/\mu_k$ con $\mu_k$ la coordenada de mayor valor absoluto (con su signo); $\mu_k\to\lambda_1$ si el valor propio dominante es estricto.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>4 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 9 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 5 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>Hallar la matriz de Jordan $J$ <small>(4 de 4)</small></td><td>Valores propios, $d_i=n-\operatorname{rang}(A-\lambda_iI)$ para cada uno, y reparte $\alpha_i$ en $d_i$ bloques.</td>
+      <td><a href="#ej4-36">4.36</a> · <a href="#ej4-37">4.37</a> · <a href="#ej4-39">4.39</a></td>
+      <td><a href="#ex-ene20a-4">Ene. 20 A ej. 4</a> · <a href="#ex-ene22a-4">Ene. 22 A ej. 4</a> · <a href="#ex-sep24-p8b">Sept. 24 p. 8</a> · <a href="#ex-feb25a-4">Feb. 25 (1.ª) preg. 4</a></td></tr>
+    <tr><td>Tamaño de los bloques con los rangos de $(A-\lambda I)^k$ <small>(0 de 4)</small></td><td>Calcula $r_k=\operatorname{rang}N^k$ y usa que los bloques de tamaño $\ge k$ son $r_{k-1}-r_k$.</td>
+      <td><a href="#ej4-39">4.39</a></td>
+      <td>—</td></tr>
+    <tr><td>Matriz de paso $P$ (y $A^n$) <small>(0 de 4)</small></td><td>Para cada bloque de tamaño $k$, cabeza $v\in\operatorname{Nuc}N^k\setminus\operatorname{Nuc}N^{k-1}$ y columnas $(N^{k-1}v\mid\cdots\mid v)$.</td>
+      <td><a href="#ej4-38">4.38</a> · <a href="#ej4-40">4.40</a></td>
+      <td>—</td></tr>
+    <tr><td>Verdadero o falso sobre $J$ <small>(0 de 4)</small></td><td>Traduce cada afirmación a $d_i$, $\alpha_i$, nº de bloques, nº de unos y semejanza; contrasta con un ejemplo.</td>
+      <td><a href="#ej4-33">4.33</a> · <a href="#ej4-34">4.34</a> · <a href="#ej4-35">4.35</a> · <a href="#ej4-36">4.36</a> · <a href="#ej4-37">4.37</a> · <a href="#ej4-38">4.38</a></td>
+      <td>—</td></tr>
+    <tr><td>Método de potencias <small>(0 de 4)</small></td><td>Itera $x_{k+1}=Ax_k/\mu_k$ con $\mu_k$ la coordenada de mayor valor absoluto; $\mu_k\to\lambda_1$.</td>
+      <td><a href="#ej4-41">4.41</a></td>
+      <td>—</td></tr>
+  </table>
+  <p><small>En examen sale siempre «hallar la matriz de Jordan» de una $2\times2$ o $3\times3$, a veces con matriz de paso; el método de potencias no ha salido en ninguna convocatoria revisada.</small></p>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §4.4.1, introducción, p. 167-168">U p.167-168</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §4.4.1, introducción, p. 167-168">U p.167-168</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>En el tema 4.3 vimos que una matriz $A$ de orden $n$ se <b>diagonaliza</b> cuando tiene $n$ vectores propios independientes, es decir, $n$ «ejes propios» que forman una base. Pero hay matrices a las que <b>les faltan ejes</b>: por ejemplo, un valor propio doble con un solo eje propio. En ese caso no se puede llegar a una matriz diagonal, pero sí a una <b>casi diagonal</b>: la que tiene los valores propios en la diagonal y, como mucho, unos «1» justo encima. Esa matriz se llama <b>forma de Jordan</b> de $A$. Cada «1» marca un eje que falta: en lugar de un vector propio, se usa un vector que $A$ no solo estira, sino que además <b>empuja</b> hacia un eje propio (como una baraja de cartas que se desliza al inclinarla).</p>
@@ -76,7 +112,7 @@
 
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>La idea: cuando faltan ejes propios <span class="src" data-l="U" data-ref="U §4.4.1, p. 167; ejemplo y explicación propios, matriz de E Ej. 4.36, p. 153">U p.167 · E 4.36 · P</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>La idea: cuando faltan ejes propios <span class="src" data-l="U" data-ref="U §4.4.1, p. 167; ejemplo y explicación propios, matriz de E Ej. 4.36, p. 153">U p.167 · E 4.36 · P</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva: «inclinar la baraja»</span>
   <p>Una matriz diagonalizable solo <b>estira</b> cada eje propio. Una matriz con un valor propio doble y un solo eje propio hace algo más: sobre un eje estira, pero sobre otro vector estira <b>y además lo empuja hacia el primer eje</b>. Es una <b>cizalla</b>: imagina una baraja de cartas apilada y la empujas por arriba; cada carta se desplaza lateralmente una cantidad proporcional a su altura. La carta de abajo (el eje propio) no se mueve; las de arriba se desplazan hacia ella. Ese «empuje» es exactamente el «1» de la matriz de Jordan.</p>
@@ -111,7 +147,7 @@
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>Teorema de Jordan: bloques y nilpotencia <span class="src" data-l="U" data-ref="U §4.4.2, Teorema 4.8, p. 168; propiedades y J_i = λ_i I + N, p. 169; construcción p. 169-170; E p. 150">U p.168-170 · E p.150</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>Teorema de Jordan: bloques y nilpotencia <span class="src" data-l="U" data-ref="U §4.4.2, Teorema 4.8, p. 168; propiedades y J_i = λ_i I + N, p. 169; construcción p. 169-170; E p. 150">U p.168-170 · E p.150</span></h2>
 
 <div class="box def"><span class="h">Bloque de Jordan y matriz de Jordan</span>
   <p>Un <b>bloque de Jordan</b> de tamaño $s$ y valor propio $\lambda$ es la matriz $s\times s$
@@ -162,7 +198,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>¿Qué matrices $J$ son posibles? Número y tamaño de los bloques <span class="src" data-l="U" data-ref="U §4.4.2, construcción p. 169-170; Ejemplo 4.16 p. 170; Ejemplo 4.17 p. 171-172; orden 3 p. 171-172 y 175-176; Ejemplo 4.22 p. 179">U p.169-172, 175-176, 179</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>¿Qué matrices $J$ son posibles? Número y tamaño de los bloques <span class="src" data-l="U" data-ref="U §4.4.2, construcción p. 169-170; Ejemplo 4.16 p. 170; Ejemplo 4.17 p. 171-172; orden 3 p. 171-172 y 175-176; Ejemplo 4.22 p. 179">U p.169-172, 175-176, 179</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva: cada valor propio «reparte» su multiplicidad en bloques</span>
   <p>Un valor propio $\lambda$ con multiplicidad algebraica $\alpha$ debe «ocupar» $\alpha$ posiciones de la diagonal de $J$. Las reparte en <b>bloques</b>: tantos como vectores propios independientes tenga, es decir, $d$. Piensa en $\alpha$ como el número de «personas» que hay que sentar y en $d$ como el número de «mesas» que hay: los tamaños de los bloques son cuántos se sientan en cada mesa. Cuantas más mesas ($d$ grande), menos unos hay. Con $d=\alpha$ cada uno en su mesa: diagonal.</p>
@@ -219,7 +255,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Leer $J$ en los rangos de $(A-\lambda I)^k$ <span class="src" data-l="U" data-ref="U §4.4.2, p. 173 (Definición 4.13), p. 176-180 (Ejemplos 4.20, 4.21, 4.23); argumento por el rango de matrices semejantes, U Teor. 4.1 p. 146 y p. 176">U p.173, 176-180</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Leer $J$ en los rangos de $(A-\lambda I)^k$ <span class="src" data-l="U" data-ref="U §4.4.2, p. 173 (Definición 4.13), p. 176-180 (Ejemplos 4.20, 4.21, 4.23); argumento por el rango de matrices semejantes, U Teor. 4.1 p. 146 y p. 176">U p.173, 176-180</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva: el ascensor que baja un piso</span>
   <p>Sea $N=A-\lambda I$. Dentro de un bloque de tamaño $s$, $N$ funciona como un <b>ascensor que baja un piso</b>: lleva la cabeza de la cadena $v$ al piso de abajo $Nv$, luego a $N^2v$, y así hasta el vector propio, que $N$ manda a $0$. Cuántas veces hay que aplicar $N$ para llegar a $0$ es el <b>tamaño del bloque</b>. Así, $\operatorname{Nuc}N$ (los vectores que caen a $0$ de golpe) son los del piso 1; $\operatorname{Nuc}N^2$ añade los del piso 2; etc.</p>
@@ -262,7 +298,7 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 </div>
 
 <!-- ============================ 5 ============================ -->
-<h2 id="s5"><span class="n">5</span>La matriz de paso: cadenas de vectores <span class="src" data-l="U" data-ref="U §4.4.2, Definición 4.13 y guion para la matriz de paso p. 173; Ejemplos 4.18 p. 173-175 y 4.19 p. 176-177; E Ej. 4.38 p. 155 y 4.40 p. 158-159">U p.173-177 · E 4.38, 4.40</span></h2>
+<h2 id="s5" data-vista="teoria"><span class="n">5</span>La matriz de paso: cadenas de vectores <span class="src" data-l="U" data-ref="U §4.4.2, Definición 4.13 y guion para la matriz de paso p. 173; Ejemplos 4.18 p. 173-175 y 4.19 p. 176-177; E Ej. 4.38 p. 155 y 4.40 p. 158-159">U p.173-177 · E 4.38, 4.40</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva: elegir la «cabeza» y bajar</span>
   <p>Para cada bloque de tamaño $s$ hay que encontrar $s$ vectores tales que $A$ los vaya «empujando» hacia el vector propio. Se empieza por el <b>más alto</b> (la <b>cabeza</b> $v$), que debe estar «a $s$ pisos» del suelo, y se baja con $N$: $v$, $Nv$, $N^2v$, …, hasta el vector propio. Si eliges mal la cabeza (demasiado abajo) la cadena se queda corta y no llena el bloque.</p>
@@ -343,7 +379,7 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 </div>
 
 <!-- ============================ 6 ============================ -->
-<h2 id="s6"><span class="n">6</span>Técnicas iterativas: el método de potencias <span class="src" data-l="U" data-ref="U §4.4.3, Técnicas iterativas para estimar valores y vectores propios, p. 180-190; Lay §5.8, Estimaciones iterativas para valores propios, p. 319-323">U p.180-190 · L p.319-323</span></h2>
+<h2 id="s6" data-vista="teoria"><span class="n">6</span>Técnicas iterativas: el método de potencias <span class="src" data-l="U" data-ref="U §4.4.3, Técnicas iterativas para estimar valores y vectores propios, p. 180-190; Lay §5.8, Estimaciones iterativas para valores propios, p. 319-323">U p.180-190 · L p.319-323</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva: el valor propio mayor «gana» a base de repetir</span>
   <p>Hallar los valores propios exactos de una matriz grande es difícil (no hay fórmula general para el grado $\ge5$). Si solo interesa el <b>mayor en valor absoluto</b>, basta con una receta muy simple: coger un vector, multiplicarlo por $A$ una y otra vez. Como cada multiplicación estira cada eje propio por su valor propio, el eje con el valor propio más grande crece más rápido que los demás y acaba <b>dominando</b> la dirección del vector: es como una población en la que una especie se reproduce más deprisa que las otras. Se normaliza en cada paso (dividiendo por la coordenada mayor) para que los números no se disparen, y esa coordenada va dando el valor propio.</p>
@@ -427,15 +463,90 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 </div>
 
 <!-- ============================ 7 ============================ -->
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 4.4»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-bloques">
+  <h3>Tipo 1 — Hallar la matriz de Jordan $J$</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «halla / calcula la matriz de Jordan de $A$», «una posible matriz de Jordan», «¿es diagonalizable? ¿cuál es su $J$?».</p>
+  <ol class="pasos">
+    <li>Calcula $|A-\lambda I|$ y los valores propios con su multiplicidad $\alpha_i$. Si alguna raíz no es real, no hay $J$ real.</li>
+    <li>Para cada $\lambda_i$ calcula $d_i=n-\operatorname{rang}(A-\lambda_iI)$: es el número de bloques de ese valor propio.</li>
+    <li>Reparte $\alpha_i$ en $d_i$ bloques (tamaños de mayor a menor). Con $\alpha_i\le3$ queda fijado; con $\alpha_i\ge4$ y varias opciones, usa los rangos (tipo siguiente).</li>
+    <li>Escribe $J$: cada bloque con $\lambda_i$ en la diagonal y unos encima. Justifica: «$d=\alpha$, luego diagonal» o «$d<\alpha$, luego hay unos».</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}4&1\\-1&2\end{pmatrix}$: $|A-\lambda I|=(\lambda-3)^2$, $\alpha=2$. $\operatorname{rang}(A-3I)=1$, $d=1$: un bloque $2\times2$, $J=\begin{pmatrix}3&1\\0&3\end{pmatrix}$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> decir «no diagonalizable, no hay $J$» · contar bloques por valores propios distintos · olvidar que si $d=\alpha$ en todos, $J$ es diagonal · sumar mal: los tamaños de un valor propio deben sumar $\alpha_i$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej4-36">4.36</a> · <a href="#ej4-37">4.37</a> · <a href="#ej4-39">4.39</a> · <a href="#ej-propio-1">Ejemplo propio 1</a> · <a href="#ej-propio-2">Ejemplo propio 2</a> · <a href="#ej-propio-3">Ejemplo propio 3</a> · <a href="#ej-propio-4">Ejemplo propio 4</a> · <a href="#ej-propio-7">Ejemplo propio 7</a> · <a href="#ej-propio-9">Ejemplo propio 9</a> · <a href="#ej-propio-12">Ejemplo propio 12</a> · <a href="#ej-propio-13">Ejemplo propio 13</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-ene20a-4">Ene. 20 A ej. 4</a> · <a href="#ex-ene22a-4">Ene. 22 A ej. 4</a> · <a href="#ex-sep24-p8b">Sept. 24 p. 8</a> · <a href="#ex-feb25a-4">Feb. 25 (1.ª) preg. 4</a></p>
+</section>
+
+<section class="ficha" id="tipo-rangos">
+  <h3>Tipo 2 — Tamaño de los bloques con los rangos de $(A-\lambda I)^k$</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «todas las $J$ posibles», «con estos rangos, halla $J$», $\alpha\ge4$ con $d\ge2$, «¿son semejantes?» con mismo polinomio y misma $d$.</p>
+  <ol class="pasos">
+    <li>Pon $N=A-\lambda I$ y $r_0=n$, $r_1=\operatorname{rang}N$, $r_2=\operatorname{rang}N^2$…, hasta que $n-r_k=\alpha$.</li>
+    <li>Nº de bloques de tamaño $\ge k$: $r_{k-1}-r_k$ (para $k=1$ es $d$).</li>
+    <li>Bloques de tamaño exactamente $k$: (los $\ge k$) menos (los $\ge k+1$).</li>
+    <li>Escribe $J$ colocando los bloques de mayor a menor. Para «posibles $J$» lista todas las particiones de $\alpha$ en $d$ partes.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $\alpha=4$ con $r_1=2$, $r_2=1$, $r_3=0$ ($n=4$): bloques $\ge1$: $4-2=2$; $\ge2$: $2-1=1$; $\ge3$: $1-0=1$; $\ge4$: $0$. Luego tamaños $3$ y $1$: $J=J_3(\lambda)\oplus J_1(\lambda)$. Con $r_2=0$ saldría $(2,2)$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> parar en $d$ cuando $\alpha=4$ y $d=2$ (hay dos candidatas, $(3,1)$ y $(2,2)$) · restar mal los rangos · seguir potenciando una vez que $n-r_k=\alpha$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej4-39">4.39</a> · <a href="#ej-propio-5">Ejemplo propio 5</a> · <a href="#ej-propio-6">Ejemplo propio 6</a> · <a href="#ej-propio-7">Ejemplo propio 7</a> · <a href="#ej-propio-10">Ejemplo propio 10</a> · <a href="#ej-propio-14">Ejemplo propio 14</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
+<section class="ficha" id="tipo-paso">
+  <h3>Tipo 3 — Matriz de paso $P$ (y $A^n$)</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «halla una matriz de paso», «halla $P$ tal que $P^{-1}AP=J$», «¿es $P$ una matriz de paso?», «calcula $A^n$».</p>
+  <ol class="pasos">
+    <li>Halla $J$ (tipo anterior) y, para cada $\lambda$, $N=A-\lambda I$ y los núcleos $\operatorname{Nuc}N\subset\operatorname{Nuc}N^2\subset\cdots$ hasta dimensión $\alpha$.</li>
+    <li>Por cada bloque de tamaño $k$ (empezando por el mayor): elige una cabeza $v\in\operatorname{Nuc}N^k$ independiente de lo ya elegido y calcula $Nv,\dots,N^{k-1}v$. Los bloques $1\times1$ llevan vectores propios independientes.</li>
+    <li>Coloca las columnas bloque a bloque en el mismo orden que en $J$, cada bloque como $(N^{k-1}v\mid\cdots\mid Nv\mid v)$: el vector propio primero.</li>
+    <li>Comprueba $\det P\neq0$ y $AP=PJ$ (sin invertir). Para $A^n$: $A^n=PJ^nP^{-1}$, con $J_2(\lambda)^n=\begin{pmatrix}\lambda^n&n\lambda^{n-1}\\0&\lambda^n\end{pmatrix}$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}1&1\\-1&3\end{pmatrix}$, $\lambda=2$ doble, $N=\begin{pmatrix}-1&1\\-1&1\end{pmatrix}$. Cabeza $v=(1,0)$, $Nv=(-1,-1)$. $P=\begin{pmatrix}-1&1\\-1&0\end{pmatrix}$ ($\det=1$) y $P^{-1}AP=\begin{pmatrix}2&1\\0&2\end{pmatrix}$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> poner la cabeza antes que el vector propio (sale $J$ traspuesta) · tomar $v$ dentro de $\operatorname{Nuc}N^{k-1}$ · con bloques $(2,2)$, cabezas dependientes (da $P$ singular) · olvidar comprobar $AP=PJ$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej4-38">4.38</a> · <a href="#ej4-40">4.40</a> · <a href="#ej-propio-1">Ejemplo propio 1</a> · <a href="#ej-propio-2">Ejemplo propio 2</a> · <a href="#ej-propio-3">Ejemplo propio 3</a> · <a href="#ej-propio-4">Ejemplo propio 4</a> · <a href="#ej-propio-7">Ejemplo propio 7</a> · <a href="#ej-propio-8">Ejemplo propio 8</a> · <a href="#ej-propio-12">Ejemplo propio 12</a> · <a href="#ej-propio-13">Ejemplo propio 13</a> · <a href="#ej-propio-14">Ejemplo propio 14</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep24-p8b">Sept. 24 p. 8</a></p>
+</section>
+
+<section class="ficha" id="tipo-vf">
+  <h3>Tipo 4 — Verdadero o falso sobre $J$</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «justificar si…» con afirmaciones sobre bloques, unos, ser diagonal, semejante a otra matriz o única $P$.</p>
+  <ol class="pasos">
+    <li>Traduce la afirmación: nº de bloques $=\sum d_i$ (vectores propios independientes), nº de unos $=n-\sum d_i$, $J$ diagonal $\iff d_i=\alpha_i$ siempre.</li>
+    <li>Si hay una matriz concreta, calcula valores propios y $d_i$ y contrasta la afirmación con ellos.</li>
+    <li>Si es general, razona con un ejemplo pequeño o un contraejemplo ($J_2(\lambda)$, $J_3(\lambda)$) y cita el teorema.</li>
+    <li>Recuerda: $J$ única salvo orden de bloques (y cambiar el orden da una matriz semejante); $P$ no es única; cada bloque es $\lambda I+N$ con $N$ nilpotente.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> «El nº de unos de $J$ es igual al nº de bloques»: falso. $J=J_3(2)$ tiene 1 bloque y 2 unos; el nº de unos es $n-\sum d_i=3-1$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> creer que los unos pueden ser otro valor · pensar que reordenar bloques da una matriz no semejante · confundir nº de bloques con valores propios distintos.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej4-33">4.33</a> · <a href="#ej4-34">4.34</a> · <a href="#ej4-35">4.35</a> · <a href="#ej4-36">4.36</a> · <a href="#ej4-37">4.37</a> · <a href="#ej4-38">4.38</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
+<section class="ficha" id="tipo-potencias">
+  <h3>Tipo 5 — Método de potencias</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «aproxime el valor propio / vector propio dominante», «método de potencias», «valor propio de menor módulo».</p>
+  <ol class="pasos">
+    <li>Elige $x_0\neq0$ sencillo, por ejemplo $(1,0)$ o $(1,1)$.</li>
+    <li>Calcula $Ax_k$ y toma $\mu_k$ como su coordenada de mayor valor absoluto, con su signo.</li>
+    <li>Normaliza: $x_{k+1}=Ax_k/\mu_k$ (tiene una coordenada igual a $1$). Repite hasta que $\mu_k$ se estabilice.</li>
+    <li>Para el menor en módulo, aplica el método a $A^{-1}$ y toma el inverso del resultado.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $x_0=(1,0)$: $Ax_0=(2,1)$, $\mu_0=2$, $x_1=(1,\tfrac12)$; $Ax_1=(\tfrac52,2)$, $\mu_1=\tfrac52$. Tiende a $\lambda_1=3$ con vector $(1,1)$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> olvidar el signo de $\mu_k$ · pensar que sirve sin valor dominante estricto · empezar con un $x_0$ sin componente en $v_1$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej4-41">4.41</a> · <a href="#ej-propio-11">Ejemplo propio 11</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
 <!-- ============================ 8 ============================ -->
-<h2 id="ejercicios"><span class="n">8</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §4.4, Ej. 4.33-4.41, p. 150-160">E p.150-160</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">8</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §4.4, Ej. 4.33-4.41, p. 150-160">E p.150-160</span></h2>
 
 <p>Los Ejercicios 4.33 a 4.41 de E son los de esta sección: del 4.33 al 4.40 tratan la forma de Jordan y la matriz de paso; el 4.41 es del método de potencias. Los apartados con <b>Maxima</b> (4.36-D, 4.38-D) están fuera de examen; se razonan a mano. Orden de estudio recomendado: <b>4.33 → 4.34 → 4.35</b> (conceptos), <b>4.36 → 4.37</b> (hallar $J$), <b>4.38</b> (comprobar una $P$), <b>4.39 → 4.40</b> ($J$ y $P$ de una $4\times4$) y <b>4.41</b> (potencias). Pulsa «Mostrar soluciones» arriba para abrirlas todas.</p>
 
 <h3 id="bloqueI">Bloque I — Teoría de $J$ (E 4.33–4.35)</h3>
 
-<details class="sol" id="ej4-33"><summary>Ejercicio 4.33 — verdadero o falso sobre bloques y semejanza <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.33, p. 151">E p.151</span></summary>
-  <p class="enun">Si $J$ es la matriz de Jordan de una matriz $A$ cualquiera, responder verdadero o falso: A) El número de bloques de $J$ es superior al de vectores propios linealmente independientes. B) Al cambiar de orden los bloques de $J$ se obtiene una matriz que no es semejante a $A$. C) Cada bloque de $J$ es la suma de un múltiplo de la matriz unidad y una matriz nihilpotente.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $J$ es la matriz de Jordan de una matriz $A$ cualquiera, responder verdadero o falso: A) El número de bloques de $J$ es superior al de vectores propios linealmente independientes. B) Al cambiar de orden los bloques de $J$ se obtiene una matriz que no es semejante a $A$. C) Cada bloque de $J$ es la suma de un múltiplo de la matriz unidad y una matriz nihilpotente.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Recuerda de dónde sale cada bloque: tantos bloques como vectores propios independientes, y cada bloque es $\lambda I$ más una matriz con unos encima de la diagonal. Revisa las tres afirmaciones con eso.</p></details>
+<details class="sol" id="ej4-33"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 4.33 — verdadero o falso sobre bloques y semejanza <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.33, p. 151">E p.151</span></summary>
   <p><b>Qué se pide.</b> Traducir cada frase a «$d_i$ = nº de bloques de $\lambda_i$» y a $J_i=\lambda I+N$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Verdadero o falso sobre bloques y semejanza de la matriz de Jordan.</dd>
@@ -457,8 +568,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <p><b>Error típico:</b> pensar que el orden de los bloques cambia la clase de semejanza: solo cambia el orden de las columnas de $P$. <b>Teoría:</b> U Teor. 4.8 p.168; propiedades p.169; construcción pp.169-170.</p>
 </details>
 
-<details class="sol" id="ej4-34"><summary>Ejercicio 4.34 — ¿a qué es igual el número de unos de $J$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.34, p. 151">E p.151</span></summary>
-  <p class="enun">Si $J$ es la matriz de Jordan de una matriz $A$ cualquiera, responder verdadero o falso a si el número de unos que hay por encima de la diagonal principal de $J$ es: A) Igual al número de vectores propios linealmente independientes. B) Igual al número de bloques. C) Igual al número de vectores no propios que se necesitan para formar una base de vectores que determinan la matriz de paso. D) Igual al rango de $A$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $J$ es la matriz de Jordan de una matriz $A$ cualquiera, responder verdadero o falso a si el número de unos que hay por encima de la diagonal principal de $J$ es: A) Igual al número de vectores propios linealmente independientes. B) Igual al número de bloques. C) Igual al número de vectores no propios que se necesitan para formar una base de vectores que determinan la matriz de paso. D) Igual al rango de $A$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Cuenta los unos de $J$ en un ejemplo pequeño (un bloque $3\times3$, o dos de $2\times2$) y compáralos con el número de bloques y con $n-\sum d_i$.</p></details>
+<details class="sol" id="ej4-34"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 4.34 — ¿a qué es igual el número de unos de $J$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.34, p. 151">E p.151</span></summary>
   <p><b>Qué se pide.</b> Contar unos, bloques y vectores.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>A qué es igual el número de unos de $J$.</dd>
@@ -478,8 +590,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <p><b>Error típico:</b> confundir «nº de unos» con «nº de bloques»: son complementarios hasta $n$. <b>Teoría:</b> U pp.169-170.</p>
 </details>
 
-<details class="sol" id="ej4-35"><summary>Ejercicio 4.35 — ¿cuándo es diagonal $J$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.35, p. 152">E p.152</span></summary>
-  <p class="enun">Si $J$ es la matriz de Jordan de una matriz $A$ cualquiera, justificar si: A) Los elementos de $J$ que están encima de la diagonal principal son siempre 1. B) $J$ es diagonal cuando el número de valores propios distintos es igual al rango de $A$. C) Los elementos que están encima de la diagonal principal pueden ser valores distintos a 0 y distintos a 1 para alguna matriz $A$. D) Ninguna de las anteriores es correcta.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $J$ es la matriz de Jordan de una matriz $A$ cualquiera, justificar si: A) Los elementos de $J$ que están encima de la diagonal principal son siempre 1. B) $J$ es diagonal cuando el número de valores propios distintos es igual al rango de $A$. C) Los elementos que están encima de la diagonal principal pueden ser valores distintos a 0 y distintos a 1 para alguna matriz $A$. D) Ninguna de las anteriores es correcta.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Piensa en el caso diagonalizable (¿hay unos?) y en cómo se definió el bloque: ¿qué valores puede haber justo encima de la diagonal?</p></details>
+<details class="sol" id="ej4-35"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 4.35 — ¿cuándo es diagonal $J$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.35, p. 152">E p.152</span></summary>
   <p><b>Qué se pide.</b> Refutar con contraejemplos las tres primeras.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Cuándo es diagonal $J$ y qué se puede decir de los elementos fuera de la diagonal.</dd>
@@ -502,8 +615,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 
 <h3 id="bloqueII">Bloque II — Hallar $J$ (E 4.36–4.38)</h3>
 
-<details class="sol" id="ej4-36"><summary>Ejercicio 4.36 — $2\times2$ con un valor propio doble <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.36, p. 153">E p.153</span></summary>
-  <p class="enun">Si $A$ es la matriz de filas $(3,1)$, $(-1,1)$, justificar si: A) Es semejante a una matriz diagonal. B) Existe una base de $\mathbb R^2$ formada por vectores propios de $A$. C) Se puede calcular su matriz $J$ de Jordan. D) Para obtener $J$ con MAXIMA hay que evaluar <code>load(diag); jordan(); dispJordan();</code>.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es la matriz de filas $(3,1)$, $(-1,1)$, justificar si: A) Es semejante a una matriz diagonal. B) Existe una base de $\mathbb R^2$ formada por vectores propios de $A$. C) Se puede calcular su matriz $J$ de Jordan. D) Para obtener $J$ con MAXIMA hay que evaluar <code>load(diag); jordan(); dispJordan();</code>.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula el polinomio característico y, para su valor propio, el rango de $A-\lambda I$ para obtener $d$. Compara $d$ con $\alpha$.</p></details>
+<details class="sol" id="ej4-36"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 4.36 — $2\times2$ con un valor propio doble <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.36, p. 153">E p.153</span></summary>
   <p><b>Qué se pide.</b> $A=\begin{pmatrix}3&1\cr-1&1\end{pmatrix}$: decidir con $\alpha$ y $d$, y hallar $J$ y $P$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Para una $2\times2$ con valor doble: semejanza a diagonal, base de vectores propios y existencia de $J$.</dd>
@@ -533,8 +647,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <p><b>Error típico:</b> concluir «no tiene forma de Jordan» porque no es diagonalizable: el teorema de Jordan existe para ese caso. <b>Teoría:</b> U Teor. 4.4 p.153, 4.6 p.162, 4.7 p.164, 4.8 p.168, guion p.173. (Verificado con sympy.)</p>
 </details>
 
-<details class="sol" id="ej4-37"><summary>Ejercicio 4.37 — $3\times3$ diagonalizable: «dos bloques» es falso <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.37, p. 154">E p.154</span></summary>
-  <p class="enun">Si $A$ es la matriz de filas $(2,2,-5)$, $(3,7,-15)$, $(1,2,-4)$, justificar si: A) La matriz de Jordan de $A$ posee solo dos bloques. B) $S=\{x=\alpha,y=\beta,z=0\mid\alpha,\beta\in\mathbb R\}$ es un subespacio de vectores propios de $A$. C) $A$ es semejante a la matriz $B$ de filas $(3,0,0)$, $(0,1,0)$ y $(0,0,3)$. D) Ninguna de las anteriores.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es la matriz de filas $(2,2,-5)$, $(3,7,-15)$, $(1,2,-4)$, justificar si: A) La matriz de Jordan de $A$ posee solo dos bloques. B) $S=\{x=\alpha,y=\beta,z=0\mid\alpha,\beta\in\mathbb R\}$ es un subespacio de vectores propios de $A$. C) $A$ es semejante a la matriz $B$ de filas $(3,0,0)$, $(0,1,0)$ y $(0,0,3)$. D) Ninguna de las anteriores.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Halla los valores propios y, para el valor propio repetido, el rango de $A-\lambda I$. Con $d$ sabes cuántos bloques hay y si $J$ es diagonal; luego contrasta cada afirmación.</p></details>
+<details class="sol" id="ej4-37"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 4.37 — $3\times3$ diagonalizable: «dos bloques» es falso <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.37, p. 154">E p.154</span></summary>
   <p><b>Qué se pide.</b> Hallar los valores propios y comprobar $d_i=\alpha_i$ antes de buscar bloques.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Para una $3\times3$, cuántos bloques tiene $J$ y si es semejante a una diagonal dada.</dd>
@@ -557,8 +672,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <p><b>Error típico:</b> responder «dos bloques» porque hay dos valores propios distintos: los bloques se cuentan por vectores propios independientes. <b>Teoría:</b> U p.153; Teor. 4.5 p.158; Teor. 4.7 p.164; p.169. (Verificado con sympy: <code>jordan_form</code> da $\operatorname{diag}(1,1,3)$.)</p>
 </details>
 
-<details class="sol" id="ej4-38"><summary>Ejercicio 4.38 — ¿es $P$ una matriz de paso? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.38, p. 155">E p.155</span></summary>
-  <p class="enun">Si $A$ es la matriz de filas $(0,3,1)$, $(2,-1,-1)$, $(-2,-1,-1)$ y $J$ la matriz de Jordan asociada, de filas $(2,0,0)$, $(0,-2,1)$, $(0,0,-2)$, justificar si la matriz de paso $P$ verifica: A) Tiene por filas $(1,1,0)$, $(1,-1,0)$, $(-1,1,1)$. B) Tiene por filas $(1,-1,1)$, $(1,1,-1)$, $(-1,-1,0)$. C) No es única. D) En MAXIMA hay instrucciones específicas para calcularla.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es la matriz de filas $(0,3,1)$, $(2,-1,-1)$, $(-2,-1,-1)$ y $J$ la matriz de Jordan asociada, de filas $(2,0,0)$, $(0,-2,1)$, $(0,0,-2)$, justificar si la matriz de paso $P$ verifica: A) Tiene por filas $(1,1,0)$, $(1,-1,0)$, $(-1,1,1)$. B) Tiene por filas $(1,-1,1)$, $(1,1,-1)$, $(-1,-1,0)$. C) No es única. D) En MAXIMA hay instrucciones específicas para calcularla.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>No hace falta construir $P$: una $P$ dada vale si es regular y cumple $AP=PJ$ (sin invertir). Mira además qué columna de $P$ debe ir en cada posición según $J$.</p></details>
+<details class="sol" id="ej4-38"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 4.38 — ¿es $P$ una matriz de paso? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.38, p. 155">E p.155</span></summary>
   <p><b>Qué se pide.</b> Comprobar candidatas sin calcular $P$ de cero: $P$ vale si y solo si es regular y $AP=PJ$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Comprobar si dos matrices candidatas son matriz de paso $P$.</dd>
@@ -587,8 +703,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 
 <h3 id="bloqueIII">Bloque III — $J$ y $P$ de una $4\times4$ con cadenas (E 4.39–4.40)</h3>
 
-<details class="sol" id="ej4-39"><summary>Ejercicio 4.39 — forma de Jordan de una $4\times4$ con $\alpha=4$, $d=2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.39, p. 156-157">E p.156-157</span></summary>
-  <p class="enun">Si $(2,0,3,0)$, $(1,2,0,3)$, $(0,0,2,0)$, $(0,0,1,2)$ son las filas de $A$, se pide obtener la matriz de Jordan $J$ asociada.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $(2,0,3,0)$, $(1,2,0,3)$, $(0,0,2,0)$, $(0,0,1,2)$ son las filas de $A$, se pide obtener la matriz de Jordan $J$ asociada.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Es $4\times4$ con un único valor propio: calcula $d$ y, como $\alpha=4$ no basta con $d$, mira los rangos de $(A-\lambda I)^2$ y $(A-\lambda I)^3$.</p></details>
+<details class="sol" id="ej4-39"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 4.39 — forma de Jordan de una $4\times4$ con $\alpha=4$, $d=2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.39, p. 156-157">E p.156-157</span></summary>
   <p><b>Qué se pide.</b> $A=\begin{pmatrix}2&0&3&0\cr1&2&0&3\cr0&0&2&0\cr0&0&1&2\end{pmatrix}$. Con $\alpha=4$ y $d=2$ hay dos candidatas, $(3,1)$ y $(2,2)$: hay que mirar los rangos de las potencias.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de Jordan de una $4\times4$ con $\alpha=4$.</dd>
@@ -616,8 +733,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <p><b>Error típico:</b> decidir los bloques solo con $d$ cuando $\alpha=4$ y $d=2$ (ejemplo propio 10). <b>Teoría:</b> U Teor. 4.1 p.146, Teor. 4.7 p.164, pp.169-170 (Ej. 4.16), guion p.173, p.176.</p>
 </details>
 
-<details class="sol" id="ej4-40"><summary>Ejercicio 4.40 — matriz de paso para el ejercicio 4.39 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.40, p. 158-159">E p.158-159</span></summary>
-  <p class="enun">Si $A$ y $J$ son las matrices del Ejercicio 4.39, se pide obtener una matriz de paso.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ y $J$ son las matrices del Ejercicio 4.39, se pide obtener una matriz de paso.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Usa los bloques del ejercicio anterior: elige la cabeza de la cadena larga en el núcleo de la potencia más alta que no esté en el anterior, y «baja» multiplicando por $N=A-\lambda I$.</p></details>
+<details class="sol" id="ej4-40"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 4.40 — matriz de paso para el ejercicio 4.39 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.40, p. 158-159">E p.158-159</span></summary>
   <p><b>Qué se pide.</b> Aplicar el guion de U p.173: $P=(e_1\,e_2\,e_3\,e_4)$ con $N=A-2I$ y $J=\operatorname{diag}(J_3(2),J_1(2))$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de paso para el $J$ del 4.39.</dd>
@@ -641,8 +759,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 
 <h3 id="bloqueIV">Bloque IV — Método de potencias (E 4.41)</h3>
 
-<details class="sol" id="ej4-41"><summary>Ejercicio 4.41 — aproximar el vector propio estrictamente dominante <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.41, p. 159-160">E p.159-160</span></summary>
-  <p class="enun">Se pide aproximar un vector propio estrictamente dominante de la matriz $\begin{pmatrix}-4&1\cr-6&1\end{pmatrix}$ mediante el método de potencias.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide aproximar un vector propio estrictamente dominante de la matriz $\begin{pmatrix}-4&1\cr-6&1\end{pmatrix}$ mediante el método de potencias.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Parte de un $x_0$ sencillo, multiplica por $A$ y divide por la coordenada de mayor valor absoluto (con su signo). Esa coordenada va dando el valor propio dominante.</p></details>
+<details class="sol" id="ej4-41"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 4.41 — aproximar el vector propio estrictamente dominante <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.41, p. 159-160">E p.159-160</span></summary>
   <p><b>Qué se pide.</b> Aplicar el algoritmo de U p.185 con $x_0=(1,1)$ y leer el resultado.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Aproximar un vector propio dominante con el método de las potencias.</dd>
@@ -682,8 +801,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 <!-- ---- Ejemplos propios ---- -->
 <h3 id="propios">Ejemplos propios (dificultad creciente)</h3>
 
-<details class="sol" id="ej-propio-1"><summary>Ejemplo propio 1 (fácil) — $J$ de una $2\times2$ no diagonalizable <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Halla $J$ y una matriz de paso de $A=\begin{pmatrix}1&1\cr-1&3\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla $J$ y una matriz de paso de $A=\begin{pmatrix}1&1\cr-1&3\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$2\times2$ con un solo valor propio: mira si $A-\lambda I$ es nula. Si no lo es, hay un único bloque; completa la base con un vector fuera del eje propio.</p></details>
+<details class="sol" id="ej-propio-1"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejemplo propio 1 (fácil) — $J$ de una $2\times2$ no diagonalizable <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Jordan y matriz de paso de una $2\times2$.</dd>
     <dt>Cómo lo pienso</dt><dd>Valor doble con un único vector propio: un bloque $2\times2$. La cadena es $v_1\in L_\lambda$, $v_2$ con $(A-\lambda I)v_2=v_1$.</dd>
@@ -702,8 +822,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-2"><summary>Ejemplo propio 2 (fácil-medio) — $3\times3$, $\lambda$ triple con $\operatorname{rang}(A-\lambda I)=1$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}3&-1&1\cr1&1&1\cr0&0&2\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}3&-1&1\cr1&1&1\cr0&0&2\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Valor propio triple: el rango de $A-\lambda I$ te da $d$, y con $\alpha=3$ ya sabes los tamaños de los bloques. Luego construye las cadenas.</p></details>
+<details class="sol" id="ej-propio-2"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 2 (fácil-medio) — $3\times3$, $\lambda$ triple con $\operatorname{rang}(A-\lambda I)=1$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>$J$ y $P$ de una $3\times3$ con valor triple y $\operatorname{rang}(A-\lambda I)=1$.</dd>
     <dt>Cómo lo pienso</dt><dd>Rango 1 en dimensión 3: $d=2$, dos bloques que suman 3. Solo cabe un bloque de 2 y otro de 1.</dd>
@@ -723,8 +844,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-3"><summary>Ejemplo propio 3 (medio) — $\lambda$ triple con $\operatorname{rang}(A-\lambda I)=2$: un bloque $3\times3$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}0&1&0\cr0&0&1\cr1&-3&3\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}0&1&0\cr0&0&1\cr1&-3&3\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Es una matriz compañera con valor propio triple. Calcula $\operatorname{rang}(A-\lambda I)$: si da $2$ solo cabe un bloque de tamaño $3$ y la cadena sale de un vector fuera de $\operatorname{Nuc}N^2$.</p></details>
+<details class="sol" id="ej-propio-3"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 3 (medio) — $\lambda$ triple con $\operatorname{rang}(A-\lambda I)=2$: un bloque $3\times3$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>$J$ y $P$ con valor triple y rango 2.</dd>
     <dt>Cómo lo pienso</dt><dd>Rango 2 ⇒ $d=1$ ⇒ un único bloque $3\times3$. Hace falta una cadena de tres vectores.</dd>
@@ -744,8 +866,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-4"><summary>Ejemplo propio 4 (medio) — $4\times4$ con dos valores propios dobles <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}1&1&1&0\cr0&1&0&1\cr0&0&2&0\cr0&0&0&2\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}1&1&1&0\cr0&1&0&1\cr0&0&2&0\cr0&0&0&2\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Dos valores propios dobles: trata cada uno por separado con su $d_i$ y su $N_i=A-\lambda_iI$; la matriz de paso es la unión de las cadenas de cada uno.</p></details>
+<details class="sol" id="ej-propio-4"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 4 (medio) — $4\times4$ con dos valores propios dobles <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>$J$ y $P$ de una $4\times4$ con dos valores propios dobles.</dd>
     <dt>Cómo lo pienso</dt><dd>Cada valor propio se trata por separado.</dd>
@@ -771,8 +894,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-5"><summary>Ejemplo propio 5 (medio) — todas las $J$ posibles para un polinomio dado (como U Ej. 4.16 y 4.22) <span class="src" data-l="P" data-ref="Ejemplo propio a partir de U Ej. 4.16 p. 170 y 4.22 p. 179">propio</span></summary>
-  <p class="enun">$A$ es de orden $5$ con $|A-\lambda I|=-(\lambda-2)^3(\lambda+1)^2$. ¿Qué formas de Jordan son posibles? ($J_s(\lambda)$ = bloque de tamaño $s$.)</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$A$ es de orden $5$ con $|A-\lambda I|=-(\lambda-2)^3(\lambda+1)^2$. ¿Qué formas de Jordan son posibles? ($J_s(\lambda)$ = bloque de tamaño $s$.)</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Reparte la multiplicidad de cada valor propio en bloques cuyos tamaños sumen $\alpha$ y cuyo número sea $d$. Lista todas las posibilidades para $\lambda=2$ y para $\lambda=-1$ y combínalas.</p></details>
+<details class="sol" id="ej-propio-5"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 5 (medio) — todas las $J$ posibles para un polinomio dado (como U Ej. 4.16 y 4.22) <span class="src" data-l="P" data-ref="Ejemplo propio a partir de U Ej. 4.16 p. 170 y 4.22 p. 179">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Enumerar las formas de Jordan posibles dado el polinomio característico.</dd>
     <dt>Cómo lo pienso</dt><dd>Para cada valor propio, los tamaños de sus bloques forman una partición de su multiplicidad.</dd>
@@ -788,8 +912,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-6"><summary>Ejemplo propio 6 (medio) — deducir $J$ a partir de los rangos de $(A-\lambda I)^k$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">$A$ de orden $5$ con único valor propio $\lambda=3$, y $\operatorname{rang}(A-3I)=3$, $\operatorname{rang}(A-3I)^2=1$, $\operatorname{rang}(A-3I)^3=0$. Halla $J$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$A$ de orden $5$ con único valor propio $\lambda=3$, y $\operatorname{rang}(A-3I)=3$, $\operatorname{rang}(A-3I)^2=1$, $\operatorname{rang}(A-3I)^3=0$. Halla $J$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Aplica la regla de los rangos: nº de bloques de tamaño $\ge k$ es $r_{k-1}-r_k$ con $r_0=5$. Resta después para tener los de tamaño exacto.</p></details>
+<details class="sol" id="ej-propio-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 6 (medio) — deducir $J$ a partir de los rangos de $(A-\lambda I)^k$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Deducir $J$ a partir de los rangos de $(A-3I)^k$.</dd>
     <dt>Cómo lo pienso</dt><dd>Las diferencias entre rangos consecutivos cuentan cuántos bloques hay de cada tamaño.</dd>
@@ -807,8 +932,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-7"><summary>Ejemplo propio 7 (medio) — matriz nilpotente <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; U p. 169 (nilpotente)">propio</span></summary>
-  <p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}1&1&0\cr-1&-1&1\cr0&0&0\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla $J$ y $P$ de $A=\begin{pmatrix}1&1&0\cr-1&-1&1\cr0&0&0\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula el polinomio característico (¿qué valor propio sale?) y los rangos de $A$, $A^2$, $A^3$ para saber el tamaño de la cadena.</p></details>
+<details class="sol" id="ej-propio-7"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 7 (medio) — matriz nilpotente <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; U p. 169 (nilpotente)">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>$J$ y $P$ de una matriz nilpotente.</dd>
     <dt>Cómo lo pienso</dt><dd>Único valor propio $0$; el tamaño máximo de bloque es el menor $k$ con $A^k=0$.</dd>
@@ -828,8 +954,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-8"><summary>Ejemplo propio 8 (medio-difícil) — potencias de un bloque y $A^n=PJ^nP^{-1}$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Con $A=\begin{pmatrix}1&1\cr-1&3\end{pmatrix}$ (ejemplo propio 1), halla $A^n$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Con $A=\begin{pmatrix}1&1\cr-1&3\end{pmatrix}$ (ejemplo propio 1), halla $A^n$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Usa $A=PJP^{-1}$, luego $A^n=PJ^nP^{-1}$. Para el bloque $\lambda I+N$ con $N^2=0$ desarrolla la potencia con el binomio.</p></details>
+<details class="sol" id="ej-propio-8"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejemplo propio 8 (medio-difícil) — potencias de un bloque y $A^n=PJ^nP^{-1}$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Calcular $A^n$ con un bloque de Jordan.</dd>
     <dt>Cómo lo pienso</dt><dd>Un bloque $\lambda I+N$ con $N^2=0$ se eleva con el binomio, que solo tiene dos términos.</dd>
@@ -853,8 +980,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-9"><summary>Ejemplo propio 9 (medio-difícil) — raíces complejas: no hay $J$ real <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; U p. 167 sobre raíces reales">propio</span></summary>
-  <p class="enun">Estudia si $A=\begin{pmatrix}1&-2\cr1&-1\end{pmatrix}$ tiene forma de Jordan real.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Estudia si $A=\begin{pmatrix}1&-2\cr1&-1\end{pmatrix}$ tiene forma de Jordan real.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula el polinomio característico y mira si sus raíces son reales. ¿Qué hipótesis del Teorema 4.8 se pierde?</p></details>
+<details class="sol" id="ej-propio-9"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 9 (medio-difícil) — raíces complejas: no hay $J$ real <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; U p. 167 sobre raíces reales">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si una matriz tiene forma de Jordan real.</dd>
     <dt>Cómo lo pienso</dt><dd>Si el polinomio tiene raíces complejas, no hay $J$ real.</dd>
@@ -868,8 +996,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-10"><summary>Ejemplo propio 10 (difícil) — mismo polinomio y misma $d$, pero no semejantes <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">$A=\begin{pmatrix}2&0&3&0\cr1&2&0&3\cr0&0&2&0\cr0&0&1&2\end{pmatrix}$ (la de E 4.39) y $B=\begin{pmatrix}2&0&1&0\cr0&2&0&1\cr0&0&2&0\cr0&0&0&2\end{pmatrix}$. ¿Son semejantes?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$A=\begin{pmatrix}2&0&3&0\cr1&2&0&3\cr0&0&2&0\cr0&0&1&2\end{pmatrix}$ (la de E 4.39) y $B=\begin{pmatrix}2&0&1&0\cr0&2&0&1\cr0&0&2&0\cr0&0&0&2\end{pmatrix}$. ¿Son semejantes?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Compara los rangos de $(A-2I)^k$ de las dos matrices, no solo $d$: dos matrices semejantes tienen los mismos rangos para todo $k$.</p></details>
+<details class="sol" id="ej-propio-10"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejemplo propio 10 (difícil) — mismo polinomio y misma $d$, pero no semejantes <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si dos matrices con igual polinomio y $d$ son semejantes.</dd>
     <dt>Cómo lo pienso</dt><dd>Si los rangos de $(A-\lambda I)^2$ difieren, los tamaños de bloques difieren.</dd>
@@ -887,8 +1016,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-11"><summary>Ejemplo propio 11 (medio) — método de potencias con $A^{-1}$: el valor propio de menor módulo <span class="src" data-l="P" data-ref="Ejemplo propio a partir de U Ej. 4.30, p. 189">propio</span></summary>
-  <p class="enun">$A=\begin{pmatrix}2&1\cr1&2\end{pmatrix}$ ($|A-\lambda I|=(\lambda-1)(\lambda-3)$; vectores $(1,1)$ para $3$ y $(1,-1)$ para $1$). Estima el valor propio menor con $x_0=(1,0)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$A=\begin{pmatrix}2&1\cr1&2\end{pmatrix}$ ($|A-\lambda I|=(\lambda-1)(\lambda-3)$; vectores $(1,1)$ para $3$ y $(1,-1)$ para $1$). Estima el valor propio menor con $x_0=(1,0)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>El valor propio menor de $A$ es el mayor de $A^{-1}$ (inverso). Aplica el método de potencias a $A^{-1}$ y recuerda invertir el resultado.</p></details>
+<details class="sol" id="ej-propio-11"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 11 (medio) — método de potencias con $A^{-1}$: el valor propio de menor módulo <span class="src" data-l="P" data-ref="Ejemplo propio a partir de U Ej. 4.30, p. 189">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Estimar el valor propio de menor módulo con el método de potencias en $A^{-1}$.</dd>
     <dt>Cómo lo pienso</dt><dd>Los valores propios de $A^{-1}$ son los inversos; el dominante de $A^{-1}$ da el menor de $A$.</dd>
@@ -926,14 +1056,15 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 </div>
 
 <!-- ============================ 9 ============================ -->
-<h2 id="examenes"><span class="n">9</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">9</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>De los 24 exámenes escaneados, <b>cuatro ejercicios</b> (uno de ellos un apartado suelto) tienen la forma de Jordan como contenido principal; <b>ninguno</b> pregunta por el método de potencias. Se agrupan por método, de menos a más trabajo: <b>A</b> si la matriz es diagonalizable, su Jordan es la diagonal; <b>B</b> no diagonalizable: se leen los bloques en el rango; <b>C</b> Jordan con matriz de paso por cadenas. Todo verificado con sympy.</p>
 
 <h3 id="metodoA">Método A — Diagonalizable $\Rightarrow$ su matriz de Jordan es la diagonal</h3>
 
-<details class="sol" id="ex-ene22a-4"><summary>Ene. 2022 (tipo A), ejercicio 4 — «una posible matriz de Jordan» de una matriz diagonalizable <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A), ejercicio 4">X Ene. 2022 (A) ej. 4</span></summary>
-  <p class="enun">Si $A$ es la matriz de filas $(2,2,-5)$, $(3,7,-15)$, $(1,2,-4)$, obtener una posible matriz de Jordan suya.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es la matriz de filas $(2,2,-5)$, $(3,7,-15)$, $(1,2,-4)$, obtener una posible matriz de Jordan suya.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Halla los valores propios y, para el repetido, el rango de $A-\lambda I$. Si $d=\alpha$ la forma de Jordan es una diagonal.</p></details>
+<details class="sol" id="ex-ene22a-4"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ene. 2022 (tipo A), ejercicio 4 — «una posible matriz de Jordan» de una matriz diagonalizable <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A), ejercicio 4">X Ene. 2022 (A) ej. 4</span></summary>
   <p><b>Qué se pide.</b> Es la matriz de E 4.37. Aquí lo que enseña es que <b>si $A$ es diagonalizable, su $J$ es la diagonal</b> (U p.169; Ej. 4.17, p.171-172). El trabajo de fondo ($d=\alpha$) es el de 4.3.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Dar una forma de Jordan de una matriz diagonalizable.</dd>
@@ -964,8 +1095,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <p><b>Error típico:</b> «tiene un valor propio doble $\Rightarrow$ no diagonalizable $\Rightarrow$ $J$ con un uno». Lo que decide es el rango de $A-\lambda I$: aquí es $1$ y no hay ningún uno.</p>
 </details>
 
-<details class="sol" id="ex-ene20a-4"><summary>Ene. 2020 (tipo A), ejercicio 4 — tres valores propios reales distintos (irracionales) <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 4">X Ene. 2020 (A) ej. 4</span></summary>
-  <p class="enun">Hallar una matriz de Jordan de la matriz $\begin{pmatrix}1&-1&3\cr3&1&2\cr4&0&1\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hallar una matriz de Jordan de la matriz $\begin{pmatrix}1&-1&3\cr3&1&2\cr4&0&1\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Mira el polinomio característico: si tiene tres raíces reales distintas (aunque sean irracionales) la matriz es diagonalizable y $J$ es la diagonal con ellas.</p></details>
+<details class="sol" id="ex-ene20a-4"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ene. 2020 (tipo A), ejercicio 4 — tres valores propios reales distintos (irracionales) <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 4">X Ene. 2020 (A) ej. 4</span></summary>
   <p><b>Qué se pide.</b> Solo $J$. Con tres raíces reales distintas no hace falta ni un vector propio.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Forma de Jordan con tres valores reales distintos.</dd>
@@ -986,8 +1118,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 
 <h3 id="metodoB">Método B — No diagonalizable: los bloques se leen en el rango</h3>
 
-<details class="sol" id="ex-feb25a-4"><summary>Feb. 2025 (1.ª sem.), pregunta 4 — matriz de Jordan de $\begin{pmatrix}0&1\cr-1&2\end{pmatrix}$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), pregunta 4">X Feb. 2025 (1.ª) P4</span></summary>
-  <p class="enun">Calcule la matriz de Jordan correspondiente a $\begin{pmatrix}0&1\cr-1&2\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcule la matriz de Jordan correspondiente a $\begin{pmatrix}0&1\cr-1&2\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$2\times2$: polinomio característico, valor propio doble y rango de $A-\lambda I$. Con $d=1$ el bloque es único y ocupa toda la matriz.</p></details>
+<details class="sol" id="ex-feb25a-4"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2025 (1.ª sem.), pregunta 4 — matriz de Jordan de $\begin{pmatrix}0&1\cr-1&2\end{pmatrix}$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), pregunta 4">X Feb. 2025 (1.ª) P4</span></summary>
   <p><b>Qué se pide.</b> $2\times2$ con un valor propio doble: hay que decidir entre $A=\lambda I$ y un bloque $2\times2$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Forma de Jordan de una $2\times2$.</dd>
@@ -1015,8 +1148,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 
 <h3 id="metodoC">Método C — Jordan con matriz de paso: cadena de núcleos</h3>
 
-<details class="sol" id="ex-sep24-p8b"><summary>Sept. 2024, problema 8 (2.º apartado) — $J$ y matriz de paso de $\begin{pmatrix}3&0&0\cr0&4&-1\cr0&1&2\end{pmatrix}$ <span class="src" data-l="X" data-ref="Sept. 2024, problema 8 (2.º apartado)">X Sept. 2024 P8 (2.º)</span></summary>
-  <p class="enun">Considere $A=\begin{pmatrix}3&0&0\cr0&4&-1\cr0&1&2\end{pmatrix}$. Demuestre que $A$ no es diagonalizable (1 punto). <b>Calcule la matriz de Jordan asociada a $A$ (1 punto).</b></p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Considere $A=\begin{pmatrix}3&0&0\cr0&4&-1\cr0&1&2\end{pmatrix}$. Demuestre que $A$ no es diagonalizable (1 punto). <b>Calcule la matriz de Jordan asociada a $A$ (1 punto).</b></p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Separa la matriz en un bloque $1\times1$ y otro $2\times2$. Calcula los valores propios de este último y el rango de $A-\lambda I$ para el repetido.</p></details>
+<details class="sol" id="ex-sep24-p8b"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2024, problema 8 (2.º apartado) — $J$ y matriz de paso de $\begin{pmatrix}3&0&0\cr0&4&-1\cr0&1&2\end{pmatrix}$ <span class="src" data-l="X" data-ref="Sept. 2024, problema 8 (2.º apartado)">X Sept. 2024 P8 (2.º)</span></summary>
   <p><b>Qué se pide.</b> El 1.er apartado está desarrollado en 4.3 (<a href="tema_4_3_diagonalizacion.html#ex-sep24-p8a">Sept. 2024, P8, 1.º</a>). Aquí, el 2.º: hallar $J$; además se construye $P$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>$J$ y matriz de paso de una $3\times3$.</dd>
@@ -1049,8 +1183,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 
 <h3>Ejemplos propios con estos esquemas</h3>
 
-<details class="sol" id="ej-propio-12"><summary>Ejemplo propio 12 (examen) — $2\times2$: $J$, $P$ y $A^n$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Halla la forma de Jordan $J$, una matriz de paso $P$ y $A^n$ para $A=\begin{pmatrix}3&1\cr-1&1\end{pmatrix}$ (la de E 4.36).</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla la forma de Jordan $J$, una matriz de paso $P$ y $A^n$ para $A=\begin{pmatrix}3&1\cr-1&1\end{pmatrix}$ (la de E 4.36).</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Es la matriz de E 4.36: construye $P$ con un vector propio y un vector fuera del eje, y calcula $A^n=PJ^nP^{-1}$ con la potencia del bloque.</p></details>
+<details class="sol" id="ej-propio-12"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 12 (examen) — $2\times2$: $J$, $P$ y $A^n$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>$J$, $P$ y $A^n$ de una $2\times2$.</dd>
     <dt>Cómo lo pienso</dt><dd>Cadena de longitud 2 y binomio del bloque.</dd>
@@ -1074,8 +1209,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <div class="recipe"><b>Receta:</b> $2\times2$ con $\lambda$ doble y $A\neq\lambda I$: $J=\begin{pmatrix}\lambda&1\cr0&\lambda\end{pmatrix}$, $P=(Nv\mid v)$, $J^n=\begin{pmatrix}\lambda^n&n\lambda^{n-1}\cr0&\lambda^n\end{pmatrix}$. <b>Error típico:</b> elevar cada entrada de $J$ a $n$.</div>
 </details>
 
-<details class="sol" id="ej-propio-13"><summary>Ejemplo propio 13 (examen) — valor simple y valor doble con $d=1$ (como U Ej. 4.18) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Halla $J$ y $P$ para $A=\begin{pmatrix}2&1&1\cr0&2&0\cr0&1&1\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla $J$ y $P$ para $A=\begin{pmatrix}2&1&1\cr0&2&0\cr0&1&1\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Valor simple y valor doble: haz el rango de $A-2I$ para el doble. Si da $d=1$ hay un bloque $2\times2$ y necesitas una cadena de longitud 2.</p></details>
+<details class="sol" id="ej-propio-13"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 13 (examen) — valor simple y valor doble con $d=1$ (como U Ej. 4.18) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>$J$ y $P$ de una matriz con valor simple y valor doble con $d=1$.</dd>
     <dt>Cómo lo pienso</dt><dd>Un bloque $1\times1$ y uno $2\times2$.</dd>
@@ -1106,8 +1242,9 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <div class="recipe"><b>Receta:</b> $v\in\operatorname{Nuc}N^k$ <b>y</b> $v\notin\operatorname{Nuc}N^{k-1}$: las dos condiciones a la vez.</div>
 </details>
 
-<details class="sol" id="ej-propio-14"><summary>Ejemplo propio 14 (examen) — valor triple con un solo bloque $3\times3$ y $J^n$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">a) Sin calcular $P$, ¿qué formas de Jordan son posibles para una $3\times3$ con $|A-\lambda I|=-(\lambda-1)^3$? b) Para $A=\begin{pmatrix}0&1&0\cr0&0&1\cr1&-3&3\end{pmatrix}$ halla $J$ y $P$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">a) Sin calcular $P$, ¿qué formas de Jordan son posibles para una $3\times3$ con $|A-\lambda I|=-(\lambda-1)^3$? b) Para $A=\begin{pmatrix}0&1&0\cr0&0&1\cr1&-3&3\end{pmatrix}$ halla $J$ y $P$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>En el apartado a) reparte $\alpha=3$ en bloques (tres tamaños posibles de reparto); en b) decide con el rango de $A-I$ y construye la cadena de longitud 3.</p></details>
+<details class="sol" id="ej-propio-14"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 14 (examen) — valor triple con un solo bloque $3\times3$ y $J^n$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Posibles $J$ con polinomio $-(\lambda-1)^3$ y cálculo para una matriz concreta.</dd>
     <dt>Cómo lo pienso</dt><dd>Particiones de 3: tres formas posibles.</dd>
@@ -1160,7 +1297,7 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 </div>
 
 <!-- ============================ 10 ============================ -->
-<h2 id="chuleta"><span class="n">10</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">10</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <table>
   <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
@@ -1209,7 +1346,7 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
 </div>
 
 <!-- ============================ 11 ============================ -->
-<h2 id="mapa"><span class="n">11</span>Mapa del tema 4: qué hacer ante una matriz <span class="src" data-l="P" data-ref="Resumen propio de los temas 4.1 a 4.4">propio</span></h2>
+<h2 id="mapa" data-vista="teoria"><span class="n">11</span>Mapa del tema 4: qué hacer ante una matriz <span class="src" data-l="P" data-ref="Resumen propio de los temas 4.1 a 4.4">propio</span></h2>
 
 <div class="box tip"><span class="h">Receta completa, del polinomio a $P$</span>
   <ol class="steps">
@@ -1234,6 +1371,27 @@ que se estabiliza cuando la dimensión llega a $\alpha$ (no crece más). Sus vec
   <tr><td>Valor propio dominante, sin resolver $|A-\lambda I|$</td><td>método de potencias (4.4.3)</td><td>$\mu_k\to\lambda_1$, $x_k\to v_1$</td></tr>
 </table>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>$A=\begin{pmatrix}3&1&1\\0&3&0\\0&0&3\end{pmatrix}$ tiene $\lambda=3$ triple. ¿Cuál es su forma de Jordan?</p>
+    <ul class="opts"><li>$3I$ (diagonal)<span class="why">$A-3I\neq0$, tiene rango $1$: $d=2<3$, luego hay algún $1$ y no es diagonal.</span></li><li data-ok>Un bloque $2\times2$ y otro $1\times1$</li><li>Un único bloque $3\times3$<span class="why">Un solo bloque exigiría $d=1$ (rango $2$), pero $\operatorname{rang}(A-3I)=1$ da $d=2$ bloques.</span></li><li>Tres bloques $1\times1$ con un $1$ encima<span class="why">Tres bloques son tres vectores propios independientes ($d=3$) y entonces no habría unos.</span></li></ul>
+    <p class="fb">$\operatorname{rang}(A-3I)=1$, luego $d=3-1=2$ bloques de tamaños que suman $3$: $(2,1)$.</p></div>
+  <div class="qp"><p>$J$ es de orden $4$ con un único valor propio y un único bloque. ¿Cuántos unos tiene encima de la diagonal?</p>
+    <ul class="opts"><li>1<span class="why">Un uno sería un bloque $2\times2$ más otros bloques. Con un solo bloque de tamaño $4$ hay $3$.</span></li><li data-ok>3</li><li>4<span class="why">Un bloque $4\times4$ tiene $4-1=3$ unos (una línea de $3$ posiciones), no $4$.</span></li><li>0<span class="why">Sin unos sería diagonal, es decir cuatro bloques $1\times1$.</span></li></ul>
+    <p class="fb">Nº de unos $=n-\sum d_i=4-1=3$.</p></div>
+  <div class="qp"><p>Una matriz $4\times4$ tiene $\lambda=2$ con $\alpha=4$, $\operatorname{rang}(A-2I)=2$ y $\operatorname{rang}(A-2I)^2=0$. ¿Qué bloques tiene?</p>
+    <ul class="opts"><li data-ok>$(2,2)$</li><li>$(3,1)$<span class="why">Un bloque de tamaño $3$ exigiría $(A-2I)^2\neq0$; aquí es nula.</span></li><li>$(2,1,1)$<span class="why">Serían $d=3$ bloques, pero $d=4-2=2$.</span></li><li>$(4)$<span class="why">Un bloque de tamaño $4$ da $d=1$, no $d=2$.</span></li></ul>
+    <p class="fb">$d=4-2=2$ bloques; los de tamaño $\ge2$ son $r_1-r_2=2-0=2$, así que ambos tienen tamaño $2$: $J_2\oplus J_2$.</p></div>
+  <div class="qp"><p>Sea $A=\begin{pmatrix}1&1\\-1&3\end{pmatrix}$, $J=\begin{pmatrix}2&1\\0&2\end{pmatrix}$. ¿Cuál es una matriz de paso $P$ con $P^{-1}AP=J$?</p>
+    <ul class="opts"><li data-ok>$\begin{pmatrix}-1&1\\-1&0\end{pmatrix}$</li><li>$\begin{pmatrix}1&-1\\0&-1\end{pmatrix}$<span class="why">Tiene la cabeza $(1,0)$ en la primera columna y el vector propio en la segunda: sale la traspuesta $\begin{pmatrix}2&0\\1&2\end{pmatrix}$.</span></li><li>$\begin{pmatrix}1&1\\1&0\end{pmatrix}$<span class="why">Las columnas no cumplen $Ap_2=p_1+2p_2$: da $\begin{pmatrix}2&-1\\0&2\end{pmatrix}$, no $J$.</span></li><li>$\begin{pmatrix}1&1\\-1&0\end{pmatrix}$<span class="why">Su primera columna $(1,-1)$ no es vector propio de $A$ (el propio es $(1,1)$): da otra matriz.</span></li></ul>
+    <p class="fb">El vector propio de $\lambda=2$ es $(-1,-1)$ (1.ª columna) y la cabeza $v=(1,0)$ con $(A-2I)v=(-1,-1)$ (2.ª columna). Se comprueba $AP=PJ$.</p></div>
+  <div class="qp"><p>$A=\begin{pmatrix}1&-2\\1&-1\end{pmatrix}$. ¿Qué ocurre con su forma de Jordan real?</p>
+    <ul class="opts"><li data-ok>No existe, porque $|A-\lambda I|=\lambda^2+1$ no tiene raíces reales.</li><li>Es $\begin{pmatrix}1&1\\0&-1\end{pmatrix}$.<span class="why">Los valores propios no son $1$ y $-1$: la traza es $0$ y el determinante $1$, que dan $\lambda^2+1$.</span></li><li>Es $\begin{pmatrix}0&1\\0&0\end{pmatrix}$.<span class="why">Esa matriz tiene polinomio $\lambda^2$; semejantes tienen el mismo polinomio característico.</span></li><li>Es diagonal porque tiene dos valores propios distintos.<span class="why">Los valores propios $\pm i$ son distintos pero complejos: no hay $J$ real.</span></li></ul>
+    <p class="fb">El Teorema 4.8 exige raíces reales. Aquí $\lambda=\pm i$; solo sobre $\mathbb C$ se diagonaliza.</p></div>
+  <div class="qp"><p>Con $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$ y $x_0=(1,0)$, ¿cuánto vale $\mu_1$ en el método de potencias?</p>
+    <ul class="opts"><li data-ok>$\tfrac52$</li><li>$2$<span class="why">Es $\mu_0$ (coordenada mayor de $Ax_0=(2,1)$); $\mu_1$ sale de $Ax_1$ con $x_1=(1,\tfrac12)$.</span></li><li>$3$<span class="why">Es el valor propio al que tiende $\mu_k$, no el segundo término de la sucesión.</span></li><li>$2$ con vector $(1,1)$<span class="why">Mezcla cosas: tras dos pasos aún no se ha llegado a $(1,1)$.</span></li></ul>
+    <p class="fb">$x_1=(1,\tfrac12)$ y $Ax_1=(\tfrac52,2)$, cuya coordenada mayor es $\tfrac52$. La sucesión $2,\tfrac52,\dots$ tiende a $3$.</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>
