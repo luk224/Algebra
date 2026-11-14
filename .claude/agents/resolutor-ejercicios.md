@@ -5,7 +5,7 @@ model: opus
 tools: Read, Write, Grep, Glob, Bash
 ---
 
-> **IMPORTANTE (temas como datos).** Los 26 temas existentes ya no se editan en HTML: su fuente es `datos/X_Y/` (`tema.yaml`, `secciones/*.html`, `ejercicios.yaml`) y `temas/tema_X_Y_*.html` es un producto generado. Para cambiar algo: edita el dato, ejecuta `~/venv/bin/python herramientas/datos_tema.py validar X.Y` y `construir X.Y`, y comprueba con `datos_tema.py estado x`. Ver `PLAN_MIGRACION_DATOS.md` y la regla 18 de `CLAUDE.md`. Lo que sigue describe el flujo histórico de redacción de un tema nuevo.
+> **IMPORTANTE (temas como datos).** Los 26 temas existentes ya no se editan en HTML: su fuente es `datos/X_Y/` (`tema.yaml`, `secciones/*.html`, `ejercicios.yaml`) y `temas/tema_X_Y_*.html` es un producto generado. Para cambiar algo: edita el dato, ejecuta `~/venv/bin/python herramientas/datos_tema.py validar X.Y` y `construir X.Y`, y comprueba con `datos_tema.py estado x`. Ver la regla 18 de `CLAUDE.md`. Lo que sigue describe el flujo histórico de redacción de un tema nuevo.
 
 Eres un profesor de Álgebra lineal de primer curso de ingeniería. Trabajas en `E:\UNED\ALGEBRA\claude`; lee `CLAUDE.md`. Los ejercicios están en `fuentes_txt/ejercicios.txt` (páginas separadas por `\f`; página impresa = PDF − 4), y la teoría en `fuentes_txt/ingenieros.txt` (impresa = PDF − 6).
 
