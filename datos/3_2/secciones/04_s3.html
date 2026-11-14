@@ -1,0 +1,91 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>El núcleo de una aplicación lineal <span class="src" data-l="U" data-ref="U §3.2.3 Núcleo, Definición 3.3, Figura 3.2 y Ejemplos 3.12-3.14, p. 109-111">U p.109-111</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>El núcleo es el conjunto de vectores que $f$ <b>borra</b>: los que manda al vector cero de $W$. Siempre contiene al $\bar0$ (porque $f(\bar0)=\bar0$). Si no contiene nada más, $f$ «no aplasta nada» y es lo más fiel posible; cuanto más grande es el núcleo, más información pierde $f$. Calcularlo es <b>resolver un sistema homogéneo</b>: «$f(x)=\bar0$».</p>
+</div>
+
+<div class="box def"><span class="h">Definición 3.3 — núcleo</span>
+  <p>Sea $f:V\to W$ lineal. El <b>núcleo</b> de $f$ es
+  $$\operatorname{Nuc}(f)=\{\,v\in V\mid f(v)=\bar0\in W\,\}=f^{-1}(\bar0).$$
+  <b>El núcleo de $f$ es un subespacio de $V$.</b></p>
+  <span class="src" data-l="U" data-ref="U Definición 3.3, p. 109">U p.109</span>
+</div>
+
+<div class="box thm"><span class="h">¿Por qué es un subespacio? (demostración de U)</span>
+  <p>Si $v_1,v_2\in\operatorname{Nuc}(f)$ y $\lambda\in\mathbb R$, por ser $f$ lineal
+  $$f(v_1+\lambda v_2)=f(v_1)+\lambda f(v_2)=\bar0+\lambda\,\bar0=\bar0,$$
+  luego $v_1+\lambda v_2\in\operatorname{Nuc}(f)$. Además $\bar0\in\operatorname{Nuc}(f)$ porque $f(\bar0)=\bar0$.</p>
+  <span class="src" data-l="U" data-ref="U demostración de que el núcleo es subespacio, p. 109">U p.109</span>
+</div>
+
+<figure class="bookfig">
+  <img src="../assets/img/fig_u_3_2.png" alt="Diagrama de flechas de U: los vectores de un óvalo azul Nuc(f), dentro del espacio V, se envían mediante f a un único punto, el vector cero, del espacio W" loading="lazy">
+  <figcaption>Figura 3.2 de U: todos los vectores del núcleo (óvalo azul, dentro de $V$) se envían al mismo punto, el $\bar0$ de $W$. <span class="src" data-l="U" data-ref="U Figura 3.2, Núcleo de una aplicación lineal, p. 110">U p.110</span></figcaption>
+</figure>
+
+<div class="box thm"><span class="h">Cómo se calcula el núcleo</span>
+  <ol>
+    <li>Escribe $f(x)=\bar0$ componente a componente: queda un <b>sistema homogéneo</b> en las coordenadas $x_i$ del espacio inicial (si $f$ viene dada por su matriz $A$: $AX=0$).</li>
+    <li>Resuélvelo (Gauss). El número de <b>parámetros libres</b> es la dimensión: $n-\operatorname{rang}(A)$ (Rouché, U p.30).</li>
+    <li>Escribe la solución general como $\lambda_1u_1+\dots+\lambda_ku_k$: los $u_i$ (uno por parámetro) son una <b>base</b> de $\operatorname{Nuc}(f)$. Las <b>ecuaciones</b> del núcleo son las del propio sistema (quitando las redundantes).</li>
+    <li>Si el único vector que cumple todo es el $\bar0$, entonces $\operatorname{Nuc}(f)=\{\bar0\}$, con $\operatorname{Dim}=0$ (convenio de U p.112) y base vacía.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 3.12-3.14 (resolver el sistema homogéneo), p. 110-111; convenio Dim{0}=0, p. 112">U p.110-112</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.12 (U) — núcleo $=\{0\}$ en un espacio de matrices</span>
+  <p>Para la $f:M\to\mathbb R^4$ del Ej. 3.1 (la del Ej. 3.8 de arriba). Una matriz de $M$ está en el núcleo si su imagen es $(0,0,0,0)$:</p>
+  <ol class="steps">
+    <li>Sistema:
+    $$\begin{cases}a_{11}+a_{12}=0\\a_{12}-a_{11}=0\\a_{21}=0\end{cases}$$</li>
+    <li>Sumando las dos primeras, $2a_{12}=0$, es decir $a_{12}=0$; llevado a la segunda, $a_{11}=0$; y $a_{21}=0$.</li>
+    <li>Por tanto $\operatorname{Nuc}(f)=f^{-1}(0,0,0,0)=\left\{\begin{pmatrix}0&0\\0&0\end{pmatrix}\right\}$: solo la matriz nula.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.12, p. 110">U p.110</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.13 (U) — núcleo $=\{0\}$ en $\mathbb R^3$</span>
+  <p>Núcleo de la $f$ del Ej. 3.9, $f(x_1,x_2,x_3)=(x_1+x_2,\,x_3,\,x_2)$:
+  $$\begin{cases}x_1+x_2=0\\x_3=0\\x_2=0\end{cases}\ \Longrightarrow\ x_2=0,\ x_3=0,\ x_1=0 .$$
+  Luego $\operatorname{Nuc}(f)=\{(0,0,0)\}$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.13, p. 110">U p.110</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.14 (U) — núcleo no trivial, en $\mathbb R^3$ y en polinomios</span>
+  <p><b>(a) La $f$ del Ej. 3.10</b> ($f(e_1)=(1,0)$, $f(e_2)=(1,1)$, $f(e_3)=(3,2)$).</p>
+  <ol class="steps">
+    <li>Por linealidad, $f(x_1,x_2,x_3)=x_1(1,0)+x_2(1,1)+x_3(3,2)=(x_1+x_2+3x_3,\ x_2+2x_3)$. Igualando a $(0,0)$:
+    $$\begin{cases}x_1+x_2+3x_3=0\\x_2+2x_3=0\end{cases}$$
+    (dos ecuaciones independientes en 3 incógnitas: $3-2=1$ parámetro).</li>
+    <li>Despejando de abajo arriba: $x_2=-2x_3$ y $x_1=-x_2-3x_3=2x_3-3x_3=-x_3$. Tomando como parámetro $x_3=-t$: $x_1=t,\ x_2=2t,\ x_3=-t$.</li>
+    <li>$\operatorname{Nuc}(f)=\langle(1,2,-1)\rangle$, de <b>dimensión 1</b>. Comprobación: $f(1,2,-1)=(1+2-3,\ 2-2)=(0,0)$ ✓.</li>
+  </ol>
+  <p><b>(b) La $f$ del Ej. 3.11</b> ($f(a+bx+cx^2)=(a,\,b+c,\,0)$). Un polinomio está en el núcleo si $(a,\,b+c,\,0)=(0,0,0)$:
+  $$\begin{cases}a=0\\b+c=0\end{cases}\ \Longrightarrow\ a=0,\ b=-c\ \Longrightarrow\ p=-c\,x+c\,x^2=c\,(x^2-x).$$
+  Luego $\operatorname{Nuc}(f)=\langle x-x^2\rangle$, de dimensión 1. <i>(Con (b) y el Ej. 3.11: $2+1=3=\operatorname{Dim}\wp_2$.)</i></p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.14, p. 111">U p.111</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: núcleo e imagen de una aplicación de $\mathbb R^2$ en $\mathbb R^2$</span>
+  <p>Cambia los cuatro números de la matriz $A$ (es la aplicación $f(x)=Ax$) y mueve el vector $x$. Con la matriz inicial (rango 1) verás la <b>recta naranja</b> (núcleo, a la izquierda: lo que se aplasta en el origen) y la <b>recta azul</b> (imagen, a la derecha: lo que se alcanza), y que la recta verde discontinua $x+\operatorname{Nuc}$ se aplasta entera en un punto. Prueba «Isomorfismo» (núcleo $=\{0\}$, imagen $=\mathbb R^2$) y «Aplicación nula» (núcleo $=\mathbb R^2$) y comprueba siempre que <b>dim núcleo + dim imagen = 2</b>.</p>
+  <div class="anim-lineal" data-modo="nucimg" data-m="1,2,2,4"></div>
+  <p class="note">«Inyectiva» y «sobreyectiva», que aparecen en los mensajes del componente, son vocabulario de Lay (§5), no de U.</p>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo 3D: núcleo e imagen de $f:\mathbb R^3\to\mathbb R^3$</span>
+  <p>Con una matriz $3\times3$ el núcleo puede ser el origen, una recta, un plano o todo $\mathbb R^3$, y la imagen también; siempre se cumple $\operatorname{Dim}\operatorname{Nuc}f+\operatorname{Dim}\operatorname{Im}f=3$. Pulsa los casos preparados y mueve el vector $x$.</p>
+  <div class="d3-nuc" data-m="1,0,0;0,1,0;0,0,0"></div>
+  <span class="src" data-l="P" data-ref="Figura 3D propia (componente assets/tres-d.js, three.js)">P</span>
+</div>
+
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>«El núcleo es el cero».</b> $\{\bar0\}$ es el núcleo solo si <i>nada más</i> se aplasta. En el Ej. 3.14 hay una recta entera. La derivada en polinomios (E 3.26) aplasta todas las constantes.</li>
+    <li><b>Dar como «base» el vector $\bar0$</b> o las ecuaciones: una base son <i>vectores</i> libres que generan; el $\bar0$ nunca está en una base (un sistema con el $\bar0$ es ligado). Si el núcleo es $\{\bar0\}$, la base es vacía y la dimensión 0.</li>
+    <li><b>Ignorar una variable libre:</b> si una variable no aparece en la fórmula de $f$ (como $z$ en $f(x,y,z)=(x,y)$), queda libre en el núcleo.</li>
+  </ul>
+</div>
+

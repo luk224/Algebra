@@ -1,0 +1,91 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>La imagen de una aplicación lineal <span class="src" data-l="U" data-ref="U §3.2.2 Imagen, Definición 3.2, Figura 3.1 y Ejemplos 3.8-3.11, p. 105-109">U p.105-109</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>La imagen son <b>todos los valores que $f$ puede tomar</b>: los vectores de $W$ que tienen «algún original» en $V$. Como $f$ respeta combinaciones lineales, si ya sabes lo que hace con los vectores de una base, <b>todos los demás valores son combinaciones de esos</b>. Por eso la imagen es el subespacio <b>generado por las imágenes de la base</b>: es lo que se calcula siempre.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 3.2 — imagen</span>
+  <p>Sea $f:V\to W$ lineal. La <b>imagen</b> de $f$ es
+  $$\operatorname{Im}(f)=\{\,w\in W\mid w=f(v)\ \text{para algún } v\in V\,\}.$$
+  <b>La imagen de $f$ es un subespacio de $W$.</b></p>
+  <span class="src" data-l="U" data-ref="U Definición 3.2, p. 106">U p.106</span>
+</div>
+
+<div class="box thm"><span class="h">¿Por qué es un subespacio? (demostración de U)</span>
+  <p>Basta ver (criterio de U p.66) que si $w_1,w_2\in\operatorname{Im}(f)$ y $\lambda\in\mathbb R$, entonces $w_1+\lambda w_2\in\operatorname{Im}(f)$. Como $w_1,w_2$ están en la imagen, existen $v_1,v_2\in V$ con $f(v_1)=w_1$ y $f(v_2)=w_2$. Por ser $f$ lineal,
+  $$w_1+\lambda w_2=f(v_1)+\lambda f(v_2)=f(v_1+\lambda v_2),$$
+  y $v_1+\lambda v_2\in V$ porque $V$ es espacio vectorial. Luego $w_1+\lambda w_2$ tiene un original en $V$, es decir, está en $\operatorname{Im}(f)$. (Además $\bar0=f(\bar0)\in\operatorname{Im}(f)$, así que no es vacío.)</p>
+  <span class="src" data-l="U" data-ref="U demostración de que la imagen es subespacio, p. 106">U p.106</span>
+</div>
+
+<figure class="bookfig">
+  <img src="../assets/img/fig_u_3_1.png" alt="Diagrama de flechas de U: varios vectores del espacio V se envían mediante f a vectores del espacio W; todos caen dentro de un óvalo rosa etiquetado Im(f), contenido en W" loading="lazy">
+  <figcaption>Figura 3.1 de U: la imagen de $f$ es la parte de $W$ a la que llegan las flechas; puede ser todo $W$ o solo un subespacio. <span class="src" data-l="U" data-ref="U Figura 3.1, Imagen de una aplicación lineal, p. 106">U p.106</span></figcaption>
+</figure>
+
+<div class="box thm"><span class="h">Cómo se calcula la imagen: generada por las imágenes de una base</span>
+  <p>Si $\{e_1,\dots,e_n\}$ es una base de $V$ (en $\mathbb R^n$, la canónica), entonces
+  $$\operatorname{Im}(f)=\langle f(e_1),\dots,f(e_n)\rangle.$$
+  <i>Por qué:</i> todo $v\in V$ es $v=x_1e_1+\dots+x_ne_n$ y, por linealidad (U p.103), $f(v)=x_1f(e_1)+\dots+x_nf(e_n)$: toda imagen es combinación de las $f(e_j)$ y recíprocamente cualquier combinación de ellas es la imagen del $v$ correspondiente. Después se <b>suprimen los dependientes</b> (Teor. 2.1, U p.79) y la <b>dimensión</b> es el <b>rango</b> de esos vectores (Teor. 2.5, U p.88). Si la aplicación está dada por una matriz $A$, estos generadores son sus <b>columnas</b>.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 3.9 y 3.10 (la imagen está generada por las imágenes de la base), p. 107-108; propiedad 3, p. 103">U p.107-108</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.8 (U) — una condición «a simple vista»</span>
+  <p>Sea $M$ el espacio de las matrices $\begin{pmatrix}a_{11}&a_{12}\\a_{21}&0\end{pmatrix}$ y $f:M\to\mathbb R^4$ la aplicación del Ej. 3.1, que lleva
+  $$f\begin{pmatrix}a_{11}&a_{12}\\a_{21}&0\end{pmatrix}=(a_{11}+a_{12},\ a_{12}-a_{11},\ a_{21},\ 0).$$</p>
+  <ol class="steps">
+    <li>Se ve a simple vista que la <b>última coordenada es siempre 0</b>: ningún vector de $\mathbb R^4$ con $x_4\neq0$ es imagen de una matriz de $M$.</li>
+    <li>Pero eso por sí solo <b>no prueba</b> que se alcancen todos los demás. Hay que comprobar que, dado $(x_1,x_2,x_3,x_4)$ con $x_4=0$, el sistema
+    $$\begin{cases}x_1=a_{11}+a_{12}\\x_2=a_{12}-a_{11}\\x_3=a_{21}\end{cases}$$
+    tiene solución en $a_{11},a_{12},a_{21}$: la matriz de coeficientes es $3\times3$ de determinante $\ne0$ (en las dos primeras ecuaciones, sumando y restando se despejan $a_{12}=\tfrac{x_1+x_2}2$, $a_{11}=\tfrac{x_1-x_2}2$).</li>
+    <li>Por tanto $\operatorname{Im}(f)=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4\mid x_4=0\}$: aquí la condición visible sí era suficiente (no siempre lo es).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.8, p. 106-107">U p.106-107</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.9 (U) — imagen $=\mathbb R^3$</span>
+  <p>$f:\mathbb R^3\to\mathbb R^3$, $f(x_1,x_2,x_3)=(x_1+x_2,\ x_3,\ x_2)$.</p>
+  <ol class="steps">
+    <li><b>Separar por variables</b> (la linealidad permite sacar los escalares $x_i$):
+    $$f(x_1,x_2,x_3)=x_1\begin{pmatrix}1\\0\\0\end{pmatrix}+x_2\begin{pmatrix}1\\0\\1\end{pmatrix}+x_3\begin{pmatrix}0\\1\\0\end{pmatrix}.$$
+    Así $\{(1,0,0),(1,0,1),(0,1,0)\}$ es un <b>sistema generador</b> de $\operatorname{Im}(f)$.</li>
+    <li><b>¿Es libre?</b> El determinante de los tres vectores es
+    $$\begin{vmatrix}1&1&0\\0&0&1\\0&1&0\end{vmatrix}=1\cdot(0\cdot0-1\cdot1)=-1\neq0,$$
+    luego son independientes: forman una base y $\operatorname{Dim}\operatorname{Im}(f)=3$.</li>
+    <li><b>Conclusión.</b> $\operatorname{Im}(f)=\langle(1,0,0),(1,0,1),(0,1,0)\rangle=\mathbb R^3$: un subespacio de $\mathbb R^3$ de dimensión 3 es todo $\mathbb R^3$ (Teor. 2.6: sus 3 vectores de base son libres en $\mathbb R^3$ y, al ser $3=\operatorname{Dim}\mathbb R^3$, forman base de $\mathbb R^3$; luego el subespacio es $\mathbb R^3$).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.9, p. 107">U p.107</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.10 (U) — aplicación dada por las imágenes de la base canónica</span>
+  <p>$f:\mathbb R^3\to\mathbb R^2$ con $f(1,0,0)=(1,0)$, $f(0,1,0)=(1,1)$, $f(0,0,1)=(3,2)$.</p>
+  <ol class="steps">
+    <li><b>Fórmula de $f$.</b> Por linealidad,
+    $$f(x_1,x_2,x_3)=x_1\begin{pmatrix}1\\0\end{pmatrix}+x_2\begin{pmatrix}1\\1\end{pmatrix}+x_3\begin{pmatrix}3\\2\end{pmatrix}.$$</li>
+    <li><b>Generadores.</b> $\operatorname{Im}(f)=\langle(1,0),(1,1),(3,2)\rangle$. Son tres vectores, pero la <b>dimensión no es 3</b> (estamos en $\mathbb R^2$): es el rango. $(1,0)$ y $(1,1)$ no son proporcionales, luego el rango es 2 (se ve en $\begin{vmatrix}1&1\\0&1\end{vmatrix}=1\neq0$). Y $(3,2)=(1,0)+2\,(1,1)$ sobra.</li>
+    <li><b>Conclusión.</b> Dos vectores independientes en $\mathbb R^2$ son base de $\mathbb R^2$: $\operatorname{Im}(f)=\mathbb R^2$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.10, p. 108">U p.108</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.11 (U) — dimensión y ecuaciones cartesianas de la imagen</span>
+  <p>$f:\wp_2\to\mathbb R^3$, $f(a+bx+cx^2)=(a,\ b+c,\ 0)$, con $\wp_2$ los polinomios de grado $\le2$.</p>
+  <ol class="steps">
+    <li><b>Los elementos de la imagen</b> son los $(a,\,b+c,\,0)$ con $a,b,c\in\mathbb R$ cualesquiera. Separando,
+    $$\begin{pmatrix}a\\b+c\\0\end{pmatrix}=a\begin{pmatrix}1\\0\\0\end{pmatrix}+(b+c)\begin{pmatrix}0\\1\\0\end{pmatrix}.$$</li>
+    <li>Luego $\operatorname{Im}(f)=\langle(1,0,0),(0,1,0)\rangle$ (como $b+c$ toma cualquier valor, el segundo vector aparece con coeficiente libre) y <b>$\operatorname{Dim}\operatorname{Im}(f)=2$</b>.</li>
+    <li><b>Ecuación cartesiana.</b> La única coordenada que debe cumplir una condición es la tercera: <b>$x_3=0$</b> (en la notación del espacio de llegada, $y_3=0$): un plano de $\mathbb R^3$, $3-2=1$ ecuación.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.11, p. 108-109">U p.108-109</span>
+</div>
+
+<div class="box tip"><span class="h">Ecuaciones cartesianas de la imagen (cuando se piden)</span>
+  <p>Con los generadores de $\operatorname{Im}(f)$ ya depurados (una base), un vector $(y_1,\dots,y_m)\in W$ está en la imagen <b>si y solo si añadirlo no sube el rango</b> (Rouché: el sistema $f(x)=y$ es compatible). Se anulan los menores orlados (o el determinante, si hay un solo menor que orlar). Habrá $m-\operatorname{Dim}\operatorname{Im}(f)$ ecuaciones. Si la imagen es todo $W$, <b>no hay ecuaciones cartesianas</b> (E 3.16). Se ven aplicadas en E 3.23 y en varios ejemplos de examen.</p>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U §2.2 p. 71 y Rouché, §1.4 p. 30">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que la dimensión de la imagen es el <b>número de generadores</b>: es el <b>rango</b>. En el Ej. 3.10 hay 3 generadores y la dimensión es 2. Y otro, igual de frecuente: tomar las <b>filas</b> de la matriz como generadores de la imagen; son las <b>columnas</b> (cada columna es $f(e_j)$).</p>
+</div>
+

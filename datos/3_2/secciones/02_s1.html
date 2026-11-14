@@ -1,0 +1,43 @@
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>La idea: lo que se aplasta y lo que se alcanza <span class="src" data-l="P" data-ref="Explicación propia; introduce U Defs. 3.2 y 3.3, p. 106 y 109">propio</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Piensa en un <b>proyector de diapositivas</b> (o en una linterna que proyecta sombras): lleva puntos del espacio 3D a la pared 2D. <b>Núcleo</b> = los puntos que acaban exactamente en el origen de la pared (todo lo que está sobre «el rayo» que pasa por el origen se aplasta en un único punto). <b>Imagen</b> = todos los puntos de la pared que la sombra puede alcanzar. Una máquina que aplasta mucho (núcleo grande) alcanza poco (imagen pequeña), y al revés: eso es exactamente lo que dice el teorema de las dimensiones (§4).</p>
+</div>
+
+<table>
+  <tr><th>Lenguaje natural</th><th>Lenguaje de conjuntos</th><th>Lenguaje algebraico</th></tr>
+  <tr><td>$w$ es un valor que $f$ puede dar</td><td>$w\in\operatorname{Im}(f)\subset W$</td><td>existe $v\in V$ con $f(v)=w$ <i>(sistema $f(x)=w$ compatible)</i></td></tr>
+  <tr><td>$v$ es un vector que $f$ manda al cero</td><td>$v\in\operatorname{Nuc}(f)\subset V$</td><td>$f(v)=\bar0$ <i>(sistema homogéneo $Ax=0$)</i></td></tr>
+</table>
+<p class="note">U insiste en saber pasar de un lenguaje a otro (U p.105, «Orientaciones»).</p>
+
+<div class="box ex"><span class="h">Ejemplo guía 1 — de $\mathbb R^2$ a $\mathbb R^2$ (aplasta una dirección)</span>
+  <p>Sea $f:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(x+2y,\ 2x+4y)$. Fíjate en que la segunda coordenada es el doble de la primera:</p>
+  <ol class="steps">
+    <li><b>Qué alcanza (imagen).</b> Sacando factor común,
+    $$f(x,y)=(x+2y)\,(1,2).$$
+    Toda imagen es un múltiplo de $(1,2)$, y cualquier múltiplo $c\,(1,2)$ se alcanza (por ejemplo con $(x,y)=(c,0)$). Luego $\operatorname{Im}(f)=\langle(1,2)\rangle$: una <b>recta</b> de $\mathbb R^2$ (la de ecuación $y_2=2y_1$, escribiendo $(y_1,y_2)$ para el espacio de llegada). No se llega a todo el plano.</li>
+    <li><b>Qué se aplasta (núcleo).</b> $f(x,y)=(0,0)$ equivale a $x+2y=0$ (la segunda ecuación es la primera multiplicada por 2). Con $y=\lambda$ queda $x=-2\lambda$:
+    $$\operatorname{Nuc}(f)=\{\lambda\,(-2,1)\}=\langle(-2,1)\rangle,$$
+    otra <b>recta</b>. Comprobación: $f(-2,1)=(-2+2,\,-4+4)=(0,0)$ ✓.</li>
+    <li><b>Qué significa.</b> Los vectores $(1,0)$ y $(1,0)+(-2,1)=(-1,1)$ difieren en un vector del núcleo, y tienen <b>la misma imagen</b>: $f(1,0)=(1,2)$ y $f(-1,1)=(-1+2,\,-2+4)=(1,2)$. En general, <b>una recta paralela al núcleo entera se aplasta en un único punto</b>.</li>
+    <li><b>Dimensiones.</b> $\operatorname{Dim}\operatorname{Im}(f)=1$, $\operatorname{Dim}\operatorname{Nuc}(f)=1$ y $1+1=2=\operatorname{Dim}\mathbb R^2$ (anticipo del Teorema 3.1).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy (aplicación de matriz (1 2; 2 4), la misma del componente interactivo)">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo guía 2 — de $\mathbb R^3$ a $\mathbb R^2$ (la proyección: «sombra» sobre el suelo)</span>
+  <p>Sea $f:\mathbb R^3\to\mathbb R^2$, $f(x,y,z)=(x,\,y)$: «olvida la altura $z$».</p>
+  <ol class="steps">
+    <li><b>Imagen.</b> Dado cualquier $(a,b)\in\mathbb R^2$, el vector $(a,b,0)$ cumple $f(a,b,0)=(a,b)$. Se alcanza todo: $\operatorname{Im}(f)=\mathbb R^2$ (dimensión 2).</li>
+    <li><b>Núcleo.</b> $f(x,y,z)=(0,0)\iff x=0,\ y=0$, y $z$ queda <b>libre</b>. $\operatorname{Nuc}(f)=\{(0,0,z)\}=\langle(0,0,1)\rangle$: el <b>eje vertical</b>, dimensión 1. Es lo que se aplasta: todos los puntos de una misma vertical dan la misma sombra.</li>
+    <li><b>Dimensiones.</b> $2+1=3=\operatorname{Dim}\mathbb R^3$ ✓. Observa dónde vive cada uno: el núcleo es un subespacio de $\mathbb R^3$ (vectores de 3 coordenadas); la imagen, de $\mathbb R^2$ (2 coordenadas).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Confundir dónde vive cada subespacio.</b> $\operatorname{Nuc}(f)\subset V$ (espacio <b>inicial</b>), $\operatorname{Im}(f)\subset W$ (espacio <b>final</b>). Si $f:\mathbb R^4\to P_2$, una base del núcleo está formada por vectores de $\mathbb R^4$ (4 coordenadas) y una base de la imagen por polinomios de $P_2$ (3 coordenadas). Usa letras distintas para las coordenadas de uno y otro ($x_i$ en el inicial, $y_j$ en el final).</p>
+</div>
+
