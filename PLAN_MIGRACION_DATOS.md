@@ -97,13 +97,13 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
 ### F5 — Capa pedagógica en el resto de temas (ya con datos)
 **Cómo se hace F5.1 (proceso montado):** un agente por tema (sonnet) lee `herramientas/prompt_capa.md` y escribe `datos/X_Y/capa_propuesta.yaml` (niveles, pistas, tipos, esencial, quiz); se valida con `aplicar_capa.py X.Y --solo-validar`; después `aplicar_capa.py X.Y` lo aplica (mueve el enunciado, añade pistas, copia esencial/tipos/quiz a `tema.yaml`, pone `capa: true` y reconstruye). Revisar a mano una muestra de pistas por tema antes de commit. Estado por tema: ver la tabla de arriba (columna **P** = capa aplicada).
 - [ ] **5.1** Por tema: `nivel` y `pista` de cada ejercicio, fichas de método por tipo de problema, «Lo esencial en 5 minutos» y autoevaluación con el porqué de cada opción errónea. Se escribe en datos; el piloto 2.3 es el modelo.
-- [ ] **5.1b** Mejoras de contenido del piloto aún no aplicadas ni siquiera al 2.3 (decidir primero en el 2.3, luego extender):
+- [x] **5.1b** Mejoras de contenido del piloto aún no aplicadas ni siquiera al 2.3 (decidir primero en el 2.3, luego extender): *(hecho: pregunta motivadora por apartado —147—, consigna en 58 animaciones, resultado primero en 138 soluciones, 13 demostraciones plegadas como «Ampliación». Pendiente, a propósito: teoría en tarjetas cortas (exige reescribir la teoría)*
   - Teoría en tarjetas cortas (idea, definición, ejemplo mínimo, error típico) y el resto en «Ampliación» plegada (`details.ampl`). En el 2.3 solo se plegaron 2 bloques.
   - Pregunta motivadora de 2 líneas **antes** de cada definición.
   - Soluciones de práctica con «resultado + por qué» primero y el desarrollo largo tras «Ver desarrollo» (las de examen mantienen el desarrollo completo).
   - Cada animación con consigna: «mueve esto y fíjate en aquello» + pregunta que se responde observando.
   - Las pestañas arrancan en **Todo** (decidido por el usuario); Teoría, Por tipo, Ejercicios y Examen filtran.
-- [ ] **5.2** Series de práctica: añadir los generadores de cada tema a `assets/practica.js` y comprobarlos con `probar_practica.py` (0 errores). Orden por rentabilidad según `prioridades.html`: 1.2, 3.2, 6.2, 5.1, 1.3, 1.4, 4.3, 4.2.
+- [x] **5.2** Series de práctica: añadir los generadores de cada tema a `assets/practica.js` y comprobarlos con `probar_practica.py` (0 errores). Orden por rentabilidad según `prioridades.html`: 1.2, 3.2, 6.2, 5.1, 1.3, 1.4, 4.3, 4.2. *(hecho: 35 tipos de práctica verificados con sympy; series en los 26 temas)*
 - [x] **5.3** Revisión con el `revisor-tema` de cada tema. *(hecho: 26 de 26; correcciones aplicadas; restos en `CORRECCIONES_PENDIENTES.md`)*
 
 ### F6 — Procesos y agentes
