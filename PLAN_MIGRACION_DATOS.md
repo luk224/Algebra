@@ -1,13 +1,57 @@
 # Plan: temas como datos + plantillas
 
-> **ESTADO AL CERRAR LA SESIÓN (14-nov-2026, límite de uso):** hechas F1, F2, F3, F4, F5.1 (los 26 temas con capa), F5.2 (series de práctica en 11 temas; 20 generadores verificados), F6 (CLAUDE.md, agentes, `construir_todo.py`). **Pendiente:** F5.3 (revisión: ver `CORRECCIONES_PENDIENTES.md`, nada aplicado; faltan por recoger los informes de 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 4.1-4.4, 5.1-5.4, 6.1-6.5), F5.1b (mejoras de contenido: teoría en tarjetas, pregunta motivadora, soluciones con resultado primero, consignas en animaciones), generadores de práctica para los demás temas, y F7/F8 (esperan aprobación). Antes de seguir: `git pull`, `~/venv/bin/python herramientas/construir_todo.py --sin-practica`.
 
-**Alcance:** uso personal, solo contenido estático. Las pestañas arrancan en «Todo».
+**Alcance:** uso personal, solo contenido estático. Las pestañas arrancan en «Todo». **Estado: ver «ESTADO ACTUAL Y CÓMO CONTINUAR» más abajo.**
 
 Objetivo: dejar de editar a mano 26 HTML de ~120 KB. El contenido vive en **datos** (YAML + fragmentos HTML con LaTeX) y el HTML de `temas/` se **genera**. Así un cambio de diseño se aplica a todos los temas, los agentes abren trozos pequeños en vez de ficheros enormes y un validador impide que se pierda un ejercicio de examen.
 
 > **Regla de oro:** no se migra un tema si `verificar` no da «IDA Y VUELTA OK». Nunca se empieza el siguiente paso sin haber hecho commit del anterior.
 > **Estado:** el usuario ha aprobado solo el piloto (tema 2.3). **No migrar el resto hasta que el usuario lo confirme.**
+
+
+## ▶ ESTADO ACTUAL Y CÓMO CONTINUAR (actualizado el 14-nov-2026, tarde)
+
+**Todo lo aprobado está hecho y subido a `main`.** Fases F1-F8 completas; los 26 temas son datos + plantilla y llevan la capa pedagógica completa. El usuario dijo: «continúa» tras vaciar el contexto → leer esta sección y seguir por «Siguientes pasos».
+
+### Qué hay (resumen)
+- **Datos:** `datos/X_Y/{tema.yaml, secciones/*.html, ejercicios.yaml}` (26 temas), `datos/_plantilla/tema.html`, `datos/examenes.yaml` (registro generado), `datos/dependencias.yaml` (orden y dependencias, criterio del autor, dado por bueno por el usuario). `temas/*.html` son **generados** (no se editan a mano).
+- **Capa pedagógica por tema** (en `tema.yaml` y `ejercicios.yaml`): `esencial`, `tipos` (fichas + `series` de práctica), `quiz`, `que_cae_nota`, `motivacion` (pregunta por apartado), `consignas` (animaciones); por ejercicio: `nivel`, `pista`, `enunciado` visible, `problema`, `etiqueta`. Pestañas (arrancan en «Todo»), fuentes ocultas por defecto, resultado primero, demostraciones en «Ampliación».
+- **Páginas de estudio** (generadas): `index.html` (manual), `prioridades.html`, `ruta.html` (5 h/semana por defecto), `repaso.html` (276 tarjetas, Leitner en localStorage), `chuletas.html`, `glosario.html`, `mapa.html`.
+- **Prácticas:** `assets/practica.js` con 35 generadores (verificados con sympy: 35 tipos × 800 semillas, 0 errores); los 26 temas tienen series.
+- **Revisión:** los 26 temas revisados con agentes `revisor-tema`; correcciones aplicadas (`CORRECCIONES_PENDIENTES.md` = registro; solo queda 1.4 `ex-feb20b`, a propósito).
+
+### Alcance fijado por el usuario (no reabrir)
+Uso personal, solo contenido estático. **Sin** simulacros, tutor, servidor/usuarios, avisos legales ni trabajo de accesibilidad. Pestañas por defecto en «Todo». Nunca se pierde un ejercicio de examen (636 soluciones; 219 ejercicios de examen desarrollados paso a paso).
+
+### Flujo de trabajo y comandos (siempre `~/venv/bin/python`)
+| Qué | Comando |
+|---|---|
+| Reconstruir todo y comprobar | `herramientas/construir_todo.py` (`--sin-practica` para ir más rápido): valida, construye los 26 HTML, regenera examenes/prioridades/repaso/ruta/estudio y prueba los generadores |
+| ¿HTML = datos? | `herramientas/datos_tema.py estado x` |
+| Un tema | `datos_tema.py validar X.Y` / `construir X.Y` |
+| Pruebas del sitio (Chrome, ~3 min; usar `run_in_background`) | `herramientas/tests_sitio.py` (28 páginas × móvil/escritorio/oscuro; enlaces; recuentos) |
+| Corregir datos puntualmente | `herramientas/parche.py` (`setf`, `rep`, `repall`, `drop`, `tipo`, `quiz_why`, `quiz_opt`, `quiz_campo`…; fallan si el texto no existe) |
+| Capa de un tema nuevo | `aplicar_capa.py X.Y` (propuesta en `capa_propuesta.yaml`; instrucciones en `prompt_capa.md`; revisión: `prompt_revision_capa.md`) |
+| Motivación/consignas | `aplicar_motivacion.py X.Y` (propuesta `motivacion_propuesta.yaml`; `prompt_motivacion.md`) |
+| Generadores de práctica | añadir en `assets/practica.js` + prueba sympy en `herramientas/probar_practica.py`; enlazar con `series:` en el tipo de `tema.yaml` |
+Antes de cada commit: `construir_todo.py` → `TODO OK`, nº de `class="sol"` = 636. Commits en español con las líneas de atribución; `git pull --rebase --autostash origin main` al empezar; sin `--force`. No se vuelven a ejecutar `datos_tema.py extraer` ni `plantilla` (sobrescribirían ediciones).
+
+### Lecciones aprendidas (evitan repetir errores)
+- YAML: todo el texto en bloques literales `|-`; un valor sin comillas con «: » rompe el fichero (p. ej. `animacion: Interactivo: …`; el aplicador ya lo convierte).
+- Los agentes (sonnet para redactar, `revisor-tema` opus para revisar) son rápidos; lanzar en tandas de ≤7 para no agotar el límite de uso (ya ocurrió una vez). Su informe llega como mensaje; si la sesión se corta se pierde: volcar los hallazgos a un fichero del repo en cuanto llegan.
+- Los revisores encontraron errores reales (quiz con dos respuestas correctas, signos, datos falsos en enunciados, comparativas entre libros): merece la pena revisar todo contenido nuevo escrito por agentes.
+- Un mismo `id` de examen (p. ej. `ex-sep24`) existe en varios temas: designa el examen, no la pregunta; la clave es (tema, id). Solo cuentan los ejercicios con `pasos`.
+- Las cajas «Qué mirar en la animación» (tip) no son animaciones; `aplicar_motivacion.py` las excluye.
+- JSON de Playwright devuelve `-0.0` como número: normalizar con `+ 0` en los generadores.
+- Los PDF (`herramientas/exportar_pdf.py`) imprimen «Lo esencial», «Qué cae», fichas y «Si te atascas»; ocultan pistas, autoevaluación, series, pestañas y el aviso «GENERADO».
+
+### Siguientes pasos (candidatos, por orden; ninguno es obligatorio)
+1. **Teoría en tarjetas cortas** (idea → definición → ejemplo mínimo → error típico), con el resto en «Ampliación». Es lo único del piloto sin hacer: exige reescribir secciones de teoría (`secciones/*.html`); probar primero en un tema (p. ej. 2.3) y, si convence, extender por módulos con agentes + `revisor-tema`.
+2. **Tabla de notación** global con búsqueda (no hecha de F7.3).
+3. **Revisar a mano** una muestra de las 147 preguntas motivadoras y de las 58 consignas (las escribieron agentes sin revisor); p. ej. 3.2 `s4` está algo enrevesada.
+4. **Más prácticas** donde aún hay un solo generador por tema (ver `tipos[].series`); priorizar los temas de `prioridades.html` (1.2, 3.2, 6.2, 5.1, 1.3, 1.4, 4.3, 4.2).
+5. **Unificar** 1.4 `ex-feb20b` (convención de signo del multiplicador en L).
+6. Si el usuario lo pide: probar con estudiantes, publicar, etc. (hoy fuera de alcance).
 
 ## Cómo retomar el trabajo (si se acaba el contexto o los tokens)
 1. `cd ~/UNED/ALGEBRA/claude && git pull --rebase --autostash origin main && git log -8 --oneline`
