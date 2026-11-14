@@ -10,7 +10,8 @@ N = int(sys.argv[1]) if len(sys.argv) > 1 else 400
 tmp = pathlib.Path(tempfile.mkdtemp()) / 'p.html'
 tmp.write_text(f'<html><head><meta charset="utf-8"></head><body><script src="{(RAIZ/"assets/practica.js").as_uri()}"></script></body></html>')
 
-TIPOS = ['base3', 'cuenta', 'dimension', 'coord2', 'coordpol', 'rango', 'completar']
+TIPOS = ['base3', 'cuenta', 'dimension', 'coord2', 'coordpol', 'rango', 'completar',
+         'prod22', 'inv22', 'rango34', 'det3', 'detprop', 'sist2', 'clasifica', 'dimnuc', 'polcar22', 'diag22', 'proy', 'qmat', 'sylv']
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(); pg.goto(tmp.as_uri())
     datos = pg.evaluate("""(args)=>{const [tipos,N]=args,out={};
@@ -71,6 +72,56 @@ for t, lista in datos.items():
             if sp.expand(sum(l*e for l, e in zip(lam, E)) - p) != 0 or q['ans'] != lam: fallo(t, s, 'polinomio')
         elif t == 'rango':
             if sp.Matrix(d['rows']).rank() != d['ans'] or q['ans'] != [d['ans']]: fallo(t, s, 'rango')
+        elif t == 'prod22':
+            if list(sp.Matrix(d['A']) * sp.Matrix(d['B'])) != d['ans'] or q['ans'] != d['ans']: fallo(t, s, 'producto')
+        elif t == 'inv22':
+            Ai = sp.Matrix(d['A']).inv()
+            if any(abs(float(a) - b) > 1e-9 for a, b in zip(Ai, d['ans'])): fallo(t, s, 'inversa')
+        elif t == 'rango34':
+            if sp.Matrix(d['A']).rank() != d['ans']: fallo(t, s, 'rango34')
+        elif t == 'det3':
+            if sp.Matrix(d['M']).det() != d['ans']: fallo(t, s, 'det3')
+        elif t == 'detprop':
+            import random
+            f, n, k, c = d['f'], d['n'], d['k'], d['c']
+            # matriz real de orden n con determinante k para comprobar la propiedad con sympy
+            A = sp.diag(*([k] + [1] * (n - 1)))
+            esperado = {0: (c * A).det(), 1: A.inv().det(), 2: (A * A).det(), 3: A.T.det()}[f]
+            if abs(float(esperado) - d['ans']) > 1e-9: fallo(t, s, f'detprop f={f}')
+        elif t == 'sist2':
+            M = sp.Matrix(d['M']); sol = M.LUsolve(sp.Matrix(d['rhs']))
+            if list(sol) != d['ans'] or M.det() == 0: fallo(t, s, 'sist2')
+        elif t == 'clasifica':
+            A = sp.Matrix(d['A']); Ab = A.row_join(sp.Matrix(d['b']))
+            r0, r1 = A.rank(), Ab.rank()
+            cat = 2 if r0 < r1 else (0 if r0 == 3 else 1)
+            if (r0, r1, cat) != (d['r0'], d['r1'], d['cat']) or q['opts'].index(True) != cat: fallo(t, s, 'clasifica')
+        elif t == 'dimnuc':
+            r = sp.Matrix(d['A']).rank()
+            if d['ans'] != [4 - r, r] or len(sp.Matrix(d['A']).nullspace()) != 4 - r: fallo(t, s, 'dimnuc')
+        elif t == 'polcar22':
+            A = sp.Matrix(d['A']); ev = sorted(A.eigenvals().keys())
+            if [int(x) for x in ev] != d['ans']: fallo(t, s, 'polcar22')
+        elif t == 'diag22':
+            A = sp.Matrix(d['A']); real_diag = A.is_diagonalizable(reals_only=True)
+            if bool(real_diag) != d['si'] or q['opts'][0] != d['si']: fallo(t, s, 'diag22')
+        elif t == 'proy':
+            u = sp.Matrix(d['u']); v = sp.Matrix(d['v']); pr = (u.dot(v) / u.dot(u)) * u
+            if any(abs(float(a) - b) > 1e-9 for a, b in zip(pr, d['ans'])): fallo(t, s, 'proy')
+            if u.dot(v - pr) != 0: fallo(t, s, 'proy no ortogonal')
+        elif t == 'qmat':
+            xs = sp.symbols('x1 x2 x3'); a, b_, c, dd, e, f = d['co']
+            Q = a*xs[0]**2 + b_*xs[1]**2 + c*xs[2]**2 + dd*xs[0]*xs[1] + e*xs[0]*xs[2] + f*xs[1]*xs[2]
+            S = sp.Matrix([[d['ans'][0], d['ans'][1], d['ans'][2]], [d['ans'][1], d['ans'][3], d['ans'][4]], [d['ans'][2], d['ans'][4], d['ans'][5]]])
+            X = sp.Matrix(xs)
+            if sp.expand((X.T * S * X)[0] - Q) != 0: fallo(t, s, 'qmat')
+        elif t == 'sylv':
+            S = sp.Matrix([[d['a'], d['b']], [d['b'], d['c']]])
+            ev = list(S.eigenvals().keys()); pos = [float(x) for x in ev if float(x) > 1e-9]; neg = [float(x) for x in ev if float(x) < -1e-9]
+            mult = S.eigenvals()
+            npos = sum(m for x, m in mult.items() if float(x) > 1e-9); nneg = sum(m for x, m in mult.items() if float(x) < -1e-9)
+            cat = 0 if (npos == 2) else 1 if (nneg == 2) else 2 if (npos == 1 and nneg == 1) else 3
+            if cat != d['cat'] or q['opts'].index(True) != d['cat']: fallo(t, s, 'sylv')
         elif t == 'completar':
             u1, u2 = d['u']
             dets = [sp.Matrix([u1, u2, o['v']]).det() for o in d['opts']]
@@ -90,12 +141,18 @@ with sync_playwright() as p:
         if(!igual(alt,[x,y])&&!igual(alt,v)&&!igual(alt,[y,x])) out.push(['coord2-filas',q.diag(alt)]);
         q=G.coordpol(s*31+5);d=q.data;out.push(['pol-canon',q.diag([d.p[2],d.p[1],d.p[0]])]);
         q=G.rango(s*31+5);d=q.data;out.push(['rango-cuenta',q.diag([4])]);
+        q=G.prod22(s*31+5);d=q.data;let A=d.A,B=d.B,mm=(X,Y)=>[X[0][0]*Y[0][0]+X[0][1]*Y[1][0],X[0][1]*Y[1][1]+X[0][0]*Y[0][1],X[1][0]*Y[0][0]+X[1][1]*Y[1][0],X[1][0]*Y[0][1]+X[1][1]*Y[1][1]];
+        out.push(['prod-BA',q.diag(mm(B,A))]);{const H=[A[0][0]*B[0][0],A[0][1]*B[0][1],A[1][0]*B[1][0],A[1][1]*B[1][1]],BA=mm(B,A); if(H.some((x,i)=>x!==BA[i])) out.push(['prod-had',q.diag(H)]);}
+        q=G.inv22(s*31+5);d=q.data;A=d.A;out.push(['inv-adj',Math.abs(d.det)===1?'dividir':q.diag([A[1][1],-A[0][1],-A[1][0],A[0][0]])]);
+        q=G.det3(s*31+5);d=q.data;out.push(['det-signo',q.diag([-d.ans])]);
+        q=G.polcar22(s*31+5);d=q.data;out.push(['pc-signos',q.diag([-d.ans[1],-d.ans[0]])]);
+        q=G.qmat(s*31+5);d=q.data;out.push(['qmat-mitad',q.diag([d.co[0],d.co[3],d.co[4],d.co[1],d.co[5],d.co[2]])]);
       } return out;}""", 300)
     b.close()
-CLAVE = {'coord2-canon': 'canónica', 'coord2-orden': 'orden', 'coord2-filas': 'filas', 'pol-canon': 'canónica', 'rango-cuenta': 'contado'}
+CLAVE = {'prod-BA': 'BA', 'prod-had': 'entrada a entrada', 'inv-adj': 'dividir', 'det-signo': 'signo', 'pc-signos': 'signos', 'qmat-mitad': 'mitad', 'coord2-canon': 'canónica', 'coord2-orden': 'orden', 'coord2-filas': 'filas', 'pol-canon': 'canónica', 'rango-cuenta': 'contado'}
 mal = [k for k, m in diag if CLAVE[k] not in (m or '') and not (k == 'pol-canon' and 'canónica' in (m or ''))]
 # pol-canon con p0,p1,p2 invertido: el primer test usa [p2,p1,p0] -> mensaje de 'mayor a menor grado'
-mal = [k for k, m in diag if (CLAVE[k] not in (m or '')) and not (k == 'pol-canon' and 'mayor a menor' in (m or '')) and not (k=='rango-cuenta' and 'Esa es la dimensión' in (m or ''))]
+mal = [k for k, m in diag if (CLAVE[k] not in (m or '')) and not (k == 'pol-canon' and 'mayor a menor' in (m or '')) and not (k=='rango-cuenta' and 'Esa es la dimensión' in (m or '')) and not (k=='det-signo' and 'sumado' in (m or '')) and not (k=='pc-signos' and ('traza' in (m or '') or 'menor a mayor' in (m or '')))]
 print('diagnósticos incorrectos:', len(mal), 'de', len(diag))
 if mal:
     errores.append('diagnóstico ' + mal[0])
