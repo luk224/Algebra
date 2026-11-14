@@ -1,0 +1,105 @@
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Qué es una aplicación lineal <span class="src" data-l="U" data-ref="U §3.1.2 Definición 3.1 y Ejemplos 3.1-3.2, p. 101-103">U p.101-103</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: «respeta sumas y múltiplos»</span>
+  <p>Una <b>aplicación</b> $f:V\to W$ asigna a cada vector $v$ de $V$ <b>un único</b> vector $f(v)$ de $W$. Ahora bien, $V$ y $W$ no son simples conjuntos: tienen suma y producto por escalares. Una aplicación es <b>lineal</b> si lleva esas operaciones de $V$ a las de $W$ sin estropearlas:</p>
+  <ul>
+    <li><b>conserva la suma:</b> la imagen de una suma es la suma de las imágenes, $f(u+v)=f(u)+f(v)$;</li>
+    <li><b>conserva el producto por escalares:</b> la imagen de un múltiplo es el múltiplo de la imagen, $f(\lambda u)=\lambda f(u)$.</li>
+  </ul>
+  <p>Analogía: pasar de euros a dólares con un cambio fijo. Si pagas 3 € + 5 € y conviertes, es igual que convertir 3 €, convertir 5 € y sumar; y convertir «el doble» es «el doble de lo convertido». Ahora bien, si el banco te cobra además una comisión fija de $1$ por operación, ya no se cumple (convertir 0 € te cuesta $1$): la conversión pasa de ser lineal a ser <b>afín</b>.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 3.1 — aplicación lineal</span>
+  <p>Sean $V$ y $W$ espacios vectoriales (sobre $\mathbb R$). Una aplicación $f:V\to W$ es <b>lineal</b> si para todo $v,u\in V$ y todo escalar $\lambda\in\mathbb R$:
+$$f(v+\lambda u)=f(v)+\lambda f(u).$$
+A las aplicaciones lineales también se las llama <b>transformaciones lineales</b>. Si además $V=W$ (el mismo espacio de partida y de llegada) se dice que $f$ es un <b>endomorfismo</b>.</p>
+  <span class="src" data-l="U" data-ref="U Definición 3.1, p. 101">U p.101</span>
+  <span class="src" data-l="U" data-ref="U p. 103: «las aplicaciones que conservan las operaciones… reciben el nombre de aplicaciones lineales o transformaciones lineales»">U p.103</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, solución del Ej. 3.1 C (definición de endomorfismo), p. 80">E p.80</span>
+</div>
+
+<div class="box thm"><span class="h">La definición equivale a dos condiciones por separado</span>
+  <p>$f$ es lineal $\iff$ se cumplen a la vez:</p>
+  <p>(i) $f(u+v)=f(u)+f(v)$ (conserva la suma) &nbsp;&nbsp; y &nbsp;&nbsp; (ii) $f(\lambda u)=\lambda f(u)$ (conserva el producto por escalares).</p>
+  <p><i>Por qué.</i> ($\Rightarrow$) Con $\lambda=1$ en la Def. 3.1 sale (i). Para (ii): tomando el primer vector igual a $0$, $f(0+\lambda u)=f(0)+\lambda f(u)$, y como $f(0)=0$ (P1, §3), $f(\lambda u)=\lambda f(u)$. ($\Leftarrow$) $f(v+\lambda u)=f(v)+f(\lambda u)=f(v)+\lambda f(u)$ usando primero (i) y luego (ii). Por eso E y Lay comprueban (i) y (ii) por separado, y U las junta en una sola igualdad: es lo mismo.</p>
+  <span class="src" data-l="U" data-ref="U p. 103: «Conserva la suma: f(A+B)=f(A)+f(B). Conserva el producto por escalares f(λA)=λf(A)»">U p.103</span>
+  <span class="src" data-l="L" data-ref="Lay §1.8, Definición de transformación lineal (i. T(u+v)=T(u)+T(v); ii. T(cu)=cT(u)), p. 65">L §1.8 p.65</span>
+  <span class="src" data-l="L" data-ref="Lay §4.2, Definición de transformación lineal entre espacios vectoriales V y W, p. 204">L §4.2 p.204</span>
+</div>
+
+<div class="box ex"><span class="h">Primer ejemplo numérico en $\mathbb R^2$</span>
+  <p>Sea $f:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(x+y,\ 2x-y)$. Tomemos $u=(1,2)$, $v=(3,-1)$ y $\lambda=2$ y comprobemos la igualdad de la Def. 3.1 <b>con números</b> (no es una demostración, solo «ver» qué afirma):</p>
+  <ol class="steps">
+    <li><b>Primer miembro.</b> $u+\lambda v=(1,2)+2(3,-1)=(7,0)$, y
+      $$f(7,0)=(7+0,\ 2\cdot7-0)=(7,14).$$</li>
+    <li><b>Segundo miembro.</b> $f(u)=(3,0)$, $f(v)=(2,7)$, luego
+      $$f(u)+\lambda f(v)=(3,0)+2(2,7)=(7,14).$$</li>
+    <li><b>Coinciden.</b> Transformar la combinación o combinar las transformadas da lo mismo. (Para <i>demostrar</i> que $f$ es lineal hay que hacerlo con $u,v,\lambda$ <b>genéricos</b>, como en los Ejemplos 3.1-3.2 de abajo.)</li>
+  </ol>
+  <p><b>Y una aplicación que no lo cumple:</b> $g(x,y)=(x+1,\ y)$ (una <b>traslación</b>). Con los mismos $u,v,\lambda$: $g(u+\lambda v)=g(7,0)=(8,0)$, pero $g(u)+\lambda g(v)=(2,2)+2(4,-1)=(10,0)$. Distintos: $g$ <b>no</b> es lineal. (Un solo caso que falle basta para negar la linealidad; un solo caso que cuadre no la prueba.)</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: «transformar la combinación» frente a «combinar las transformadas»</span>
+  <p>Elige una aplicación del desplegable y mueve $\alpha$ y $\beta$: a la izquierda ves $w=\alpha u+\beta v$ en el espacio de partida; a la derecha, $f(w)$ (flecha verde) y $\alpha f(u)+\beta f(v)$ (flecha morada discontinua). En una aplicación lineal las dos flechas <b>siempre coinciden</b>; en las no lineales (traslación, cuadrados, productos) se separan para casi todos los valores de $\alpha,\beta$. Ojo: en la traslación $g(x,y)=(x+1,y)$ las flechas <b>sí coinciden cuando $\alpha+\beta=1$</b> (p. ej. $\alpha=\beta=0{,}5$); por eso un caso que cuadra <b>no demuestra</b> la linealidad.</p>
+  <div class="anim-lineal" data-modo="lineal" data-u="2,1" data-v="-1,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<figure>
+  <svg class="fig" viewBox="0 0 520 215" role="img" aria-label="Una aplicación lineal f lleva los vectores u, v y u+v del espacio V a f(u), f(v) y f(u)+f(v) del espacio W: el paralelogramo de la izquierda se transforma en el paralelogramo de la derecha">
+    <rect x="10" y="28" width="225" height="170" rx="8" fill="none" stroke="currentColor" stroke-opacity=".35"></rect>
+    <rect x="285" y="28" width="225" height="170" rx="8" fill="none" stroke="currentColor" stroke-opacity=".35"></rect>
+    <line class="a" x1="60" y1="170" x2="140" y2="130"></line>
+    <line class="b" x1="60" y1="170" x2="90" y2="100"></line>
+    <line class="ax" x1="60" y1="170" x2="170" y2="60"></line>
+    <line class="th" x1="140" y1="130" x2="170" y2="60" stroke-dasharray="5 4"></line>
+    <line class="th" x1="90" y1="100" x2="170" y2="60" stroke-dasharray="5 4"></line>
+    <circle class="op" cx="60" cy="170" r="4"></circle>
+    <line class="a" x1="340" y1="170" x2="440" y2="160"></line>
+    <line class="b" x1="340" y1="170" x2="360" y2="90"></line>
+    <line class="ax" x1="340" y1="170" x2="460" y2="80"></line>
+    <line class="th" x1="440" y1="160" x2="460" y2="80" stroke-dasharray="5 4"></line>
+    <line class="th" x1="360" y1="90" x2="460" y2="80" stroke-dasharray="5 4"></line>
+    <circle class="op" cx="340" cy="170" r="4"></circle>
+    <text class="sm" x="18" y="46">V (espacio inicial)</text>
+    <text class="sm" x="293" y="46">W (espacio final)</text>
+    <text class="sm" x="112" y="156">u</text>
+    <text class="sm" x="62" y="118">v</text>
+    <text class="sm" x="176" y="58">u+v</text>
+    <text class="sm" x="395" y="184">f(u)</text>
+    <text class="sm" x="336" y="116" text-anchor="end">f(v)</text>
+    <text class="sm" x="506" y="68" text-anchor="end">f(u)+f(v) = f(u+v)</text>
+    <text class="lg" x="260" y="108" text-anchor="middle">f ⟶</text>
+    <text class="lg" x="260" y="16" text-anchor="middle">f lleva paralelogramos en paralelogramos</text>
+  </svg>
+  <figcaption>Una aplicación lineal respeta la suma: el paralelogramo que forman $u$, $v$ y $u+v$ se transforma en el que forman $f(u)$, $f(v)$ y $f(u)+f(v)$, y la diagonal $u+v$ va a la diagonal $f(u+v)=f(u)+f(v)$. Que ambos sean paralelogramos es lo que significa «conservar la suma». Figura propia (ejemplo ilustrativo; $f$ no es una aplicación concreta del texto). <span class="src" data-l="P" data-ref="Figura propia, ilustra la Definición 3.1 de U p. 101 y L §1.8 p. 65">P</span></figcaption>
+</figure>
+
+<div class="box ex"><span class="h">Ej. U 3.1-3.2 — una aplicación lineal entre matrices y vectores</span>
+  <p>$M$ es el espacio de las matrices cuadradas de orden 2 con $a_{22}=0$; $f:M\to\mathbb R^4$ se define como
+  $$f\begin{pmatrix}a_{11}&a_{12}\cr a_{21}&0\end{pmatrix}=(a_{11}+a_{12},\ a_{12}-a_{11},\ a_{21},\ 0).$$
+  Intervienen tres cosas (U p.101-102): el espacio inicial $M$, el espacio final $\mathbb R^4$ y la regla $f$. Para comprobar que es lineal (U p.102: «una técnica es desarrollar independientemente los dos miembros y compararlos») se toman $v=\begin{pmatrix}a_{11}&a_{12}\cr a_{21}&0\end{pmatrix}$, $w=\begin{pmatrix}b_{11}&b_{12}\cr b_{21}&0\end{pmatrix}$ y $\lambda\in\mathbb R$:</p>
+  <ol class="steps">
+    <li><b>Primer miembro.</b> $v+\lambda w$ tiene entradas $a_{11}+\lambda b_{11}$, $a_{12}+\lambda b_{12}$, $a_{21}+\lambda b_{21}$ y $0$, luego
+      $$\begin{gathered}f(v+\lambda w)=\big(\cr{}a_{11}+\lambda b_{11}+a_{12}+\lambda b_{12},\cr{}a_{12}+\lambda b_{12}-a_{11}-\lambda b_{11},\cr{}a_{21}+\lambda b_{21},\ 0\big).\end{gathered}$$</li>
+    <li><b>Segundo miembro.</b>
+      $$\begin{gathered}f(v)+\lambda f(w)=\big(\cr{}a_{11}+a_{12}+\lambda(b_{11}+b_{12}),\cr{}a_{12}-a_{11}+\lambda(b_{12}-b_{11}),\cr{}a_{21}+\lambda b_{21},\ 0\big).\end{gathered}$$</li>
+    <li><b>Conclusión.</b> Ambos miembros son idénticos, luego $f$ es lineal. (La imagen de una suma es la suma de imágenes y la de un múltiplo, el múltiplo de la imagen: U p.103.)</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 3.1 y 3.2, p. 101-102">U p.101-102</span>
+</div>
+
+<div class="box tip"><span class="h">Cómo demostrar que una aplicación <b>es</b> lineal (receta)</span>
+  <ol>
+    <li>Escribe los vectores <b>genéricos</b> $v=(x_1,\dots)$, $u=(y_1,\dots)$ y el escalar $\lambda$, y calcula $v+\lambda u$ componente a componente.</li>
+    <li>Desarrolla <b>por separado</b> el primer miembro $f(v+\lambda u)$ (aplicando la fórmula de $f$ a $v+\lambda u$) y el segundo $f(v)+\lambda f(u)$.</li>
+    <li>Compara: si son iguales para todo $v,u,\lambda$, $f$ es lineal. <b>Señal rápida:</b> si cada componente de $f(x)$ es una combinación $a_1x_1+\dots+a_nx_n$ <b>sin término independiente ni productos, potencias, valores absolutos…</b>, la igualdad saldrá siempre.</li>
+  </ol>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Escribir como primer paso «$f(v+\lambda u)=f(v)+\lambda f(u)$» y seguir: eso es lo que hay que <b>demostrar</b>, no puede darse por supuesto. Y confundir «lineal» con «endomorfismo»: $f:\mathbb R^2\to\mathbb R^3$ puede ser perfectamente lineal y, sin embargo, <b>no</b> es endomorfismo porque $\mathbb R^2\neq\mathbb R^3$ (ver Ej. 3.2 y la autoevaluación de U p.138).</p>
+</div>
+

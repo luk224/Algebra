@@ -1,0 +1,65 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>La imagen de una combinación lineal: calcular $f(w)$ con pocos datos <span class="src" data-l="U" data-ref="U p. 103 (propiedad 3) y adelanto del Teorema 3.2, p. 114">U p.103 y p.114</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una aplicación lineal es una «máquina» que, por ser tan rígida, queda <b>totalmente determinada</b> por lo que hace a unos pocos vectores: <b>los de una base</b>. Es como un decorado montado sobre unos cuantos postes: si sabes dónde caen los postes y que la tela entre ellos es «elástica y proporcional», sabes dónde cae cualquier punto. Matemáticamente: todo $w$ es $w=a_1e_1+\dots+a_ne_n$ (de forma única, Def. 2.10), y por P3 $f(w)=a_1f(e_1)+\dots+a_nf(e_n)$. Los $a_i$ se calculan en el <b>espacio inicial</b> y se reutilizan <b>tal cual</b> en el final.</p>
+</div>
+
+<div class="box tip"><span class="h">Receta: hallar $f(w)$ conociendo $f(v_1),\dots,f(v_k)$</span>
+  <ol>
+    <li><b>Plantea</b> $w=a_1v_1+\dots+a_kv_k$ con los vectores del <b>espacio inicial</b> cuya imagen conoces; igualando coordenadas sale un sistema para $a_1,\dots,a_k$.</li>
+    <li><b>Resuelve y comprueba</b> la combinación (sustituyendo): ¡es el paso donde más se falla!</li>
+    <li><b>Aplica P3:</b> $f(w)=a_1f(v_1)+\dots+a_kf(v_k)$ con <b>esos mismos</b> coeficientes y las <b>imágenes</b> dadas.</li>
+  </ol>
+  <p><b>Casos.</b> (a) Si los $v_i$ forman una <b>base</b>, la combinación <b>existe y es única</b> (una base es generadora y libre, Def. 2.9-2.10, U p.82-85) y $f(w)$ queda determinada: es el contenido del Teorema 3.2 de U p.114 (§3.3), que solo afirma que la imagen de cualquier vector está determinada por las imágenes de una base. (Para <i>cualesquiera</i> imágenes de la base sí existe una aplicación lineal que las tome.) (b) Si los $v_i$ <b>generan pero son ligados</b>: la combinación existe, <b>no es única</b>, y $f(w)$ solo está bien definida si los datos son <b>compatibles</b> (cualquier combinación debe dar el mismo resultado; ver «Datos incompatibles» abajo). (c) Si no generan, puede no haber combinación y entonces los datos no determinan $f(w)$.</p>
+  <span class="src" data-l="U" data-ref="U propiedad 3 (p. 103); Teorema 3.2: la imagen de cualquier vector está determinada por las imágenes de una base (adelanto, §3.3.2, p. 114)">U p.103 y p.114</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo con la base canónica</span>
+  <p>$f:\mathbb R^2\to\mathbb R^2$ lineal con $f(1,0)=(2,1)$ y $f(0,1)=(-1,3)$. Calcula $f(4,-3)$.</p>
+  <ol class="steps">
+    <li>$(4,-3)=4(1,0)-3(0,1)$ (las coordenadas en la base canónica son las componentes).</li>
+    <li>Por P3: $f(4,-3)=4f(1,0)-3f(0,1)=4(2,1)-3(-1,3)=(8,4)+(3,-9)=(11,-5)$.</li>
+    <li>En general, $f(a,b)=a(2,1)+b(-1,3)=(2a-b,\ a+3b)$: <b>las imágenes de la base canónica son las «columnas» de la fórmula</b> (esto se formaliza en 3.3).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo con una base <i>no</i> canónica</span>
+  <p>$f:\mathbb R^2\to\mathbb R^2$ lineal con $f(1,1)=(3,0)$ y $f(1,-1)=(1,2)$. Calcula $f(5,1)$.</p>
+  <ol class="steps">
+    <li><b>¿Es base $\{(1,1),(1,-1)\}$?</b> $\begin{vmatrix}1&1\cr1&-1\end{vmatrix}=-2\neq0$: son libres y, siendo 2 vectores en $\mathbb R^2$, base (Teor. 2.6). Así que la combinación existe y es única.</li>
+    <li><b>Coordenadas de $(5,1)$.</b> $a(1,1)+b(1,-1)=(5,1)$ da
+      $$\begin{aligned}a+b&=5\cr a-b&=1\end{aligned}\quad\Rightarrow\quad a=3,\ b=2.$$
+      Comprobación: $3(1,1)+2(1,-1)=(5,1)$ ✓.</li>
+    <li><b>P3 con esos coeficientes:</b> $f(5,1)=3f(1,1)+2f(1,-1)=3(3,0)+2(1,2)=(9,0)+(2,4)=(11,4)$.</li>
+  </ol>
+  <p><b>Error típico:</b> usar las componentes $(5,1)$ como coeficientes: $5f(1,1)+1\cdot f(1,-1)$ <b>está mal</b> (eso sería si la base fuera la canónica). Primero hay que pasar a coordenadas <b>en la base dada</b>.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box warn"><span class="h">Datos incompatibles: no se pueden dar imágenes libremente sobre vectores ligados</span>
+  <p>¿Existe una aplicación lineal $f:\mathbb R^2\to\mathbb R^2$ con $f(1,2)=(1,0)$ y $f(2,4)=(3,1)$? <b>No.</b> Como $(2,4)=2(1,2)$ son ligados, por P3 tendría que ser $f(2,4)=2f(1,2)=(2,0)\neq(3,1)$. Las imágenes solo se pueden dar <b>libremente</b> sobre los vectores de una <b>base</b> (o de un sistema libre); sobre vectores ligados, la linealidad las fija (P3, P4).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<h3>Imagen de un sistema libre o ligado</h3>
+
+<div class="box ex"><span class="h">Los ligados conservan <i>la misma relación</i></span>
+  <p>$g:\mathbb R^3\to\mathbb R^3$, $g(x,y,z)=(x+y,\ 2x+2y,\ z)$ (lineal: sin términos independientes). El sistema $S=\{a,b,c\}$ con $a=(1,0,0)$, $b=(0,1,0)$, $c=(1,1,0)$ es <b>ligado</b>: $c=a+b$, es decir $a+b-c=0$. Sus imágenes son $g(a)=(1,2,0)$, $g(b)=(1,2,0)$, $g(c)=(2,4,0)$, y se cumple <b>la misma relación</b>: $g(a)+g(b)-g(c)=(1,2,0)+(1,2,0)-(2,4,0)=0$. Es P4: la relación se conserva con los mismos coeficientes, así que sigue siendo ligado.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; ilustra U propiedad 4, p. 103">P</span>
+</div>
+
+<div class="box ex"><span class="h">Los libres pueden perder la independencia</span>
+  <p>Con el mismo $g$: $\{a,b\}=\{(1,0,0),(0,1,0)\}$ es <b>libre</b>, pero $\{g(a),g(b)\}=\{(1,2,0),(1,2,0)\}$ es ligado (son iguales). La aplicación «aplasta» todo el plano $z=0$ sobre una recta (U Ej. 3.6 hace lo mismo con $f(x_1,x_2)=x_1$: $\{(2,1),(1,3)\}\mapsto\{2,1\}$). Es P5.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio; ilustra U propiedad 5 y Ejemplo 3.6, p. 103-104">P</span>
+</div>
+
+<table>
+  <tr><th>Pregunta</th><th>Respuesta</th><th>Propiedad</th></tr>
+  <tr><td>Originales ligados $\Rightarrow$ imágenes…</td><td>ligadas (siempre)</td><td>P4</td></tr>
+  <tr><td>Originales libres $\Rightarrow$ imágenes…</td><td>pueden ser ligadas (no siempre libres)</td><td>P5</td></tr>
+  <tr><td>Imágenes libres $\Rightarrow$ originales…</td><td>libres (siempre)</td><td>contrarrecíproca de P4</td></tr>
+  <tr><td>Imágenes ligadas $\Rightarrow$ originales…</td><td>pueden ser libres (no siempre ligados)</td><td>P5</td></tr>
+</table>
+
