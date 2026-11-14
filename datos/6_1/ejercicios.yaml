@@ -1,0 +1,900 @@
+- id: ej6-3
+  clase: libro
+  titulo: |-
+    Ejercicio 6.3 — test: ¿aplicación bilineal o forma bilineal?
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.3, p. 204
+    texto: |-
+      E p.204
+  cuerpo:
+  - enun: |-
+      Si $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ es una aplicación bilineal, se verifica: A) No es forma bilineal porque el espacio imagen no es $\mathbb R$. B) No es bilineal porque el origen de la aplicación es un producto de dos espacios iguales. C) Es forma bilineal.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Distinguir si una aplicación bilineal $\mathbb R^2\times\mathbb R^2\to\mathbb R$ es forma bilineal.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Leo la definición: una forma bilineal es una aplicación bilineal con valores en $\mathbb R$. El espacio de partida puede ser un producto de espacios iguales sin problema.
+      - - |-
+          Qué uso
+        - |-
+          <b>Forma bilineal (Def. 6.1, U p.243):</b> $f:V\times V\to\mathbb R$ lineal en cada variable: $f(\lambda x+\mu x',y)=\lambda f(x,y)+\mu f(x',y)$ y lo mismo en la segunda. Es <b>simétrica</b> si $f(x,y)=f(y,x)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Contrasto las tres opciones con la definición.
+  - pasos:
+    - |-
+      <b>Qué es una forma bilineal</b> (Def. 6.2): una aplicación bilineal que sale de $E\times E$ (el mismo espacio dos veces) y llega a $\mathbb R$. Hay que comprobar solo esas dos condiciones.
+    - |-
+      <b>Origen:</b> $\mathbb R^2\times\mathbb R^2$ es $E\times E$ con $E=\mathbb R^2$ ✓. <b>Llegada:</b> $\mathbb R$ ✓. <b>Bilinealidad:</b> la da el enunciado.
+    - |-
+      <b>Conclusión:</b> es forma bilineal, así que <b>C</b> es la verdadera. A es falsa (la imagen sí es $\mathbb R$). B es falsa: que los dos factores sean iguales no impide la bilinealidad, es justo lo que pide la Def. 6.2.
+  - receta: |-
+      «forma bilineal» = (i) bilineal, (ii) dos factores iguales, (iii) llegada en $\mathbb R$.
+  - error: |-
+      confundir «aplicación» y «forma»: $x_1y_2+x_2y_3$ de $\mathbb R^2\times\mathbb R^3$ en $\mathbb R$ es bilineal pero no es forma (U Ej. 6.3, p.245). <b>Teoría:</b> U Def. 6.1 p.244, Def. 6.2 y Ej. 6.3 p.245.
+- id: ej6-2
+  clase: libro
+  titulo: |-
+    Ejercicio 6.2 — demostrar si son bilineales $x_1+y_2$ y $x_1y_2$
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.2, p. 203-204
+    texto: |-
+      E p.203-204
+  cuerpo:
+  - enun: |-
+      Demuéstrese si son bilineales las aplicaciones $f((x_1,x_2),(y_1,y_2))$ siguientes: A) $x_1+y_2$. B) $x_1y_2$.
+  - html: |-
+      <p><b>A) No es bilineal.</b></p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Demostrar si $x_1+y_2$ y $x_1y_2$ son bilineales.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Bilineal = lineal en cada variable. Una suma de una variable de $x$ y otra de $y$ es lineal en conjunto pero no por separado (fijado $y$, hay un término constante $y_2$). El producto $x_1y_2$ sí es lineal en cada una.
+      - - |-
+          Qué uso
+        - |-
+          <b>Forma bilineal (Def. 6.1, U p.243):</b> $f:V\times V\to\mathbb R$ lineal en cada variable: $f(\lambda x+\mu x',y)=\lambda f(x,y)+\mu f(x',y)$ y lo mismo en la segunda. Es <b>simétrica</b> si $f(x,y)=f(y,x)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Fijo $y$ y miro si $x\mapsto f(x,y)$ es lineal; luego fijo $x$.
+  - pasos:
+    - |-
+      <b>Para negar</b> basta que <i>una</i> de las cuatro igualdades de la Def. 6.1 falle en <i>un</i> caso. Elegimos $\lambda=2$, $x=(0,1)$, $y=(1,1)$.
+    - |-
+      $f(2x,y)=f((0,2),(1,1))=0+1=1$, mientras que $2f(x,y)=2(0+1)=2$. Como $1\neq2$, falla $f(\lambda x,y)=\lambda f(x,y)$.
+    - |-
+      <b>Por qué falla en general:</b> $f(\lambda x,y)=\lambda x_1+y_2$ pero $\lambda f(x,y)=\lambda x_1+\lambda y_2$; el sumando $y_2$ no lleva ninguna $x$ y no «escala» al multiplicar $x$ por $\lambda$.
+    - |-
+      <b>Atajo</b> (propiedad de U p.248): toda bilineal cumple $f(0,y)=0$, y aquí $f((0,0),(0,1))=0+1=1\neq0$. (Con $y=(0,0)$ no se vería: $f(0,0)=0$ sí se cumple.)
+  - html: |-
+      <p><b>B) Sí es bilineal.</b> Con $x,x',y,y'$ y $\lambda$ <b>cualesquiera</b> (hay que probarlo en general, no con números):</p>
+  - pasos:
+    - |-
+      $f(x+x',y)=(x_1+x_1')y_2=x_1y_2+x_1'y_2=f(x,y)+f(x',y)$ (distributiva en $\mathbb R$).
+    - |-
+      $$f(\lambda x,y)=(\lambda x_1)y_2=\lambda(x_1y_2)=\lambda f(x,y)$$
+            <p>(asociatividad).</p>
+    - |-
+      $f(x,y+y')=x_1(y_2+y_2')=x_1y_2+x_1y_2'=f(x,y)+f(x,y')$.
+    - |-
+      <p>$f(x,\lambda y)=x_1(\lambda y_2)=\lambda f(x,y)$. Las cuatro se cumplen y $f$ va de $\mathbb R^2\times\mathbb R^2$ a $\mathbb R$: es <b>forma bilineal</b>, con matriz</p>
+            $$\begin{pmatrix}0&1\\0&0\end{pmatrix}$$
+            <p>(solo $a_{12}=f(e_1,e_2)=1$).</p>
+  - receta: |-
+      bilineal ⇔ polinomio con todos los sumandos de la forma $a_{ij}x_iy_j$. Si lo es, pruébalo con las 4 igualdades (o reconoce $X^tAY$); si no, busca un contraejemplo numérico (o usa $f(0,y)\neq0$).
+  - error: |-
+      «tiene grado 1 en $x$ y grado 1 en $y$»: $x_1+y_2$ no es bilineal. Cada sumando debe tener grado 1 en $x$ <i>y</i> grado 1 en $y$. <b>Teoría:</b> U Def. 6.1 p.244; propiedades p.248.
+- id: ej6-1
+  clase: libro
+  titulo: |-
+    Ejercicio 6.1 — demostrar que $f=x_1y_1-x_1y_2-3x_2y_1+3x_2y_2$ es bilineal
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.1, p. 202-203
+    texto: |-
+      E p.202-203
+  cuerpo:
+  - enun: |-
+      Dada $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ definida por $f(\bar x,\bar y)=x_1y_1-x_1y_2-3x_2y_1+3x_2y_2$, demostrar que es una aplicación bilineal.
+  - html: |-
+      <p>Sean $x,x',y,y'\in\mathbb R^2$ y $\lambda\in\mathbb R$ cualesquiera. Como en U Ej. 6.2 (p.244-245), se calcula el primer y el segundo miembro de cada igualdad por separado.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Demostrar que una expresión con términos $x_iy_j$ es bilineal.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Todos los términos son de la forma (constante)$\cdot x_iy_j$: lineal en $x$ para $y$ fijo y viceversa.
+      - - |-
+          Qué uso
+        - |-
+          <b>Forma bilineal (Def. 6.1, U p.243):</b> $f:V\times V\to\mathbb R$ lineal en cada variable: $f(\lambda x+\mu x',y)=\lambda f(x,y)+\mu f(x',y)$ y lo mismo en la segunda. Es <b>simétrica</b> si $f(x,y)=f(y,x)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Desarrollo $f(\lambda x+\mu x',y)$ y $f(x,\lambda y+\mu y')$.
+  - pasos:
+    - |-
+      <b>$f(x+x',y)=f(x,y)+f(x',y)$.</b> 1.er miembro: $(x_1+x_1')y_1-(x_1+x_1')y_2-3(x_2+x_2')y_1+3(x_2+x_2')y_2$; al desarrollar con la distributiva queda $(x_1y_1-x_1y_2-3x_2y_1+3x_2y_2)+(x_1'y_1-x_1'y_2-3x_2'y_1+3x_2'y_2)$, que es el 2.º miembro.
+    - |-
+      <b>$f(\lambda x,y)=\lambda f(x,y)$.</b> 1.er miembro: $\lambda x_1y_1-\lambda x_1y_2-3\lambda x_2y_1+3\lambda x_2y_2$; sacando $\lambda$ factor común es el 2.º miembro.
+    - |-
+      <b>$f(x,y+y')=f(x,y)+f(x,y')$.</b> $x_1(y_1+y_1')-x_1(y_2+y_2')-3x_2(y_1+y_1')+3x_2(y_2+y_2')$ se separa en los términos con $y$ y los términos con $y'$: es $f(x,y)+f(x,y')$.
+    - |-
+      <b>$f(x,\lambda y)=\lambda f(x,y)$.</b> El 1.er miembro, $\lambda x_1y_1-\lambda x_1y_2-3\lambda x_2y_1+3\lambda x_2y_2$, coincide con el 2.º.
+    - |-
+      <b>Conclusión:</b> $f$ es lineal en cada variable, luego bilineal; como va de $\mathbb R^2\times\mathbb R^2$ a $\mathbb R$, es <b>forma</b> bilineal.
+  - html: |-
+      <p><b>Comprobación alternativa (más corta, también válida en examen).</b> La expresión es $X^tAY$ con $A=\begin{pmatrix}1&-1\\-3&3\end{pmatrix}$ (coeficientes de $x_iy_j$). Por las propiedades del producto de matrices (sección 2), toda $X^tAY$ es bilineal.</p>
+  - receta: |-
+      para demostrar bilinealidad, o bien escribes las 4 igualdades con 1.er y 2.º miembro, o bien reconoces $f=X^tAY$ y usas la distributividad. Ambas son justificaciones completas.
+  - error: |-
+      comprobarlo solo con vectores concretos: un ejemplo numérico vale para <b>refutar</b>, nunca para <b>demostrar</b>. <b>Teoría:</b> U Def. 6.1 p.244, Ej. 6.2 p.244-245, §6.1.2 p.246.
+- id: ej6-5
+  clase: libro
+  titulo: |-
+    Ejercicio 6.5 — $f((5,3),(-1,2))$ conocidos los $f(e_i,e_j)$
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.5, p. 206
+    texto: |-
+      E p.206
+  cuerpo:
+  - enun: |-
+      Si $\{e_1,e_2\}$ es la base canónica de $\mathbb R^2$ y $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ es bilineal con $f(e_1,e_1)=1$, $f(e_1,e_2)=2$, $f(e_2,e_1)=-1$, $f(e_2,e_2)=5$, entonces $f((5,3),(-1,2))$ vale: A) $-19$. B) $(-19,48)$. C) $48$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Calcular $f$ en dos vectores conociendo $f(e_i,e_j)$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          La bilinealidad me permite desarrollar $f(x,y)=\sum x_iy_jf(e_i,e_j)$: solo necesito los cuatro valores.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz y expresión (U p.246):</b> $A=(f(e_i,e_j))$ y $f(x,y)=X^tAY=\sum a_{ij}x_iy_j$; $f$ es simétrica $\iff A=A^t$. El orden de los argumentos importa si $A$ no es simétrica.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Descompongo cada vector en la base canónica y desarrollo.
+  - pasos:
+    - |-
+      <p><b>Matriz asociada</b> ($a_{ij}=f(e_i,e_j)$, la fila la da el primer vector):</p>
+            $$A=\begin{pmatrix}1&2\\-1&5\end{pmatrix}.$$
+    - |-
+      <b>Por qué basta con eso:</b> por la bilinealidad $f(x,y)=\sum x_iy_jf(e_i,e_j)=X^tAY$; los cuatro valores determinan $f$.
+    - |-
+      <p><b>Evaluación</b> (base canónica: coordenadas = componentes). Primero</p>
+            $$AY=\begin{pmatrix}1&2\\-1&5\end{pmatrix}\begin{pmatrix}-1\\2\end{pmatrix}=\begin{pmatrix}3\\11\end{pmatrix}$$
+            <p>y luego</p>
+            $$X^t(AY)=(5\ \ 3)\begin{pmatrix}3\\11\end{pmatrix}=15+33=48.$$
+    - |-
+      <b>Comprobación con la analítica:</b> $f=x_1y_1+2x_1y_2-x_2y_1+5x_2y_2$ da $-5+20+3+30=48$ ✓.
+    - |-
+      <b>Opciones:</b> la correcta es <b>C</b>. B es absurda: $f$ toma valores en $\mathbb R$, no en $\mathbb R^2$. (De dónde sale $-19$ en A no lo explica el libro.)
+  - receta: |-
+      valores en la base ⇒ colócalos en $A$ (primer argumento = fila) ⇒ $f(x,y)=X^tAY$, multiplicando primero $AY$.
+  - error: |-
+      trasponer $A$: $X^tA^tY=f((-1,2),(5,3))=9\neq48$. <b>Teoría:</b> U Def. 6.3 y expresión matricial, p.246.
+- id: ej6-6
+  clase: libro
+  titulo: |-
+    Ejercicio 6.6 — expresión matricial de $f=x_1y_1-4x_1y_2+6x_2y_3-x_3y_1-3x_3y_3$
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.6, p. 206 (es el Ejemplo 6.4 de U, p. 246-247)
+    texto: |-
+      E p.206
+  cuerpo:
+  - enun: |-
+      Si $f(\bar x,\bar y)=x_1y_1-4x_1y_2+6x_2y_3-x_3y_1-3x_3y_3$ es la expresión analítica de la forma bilineal $f:\mathbb R^3\times\mathbb R^3\to\mathbb R$, calcular su expresión matricial.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Expresión matricial de una forma bilineal dada en coordenadas.
+      - - |-
+          Cómo lo pienso
+        - |-
+          El coeficiente de $x_iy_j$ es la entrada $(i,j)$ de la matriz; los términos que no aparecen valen 0.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz y expresión (U p.246):</b> $A=(f(e_i,e_j))$ y $f(x,y)=X^tAY=\sum a_{ij}x_iy_j$; $f$ es simétrica $\iff A=A^t$. El orden de los argumentos importa si $A$ no es simétrica.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Relleno la matriz $3\times3$ leyendo los coeficientes.
+  - pasos:
+    - |-
+      <b>Qué se pide:</b> escribir $f=X^tAY$ con $a_{ij}=f(e_i,e_j)$ en la base canónica (Def. 6.3).
+    - |-
+      <b>Por qué vale «leer coeficientes».</b> $f(e_1,e_1)$: sustituyes $x=y=(1,0,0)$ y solo sobrevive $x_1y_1=1$, así $a_{11}=1$. En general con $x=e_i$, $y=e_j$ solo sobrevive $x_iy_j$, luego $a_{ij}$ <b>es el coeficiente de $x_iy_j$</b> (0 si no aparece).
+    - |-
+      <b>Lectura:</b> fila 1: $x_1y_1\to1$, $x_1y_2\to-4$, $x_1y_3\to0$. Fila 2: $x_2y_1,x_2y_2\to0$, $x_2y_3\to6$. Fila 3: $x_3y_1\to-1$, $x_3y_2\to0$, $x_3y_3\to-3$.
+    - |-
+      <b>Resultado:</b>
+          $$f(x,y)=(x_1\ x_2\ x_3)\begin{pmatrix}1&-4&0\\0&0&6\\-1&0&-3\end{pmatrix}\begin{pmatrix}y_1\\y_2\\y_3\end{pmatrix}.$$
+    - |-
+      <b>Observación:</b> $A$ <b>no es simétrica</b> ($a_{12}=-4$, $a_{21}=0$), así que $f$ no es simétrica (<a href="tema_6_2_formas_cuadraticas.html#s1">tema 6.2</a>).
+  - receta: |-
+      en la base en que está escrita, $a_{ij}$ = coeficiente de $x_iy_j$: el índice de la $x$ es la fila, el de la $y$ la columna; lo que falta, ceros.
+  - error: |-
+      «repartir» $-4$ entre $a_{12}$ y $a_{21}$ ($-2$ y $-2$): eso se hace con formas <i>cuadráticas</i> (6.2), nunca con una bilineal. <b>Teoría:</b> U Def. 6.3 p.246, Ej. 6.4 p.246-247.
+- id: ej6-4
+  clase: libro
+  titulo: |-
+    Ejercicio 6.4 — $f(x-y,x-y)$ para $f$ bilineal simétrica (frontera con 6.2)
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.4, p. 205
+    texto: |-
+      E p.205
+  cuerpo:
+  - enun: |-
+      Si $E$ es un espacio vectorial y $f:E\times E\to\mathbb R$ es una aplicación bilineal <b>simétrica</b>, ¿cuánto vale $f(x-y,x-y)$ para todo $x,y\in E$? A) $f(x,x)-f(y,y)$. B) $f(-x+y,-x+y)$. C) $f(x,x)-2f(x,y)+f(y,y)$. D) Ninguna de las anteriores.
+  - html: |-
+      <p><i>Simétrica</i> significa $f(x,y)=f(y,x)$ (U Def. 6.5, p.252; se estudia en el <a href="tema_6_2_formas_cuadraticas.html#s1">tema 6.2</a>).</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Desarrollar $f(x-y,x-y)$ si $f$ es bilineal simétrica.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Es como $(a-b)^2$ pero sin conmutatividad automática: la simetría me permite agrupar los términos cruzados.
+      - - |-
+          Qué uso
+        - |-
+          <b>Forma bilineal (Def. 6.1, U p.243):</b> $f:V\times V\to\mathbb R$ lineal en cada variable: $f(\lambda x+\mu x',y)=\lambda f(x,y)+\mu f(x',y)$ y lo mismo en la segunda. Es <b>simétrica</b> si $f(x,y)=f(y,x)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Desarrollo con bilinealidad y uso $f(x,y)=f(y,x)$.
+  - pasos:
+    - |-
+      <b>Desarrollo en la 1.ª variable</b> (con $x-y=x+(-1)y$): $f(x-y,x-y)=f(x,x-y)-f(y,x-y)$.
+    - |-
+      <b>En la 2.ª</b>, en cada término: $=f(x,x)-f(x,y)-f(y,x)+f(y,y)$. Es «multiplicar como un producto», respetando el orden de los argumentos.
+    - |-
+      <b>Simetría</b> (aquí y solo aquí se usa la hipótesis): $f(y,x)=f(x,y)$, luego $=f(x,x)-2f(x,y)+f(y,y)$. <b>C es verdadera.</b>
+    - |-
+      <b>B.</b> Con $u=x-y$ y la propiedad $f(-u,v)=f(u,-v)=-f(u,v)$ (U p.248): $f(-u,-u)=-f(u,-u)=f(u,u)$. <b>B también es verdadera</b>, y para <i>cualquier</i> forma bilineal, simétrica o no.
+    - |-
+      <b>A es falsa:</b> con el producto escalar usual, $x=(1,0)$, $y=(0,1)$: $f(x-y,x-y)=2$ y $f(x,x)-f(y,y)=0$. <b>D es falsa</b> (B y C son ciertas).
+  - receta: |-
+      para $f(\text{combinación},\text{combinación})$, multiplica cada sumando del primer argumento por cada sumando del segundo respetando el orden; luego, si $f$ es simétrica, junta $f(x,y)$ con $f(y,x)$.
+  - error: |-
+      escribir $-2f(x,y)$ sin tener simetría; en general es $-f(x,y)-f(y,x)$. <b>Teoría:</b> U Def. 6.1 p.244, propiedades p.248; Def. 6.5 p.252 (<a href="tema_6_2_formas_cuadraticas.html#s1">tema 6.2</a>).
+- id: ej6-7
+  clase: libro
+  titulo: |-
+    Ejercicio 6.7 — expresión analítica de una forma bilineal simétrica dada en una base (frontera con 6.2)
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.7, p. 207
+    texto: |-
+      E p.207
+  cuerpo:
+  - enun: |-
+      Si $\{e_1,e_2,e_3\}$ es una base de $\mathbb R^3$ con $f(e_1,e_1)=f(e_2,e_2)=f(e_3,e_3)=1$ y $f(e_1,e_2)=f(e_2,e_3)=f(e_3,e_1)=a$, se pide la expresión analítica de la forma bilineal <b>simétrica</b> $f$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Escribir la expresión analítica de una forma simétrica definida por sus valores en una base.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Simétrica ⇒ matriz simétrica con las entradas $f(e_i,e_j)$. La expresión es $X^tAY$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz y expresión (U p.246):</b> $A=(f(e_i,e_j))$ y $f(x,y)=X^tAY=\sum a_{ij}x_iy_j$; $f$ es simétrica $\iff A=A^t$. El orden de los argumentos importa si $A$ no es simétrica.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Escribo la matriz y la expando.
+  - pasos:
+    - |-
+      <b>Completar la matriz con la simetría.</b> Se dan la diagonal y tres posiciones: $(1,2)$, $(2,3)$, $(3,1)$. Las otras tres, $(2,1)$, $(3,2)$, $(1,3)$, salen de $f(e_j,e_i)=f(e_i,e_j)$ (U Def. 6.5). Sin la palabra «simétrica» el problema no tendría solución única.
+          $$A=\begin{pmatrix}1&a&a\\a&1&a\\a&a&1\end{pmatrix}.$$
+    - |-
+      <b>Expresión analítica</b> (con $x_i,y_j$ las coordenadas en <b>esa base</b>, que no es la canónica): $f(x,y)=\sum a_{ij}x_iy_j$,
+          $$f(x,y)=x_1y_1+x_2y_2+x_3y_3+a\,(x_1y_2+x_2y_1+x_2y_3+x_3y_2+x_1y_3+x_3y_1).$$
+    - |-
+      <b>Lo que da E</b> es $f(x,x)=x_1^2+x_2^2+x_3^2+2a(x_1x_2+x_2x_3+x_3x_1)$, la <b>forma cuadrática</b> asociada (<a href="tema_6_2_formas_cuadraticas.html#s1">tema 6.2</a>), que se obtiene del paso 2 poniendo $y=x$.
+  - receta: |-
+      con los datos $f(e_i,e_j)$ rellena $A$; si dice «simétrica», copia lo que falta en las posiciones traspuestas; luego $f(x,y)=\sum a_{ij}x_iy_j$ en coordenadas de esa base.
+  - error: |-
+      escribir $2a\,x_1y_2$ en la forma <b>bilineal</b>. El 2 solo aparece en $f(x,x)$, al juntar $x_1x_2$ con $x_2x_1$; en $f(x,y)$ los monomios $x_1y_2$ y $x_2y_1$ son distintos y cada uno lleva $a$. <b>Teoría:</b> U Def. 6.3 y §6.1.2 p.246; Def. 6.5 p.252.
+- id: ej6-8
+  clase: libro
+  titulo: |-
+    Ejercicio 6.8 — matriz y expresión de $f$ en una base $B'$ de $\mathbb R^3$
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 6.8, p. 207-208
+    texto: |-
+      E p.207-208
+  cuerpo:
+  - enun: |-
+      Si $f(\bar x,\bar y)=x_1y_1-x_1y_3+x_2y_1+x_2y_2+x_2y_3-x_3y_1+x_3y_2+2x_3y_3$ es la expresión de $f$ respecto de la base $B=\{e_1,e_2,e_3\}$ de $\mathbb R^3$, y $B'=\{e_1',e_2',e_3'\}$ es otra base con $e_1'=(2,2,3)_B$, $e_2'=(-1,0,-1)_B$, $e_3'=(0,-1,-1)_B$, se pide la expresión matricial y analítica de $f$ en $B'$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Matriz y expresión de $f$ en otra base $B'$ dada.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Cambio de base en una forma bilineal: $A'=P^tAP$ con $P$ de columnas los vectores de $B'$ en $B$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Cambio de base (U p.250):</b> si $P$ tiene por columnas los vectores de $B'$ escritos en $B$, la matriz en $B'$ es $A'=P^tAP$ (congruencia). Conserva rango, simetría y signo del determinante; $\det A'=\det A\,(\det P)^2$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Formo $P$ y calculo $P^tAP$.
+  - pasos:
+    - |-
+      <b>Matriz en $B$</b> (la expresión está dada en $B$: $a_{ij}$ = coeficiente de $x_iy_j$): fila 1: $1,0,-1$; fila 2: $1,1,1$; fila 3: $-1,1,2$.
+          $$A=\begin{pmatrix}1&0&-1\\1&1&1\\-1&1&2\end{pmatrix}.$$
+    - |-
+      <b>Matriz de paso $P$ de $B'$ a $B$:</b> columnas = vectores de $B'$ en coordenadas de $B$ (así $X=PX'$, Teor. 6.1):
+          $$P=\begin{pmatrix}2&-1&0\\2&0&-1\\3&-1&-1\end{pmatrix}.$$
+    - |-
+      <p><b>¿Es $B'$ una base?</b></p>
+            $$|P|=2\begin{vmatrix}0&-1\\-1&-1\end{vmatrix}-(-1)\begin{vmatrix}2&-1\\3&-1\end{vmatrix}=2(-1)+1\cdot1=-1\neq0.$$
+            <p>Sí.</p>
+    - |-
+      <b>Por qué $A'=P^tAP$:</b> $f(x,y)=X^tAY=(PX')^tA(PY')=X'^t(P^tAP)Y'$ (Teor. 6.1).
+    - |-
+      <b>Primero $AP$:</b>
+          $$AP=\begin{pmatrix}1&0&-1\\1&1&1\\-1&1&2\end{pmatrix}\begin{pmatrix}2&-1&0\\2&0&-1\\3&-1&-1\end{pmatrix}=\begin{pmatrix}-1&0&1\\7&-2&-2\\6&-1&-3\end{pmatrix}.$$
+    - |-
+      <p><b>Después $P^t(AP)$</b>, con</p>
+            $$P^t=\begin{pmatrix}2&2&3\\-1&0&-1\\0&-1&-1\end{pmatrix}:$$
+            <p>fila 1: $(-2+14+18,\ 0-4-3,\ 2-4-9)=(30,-7,-11)$; fila 2: $(1-6,\ 0+1,\ -1+3)=(-5,1,2)$; fila 3: $(-7-6,\ 2+1,\ 2+3)=(-13,3,5)$.</p>$$A'=P^tAP=\begin{pmatrix}30&-7&-11\\-5&1&2\\-13&3&5\end{pmatrix}.$$
+    - |-
+      <b>Controles.</b> Un elemento por definición: $a'_{12}=f(e_1',e_2')=(2,2,3)\,A\,(-1,0,-1)^t$; $A(-1,0,-1)^t$ es la 2.ª columna de $AP$, $(0,-2,-1)^t$, y $(2,2,3)\cdot(0,-2,-1)=-7$ ✓. Con determinantes: $|A'|=|P|^2|A|=1\cdot(-1)=-1$ ✓ (y $|A|=-1$).
+    - |-
+      <b>Expresiones en $B'$</b> ($x_i,y_j$ ahora son coordenadas en $B'$):
+          $$f(x,y)=(x_1\ x_2\ x_3)\begin{pmatrix}30&-7&-11\\-5&1&2\\-13&3&5\end{pmatrix}\begin{pmatrix}y_1\\y_2\\y_3\end{pmatrix},$$
+          $$f(x,y)=30x_1y_1-7x_1y_2-11x_1y_3-5x_2y_1+x_2y_2+2x_2y_3-13x_3y_1+3x_3y_2+5x_3y_3.$$
+  - html: |-
+      <p>El resultado de E es correcto; solo omite comprobar que $B'$ sea base.</p>
+  - receta: |-
+      (1) $A$ en la base vieja; (2) $P$ con los vectores nuevos en <b>columnas</b>; (3) $\det P\neq0$; (4) $A'=P^tAP$ calculando $AP$ primero; (5) control con $|A'|=|A||P|^2$ y un $a'_{ij}=v_i^tAv_j$.
+  - error: |-
+      usar $P^{-1}AP$ (semejanza), poner los vectores en filas, o usar la $P$ de $B$ a $B'$ (la inversa). <b>Teoría:</b> U Def. 6.3 p.246, Ej. 6.6 p.248-249, Teor. 6.1 p.249-250, Ej. 6.8 p.250-251.
+- id: ej-propio-1
+  clase: propio
+  titulo: |-
+    Propio P1 — ¿cuáles son formas bilineales? $2x_1y_2-x_2y_1$, $x_1y_1+1$, $x_1^2y_1$
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio; U Def. 6.1-6.2 p. 244-245 y propiedades p. 248
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Decide cuáles de estas aplicaciones $\mathbb R^2\times\mathbb R^2\to\mathbb R$ son formas bilineales: (a) $f=2x_1y_2-x_2y_1$; (b) $g=x_1y_1+1$; (c) $h=x_1^2y_1$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Decidir qué aplicaciones son formas bilineales.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Busco términos que rompan la linealidad: constantes (la segunda), cuadrados de una variable (la tercera).
+      - - |-
+          Qué uso
+        - |-
+          <b>Forma bilineal (Def. 6.1, U p.243):</b> $f:V\times V\to\mathbb R$ lineal en cada variable: $f(\lambda x+\mu x',y)=\lambda f(x,y)+\mu f(x',y)$ y lo mismo en la segunda. Es <b>simétrica</b> si $f(x,y)=f(y,x)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Compruebo homogeneidad y aditividad en cada variable.
+  - pasos:
+    - |-
+      <p><b>(a) Sí.</b> Es $X^tAY$ con</p>
+            $$A=\begin{pmatrix}0&2\\-1&0\end{pmatrix}$$
+            <p>($a_{12}=2$, $a_{21}=-1$); toda $X^tAY$ es bilineal y va de $E\times E$ a $\mathbb R$. (Si los coeficientes fueran iguales y opuestos, $2x_1y_2-2x_2y_1=2\det(x,y)$ sería el doble del área con signo; aquí son distintos y $A$ no es antisimétrica.)</p>
+    - |-
+      <b>(b) No.</b> Toda bilineal cumple $g(0,y)=0$, pero $g((0,0),(0,0))=1\neq0$ (término constante).
+    - |-
+      <b>(c) No.</b> Falla $h(\lambda x,y)=\lambda h(x,y)$: con $\lambda=2$, $x=y=(1,0)$ da $h((2,0),(1,0))=4$ y $2h((1,0),(1,0))=2$. Aquí $h(0,y)=0$ sí se cumple: ese atajo es <b>necesario pero no suficiente</b>; la potencia $x_1^2$ delata el fallo.
+  - receta: |-
+      mira los monomios: solo vale $a_{ij}x_iy_j$ (un $x$ y un $y$ de grado 1). Los demás (constantes, solo $x$, solo $y$, potencias) la rompen.
+- id: ej-propio-2
+  clase: propio
+  titulo: |-
+    Propio P2 — matriz, evaluación y orden de los argumentos
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio; U Def. 6.3 p. 246
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Sea $f=2x_1y_1-x_1y_2+3x_2y_1+x_2y_2$ en la canónica de $\mathbb R^2$. Escribe su matriz y calcula $f((1,-2),(3,1))$ y $f((3,1),(1,-2))$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Matriz de $f$ y evaluación con el orden de los argumentos.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Como la matriz no es simétrica, $f(x,y)\neq f(y,x)$: el orden importa.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz y expresión (U p.246):</b> $A=(f(e_i,e_j))$ y $f(x,y)=X^tAY=\sum a_{ij}x_iy_j$; $f$ es simétrica $\iff A=A^t$. El orden de los argumentos importa si $A$ no es simétrica.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Calculo $X^tAY$ y $Y^tAX$.
+  - pasos:
+    - |-
+      $$A=\begin{pmatrix}2&-1\\3&1\end{pmatrix}$$
+            <p>(coeficientes de $x_iy_j$).</p>
+    - |-
+      $$AY=A\begin{pmatrix}3\\1\end{pmatrix}=\begin{pmatrix}5\\10\end{pmatrix}$$
+            <p>y $f((1,-2),(3,1))=(1,-2)\cdot(5,10)=-15$. Con la analítica: $6-1-18-2=-15$ ✓.</p>
+    - |-
+      <p>Orden cambiado:</p>
+            $$A\begin{pmatrix}1\\-2\end{pmatrix}=\begin{pmatrix}4\\1\end{pmatrix}$$
+            <p>y $f((3,1),(1,-2))=(3,1)\cdot(4,1)=13\neq-15$.</p>
+    - |-
+      Moraleja: $f$ <b>no es simétrica</b> porque $A\neq A^t$; para una no simétrica el orden de los argumentos importa.
+  - receta: |-
+      $A$ de los coeficientes, $AY$ primero, $X^t(AY)$ después; y vigila el orden.
+- id: ej-propio-3
+  clase: propio
+  titulo: |-
+    Propio P3 — cambio de base en $\mathbb R^2$ por los dos métodos
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio; U Teor. 6.1 p. 249-250 y Ej. 6.6 p. 248-249
+    texto: propio
+  cuerpo:
+  - enun: |-
+      $f$ tiene matriz $A=\begin{pmatrix}1&2\\0&-1\end{pmatrix}$ en la canónica. Halla su matriz en $B'=\{v_1=(1,1),\ v_2=(1,2)\}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Cambio de base en $\mathbb R^2$ por dos métodos.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Dos formas de ver lo mismo: la matriz nueva es $P^tAP$ o la tabla de $f(v_i,v_j)$ directamente.
+      - - |-
+          Qué uso
+        - |-
+          <b>Cambio de base (U p.250):</b> si $P$ tiene por columnas los vectores de $B'$ escritos en $B$, la matriz en $B'$ es $A'=P^tAP$ (congruencia). Conserva rango, simetría y signo del determinante; $\det A'=\det A\,(\det P)^2$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Calculo ambos y comparo.
+  - pasos:
+    - |-
+      $$P=\begin{pmatrix}1&1\\1&2\end{pmatrix}$$
+            <p>(columnas $v_1,v_2$), $|P|=1\neq0$: $B'$ es base.</p>
+    - |-
+      $$AP=\begin{pmatrix}1&2\\0&-1\end{pmatrix}\begin{pmatrix}1&1\\1&2\end{pmatrix}=\begin{pmatrix}3&5\\-1&-2\end{pmatrix}$$
+            <p>(sus columnas son $Av_1,Av_2$).</p>
+    - |-
+      $$A'=P^tAP=\begin{pmatrix}1&1\\1&2\end{pmatrix}\begin{pmatrix}3&5\\-1&-2\end{pmatrix}=\begin{pmatrix}2&3\\1&1\end{pmatrix}.$$
+    - |-
+      <b>Control por definición:</b> $a'_{12}=f(v_1,v_2)=(1,1)\cdot(5,-2)=3$ ✓; $a'_{21}=f(v_2,v_1)=(1,2)\cdot(3,-1)=1$ ✓. Con determinantes: $|A'|=2-3=-1=|A||P|^2=(-1)\cdot1$ ✓.
+    - |-
+      <p><b>Contraste con la semejanza:</b></p>
+            $$P^{-1}AP=\begin{pmatrix}7&12\\-4&-7\end{pmatrix},$$
+            <p>otra matriz distinta, la del endomorfismo $x\mapsto Ax$ en $B'$, no la de la forma bilineal.</p>
+  - receta: |-
+      $P^tAP$ y, como control, uno o dos $a'_{ij}=v_i^tAv_j$.
+- id: ej-propio-4
+  clase: propio
+  titulo: |-
+    Propio P4 — cambio de base en $\mathbb R^3$ con $|P|\neq\pm1$ y evaluación en $B'$
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio; U Teor. 6.1 p. 249-250
+    texto: propio
+  cuerpo:
+  - enun: |-
+      $f$ tiene matriz $A=\begin{pmatrix}1&1&0\\0&1&2\\1&0&0\end{pmatrix}$ en la canónica. Halla su matriz en $B'=\{(1,0,0),(1,2,0),(0,1,1)\}$, comprueba el determinante y evalúa $f$ con $x'=(1,0,1)_{B'}$, $y'=(0,1,-1)_{B'}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Cambio de base en $\mathbb R^3$ con $|P|\neq\pm1$ y evaluación.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Antes de calcular, sé que el determinante cambia en $(\det P)^2$: me sirve de control.
+      - - |-
+          Qué uso
+        - |-
+          <b>Cambio de base (U p.250):</b> si $P$ tiene por columnas los vectores de $B'$ escritos en $B$, la matriz en $B'$ es $A'=P^tAP$ (congruencia). Conserva rango, simetría y signo del determinante; $\det A'=\det A\,(\det P)^2$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          $P^tAP$ y comprobación del determinante.
+  - pasos:
+    - |-
+      $$P=\begin{pmatrix}1&1&0\\0&2&1\\0&0&1\end{pmatrix},$$
+            <p>triangular: $|P|=2\neq0$, $B'$ es base.</p>
+    - |-
+      $$AP=\begin{pmatrix}1&3&1\\0&2&3\\1&1&0\end{pmatrix}$$
+            <p>(columna $j$ = $A$ por el $j$-ésimo vector nuevo).</p>
+    - |-
+      $$P^t=\begin{pmatrix}1&0&0\\1&2&0\\0&1&1\end{pmatrix}$$
+            $$A'=P^t(AP)=\begin{pmatrix}1&3&1\\1&7&7\\1&3&3\end{pmatrix}$$
+            <p>(fila 2: $(1,2,0)$ por las columnas da $(1,7,7)$; fila 3: $(0,1,1)$ da $(1,3,3)$).</p>
+    - |-
+      <b>Determinante:</b> $|A|=2$ (por la 3.ª fila), así que $|A'|$ debe valer $|A||P|^2=2\cdot4=8$; directamente, $|A'|=1(21-21)-3(3-7)+1(3-7)=8$ ✓. <b>No coincide con $|A|$</b>: la congruencia no conserva el determinante. El rango sí: 3 y 3.
+    - |-
+      <b>Evaluar en $B'$:</b> $A'y'=(3-1,\ 7-7,\ 3-3)^t=(2,0,0)^t$, luego $f=x'^tA'y'=(1,0,1)\cdot(2,0,0)=2$. <b>Comprobación en la canónica:</b> $X=Px'=(1,1,1)$, $Y=Py'=(1,1,-1)$, $AY=(2,-1,1)$ y $X^tAY=2-1+1=2$ ✓. El valor de $f$ no depende de la base; solo cambia su expresión.
+  - receta: |-
+      el valor de $f(x,y)$ se puede calcular en cualquier base: $X^tAY=X'^tA'Y'$. Úsalo como control cruzado.
+- id: ej-propio-5
+  clase: propio
+  titulo: |-
+    Propio P5 — congruencia frente a semejanza: qué se conserva, y por qué $I$ y $-I$ no son congruentes
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio; U Def. 6.4 p. 249, Def. 4.5 p. 148, Teor. 4.4 p. 153, §4.1 p. 147
+    texto: propio
+  cuerpo:
+  - enun: |-
+      (a) Con $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$ y $P=\begin{pmatrix}1&1\\0&2\end{pmatrix}$, calcula $P^tAP$ y $P^{-1}AP$ y compara rango, determinante, traza, valores propios y simetría. (b) ¿Son congruentes $I_2$ y $-I_2$? ¿Y $I_2$ y $\operatorname{diag}(1,-1)$?
+  - html: |-
+      <p><b>(a)</b></p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Comparar congruencia y semejanza con un ejemplo.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Congruente: $P^tAP$; semejante: $P^{-1}AP$. Si $P$ no es ortogonal, son distintas. La congruencia conserva simetría; la semejanza, valores propios.
+      - - |-
+          Qué uso
+        - |-
+          <b>Cambio de base (U p.250):</b> si $P$ tiene por columnas los vectores de $B'$ escritos en $B$, la matriz en $B'$ es $A'=P^tAP$ (congruencia). Conserva rango, simetría y signo del determinante; $\det A'=\det A\,(\det P)^2$. La <b>semejanza</b> $P^{-1}AP$ conserva valores propios y traza; la congruencia no.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Calculo las dos transformadas y comparo invariantes.
+  - pasos:
+    - |-
+      <p>Primero</p>
+            $$AP=\begin{pmatrix}1&1\\0&4\end{pmatrix}$$
+            <p>y luego</p>
+            $$P^tAP=P^t(AP)=\begin{pmatrix}1&0\\1&2\end{pmatrix}\begin{pmatrix}1&1\\0&4\end{pmatrix}=\begin{pmatrix}1&1\\1&9\end{pmatrix}$$
+            <p>(congruente con $A$).</p>
+    - |-
+      $$P^{-1}=\tfrac12\begin{pmatrix}2&-1\\0&1\end{pmatrix}$$
+            $$P^{-1}AP=\begin{pmatrix}1&-1\\0&2\end{pmatrix}$$
+            <p>(semejante a $A$).</p>
+  - html: |-
+      <table>
+          <tr><th></th><th>$A$</th><th>$P^tAP$ (congruente)</th><th>$P^{-1}AP$ (semejante)</th></tr>
+          <tr><td>rango</td><td>2</td><td>2 ✓</td><td>2 ✓</td></tr>
+          <tr><td>determinante</td><td>2</td><td>$8=2\cdot|P|^2$ (mismo signo)</td><td>2 ✓</td></tr>
+          <tr><td>traza</td><td>3</td><td>10 ✗</td><td>3 ✓</td></tr>
+          <tr><td>valores propios</td><td>1, 2</td><td>$5\pm\sqrt{17}$ ✗</td><td>1, 2 ✓</td></tr>
+          <tr><td>simétrica</td><td>sí</td><td>sí ✓</td><td>no ✗</td></tr>
+        </table>
+  - html: |-
+      <p><b>(b)</b></p>
+  - pasos:
+    - |-
+      <p><b>$I_2$ y $-I_2$ no son congruentes</b>, aunque tengan rango 2 y determinante $1$. Si $-I=P^tIP=P^tP$ con</p>
+            $$P=\begin{pmatrix}a&b\\c&d\end{pmatrix},$$
+            <p>el elemento $(1,1)$ de $P^tP$ es $a^2+c^2\geq0$, y no puede valer $-1$. Interpretación: para la forma de matriz $I$, $f(x,x)=x^tx>0$ en cualquier base.</p>
+    - |-
+      <b>$I_2$ y $\operatorname{diag}(1,-1)$ no son congruentes</b>: sus determinantes tienen distinto signo y $|P|^2>0$ no cambia el signo.
+    - |-
+      <b>Moraleja:</b> rango y signo del determinante son condiciones <b>necesarias</b> de congruencia, no suficientes (caso 1). El invariante completo (la signatura) se verá en 6.3.
+  - receta: |-
+      para refutar que dos matrices son congruentes, busca un invariante que difiera (rango, signo de $\det$, o el signo de $f(x,x)$); para refutar semejanza, la traza, el determinante o los valores propios.
+- id: ex-feb25b-6
+  clase: examen
+  titulo: |-
+    Feb. 2025 (tipo B), pregunta 6 — $f((1,1),(2,3))$ dados los $f(e_i,e_j)$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2025 (tipo B), pregunta 6
+    texto: |-
+      X Feb. 2025 (B) P6
+  cuerpo:
+  - enun: |-
+      Si $\{e_1,e_2\}$ es la base canónica de $\mathbb R^2$ y $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ es una aplicación bilineal con $f(e_1,e_1)=5$, $f(e_1,e_2)=-9$, $f(e_2,e_1)=2$, $f(e_2,e_2)=1$, calcule $f((1,1),(2,3))$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Calcular $f((1,1),(2,3))$ conocidos los cuatro $f(e_i,e_j)$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          La bilinealidad convierte el cálculo en una suma de cuatro términos.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz y expresión (U p.246):</b> $A=(f(e_i,e_j))$ y $f(x,y)=X^tAY=\sum a_{ij}x_iy_j$; $f$ es simétrica $\iff A=A^t$. El orden de los argumentos importa si $A$ no es simétrica.
+      - - |-
+          Por dónde empiezo
+        - |-
+          $X^tAY$ con la matriz dada.
+  - pasos:
+    - |-
+      <p><b>Matriz</b> (U Def. 6.3, $a_{ij}=f(e_i,e_j)$, la fila la da el primer vector):</p>
+            $$A=\begin{pmatrix}5&-9\\2&1\end{pmatrix}.$$
+    - |-
+      <b>Fórmula</b> (por bilinealidad, $f(x,y)=\sum x_iy_jf(e_i,e_j)=X^tAY$).
+    - |-
+      $$AY=\begin{pmatrix}5&-9\\2&1\end{pmatrix}\begin{pmatrix}2\\3\end{pmatrix}=\begin{pmatrix}10-27\\4+3\end{pmatrix}=\begin{pmatrix}-17\\7\end{pmatrix}$$
+            $$X^tAY=(1\ \ 1)\begin{pmatrix}-17\\7\end{pmatrix}=-10.$$
+    - |-
+      <p><b>Alternativa sin matrices:</b></p>
+            $$f(e_1+e_2,\,2e_1+3e_2)=2f(e_1,e_1)+3f(e_1,e_2)+2f(e_2,e_1)+3f(e_2,e_2)=10-27+4+3=-10$$
+            <p>✓.</p>
+  - receta: |-
+      la misma que E 6.5: $A$ con el primer argumento en la fila, $AY$ y luego $X^t(AY)$; o desarrollar a mano por bilinealidad.
+  - error: |-
+      trasponer $A$ o cambiar el orden de los vectores: $f((2,3),(1,1))=1\neq-10$.
+- id: ex-feb26a-6
+  clase: examen
+  titulo: |-
+    Feb. 2026 (tipo A), pregunta 6 — matriz de $f$ en $B'=\{e_1+e_2,\ e_1-e_2\}$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2026 (tipo A), pregunta 6
+    texto: |-
+      X Feb. 2026 (A) P6
+  cuerpo:
+  - enun: |-
+      Sea $B=\{e_1,e_2\}$ la base canónica de $\mathbb R^2$ y $B'=\{e_1+e_2,\ e_1-e_2\}$ (en ese orden). Sea $f:\mathbb R^2\times\mathbb R^2\to\mathbb R$ forma bilineal con matriz $\begin{pmatrix}1&1\\1&1\end{pmatrix}$ respecto de $B$. Calcule la matriz asociada a $f$ respecto de $B'$.
+  - html: |-
+      <p><b>Método 1 (elemento a elemento, como U Ej. 6.6).</b></p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Matriz de $f$ en la base $\{e_1+e_2,e_1-e_2\}$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          La matriz inicial tiene todo unos: $f(x,y)=(x_1+x_2)(y_1+y_2)$. En la nueva base un vector se hace $0$ en la suma.
+      - - |-
+          Qué uso
+        - |-
+          <b>Cambio de base (U p.250):</b> si $P$ tiene por columnas los vectores de $B'$ escritos en $B$, la matriz en $B'$ es $A'=P^tAP$ (congruencia). Conserva rango, simetría y signo del determinante; $\det A'=\det A\,(\det P)^2$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          $P^tAP$ con $P$ de columnas $(1,1),(1,-1)$.
+  - pasos:
+    - |-
+      <p>$v_1=(1,1)$, $v_2=(1,-1)$. Son base:</p>
+            $$\begin{vmatrix}1&1\\1&-1\end{vmatrix}=-2\neq0.$$
+    - |-
+      $a'_{ij}=f(v_i,v_j)=v_i^tAv_j$. Primero $Av_1=(2,2)^t$ y $Av_2=(0,0)^t$.
+    - |-
+      $a'_{11}=(1,1)\cdot(2,2)=4$; $a'_{12}=(1,1)\cdot(0,0)=0$; $a'_{21}=(1,-1)\cdot(2,2)=0$; $a'_{22}=(1,-1)\cdot(0,0)=0$.
+    - |-
+      $$A'=\begin{pmatrix}4&0\\0&0\end{pmatrix}.$$
+  - html: |-
+      <p><b>Método 2 (congruencia, Teor. 6.1).</b> $P=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ (columnas = $v_1,v_2$ en $B$), $AP=\begin{pmatrix}2&0\\2&0\end{pmatrix}$ y $P^tAP=\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}2&0\\2&0\end{pmatrix}=\begin{pmatrix}4&0\\0&0\end{pmatrix}$ ✓.</p>
+  - html: |-
+      <p><b>Controles:</b> el rango se conserva ($\operatorname{rg}A=\operatorname{rg}A'=1$) y $|A'|=|A||P|^2=0\cdot4=0$ ✓.</p>
+  - receta: |-
+      base nueva dada por combinaciones de la vieja ⇒ $P$ con esas combinaciones <b>en columnas</b> ⇒ $A'=P^tAP$. Con $2\times2$, el método 1 es igual de rápido y sirve de control.
+  - html: |-
+      <p><b>Intuición.</b> $f(x,y)=(x_1+x_2)(y_1+y_2)$. En la base nueva, $v_2=(1,-1)$ tiene «suma de componentes» cero: todo lo que lo toca vale 0.</p>
+- id: ex-sep18a-6
+  clase: examen
+  titulo: |-
+    Sept. 2018 (tipo A), ejercicio 6 — hallar la matriz de cambio de base; $P$ no es única
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2018 (tipo A), ejercicio 6
+    texto: |-
+      X Sept. 2018 (A) ej. 6
+  cuerpo:
+  - enun: |-
+      Si $A=\begin{pmatrix}1&1\\1&2\end{pmatrix}$ es la matriz que caracteriza a una forma bilineal en una base $B$ y $A'=\begin{pmatrix}1&2\\2&5\end{pmatrix}$ es la matriz de la misma forma en otra base $B'$, calcule la matriz de cambio de base de $B'$ a $B$. (Son las matrices del Ejemplo 6.7, U p.250.)
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Hallar la matriz de cambio de base conocidas las dos matrices de una forma bilineal.
+      - - |-
+          Cómo lo pienso
+        - |-
+          La condición es $P^tAP=A'$; no hay una única $P$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Cambio de base (U p.250):</b> si $P$ tiene por columnas los vectores de $B'$ escritos en $B$, la matriz en $B'$ es $A'=P^tAP$ (congruencia). Conserva rango, simetría y signo del determinante; $\det A'=\det A\,(\det P)^2$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Ensayo $P$ por bloques triangulares.
+  - pasos:
+    - |-
+      <p><b>Planteamiento.</b> Por el Teor. 6.1, si</p>
+            $$P=\begin{pmatrix}a&b\\c&d\end{pmatrix}$$
+            <p>es la matriz de paso de $B'$ a $B$, es regular y $P^tAP=A'$.</p>
+    - |-
+      <p><b>Sistema.</b> Multiplicando,</p>
+            $$P^tAP=\begin{pmatrix}a^2+2ac+2c^2&ab+ad+bc+2cd\\ab+ad+bc+2cd&b^2+2bd+2d^2\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}:$$
+            <p>tres ecuaciones (las posiciones $(1,2)$ y $(2,1)$ coinciden) con cuatro incógnitas y no lineales. No cabe esperar solución única.</p>
+    - |-
+      <b>Truco: completar cuadrados.</b> $a^2+2ac+2c^2=(a+c)^2+c^2=1$; $\ b^2+2bd+2d^2=(b+d)^2+d^2=5$; $\ ab+ad+bc+2cd=(a+c)(b+d)+cd=2$. Con $u=(a+c,\ c)$ y $v=(b+d,\ d)$ dicen $|u|^2=1$, $|v|^2=5$, $u\cdot v=2$.
+    - |-
+      <b>Una solución entera.</b> Prueba $c=0$, $a=1$, $u=(1,0)$. Entonces $b+d=2$ y $4+d^2=5$ ⇒ $d=\pm1$; con $d=1$, $b=1$:
+          $$P_1=\begin{pmatrix}1&1\\0&1\end{pmatrix},\ |P_1|=1\neq0.$$<p>Comprobación:</p>
+            $$AP_1=\begin{pmatrix}1&2\\1&3\end{pmatrix}$$
+            $$P_1^tAP_1=\begin{pmatrix}1&0\\1&1\end{pmatrix}\begin{pmatrix}1&2\\1&3\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}=A'$$
+            <p>✓.</p>
+    - |-
+      <p><b>La de U Ej. 6.7 también sirve:</b></p>
+            $$P_2=\begin{pmatrix}-1&-1\\1&2\end{pmatrix}$$
+            <p>($u=(0,1)$, $v=(1,2)$), con $|P_2|=-1$;</p>
+            $$AP_2=\begin{pmatrix}0&1\\1&3\end{pmatrix}$$
+            $$P_2^t(AP_2)=\begin{pmatrix}-1&1\\-1&2\end{pmatrix}\begin{pmatrix}0&1\\1&3\end{pmatrix}=A'$$
+            <p>✓.</p>
+    - |-
+      <b>Hay infinitas.</b> $u=(\cos t,\sin t)$ es cualquier unitario y $v=2u\pm u^\perp$ con $u^\perp=(-\sin t,\cos t)$. Deshaciendo el cambio, para todo $t\in\mathbb R$:
+          $$P_+(t)=\begin{pmatrix}\cos t-\sin t&\cos t-3\sin t\\\sin t&\cos t+2\sin t\end{pmatrix}\ (|P_+|=1),\quad P_-(t)=\begin{pmatrix}\cos t-\sin t&3\cos t-\sin t\\\sin t&2\sin t-\cos t\end{pmatrix}\ (|P_-|=-1).$$
+          $P_1=P_+(0)$ y $P_2=P_-(\pi/2)$. Las soluciones <b>enteras</b> en $[-4,4]^4$ son exactamente 8: $(a,b,c,d)\in\{(1,1,0,1),(-1,-1,0,-1),(1,3,0,-1),(-1,-3,0,1),(-1,-1,1,2),(1,1,-1,-2),(-1,-3,1,2),(1,3,-1,-2)\}$.
+    - |-
+      <b>Por qué no es única.</b> Si $P$ cumple $P^tAP=A'$ y $U$ es regular con $U^tA'U=A'$, entonces $PU$ también: $(PU)^tA(PU)=U^t(P^tAP)U=U^tA'U=A'$. Geométricamente: como $|A|=1>0$ y $a_{11}>0$, $f$ es un producto escalar (tema 5.1); $A$ y $A'$ son matrices de Gram en dos bases, y cualquier giro o simetría para ese producto lleva una base en otra con la misma matriz de Gram.
+  - html: |-
+      <div class="box tip"><span class="h">Respuesta de examen recomendada</span>
+          <p>«Por el Teor. 6.1, la matriz de paso $P$ de $B'$ a $B$ es regular y cumple $P^tAP=A'$. Con $P=\begin{pmatrix}a&b\\c&d\end{pmatrix}$ obtengo $(a+c)^2+c^2=1$, $(b+d)^2+d^2=5$, $(a+c)(b+d)+cd=2$. Una solución es $P=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ (regular), y compruebo $P^tAP=A'$. No es única: por ejemplo, $\begin{pmatrix}-1&-1\\1&2\end{pmatrix}$ (U Ej. 6.7) también la cumple.»</p>
+        </div>
+  - receta: |-
+      matriz de paso desconocida entre dos congruentes dadas: plantea $P^tAP=A'$, escribe cada ecuación como suma de cuadrados o producto escalar, busca una solución sencilla (prueba $c=0$), compruébala y di que no es única.
+  - error: |-
+      (a) plantear $P^{-1}AP=A'$ (semejanza): aquí no tiene solución, porque las trazas son 3 y 6 y las semejantes tienen la misma traza (U Teor. 4.4). (b) Dar por mala una $P$ distinta de la esperada (hay infinitas). (c) Olvidar comprobar que $P$ es regular.
+- id: ex-feb22a1-5
+  clase: examen
+  titulo: |-
+    Feb. 2022 (tipo A1, v2), ejercicio 5 — dos matrices de Gram del mismo producto escalar
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2022 (tipo A1, Algebra_Febrero22A1-v2), ejercicio 5
+    texto: |-
+      X Feb. 2022 (A1) ej. 5
+  cuerpo:
+  - enun: |-
+      Si $G$ y $G'$ son dos matrices de Gram del mismo producto escalar en bases diferentes, razone si son o no ciertas: (i) los dos determinantes son iguales; (ii) ambas matrices son congruentes y equivalentes.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Relación entre dos matrices de Gram del mismo producto escalar.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Son matrices de la misma forma en bases distintas: congruentes y equivalentes. Los determinantes difieren en el cuadrado del determinante de $P$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Cambio de base (U p.250):</b> si $P$ tiene por columnas los vectores de $B'$ escritos en $B$, la matriz en $B'$ es $A'=P^tAP$ (congruencia). Conserva rango, simetría y signo del determinante; $\det A'=\det A\,(\det P)^2$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Razono con $G'=Q^tGQ$ y un ejemplo.
+  - pasos:
+    - |-
+      <b>Relación entre ellas</b> (U Teor. 5.1, p.198; teoría en el <a href="tema_5_1_producto_escalar.html#cambio-base">tema 5.1</a>): $G'=Q^tGQ$ con $Q$ regular (matriz de cambio de base de $B'$ a $B$). Es exactamente el Teorema 6.1: $G$ es la matriz de una forma bilineal.
+    - |-
+      <b>(ii) Verdadero.</b> $G'=Q^tGQ$ es la definición de <b>congruentes</b> (Def. 6.4). Y congruentes ⇒ <b>equivalentes</b> ($G'=MGN$ con $M=Q^t$, $N=Q$ regulares; U §4.1, p.147), luego tienen el mismo rango (aquí, $n$).
+    - |-
+      <p><b>(i) Falso en general.</b> $\det G'=(\det Q)^2\det G$. Contraejemplo:</p>
+            $$G=\begin{pmatrix}2&1\\1&1\end{pmatrix}$$
+            <p>($\det G=1$) y</p>
+            $$Q=\begin{pmatrix}1&1\\0&2\end{pmatrix}:$$
+            $$G'=Q^tGQ=\begin{pmatrix}2&4\\4&10\end{pmatrix},$$
+            <p>con $\det G'=4\neq1$. Solo coinciden si $|\det Q|=1$. Lo que sí se conserva es el signo (en un producto escalar siempre positivo).</p>
+  - html: |-
+      <p><i>La congruencia ⇒ equivalencia está en U p.147, tras la Def. 4.4.</i></p>
+  - receta: |-
+      dos matrices que representan lo mismo en bases distintas son congruentes ($Q^tGQ$) y por tanto equivalentes; su determinante cambia en $(\det Q)^2$.
+  - error: |-
+      decir que «son semejantes» (no tiene por qué: la traza cambia) o que «tienen el mismo determinante». <b>Teoría:</b> U Teor. 5.1 p.198; Def. 4.4 p.147.
