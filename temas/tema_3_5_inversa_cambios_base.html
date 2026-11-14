@@ -121,6 +121,8 @@
     <li>El cambio contrario (antigua $\to$ nueva) <b>no recibe letra nueva</b>: es $Q^{-1}$ o $P^{-1}$.</li>
     <li>Matriz de $f$ en las bases nuevas: $A'=P^{-1}AQ$. Endomorfismo (misma base en salida y llegada, $S=B$, $S'=B'$): $P=Q$ y $A'=Q^{-1}AQ$.</li>
   </ul>
+  <p><b>En los exámenes</b> se llama $P$ (o «matriz de cambio de la base nueva a la canónica») a nuestra $Q$, $P^{-1}$ a nuestra $Q^{-1}$, y el endomorfismo se escribe $P^{-1}AP$.</p>
+  <details class="ampl"><summary>Tabla de traducción con la letra de cada libro (U y E)</summary>
   <table>
     <tr><th>Aquí</th><th>U</th><th>E</th></tr>
     <tr><td>$Q$ ($x_B=Qx_{B'}$)</td><td>$Q$ (Def. 3.14)</td><td>$Q_{B'B}$</td></tr>
@@ -129,7 +131,7 @@
     <tr><td>$P^{-1}$ ($y_{S'}=P^{-1}y_S$)</td><td>$P^{-1}$ (p.136-137)</td><td>$P_{UU'}$</td></tr>
     <tr><td>$A'=Q^{-1}AQ$ (endomorfismo)</td><td>$A'=P^{-1}AP$ (Def. 4.5, p.148; allí $P$ = nuestra $Q$, matriz de paso)</td><td>$Q_{BB'}AQ_{B'B}$</td></tr>
   </table>
-  <p><b>En los exámenes</b> se llama $P$ (o «matriz de cambio de la base nueva a la canónica») a nuestra $Q$, $P^{-1}$ a nuestra $Q^{-1}$, y el endomorfismo se escribe $P^{-1}AP$.</p>
+  </details>
   <p><b>Truco para no equivocarte de sentido.</b> En $x_B=Q\,x_{B'}$, el subíndice de la derecha ($B'$) es la base cuyas coordenadas «entran» en $Q$, y las columnas de $Q$ son los vectores de esa base $B'$ escritos en $B$. Comprobación instantánea: $Q\,(1,0,\dots,0)^t$ es la primera columna de $Q$, y $(1,0,\dots,0)_{B'}$ es $e'_1$; luego la primera columna de $Q$ <b>tiene que ser</b> $e'_1$ escrito en $B$.</p>
   <span class="src" data-l="U" data-ref="U §3.5.2 Def. 3.14, p. 132; §3.5.3, p. 135-136 (uso de la letra P); Def. 4.5, p. 148">U p.132-136</span>
   <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.34-3.38, p. 111-116 (notación Q_{B'B}, P_{U'U})">E p.111-116</span>
@@ -164,8 +166,11 @@
   <span class="src" data-l="U" data-ref="U Definición 3.14, p. 132">U p.132</span>
 </div>
 
-<div class="box intu"><span class="h">Por qué las columnas son los vectores de la base nueva (deducción, una sola vez)</span>
-  <p>Si $x=x'_1e'_1+\dots+x'_ne'_n$ y cada vector nuevo es $e'_j=q_{1j}e_1+\dots+q_{nj}e_n$, al sustituir y agrupar el coeficiente de $e_i$ queda $x_i=q_{i1}x'_1+\dots+q_{in}x'_n$, que es la fila $i$ del producto $Q\,x_{B'}$. Como las coordenadas respecto de una base son <b>únicas</b> (Def. 2.10, U p.85), esas son <i>las</i> coordenadas de $x$ en $B$. Dicho de otro modo: $Q$ es la <b>matriz de la aplicación identidad</b> $i:(V,B')\to(V,B)$ (cada vector se lleva a sí mismo, pero se escribe en otra base).</p>
+<div class="box intu"><span class="h">Por qué las columnas son los vectores de la base nueva</span>
+  <p>$Q$ es la <b>matriz de la aplicación identidad</b> $i:(V,B')\to(V,B)$: cada vector se lleva a sí mismo, pero se escribe en otra base; sus columnas son, por la Def. 3.4, las imágenes de los $e'_j$ (ellos mismos) escritas en $B$.</p>
+  <details class="ampl"><summary>Deducción (una sola vez)</summary>
+  <p>Si $x=x'_1e'_1+\dots+x'_ne'_n$ y cada vector nuevo es $e'_j=q_{1j}e_1+\dots+q_{nj}e_n$, al sustituir y agrupar el coeficiente de $e_i$ queda $x_i=q_{i1}x'_1+\dots+q_{in}x'_n$, que es la fila $i$ del producto $Q\,x_{B'}$. Como las coordenadas respecto de una base son <b>únicas</b> (Def. 2.10, U p.85), esas son <i>las</i> coordenadas de $x$ en $B$.</p>
+  </details>
   <span class="src" data-l="P" data-ref="Deducción propia a partir de U Def. 3.14, p. 132 y Def. 2.10, p. 85">propio</span>
 </div>
 
@@ -234,8 +239,10 @@
 
 <div class="box thm"><span class="h">Las matrices de cambio de base son regulares y el cambio contrario es la inversa</span>
   <p>Sea $R$ la matriz del cambio contrario, $x_{B'}=R\,x_B$ (columnas de $R$ = vectores de $B$ escritos en $B'$). Entonces
-  $$R=Q^{-1},\qquad\det Q\neq0,\qquad\det(Q^{-1})=\frac1{\det Q}.$$
-  <b>Demostración (con los dos lados).</b> Para todo vector, $x_{B'}=R\,x_B=RQ\,x_{B'}$. Tomando $x_{B'}=(1,0,\dots,0),\dots,(0,\dots,0,1)$ se obtienen las columnas de $RQ$, que son las de $I$: $RQ=I$. Del mismo modo, $x_B=Q\,x_{B'}=QR\,x_B$ para todo $x_B$ da $QR=I$. Por la definición de inversa (U p.13, $AB=BA=I$), $R=Q^{-1}$. Como $Q$ tiene inversa, es regular, y $\det(RQ)=\det R\det Q=1$ (U p.26).</p>
+  $$R=Q^{-1},\qquad\det Q\neq0,\qquad\det(Q^{-1})=\frac1{\det Q}.$$</p>
+  <details class="ampl"><summary>Demostración (con los dos lados)</summary>
+  <p>Para todo vector, $x_{B'}=R\,x_B=RQ\,x_{B'}$. Tomando $x_{B'}=(1,0,\dots,0),\dots,(0,\dots,0,1)$ se obtienen las columnas de $RQ$, que son las de $I$: $RQ=I$. Del mismo modo, $x_B=Q\,x_{B'}=QR\,x_B$ para todo $x_B$ da $QR=I$. Por la definición de inversa (U p.13, $AB=BA=I$), $R=Q^{-1}$. Como $Q$ tiene inversa, es regular, y $\det(RQ)=\det R\det Q=1$ (U p.26).</p>
+  </details>
   <span class="src" data-l="U" data-ref="U §3.5.3, «Las matrices de cambio de base son regulares (tienen inversa)», p. 135">U p.135</span>
 </div>
 
@@ -464,7 +471,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Con dos descripciones del mismo vector, hallar $e'_3$.</dd>
     <dt>Cómo lo pienso</dt><dd>Escribo $x$ en $B'$ como $2e'_1+3e'_2+4e'_3$ y lo paso a $B$ sustituyendo los $e'_j$ conocidos; el que falta, $e'_3$, queda como incógnita y se despeja igualando con $x=(6,5,7)_B$.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. Las coordenadas de un vector en una base son únicas.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>. Las coordenadas de un vector en una base son únicas.</dd>
     <dt>Por dónde empiezo</dt><dd>Planteo las coordenadas de $e'_3$ como incógnitas y resuelvo.</dd>
   </dl></div>
   <ol class="steps">
@@ -522,7 +529,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de cambio de $B'$ a la canónica.</dd>
     <dt>Cómo lo pienso</dt><dd>Columnas = vectores de $B'$ escritos en la base de llegada.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Coloco los vectores por columnas.</dd>
   </dl></div>
   <ol class="steps">
@@ -545,7 +552,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Resolver el 3.33 con las ecuaciones del cambio.</dd>
     <dt>Cómo lo pienso</dt><dd>$x_B=Qx_{B'}$.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Multiplico $Q$ por las coordenadas dadas.</dd>
   </dl></div>
   <ol class="steps">
@@ -566,7 +573,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Probar que el cambio contrario es la inversa, calcularlo y escribir sus ecuaciones.</dd>
     <dt>Cómo lo pienso</dt><dd>Si paso de $B'$ a $B$ y luego de $B$ a $B'$ vuelvo al principio: el producto de los cambios es la identidad.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. Si dos matrices cumplen $RQx=x$ para todo $x$, entonces $RQ=I$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>. Si dos matrices cumplen $RQx=x$ para todo $x$, entonces $RQ=I$.</dd>
     <dt>Por dónde empiezo</dt><dd>Encadeno los cambios, calculo $Q^{-1}$ y leo las filas.</dd>
   </dl></div>
   <ol class="steps">
@@ -594,7 +601,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuaciones de un endomorfismo en la base $B'$.</dd>
     <dt>Cómo lo pienso</dt><dd>Diagrama: de $B'$ a $B$ (con $Q$), aplico $A$, y vuelvo a $B'$ (con $Q^{-1}$). El orden de los factores es $Q^{-1}AQ$.</dd>
-    <dt>Qué uso</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.15</b> (U p.136): $A'=P^{-1}AQ$ ($Q$ salida, $P$ llegada); endomorfismo con la misma base: $A'=Q^{-1}AQ$ — <a href="#s4">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Matriz $A$, cambios $Q,Q^{-1}$ y producto.</dd>
   </dl></div>
   <ol class="steps">
@@ -628,7 +635,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Con cuatro bases y $f$ dada en las antiguas, hallar $A$, los cuatro cambios y la matriz nueva.</dd>
     <dt>Cómo lo pienso</dt><dd>Tantas matrices en juego: pienso un dibujo de flechas. $A'=P^{-1}AQ$ con $Q$ en la salida y $P$ en la llegada.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. <b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>. <b>Def. 3.15</b> (U p.136): $A'=P^{-1}AQ$ ($Q$ salida, $P$ llegada); endomorfismo con la misma base: $A'=Q^{-1}AQ$ — <a href="#s4">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>$A$ por linealidad, cambios por columnas, inversa por despeje y producto.</dd>
   </dl></div>
   <ol class="steps">
@@ -665,7 +672,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir cuál de tres matrices es la de cambio de base entre polinomios dada por filas.</dd>
     <dt>Cómo lo pienso</dt><dd>Cuidado con filas y columnas: las coordenadas van por columnas.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. Atención: las coordenadas van por <b>columnas</b>; leídas por filas son otra cosa.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>. Atención: las coordenadas van por <b>columnas</b>; leídas por filas son otra cosa.</dd>
     <dt>Por dónde empiezo</dt><dd>Coordenadas de cada polinomio de $B'$ por columnas y leo las filas.</dd>
   </dl></div>
   <ol class="steps">
@@ -690,7 +697,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz canónica de $f$ conociendo sus valores sobre una base no canónica.</dd>
     <dt>Cómo lo pienso</dt><dd>Dos caminos: expresar los $e_j$ con la base dada (linealidad) o usar $M=FQ^{-1}$.</dd>
-    <dt>Qué uso</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$. Equivalente: si $F$ es la matriz con $V$ en la salida y $Q$ el cambio de $V$ a la canónica, entonces $F=MQ$ y $M=FQ^{-1}$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.15</b> (U p.136): $A'=P^{-1}AQ$ ($Q$ salida, $P$ llegada); endomorfismo con la misma base: $A'=Q^{-1}AQ$ — <a href="#s4">teoría</a>. Equivalente: si $F$ es la matriz con $V$ en la salida y $Q$ el cambio de $V$ a la canónica, entonces $F=MQ$ y $M=FQ^{-1}$.</dd>
     <dt>Por dónde empiezo</dt><dd>Compruebo base, calculo $Q^{-1}$ y $M=FQ^{-1}$.</dd>
   </dl></div>
   <ol class="steps">
@@ -735,7 +742,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Coordenadas en los dos sentidos con $Q$ y $Q^{-1}$.</dd>
     <dt>Cómo lo pienso</dt><dd>De nueva a antigua se multiplica por $Q$; de antigua a nueva, por $Q^{-1}$.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. De nueva a antigua se multiplica por $Q$; de antigua a nueva, por $Q^{-1}$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>. De nueva a antigua se multiplica por $Q$; de antigua a nueva, por $Q^{-1}$.</dd>
     <dt>Por dónde empiezo</dt><dd>$Q$ con los vectores de $B'$, multiplico e invierto.</dd>
   </dl></div>
   <ol class="steps">
@@ -762,7 +769,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de un endomorfismo en una nueva base.</dd>
     <dt>Cómo lo pienso</dt><dd>$Q^{-1}AQ$ en ese orden; $QAQ^{-1}$ también conserva traza y determinante, pero es otra cosa.</dd>
-    <dt>Qué uso</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.15</b> (U p.136): $A'=P^{-1}AQ$ ($Q$ salida, $P$ llegada); endomorfismo con la misma base: $A'=Q^{-1}AQ$ — <a href="#s4">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Calculo $AQ$ primero y luego $Q^{-1}(AQ)$.</dd>
   </dl></div>
   <ol class="steps">
@@ -790,7 +797,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de $f:\mathbb R^2\to\mathbb R^3$ cuando cambian la base de partida y la de llegada.</dd>
     <dt>Cómo lo pienso</dt><dd>Dos cambios distintos: $A'=P^{-1}AQ$.</dd>
-    <dt>Qué uso</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.15</b> (U p.136): $A'=P^{-1}AQ$ ($Q$ salida, $P$ llegada); endomorfismo con la misma base: $A'=Q^{-1}AQ$ — <a href="#s4">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>$A$ canónica, $Q$, $P$, $P^{-1}$ y producto.</dd>
   </dl></div>
   <ol class="steps">
@@ -818,7 +825,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Calcular $A^{-1}$ interpretando $A$ como matriz de cambio de base.</dd>
     <dt>Cómo lo pienso</dt><dd>Si las columnas de $A$ son una base, $A$ es el cambio de esa base a la canónica y $A^{-1}$ el contrario.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. La inversa de una matriz de cambio de base es el cambio contrario. $g\circ f=f\circ g=\mathrm{id}\iff$ sus matrices son inversas.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>. La inversa de una matriz de cambio de base es el cambio contrario. $g\circ f=f\circ g=\mathrm{id}\iff$ sus matrices son inversas.</dd>
     <dt>Por dónde empiezo</dt><dd>Expreso los $e_j$ con las columnas de $A$.</dd>
   </dl></div>
   <ol class="steps">
@@ -853,27 +860,27 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $U=\{\bar u_1,\bar u_2,\bar u_3\}$ y $U'=\{\bar u'_1,\bar u'_2,\bar u'_3\}$ son bases de $\mathbb R^3$, cuyos vectores están relacionados por $\bar u'_1=\bar u_1+\bar u_3$; $\bar u'_2=\bar u_1-\bar u_2$ y $\bar u'_3=\bar u_2$, es cierto que el determinante de la matriz asociada al cambio de la base $U$ a la base $U'$ es: A) 1; B) $-1$; C) 0; D) Otro diferente.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz de cambio de $U'$ a $U$ con los vectores nuevos por columnas, calcula su determinante y recuerda que el cambio de $U$ a $U'$ es la inversa.</p></details>
 <details class="sol" id="ex-feb17a-3"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2017 (2.ª sem., tipo A), ejercicio 3 — determinante de la matriz de cambio de $U$ a $U'$ <span class="src" data-l="X" data-ref="Feb. 2017 (2.ª sem., tipo A), ejercicio 3">X Feb. 2017 (A) ej. 3</span></summary>
-  <p><b>Qué se pide.</b> Hay dos bases de $\mathbb R^3$, una «antigua» $U$ y una «nueva» $U'$, y se dice cómo se escribe cada vector nuevo con los antiguos. No sabemos qué vectores son, y no hace falta: la matriz de cambio solo usa <b>coeficientes</b>. Hay que construir la matriz de cambio y calcular su determinante.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Determinante de la matriz de cambio de $U$ a $U'$.</dd>
     <dt>Cómo lo pienso</dt><dd>Nunca puede ser $0$. Construyo la matriz por columnas y calculo.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$. El determinante de una matriz de cambio de base nunca es cero.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>. El determinante de una matriz de cambio de base nunca es cero.</dd>
     <dt>Por dónde empiezo</dt><dd>Coordenadas de los $\bar u'_j$ en $U$ por columnas y determinante.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Coordenadas de los vectores nuevos en la base antigua</b> (Def. 2.10), contando los coeficientes de $\bar u_1,\bar u_2,\bar u_3$ en ese orden, con los ceros:
-      $$\bar u'_1=(1,0,1)_U,\qquad\bar u'_2=(1,-1,0)_U,\qquad\bar u'_3=(0,1,0)_U.$$</li>
-    <li><b>Matriz de cambio</b> (Def. 3.14), esas coordenadas por columnas: $x_U=Qx_{U'}$ con
-      $$Q=\begin{pmatrix}1&1&0\\0&-1&1\\1&0&0\end{pmatrix}.$$
-      <p>Es exactamente la matriz $P$ del Ej. 3.31 de U (mismas relaciones).</p></li>
-    <li><b>Determinante.</b> Desarrollo por la 3.ª fila (un solo elemento no nulo, el $1$ de la posición $(3,1)$, signo $(-1)^{3+1}=+1$):
-      $$\det Q=1\cdot\begin{vmatrix}1&0\\-1&1\end{vmatrix}=1.$$
-      <p>Es distinto de 0, como debe ser: descarta C sin más cuentas.</p></li>
-    <li><b>¿Y si «de $U$ a $U'$» significa la matriz inversa?</b> «De $U$ a $U'$» es $x_{U'}=R\,x_U$ con $R=Q^{-1}$. Entonces $\det R=1/\det Q=1$. Comprobación directa despejando (U p.137):
-      $$\bar u_2=\bar u'_3,\qquad\bar u_1=\bar u'_2+\bar u'_3,\qquad\bar u_3=\bar u'_1-\bar u'_2-\bar u'_3,$$
-      $$R=Q^{-1}=\begin{pmatrix}0&0&1\\1&0&-1\\1&1&-1\end{pmatrix},\qquad\det R=1.$$</li>
-    <li><b>Respuesta: A) 1</b>, con cualquiera de las dos lecturas.</li>
-  </ol>
+    <li><b>Coordenadas de los vectores nuevos en la base antigua</b> (los coeficientes de las relaciones, con los ceros): $$\bar u'_1=(1,0,1)_U,\qquad\bar u'_2=(1,-1,0)_U,\qquad\bar u'_3=(0,1,0)_U.$$</li>
+    <li><b>Matriz de cambio de $U'$ a $U$</b> (Def. 3.14), esas coordenadas por columnas, $x_U=Q\,x_{U'}$: $$Q=\begin{pmatrix}1&1&0\\0&-1&1\\1&0&0\end{pmatrix}.$$</li>
+    <li><b>Determinante</b>, desarrollando por la 3.ª fila (un solo elemento no nulo, el $1$ de la posición $(3,1)$, signo $(-1)^{3+1}=+1$): $$\det Q=1\cdot\begin{vmatrix}1&0\\-1&1\end{vmatrix}=1.$$</li>
+    <li><b>Sentido pedido.</b> El cambio «de $U$ a $U'$» es el contrario, $x_{U'}=Q^{-1}x_U$, y $$\det Q^{-1}=\frac1{\det Q}=1.$$ <b>Respuesta: A) 1</b> (con cualquiera de las dos lecturas del enunciado).</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>No hace falta saber qué vectores son los $\bar u_j$: la matriz de cambio solo usa los <b>coeficientes</b> de las relaciones.</li>
+      <li>$\det Q\neq0$ siempre (toda matriz de cambio de base es regular): la opción C se descarta sin cuentas.</li>
+      <li>Comprobación de la inversa despejando (U p.137): $\bar u_2=\bar u'_3$, $\bar u_1=\bar u'_2+\bar u'_3$, $\bar u_3=\bar u'_1-\bar u'_2-\bar u'_3$, de donde $$Q^{-1}=\begin{pmatrix}0&0&1\\1&0&-1\\1&1&-1\end{pmatrix},\qquad\det Q^{-1}=1\ ✓$$</li>
+      <li>$Q$ es exactamente la matriz $P$ del Ejemplo 3.31 de U (mismas relaciones entre las bases).</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> (1) escribe cada vector <b>nuevo</b> como combinación de los <b>antiguos</b> y lee sus coordenadas, con los ceros; (2) ponlas <b>en columnas</b>: esa es $Q$, con $x_{\text{antigua}}=Q\,x_{\text{nueva}}$; (3) $\det Q\neq0$ siempre; el cambio contrario tiene matriz $Q^{-1}$ y determinante $1/\det Q$.</div>
   <p><b>Error típico:</b> poner las coordenadas por filas (da $Q^t$; el determinante coincide pero la matriz está mal); olvidar los ceros; equivocarse de signo en el adjunto y contestar B.</p>
 </details>
@@ -881,24 +888,25 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $\mathcal B=\{\bar v_1,\bar v_2,\bar v_3\}$ y $\mathcal B'=\{\bar u_1,\bar u_2,\bar u_3\}$ son bases de $\mathbb R^3$, cuyos vectores están relacionados por $\bar u_1=2\bar v_1-\bar v_2$, $\bar u_2=5\bar v_1-\bar v_3$ y $\bar u_3=4\bar v_2$, calcule el determinante de la matriz de cambio de coordenadas respecto de $\mathcal B'$ a coordenadas respecto de $\mathcal B$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La matriz de cambio de $\mathcal B'$ a $\mathcal B$ tiene por columnas los vectores $\bar u_j$ escritos respecto de $\mathcal B$. Calcula el determinante de esa matriz $3\times3$.</p></details>
 <details class="sol" id="ex-feb25a-p2"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2025 (1.ª sem.), pregunta 2 — determinante de la matriz de cambio de $\mathcal B'$ a $\mathcal B$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), pregunta 2">X Feb. 2025 (1.ª) P2</span></summary>
-  <p><b>Qué se pide.</b> Ahora el sentido está claro: se parte de coordenadas en $\mathcal B'$ y se quieren las de $\mathcal B$: la $Q$ de $x_{\mathcal B}=Qx_{\mathcal B'}$ (Def. 3.14). Como el resultado no será $\pm1$, el sentido <b>sí</b> importa.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Determinante de la matriz de cambio de $\mathcal B'$ a $\mathcal B$.</dd>
     <dt>Cómo lo pienso</dt><dd>Columnas = coordenadas de los $\bar u_j$ en $\mathcal B$.</dd>
-    <dt>Qué uso</dt><dd><b>Matriz de cambio de base (Def. 3.14, U p.135):</b> si $B'=\{e'_1,\dots,e'_n\}$ es la base nueva y $B$ la antigua, $Q=Q_{B'B}$ tiene por columna $j$ las coordenadas de $e'_j$ <i>en $B$</i>, y $x_B=Q\,x_{B'}$. Es siempre regular y el cambio contrario es $Q^{-1}$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.14</b> (U p.132): $x_B=Q\,x_{B'}$, columnas de $Q$ = base nueva escrita en la antigua; siempre regular, el cambio contrario es $Q^{-1}$ — <a href="#s2">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Matriz y determinante por la fila con más ceros.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Por qué la matriz se construye así.</b> Sea $w=\alpha_1\bar u_1+\alpha_2\bar u_2+\alpha_3\bar u_3$, con coordenadas $(\alpha_1,\alpha_2,\alpha_3)_{\mathcal B'}$. Sustituyendo los $\bar u_j$:
-      $$w=(2\alpha_1+5\alpha_2)\bar v_1+(-\alpha_1+4\alpha_3)\bar v_2+(-\alpha_2)\bar v_3.$$
-      <p>Las coordenadas en $\mathcal B$ son</p>
-      $$\beta_1=2\alpha_1+5\alpha_2,\qquad\beta_2=-\alpha_1+4\alpha_3,\qquad\beta_3=-\alpha_2.$$</li>
-    <li><b>Matriz.</b> Los coeficientes fila a fila; sus columnas son las coordenadas de $\bar u_1,\bar u_2,\bar u_3$ en $\mathcal B$:
-      $$\begin{pmatrix}\beta_1\\\beta_2\\\beta_3\end{pmatrix}=\underbrace{\begin{pmatrix}2&5&0\\-1&0&4\\0&-1&0\end{pmatrix}}_{Q}\begin{pmatrix}\alpha_1\\\alpha_2\\\alpha_3\end{pmatrix}.$$</li>
-    <li><b>Determinante.</b> Desarrollo por la 3.ª fila, cuyo único elemento no nulo es el $-1$ de la posición $(3,2)$, con signo $(-1)^{3+2}=-1$ y menor $\begin{vmatrix}2&0\\-1&4\end{vmatrix}=8$:
-      $$\det Q=(-1)\cdot(-1)\cdot8=8.$$</li>
-    <li><b>Comprobación de sentido.</b> El cambio contrario, de $\mathcal B$ a $\mathcal B'$, tendría determinante $1/8$. La respuesta pedida es $|Q|=\mathbf{8}$.</li>
-  </ol>
+    <li><b>Coordenadas de los vectores de $\mathcal B'$ en $\mathcal B$</b> (los coeficientes de las relaciones, con los ceros): $$\bar u_1=(2,-1,0)_{\mathcal B},\qquad\bar u_2=(5,0,-1)_{\mathcal B},\qquad\bar u_3=(0,4,0)_{\mathcal B}.$$</li>
+    <li><b>Matriz de cambio de $\mathcal B'$ a $\mathcal B$</b> (Def. 3.14), esas coordenadas por columnas, $x_{\mathcal B}=Q\,x_{\mathcal B'}$: $$Q=\begin{pmatrix}2&5&0\\-1&0&4\\0&-1&0\end{pmatrix}.$$</li>
+    <li><b>Determinante</b>, desarrollando por la 3.ª fila (único elemento no nulo, el $-1$ de la posición $(3,2)$, signo $(-1)^{3+2}=-1$): $$\det Q=(-1)\cdot(-1)\cdot\begin{vmatrix}2&0\\-1&4\end{vmatrix}=8.$$ <b>Respuesta: $8$.</b></li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li><b>Por qué la matriz se construye así.</b> Si $w=\alpha_1\bar u_1+\alpha_2\bar u_2+\alpha_3\bar u_3$, sustituyendo las relaciones queda $w=(2\alpha_1+5\alpha_2)\bar v_1+(-\alpha_1+4\alpha_3)\bar v_2+(-\alpha_2)\bar v_3$: los coeficientes, fila a fila, son el producto $Q\,(\alpha_1,\alpha_2,\alpha_3)^t$.</li>
+      <li>El sentido importa: el cambio contrario, de $\mathcal B$ a $\mathcal B'$, tendría determinante $1/8$ (aquí el resultado no es $\pm1$ y la confusión se nota).</li>
+      <li>Control del sentido: $Q\,(1,0,0)^t=(2,-1,0)$ debe ser $\bar u_1$ escrito en $\mathcal B$ ✓. Ojo a los nombres: $\mathcal B'$ es la base formada por los $\bar u$.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> igual que el ejercicio anterior. Si dice «de coordenadas en $\mathcal B'$ a coordenadas en $\mathcal B$», la matriz es la de los vectores de $\mathcal B'$ <b>escritos en</b> $\mathcal B$, por columnas. Para no equivocarte de sentido: $Q\,(1,0,0)^t$ debe ser $\bar u_1$ en $\mathcal B$, es decir $(2,-1,0)$.</div>
   <p><b>Error típico:</b> contestar $1/8$ por invertir el sentido; confundir los nombres de las bases ($\mathcal B'$ está formada por los $\bar u$).</p>
 </details>
@@ -909,34 +917,29 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $f(x_1,x_2)=(-7x_1+6x_2,\ -9x_1+8x_2)$ una aplicación lineal de $\mathbb R^2$ en $\mathbb R^2$ respecto a la base canónica. Halle la matriz asociada a $f$ con respecto a la base $B=\{(1,-1),(1,1)\}$. <i>(El 2.º apartado, «estudie si $f$ es diagonalizable…», es del tema 4.3.)</i></p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Forma $A$ (matriz canónica de $f$) y $Q$ con los vectores de $B$ por columnas; la matriz pedida es $Q^{-1}AQ$. Ojo, aquí la base nueva se llama $B$.</p></details>
 <details class="sol" id="ex-feb26-2p8-35"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2026 (2.ª sem.), problema 8, 1.er apartado, por la vía $Q^{-1}AQ$ <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª sem.), problema 8, 1.er apartado">X Feb. 2026 (2.ª) P8</span></summary>
-  <p><b>Qué se pide.</b> $f$ es un endomorfismo. «La matriz respecto a la base $B$» significa $B$ <b>en la salida y en la llegada</b>. Conocemos la matriz en la canónica $C$ y queremos la de $B$. El 1.er apartado ya se resolvió por la Def. 3.4 en el <a href="tema_3_3_ecuaciones_matriz_asociada.html#ex-feb26-2p8">tema 3.3</a>; aquí se rehace por la fórmula $Q^{-1}AQ$ y se comparan las dos vías.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de un endomorfismo de $\mathbb R^2$ en la base $B$ por $Q^{-1}AQ$.</dd>
     <dt>Cómo lo pienso</dt><dd>Tamaño pequeño: inversa por adjunta.</dd>
-    <dt>Qué uso</dt><dd><b>Cambio de base en una aplicación lineal (Def. 3.15, U p.136):</b> si $A$ es la matriz en las bases antiguas y $Q$ (salida) y $P$ (llegada) los cambios, la matriz nueva es $A'=P^{-1}AQ$. En un endomorfismo con la misma base nueva, $A'=Q^{-1}AQ$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 3.15</b> (U p.136): $A'=P^{-1}AQ$ ($Q$ salida, $P$ llegada); endomorfismo con la misma base: $A'=Q^{-1}AQ$ — <a href="#s4">teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>$A$, $Q$, $Q^{-1}$ y producto.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Matriz en la canónica</b> (Def. 3.4):
-      $$A=\begin{pmatrix}-7&6\\-9&8\end{pmatrix}.$$</li>
-    <li><b>Matriz de cambio $Q$ de $B$ (nueva) a $C$ (antigua):</b> columnas = vectores de $B$,
-      $$Q=\begin{pmatrix}1&1\\-1&1\end{pmatrix},\qquad\det Q=1+1=2\neq0$$
-      <p>(confirma que $B$ es base).</p></li>
-    <li><b>Fórmula</b> (Def. 3.15 con $P=Q$): $A_B=Q^{-1}AQ$.</li>
-    <li><b>Inversa</b> (adjunta, $2\times2$):
-      $$Q^{-1}=\frac12\begin{pmatrix}1&-1\\1&1\end{pmatrix}.$$
-      <p>Comprobación:</p>
-      $$\frac12\begin{pmatrix}1&-1\\1&1\end{pmatrix}\begin{pmatrix}1&1\\-1&1\end{pmatrix}=\frac12\begin{pmatrix}2&0\\0&2\end{pmatrix}=I\ ✓$$</li>
-    <li><b>Producto</b> (asociativo, pero sin cambiar el orden):
-      $$Q^{-1}A=\frac12\begin{pmatrix}-7+9&6-8\\-7-9&6+8\end{pmatrix}=\begin{pmatrix}1&-1\\-8&7\end{pmatrix},$$
-      $$A_B=\begin{pmatrix}1&-1\\-8&7\end{pmatrix}\begin{pmatrix}1&1\\-1&1\end{pmatrix}=\begin{pmatrix}2&0\\-15&-1\end{pmatrix}.$$</li>
-    <li><b>Comparación con la otra vía.</b> Las columnas $(2,-15)_B$ y $(0,-1)_B$ de $A_B$ son las mismas que se obtienen en el tema 3.3 por la Def. 3.4. Aquí
-      $$AQ=\begin{pmatrix}-13&-1\\-17&-1\end{pmatrix}$$
-      <p>junta las imágenes $f(1,-1)$ y $f(1,1)$, y $Q^{-1}$ las pasa a coordenadas en $B$.</p></li>
-    <li><b>Comprobación con un vector.</b> $v=(2,1)_B=2(1,-1)+1(1,1)=(3,-1)$. Directamente $f(3,-1)=(-27,-35)$. Con la nueva matriz,
-      $$A_B\binom21=\binom4{-31},\qquad4(1,-1)-31(1,1)=(-27,-35)\ ✓$$</li>
-    <li><b>Control rápido.</b> Traza ($2-1=1$) y determinante ($-2$) coinciden con los de $A$ ($-7+8=1$; $-56+54=-2$): $\det(Q^{-1}AQ)=\det A$.</li>
-  </ol>
+    <li><b>Matriz de $f$ en la base canónica</b> (Def. 3.4, columnas = imágenes de $e_1,e_2$): $$A=\begin{pmatrix}-7&6\\-9&8\end{pmatrix}.$$</li>
+    <li><b>Matriz de cambio</b> de $B$ (nueva) a la canónica (antigua), vectores de $B$ por columnas: $$Q=\begin{pmatrix}1&1\\-1&1\end{pmatrix},\qquad\det Q=1+1=2\neq0,$$ luego $B$ es base.</li>
+    <li><b>Fórmula</b> (Def. 3.15, misma base $B$ en salida y llegada): $A_B=Q^{-1}AQ$.</li>
+    <li><b>Inversa</b> ($2\times2$, por la adjunta): $$Q^{-1}=\frac12\begin{pmatrix}1&-1\\1&1\end{pmatrix}.$$</li>
+    <li><b>Producto</b>, primero $Q^{-1}A$ y el resultado por $Q$: $$Q^{-1}A=\frac12\begin{pmatrix}-7+9&6-8\\-7-9&6+8\end{pmatrix}=\begin{pmatrix}1&-1\\-8&7\end{pmatrix},\qquad A_B=\begin{pmatrix}1&-1\\-8&7\end{pmatrix}\begin{pmatrix}1&1\\-1&1\end{pmatrix}=\begin{pmatrix}2&0\\-15&-1\end{pmatrix}.$$ <b>Respuesta:</b> $A_B=\begin{pmatrix}2&0\\-15&-1\end{pmatrix}$.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>«La matriz respecto a la base $B$» significa $B$ en la salida <b>y</b> en la llegada ($f$ es un endomorfismo). El mismo apartado está resuelto por la Def. 3.4 en el <a href="tema_3_3_ecuaciones_matriz_asociada.html#ex-feb26-2p8">tema 3.3</a>; las columnas $(2,-15)_B$ y $(0,-1)_B$ salen iguales por las dos vías.</li>
+      <li>Comprobación de la inversa: $Q^{-1}Q=\frac12\begin{pmatrix}2&0\\0&2\end{pmatrix}=I$ ✓.</li>
+      <li>$AQ=\begin{pmatrix}-13&-1\\-17&-1\end{pmatrix}$ junta las imágenes $f(1,-1)$ y $f(1,1)$ en la canónica; $Q^{-1}$ las pasa a coordenadas en $B$.</li>
+      <li>Comprobación con un vector: $v=(2,1)_B=2(1,-1)+1(1,1)=(3,-1)$ y $f(3,-1)=(-27,-35)$; con la nueva matriz, $A_B\binom21=\binom4{-31}$ y $4(1,-1)-31(1,1)=(-27,-35)$ ✓.</li>
+      <li>Control rápido: traza $2-1=1$ y determinante $-2$ coinciden con los de $A$: $\det(Q^{-1}AQ)=\det A$. Este control <b>no</b> detecta el orden equivocado $QAQ^{-1}$; la comprobación con un vector sí.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> (1) $A$ en la canónica; (2) $Q$ = vectores de la base nueva <b>en columnas</b>; (3) $A'=Q^{-1}AQ$, con la inversa a la <b>izquierda</b>; (4) comprueba con un vector o con $\det A'=\det A$ (débil). Si las bases de salida y de llegada son distintas: $A'=P^{-1}AQ$.</div>
   <p><b>Error típico:</b> (a) invertir el orden y calcular $QAQ^{-1}=\begin{pmatrix}-1&15\cr0&2\end{pmatrix}$, que es la matriz en <b>otra</b> base (el control del determinante no lo detecta; la comprobación con un vector sí); (b) poner los vectores de $B$ en filas, que da otra vez $\begin{pmatrix}-1&15\cr0&2\end{pmatrix}$; (c) dejar el resultado como $AQ$.</p>
 </details>
