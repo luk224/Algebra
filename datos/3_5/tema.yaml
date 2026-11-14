@@ -34,3 +34,230 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Un vector es el mismo aunque cambien sus números; lo que cambia es la base con la que los escribes, y la matriz $Q$ es el diccionario entre dos bases.
+  items:
+  - |-
+    <b>Cambio de coordenadas:</b> $x_B=Q\,x_{B'}$, donde las <b>columnas</b> de $Q$ son los vectores de la base nueva $B'$ escritos en la antigua $B$. Si $B$ es la canónica, $Q$ se lee directamente.
+  - |-
+    <b>Sentido contrario:</b> $x_{B'}=Q^{-1}x_B$. Toda matriz de cambio de base es regular ($\det Q\neq0$) y $\det Q^{-1}=1/\det Q$.
+  - |-
+    <b>Aplicación entre dos espacios:</b> $A'=P^{-1}AQ$, con $Q$ el cambio en el espacio de salida y $P$ el del de llegada (ambos de nueva a antigua). La inversa va a la <b>izquierda</b>.
+  - |-
+    <b>Endomorfismo (misma base):</b> $A'=Q^{-1}AQ$; las matrices $A$ y $A'$ son semejantes y $\det A'=\det A$. Es la base del tema 4 (diagonalización).
+  - |-
+    <b>Calcular $Q^{-1}$:</b> despejando la base antigua, por Gauss-Jordan $(Q\mid I)\sim(I\mid Q^{-1})$ o con la adjunta. Comprueba siempre con un vector.
+tipos:
+- id: cambio
+  nombre: |-
+    Pasar coordenadas de una base a otra
+  receta: |-
+    Base nueva por columnas forma $Q$; entonces $x_B=Q\,x_{B'}$.
+  senal: |-
+    «coordenadas de $x$ respecto de $B$ sabiendo que es $(\dots)_{B'}$», «matriz de cambio de base», «ecuaciones del cambio de base».
+  pasos:
+  - |-
+    <b>Decide el sentido:</b> ¿qué base es la «nueva» ($B'$) y cuál la «antigua» ($B$)? $Q$ siempre lleva coordenadas de nueva a antigua.
+  - |-
+    <b>Escribe cada vector de $B'$ en la base $B$</b>. Si $B$ es la canónica, son sus componentes; si no, hay que resolver un sistema por cada vector (en $P_n$, igualar coeficientes).
+  - |-
+    <b>Colócalos por columnas</b> para formar $Q$ y comprueba $\det Q\neq0$.
+  - |-
+    <b>Multiplica</b> $x_B=Q\,x_{B'}$ (o escribe las ecuaciones fila a fila) y comprueba con la definición de coordenadas.
+  ejemplo: |-
+    $B'=\{(1,2),(1,-1)\}$ y $x=(3,1)_{B'}$: $Q=\begin{pmatrix}1&1\\2&-1\end{pmatrix}$ y $x_B=Q\binom31=(4,5)$. Comprobación: $3(1,2)+1(1,-1)=(4,5)$.
+  fallos: |-
+    poner los vectores de $B'$ por filas (sale $Q^t$) · multiplicar por $Q$ cuando el dato está en la base antigua · olvidar que el orden de los vectores de la base importa.
+- id: inversa
+  nombre: |-
+    Cambio contrario y matriz inversa
+  receta: |-
+    De antigua a nueva se multiplica por $Q^{-1}$.
+  senal: |-
+    «coordenadas en $B'$ de un vector dado en $B$», «de $B$ a $B'$», «demuestre que $Q_{BB'}=Q_{B'B}^{-1}$», «calcule la inversa».
+  pasos:
+  - |-
+    <b>Forma $Q$</b> (de $B'$ a $B$) como en el tipo anterior.
+  - |-
+    <b>Calcula $Q^{-1}$:</b> despejando los vectores de $B$ en función de los de $B'$ (las coordenadas obtenidas son las columnas), por Gauss-Jordan $(Q\mid I)\sim(I\mid Q^{-1})$ o con la adjunta en $2\times2$.
+  - |-
+    <b>Comprueba</b> $Q^{-1}Q=I$ y aplica $x_{B'}=Q^{-1}x_B$.
+  - |-
+    <b>Si hay que demostrarlo:</b> sustituye $x_B=Qx_{B'}$ en $x_{B'}=Rx_B$ para todo vector y concluye $RQ=I$ (y $QR=I$).
+  ejemplo: |-
+    $Q=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ (columnas $(2,1)$ y $(1,1)$): $\det Q=1$ y $Q^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}$. Así $y=(3,1)$ de la canónica pasa a $Q^{-1}y=(2,-1)_{B'}$, pues $2(2,1)-1(1,1)=(3,1)$.
+  fallos: |-
+    usar $Q$ en vez de $Q^{-1}$ · poner las coordenadas por filas al despejar (sale $(Q^{-1})^t$) · en $2\times2$, olvidar dividir entre el determinante.
+- id: endo
+  nombre: |-
+    Matriz de un endomorfismo en otra base
+  receta: |-
+    $A'=Q^{-1}AQ$ con $Q$ = vectores de la base nueva por columnas.
+  senal: |-
+    «matriz asociada a $f:\mathbb R^n\to\mathbb R^n$ respecto de la base $B'$», «ecuaciones de $f$ referidas a la base…».
+  pasos:
+  - |-
+    <b>Halla $A$</b>, la matriz de $f$ en la base que ya conoces (normalmente la canónica: imágenes de $e_j$ por columnas).
+  - |-
+    <b>Forma $Q$</b> con los vectores de la base nueva por columnas y calcula $Q^{-1}$.
+  - |-
+    <b>Multiplica en el orden correcto:</b> $A'=Q^{-1}(AQ)$. Primero $AQ$ (imágenes de $B'$ en la base antigua) y luego $Q^{-1}$ las pasa a la nueva.
+  - |-
+    <b>Comprueba</b> $\det A'=\det A$ y una columna: la columna $j$ de $A'$ son las coordenadas de $f(e'_j)$ en $B'$.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&2\\0&3\end{pmatrix}$, $B'=\{(1,0),(1,1)\}$: $Q=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ y $A'=Q^{-1}AQ=\begin{pmatrix}1&0\\0&3\end{pmatrix}$. (Con $QAQ^{-1}$ saldría $\begin{pmatrix}1&4\\0&3\end{pmatrix}$, que es otra matriz.)
+  fallos: |-
+    escribir $QAQ^{-1}$ (el determinante y la traza no lo detectan) · detenerse en $AQ$ · usar $Q$ donde va $Q^{-1}$.
+- id: bases2
+  nombre: |-
+    Aplicación entre espacios distintos o con imágenes de una base
+  receta: |-
+    $A'=P^{-1}AQ$; o bien $M=F\,Q^{-1}$ si te dan las imágenes de una base.
+  senal: |-
+    «$f:\mathbb R^n\to\mathbb R^m$ con bases $B,B'$ en la salida y $U,U'$ en la llegada», «halle la matriz canónica sabiendo $f(v_1)=\dots$».
+  pasos:
+  - |-
+    <b>Obtén $A$</b> en las bases antiguas (Def. 3.4: columnas = imágenes de la base de salida escritas en la de llegada). Si te dan imágenes de vectores que no son la base, usa la linealidad.
+  - |-
+    <b>Forma $Q$</b> (salida, tamaño $\dim V$) y <b>$P$</b> (llegada, tamaño $\dim W$), ambas de nueva a antigua, con los vectores por columnas.
+  - |-
+    <b>Calcula $P^{-1}$</b> y multiplica $A'=P^{-1}AQ$; comprueba que los tamaños encajan.
+  - |-
+    <b>Caso «imágenes de una base $V$»:</b> pon los vectores de $V$ en columnas ($Q$) y sus imágenes en columnas ($F$); la matriz canónica es $M=FQ^{-1}$.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&2\\3&4\end{pmatrix}$, $Q=\begin{pmatrix}1&0\\1&1\end{pmatrix}$, $P=\begin{pmatrix}1&1\\0&1\end{pmatrix}$: $A'=P^{-1}AQ=\begin{pmatrix}1&-1\\0&1\end{pmatrix}\begin{pmatrix}3&2\\7&4\end{pmatrix}=\begin{pmatrix}-4&-2\\7&4\end{pmatrix}$. Matriz canónica: $f(1,1)=(2,0)$, $f(0,1)=(1,1)$ dan $M=\begin{pmatrix}2&1\\0&1\end{pmatrix}\begin{pmatrix}1&0\\-1&1\end{pmatrix}=\begin{pmatrix}1&1\\-1&1\end{pmatrix}$.
+  fallos: |-
+    intercambiar $P$ y $Q$ (los tamaños no encajan) · usar $P$ en lugar de $P^{-1}$ · mezclar los datos de $f$ de dos ejercicios con las mismas bases.
+- id: detq
+  nombre: |-
+    Determinante de una matriz de cambio de base
+  receta: |-
+    Vectores nuevos por columnas; el determinante es ese; el contrario es el inverso.
+  senal: |-
+    «el determinante de la matriz de cambio de $B'$ a $B$ es…», «relacionados por $u'_1=u_1+u_3,\dots$».
+  pasos:
+  - |-
+    <b>Lee del enunciado</b> cómo se escribe cada vector nuevo en función de los antiguos.
+  - |-
+    <b>Escribe $Q$ con esas coordenadas por columnas</b> (de nueva a antigua). El determinante no cambia si las pones por filas, pero hazlo bien.
+  - |-
+    <b>Calcula $\det Q$</b> (Sarrus o desarrollo por una línea).
+  - |-
+    <b>Si piden el sentido contrario</b>, el resultado es $1/\det Q$.
+  ejemplo: |-
+    $u'_1=2v_1,\ u'_2=v_2+v_3,\ u'_3=v_3$: $Q=\begin{pmatrix}2&0&0\\0&1&0\\0&1&1\end{pmatrix}$, $\det Q=2$. El cambio de $B$ a $B'$ tiene determinante $1/2$.
+  fallos: |-
+    dar $\det Q$ cuando piden el cambio contrario · pensar que puede salir $0$ · equivocar el signo al desarrollar.
+quiz:
+- p: |-
+    Sea $B'=\{(1,1),(-1,1)\}$ y $x=(2,-1)_{B'}$. ¿Cuáles son las coordenadas de $x$ en la base canónica?
+  opciones:
+  - t: |-
+      $(3,1)$
+    ok: true
+  - t: |-
+      $(1,-3)$
+    ok: false
+    why: |-
+      Has puesto los vectores de $B'$ por filas y has usado $Q^t$. Deben ir por columnas.
+  - t: |-
+      $(1/2,-3/2)$
+    ok: false
+    why: |-
+      Has multiplicado por $Q^{-1}$, que va de la canónica a $B'$. Aquí el dato ya está en $B'$: hay que multiplicar por $Q$.
+  fb: |-
+    $Q=\begin{pmatrix}1&-1\\1&1\end{pmatrix}$ y $x_B=Q\binom{2}{-1}=(3,1)$. Comprobación: $2(1,1)-1(-1,1)=(3,1)$.
+- p: |-
+    Con las mismas bases, el vector $(3,1)$ está dado en la canónica. ¿Cuáles son sus coordenadas respecto de $B'=\{(1,1),(-1,1)\}$?
+  opciones:
+  - t: |-
+      $(2,-1)$
+    ok: true
+  - t: |-
+      $(2,4)$
+    ok: false
+    why: |-
+      Es $Q\,(3,1)^t$: has usado $Q$ en vez de $Q^{-1}$, que es lo que lleva de antigua a nueva.
+  - t: |-
+      $(4,-2)$
+    ok: false
+    why: |-
+      Has intercambiado y cambiado de signo los elementos de $Q$ (adjunta) pero has olvidado dividir entre $\det Q=2$.
+  fb: |-
+    $Q^{-1}=\tfrac12\begin{pmatrix}1&1\\-1&1\end{pmatrix}$, luego $x_{B'}=Q^{-1}(3,1)^t=(2,-1)$. Es el mismo vector del ejercicio anterior visto desde la otra base.
+- p: |-
+    Los vectores de $B'$ son $u'_1=2v_1$, $u'_2=v_2+v_3$, $u'_3=v_3$ respecto de $B=\{v_1,v_2,v_3\}$. ¿Cuánto vale el determinante de la matriz de cambio de $B$ a $B'$?
+  opciones:
+  - t: |-
+      $1/2$
+    ok: true
+  - t: |-
+      $2$
+    ok: false
+    why: |-
+      Es el determinante de la matriz de $B'$ a $B$. El cambio contrario es la inversa, con determinante $1/\det Q$.
+  - t: |-
+      $0$
+    ok: false
+    why: |-
+      Una matriz de cambio de base es siempre regular; un determinante nulo indicaría que los vectores no forman base.
+  fb: |-
+    Con los vectores nuevos por columnas, $\det Q=2\cdot1\cdot1=2$ (triangular por bloques). El cambio $B\to B'$ es $Q^{-1}$ y $\det Q^{-1}=1/2$.
+- p: |-
+    Sea $A=\begin{pmatrix}1&2\\0&3\end{pmatrix}$ la matriz de $f$ en la canónica y $B'=\{(1,0),(1,1)\}$. ¿Cuál es la matriz de $f$ en $B'$?
+  opciones:
+  - t: |-
+      $\begin{pmatrix}1&0\\0&3\end{pmatrix}$
+    ok: true
+  - t: |-
+      $\begin{pmatrix}1&4\\0&3\end{pmatrix}$
+    ok: false
+    why: |-
+      Es $QAQ^{-1}$: has puesto la inversa en el lado equivocado. Debe ser $Q^{-1}AQ$.
+  - t: |-
+      $\begin{pmatrix}1&2\\0&3\end{pmatrix}$
+    ok: false
+    why: |-
+      La matriz de una aplicación depende de las bases elegidas; no es la misma al cambiar $B'$.
+  fb: |-
+    $Q=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ y $Q^{-1}AQ=\begin{pmatrix}1&-1\\0&1\end{pmatrix}\begin{pmatrix}1&3\\0&3\end{pmatrix}=\begin{pmatrix}1&0\\0&3\end{pmatrix}$. Con $\det A'=3$ no basta para distinguir el orden: comprueba una columna.
+- p: |-
+    Sea $f:\mathbb R^2\to\mathbb R^3$ con matriz $A$ en las bases $B,S$. Se cambian a $B'$ (cambio $Q$) y $S'$ (cambio $P$), ambos de nueva a antigua. ¿Cuál es la matriz en $B',S'$?
+  opciones:
+  - t: |-
+      $P^{-1}AQ$
+    ok: true
+  - t: |-
+      $Q^{-1}AP$
+    ok: false
+    why: |-
+      Los tamaños no encajan: $Q$ es $2\times2$ y $A$ es $3\times2$, así que $Q^{-1}A$ no se puede multiplicar. $Q$ actúa en la salida (derecha) y $P$ en la llegada (izquierda).
+  - t: |-
+      $PAQ^{-1}$
+    ok: false
+    why: |-
+      Los tamaños cuadran, pero las inversas están cambiadas: en la derecha va $Q$ (traduce $x_{B'}$ a $x_B$) y en la izquierda $P^{-1}$ (traduce el resultado de $S$ a $S'$).
+  fb: |-
+    Se lee de derecha a izquierda: $Q$ traduce la entrada a la base antigua, $A$ aplica $f$, y $P^{-1}$ traduce la salida a la base nueva.
+- p: |-
+    Sea $\det A=3$, $Q=\begin{pmatrix}1&1\\0&2\end{pmatrix}$ y $A'=Q^{-1}AQ$ (misma base en salida y llegada). ¿Cuánto vale $\det A'$?
+  opciones:
+  - t: |-
+      $3$
+    ok: true
+  - t: |-
+      $3/2$
+    ok: false
+    why: |-
+      Has contado solo $\det Q^{-1}=1/2$ y olvidado el factor $\det Q=2$ de la derecha: se compensan.
+  - t: |-
+      $6$
+    ok: false
+    why: |-
+      Has multiplicado por $\det Q=2$ pero no has dividido por él: $\det(Q^{-1}AQ)=\det Q^{-1}\det A\det Q$.
+  fb: |-
+    $\det A'=\frac1{\det Q}\det A\det Q=\det A=3$. Matrices semejantes tienen el mismo determinante, aunque ese control no detecta haber escrito $QAQ^{-1}$.
+capa: true
+que_cae_nota: |-
+  En examen sale casi siempre el determinante de una matriz de cambio de base (test) y la matriz de un endomorfismo en otra base, $Q^{-1}AQ$; el resto aparece en el libro de ejercicios.
