@@ -21,6 +21,9 @@ Objetivo: dejar de editar a mano 26 HTML de ~120 KB. El contenido vive en **dato
 | `datos_tema.py construir X.Y` | datos → `temas/tema_X_Y_*.html` |
 | `datos_tema.py verificar X.Y` | construye en memoria y compara con el HTML actual: (1) mismas etiquetas, atributos y texto; (2) mismo texto visible en Chrome |
 | `datos_tema.py validar X.Y` | ids únicos, campos obligatorios, bloque `plan` y `pasos`, fuente X en los ejercicios de examen, sin menciones a erratas |
+| `datos_tema.py migrar X.Y` | extraer + validar + verificar + construir y comprobación de que no se pierde ningún ejercicio |
+| `datos_tema.py probar todos` | extrae y reconstruye los 26 temas EN MEMORIA y compara; es la prueba rápida antes de cada commit |
+| `examenes.py` | regenera `datos/examenes.yaml` (registro global) y valida |
 | `probar_practica.py` | comprueba con sympy los generadores de `assets/practica.js` |
 | `prioridades.py` | regenera `prioridades.html` |
 
@@ -33,17 +36,23 @@ Leyenda: `—` sin tocar · `E` ejercicios en datos (fase F2) · `C` carcasa y t
 
 | Tema | Estado | Tema | Estado | Tema | Estado |
 |---|---|---|---|---|---|
-| 1.2 | **E** | 3.1 | **E** | 5.1 | **E** |
-| 1.3 | **E** | 3.2 | **E** | 5.2 | **E** |
-| 1.4 | **E** | 3.3 | **E** | 5.3 | **E** |
-| 1.5 | **E** | 3.4 | **E** | 5.4 | **E** |
-| 2.1 | **E** | 3.5 | **E** | 6.1 | **E** |
-| 2.2 | **E** | 4.1 | **E** | 6.2 | **E** |
-| **2.3** | **E** (piloto, ida y vuelta OK) | 4.2 | **E** | 6.3 | **E** |
-| 2.4 | **E** | 4.3 | **E** | 6.4 | **E** |
-| | | 4.4 | **E** | 6.5 | **E** |
+| 1.2 | **C** | 3.1 | **C** | 5.1 | **C** |
+| 1.3 | **C** | 3.2 | **C** | 5.2 | **C** |
+| 1.4 | **C** | 3.3 | **C** | 5.3 | **C** |
+| 1.5 | **C** | 3.4 | **C** | 5.4 | **C** |
+| 2.1 | **C** | 3.5 | **C** | 6.1 | **C** |
+| 2.2 | **C** | 4.1 | **C** | 6.2 | **C** |
+| **2.3** | **C** (+ tipos/problema) | 4.2 | **C** | 6.3 | **C** |
+| 2.4 | **C** | 4.3 | **C** | 6.4 | **C** |
+| | | 4.4 | **C** | 6.5 | **C** |
 
-## Lo que se sabe del contenido actual (censo hecho antes de empezar)
+## Hallazgos durante la migración (leer antes de seguir)
+- **Corrección de cifras:** la página de prioridades contaba 235 «ejercicios de examen» porque usaba `id="ex-…"`. Eran 13 ejercicios propios con id `ex-propio-…` (sin fuente X) y 3 resúmenes que solo remiten a otro tema. La cifra correcta es **219** ejercicios de examen desarrollados paso a paso (222 con fuente X). `prioridades.html` ya usa el registro y los 219.
+- Un mismo `id` de examen (p. ej. `ex-sep24`) existe en varios temas: designa el examen, no la pregunta. No hay colisión porque cada tema es una página distinta.
+- El extractor v2 lee los 26 temas sin intervención (636 soluciones). Los bloques con estructura no estándar (27 recetas con texto extra, `ol.steps` con `start`, párrafos «Qué se pide») quedan como bloque `html` literal.
+- **Después de la migración no se vuelve a ejecutar `extraer` ni `plantilla` en un tema**: sobrescribirían ediciones hechas en los datos. Se edita el dato y se reconstruye.
+
+## Lo que se sabía del contenido antes de empezar (censo inicial)
 - 636 soluciones (`details.sol`) en 26 temas; 593 llevan `<p class="enun">` dentro de la solución. **Solo el 2.3 tiene el formato nuevo** (enunciado visible, pista, nivel ★) y los demás el antiguo.
 - Bloques dentro de una solución: `div.plan` (539), `ol.steps` (628), `p` (997), `div.recipe` (565); rarezas: `div.box` (15), `table` (3), `figure` (2), `h4` (2), `p.note` (1).
 - 25 soluciones **sin `id`**. ~15 irregulares para el extractor actual: `details` anidados, comentarios `<!-- -->` y fórmulas `$$…$$` sueltas a nivel superior.
@@ -70,18 +79,18 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
 - Si un tema falla `verificar`: no tocar el HTML; corregir el extractor o escribir el bloque como `html` y volver a probar. Nunca «arreglar» el contenido a la vez que se migra.
 - Tras cada módulo: `validar` en todos los migrados y comprobar que el nº de `details.sol` y de `id="ex-…"` por tema no ha bajado (`grep -c`).
 
-### F3 — Carcasa y teoría
-- [ ] **3.1** `tema.yaml` ampliado con: título, módulo, kicker, resumen del hero, horas, libro y páginas, prerrequisitos, mapa del tema, enlaces a la teoría de otros temas.
-- [ ] **3.2** `plantilla_tema.html` con cabecera, topbar, pestañas, índice lateral, chuleta, lista de comprobación, errores frecuentes y panel de fuentes, rellenada desde `tema.yaml`. Verificar con la misma ida y vuelta.
-- [ ] **3.2b** La carcasa debe incluir lo que hoy solo tiene el 2.3: `<html class="pilot">`, `assets/pedagogia.css/js` y `practica.js`, `data-vista` en cada `h2` (teoría / tipos / ejercicios / examen), pestañas, botón «Mostrar fuentes» (ocultas por defecto) y el aviso «archivo generado» en la cabecera.
-- [ ] **3.3** Partir `pagina.html` en un fragmento por sección (`datos/X_Y/s1.html`, `s2.html`…), para que un agente abra solo la sección que toca.
-- [ ] **3.4** Migrar tema a tema (mismo orden que F2) con la receta: extraer → verificar → construir → commit.
+### F3 — Carcasa y teoría *(HECHO)*
+- [x] **3.1** `tema.yaml` ampliado con: título, módulo, kicker, resumen del hero, horas, libro y páginas, prerrequisitos, mapa del tema, enlaces a la teoría de otros temas. *(hecho: `tema.yaml` lleva código, archivo, título, clase de `<html>`, listas `css`/`js`, kicker, h1, resumen, chips —horas, libro y páginas— y letras de la leyenda. Prerrequisitos y mapa del tema siguen dentro de la sección «inicio» (HTML))*
+- [x] **3.2** `plantilla_tema.html` con cabecera, topbar, pestañas, índice lateral, chuleta, lista de comprobación, errores frecuentes y panel de fuentes, rellenada desde `tema.yaml`. Verificar con la misma ida y vuelta. *(hecho: `datos/_plantilla/tema.html` con marcadores `{{titulo}}`, `{{recursos}}`, `{{kicker}}`, `{{h1}}`, `{{resumen}}`, `{{chips}}`, `{{leyenda}}`, `{{cuerpo}}`; el pie es común a los 26 temas. Se edita a mano: no volver a ejecutar `plantilla`)*
+- [x] **3.2b** La carcasa debe incluir lo que hoy solo tiene el 2.3: `<html class="pilot">`, `assets/pedagogia.css/js` y `practica.js`, `data-vista` en cada `h2` (teoría / tipos / ejercicios / examen), pestañas, botón «Mostrar fuentes» (ocultas por defecto) y el aviso «archivo generado» en la cabecera. *(hecho: la plantilla lee `html_class`, `css` y `js` de `tema.yaml`; solo el 2.3 las usa de momento. Activar pestañas en otro tema = poner `html_class: class="pilot"`, añadir `pedagogia.css/js` y `data-vista` a sus `h2`: es F5. Aviso «GENERADO» ya incluido en el HTML)*
+- [x] **3.3** Partir `pagina.html` en un fragmento por sección (`datos/X_Y/s1.html`, `s2.html`…), para que un agente abra solo la sección que toca. *(hecho: `datos/X_Y/secciones/NN_id.html`, uno por `h2`; `cargar` los concatena por orden de nombre)*
+- [x] **3.4** Migrar tema a tema (mismo orden que F2) con la receta: extraer → verificar → construir → commit. *(hecho: los 26 temas, 1 commit por tema, ida y vuelta verificada con Chrome)*
 
-### F4 — Datos globales
-- [ ] **4.1** `datos/examenes.yaml`: un registro por ejercicio de examen con convocatoria, pregunta, **tema donde se desarrolla**, **tipo de problema** y puntos si se conocen. Rellenarlo desde los dossiers (`fuentes_txt/examenes_dossier_*.md`) y los `id="ex-…"`.
-- [ ] **4.1b** Añadir al esquema de ejercicio el campo `problema` (tipo de problema: `base`, `coord`, `dim`, `completar`…) para generar automáticamente las listas de enlaces de las fichas «Por tipo» y la tabla «Qué cae». En el 2.3 hoy esos enlaces están escritos a mano en `pagina.html`.
-- [ ] **4.2** Validador global: cada ejercicio del registro aparece **exactamente una vez** en algún tema; ningún ejercicio de examen desaparece (regla 14).
-- [ ] **4.3** Generar desde datos: tabla «Qué cae en el examen», enlaces de las fichas «Por tipo», `prioridades.html` y `index.html`.
+### F4 — Datos globales *(HECHO)*
+- [x] **4.1** `datos/examenes.yaml`: un registro por ejercicio de examen con convocatoria, pregunta, **tema donde se desarrolla**, **tipo de problema** y puntos si se conocen. Rellenarlo desde los dossiers (`fuentes_txt/examenes_dossier_*.md`) y los `id="ex-…"`. *(hecho: `herramientas/examenes.py` genera `datos/examenes.yaml` desde los temas; no se edita a mano)*
+- [x] **4.1b** Añadir al esquema de ejercicio el campo `problema` (tipo de problema: `base`, `coord`, `dim`, `completar`…) para generar automáticamente las listas de enlaces de las fichas «Por tipo» y la tabla «Qué cae». En el 2.3 hoy esos enlaces están escritos a mano en `pagina.html`. *(hecho en el esquema y en el 2.3: `problema` —lista, el primero es el principal— y `etiqueta`. Los otros 25 temas lo rellenan en F5)*
+- [x] **4.2** Validador global: cada ejercicio del registro aparece **exactamente una vez** en algún tema; ningún ejercicio de examen desaparece (regla 14). *(hecho, adaptado: el mismo `id` de examen se repite en varios temas porque designa el examen y cada tema desarrolla una pregunta distinta; la clave es (tema, id). El validador marca error si hay id repetido dentro de un tema y avisa de preguntas con la misma referencia en varios temas, para revisar a mano)*
+- [x] **4.3** Generar desde datos: tabla «Qué cae en el examen», enlaces de las fichas «Por tipo», `prioridades.html` y `index.html`. *(hecho para «Qué cae» y los enlaces de las fichas del 2.3 —marcadores `{{que_cae}}` y `{{vinculos:ID}}`— y para `prioridades.html`. `index.html` se deja manual: sus tarjetas llevan miniaturas SVG propias)*
 
 ### F5 — Capa pedagógica en el resto de temas (ya con datos)
 - [ ] **5.1** Por tema: `nivel` y `pista` de cada ejercicio, fichas de método por tipo de problema, «Lo esencial en 5 minutos» y autoevaluación con el porqué de cada opción errónea. Se escribe en datos; el piloto 2.3 es el modelo.

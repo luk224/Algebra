@@ -31,6 +31,10 @@ ESQUEMA de un ejercicio (ejercicios.yaml es una lista de estos registros):
   nivel      1, 2 ó 3 (★☆☆ básico, ★★☆ nivel examen, ★★★ difícil)
   enunciado  HTML del enunciado, visible fuera de la solución (sin spoilers; no lleva bloque `enun` en el cuerpo)
   pista      HTML de la pista
+  problema   (opcional) lista de tipos de problema que cubre; el primero es el principal. Alimenta la tabla «Qué cae» y los enlaces de las fichas
+  etiqueta   (opcional) texto del enlace; obligatorio en los ejercicios de examen con `problema`. Los de libro y propios se deducen del título
+
+tema.yaml puede llevar `tipos: [{id, nombre, receta}]`; las secciones usan los marcadores {{que_cae}} y {{vinculos:ID_TIPO}}.
 """
 import re, sys, pathlib, html as _html
 from html.parser import HTMLParser
@@ -197,14 +201,14 @@ def render_pagina(cfg, cuerpo):
     pl = PLANTILLA.read_text(encoding='utf8')
     cls = ' ' + cfg['html_class'] if cfg.get('html_class') else ''
     chips = ''.join(f'<span>{c}</span>' for c in cfg['chips'])
-    for k, v in (('{{html_class}}', cls), ('{{titulo}}', cfg['titulo']), ('{{recursos}}', recursos_html(cfg['css'], cfg['js'])), ('{{kicker}}', cfg['kicker']),
+    for k, v in (('{{carpeta}}', 'datos/' + cfg['codigo'].replace('.', '_') + '/'), ('{{html_class}}', cls), ('{{titulo}}', cfg['titulo']), ('{{recursos}}', recursos_html(cfg['css'], cfg['js'])), ('{{kicker}}', cfg['kicker']),
                  ('{{h1}}', cfg['h1']), ('{{resumen}}', cfg['resumen']), ('{{chips}}', chips), ('{{leyenda}}', leyenda_html(cfg['leyenda']))):
         pl = pl.replace(k, v)
     return pl.replace('{{cuerpo}}', cuerpo)    # el cuerpo va el último: puede contener llaves de LaTeX
 
 
 def crear_plantilla(codigo='4.2'):
-    """Genera datos/_plantilla/tema.html a partir de un tema de referencia (una sola vez; después se edita a mano)."""
+    """Genera datos/_plantilla/tema.html a partir de un tema de referencia. Ya existe y se edita a mano (lleva el aviso «GENERADO»): NO volver a ejecutar."""
     s = archivo_tema(codigo).read_text(encoding='utf8')
     cfg, cuerpo, _ = extraer_en_memoria(codigo)
     h = re.search(r'<header class="hero">\s*<div class="kick">(.*?)</div>\s*<h1>(.*?)</h1>\s*<p>(.*?)</p>\s*<div class="chips">(.*?)</div>', s, re.S)
@@ -295,12 +299,54 @@ def cargar(codigo):
     return cfg, cuerpo, ejs
 
 
+# ------------------------------------------------------------------ tablas y enlaces generados desde los datos
+MES = {'Ene': 1, 'Feb': 2, 'Sept': 9}
+
+
+def clave_cronologica(e):
+    x = next((f['ref'] for f in e['fuentes'] if f['l'] == 'X'), '')
+    m = re.match(r'(Ene|Feb|Sept)\.?\s*(\d{4})', x)
+    return (int(m.group(2)), MES[m.group(1)], x) if m else (0, 0, x)
+
+
+def etiqueta(e):
+    if e.get('etiqueta'): return e['etiqueta']
+    m = re.match(r'(Ejercicio \S+|Ejemplo propio \d+)', e['titulo'])
+    if e['clase'] == 'libro' and m: return m.group(1).replace('Ejercicio ', '')
+    if m: return m.group(1)
+    raise ValueError(f'{e["id"]}: falta «etiqueta» para generar su enlace')
+
+
+def enlaces(lista): return ' · '.join(f'<a href="#{e["id"]}">{etiqueta(e)}</a>' for e in lista) or '—'
+
+
+def tabla_que_cae(cfg, ejs):
+    ex = [e for e in ejs if e['clase'] == 'examen']
+    filas = []
+    for t in cfg['tipos']:
+        n = [e for e in ex if e.get('problema', [None])[0] == t['id']]
+        libro = [e for e in ejs if e['clase'] == 'libro' and t['id'] in e.get('problema', [])]
+        filas.append(f'    <tr><td>{t["nombre"]} <small>({len(n)} de {len(ex)})</small></td><td>{t["receta"]}</td>\n      <td>{enlaces(libro)}</td>\n'
+                     f'      <td>{enlaces(sorted(n, key=clave_cronologica))}</td></tr>')
+    return ('<table class="queCae">\n    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>\n'
+            + '\n'.join(filas) + '\n  </table>')
+
+
+def vinculos(tipo, ejs):
+    prop = [e for e in ejs if e['clase'] in ('libro', 'propio') and tipo in e.get('problema', [])]
+    prop.sort(key=lambda e: e['clase'] != 'libro')     # primero los del libro, luego los propios (orden de aparición)
+    ex = sorted((e for e in ejs if e['clase'] == 'examen' and tipo in e.get('problema', [])), key=clave_cronologica)
+    return f'<p class="vinculos"><b>Resueltos del libro:</b> {enlaces(prop)} &nbsp;|&nbsp; <b>De examen:</b> {enlaces(ex)}</p>'
+
+
 def construir_desde(cfg, pag, ejs):
     por = {e['id']: e for e in ejs}
     usados = set()
     def sub(m):
         usados.add(m.group(1)); return render(por[m.group(1)])
     cuerpo = re.sub(r'\{\{ejercicio:([^}]+)\}\}', sub, pag)
+    cuerpo = cuerpo.replace('{{que_cae}}', tabla_que_cae(cfg, ejs) if '{{que_cae}}' in cuerpo else '')
+    cuerpo = re.sub(r'\{\{vinculos:([^}]+)\}\}', lambda m: vinculos(m.group(1), ejs), cuerpo)
     sobran = set(por) - usados
     if sobran: raise ValueError('ejercicios en el YAML que las secciones no usan: ' + ', '.join(sorted(sobran)))
     return render_pagina(cfg, cuerpo)
@@ -321,7 +367,8 @@ class Norm(HTMLParser):
         self.t.append(('<' + tag, tuple(sorted(a))))
     def handle_startendtag(self, tag, attrs): self.handle_starttag(tag, attrs)
     def handle_endtag(self, tag): self.t.append(('</' + tag, ()))
-    def handle_comment(self, d): self.t.append(('#', d.strip()))
+    def handle_comment(self, d):
+        if not d.strip().startswith('GENERADO'): self.t.append(('#', d.strip()))   # el aviso de «archivo generado» no existía en el original
     def handle_data(self, d): self.t.append(('txt', re.sub(r'\s+', ' ', d).strip()))
 
 

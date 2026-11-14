@@ -1,7 +1,7 @@
-"""Genera prioridades.html a partir de los temas ya redactados.
-Uso: python herramientas/prioridades.py
-Datos: nº de ejercicios de examen resueltos por tema (id="ex-…"; cada ejercicio de examen se desarrolla en un solo tema,
-regla 14 de CLAUDE.md) y horas estimadas de la cabecera de cada tema («⏱ ~N h»)."""
+"""Genera prioridades.html a partir de los datos de los temas.
+Uso: ~/venv/bin/python herramientas/examenes.py && ~/venv/bin/python herramientas/prioridades.py
+Datos: nº de ejercicios de examen por tema (datos/examenes.yaml; cada ejercicio de examen se desarrolla en un solo tema,
+regla 14 de CLAUDE.md) y horas estimadas de la cabecera de cada tema («⏱ ~N h», en tema.yaml)."""
 import re, glob, pathlib, html
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
@@ -13,16 +13,18 @@ DEP = {'1.3': ['1.2'], '1.4': ['1.2', '1.3'], '2.1': ['1.4'], '2.2': ['2.1'], '2
        '4.1': ['3.5'], '4.2': ['1.3'], '4.3': ['4.2', '3.5'], '4.4': ['4.3'],
        '5.1': ['2.3'], '5.2': ['5.1'], '5.3': ['4.3', '5.2'], '5.4': ['5.1', '1.4'],
        '6.1': ['3.5'], '6.2': ['6.1'], '6.3': ['6.2', '5.3'], '6.4': ['6.3'], '6.5': ['6.3']}
-NOMBRES = {}
+import yaml, collections
+# Datos: `datos/examenes.yaml` (registro global, lo genera herramientas/examenes.py) y `datos/X_Y/tema.yaml` (título y horas de la cabecera).
+reg = yaml.safe_load((RAIZ / 'datos' / 'examenes.yaml').read_text(encoding='utf8'))
+n_ex = collections.Counter(r['tema'] for r in reg if r['desarrollo'] == 'completo')   # solo las desarrolladas paso a paso
 filas = []
-for f in sorted(glob.glob(str(RAIZ / 'temas' / 'tema_*.html'))):
-    s = open(f, encoding='utf8').read()
-    m = re.search(r'tema_(\d)_(\d)_', f); cod = f'{m[1]}.{m[2]}'
-    ex = len(set(re.findall(r'id="(ex-[^"]+)"', s)))
-    h = re.search(r'⏱ ~([\d–]+) h', s); nums = [int(x) for x in h[1].split('–')]
-    t = re.search(r'<title>[^<]*· ([^<]*)</title>', s)
-    nombre = re.sub(r'^\d\.\d\s+', '', t[1]) if t else cod
-    filas.append(dict(cod=cod, nombre=nombre, ex=ex, h=sum(nums) / len(nums), url='temas/' + pathlib.Path(f).name))
+for d in sorted((RAIZ / 'datos').glob('[1-9]_[1-9]')):
+    cfg = yaml.safe_load((d / 'tema.yaml').read_text(encoding='utf8'))
+    cod = cfg['codigo']
+    h = next(re.search(r'⏱ ~([\d–]+) h', c) for c in cfg['chips'] if '⏱' in c)
+    nums = [int(x) for x in h[1].split('–')]
+    nombre = re.sub(r'^\d\.\d\s+', '', cfg['titulo'])
+    filas.append(dict(cod=cod, nombre=nombre, ex=n_ex.get(cod, 0), h=sum(nums) / len(nums), url=cfg['archivo']))
 filas.sort(key=lambda r: ORDEN.index(r['cod']))
 TOT = sum(r['ex'] for r in filas)
 for r in filas:
