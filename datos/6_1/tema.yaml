@@ -36,3 +36,233 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Una forma bilineal es una función de dos vectores a un número, y todo el tema consiste en manejar su matriz y ver cómo cambia con la base.
+  items:
+  - |-
+    <b>Forma bilineal</b> = $f:E\times E\to\mathbb R$ lineal en cada variable por separado (cuatro igualdades). Reconocerla: cada sumando lleva un $x_i$ y un $y_j$ a la primera potencia, y nada más (ni constantes ni $x_1+y_2$).
+  - |-
+    <b>Matriz asociada:</b> $a_{ij}=f(e_i,e_j)$ y $f(x,y)=X^tAY$. La fila es el 1.er argumento y la columna el 2.º; $A$ no tiene por qué ser simétrica, así que $f(x,y)\neq f(y,x)$ en general.
+  - |-
+    <b>Cambio de base (Teor. 6.1):</b> $A'=P^tAP$, con $P$ regular cuyas columnas son los vectores de $B'$ escritos en $B$. No es $P^{-1}AP$ (eso es semejanza, tema 4).
+  - |-
+    <b>Congruencia frente a semejanza:</b> las congruentes conservan el rango, la simetría y el signo del determinante ($\det A'=\det A(\det P)^2$); no la traza ni los valores propios.
+tipos:
+- id: bilineal
+  nombre: |-
+    ¿Es bilineal / forma bilineal?
+  receta: |-
+    Comprueba las cuatro igualdades (o que sea $X^tAY$); para refutar, un contraejemplo concreto.
+  senal: |-
+    «demuestre que es bilineal», «¿es una forma bilineal?», «¿cuáles de estas aplicaciones son bilineales?».
+  pasos:
+  - |-
+    <b>Mira el tipo de espacio:</b> para ser <i>forma</i> bilineal debe ser $E\times E\to\mathbb R$ (mismo espacio dos veces, llegada en $\mathbb R$).
+  - |-
+    <b>Mira los sumandos:</b> cada uno debe llevar un solo $x_i$ y un solo $y_j$ a la primera potencia. Un término constante, solo en $x$ o en $y$, o con potencias lo estropea.
+  - |-
+    Para <b>demostrar</b>, escribe con letras generales las cuatro igualdades ($f(x+x',y)$, $f(\lambda x,y)$, $f(x,y+y')$, $f(x,\lambda y)$) o reconoce $X^tAY$.
+  - |-
+    Para <b>refutar</b>, da un contraejemplo concreto (por ejemplo $f(0,y)\neq0$ o $f(2x,y)\neq2f(x,y)$).
+  ejemplo: |-
+    $f=x_1y_1+1$: $f(0,y)=1\neq0$, luego no es bilineal. En cambio $g=x_1y_2-x_2y_1=X^t\begin{pmatrix}0&1\\-1&0\end{pmatrix}Y$ sí lo es.
+  fallos: |-
+    creer que «grado 1» o «grado 2 en total» decide algo · demostrar con números concretos · confundir aplicación bilineal con forma bilineal.
+- id: matriz
+  nombre: |-
+    Matriz, expresión y evaluación
+  receta: |-
+    $a_{ij}$ = coeficiente de $x_iy_j$ = $f(e_i,e_j)$; evalúa con $X^tAY$ (primero $AY$).
+  senal: |-
+    «calcule la expresión matricial», «conocidos $f(e_i,e_j)$, calcule $f(x,y)$», «escriba la expresión analítica».
+  pasos:
+  - |-
+    <b>Fija la base</b> (si no dicen otra, la canónica) y toma $a_{ij}=f(e_i,e_j)$: el índice del primer vector da la fila.
+  - |-
+    <b>De la analítica a $A$:</b> lee el coeficiente de cada $x_iy_j$; lo que no aparece es $0$. <b>De $A$ a la analítica:</b> suma $a_{ij}x_iy_j$.
+  - |-
+    <b>Evalúa</b> $f(x,y)=X^tAY$ con las coordenadas en esa base: primero $AY$ y luego $X^t(AY)$.
+  - |-
+    <b>Respeta el orden:</b> $f(x,y)$ y $f(y,x)$ coinciden solo si $A$ es simétrica; comprueba la cuenta con la analítica.
+  ejemplo: |-
+    $f=x_1y_2-3x_2y_1$: $A=\begin{pmatrix}0&1\\-3&0\end{pmatrix}$. Con $x=(1,2)$, $y=(3,1)$: $Ay=(1,-9)$ y $f(x,y)=1\cdot1+2\cdot(-9)=-17$.
+  fallos: |-
+    trasponer $A$ (poner $f(e_2,e_1)$ en la posición $(1,2)$) · repartir coeficientes entre $(i,j)$ y $(j,i)$ · cambiar el orden de los argumentos.
+- id: cambio
+  nombre: |-
+    Matriz en otra base
+  receta: |-
+    $A'=P^tAP$ con los vectores de $B'$ (en la base vieja) como columnas de $P$.
+  senal: |-
+    «halle la matriz asociada respecto de la base $B'$», «exprese $f$ en la base…».
+  pasos:
+  - |-
+    <b>Obtén $A$</b> en la base en la que está dada $f$ (receta anterior).
+  - |-
+    <b>Forma $P$:</b> columnas = vectores de $B'$ escritos en la base vieja. Comprueba $\det P\neq0$.
+  - |-
+    <b>Calcula $A'=P^tAP$</b> (primero $AP$, luego $P^t(AP)$).
+  - |-
+    <b>Controla:</b> una entrada con $a'_{ij}=v_i^tAv_j$ y $\det A'=\det A(\det P)^2$. Si te piden la analítica en $B'$, lee $a'_{ij}x'_iy'_j$.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$ y $B'=\{(1,0),(1,1)\}$: $P=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ y $A'=P^tAP=\begin{pmatrix}1&3\\1&4\end{pmatrix}$. Control: $a'_{12}=(1,0)A(1,1)^t=3$.
+  fallos: |-
+    usar $P^{-1}AP$ · poner los vectores en filas · usar la $P$ de $B$ a $B'$ · leer la analítica de $A$ como coeficiente de $x_iy_j$ en una base distinta.
+- id: congr
+  nombre: |-
+    Congruencia: qué se conserva
+  receta: |-
+    $A'=P^tAP$ conserva rango, simetría y signo de $\det$; no traza ni valores propios.
+  senal: |-
+    «¿son congruentes?», «razone si coinciden determinantes / valores propios», «halle la matriz de cambio de base entre $A$ y $A'$».
+  pasos:
+  - |-
+    <b>Plantea</b> $A'=P^tAP$ y recuerda que esto es un caso de equivalencia: el rango se conserva.
+  - |-
+    <b>Para el determinante:</b> $\det A'=\det A\cdot(\det P)^2$; solo se mantiene el signo y ser cero o no.
+  - |-
+    <b>Para refutar</b> «mismos autovalores» o «misma traza», calcula $P^tAP$ en un ejemplo y compara con $A$.
+  - |-
+    <b>Para hallar $P$:</b> trata las columnas de $P$ como vectores $v_1,v_2$ con $v_i^tAv_j=a'_{ij}$ y resuelve; hay más de una solución.
+  ejemplo: |-
+    $A=\operatorname{diag}(1,2)$, $P=\begin{pmatrix}1&1\\0&2\end{pmatrix}$: $P^tAP=\begin{pmatrix}1&1\\1&9\end{pmatrix}$, con $\det=8=2\cdot2^2$ y traza $10\neq3$.
+  fallos: |-
+    decir «congruentes $\Rightarrow$ mismo determinante o mismos valores propios» · creer que $P$ es única · confundir con semejanza $P^{-1}AP$.
+quiz:
+- p: |-
+    ¿Cuál de estas aplicaciones $\mathbb R^2\times\mathbb R^2\to\mathbb R$ es una forma bilineal?
+  opciones:
+  - t: |-
+      $x_1y_2-x_2y_1$
+    ok: true
+  - t: |-
+      $x_1y_1+x_2$
+    ok: false
+    why: |-
+      El sumando $x_2$ no lleva $y$: $f(0,y)=0$ aquí se cumple, pero $f(\lambda x,y)\neq\lambda f(x,y)$.
+  - t: |-
+      $x_1^2y_2$
+    ok: false
+    why: |-
+      $x_1$ está al cuadrado: $f(2x,y)=4f(x,y)\neq2f(x,y)$.
+  - t: |-
+      $x_1y_1+1$
+    ok: false
+    why: |-
+      El término constante da $f(0,y)=1\neq0$, y toda forma bilineal cumple $f(0,y)=0$.
+  fb: |-
+    Solo $x_1y_2-x_2y_1$ tiene en cada sumando un $x_i$ y un $y_j$ a la primera potencia.
+- p: |-
+    Sea $f=3x_1y_1+2x_1y_2-x_2y_1+5x_2y_2$ en la canónica. ¿Cuánto vale $f(e_2,e_1)$?
+  opciones:
+  - t: |-
+      $2$
+    ok: false
+    why: |-
+      Es el coeficiente de $x_1y_2$, o sea $f(e_1,e_2)$: has intercambiado el orden.
+  - t: |-
+      $-1$
+    ok: true
+  - t: |-
+      $5$
+    ok: false
+    why: |-
+      Es $f(e_2,e_2)$.
+  - t: |-
+      $0$
+    ok: false
+    why: |-
+      $f(e_2,e_1)$ deja vivo solo el sumando con $x_2y_1$, que existe y vale $-1$.
+  fb: |-
+    $f(e_2,e_1)$ deja vivo solo $x_2y_1$, cuyo coeficiente es $-1$.
+- p: |-
+    Con $A=\begin{pmatrix}1&2\\0&3\end{pmatrix}$ (forma $f$ en la canónica), $x=(1,1)$ e $y=(2,0)$, ¿cuánto vale $f(x,y)$?
+  opciones:
+  - t: |-
+      $2$
+    ok: true
+  - t: |-
+      $6$
+    ok: false
+    why: |-
+      Es $f(y,x)=y^tAx$: has cambiado el orden de los argumentos.
+  - t: |-
+      $0$
+    ok: false
+    why: |-
+      Que $A$ tenga un $0$ no anula el resultado; hay que calcular $x^tAy$ completo.
+  fb: |-
+    $Ay=(2,0)^t$ y $x^tAy=1\cdot2+1\cdot0=2$. Como $A$ no es simétrica, $f(y,x)=6$ es distinto.
+- p: |-
+    $f$ tiene matriz $A=\operatorname{diag}(1,-1)$ en $B$ y $B'$ tiene como vectores (en $B$) $v_1=(1,0)$, $v_2=(1,1)$. ¿Cuál es la matriz de $f$ en $B'$?
+  opciones:
+  - t: |-
+      $\begin{pmatrix}1&1\\1&0\end{pmatrix}$
+    ok: true
+  - t: |-
+      $\begin{pmatrix}1&2\\0&-1\end{pmatrix}$
+    ok: false
+    why: |-
+      Es $P^{-1}AP$ (semejanza): la fórmula correcta para una forma bilineal es $P^tAP$.
+  - t: |-
+      $\begin{pmatrix}0&-1\\-1&-1\end{pmatrix}$
+    ok: false
+    why: |-
+      Es $PAP^t$: has colocado los vectores de $B'$ en filas en vez de en columnas.
+  - t: |-
+      $\begin{pmatrix}1&0\\0&-1\end{pmatrix}$
+    ok: false
+    why: |-
+      La matriz de $f$ depende de la base: $a'_{22}=v_2^tAv_2=1-1=0\neq-1$.
+  fb: |-
+    $P=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ y $P^tAP=\begin{pmatrix}1&1\\1&0\end{pmatrix}$; control: $a'_{22}=(1,1)A(1,1)^t=0$.
+- p: |-
+    $A=\operatorname{diag}(1,2)$ y $A'=P^tAP$ con $\det P=3$. ¿Cuánto vale $\det A'$?
+  opciones:
+  - t: |-
+      $2$
+    ok: false
+    why: |-
+      Eso valdría para semejanza; con congruencia el determinante se multiplica por $(\det P)^2$.
+  - t: |-
+      $18$
+    ok: true
+  - t: |-
+      $6$
+    ok: false
+    why: |-
+      Has multiplicado por $\det P$ una sola vez, pero $P$ aparece dos veces ($P^t$ y $P$).
+  - t: |-
+      $-18$
+    ok: false
+    why: |-
+      $(\det P)^2>0$, así que el signo de $\det A$ se conserva.
+  fb: |-
+    $\det A'=\det P^t\det A\det P=2\cdot3^2=18$.
+- p: |-
+    ¿Cuál de estas matrices puede ser congruente a $I_2$?
+  opciones:
+  - t: |-
+      $\operatorname{diag}(4,9)$
+    ok: true
+  - t: |-
+      $-I_2$
+    ok: false
+    why: |-
+      Si $A'=P^tIP$, entonces $x^tA'x=\|Px\|^2\ge0$ para todo $x$; con $-I_2$ saldría negativo. Mismo rango y mismo signo del determinante no bastan.
+  - t: |-
+      $\operatorname{diag}(1,0)$
+    ok: false
+    why: |-
+      Tiene rango 1 y la congruencia conserva el rango (2 en $I_2$).
+  - t: |-
+      $\operatorname{diag}(1,-1)$
+    ok: false
+    why: |-
+      Su determinante es negativo y la congruencia conserva el signo del determinante.
+  fb: |-
+    Con $P=\operatorname{diag}(2,3)$: $P^tIP=\operatorname{diag}(4,9)$. Las demás violan el rango, el signo del determinante o que $x^tA'x\ge0$.
+capa: true
+que_cae_nota: |-
+  En el examen suele caer una cuenta directa: dar el valor $f(x,y)$ a partir de los $f(e_i,e_j)$ o calcular la matriz en otra base con $P^tAP$. Más raro, pero posible: razonar qué se conserva por congruencia.
