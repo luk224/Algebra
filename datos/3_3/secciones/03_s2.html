@@ -1,0 +1,56 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Una aplicación lineal se determina por una base <span class="src" data-l="U" data-ref="U §3.3.2 Determinación de una aplicación lineal, Teorema 3.2 y Ejemplos 3.16-3.17, p. 114-115">U p.114-115</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una aplicación cualquiera es «una ley que a cada vector le asigna otro»: en principio habría que dar infinitas imágenes. Si la aplicación es <b>lineal</b>, no: como todo vector es una combinación de los de la base y $f$ respeta combinaciones, <b>basta dar las imágenes de la base</b>. El resto del espacio queda fijado «a la fuerza».</p>
+</div>
+
+<div class="box thm"><span class="h">Teorema 3.2 (determinación de una aplicación lineal)</span>
+  <p>Si $f:V\to W$ es lineal y $B=\{e_1,\dots,e_m\}$ es una base de $V$, entonces la imagen de <b>cualquier</b> vector $v\in V$ está determinada por las imágenes $f(e_1),\dots,f(e_m)$ de los vectores de la base. Concretamente, si $v=(v_1,\dots,v_m)_B$,
+  $$f(v)=v_1f(e_1)+v_2f(e_2)+\dots+v_mf(e_m).$$</p>
+  <p><i>Por qué.</i> $v=v_1e_1+\dots+v_me_m$ (coordenadas en $B$) y $f$ es lineal (propiedad 3, U p.103): se «saca» la $f$ a cada sumando.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 3.2 y su demostración, p. 114">U p.114</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: la matriz se construye con las imágenes de la base</span>
+  <p>Aquí se ve el Teorema 3.2 en acción: las dos <b>columnas</b> de $A$ son las imágenes $f(e_1)$ y $f(e_2)$, y $f(x)=A\,x$ es la combinación de esas columnas con los coeficientes $x_1,x_2$ (las coordenadas de $x$). Cambia los datos y comprueba que, conocidas las imágenes de la base, queda fijada la imagen de cualquier vector.</p>
+  <div class="anim-matriz" data-f1="1,2" data-f2="3,-1" data-x="2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.16 (U) — las ecuaciones de $f$ a partir de la base canónica</span>
+  <p>$f:\mathbb R^2\to\mathbb R^3$ lineal con $f(1,0)=(1,2,1)$ y $f(0,1)=(1,1,0)$. U <b>obtiene unas ecuaciones de $f$</b>:</p>
+  <ol class="steps">
+    <li>Todo $x=(x_1,x_2)$ se escribe $x=x_1(1,0)+x_2(0,1)$.</li>
+    <li>Por linealidad, $f(x)=x_1(1,2,1)+x_2(1,1,0)=(x_1+x_2,\ 2x_1+x_2,\ x_1)$.</li>
+    <li>Llamando $(y_1,y_2,y_3)=f(x)$ a las coordenadas de la imagen:
+    $$\begin{cases}y_1=x_1+x_2\cr y_2=2x_1+x_2\cr y_3=x_1\end{cases}$$
+    Son las <b>ecuaciones de $f$</b>: cada $y_j$ es una combinación lineal de las $x_i$, sin términos independientes.</li>
+  </ol>
+  <p class="note">Nota: $B=\{(1,0),(0,1)\}$ es base de $\mathbb R^2$, pero $\{(1,2,1),(1,1,0)\}$ es un subconjunto de $\mathbb R^3$ que <b>no es base</b> (son dos vectores en un espacio de dimensión 3): lo que tiene que ser base es el conjunto de vectores de <b>partida</b> cuyas imágenes se dan; sus imágenes no tienen por qué serlo.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.16, p. 114-115">U p.114-115</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.17 (U) — a veces los datos no son posibles</span>
+  <p>«No puede haber una aplicación lineal $f:\mathbb R^2\to\mathbb R^2$ tal que $f(2,3)=(0,1)$ y $f(-2,-3)=(1,0)$.»</p>
+  <ol class="steps">
+    <li>Como $(-2,-3)=-1\cdot(2,3)$, la linealidad obliga a que $f(-2,-3)=-f(2,3)=-(0,1)=(0,-1)$.</li>
+    <li>Pero el enunciado dice $f(-2,-3)=(1,0)\neq(0,-1)$: <b>contradicción</b>. Los dos vectores son proporcionales (dependientes), así que <b>no forman base</b> y sus imágenes no se pueden elegir libremente.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.17, p. 115">U p.115</span>
+</div>
+
+<div class="box thm"><span class="h">Tres situaciones al «dar datos» de una aplicación lineal</span>
+  <table>
+    <tr><th>Datos</th><th>Qué ocurre</th></tr>
+    <tr><td>Imágenes de <b>todos</b> los vectores de una base de $V$</td><td>$f$ existe y es <b>única</b> (Ej. 3.16; E 3.19).</td></tr>
+    <tr><td>Imágenes de <b>solo algunos</b> vectores de la base</td><td>$f$ <b>no queda determinada</b> (faltan columnas). Ej.: con solo $f(1,0)=(1,2)$ en $\mathbb R^2\to\mathbb R^2$, $f(0,1)$ es libre (E 3.28 C).</td></tr>
+    <tr><td>Imágenes de vectores <b>dependientes</b></td><td>Hay que <b>comprobar la coherencia</b>. Si se contradicen, $f$ no existe (Ej. 3.17); si son coherentes, sobra algún dato, y $f$ solo queda determinada si entre esos vectores hay una base (si no, hay datos coherentes pero insuficientes). Ej.: $f(1,0)=(1,1)$, $f(0,1)=(0,1)$, $f(1,1)=(1,2)$ es coherente (sobra el tercero); con $f(1,1)=(5,5)$ no existiría.</td></tr>
+  </table>
+  <span class="src" data-l="P" data-ref="Resumen propio de U Teorema 3.2 y Ejemplo 3.17, p. 114-115, y de E Ej. 3.28 C, p. 103">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Creer que bastan «algunas» imágenes</b> o, al revés, que «cualquier» lista de imágenes define una aplicación lineal. Para fijar $f$ hacen falta las imágenes de una <b>base entera</b>, y los vectores a los que se las das deben ser <b>independientes</b> (si no, hay que comprobar que los datos no se contradicen).</p>
+</div>
+

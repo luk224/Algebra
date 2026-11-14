@@ -1,0 +1,79 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>La matriz asociada <span class="src" data-l="U" data-ref="U §3.3.3 Matriz asociada a una aplicación lineal, Teorema 3.3, Definición 3.4 y Ejemplo 3.18, p. 115-116">U p.115-116</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una aplicación lineal es una «máquina» entre espacios que pueden ser muy distintos (polinomios, matrices…). Para operar con números hay que <b>traducir</b>: elegimos una base en $V$ y otra en $W$ y reemplazamos cada vector por su <b>columna de coordenadas</b>. En ese idioma de coordenadas, la máquina $f$ pasa a ser «multiplicar por una matriz». Esa matriz depende de <b>qué bases elijas</b>, igual que el nombre de una calle depende del idioma del mapa.</p>
+</div>
+
+<div class="box tip"><span class="h">Recordatorio: coordenadas respecto de una base</span>
+  <p>Si $S=\{u_1,\dots,u_n\}$ es una base de $W$ y $w\in W$, las <b>coordenadas</b> de $w$ en $S$ son los únicos escalares $(w_1,\dots,w_n)$ con $w=w_1u_1+\dots+w_nu_n$ (Def. 2.10, U p.85; Lay: «$[w]_S$», §4.4 p.216-217). Ejemplo: en la base $S=\{(1,1),(1,2)\}$ de $\mathbb R^2$, el vector $(5,3)$ tiene coordenadas $(7,-2)_S$, porque $7\,(1,1)-2\,(1,2)=(5,3)$. <b>Las entradas de la matriz asociada son coordenadas, no vectores «en bruto»</b>: solo en la base canónica coinciden con las componentes.</p>
+  <span class="src" data-l="U" data-ref="U Definición 2.10, coordenadas, p. 85">U p.85</span>
+  <span class="src" data-l="L" data-ref="Lay §4.4, coordenadas respecto de una base y teorema de la representación única, p. 216-217">L §4.4 p.216-217</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 3.3</span>
+  <p>Si $f:V\to W$ es lineal, $B=\{e_1,\dots,e_m\}$ es base de $V$ y $S=\{u_1,\dots,u_n\}$ es base de $W$, entonces $f$ determina una <b>matriz única</b> asociada a $f$ en las bases $B$ y $S$.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 3.3, p. 115">U p.115</span>
+</div>
+
+<div class="box def"><span class="h">Definición 3.4 — matriz asociada</span>
+  <p>$A=(a_{ij})$ es la <b>matriz asociada</b> a $f:V\to W$ respecto de las bases $B=\{e_1,\dots,e_m\}\subset V$ y $S=\{u_1,\dots,u_n\}\subset W$ si
+  $$\begin{aligned}f(e_1)&=a_{11}u_1+\dots+a_{n1}u_n\cr f(e_2)&=a_{12}u_1+\dots+a_{n2}u_n\cr&\ \ \vdots\cr f(e_m)&=a_{1m}u_1+\dots+a_{nm}u_n\end{aligned}$$
+  Es decir: <b>la columna $j$ de $A$ son las coordenadas, en la base $S$, de $f(e_j)$</b>. $A$ tiene <b>$n$ filas</b> ($n=\operatorname{Dim}W$) y <b>$m$ columnas</b> ($m=\operatorname{Dim}V$): es de orden $n\times m$.</p>
+  <span class="src" data-l="U" data-ref="U Definición 3.4, p. 116">U p.116</span>
+</div>
+
+<figure style="margin:1em 0">
+<svg class="fig" viewBox="0 0 460 220" role="img" aria-label="Cuadrado de flechas: arriba, f lleva V (con base B) a W (con base S); abajo, la matriz A lleva las coordenadas X en R^m a las coordenadas Y en R^n; las flechas verticales son tomar coordenadas">
+  <text x="60" y="52" class="bd lg" text-anchor="middle">V</text>
+  <text x="60" y="70" class="sm" text-anchor="middle">base B</text>
+  <text x="400" y="52" class="bd lg" text-anchor="middle">W</text>
+  <text x="400" y="70" class="sm" text-anchor="middle">base S</text>
+  <text x="60" y="176" class="bd lg" text-anchor="middle">ℝ<tspan font-size="11" dy="-6">m</tspan></text>
+  <text x="400" y="176" class="bd lg" text-anchor="middle">ℝ<tspan font-size="11" dy="-6">n</tspan></text>
+  <line x1="95" y1="45" x2="350" y2="45" class="a"/>
+  <polygon points="348,38 364,45 348,52" class="pt"/>
+  <text x="230" y="36" class="bd lg" text-anchor="middle">f</text>
+  <line x1="95" y1="170" x2="350" y2="170" class="b"/>
+  <polygon points="348,163 364,170 348,177" class="pb"/>
+  <text x="230" y="161" class="bd" text-anchor="middle">X ↦ Y = A·X</text>
+  <text x="230" y="194" class="sm" text-anchor="middle">matriz asociada</text>
+  <line x1="60" y1="82" x2="60" y2="138" class="th"/>
+  <polygon points="53,136 60,150 67,136" style="fill:var(--mut)"/>
+  <text x="70" y="114" class="sm">coordenadas en B</text>
+  <line x1="400" y1="82" x2="400" y2="138" class="th"/>
+  <polygon points="393,136 400,150 407,136" style="fill:var(--mut)"/>
+  <text x="390" y="114" class="sm" text-anchor="end">coordenadas en S</text>
+</svg>
+<figcaption>Esquema propio: arriba, $f$ actúa sobre vectores; abajo, $A$ actúa sobre sus columnas de coordenadas. Ir por arriba y luego tomar coordenadas en $S$ equivale a tomar coordenadas en $B$ y multiplicar por $A$. <span class="src" data-l="P" data-ref="Figura propia">propio</span></figcaption>
+</figure>
+
+<div class="box ex"><span class="h">Ejemplo 3.18 (U) — la matriz de la aplicación del Ej. 3.16</span>
+  <ol class="steps">
+    <li><b>Tamaño.</b> La base $B=\{(1,0),(0,1)\}$ de $\mathbb R^2$ tiene 2 vectores: <b>2 columnas</b>. Cada imagen es un vector de $\mathbb R^3$: <b>3 filas</b>.</li>
+    <li><b>Coordenadas de las imágenes.</b> La base de llegada es la canónica de $\mathbb R^3$, así que las coordenadas coinciden con las componentes: $f(1,0)=(1,2,1)$ y $f(0,1)=(1,1,0)$.</li>
+    <li><b>Matriz</b> (esas coordenadas en columna):
+    $$A=\begin{pmatrix}1&1\cr2&1\cr1&0\end{pmatrix}.$$</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.18, p. 116">U p.116</span>
+</div>
+
+
+<div class="box tip"><span class="h">Receta: construir la matriz asociada</span>
+  <ol class="steps">
+    <li><b>Fija las bases</b> $B=\{e_1,\dots,e_m\}$ de $V$ y $S$ de $W$ (si el enunciado no dice nada: las canónicas) y <b>respeta el orden</b>: cambiarlo cambia la matriz.</li>
+    <li><b>Tamaño:</b> $(\operatorname{Dim}W)\times(\operatorname{Dim}V)$.</li>
+    <li>Para cada $j=1,\dots,m$: calcula $f(e_j)$ y escribe sus <b>coordenadas en $S$</b>; es la <b>columna $j$</b>.</li>
+    <li><b>Comprueba</b> con un vector: $A\cdot(\text{coordenadas de }v)$ debe dar las coordenadas de $f(v)$.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U Definición 3.4, p. 116">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>Imágenes en filas</b> (matriz traspuesta) o <b>tamaño al revés</b> ($m\times n$ en vez de $n\times m$).</li>
+    <li><b>Imágenes sin pasar a coordenadas</b> cuando la base de llegada no es la canónica (§5): los $a_{ij}$ son los coeficientes de los $u_i$, no las componentes del vector.</li>
+    <li><b>Orden de la base.</b> En polinomios, $\{1,x,x^2\}$ y $\{x^2,x,1\}$ dan matrices distintas; en $\mathcal M_{2\times2}$, coordenadas por filas $(a,b,c,d)$ o por columnas $(a,c,b,d)$: vale cualquiera <b>si se usa siempre el mismo</b>.</li>
+  </ul>
+</div>
+
