@@ -134,7 +134,7 @@ def parse_sol(s, st, en, attrs, pre, codigo, n):
     fm = re.fullmatch(r'(.*?)((?:\s*<span class="src"[^>]*>[^<]*</span>)*)\s*', summ, re.S)
     srcs = re.findall(r'<span class="src" data-l="([^"]*)" data-ref="([^"]*)">([^<]*)</span>', fm.group(2))
     fuentes = [dict(l=a, ref=b, texto=c) for a, b, c in srcs]
-    clase = 'examen' if any(f['l'] == 'X' for f in fuentes) or id_.startswith('ex-') else ('libro' if any(f['l'] == 'E' for f in fuentes) else 'propio')
+    clase = 'examen' if any(f['l'] == 'X' for f in fuentes) else ('libro' if any(f['l'] == 'E' for f in fuentes) else 'propio')
     e = dict(id=id_, clase=clase)
     if nivel: e['nivel'] = nivel
     e.update(titulo=fm.group(1).strip(), fuentes=fuentes)
