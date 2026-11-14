@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/6_4/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,10 +8,12 @@
 <title>Álgebra · 6.4 Cónicas</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
 <script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -37,10 +39,39 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Una cónica es una ecuación de segundo grado en $x_1,x_2$; todo el tema consiste en decir qué curva es y dónde está.</p>
+  <ol>
+    <li><b>Matriz asociada $A$ ($3\times3$):</b> $a_{00}$ arriba a la izquierda y los coeficientes mixtos y lineales <b>divididos entre 2</b>; la ecuación es $X^tAX=0$ con $X=(1,x_1,x_2)^t$.</li>
+    <li><b>Tres invariantes</b> que no cambian al girar ni trasladar: $|A|$, $a_{11}+a_{22}$ y $A_{00}=a_{11}a_{22}-a_{12}^2$.</li>
+    <li><b>Clasificar sin dibujar:</b> $A_{00}>0$ elipse (real si $(a_{11}+a_{22})|A|<0$), $A_{00}<0$ hipérbola, $A_{00}=0$ parábola; todo esto exige $|A|\neq0$. Si $|A|=0$, es degenerada.</li>
+    <li><b>Ecuación reducida:</b> un giro con vectores propios unitarios de $M$ elimina $x_1x_2$ y una traslación (completar cuadrados) elimina los términos lineales.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>6 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 10 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 4 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>Matriz asociada e invariantes <small>(2 de 6)</small></td><td>Escribe $A$ con $a_{00}$ arriba a la izquierda y las mitades de los coeficientes mixtos; calcula $|A|$, $a_{11}+a_{22}$ y $A_{00}$.</td>
+      <td><a href="#ej6-26">6.26</a> · <a href="#ej6-27a">6.27,</a> · <a href="#ej6-25a">6.25,</a></td>
+      <td><a href="#ex-feb18b-pb">Feb. 18 B problema, apartado b)</a> · <a href="#ex-feb20b-6">Feb. 20 B ej. 6</a></td></tr>
+    <tr><td>Clasificar la cónica <small>(2 de 6)</small></td><td>Con los invariantes, mira $|A|$ y $A_{00}$ y entra en el cuadro; si $A_{00}>0$ y $|A|\neq0$, el signo de $(a_{11}+a_{22})|A|$ separa real de imaginaria.</td>
+      <td><a href="#ej6-25b">6.25,</a> · <a href="#ej6-30">6.30</a> · <a href="#ej6-29">6.29</a></td>
+      <td><a href="#ex-sep17-6">Sept. 17 A1 ej. 6</a> · <a href="#ex-feb19b-6">Feb. 19 B ej. 6</a></td></tr>
+    <tr><td>Ecuación reducida (giro y traslación) <small>(1 de 6)</small></td><td>Si hay término $x_1x_2$, gira con los vectores propios unitarios de $M$ ($\det P=1$); después completa cuadrados para trasladar el origen al centro o al vértice.</td>
+      <td><a href="#ej6-28">6.28</a> · <a href="#ej6-27b">6.27,</a></td>
+      <td><a href="#ex-ene22-pa">Ene. 22 A1 problema, apartado a)</a></td></tr>
+    <tr><td>Cónica con parámetro <small>(1 de 6)</small></td><td>Calcula $|A|$, $A_{00}$ y la traza en función del parámetro y traduce la condición pedida (degenerada, parábola, elipse real…) en ecuaciones o desigualdades.</td>
+      <td><a href="#ej6-29">6.29</a> · <a href="#ej6-31">6.31</a> · <a href="#ej6-32">6.32</a></td>
+      <td><a href="#ex-feb19a-6">Feb. 19 A ej. 6</a></td></tr>
+  </table>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §6.4.1 Elementos didácticos, p. 271">U p.271</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §6.4.1 Elementos didácticos, p. 271">U p.271</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>Una cónica es una curva del plano que se obtiene al <b>cortar un cono con un plano</b>; en coordenadas, es el conjunto de puntos que cumplen <b>una ecuación de segundo grado</b>. Casi siempre es un óvalo (<b>elipse</b>), dos ramas abiertas (<b>hipérbola</b>) o una «U» (<b>parábola</b>). Cuando la curva está <i>torcida y desplazada</i>, la ecuación sale enrevesada (con $x_1x_2$ y términos lineales). Es como una foto torcida y descentrada: para entenderla, primero la <b>giras</b> hasta que quede recta (eso elimina $x_1x_2$) y luego la <b>centras</b> (eso elimina los términos lineales); la ecuación que queda, la <b>reducida</b>, se lee de un vistazo. Y hay un atajo: tres números de la ecuación original que no cambian al girar ni trasladar (los <b>invariantes métricos</b>) bastan para saber <b>de qué tipo</b> es la curva sin dibujarla.</p>
@@ -90,7 +121,7 @@
 </div>
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>Cónicas como lugares geométricos <span class="src" data-l="U" data-ref="U §6.4.2 Lugares geométricos, Definiciones 6.14-6.15, Figuras 6.3-6.7, p. 272-276">U p.272-276</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>Cónicas como lugares geométricos <span class="src" data-l="U" data-ref="U §6.4.2 Lugares geométricos, Definiciones 6.14-6.15, Figuras 6.3-6.7, p. 272-276">U p.272-276</span></h2>
 
 <div class="box intu"><span class="h">Idea: un cono cortado por un plano</span>
   <p>Imagina un cono doble (como dos helados de cucurucho unidos por la punta) y un plano que lo corta. Según cómo lo cortes sale una curva distinta: plano casi perpendicular al eje → un <b>óvalo</b> (elipse, y circunferencia si es exactamente perpendicular); plano paralelo a una generatriz → una <b>parábola</b>; plano más inclinado, que corta las dos hojas → una <b>hipérbola</b> (dos ramas). Si el plano pasa justo por la punta del cono aparecen las curvas <b>degeneradas</b>: un punto o un par de rectas. Por eso las cónicas se llaman también <i>secciones cónicas</i>. La otra forma de describirlas es por una <b>propiedad de distancias</b> (los «lugares geométricos»), que es la que da las ecuaciones.</p>
@@ -172,7 +203,7 @@
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>La ecuación general y su matriz asociada <span class="src" data-l="U" data-ref="U §6.4.3 Ecuación general de las cónicas, Definiciones 6.16-6.17, Ejemplos 6.29-6.30, p. 276-279">U p.276-279</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>La ecuación general y su matriz asociada <span class="src" data-l="U" data-ref="U §6.4.3 Ecuación general de las cónicas, Definiciones 6.16-6.17, Ejemplos 6.29-6.30, p. 276-279">U p.276-279</span></h2>
 
 <div class="box intu"><span class="h">Idea: la ecuación cuando la curva no está «bien colocada»</span>
   <p>Las ecuaciones de arriba suponen la cónica con el centro (o el vértice) en el origen y los ejes sobre los de coordenadas. En la práctica la curva está desplazada y torcida, y su ecuación es un polinomio de grado 2 completo. Lo importante es tener un <b>formato fijo</b> para leer los coeficientes sin equivocarse: aquí la clave es una <b>matriz $3\times3$ simétrica</b> $A$. El truco es poner delante un $1$: con $X=(1,x_1,x_2)^t$, el producto $X^tAX$ es un polinomio «homogéneo» de grado 2 en $(1,x_1,x_2)$ que, al multiplicar, reproduce <b>exactamente</b> los seis términos de la ecuación (el $1\cdot1$ da el término independiente, los $1\cdot x_i$ dan los lineales y los $x_ix_j$ los cuadráticos).</p>
@@ -230,7 +261,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>La ecuación reducida: giro y traslación <span class="src" data-l="U" data-ref="U §6.4.4 Ecuación reducida, Def. 6.18, Ej. 6.31, p. 279-284">U p.279-284</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teor. 4, Ej. 5, p. 403-405">L p.403-405</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>La ecuación reducida: giro y traslación <span class="src" data-l="U" data-ref="U §6.4.4 Ecuación reducida, Def. 6.18, Ej. 6.31, p. 279-284">U p.279-284</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teor. 4, Ej. 5, p. 403-405">L p.403-405</span></h2>
 
 <div class="box intu"><span class="h">Idea: girar y centrar</span>
   <p>La elipse $5x_1^2-4x_1x_2+5x_2^2=48$ está inclinada 45° (su eje mayor va en diagonal). Si <b>giras los ejes</b> 45° hasta alinearlos con los de la elipse, la ecuación pasa a $3y_1^2+7y_2^2=48$ (el término $x_1x_2$ desaparece) y se lee de un vistazo. Con una curva además <b>desplazada</b>, hay un segundo paso: moverse hasta el centro. Esos dos movimientos son un <b>giro</b> (que se hace con una matriz ortogonal, tema 5.2, y diagonalizando la parte cuadrática, tema 5.3) y una <b>traslación</b> (completar cuadrados). Lo que queda es una <b>ecuación reducida</b>.</p>
@@ -318,7 +349,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Clasificar por invariantes métricos <span class="src" data-l="U" data-ref="U §6.4.5 Clasificación de las cónicas, Definición 6.19, Ejemplos 6.32-6.36, p. 285-288">U p.285-288</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Clasificar por invariantes métricos <span class="src" data-l="U" data-ref="U §6.4.5 Clasificación de las cónicas, Definición 6.19, Ejemplos 6.32-6.36, p. 285-288">U p.285-288</span></h2>
 
 <div class="box intu"><span class="h">Idea: tres números que no cambian al mover los ejes</span>
   <p>Girar y trasladar es <b>mover la cámara</b>: la curva es la misma, solo cambia el sistema en que se escribe su ecuación. Hay cantidades de la ecuación que <b>no dependen del sistema</b>: son los <b>invariantes métricos</b>. Como no cambian, se pueden calcular <b>directamente en la ecuación general</b>, sin reducirla, y bastan para saber de qué tipo es la curva. Es como identificar un animal por su ADN en vez de fotografiarlo: da igual desde dónde lo mires.</p>
@@ -405,7 +436,7 @@
 </div>
 
 <!-- ============================ 5 ============================ -->
-<h2 id="s5"><span class="n">5</span>Todo junto: receta y animación <span class="src" data-l="P" data-ref="Síntesis propia de U §6.4.3-6.4.5, p. 276-288">propio</span></h2>
+<h2 id="s5" data-vista="teoria"><span class="n">5</span>Todo junto: receta y animación <span class="src" data-l="P" data-ref="Síntesis propia de U §6.4.3-6.4.5, p. 276-288">propio</span></h2>
 
 <div class="box tip"><span class="h">Receta global (dos caminos que deben coincidir)</span>
   <ol>
@@ -436,15 +467,78 @@
 </div>
 
 <!-- ============================ 6 ============================ -->
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 6.4»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-matriz">
+  <h3>Tipo 1 — Matriz asociada e invariantes</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «escriba la ecuación matricial», «parte cuadrática, lineal y constante», «calcule los invariantes métricos», «valores propios de la parte cuadrática».</p>
+  <ol class="pasos">
+    <li><b>Lee los coeficientes</b> de $a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}$: los que acompañan a $x_1x_2$, $x_1$ y $x_2$ se dividen entre 2.</li>
+    <li><b>Arma $A$</b> ($3\times3$, simétrica) con $a_{00}$ en la esquina superior izquierda, y su submatriz $M=\begin{pmatrix}a_{11}&a_{12}\\a_{12}&a_{22}\end{pmatrix}$ (parte cuadrática).</li>
+    <li><b>Calcula</b> $|A|$, la traza $a_{11}+a_{22}$ y $A_{00}=|M|$.</li>
+    <li><b>Comprueba</b> que $X^tAX=0$ con $X=(1,x_1,x_2)^t$ devuelve la ecuación original.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $x_1^2+2x_1x_2+3x_2^2-2x_1+4x_2+5=0$ da $A=\begin{pmatrix}5&-1&2\\-1&1&1\\2&1&3\end{pmatrix}$, con $|A|=-1$, $a_{11}+a_{22}=4$ y $A_{00}=1\cdot3-1^2=2$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> No dividir entre 2 el coeficiente de $x_1x_2$, de $x_1$ y de $x_2$ · poner $a_{00}$ en otra posición · tomar $M$ de $3\times3$ en vez de $2\times2$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-26">6.26</a> · <a href="#ej6-27a">6.27,</a> · <a href="#ej6-25a">6.25,</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18b-pb">Feb. 18 B problema, apartado b)</a> · <a href="#ex-feb20b-6">Feb. 20 B ej. 6</a></p>
+</section>
+
+<section class="ficha" id="tipo-clasif">
+  <h3>Tipo 2 — Clasificar la cónica</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «clasifique la cónica», «¿es una elipse, una parábola, una hipérbola…?», «¿es degenerada?», test con opciones de tipos de cónica.</p>
+  <ol class="pasos">
+    <li><b>Calcula</b> $|A|$, $A_{00}$ y $a_{11}+a_{22}$ (tipo «Matriz asociada»).</li>
+    <li><b>Mira $|A|$.</b> Si es distinto de 0, la cónica es no degenerada; si es 0, degenerada (y hay que ver el rango de $A$).</li>
+    <li><b>Mira el signo de $A_{00}$:</b> $>0$ elipse, $<0$ hipérbola, $=0$ parábola.</li>
+    <li><b>Con $A_{00}>0$ y $|A|\neq0$</b>, la elipse es real si $(a_{11}+a_{22})|A|<0$ e imaginaria si $>0$.</li>
+    <li><b>Si es degenerada</b>, usa el rango de $A$ y el signo de $A_{00}$ (secantes, un punto, paralelas, recta doble).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $x_1^2+2x_2^2-2x_1+4x_2+5=0$: $|A|=4\neq0$, $A_{00}=2>0$ y $(a_{11}+a_{22})|A|=3\cdot4>0$, luego es una <b>elipse imaginaria</b> (de hecho equivale a $(x_1-1)^2+2(x_2+1)^2=-2$).</div>
+  <p class="fallos"><b>Dónde se falla:</b> Decir «$A_{00}>0\Rightarrow$ elipse real» sin mirar el signo de $(a_{11}+a_{22})|A|$ · «$A_{00}=0\Rightarrow$ parábola» sin exigir $|A|\neq0$ · confundir $|A|$ (matriz $3\times3$) con $A_{00}$ ($2\times2$).</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-25b">6.25,</a> · <a href="#ej6-30">6.30</a> · <a href="#ej6-29">6.29</a> · <a href="#ej-propio-4">Propio P4</a> · <a href="#ej-propio-5">Propio P5</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep17-6">Sept. 17 A1 ej. 6</a> · <a href="#ex-feb19b-6">Feb. 19 B ej. 6</a></p>
+</section>
+
+<section class="ficha" id="tipo-reducida">
+  <h3>Tipo 3 — Ecuación reducida (giro y traslación)</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «ecuación reducida», «referida a los ejes de la cónica», «centro, vértices, focos, asíntotas, directriz».</p>
+  <ol class="pasos">
+    <li><b>Clasifica</b> primero la cónica, para saber qué forma reducida esperas (elipse, hipérbola o parábola).</li>
+    <li><b>Giro (solo si $a_{12}\neq0$):</b> diagonaliza $M$ con vectores propios unitarios y $\det P=1$; sustituye $x=Px'$ en la parte cuadrática y también en la lineal.</li>
+    <li><b>Traslación:</b> completa cuadrados en $x_1'$ y $x_2'$; el nuevo origen es el centro (o el vértice si es parábola).</li>
+    <li><b>Normaliza:</b> divide para que quede $\frac{x^2}{a^2}\pm\frac{y^2}{b^2}=1$ (o $y^2=2px$) y lee semiejes, focos y asíntotas.</li>
+    <li><b>Devuelve los elementos a las coordenadas originales</b> con $x=Px'$ más la traslación, y comprueba con $|A|/A_{00}$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $4x_1^2+x_2^2-8x_1+4x_2+4=0$ (sin $x_1x_2$, no hay giro): $4(x_1-1)^2+(x_2+2)^2=4$, o sea $x_1''^2+\dfrac{x_2''^2}{4}=1$ con $x_1''=x_1-1$, $x_2''=x_2+2$: elipse de centro $(1,-2)$ y semiejes $1$ y $2$ (control: $|A|/A_{00}=-16/4=-4$).</div>
+  <p class="fallos"><b>Dónde se falla:</b> Girar solo la parte cuadrática y olvidar la lineal · vectores propios sin normalizar o $\det P=-1$ · completar mal un cuadrado con coeficiente ($4x_2^2-16x_2=4[(x_2-2)^2-4]$) · colocar los focos en el eje equivocado.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-28">6.28</a> · <a href="#ej6-27b">6.27,</a> · <a href="#ej-propio-1">Propio P1</a> · <a href="#ej-propio-2">Propio P2</a> · <a href="#ej-propio-3">Propio P3</a> · <a href="#ex-feb18b-red">Ampliación de Feb. 2018 (B), pro</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-ene22-pa">Ene. 22 A1 problema, apartado a)</a></p>
+</section>
+
+<section class="ficha" id="tipo-param">
+  <h3>Tipo 4 — Cónica con parámetro</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «¿para qué valores de $m$ es degenerada / parábola / elipse real?», cónica con $\lambda,\mu,\alpha,k$ en la ecuación.</p>
+  <ol class="pasos">
+    <li><b>Escribe $A$ con el parámetro</b> y calcula $|A|$, $A_{00}$ y $a_{11}+a_{22}$ como expresiones en él.</li>
+    <li><b>Traduce la condición:</b> degenerada $\iff|A|=0$; parábola $\iff A_{00}=0$ y $|A|\neq0$; elipse real $\iff A_{00}>0$ y $(a_{11}+a_{22})|A|<0$.</li>
+    <li><b>Resuelve</b> las ecuaciones o desigualdades y descarta los valores que anulan lo que debe ser distinto de cero.</li>
+    <li><b>Estudia los valores frontera</b> aparte (donde $|A|$ o $A_{00}$ se anulan) y comprueba uno concreto.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $x_1^2+kx_2^2+2x_2=0$: $|A|=-1$, $A_{00}=k$, $a_{11}+a_{22}=1+k$. Parábola solo si $k=0$ ($|A|=-1\neq0$); si $k>0$, $(1+k)(-1)<0$ y es elipse real; si $k<0$, $A_{00}<0$ y es hipérbola.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Olvidar exigir $|A|\neq0$ en la parábola (podrían salir rectas paralelas) · resolver $A_{00}=0$ pero no comprobar el resto de condiciones · olvidar valores frontera.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-29">6.29</a> · <a href="#ej6-31">6.31</a> · <a href="#ej6-32">6.32</a> · <a href="#ej-propio-5">Propio P5</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb19a-6">Feb. 19 A ej. 6</a></p>
+</section>
+
 <!-- ============================ 7 ============================ -->
-<h2 id="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §6.4, Ej. 6.25-6.32, p. 223-227">E p.223-227</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §6.4, Ej. 6.25-6.32, p. 223-227">E p.223-227</span></h2>
 
 <p>La sección 6.4 de E empieza en la p.222 y tiene los ejercicios <b>6.25 a 6.32</b> (pp. 223-227); el 6.33 (p.229) ya es de cuádricas (tema 6.5). Se agrupan por método. Los ejercicios 6.25 y 6.27 tienen dos apartados de métodos distintos y se reparten entre bloques (se indica con un enlace).</p>
 
 <h3 id="bloqueI">Bloque I — Matriz asociada, partes e invariantes (E 6.26, 6.27 A, 6.25 A)</h3>
 
-<details class="sol" id="ej6-26"><summary>Ejercicio 6.26 — valores propios de la parte cuadrática de $x_1^2+x_2^2+2x_1x_2-4x_1-1=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.26, p. 223">E p.223</span></summary>
-  <p class="enun">Calcúlense los valores propios de la matriz de la parte cuadrática de la cónica $x_1^2+x_2^2+2x_1x_2-4x_1-1=0$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcúlense los valores propios de la matriz de la parte cuadrática de la cónica $x_1^2+x_2^2+2x_1x_2-4x_1-1=0$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Primero separa la parte cuadrática (los términos de grado 2) y escribe su matriz simétrica $2\times2$; recuerda que el coeficiente de $x_1x_2$ se reparte a medias entre las dos posiciones no diagonales.</p></details>
+<details class="sol" id="ej6-26"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 6.26 — valores propios de la parte cuadrática de $x_1^2+x_2^2+2x_1x_2-4x_1-1=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.26, p. 223">E p.223</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores propios de la parte cuadrática de una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>La parte cuadrática es $x_1^2+x_2^2+2x_1x_2$: su matriz es $\begin{pmatrix}1&1\\1&1\end{pmatrix}$, que tiene filas iguales. Intuyo un valor propio $0$.</dd>
@@ -465,8 +559,9 @@
   <p><b>Error típico:</b> poner $a_{12}=2$ (el coeficiente entero) en lugar de $1$, o meter $-4x_1$ en la matriz $2\times2$.</p>
 </details>
 
-<details class="sol" id="ej6-27a"><summary>Ejercicio 6.27, apartado A — partes cuadrática, lineal y constante de $x_1^2+x_2^2+2x_1x_2-4x_2-1=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.27 A, p. 224">E p.224</span></summary>
-  <p class="enun">Dada la cónica $x_1^2+x_2^2+2x_1x_2-4x_2-1=0$, se pide: A) Descomponer la ecuación en parte cuadrática, parte lineal y parte constante y dar las expresiones matriciales de dichas componentes. B) Obtener la ecuación de la cónica referida a una base cuyos vectores sean paralelos a los ejes de la cónica dada. <i>(El apartado B está en el <a href="#ej6-27b">Bloque III</a>.)</i></p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Dada la cónica $x_1^2+x_2^2+2x_1x_2-4x_2-1=0$, se pide: A) Descomponer la ecuación en parte cuadrática, parte lineal y parte constante y dar las expresiones matriciales de dichas componentes. B) Obtener la ecuación de la cónica referida a una base cuyos vectores sean paralelos a los ejes de la cónica dada. <i>(El apartado B está en el <a href="#ej6-27b">Bloque III</a>.)</i></p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Agrupa los términos por grado: los de grado 2, los de grado 1 y el término independiente. Cada grupo se escribe con su matriz o vector, y todos juntos forman la ecuación matricial.</p></details>
+<details class="sol" id="ej6-27a"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 6.27, apartado A — partes cuadrática, lineal y constante de $x_1^2+x_2^2+2x_1x_2-4x_2-1=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.27 A, p. 224">E p.224</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Descomponer la ecuación en parte cuadrática, lineal y constante, y escribirlas con matrices.</dd>
     <dt>Cómo lo pienso</dt><dd>Cada parte tiene su matriz: la cuadrática $A_{00}$ ($2\times2$), la lineal con los coeficientes de $x_1,x_2$ (la mitad en cada posición) y la constante.</dd>
@@ -488,8 +583,9 @@
   <div class="recipe"><b>Receta:</b> agrupar por grado (2, 1, 0); la parte lineal se escribe como producto fila por columna con $2a_{0i}$ como coeficientes.</div>
 </details>
 
-<details class="sol" id="ej6-25a"><summary>Ejercicio 6.25, apartado A — ecuación matricial e invariantes de $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.25 A, p. 223">E p.223</span></summary>
-  <p class="enun">Si $x_1^2+4x_2^2-4x_1-16x_2+19=0$ es la ecuación de una cónica, se pide: A) Encontrar su ecuación matricial, explicar qué son los invariantes métricos y calcularlos en este caso. B) Clasificar esta cónica. <i>(El apartado B está en el <a href="#ej6-25b">Bloque II</a>.)</i></p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $x_1^2+4x_2^2-4x_1-16x_2+19=0$ es la ecuación de una cónica, se pide: A) Encontrar su ecuación matricial, explicar qué son los invariantes métricos y calcularlos en este caso. B) Clasificar esta cónica. <i>(El apartado B está en el <a href="#ej6-25b">Bloque II</a>.)</i></p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Arma la matriz $3\times3$ con $a_{00}$ arriba a la izquierda y los coeficientes mixtos divididos entre 2; después calcula tres números: $|A|$, la traza de la parte cuadrática y su determinante.</p></details>
+<details class="sol" id="ej6-25a"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 6.25, apartado A — ecuación matricial e invariantes de $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.25 A, p. 223">E p.223</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuación matricial e invariantes de una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>Construyo $A$ de orden 3 con la constante, la mitad de los lineales y la parte cuadrática; los invariantes son $|A|$, $|A_{00}|$ y la traza de $A_{00}$.</dd>
@@ -511,8 +607,9 @@
 
 <h3 id="bloqueII">Bloque II — Clasificar por invariantes (E 6.25 B, 6.30)</h3>
 
-<details class="sol" id="ej6-25b"><summary>Ejercicio 6.25, apartado B — clasificar $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.25 B, p. 223">E p.223</span></summary>
-  <p class="enun">B) Clasificar esta cónica (la del <a href="#ej6-25a">apartado A</a>).</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">B) Clasificar esta cónica (la del <a href="#ej6-25a">apartado A</a>).</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Con los invariantes del apartado anterior, mira primero el signo de $A_{00}$ y si $|A|$ es cero o no; solo después decide cuál de las cónicas del cuadro es.</p></details>
+<details class="sol" id="ej6-25b"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 6.25, apartado B — clasificar $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.25 B, p. 223">E p.223</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Clasificar una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>La parte cuadrática $x_1^2+4x_2^2$ es definida positiva: $|A_{00}|>0$, elipse o similar. Falta $|A|$ para saber si es real, imaginaria o un punto.</dd>
@@ -529,8 +626,9 @@
   <p><b>Error típico:</b> ver solo $A_{00}>0$ y decir «elipse real» (puede ser imaginaria: $x_1^2+x_2^2+1=0$).</p>
 </details>
 
-<details class="sol" id="ej6-30"><summary>Ejercicio 6.30 — ¿parábola, elipse imaginaria o hipérbola? $x_1^2+4x_2^2-6x_1+8x_2+9=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.30, p. 226">E p.226</span></summary>
-  <p class="enun">La cónica $x_1^2+4x_2^2-6x_1+8x_2+9=0$ es: A) Una parábola. B) Una elipse imaginaria. C) Una hipérbola.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La cónica $x_1^2+4x_2^2-6x_1+8x_2+9=0$ es: A) Una parábola. B) Una elipse imaginaria. C) Una hipérbola.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>No hace falta reducir la ecuación: calcula $|A|$ y $A_{00}$ y compáralos con el cuadro. Si $A_{00}>0$, el signo de $(a_{11}+a_{22})|A|$ decide si la elipse es real o imaginaria.</p></details>
+<details class="sol" id="ej6-30"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.30 — ¿parábola, elipse imaginaria o hipérbola? $x_1^2+4x_2^2-6x_1+8x_2+9=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.30, p. 226">E p.226</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si una ecuación es parábola, elipse imaginaria o hipérbola.</dd>
     <dt>Cómo lo pienso</dt><dd>Antes de calcular miro la parte cuadrática: $x_1^2+4x_2^2$ definida positiva descarta parábola e hipérbola.</dd>
@@ -555,8 +653,9 @@
 
 <h3 id="bloqueIII">Bloque III — Ecuación reducida (E 6.28, 6.27 B)</h3>
 
-<details class="sol" id="ej6-28"><summary>Ejercicio 6.28 — ecuación reducida de $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.28, p. 225">E p.225</span></summary>
-  <p class="enun">Si $x_1^2+4x_2^2-4x_1-16x_2+19=0$ es la ecuación de una cónica, se pide encontrar la ecuación reducida de la cónica dada.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $x_1^2+4x_2^2-4x_1-16x_2+19=0$ es la ecuación de una cónica, se pide encontrar la ecuación reducida de la cónica dada.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>No hay término $x_1x_2$, así que no hace falta girar. Completa cuadrados en $x_1$ y en $x_2$ por separado, pasa la constante al otro lado y divide para que quede un 1.</p></details>
+<details class="sol" id="ej6-28"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.28 — ecuación reducida de $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.28, p. 225">E p.225</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuación reducida de una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>Parte cuadrática diagonal: no hay giro, solo traslación. Completo cuadrados en cada variable.</dd>
@@ -579,8 +678,9 @@
   <p><b>Error típico:</b> completar mal un cuadrado con coeficiente: $4x_2^2-16x_2=4\big[(x_2-2)^2-4\big]$, no $4(x_2-2)^2-4$.</p>
 </details>
 
-<details class="sol" id="ej6-27b"><summary>Ejercicio 6.27, apartado B — ecuación de $x_1^2+x_2^2+2x_1x_2-4x_2-1=0$ en una base paralela a sus ejes <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.27 B, p. 224">E p.224</span></summary>
-  <p class="enun">B) Obtener la ecuación de la cónica referida a una base cuyos vectores sean paralelos a los ejes de la cónica dada (cónica del <a href="#ej6-27a">apartado A</a>).</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">B) Obtener la ecuación de la cónica referida a una base cuyos vectores sean paralelos a los ejes de la cónica dada (cónica del <a href="#ej6-27a">apartado A</a>).</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Los ejes de la cónica tienen la dirección de los vectores propios de la parte cuadrática. Diagonaliza esa matriz con una base ortonormal, haz el cambio $x=Px'$ y sustitúyelo también en la parte lineal.</p></details>
+<details class="sol" id="ej6-27b"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.27, apartado B — ecuación de $x_1^2+x_2^2+2x_1x_2-4x_2-1=0$ en una base paralela a sus ejes <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.27 B, p. 224">E p.224</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuación de la cónica en una base paralela a sus ejes.</dd>
     <dt>Cómo lo pienso</dt><dd>La parte cuadrática tiene un valor propio $0$ (parábola) y otro $2$. Los ejes son los vectores propios de $A_{00}$.</dd>
@@ -605,8 +705,9 @@
 
 <h3 id="bloqueIV">Bloque IV — Cónicas con parámetro (E 6.29, 6.31, 6.32)</h3>
 
-<details class="sol" id="ej6-29"><summary>Ejercicio 6.29 — ¿para qué $m$ es degenerada $x_1^2+x_2^2-2x_1+2mx_1x_2-1=0$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.29, p. 225">E p.225</span></summary>
-  <p class="enun">La cónica $x_1^2+x_2^2-2x_1+2mx_1x_2-1=0$ será degenerada si: A) $m=5$. B) $m=2$. C) $m=|\sqrt2|$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La cónica $x_1^2+x_2^2-2x_1+2mx_1x_2-1=0$ será degenerada si: A) $m=5$. B) $m=2$. C) $m=|\sqrt2|$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Degenerada significa $|A|=0$. Escribe $A$ con el parámetro $m$ en los huecos que correspondan, desarrolla el determinante y resuelve la ecuación en $m$; luego comprueba cuáles de las opciones la cumplen.</p></details>
+<details class="sol" id="ej6-29"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.29 — ¿para qué $m$ es degenerada $x_1^2+x_2^2-2x_1+2mx_1x_2-1=0$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.29, p. 225">E p.225</span></summary>
   <p>La opción C, «$m=|\sqrt2|$», es solo $m=\sqrt2$, que es verdadera porque $\sqrt2$ es uno de los valores que anulan $|A|$ (probablemente se quiso escribir $|m|=\sqrt2$).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $m$ para que la cónica sea degenerada.</dd>
@@ -630,8 +731,9 @@
   <p><b>Error típico:</b> mirar solo $A_{00}$ (que vale $1-m^2$): la degeneración la decide $|A|$, no $A_{00}$.</p>
 </details>
 
-<details class="sol" id="ej6-31"><summary>Ejercicio 6.31 — parábola con $1+x_1^2+2\lambda x_1x_2+\mu x_2^2+2\alpha x_2=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.31, p. 226">E p.226</span></summary>
-  <p class="enun">Dada la cónica de ecuación $1+x_1^2+2\lambda x_1x_2+\mu x_2^2+2\alpha x_2=0$, se pide calcular el valor de $\alpha$ para que sea una parábola.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Dada la cónica de ecuación $1+x_1^2+2\lambda x_1x_2+\mu x_2^2+2\alpha x_2=0$, se pide calcular el valor de $\alpha$ para que sea una parábola.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Parábola exige $A_{00}=0$ (eso liga $\lambda$ y $\mu$) y además $|A|\neq0$. Calcula ambos en función de los parámetros y mira qué condición queda sobre $\alpha$.</p></details>
+<details class="sol" id="ej6-31"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 6.31 — parábola con $1+x_1^2+2\lambda x_1x_2+\mu x_2^2+2\alpha x_2=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.31, p. 226">E p.226</span></summary>
   <p>La respuesta es <b>$\alpha\neq0$</b> (y, además, $\mu=\lambda^2$).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valor de $\alpha$ para que sea parábola.</dd>
@@ -653,8 +755,9 @@
   <p><b>Error típico:</b> imponer solo $A_{00}=0$ (olvida que con $|A|=0$ son rectas paralelas).</p>
 </details>
 
-<details class="sol" id="ej6-32"><summary>Ejercicio 6.32 — elipse real con $a\,x_1^2+a\,x_2^2+2b\,x_1x_2-a=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.32, p. 227">E p.227</span></summary>
-  <p class="enun">Para que la cónica de ecuación $a\,x_1^2+a\,x_2^2+2b\,x_1x_2-a=0$ represente una elipse real se debe verificar: A) $|a|=|b|$. B) $|a|>|b|$. C) $|a|\ge|b|$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Para que la cónica de ecuación $a\,x_1^2+a\,x_2^2+2b\,x_1x_2-a=0$ represente una elipse real se debe verificar: A) $|a|=|b|$. B) $|a|>|b|$. C) $|a|\ge|b|$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Elipse real pide $A_{00}>0$ y $(a_{11}+a_{22})|A|<0$. Calcula $A_{00}$, $|A|$ y la traza en función de $a$ y $b$, y traduce cada condición a una desigualdad entre $|a|$ y $|b|$.</p></details>
+<details class="sol" id="ej6-32"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.32 — elipse real con $a\,x_1^2+a\,x_2^2+2b\,x_1x_2-a=0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.32, p. 227">E p.227</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Condición para elipse real con dos parámetros.</dd>
     <dt>Cómo lo pienso</dt><dd>Elipse real ⇔ $|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$. Aquí la ecuación no tiene términos lineales, la constante es $-a$.</dd>
@@ -680,7 +783,9 @@
 
 <h3 id="propios">Ejemplos propios (de fácil a difícil)</h3>
 
-<details class="sol" id="ej-propio-1"><summary>Propio P1 — elipse sin giro: centro, semiejes, vértices y focos de $4x_1^2+9x_2^2-8x_1+36x_2+4=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.28 y elementos de la elipse U p. 273; verificado con sympy">propio</span></summary>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Para la cónica $4x_1^2+9x_2^2-8x_1+36x_2+4=0$ determina su tipo, su centro, los semiejes, los vértices y los focos.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>No hay término cruzado, así que basta trasladar: completa cuadrados en cada variable, pasa a la forma $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$ y de ahí lee semiejes, vértices y focos con $c^2=a^2-b^2$.</p></details>
+<details class="sol" id="ej-propio-1"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio P1 — elipse sin giro: centro, semiejes, vértices y focos de $4x_1^2+9x_2^2-8x_1+36x_2+4=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.28 y elementos de la elipse U p. 273; verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Centro, semiejes, vértices y focos de una elipse sin giro.</dd>
     <dt>Cómo lo pienso</dt><dd>No hay término cruzado: sin giro. Completo cuadrados para trasladar al centro.</dd>
@@ -699,7 +804,9 @@
   <div class="recipe"><b>Receta:</b> la del E 6.28; después, $c^2=a^2-b^2$ y los focos sobre el eje mayor.</div>
 </details>
 
-<details class="sol" id="ej-propio-2"><summary>Propio P2 — hipérbola con giro: $x_1^2+4x_1x_2+x_2^2-6x_1-6x_2+3=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de U Ej. 6.31 p. 283-284; verificado con sympy">propio</span></summary>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Reduce la cónica $x_1^2+4x_1x_2+x_2^2-6x_1-6x_2+3=0$ (giro y traslación) y da su centro, vértices, focos y asíntotas en las coordenadas originales.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Hay término $x_1x_2$: primero gira con los vectores propios unitarios de la parte cuadrática (cuidando $\det P=1$), después traslada. Los elementos se calculan en $x'$ y se devuelven a $x$ con $x=Px'$.</p></details>
+<details class="sol" id="ej-propio-2"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio P2 — hipérbola con giro: $x_1^2+4x_1x_2+x_2^2-6x_1-6x_2+3=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de U Ej. 6.31 p. 283-284; verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Reducir una hipérbola con giro.</dd>
     <dt>Cómo lo pienso</dt><dd>Término cruzado ⇒ giro. Diagonalizo $A_{00}$; con valores propios de distinto signo es hipérbola.</dd>
@@ -727,7 +834,9 @@
   <div class="recipe"><b>Receta:</b> la de la Def. 6.18 con giro; el $\lambda$ positivo manda en el eje transverso si $d$ tiene el signo opuesto.</div>
 </details>
 
-<details class="sol" id="ej-propio-3"><summary>Propio P3 — parábola con giro: vértice, foco y directriz de $x_1^2+2x_1x_2+x_2^2-8x_1+8x_2=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de U p. 281-282 y definición de parábola U p. 274-275; verificado con sympy">propio</span></summary>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Para la cónica $x_1^2+2x_1x_2+x_2^2-8x_1+8x_2=0$ calcula el vértice, el foco y la directriz en las coordenadas originales.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Con $A_{00}=0$ la parte cuadrática tiene un valor propio $0$: el eje de la parábola va en la dirección de ese vector propio. Tras el giro queda $x_1'^2=2p\,x_2'$ con un término lineal; identifica $p$.</p></details>
+<details class="sol" id="ej-propio-3"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio P3 — parábola con giro: vértice, foco y directriz de $x_1^2+2x_1x_2+x_2^2-8x_1+8x_2=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de U p. 281-282 y definición de parábola U p. 274-275; verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Vértice, foco y directriz de una parábola con giro.</dd>
     <dt>Cómo lo pienso</dt><dd>$|A_{00}|=0$: parábola. El eje es la dirección del vector propio de $0$.</dd>
@@ -750,7 +859,9 @@
   <div class="recipe"><b>Receta:</b> parábola ⇒ un valor propio es 0; el eje de la parábola es la dirección de ese vector propio.</div>
 </details>
 
-<details class="sol" id="ej-propio-4"><summary>Propio P4 — las degeneradas, una por una <span class="src" data-l="P" data-ref="Ejemplo propio; cuadro de U p. 286 con el criterio corregido A11 + A22; verificado con sympy">propio</span></summary>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Reconoce, calculando invariantes, las cónicas degeneradas siguientes. a) $x_1^2-4x_2^2-2x_1+1=0$. b) $x_1^2+x_2^2-2x_1+1=0$. c) La familia $x_1^2+2x_1x_2+x_2^2+2x_1+2x_2+k=0$ según $k$. d) Comprueba que $x_1^2-1=0$ y $x_1^2+1=0$ no se distinguen con $A_{11}$ solo, y busca un criterio que sí lo haga.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $|A|$ y $A_{00}$ en cada caso: $|A|=0$ avisa de que es degenerada, y el rango de $A$ y el signo de $A_{00}$ dicen cuál de las degeneradas es.</p></details>
+<details class="sol" id="ej-propio-4"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio P4 — las degeneradas, una por una <span class="src" data-l="P" data-ref="Ejemplo propio; cuadro de U p. 286 con el criterio corregido A11 + A22; verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Reconocer las cónicas degeneradas.</dd>
     <dt>Qué se usa</dt><dd><b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
@@ -769,7 +880,9 @@
   <div class="recipe"><b>Receta:</b> $|A|=0$ ⇒ rango; con rango 2, $A_{00}$ separa secantes (reales, punto) de paralelas; en paralelas, $A_{11}+A_{22}$.</div>
 </details>
 
-<details class="sol" id="ej-propio-5"><summary>Propio P5 — clasificar para <b>todo</b> valor del parámetro: $kx_1^2+x_2^2+2x_1+1=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; modelo: U Ej. 6.36 p. 287-288 y E 6.31-6.32; verificado con sympy">propio</span></summary>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Clasifica la cónica $kx_1^2+x_2^2+2x_1+1=0$ para todo valor real del parámetro $k$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $|A|$, $A_{00}$ y la traza como funciones de $k$, halla los valores de $k$ que anulan $|A|$ o $A_{00}$ y estudia por separado cada intervalo y cada valor frontera.</p></details>
+<details class="sol" id="ej-propio-5"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio P5 — clasificar para <b>todo</b> valor del parámetro: $kx_1^2+x_2^2+2x_1+1=0$ <span class="src" data-l="P" data-ref="Ejemplo propio; modelo: U Ej. 6.36 p. 287-288 y E 6.31-6.32; verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar para todo valor del parámetro.</dd>
     <dt>Qué se usa</dt><dd><b>Condiciones con parámetros:</b> degenerada $\iff|A|=0$; parábola $\iff|A_{00}|=0$ y $|A|\neq0$; elipse real $\iff|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$. <b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
@@ -792,14 +905,15 @@
 </details>
 
 <!-- ============================ 8 ============================ -->
-<h2 id="examenes"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025) hay <b>6 ejercicios o apartados de cónicas</b>, en 6 exámenes distintos (Feb. 2018 B, Feb. 2019 A y B, Feb. 2020 B, Sept. 2017 A1 y Ene. 2022 A1); <b>no hay ninguno de cuádricas</b>. Se agrupan por método (los bloques I-IV de aquí corresponden a los de E 6.25-6.32 de arriba). </p>
 
 <h3 id="exI">Bloque I — Invariantes: definición y cálculo</h3>
 
-<details class="sol" id="ex-feb20b-6"><summary>Feb. 2020 (tipo B), ejercicio 6 — definir y citar los invariantes métricos de una cónica <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B), ejercicio 6">X Feb. 2020 (B) ej. 6</span></summary>
-  <p class="enun">Se pide definir y citar los invariantes métricos de una cónica $\mathcal C$. Nota: utilice su ecuación analítica.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide definir y citar los invariantes métricos de una cónica $\mathcal C$. Nota: utilice su ecuación analítica.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Se pide la definición: son los tres números que no cambian al girar ni trasladar los ejes. Escribe la ecuación general, la matriz $A$ y di cuáles son esos tres.</p></details>
+<details class="sol" id="ex-feb20b-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2020 (tipo B), ejercicio 6 — definir y citar los invariantes métricos de una cónica <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B), ejercicio 6">X Feb. 2020 (B) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Definir y citar los invariantes métricos.</dd>
     <dt>Cómo lo pienso</dt><dd>Son los números que no cambian bajo giros y traslaciones: $|A|$, $|A_{00}|$, $\operatorname{tr}A_{00}$.</dd>
@@ -821,8 +935,9 @@
   <p><b>Error típico:</b> citar solo «el determinante» y olvidar la traza de $M$ y $A_{00}$, o confundir $|A|$ (matriz $3\times3$) con $|M|$.</p>
 </details>
 
-<details class="sol" id="ex-feb18b-pb"><summary>Feb. 2018 (tipo B), problema b) — invariantes de $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), problema, apartado b) (1 punto)">X Feb. 2018 (B) pb. b)</span></summary>
-  <p class="enun">Calcular los invariantes de la cónica $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcular los invariantes de la cónica $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Arma $A$ con $a_{00}=-5$ arriba a la izquierda y las mitades de los coeficientes mixtos y lineales; luego $|A|$, $a_{11}+a_{22}$ y $A_{00}$.</p></details>
+<details class="sol" id="ex-feb18b-pb"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2018 (tipo B), problema b) — invariantes de $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), problema, apartado b) (1 punto)">X Feb. 2018 (B) pb. b)</span></summary>
   <div class="box warn"><span class="h">Referencia</span><p>Es el Ejemplo 6.30; sus invariantes están en U <b>Ej. 6.32</b> (p.285).</p></div>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Calcular los invariantes de una cónica.</dd>
@@ -848,8 +963,9 @@
 
 <h3 id="exII">Bloque II — Clasificar por invariantes</h3>
 
-<details class="sol" id="ex-feb19b-6"><summary>Feb. 2019 (tipo B), ejercicio 6 — clasificar $x_1^2+4x_2^2-6x_1+8x_2+9=0$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), ejercicio 6">X Feb. 2019 (B) ej. 6</span></summary>
-  <p class="enun">Clasificar la cónica de ecuación $x_1^2+4x_2^2-6x_1+8x_2+9=0$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Clasificar la cónica de ecuación $x_1^2+4x_2^2-6x_1+8x_2+9=0$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula los tres invariantes y entra en el cuadro. Con $A_{00}>0$ y $|A|\neq0$, mira el signo de $(a_{11}+a_{22})|A|$ para saber si es real o imaginaria.</p></details>
+<details class="sol" id="ex-feb19b-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2019 (tipo B), ejercicio 6 — clasificar $x_1^2+4x_2^2-6x_1+8x_2+9=0$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), ejercicio 6">X Feb. 2019 (B) ej. 6</span></summary>
   <p>Es la cónica del <a href="#ej6-30">E 6.30</a>.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar una cónica.</dd>
@@ -866,8 +982,9 @@
   <p><b>Error típico:</b> decir «elipse» sin aclarar si es real o imaginaria.</p>
 </details>
 
-<details class="sol" id="ex-sep17-6"><summary>Sept. 2017 (tipo A1), ejercicio 6 — ¿qué cónica es $x_2^2+2x_1x_2+x_1^2-2x_2+x_1+1=0$? <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A1), ejercicio 6 (test: acierto +1, fallo −0,33)">X Sept. 2017 (A1) ej. 6</span></summary>
-  <p class="enun">La cónica de ecuación $x_2^2+2x_1x_2+x_1^2-2x_2+x_1+1=0$ es: A) Una parábola; B) Una elipse; C) Una recta doble; D) Ninguna de las anteriores.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La cónica de ecuación $x_2^2+2x_1x_2+x_1^2-2x_2+x_1+1=0$ es: A) Una parábola; B) Una elipse; C) Una recta doble; D) Ninguna de las anteriores.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La parte cuadrática es $(x_1+x_2)^2$, así que $A_{00}=0$. Eso deja parábola o rectas paralelas o doble: calcula $|A|$ para distinguir.</p></details>
+<details class="sol" id="ex-sep17-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2017 (tipo A1), ejercicio 6 — ¿qué cónica es $x_2^2+2x_1x_2+x_1^2-2x_2+x_1+1=0$? <span class="src" data-l="X" data-ref="Sept. 2017 (tipo A1), ejercicio 6 (test: acierto +1, fallo −0,33)">X Sept. 2017 (A1) ej. 6</span></summary>
   <p>La segunda opción («Una elipse») es la B. Es la cónica del Ej. 6.34 de U (p.287); la respuesta correcta es «A) es cierta».</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Decidir qué cónica es entre varias opciones.</dd>
@@ -895,8 +1012,9 @@
 
 <h3 id="exIII">Bloque III — Ecuación reducida</h3>
 
-<details class="sol" id="ex-ene22-pa"><summary>Ene. 2022 (tipo A1), problema a) — ecuación reducida de $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A1), problema, apartado a) (2 puntos)">X Ene. 2022 (A1) pb. a)</span></summary>
-  <p class="enun">Calcular la ecuación reducida de la cónica $x_1^2+4x_2^2-4x_1-16x_2+19=0$ (2 puntos).</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcular la ecuación reducida de la cónica $x_1^2+4x_2^2-4x_1-16x_2+19=0$ (2 puntos).</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Sin término cruzado no hay giro: completa cuadrados en $x_1$ y en $x_2$, traslada el origen al centro y divide por la constante para dejar un 1 a la derecha.</p></details>
+<details class="sol" id="ex-ene22-pa"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ene. 2022 (tipo A1), problema a) — ecuación reducida de $x_1^2+4x_2^2-4x_1-16x_2+19=0$ <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A1), problema, apartado a) (2 puntos)">X Ene. 2022 (A1) pb. a)</span></summary>
   <div class="box warn"><span class="h">Nota</span><p>Es exactamente el <a href="#ej6-28">E 6.28</a>.</p></div>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Ecuación reducida de una cónica.</dd>
@@ -913,8 +1031,9 @@
   <p><b>Error típico:</b> dar solo «$x_1^2+4x_2^2=1$» sin indicar que son coordenadas trasladadas.</p>
 </details>
 
-<details class="sol" id="ex-feb18b-red"><summary>Ampliación de Feb. 2018 (B), problema b) — ecuación reducida de $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$ <span class="src" data-l="P" data-ref="Ampliación propia del problema de Feb. 2018 (B); el examen solo pide los invariantes; método de U Ej. 6.31 p. 283-284; verificado con sympy">propio</span></summary>
-  <p class="enun">(El examen solo pide los invariantes; se reduce aquí como ejemplo completo de giro + traslación con valores propios racionales.)</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla la ecuación reducida de la cónica $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Hay término cruzado, así que gira primero. Diagonaliza la parte cuadrática con vectores propios unitarios y $\det P=1$, sustituye en la parte lineal y completa cuadrados después.</p></details>
+<details class="sol" id="ex-feb18b-red"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ampliación de Feb. 2018 (B), problema b) — ecuación reducida de $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$ <span class="src" data-l="P" data-ref="Ampliación propia del problema de Feb. 2018 (B); el examen solo pide los invariantes; método de U Ej. 6.31 p. 283-284; verificado con sympy">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Reducir una cónica completa con giro y traslación.</dd>
     <dt>Qué se usa</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$.</dd>
@@ -946,8 +1065,9 @@
 
 <h3 id="exIV">Bloque IV — Cónica con parámetro</h3>
 
-<details class="sol" id="ex-feb19a-6"><summary>Feb. 2019 (tipo A), ejercicio 6 — ¿para qué $\alpha$ es parábola $1+x_1^2+2x_1x_2+x_2^2+2\alpha x_2=0$? <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), ejercicio 6">X Feb. 2019 (A) ej. 6</span></summary>
-  <p class="enun">Determinar, si es posible, los valores de $\alpha\in\mathbb R$ para que la ecuación $1+x_1^2+2x_1x_2+x_2^2+2\alpha x_2=0$ defina una parábola.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Determinar, si es posible, los valores de $\alpha\in\mathbb R$ para que la ecuación $1+x_1^2+2x_1x_2+x_2^2+2\alpha x_2=0$ defina una parábola.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Parábola exige $A_{00}=0$ y $|A|\neq0$. Aquí la parte cuadrática ya cumple lo primero; calcula $|A|$ en función de $\alpha$ y mira qué valores lo hacen distinto de cero.</p></details>
+<details class="sol" id="ex-feb19a-6"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Feb. 2019 (tipo A), ejercicio 6 — ¿para qué $\alpha$ es parábola $1+x_1^2+2x_1x_2+x_2^2+2\alpha x_2=0$? <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), ejercicio 6">X Feb. 2019 (A) ej. 6</span></summary>
   <p>Es el <a href="#ej6-31">E 6.31</a> con $\lambda=\mu=1$ (ya cumple $\mu=\lambda^2$); $|A|=-\alpha^2$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $\alpha$ para parábola.</dd>
@@ -972,7 +1092,7 @@
 </ul>
 
 <!-- ============================ 9 ============================ -->
-<h2 id="chuleta"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <div class="box thm"><span class="h">Fórmulas y reglas clave (con sus hipótesis)</span>
   <table>
@@ -1022,6 +1142,27 @@
   <span class="src" data-l="P" data-ref="Errores recopilados de U §6.4, E §6.4 y las soluciones oficiales de los exámenes">propio</span>
 </div>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>¿Qué cónica es $x_1x_2-1=0$?</p>
+    <ul class="opts"><li>Una elipse real.<span class="why">Aquí $A_{00}=0\cdot0-\left(\tfrac12\right)^2=-\tfrac14<0$; con $A_{00}>0$ sería elipse, pero es negativo.</span></li><li data-ok>Una hipérbola.</li><li>Una parábola.<span class="why">La parábola exige $A_{00}=0$ y aquí vale $-\tfrac14$. Que falten los términos $x_1^2$ y $x_2^2$ no la hace parábola.</span></li><li>Dos rectas secantes.<span class="why">Las degeneradas tienen $|A|=0$, pero aquí $|A|=\tfrac14\neq0$.</span></li></ul>
+    <p class="fb">$A=\begin{pmatrix}-1&0&0\\0&0&\tfrac12\\0&\tfrac12&0\end{pmatrix}$ tiene $|A|=\tfrac14\neq0$ (no degenerada) y $A_{00}=-\tfrac14<0$: hipérbola.</p></div>
+  <div class="qp"><p>¿Qué representa $x_1^2+x_2^2+1=0$?</p>
+    <ul class="opts"><li>Una circunferencia real de radio 1.<span class="why">Pasando el 1 al otro lado queda $x_1^2+x_2^2=-1$, que ningún punto real cumple. Con $A_{00}>0$ hay que mirar el signo de $(a_{11}+a_{22})|A|$.</span></li><li data-ok>Una elipse imaginaria (ningún punto real).</li><li>Un único punto.<span class="why">Un punto exigiría $|A|=0$; aquí $|A|=1\neq0$ (el punto sería $x_1^2+x_2^2=0$).</span></li><li>Una hipérbola.<span class="why">$A_{00}=1>0$; la hipérbola necesita $A_{00}<0$.</span></li></ul>
+    <p class="fb">$|A|=1$, $A_{00}=1>0$, $a_{11}+a_{22}=2$: $(a_{11}+a_{22})|A|=2>0$, luego elipse imaginaria.</p></div>
+  <div class="qp"><p>¿Qué cónica es $x_1^2-2x_1+1=0$?</p>
+    <ul class="opts"><li>Una parábola.<span class="why">Aquí $A_{00}=0$, pero también $|A|=0$: la parábola exige $|A|\neq0$.</span></li><li>Dos rectas paralelas distintas.<span class="why">Las paralelas tienen rango de $A$ igual a 2; aquí el rango es 1. Además $(x_1-1)^2=0$ da una sola recta.</span></li><li data-ok>Una recta doble, $x_1=1$.</li><li>Una elipse imaginaria.<span class="why">$A_{00}=0$, no es positivo; y $(x_1-1)^2=0$ sí tiene puntos reales.</span></li></ul>
+    <p class="fb">$A=\begin{pmatrix}1&-1&0\\-1&1&0\\0&0&0\end{pmatrix}$ tiene rango 1, $|A|=0$ y $A_{00}=0$: recta doble. Además $x_1^2-2x_1+1=(x_1-1)^2$.</p></div>
+  <div class="qp"><p>¿Por qué $x_1^2-x_2^2=0$ no es una hipérbola?</p>
+    <ul class="opts"><li>Porque $A_{00}=-1>0$.<span class="why">$A_{00}=-1$ es negativo, que es justo la condición de hipérbola o rectas secantes; el fallo está en otro invariante.</span></li><li data-ok>Porque $|A|=0$: es degenerada, formada por las rectas $x_1=x_2$ y $x_1=-x_2$.</li><li>Porque no tiene términos lineales.<span class="why">Los términos lineales no deciden el tipo; una hipérbola puede estar centrada en el origen ($x_1^2-x_2^2=1$).</span></li></ul>
+    <p class="fb">Aquí $A=\operatorname{diag}(0,1,-1)$: $|A|=0$ y $A_{00}=-1<0$, o sea rectas secantes. Si fuera $x_1^2-x_2^2=1$, $|A|\neq0$ y sí sería hipérbola.</p></div>
+  <div class="qp"><p>¿Cuál es la ecuación reducida de $4x_1^2+x_2^2-8x_1+4x_2+4=0$?</p>
+    <ul class="opts"><li data-ok>$x_1''^2+\dfrac{x_2''^2}{4}=1$</li><li>$\dfrac{x_1''^2}{4}+x_2''^2=1$<span class="why">El 4 que multiplica a $x_1''^2$ pasa al denominador como $\tfrac14$, es decir, $x_1''^2/1$; no se pone en el eje contrario.</span></li><li>$4x_1''^2+x_2''^2=-4$<span class="why">La constante tras completar cuadrados es $+4$ a la derecha, no $-4$; sería una elipse imaginaria.</span></li></ul>
+    <p class="fb">Completando cuadrados: $4(x_1-1)^2+(x_2+2)^2=4$; dividiendo entre 4, $(x_1-1)^2+\tfrac{(x_2+2)^2}{4}=1$. Control: $|A|/A_{00}=-16/4=-4$.</p></div>
+  <div class="qp"><p>En $x_1^2+kx_2^2+2x_2=0$, ¿para qué valores de $k$ es parábola?</p>
+    <ul class="opts"><li data-ok>Solo $k=0$.</li><li>Para todo $k>0$.<span class="why">Con $k>0$, $A_{00}=k>0$ y $(1+k)|A|=-(1+k)<0$: es una elipse real.</span></li><li>Para $k<0$.<span class="why">Con $k<0$, $A_{00}<0$: hipérbola.</span></li><li>Para ningún $k$, porque $|A|=-1$ siempre.<span class="why">$|A|=-1\neq0$ es justo lo que se exige para que no sea degenerada; el que ahora sea o no parábola lo decide $A_{00}=k$.</span></li></ul>
+    <p class="fb">$A_{00}=k$ y $|A|=-1\neq0$. La parábola exige $A_{00}=0$ con $|A|\neq0$: $k=0$ (entonces $x_1^2=-2x_2$).</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>

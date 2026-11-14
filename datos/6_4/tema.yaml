@@ -36,3 +36,230 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Una cónica es una ecuación de segundo grado en $x_1,x_2$; todo el tema consiste en decir qué curva es y dónde está.
+  items:
+  - |-
+    <b>Matriz asociada $A$ ($3\times3$):</b> $a_{00}$ arriba a la izquierda y los coeficientes mixtos y lineales <b>divididos entre 2</b>; la ecuación es $X^tAX=0$ con $X=(1,x_1,x_2)^t$.
+  - |-
+    <b>Tres invariantes</b> que no cambian al girar ni trasladar: $|A|$, $a_{11}+a_{22}$ y $A_{00}=a_{11}a_{22}-a_{12}^2$.
+  - |-
+    <b>Clasificar sin dibujar:</b> $A_{00}>0$ elipse (real si $(a_{11}+a_{22})|A|<0$), $A_{00}<0$ hipérbola, $A_{00}=0$ parábola; todo esto exige $|A|\neq0$. Si $|A|=0$, es degenerada.
+  - |-
+    <b>Ecuación reducida:</b> un giro con vectores propios unitarios de $M$ elimina $x_1x_2$ y una traslación (completar cuadrados) elimina los términos lineales.
+tipos:
+- id: matriz
+  nombre: |-
+    Matriz asociada e invariantes
+  receta: |-
+    Escribe $A$ con $a_{00}$ arriba a la izquierda y las mitades de los coeficientes mixtos; calcula $|A|$, $a_{11}+a_{22}$ y $A_{00}$.
+  senal: |-
+    «escriba la ecuación matricial», «parte cuadrática, lineal y constante», «calcule los invariantes métricos», «valores propios de la parte cuadrática».
+  pasos:
+  - |-
+    <b>Lee los coeficientes</b> de $a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}$: los que acompañan a $x_1x_2$, $x_1$ y $x_2$ se dividen entre 2.
+  - |-
+    <b>Arma $A$</b> ($3\times3$, simétrica) con $a_{00}$ en la esquina superior izquierda, y su submatriz $M=\begin{pmatrix}a_{11}&a_{12}\\a_{12}&a_{22}\end{pmatrix}$ (parte cuadrática).
+  - |-
+    <b>Calcula</b> $|A|$, la traza $a_{11}+a_{22}$ y $A_{00}=|M|$.
+  - |-
+    <b>Comprueba</b> que $X^tAX=0$ con $X=(1,x_1,x_2)^t$ devuelve la ecuación original.
+  ejemplo: |-
+    $x_1^2+2x_1x_2+3x_2^2-2x_1+4x_2+5=0$ da $A=\begin{pmatrix}5&-1&2\\-1&1&1\\2&1&3\end{pmatrix}$, con $|A|=-1$, $a_{11}+a_{22}=4$ y $A_{00}=1\cdot3-1^2=2$.
+  fallos: |-
+    No dividir entre 2 el coeficiente de $x_1x_2$, de $x_1$ y de $x_2$ · poner $a_{00}$ en otra posición · tomar $M$ de $3\times3$ en vez de $2\times2$.
+- id: clasif
+  nombre: |-
+    Clasificar la cónica
+  receta: |-
+    Con los invariantes, mira $|A|$ y $A_{00}$ y entra en el cuadro; si $A_{00}>0$ y $|A|\neq0$, el signo de $(a_{11}+a_{22})|A|$ separa real de imaginaria.
+  senal: |-
+    «clasifique la cónica», «¿es una elipse, una parábola, una hipérbola…?», «¿es degenerada?», test con opciones de tipos de cónica.
+  pasos:
+  - |-
+    <b>Calcula</b> $|A|$, $A_{00}$ y $a_{11}+a_{22}$ (tipo «Matriz asociada»).
+  - |-
+    <b>Mira $|A|$.</b> Si es distinto de 0, la cónica es no degenerada; si es 0, degenerada (y hay que ver el rango de $A$).
+  - |-
+    <b>Mira el signo de $A_{00}$:</b> $>0$ elipse, $<0$ hipérbola, $=0$ parábola.
+  - |-
+    <b>Con $A_{00}>0$ y $|A|\neq0$</b>, la elipse es real si $(a_{11}+a_{22})|A|<0$ e imaginaria si $>0$.
+  - |-
+    <b>Si es degenerada</b>, usa el rango de $A$ y el signo de $A_{00}$ (secantes, un punto, paralelas, recta doble).
+  ejemplo: |-
+    $x_1^2+2x_2^2-2x_1+4x_2+5=0$: $|A|=4\neq0$, $A_{00}=2>0$ y $(a_{11}+a_{22})|A|=3\cdot4>0$, luego es una <b>elipse imaginaria</b> (de hecho equivale a $(x_1-1)^2+2(x_2+1)^2=-2$).
+  fallos: |-
+    Decir «$A_{00}>0\Rightarrow$ elipse real» sin mirar el signo de $(a_{11}+a_{22})|A|$ · «$A_{00}=0\Rightarrow$ parábola» sin exigir $|A|\neq0$ · confundir $|A|$ (matriz $3\times3$) con $A_{00}$ ($2\times2$).
+- id: reducida
+  nombre: |-
+    Ecuación reducida (giro y traslación)
+  receta: |-
+    Si hay término $x_1x_2$, gira con los vectores propios unitarios de $M$ ($\det P=1$); después completa cuadrados para trasladar el origen al centro o al vértice.
+  senal: |-
+    «ecuación reducida», «referida a los ejes de la cónica», «centro, vértices, focos, asíntotas, directriz».
+  pasos:
+  - |-
+    <b>Clasifica</b> primero la cónica, para saber qué forma reducida esperas (elipse, hipérbola o parábola).
+  - |-
+    <b>Giro (solo si $a_{12}\neq0$):</b> diagonaliza $M$ con vectores propios unitarios y $\det P=1$; sustituye $x=Px'$ en la parte cuadrática y también en la lineal.
+  - |-
+    <b>Traslación:</b> completa cuadrados en $x_1'$ y $x_2'$; el nuevo origen es el centro (o el vértice si es parábola).
+  - |-
+    <b>Normaliza:</b> divide para que quede $\frac{x^2}{a^2}\pm\frac{y^2}{b^2}=1$ (o $y^2=2px$) y lee semiejes, focos y asíntotas.
+  - |-
+    <b>Devuelve los elementos a las coordenadas originales</b> con $x=Px'$ más la traslación, y comprueba con $|A|/A_{00}$.
+  ejemplo: |-
+    $4x_1^2+x_2^2-8x_1+4x_2+4=0$ (sin $x_1x_2$, no hay giro): $4(x_1-1)^2+(x_2+2)^2=4$, o sea $x_1''^2+\dfrac{x_2''^2}{4}=1$ con $x_1''=x_1-1$, $x_2''=x_2+2$: elipse de centro $(1,-2)$ y semiejes $1$ y $2$ (control: $|A|/A_{00}=-16/4=-4$).
+  fallos: |-
+    Girar solo la parte cuadrática y olvidar la lineal · vectores propios sin normalizar o $\det P=-1$ · completar mal un cuadrado con coeficiente ($4x_2^2-16x_2=4[(x_2-2)^2-4]$) · colocar los focos en el eje equivocado.
+- id: param
+  nombre: |-
+    Cónica con parámetro
+  receta: |-
+    Calcula $|A|$, $A_{00}$ y la traza en función del parámetro y traduce la condición pedida (degenerada, parábola, elipse real…) en ecuaciones o desigualdades.
+  senal: |-
+    «¿para qué valores de $m$ es degenerada / parábola / elipse real?», cónica con $\lambda,\mu,\alpha,k$ en la ecuación.
+  pasos:
+  - |-
+    <b>Escribe $A$ con el parámetro</b> y calcula $|A|$, $A_{00}$ y $a_{11}+a_{22}$ como expresiones en él.
+  - |-
+    <b>Traduce la condición:</b> degenerada $\iff|A|=0$; parábola $\iff A_{00}=0$ y $|A|\neq0$; elipse real $\iff A_{00}>0$ y $(a_{11}+a_{22})|A|<0$.
+  - |-
+    <b>Resuelve</b> las ecuaciones o desigualdades y descarta los valores que anulan lo que debe ser distinto de cero.
+  - |-
+    <b>Estudia los valores frontera</b> aparte (donde $|A|$ o $A_{00}$ se anulan) y comprueba uno concreto.
+  ejemplo: |-
+    $x_1^2+kx_2^2+2x_2=0$: $|A|=-1$, $A_{00}=k$, $a_{11}+a_{22}=1+k$. Parábola solo si $k=0$ ($|A|=-1\neq0$); si $k>0$, $(1+k)(-1)<0$ y es elipse real; si $k<0$, $A_{00}<0$ y es hipérbola.
+  fallos: |-
+    Olvidar exigir $|A|\neq0$ en la parábola (podrían salir rectas paralelas) · resolver $A_{00}=0$ pero no comprobar el resto de condiciones · olvidar valores frontera.
+quiz:
+- p: |-
+    ¿Qué cónica es $x_1x_2-1=0$?
+  opciones:
+  - t: |-
+      Una elipse real.
+    ok: false
+    why: |-
+      Aquí $A_{00}=0\cdot0-\left(\tfrac12\right)^2=-\tfrac14<0$; con $A_{00}>0$ sería elipse, pero es negativo.
+  - t: |-
+      Una hipérbola.
+    ok: true
+  - t: |-
+      Una parábola.
+    ok: false
+    why: |-
+      La parábola exige $A_{00}=0$ y aquí vale $-\tfrac14$. Que falten los términos $x_1^2$ y $x_2^2$ no la hace parábola.
+  - t: |-
+      Dos rectas secantes.
+    ok: false
+    why: |-
+      Las degeneradas tienen $|A|=0$, pero aquí $|A|=\tfrac14\neq0$.
+  fb: |-
+    $A=\begin{pmatrix}-1&0&0\\0&0&\tfrac12\\0&\tfrac12&0\end{pmatrix}$ tiene $|A|=\tfrac14\neq0$ (no degenerada) y $A_{00}=-\tfrac14<0$: hipérbola.
+- p: |-
+    ¿Qué representa $x_1^2+x_2^2+1=0$?
+  opciones:
+  - t: |-
+      Una circunferencia real de radio 1.
+    ok: false
+    why: |-
+      Pasando el 1 al otro lado queda $x_1^2+x_2^2=-1$, que ningún punto real cumple. Con $A_{00}>0$ hay que mirar el signo de $(a_{11}+a_{22})|A|$.
+  - t: |-
+      Una elipse imaginaria (ningún punto real).
+    ok: true
+  - t: |-
+      Un único punto.
+    ok: false
+    why: |-
+      Un punto exigiría $|A|=0$; aquí $|A|=1\neq0$ (el punto sería $x_1^2+x_2^2=0$).
+  - t: |-
+      Una hipérbola.
+    ok: false
+    why: |-
+      $A_{00}=1>0$; la hipérbola necesita $A_{00}<0$.
+  fb: |-
+    $|A|=1$, $A_{00}=1>0$, $a_{11}+a_{22}=2$: $(a_{11}+a_{22})|A|=2>0$, luego elipse imaginaria.
+- p: |-
+    ¿Qué cónica es $x_1^2-2x_1+1=0$?
+  opciones:
+  - t: |-
+      Una parábola.
+    ok: false
+    why: |-
+      Aquí $A_{00}=0$, pero también $|A|=0$: la parábola exige $|A|\neq0$.
+  - t: |-
+      Dos rectas paralelas distintas.
+    ok: false
+    why: |-
+      Las paralelas tienen rango de $A$ igual a 2; aquí el rango es 1. Además $(x_1-1)^2=0$ da una sola recta.
+  - t: |-
+      Una recta doble, $x_1=1$.
+    ok: true
+  - t: |-
+      Una elipse imaginaria.
+    ok: false
+    why: |-
+      $A_{00}=0$, no es positivo; y $(x_1-1)^2=0$ sí tiene puntos reales.
+  fb: |-
+    $A=\begin{pmatrix}1&-1&0\\-1&1&0\\0&0&0\end{pmatrix}$ tiene rango 1, $|A|=0$ y $A_{00}=0$: recta doble. Además $x_1^2-2x_1+1=(x_1-1)^2$.
+- p: |-
+    ¿Por qué $x_1^2-x_2^2=0$ no es una hipérbola?
+  opciones:
+  - t: |-
+      Porque $A_{00}=-1>0$.
+    ok: false
+    why: |-
+      $A_{00}=-1$ es negativo, que es justo la condición de hipérbola o rectas secantes; el fallo está en otro invariante.
+  - t: |-
+      Porque $|A|=0$: es degenerada, formada por las rectas $x_1=x_2$ y $x_1=-x_2$.
+    ok: true
+  - t: |-
+      Porque no tiene términos lineales.
+    ok: false
+    why: |-
+      Los términos lineales no deciden el tipo; una hipérbola puede estar centrada en el origen ($x_1^2-x_2^2=1$).
+  fb: |-
+    Aquí $A=\operatorname{diag}(0,1,-1)$: $|A|=0$ y $A_{00}=-1<0$, o sea rectas secantes. Si fuera $x_1^2-x_2^2=1$, $|A|\neq0$ y sí sería hipérbola.
+- p: |-
+    ¿Cuál es la ecuación reducida de $4x_1^2+x_2^2-8x_1+4x_2+4=0$?
+  opciones:
+  - t: |-
+      $x_1''^2+\dfrac{x_2''^2}{4}=1$
+    ok: true
+  - t: |-
+      $\dfrac{x_1''^2}{4}+x_2''^2=1$
+    ok: false
+    why: |-
+      El 4 que multiplica a $x_1''^2$ pasa al denominador como $\tfrac14$, es decir, $x_1''^2/1$; no se pone en el eje contrario.
+  - t: |-
+      $4x_1''^2+x_2''^2=-4$
+    ok: false
+    why: |-
+      La constante tras completar cuadrados es $+4$ a la derecha, no $-4$; sería una elipse imaginaria.
+  fb: |-
+    Completando cuadrados: $4(x_1-1)^2+(x_2+2)^2=4$; dividiendo entre 4, $(x_1-1)^2+\tfrac{(x_2+2)^2}{4}=1$. Control: $|A|/A_{00}=-16/4=-4$.
+- p: |-
+    En $x_1^2+kx_2^2+2x_2=0$, ¿para qué valores de $k$ es parábola?
+  opciones:
+  - t: |-
+      Solo $k=0$.
+    ok: true
+  - t: |-
+      Para todo $k>0$.
+    ok: false
+    why: |-
+      Con $k>0$, $A_{00}=k>0$ y $(1+k)|A|=-(1+k)<0$: es una elipse real.
+  - t: |-
+      Para $k<0$.
+    ok: false
+    why: |-
+      Con $k<0$, $A_{00}<0$: hipérbola.
+  - t: |-
+      Para ningún $k$, porque $|A|=-1$ siempre.
+    ok: false
+    why: |-
+      $|A|=-1\neq0$ es justo lo que se exige para que no sea degenerada; el que ahora sea o no parábola lo decide $A_{00}=k$.
+  fb: |-
+    $A_{00}=k$ y $|A|=-1\neq0$. La parábola exige $A_{00}=0$ con $|A|\neq0$: $k=0$ (entonces $x_1^2=-2x_2$).
+capa: true
