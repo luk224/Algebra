@@ -34,3 +34,251 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Tres relaciones entre matrices, un mismo criterio: la que conserva más cosas es la semejanza.
+  items:
+  - |-
+    <b>Relación de equivalencia</b> = reflexiva + simétrica + transitiva. Parte el conjunto en clases disjuntas; si se puede escribir como $f(x)=f(y)$ lo es siempre.
+  - |-
+    <b>Equivalentes</b> ($B=MAN$, $M,N$ regulares) $\iff$ mismo tamaño y <b>mismo rango</b>. <b>Congruentes</b> $B=P^tAP$. <b>Semejantes</b> $B=P^{-1}AP$ (matrices de un mismo endomorfismo en bases distintas).
+  - |-
+    Semejantes y congruentes $\Rightarrow$ equivalentes, pero no al revés, y entre sí no se implican. Semejantes conservan rango, determinante, traza y polinomio característico; congruentes solo el rango y el signo del determinante ($|P|^2|A|$).
+  - |-
+    <b>Atajo de examen:</b> para negar la semejanza basta un invariante distinto; para afirmarla hay que dar $P$ (resolviendo $AP=PB$ con $\det P\neq0$). Mismos invariantes no prueban nada ($I$ y $\begin{pmatrix}1&1\\0&1\end{pmatrix}$).
+tipos:
+- id: equiv
+  nombre: |-
+    ¿Es una relación de equivalencia? Clases
+  receta: |-
+    Comprueba reflexiva, simétrica y transitiva (o escríbela como $f(x)=f(y)$); las clases son los conjuntos donde $f$ vale igual.
+  senal: |-
+    «justifique si $R$ es de equivalencia», «halle las clases», «conjunto cociente», «añada pares hasta obtener una equivalencia».
+  pasos:
+  - |-
+    <b>Reflexiva:</b> mira si hay un lazo $(a,a)$ por cada elemento de $A$. Falta uno: no lo es.
+  - |-
+    <b>Simétrica:</b> por cada $(a,b)$ debe estar $(b,a)$.
+  - |-
+    <b>Transitiva:</b> revisa todas las cadenas $(a,b),(b,c)$ y comprueba que está el atajo $(a,c)$. Para negarla basta una cadena sin atajo.
+  - |-
+    <b>Clases:</b> agrupa los elementos relacionados entre sí; $A/R$ es la lista de clases. Si hay que completar, añade lo mínimo que falta.
+  ejemplo: |-
+    $A=\{1,2,3\}$, $R=\{(1,1),(2,2),(1,2),(2,1)\}$: falta $(3,3)$, no es reflexiva, luego no es de equivalencia. Con $(3,3)$ añadido sí lo es, y $A/R=\{\{1,2\},\{3\}\}$.
+  fallos: |-
+    probar la transitividad con un solo ejemplo · olvidar los lazos de los elementos que no aparecen en ningún otro par · confundir simétrica con antisimétrica.
+- id: clasif
+  nombre: |-
+    Equivalentes, congruentes o semejantes (teoría)
+  receta: |-
+    Escribe la fórmula de cada relación ($MAN$, $P^tAP$, $P^{-1}AP$), ve qué cambia (rango, determinante, traza) y busca un contraejemplo si la implicación es falsa.
+  senal: |-
+    «razone si es cierto que… son equivalentes / congruentes / semejantes», «qué relación verifican las matrices asociadas a un endomorfismo».
+  pasos:
+  - |-
+    Recuerda la fórmula: equivalentes $B=MAN$, congruentes $B=P^tAP$, semejantes $B=P^{-1}AP$ (con $M,N,P$ regulares).
+  - |-
+    Recuerda la jerarquía: semejantes y congruentes $\Rightarrow$ equivalentes (mismo rango); ninguna otra flecha vale.
+  - |-
+    Si la afirmación es <b>cierta</b>, deduce la propiedad tomando rango o determinante en la fórmula.
+  - |-
+    Si es <b>falsa</b>, da un contraejemplo de orden 1 o 2 con la fórmula calculada.
+  ejemplo: |-
+    $I_2$ y $\operatorname{diag}(4,1)=P^tIP$ con $P=\operatorname{diag}(2,1)$ son congruentes, pero $\det$ vale $1$ y $4$: el determinante no se conserva en la congruencia ($|P^tAP|=|P|^2|A|$) y no son semejantes.
+  fallos: |-
+    creer que equivalentes implica semejantes · creer que congruentes tienen el mismo determinante · olvidar que $M$ y $N$ deben ser regulares.
+- id: semej
+  nombre: |-
+    ¿Son semejantes? (invariantes)
+  receta: |-
+    Compara rango, determinante, traza: si algo difiere, no son semejantes; si todo coincide no concluyes y hay que dar $P$.
+  senal: |-
+    «¿son semejantes $A$ y $B$?», «determinante de una matriz semejante a…», «¿existe matriz de paso?».
+  pasos:
+  - |-
+    Calcula rango, determinante y traza de cada matriz (de orden 2, el polinomio $\lambda^2-\operatorname{tr}\lambda+\det$).
+  - |-
+    Si algún invariante difiere: <b>no son semejantes</b>. Fin.
+  - |-
+    Si coinciden todos no hay conclusión: plantea $PB=AP$ y exige $\det P\neq0$.
+  - |-
+    Si hay solución regular, esa $P$ prueba la semejanza; si no, no son semejantes (el caso $\lambda I$ frente a una matriz no diagonal).
+  ejemplo: |-
+    $\begin{pmatrix}2&1\\0&3\end{pmatrix}$ y $\operatorname{diag}(1,5)$: $\det=6$ frente a $5$, luego no son semejantes (las trazas, $5$ y $6$, tampoco coinciden).
+  fallos: |-
+    decir que son semejantes porque coinciden rango y determinante · creer que los invariantes iguales prueban la semejanza · olvidar que $\lambda I$ solo es semejante a sí misma.
+- id: paso
+  nombre: |-
+    Hallar la matriz de paso $P$
+  receta: |-
+    Plantea $AP=PD$ (o $PB=AP$), resuelve el sistema lineal en las entradas de $P$ y exige $\det P\neq0$; si $D$ es diagonal, las columnas son vectores propios.
+  senal: |-
+    «halle una matriz de paso $P$ tal que $\Lambda=P^{-1}AP$», «todas las matrices de paso», «¿qué condiciones cumple $P$?».
+  pasos:
+  - |-
+    Escribe $P$ con entradas $a,b,c,d,\dots$ y la igualdad $AP=PB$ (equivale a $B=P^{-1}AP$ sin invertir).
+  - |-
+    Iguala entrada a entrada: queda un sistema lineal homogéneo en $a,b,c,d$.
+  - |-
+    Resuélvelo (suele quedar una familia con parámetros) y <b>exige $\det P\neq0$</b>.
+  - |-
+    Si $B$ es diagonal, cada columna de $P$ es un vector propio del valor propio correspondiente, en el mismo orden. La $P$ nunca es única.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&2\\0&3\end{pmatrix}$, $D=\operatorname{diag}(1,3)$: $P=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ (columnas $(1,0)$ y $(1,1)$ propios de $1$ y $3$); $AP=\begin{pmatrix}1&3\\0&3\end{pmatrix}=PD$.
+  fallos: |-
+    olvidar la condición $\det P\neq0$ · poner las columnas en distinto orden que los valores de la diagonal · multiplicar al revés ($PAP^{-1}$ en lugar de $P^{-1}AP$).
+- id: potencia
+  nombre: |-
+    Potencias $A^n$ con $A=P\Lambda P^{-1}$
+  receta: |-
+    Con $A=P\Lambda P^{-1}$ se tiene $A^n=P\Lambda^nP^{-1}$, y $\Lambda^n$ es elevar cada entrada diagonal.
+  senal: |-
+    «halle $A^n$», «¿cuál es $A^{15}$?» (con matriz de paso del ejercicio anterior).
+  pasos:
+  - |-
+    Obtén $P$ y $\Lambda$ con $\Lambda=P^{-1}AP$ (valores propios en la diagonal, vectores propios en las columnas).
+  - |-
+    Despeja $A=P\Lambda P^{-1}$: los $P^{-1}P$ intermedios se cancelan y $A^n=P\Lambda^nP^{-1}$.
+  - |-
+    Eleva la diagonal entrada a entrada y calcula $P^{-1}$.
+  - |-
+    Multiplica $P\Lambda^nP^{-1}$; en tests, descarta opciones con la traza ($\operatorname{tr}A^n=\sum\lambda_i^n$) o el determinante.
+  ejemplo: |-
+    $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $P=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$, $\Lambda=\operatorname{diag}(3,1)$: $A^2=P\Lambda^2P^{-1}=\tfrac12\begin{pmatrix}10&8\\8&10\end{pmatrix}=\begin{pmatrix}5&4\\4&5\end{pmatrix}$.
+  fallos: |-
+    elevar las entradas de $A$ en lugar de las de $\Lambda$ · olvidar $P^{-1}$ al final · multiplicar $P\Lambda^nP^{-1}$ en distinto orden.
+quiz:
+- p: |-
+    ¿Cuál de estas relaciones en $A=\{1,2,3\}$ es de equivalencia?
+  opciones:
+  - t: |-
+      $\{(1,1),(2,2),(1,2),(2,1)\}$
+    ok: false
+    why: |-
+      Falta el lazo $(3,3)$: no es reflexiva.
+  - t: |-
+      $\{(1,1),(2,2),(3,3),(1,2)\}$
+    ok: false
+    why: |-
+      Tiene $(1,2)$ pero no $(2,1)$: no es simétrica.
+  - t: |-
+      $\{(1,1),(2,2),(3,3),(1,2),(2,1)\}$
+    ok: true
+  - t: |-
+      $\{(1,1),(2,2),(3,3),(1,2),(2,1),(2,3),(3,2)\}$
+    ok: false
+    why: |-
+      Tiene $(1,2),(2,3)$ pero no $(1,3)$: no es transitiva.
+  fb: |-
+    La tercera tiene los tres lazos, cada par con su vuelta y ninguna cadena sin atajo; sus clases son $\{1,2\}$ y $\{3\}$.
+- p: |-
+    $A$ es una matriz $2\times2$ semejante a $\operatorname{diag}(2,5)$. ¿Cuánto vale $|A|$?
+  opciones:
+  - t: |-
+      $7$
+    ok: false
+    why: |-
+      Es la traza, no el determinante.
+  - t: |-
+      $10$
+    ok: true
+  - t: |-
+      $0$
+    ok: false
+    why: |-
+      Una matriz semejante a una regular es regular: su determinante no es 0.
+  - t: |-
+      No se puede saber, depende de $P$.
+    ok: false
+    why: |-
+      El determinante es invariante por semejanza: $|P^{-1}AP|=|A|$.
+  fb: |-
+    $|P^{-1}DP|=|P|^{-1}|D||P|=|D|=2\cdot5=10$.
+- p: |-
+    $I_2$ y $B=\operatorname{diag}(4,1)$ son congruentes ($B=P^tIP$, $P=\operatorname{diag}(2,1)$). ¿Son semejantes?
+  opciones:
+  - t: |-
+      Sí, congruentes implica semejantes.
+    ok: false
+    why: |-
+      No hay esa implicación: la congruencia no conserva el determinante.
+  - t: |-
+      No, porque sus determinantes son $1$ y $4$.
+    ok: true
+  - t: |-
+      Sí, porque tienen el mismo rango.
+    ok: false
+    why: |-
+      El mismo rango da solo equivalencia, no semejanza.
+  - t: |-
+      No, porque $P$ no es regular.
+    ok: false
+    why: |-
+      $\det P=2\neq0$: $P$ es regular; el problema es que $P^tIP\neq P^{-1}IP$.
+  fb: |-
+    $|B|=4\neq1=|I|$, y el determinante es invariante por semejanza. De hecho la única matriz semejante a $I$ es $I$.
+- p: |-
+    $J=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ e $I_2$ tienen el mismo rango, determinante, traza y polinomio característico. ¿Son semejantes?
+  opciones:
+  - t: |-
+      Sí, tienen los mismos invariantes.
+    ok: false
+    why: |-
+      Los invariantes iguales son solo condición necesaria.
+  - t: |-
+      No, porque $P^{-1}IP=I\neq J$ para toda $P$.
+    ok: true
+  - t: |-
+      Sí, con $P=J$.
+    ok: false
+    why: |-
+      $J^{-1}IJ=I$, no $J$.
+  - t: |-
+      Depende de la base.
+    ok: false
+    why: |-
+      La semejanza afirma que existe alguna $P$ regular; aquí ninguna sirve.
+  fb: |-
+    La clase de semejanza de $I$ es $\{I\}$: toda matriz $P^{-1}IP$ vale $I$.
+- p: |-
+    $A=\begin{pmatrix}1&2\\2&4\end{pmatrix}$ y $B=\begin{pmatrix}0&0\\0&3\end{pmatrix}$. ¿Cuál es cierta?
+  opciones:
+  - t: |-
+      Son equivalentes y semejantes.
+    ok: false
+    why: |-
+      Las trazas son $5$ y $3$: no son semejantes.
+  - t: |-
+      Son equivalentes pero no semejantes.
+    ok: true
+  - t: |-
+      Ni equivalentes ni semejantes.
+    ok: false
+    why: |-
+      Ambas tienen rango 1, luego sí son equivalentes.
+  - t: |-
+      Son semejantes pero no equivalentes.
+    ok: false
+    why: |-
+      Semejantes implica equivalentes (mismo rango).
+  fb: |-
+    Rango 1 en ambas: equivalentes. Traza $5\neq3$: no semejantes.
+- p: |-
+    $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}=P\Lambda P^{-1}$ con $\Lambda=\operatorname{diag}(3,1)$. ¿Cuánto vale $A^3$?
+  opciones:
+  - t: |-
+      $\begin{pmatrix}8&1\\1&8\end{pmatrix}$
+    ok: false
+    why: |-
+      Has elevado las entradas de $A$ una a una; la potencia matricial no actúa así.
+  - t: |-
+      $\begin{pmatrix}27&0\\0&1\end{pmatrix}$
+    ok: false
+    why: |-
+      Es $\Lambda^3$; falta multiplicar por $P$ y $P^{-1}$.
+  - t: |-
+      $\begin{pmatrix}14&13\\13&14\end{pmatrix}$
+    ok: true
+  fb: |-
+    $A^3=P\Lambda^3P^{-1}=\tfrac12\begin{pmatrix}28&26\\26&28\end{pmatrix}$, con $P=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$.
+capa: true
