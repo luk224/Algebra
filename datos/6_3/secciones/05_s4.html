@@ -1,0 +1,56 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Clasificar por los valores propios <span class="src" data-l="U" data-ref="U §6.3, Caracterización de la clasificación de las formas cuadráticas, Ejemplo 6.24, p. 266-267">U p.266-267</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 5 (formas cuadráticas y valores propios), Ejemplo 6, p. 405-406">L p.405-406</span></h2>
+
+<div class="box intu"><span class="h">Idea: el signo lo ponen los $\lambda_i$</span>
+  <p>En la base de vectores propios, $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$. Cada $y_i^2\ge0$, así que cada sumando tiene el signo de su $\lambda_i$. Si todos los $\lambda_i>0$, la suma es positiva salvo que todos los $y_i$ valgan 0, o sea $x=0$: definida positiva. Si alguno es negativo, basta tomar el vector que sólo tiene esa coordenada no nula y $Q$ es negativa ahí. <b>Lo único que hay que saber de $A$ son los signos de sus valores propios.</b></p>
+  <span class="src" data-l="L" data-ref="Lay §7.2, demostración del Teorema 5, p. 406: x = Py, Q = λ1 y1² + … + λn yn², P invertible">L p.406</span>
+  <span class="src" data-l="P" data-ref="Redacción propia de la idea; la demostración es la de Lay">propio</span>
+</div>
+
+<div class="box thm"><span class="h">Caracterización por los valores propios</span>
+  <p>Sea $A$ una matriz asociada a $Q$ y $\{\lambda_i\}$ todas sus raíces características (valores propios, contados con multiplicidad). Entonces:</p>
+  <table>
+    <tr><th>$Q$ es…</th><th>⇔</th><th>Valores propios de $A$</th></tr>
+    <tr><td>Definida positiva</td><td>⇔</td><td>$\lambda_i>0$ para todo $i$</td></tr>
+    <tr><td>Definida negativa</td><td>⇔</td><td>$\lambda_i&lt;0$ para todo $i$</td></tr>
+    <tr><td>Semidefinida positiva</td><td>⇔</td><td>$\lambda_i\ge0$ para todo $i$ <b>y</b> algún $\lambda_i=0$</td></tr>
+    <tr><td>Semidefinida negativa</td><td>⇔</td><td>$\lambda_i\le0$ para todo $i$ <b>y</b> algún $\lambda_i=0$</td></tr>
+    <tr><td>Indefinida</td><td>⇔</td><td>hay valores propios positivos y negativos (no nulos)</td></tr>
+  </table>
+  <p><b>Demostración (idea).</b> Con $P$ ortogonal, $Q=\sum\lambda_iy_i^2$ con $Y=P^{-1}X$ y $X\neq0\iff Y\neq0$ ($P$ es regular). Si todos $\lambda_i>0$ y $Y\neq0$, la suma es $>0$. Si algún $\lambda_k\le0$, el vector con $Y=e_k$ da $Q=\lambda_k\le0$ con $X\neq0$. Con eso salen las cinco filas.</p>
+  <span class="src" data-l="U" data-ref="U §6.3, Caracterización de la clasificación de las formas cuadráticas, p. 266">U p.266</span>
+  <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 5: positiva definida ⇔ todos los valores propios positivos; negativa definida ⇔ todos negativos; indefinida ⇔ valores propios positivos y negativos, p. 405">L p.405</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 6.24 de U — $Q=x_1^2+x_2^2-2x_1x_2$</span>
+  <ol class="steps">
+    <li>$A=\begin{pmatrix}1&-1\\-1&1\end{pmatrix}$ (el $-2x_1x_2$ se parte en $-1,-1$).</li>
+    <li>$|A-\lambda I|=(1-\lambda)^2-1=\lambda(\lambda-2)$: $\lambda_1=0$, $\lambda_2=2$.</li>
+    <li>Un valor propio positivo y uno nulo, ninguno negativo $\Rightarrow$ <b>semidefinida positiva</b>. Comprobación: $Q=(x_1-x_2)^2\ge0$ y $Q(1,1)=0$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.3, Ejemplo 6.24, p. 266-267">U p.266-267</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 6 de Lay: todos los coeficientes positivos y, sin embargo, indefinida</span>
+  <p>$Q(x)=3x_1^2+2x_2^2+x_3^2+4x_1x_2+4x_2x_3$, de matriz $A=\begin{pmatrix}3&2&0\\2&2&2\\0&2&1\end{pmatrix}$. Sus valores propios son $5,\ 2,\ -1$: hay positivos y uno negativo $\Rightarrow$ <b>indefinida</b>, «aunque todos los signos son positivos». Los signos de los coeficientes del polinomio <b>no</b> deciden; los de los valores propios, sí. (Comprobación con la traza y el determinante: $5+2-1=6=3+2+1$ y $5\cdot2\cdot(-1)=-10=|A|$.)</p>
+  <span class="src" data-l="L" data-ref="Lay §7.2, Ejemplo 6, p. 406 (valores propios 5, 2, −1)">L p.406</span>
+</div>
+
+<div class="box tip"><span class="h">Atajo en $2\times2$ sin hallar los valores propios</span>
+  <p>Para $A=\begin{pmatrix}a&b\\b&c\end{pmatrix}$ los valores propios cumplen $\lambda_1+\lambda_2=a+c$ y $\lambda_1\lambda_2=|A|$ (traza y determinante, porque $A$ es semejante a $\Lambda$). Entonces: $|A|&lt;0\Rightarrow$ signos opuestos $\Rightarrow$ <b>indefinida</b>; $|A|>0\Rightarrow$ mismo signo: <b>DP</b> si $a>0$, <b>DN</b> si $a&lt;0$; $|A|=0\Rightarrow$ un valor propio nulo: <b>semidefinida</b> (SP si $a+c>0$, SN si $a+c&lt;0$) o la forma nula.</p>
+  <span class="src" data-l="P" data-ref="Atajo propio: tr A = suma de valores propios y |A| = producto (U p. 153 traza; U p. 26 determinante del producto)">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: clasificar una forma cuadrática 2×2 por Sylvester, valores propios e invariantes</span>
+  <div class="anim-clasif" data-a="1,2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (assets/animaciones.js, anim-clasif); presets con E 6.18, E 6.19, U Ej. 6.26, U Ej. 6.24, DN, SN, Δ1 = 0 y Q ≡ 0">P</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>Clasificar por los signos de los coeficientes</b> del polinomio o de la diagonal de $A$ (Lay Ej. 6: $3,2,1$ positivos y es indefinida).</li>
+    <li><b>Confundir «algún $\lambda_i=0$» con «semidefinida»:</b> $\lambda_i\ge0$ <b>para todo $i$</b> y alguno nulo. Con $\lambda=2,0,-1$ es indefinida.</li>
+    <li>Calcular los valores propios de una matriz <b>no simétrica</b> $M$ con $Q=X^tMX$: hay que usar la <b>simétrica</b> $A=\tfrac12(M+M^t)$ (si no, los valores propios pueden ni ser reales).</li>
+  </ul>
+</div>
+

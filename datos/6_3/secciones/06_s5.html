@@ -1,0 +1,65 @@
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Criterio de Sylvester (menores principales) <span class="src" data-l="U" data-ref="U §6.3.2, Criterio de Sylvester para la clasificación de formas cuadráticas, Ejemplo 6.25, p. 267-268">U p.267-268</span></h2>
+
+<div class="box intu"><span class="h">Idea: clasificar sin calcular valores propios</span>
+  <p>Calcular valores propios de una matriz $3\times3$ obliga a resolver una ecuación de grado 3, y con un parámetro $a$ dentro es muy incómodo. El criterio de Sylvester se apoya sólo en <b>determinantes de las esquinas superiores izquierdas</b> de $A$ (los <b>menores principales</b>), que son polinomios sencillos en el parámetro. La idea: si miras sólo las primeras $k$ variables ($x_{k+1}=\dots=0$), $Q$ se reduce a una forma con matriz «la esquina $k\times k$», y su determinante $\Delta_k$ va dando información acumulada de los signos de los valores propios.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia; el enunciado es U p. 267">propio</span>
+</div>
+
+<div class="box def"><span class="h">Menores principales</span>
+  <p>Si $A=(a_{ij})$ es $n\times n$, sus <b>submatrices principales</b> son las de la esquina superior izquierda y sus determinantes son:
+  $$\Delta_1=a_{11},\qquad\Delta_2=\begin{vmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{vmatrix},\ \dots,\ \Delta_{n-1},\qquad\Delta_n=|A|.$$</p>
+  <span class="src" data-l="U" data-ref="U §6.3.2, menores de las submatrices principales, p. 267">U p.267</span>
+</div>
+
+<div class="box thm"><span class="h">Criterio de Sylvester para la clasificación (U p.267, forma literal)</span>
+  <ul>
+    <li>$\Delta_1>0,\ \Delta_2>0,\ \dots,\ \Delta_{n-1}>0,\ |A|>0\ \Longleftrightarrow\ Q$ es <b>definida positiva</b>.</li>
+    <li>$\Delta_1&lt;0,\ \Delta_2>0,\ \Delta_3&lt;0,\ \dots$ (signos <b>alternos</b>, empezando por $-$; el último $|A|$ con el signo que corresponda a su posición) $\Longleftrightarrow\ Q$ es <b>definida negativa</b>.</li>
+    <li>$|A|=0$ y $\Delta_1>0,\ \Delta_2>0,\ \dots,\ \Delta_{n-1}>0\ \Longrightarrow\ Q$ es <b>semidefinida positiva</b>.</li>
+    <li>$|A|=0$ y $\Delta_1&lt;0,\ \Delta_2>0,\ \Delta_3&lt;0,\ \dots,\ \Delta_{n-1}$ (alternando) $\Longrightarrow\ Q$ es <b>semidefinida negativa</b>.</li>
+    <li><b>En otros casos</b> se utiliza la clasificación por raíces características o por invariantes.</li>
+  </ul>
+  <p><b>Avisos importantes (hipótesis).</b> (1) Para las <b>definidas</b> el criterio es «⇔»: sirve para dar el conjunto <b>exacto</b> de valores de un parámetro. (2) Para las <b>semidefinidas</b> es sólo «⇒» (condición suficiente): si no se cumple, <b>no</b> se puede concluir que no sea semidefinida (p. ej. $\operatorname{diag}(0,1)$ es SP y tiene $\Delta_1=0$). (3) Con $n=2$, DN equivale a $\Delta_1&lt;0$ y $|A|>0$; con $n=3$, a $\Delta_1&lt;0,\ \Delta_2>0,\ |A|&lt;0$. (4) Para <b>indefinida</b> no hay rama propia: es el «otro caso».</p>
+  <span class="src" data-l="U" data-ref="U §6.3.2, Criterio de Sylvester para la clasificación de formas cuadráticas, p. 267 (cuatro implicaciones y «en otros casos…»)">U p.267</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 6.25 de U — $Q=x_1^2-2x_2^2-x_3^2+2x_1x_2+x_1x_3$</span>
+  <ol class="steps">
+    <li>$A=\begin{pmatrix}1&1&\tfrac12\\1&-2&0\\\tfrac12&0&-1\end{pmatrix}$ (cruzados partidos a la mitad).</li>
+    <li>$\Delta_1=1>0$, $\Delta_2=\begin{vmatrix}1&1\\1&-2\end{vmatrix}=-3&lt;0$, $|A|=\tfrac72$ (por Sarrus: $2+1+\tfrac12=\tfrac72$).</li>
+    <li>Con $\Delta_1>0$ pero $\Delta_2&lt;0$ <b>no se cumple ninguna rama</b>: Sylvester no decide.</li>
+    <li>Se recurre a la definición con dos vectores: $Q(1,0,0)=1>0$ y $Q(-1,0,1)=1+0-1+0-1=-1&lt;0$. Hay un valor positivo y otro negativo $\Rightarrow$ <b>indefinida</b>.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.3.2, Ejemplo 6.25, p. 268">U p.268</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo propio: definida negativa en $\mathbb R^3$ por Sylvester — $Q=-x_1^2-2x_2^2-3x_3^2+2x_1x_2$</span>
+  <ol class="steps">
+    <li>$A=\begin{pmatrix}-1&1&0\\1&-2&0\\0&0&-3\end{pmatrix}$.</li>
+    <li>$\Delta_1=-1&lt;0$; $\Delta_2=\begin{vmatrix}-1&1\\1&-2\end{vmatrix}=2-1=1>0$; $\Delta_3=|A|=-3\cdot1=-3&lt;0$.</li>
+    <li>Signos $-,+,-$ (alternos, empezando por $-$) $\Rightarrow$ <b>definida negativa</b>.</li>
+    <li>Control: valores propios $-3$ y $\tfrac{-3\pm\sqrt5}2$, todos negativos ✓.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; criterio de Sylvester U p. 267">propio</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: Sylvester</span>
+  <ol>
+    <li>Escribe $A$ (desdoblando) y calcula $\Delta_1,\dots,\Delta_{n-1},|A|$.</li>
+    <li>¿Todos $>0$? $\Rightarrow$ DP. ¿Signos $-,+,-,\dots$? $\Rightarrow$ DN.</li>
+    <li>¿$|A|=0$ y los demás cumplen $+,+,\dots$ (o $-,+,\dots$)? $\Rightarrow$ SP (o SN).</li>
+    <li>Si nada encaja: <b>no concluyas nada</b>. Busca <b>dos vectores</b> con $Q$ de signo opuesto (prueba $e_i$, $e_i\pm e_j$) o calcula valores propios.</li>
+    <li>Con parámetro: escribe cada $\Delta_k$ como polinomio en el parámetro, resuelve las desigualdades de las ramas de «⇔» y <b>intersecta</b> las soluciones.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir del criterio de U p. 267">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li>Pensar que «$\Delta_1=0$» o «$\Delta_2&lt;0$» significa «semidefinida». La rama SP exige $|A|=0$ <b>y</b> los $\Delta_k$ de orden $&lt;n$ estrictamente positivos.</li>
+    <li>Usar $|A|\ge0$ y $\Delta_k\ge0$ como criterio de «semidefinida positiva» (para ello hacen falta <b>todos</b> los menores principales, es decir, los formados con las mismas filas y columnas $i_1&lt;\dots&lt;i_k$ cualesquiera, no sólo los de la esquina superior izquierda; el criterio de U es una condición <b>suficiente</b>).</li>
+    <li>Olvidar que el desdoblado deja $a_{ij}=\tfrac c2$: con un parámetro en un término cruzado, $ax_1x_2$ da $\tfrac a2$ en la matriz.</li>
+  </ul>
+</div>
+

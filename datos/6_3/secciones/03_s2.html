@@ -1,0 +1,59 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Forma canónica: quitar los términos cruzados <span class="src" data-l="U" data-ref="U §6.3, Ejemplos 6.19-6.21, Definición 6.10, p. 259-263">U p.259-263</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 4 (teorema de los ejes principales), Ejemplo 5, p. 403-404">L p.403</span></h2>
+
+<div class="box intu"><span class="h">Idea: girar los ejes hasta que desaparezca el cruzado</span>
+  <p>Una elipse inclinada, como $5x_1^2-4x_1x_2+5x_2^2=48$, tiene un término cruzado $-4x_1x_2$ porque sus ejes <b>no</b> coinciden con los de coordenadas. Si giras los ejes hasta alinearlos con los de la elipse, la ecuación pasa a $3y_1^2+7y_2^2=48$: sólo cuadrados, y se lee de un vistazo (los números $3$ y $7$ son los valores propios de la matriz). Eso es una <b>forma canónica</b>: <b>una base</b> en la que $Q$ sólo tiene términos cuadrados. Y el giro lo da una matriz ortogonal $P$ con las columnas = vectores propios unitarios de $A$ (los <b>ejes principales</b>).</p>
+  <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 4 (ejes principales) y Ejemplo 5: 5x1² − 4x1x2 + 5x2² con valores propios 3 y 7 → 3y1² + 7y2², p. 403-404">L p.403-404</span>
+  <span class="src" data-l="P" data-ref="Redacción propia de la analogía de girar los ejes">propio</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.10 — forma cuadrática canónica</span>
+  <p>$Q$ es una forma cuadrática <b>canónica</b> si $Q(x)=Q(x_1,\dots,x_n)=\sum_{i=1}^nk_ix_i^2$, con $k_i\in\mathbb R$. Es decir, <b>su matriz es diagonal</b>: no hay términos cruzados («rectangulares»). Recuerda (U p.259): <i>siempre es posible expresar una forma cuadrática de modo que su matriz asociada sea diagonal</i>.</p>
+  <span class="src" data-l="U" data-ref="U §6.3, Definición 6.10, p. 261 (y enunciado de p. 259)">U p.259-261</span>
+</div>
+
+<div class="box thm"><span class="h">Cómo se consigue (teorema de los ejes principales)</span>
+  <p>Sea $A$ la matriz simétrica de $Q$ en una base $B$. Por el tema 5.3 existe una base <b>ortonormal</b> $B'$ de vectores propios de $A$; con $P$ ortogonal (columnas = $B'$ en coordenadas de $B$), $P^tAP=P^{-1}AP=\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$. Como $A'=P^tAP$ es la matriz de $Q$ en $B'$ (tema 6.2), en las coordenadas $Y=P^{-1}X$:
+  $$Q=\lambda_1y_1^2+\lambda_2y_2^2+\dots+\lambda_ny_n^2.$$
+  Los $\lambda_i$ son los valores propios de $A$ (repetidos según multiplicidad) y aparecen en el <b>mismo orden</b> que los vectores propios en $P$.</p>
+  <span class="src" data-l="U" data-ref="U §6.3, p. 259: Λ = PᵗAP con P ortogonal y Teorema 6.1; Ejemplo 6.20, p. 260-261">U p.259-261</span>
+  <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 4 (teorema de los ejes principales): existe x = Py ortogonal que convierte xᵗAx en yᵗDy sin productos cruzados, p. 403">L p.403</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: forma canónica por valores propios</span>
+  <ol>
+    <li>Matriz simétrica $A$ de $Q$ (desdoblando los cruzados) y su comprobación $X^tAX=Q$.</li>
+    <li>Valores propios: $|A-\lambda I|=0$ (todos reales).</li>
+    <li>Un vector propio por cada valor propio (si un $\lambda$ es doble, una base de su subespacio propio).</li>
+    <li><b>Ortogonalizar y normalizar</b>: vectores de valores propios distintos ya son ortogonales; dentro de un subespacio propio de dimensión $\ge2$ aplica Gram-Schmidt. Divide cada uno por su norma.</li>
+    <li>$B'=\{u_1,\dots,u_n\}$; $P=(u_1\,\dots\,u_n)$; $Q=\sum\lambda_iy_i^2$ en las coordenadas de $B'$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.3, Ejemplos 6.19-6.20, p. 259-261">U p.259-261</span>
+  <span class="src" data-l="P" data-ref="Receta propia en cinco pasos; el uso de Gram-Schmidt dentro de un subespacio propio es U §5.1.5 p. 207-208">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 6.19 y 6.20 de U — $Q=x_1^2+2x_2^2+4x_2x_3+2x_3^2$</span>
+  <ol class="steps">
+    <li><b>Matriz.</b> $A=\begin{pmatrix}1&0&0\\0&2&2\\0&2&2\end{pmatrix}$ ($4x_2x_3\Rightarrow a_{23}=a_{32}=2$). No es diagonal.</li>
+    <li><b>Valores propios.</b> $|A-\lambda I|=(1-\lambda)\big[(2-\lambda)^2-4\big]=(1-\lambda)\lambda(\lambda-4)$: $\lambda=1,\,0,\,4$. $\Lambda=\operatorname{diag}(1,0,4)$.</li>
+    <li><b>Vectores propios.</b> $\lambda=1$: $(1,0,0)$. $\lambda=0$: $(0,1,-1)$. $\lambda=4$: $(0,1,1)$.</li>
+    <li><b>Ortonormal.</b> Son ortogonales dos a dos (valores propios distintos; p. ej. $(0,1,-1)\cdot(0,1,1)=0$). Se normalizan: $B'=\{(1,0,0),\ \tfrac1{\sqrt2}(0,1,-1),\ \tfrac1{\sqrt2}(0,1,1)\}$ y $P^tAP=\Lambda$.</li>
+    <li><b>Forma canónica.</b> $Q=y_1^2+0\cdot y_2^2+4y_3^2=y_1^2+4y_3^2$: sólo dos términos (el valor propio 0 «desaparece»).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.3, Ejemplo 6.19, p. 259-260 y Ejemplo 6.20, p. 260-261">U p.259-261</span>
+</div>
+
+<div class="box warn"><span class="h">La forma canónica no es única (Ejemplo 6.21 de U)</span>
+  <p>Si en el ejemplo anterior tomas la base <b>ortogonal pero sin normalizar</b> $\{(1,0,0),(0,1,-1),(0,1,1)\}$, la matriz de $Q$ es $\operatorname{diag}(1,0,8)$ y $Q=y_1^2+8y_3^2$ (el $8$ es $4\cdot\|(0,1,1)\|^2=4\cdot2$). También es una forma canónica. U concluye (p.263): <i>«La forma cuadrática canónica asociada a $Q$ no es única»</i>. Lo que <b>no</b> cambia son los <b>signos</b> (apartado 3). Con base ortogonal no normalizada, $P^tAP=\operatorname{diag}(\lambda_i\|v_i\|^2)$: los signos se conservan, los números no, y <b>no</b> es $P^{-1}AP$.</p>
+  <span class="src" data-l="U" data-ref="U §6.3, Ejemplo 6.21, p. 262 y comentario de p. 263 (la forma canónica no es única)">U p.262-263</span>
+</div>
+
+<div class="box ex"><span class="h">Comprobación alternativa: completar cuadrados</span>
+  <p>El mismo $Q=x_1^2+2x_2^2+4x_2x_3+2x_3^2=x_1^2+2(x_2+x_3)^2$ es otra forma canónica, $y_1^2+2y_2^2$ (con $y_1=x_1$, $y_2=x_2+x_3$, $y_3=x_3$ y $0\cdot y_3^2$), con coeficientes $1,\,2,\,0$ en vez de $1,\,4,\,0$ (o $1,\,0,\,4$). Tiene <b>dos coeficientes positivos y uno nulo</b>, igual que la anterior: es lo único que importa para clasificar. No es el método de U (que usa valores propios), pero sirve de control.</p>
+  <span class="src" data-l="P" data-ref="Comprobación propia por completar cuadrados; U y Lay diagonalizan con valores propios (U p. 259-263, L p. 403)">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Dar los valores propios como coeficientes de $Q$ en una base de vectores propios <b>sin normalizar</b> (o no ortogonales): sólo valen si $P$ es ortogonal. Y olvidar el orden: si $P=(u_2\ u_1)$, entonces $\Lambda=\operatorname{diag}(\lambda_2,\lambda_1)$. Es el fallo de E 6.18 y de Feb. 2024 (1.ª) P6.</p>
+</div>
+
