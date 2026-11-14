@@ -1,0 +1,48 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Propiedades y no conmutatividad <span class="src" data-l="U" data-ref="U §3.4.4, Propiedades de la composición y de la multiplicación de matrices, p. 128; Ejemplo 3.27, p. 129-130">U p.128-130</span></h2>
+
+<div class="box thm"><span class="h">Propiedades de la composición y del producto de matrices</span>
+  <table>
+    <tr><th>Aplicaciones</th><th>Matrices</th></tr>
+    <tr><td><b>Asociativa:</b> $(f\circ g)\circ h=f\circ(g\circ h)$</td><td>$(AB)C=A(BC)$</td></tr>
+    <tr><td><b>Identidad</b> $i$: $i\circ g=g$ y $f\circ i=f$ (la identidad del espacio que corresponda)</td><td>$IB=B$ y $AI=A$ (la $I$ del orden que corresponda)</td></tr>
+    <tr><td><b>No es conmutativa:</b> $f\circ g$ puede ser distinta de $g\circ f$; en general ni siquiera se puede hacer $g\circ f$</td><td>$AB$ puede ser distinto de $BA$; en general ni siquiera se puede hacer $BA$</td></tr>
+    <tr><td><b>Distributiva:</b> $h\circ(f+g)=h\circ f+h\circ g$; $(f+g)\circ h=f\circ h+g\circ h$</td><td>$A(B+C)=AB+AC$; $(A+B)C=AC+BC$</td></tr>
+    <tr><td><b>Con escalares:</b> $\lambda(f\circ g)=(\lambda f)\circ g=f\circ(\lambda g)$</td><td>$\lambda(AB)=(\lambda A)B=A(\lambda B)$</td></tr>
+  </table>
+  <p>Lay (Teorema 2, p.97) recoge las mismas para matrices, e $I_mA=A=AI_n$.</p>
+  <span class="src" data-l="U" data-ref="U Propiedades de la composición y de la multiplicación de matrices, p. 128">U p.128</span>
+  <span class="src" data-l="L" data-ref="Lay §2.1, Teorema 2, p. 97">L §2.1 p.97</span>
+</div>
+
+<div class="box intu"><span class="h">Por qué las propiedades de la composición «vienen gratis»</span>
+  <p>Que $(AB)C=A(BC)$ se ve directamente con aplicaciones: $(f\circ g)\circ h$ y $f\circ(g\circ h)$ hacen lo mismo («$h$, luego $g$, luego $f$»); basta con ver el producto de matrices como composición. Y que $AB\ne BA$ también: «calcetines y luego zapatos» no es «zapatos y luego calcetines».</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.27 (U) — $f\circ g$ y $g\circ f$ no son ni del mismo tamaño</span>
+  <p>$f:\mathbb R^3\to\mathbb R^2$, $f(x_1,x_2,x_3)=(x_1-x_3,\ x_2+x_3)$; $g:\mathbb R^2\to\mathbb R^3$, $g(x_1,x_2)=(x_1+x_2,\ x_1-x_2,\ 2x_1+3x_2)$. Se piden las ecuaciones de $f\circ g$ y $g\circ f$ y comprobar con matrices que el producto no es conmutativo.</p>
+  <ol class="steps">
+    <li><b>Diagramas de espacios.</b> $\mathbb R^2\xrightarrow{g}\mathbb R^3\xrightarrow{f}\mathbb R^2$ da $f\circ g:\mathbb R^2\to\mathbb R^2$; $\mathbb R^3\xrightarrow{f}\mathbb R^2\xrightarrow{g}\mathbb R^3$ da $g\circ f:\mathbb R^3\to\mathbb R^3$. Existen las dos.</li>
+    <li><b>Matrices</b> (columnas = imágenes de la base canónica):
+    $$A=\begin{pmatrix}1&0&-1\cr0&1&1\end{pmatrix}\ (2\times3),\qquad B=\begin{pmatrix}1&1\cr1&-1\cr2&3\end{pmatrix}\ (3\times2).$$</li>
+    <li><b>$f\circ g$</b> (primero $g$): $AB$ es $(2\times3)(3\times2)=2\times2$:
+    $$\begin{aligned}AB&=\begin{pmatrix}1+0-2&1+0-3\cr0+1+2&0-1+3\end{pmatrix}\cr&=\begin{pmatrix}-1&-2\cr3&2\end{pmatrix},\end{aligned}$$
+    es decir, $(f\circ g)(x_1,x_2)=(-x_1-2x_2,\ 3x_1+2x_2)$.</li>
+    <li><b>$g\circ f$</b> (primero $f$): $BA$ es $(3\times2)(2\times3)=3\times3$:
+    $$BA=\begin{pmatrix}1&1&0\cr1&-1&-2\cr2&3&1\end{pmatrix},\qquad (g\circ f)(x)=(x_1+x_2,\ x_1-x_2-2x_3,\ 2x_1+3x_2+x_3).$$</li>
+    <li><b>Comprobación de una entrada con la definición:</b> primera componente de $g(f(x))$: $(x_1-x_3)+(x_2+x_3)=x_1+x_2$ ✓.</li>
+    <li><b>Conclusión:</b> $AB\neq BA$ (ni siquiera tienen el mismo tamaño: $2\times2$ frente a $3\times3$).</li>
+  </ol>
+  <p class="note">Decir que el producto no es conmutativo no excluye que en algún caso concreto sí se verifique $AB=BA$ (por ejemplo, $A$ e $I$, o $A$ consigo misma).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.27, p. 129-130">U p.129-130</span>
+</div>
+
+<div class="box warn"><span class="h">Reglas de los números que <i>no</i> valen con matrices</span>
+  <ul>
+    <li>$AB=BA$ (falso en general).</li>
+    <li>$AB=0\Rightarrow A=0$ o $B=0$ (falso: hay matrices no nulas con producto nulo; ver E 3.31 B).</li>
+    <li>$(A+B)^2=A^2+2AB+B^2$ (solo si $AB=BA$; en general $(A+B)^2=A^2+AB+BA+B^2$).</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Observaciones propias a partir de U p.128 y E Ej. 3.31, p. 108">propio</span>
+</div>
+
