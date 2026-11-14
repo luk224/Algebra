@@ -150,7 +150,7 @@
 
 <div class="box ex"><span class="h">Animación: ¿cuándo $x$ y $Ax$ están en la misma recta?</span>
   <p class="consigna"><b>🔎 Qué mirar:</b> Con $A$ del Ejemplo 4.6, mueve el vector $x$ hasta ponerlo en $(2,1)$ y luego en $(1,1)$, y fíjate en cuándo $Ax$ queda alineado con $x$ y cuál es el factor de estiramiento. Después pulsa «Giro 90°» y «Doble con d = 1» y observa qué ocurre con los valores y vectores propios. <b>Responde observando:</b> ¿Por qué un giro de 90° no deja ninguna dirección fija en el plano?</p>
-  <p>Mueve el vector $x$ y comprueba cuándo $Ax$ queda alineado con él. Con $A$ del Ejemplo 4.6, prueba $x=(2,1)$ (propio, $\lambda=2$) y $x=(1,1)$ (propio, $\lambda=1$), y luego pulsa «Giro 90°» o «Doble con d = 1» para ver qué pasa cuando faltan valores propios o vectores propios. Más abajo, la receta completa se apoya en estos mismos cálculos.</p>
+  <p>Mueve el vector $x$ y comprueba cuándo $Ax$ queda alineado con él. Con $A$ del Ejemplo 4.6, prueba $x=(2,1)$ (propio, $\lambda=2$) y $x=(1,1)$ (propio, $\lambda=1$), y luego pulsa «Giro 90°» o «Doble con d = 1» para ver qué pasa cuando faltan valores propios o vectores propios.</p>
   <div class="anim-propios" data-a="3,-2,1,0" data-x="2,1"></div>
   <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-propios)">P</span>
 </div>
@@ -168,7 +168,9 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 </div>
 
 <div class="box def"><span class="h">Definición 4.7 — valor propio</span>
-  <p>El número $\lambda\in\mathbb R$ de la definición anterior es el <b>valor propio</b> (autovalor) <b>asociado</b> al vector propio $x$. Un vector propio tiene <b>un único</b> valor propio (si $Ax=\lambda x=\mu x$ con $x\neq0$, entonces $\lambda=\mu$), pero un valor propio tiene <b>infinitos</b> vectores propios: todos los múltiplos no nulos de uno de ellos (y más, si $d\gt1$).</p>
+  <p>El número $\lambda\in\mathbb R$ de la definición anterior es el <b>valor propio</b> (autovalor) <b>asociado</b> al vector propio $x$. Un vector propio tiene <b>un único</b> valor propio, pero un valor propio tiene <b>infinitos</b> vectores propios (todos los múltiplos no nulos de uno, y más si $d\gt1$).</p>
+  <details class="ampl"><summary>Por qué el valor propio de un vector es único</summary>
+  <p>Si $Ax=\lambda x=\mu x$ con $x\neq0$, entonces $(\lambda-\mu)x=0$ y, como $x\neq0$, $\lambda=\mu$.</p></details>
   <span class="src" data-l="U" data-ref="U Definición 4.7, p. 151">U p.151</span>
 </div>
 
@@ -181,7 +183,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <p>Dado un valor propio $\lambda$ de $A$ (de orden $n$), el <b>subespacio propio</b> (o de vectores propios asociados a $\lambda$) es
   $$L_\lambda=\{x\in V:\ AX=\lambda X\}=\{x:\ (A-\lambda I)X=0\}=\operatorname{Nuc}(A-\lambda I)=\operatorname{Nuc}(f-\lambda\,\mathrm{Id}).$$
   Contiene a todos los vectores propios de $\lambda$ <b>y al vector $0$</b>. Se calcula resolviendo el sistema homogéneo $(A-\lambda I)X=0$.</p>
-  <span class="src" data-l="U" data-ref="U Definición 4.8, p. 152 (U omite precisar que hay que añadir el 0)">U p.152</span>
+  <span class="src" data-l="U" data-ref="U Definición 4.8, p. 152">U p.152</span>
   <span class="src" data-l="L" data-ref="Lay §5.1, espacio propio = Nul(A-λI), p. 268">L §5.1 p.268</span>
 </div>
 
@@ -198,9 +200,8 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 
 <div class="box thm"><span class="h">Vectores propios de valores propios distintos son libres</span>
   <p>Si $\lambda_1,\dots,\lambda_k$ son valores propios <b>distintos</b> de $A$ y $x_i$ es un vector propio de $\lambda_i$, entonces $\{x_1,\dots,x_k\}$ es un sistema <b>libre</b>. Equivalentemente: los subespacios propios de valores distintos solo comparten el $0$ ($L_\lambda\cap L_\mu=\{0\}$) y su suma es <b>directa</b> (U p.152, sin demostración).</p>
-  <details class="ampl"><summary>Ampliación: prueba (se puede saltar en una primera lectura)</summary>
-<p><b>Prueba para dos vectores</b> (idea general): supón $\alpha x_1+\beta x_2=0$. Aplica $A$: $\alpha\lambda_1x_1+\beta\lambda_2x_2=0$. Multiplica la primera igualdad por $\lambda_1$ y resta: $\beta(\lambda_2-\lambda_1)x_2=0$. Como $\lambda_2\neq\lambda_1$ y $x_2\neq0$, queda $\beta=0$; y entonces $\alpha x_1=0$ da $\alpha=0$.</p>
-</details>
+  <details class="ampl"><summary>Prueba para dos vectores (idea general)</summary>
+  <p>Supón $\alpha x_1+\beta x_2=0$. Aplica $A$: $\alpha\lambda_1x_1+\beta\lambda_2x_2=0$. Multiplica la primera igualdad por $\lambda_1$ y resta: $\beta(\lambda_2-\lambda_1)x_2=0$. Como $\lambda_2\neq\lambda_1$ y $x_2\neq0$, queda $\beta=0$; y entonces $\alpha x_1=0$ da $\alpha=0$.</p></details>
   <span class="src" data-l="U" data-ref="U §4.2.2, p. 152 (sin demostración)">U p.152</span>
   <span class="src" data-l="L" data-ref="Lay §5.1, Teorema 2, p. 270">L §5.1 p.270</span>
 </div>
@@ -217,13 +218,14 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <p class="motiva"><b>❓ Para empezar:</b> Buscar a ojo los vectores que $A$ no desvía solo funciona en ejemplos muy sencillos. ¿Se puede convertir la búsqueda en una ecuación en una sola incógnita, de modo que sus raíces sean los únicos números posibles?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva: del «existe un vector» a «un determinante vale cero»</span>
-  <p>Buscar $\lambda$ y $X\neq0$ con $AX=\lambda X$ parece difícil porque hay dos incógnitas. El truco: pasar todo al mismo lado, $(A-\lambda I)X=0$. Es un sistema <b>homogéneo</b>; siempre tiene la solución $X=0$, y queremos una solución <b>no nula</b>. Eso ocurre exactamente cuando la matriz $A-\lambda I$ es <b>singular</b>, es decir, cuando su determinante es $0$. Así el problema se reduce a resolver <i>una</i> ecuación en $\lambda$.</p>
+  <p>Hay dos incógnitas ($\lambda$ y $X$). Pasando todo al mismo lado, $(A-\lambda I)X=0$ es un sistema <b>homogéneo</b> y queremos una solución <b>no nula</b>: ocurre exactamente cuando $A-\lambda I$ es <b>singular</b>, es decir, cuando su determinante es $0$. El problema se reduce a <i>una</i> ecuación en $\lambda$.</p>
 </div>
 
 <div class="box def"><span class="h">Definiciones 4.9 y 4.10 — ecuación y polinomio característico</span>
   <p>$$\lambda\ \text{valor propio de }A\iff(A-\lambda I)X=0\text{ tiene solución }X\neq0\iff\operatorname{rang}(A-\lambda I)\lt n\iff|A-\lambda I|=0.$$
   La ecuación $|A-\lambda I|=0$ es la <b>ecuación característica</b> (Def. 4.9) y sus soluciones, las <b>raíces características</b>, son los valores propios. El determinante $|A-\lambda I|$ es el <b>polinomio característico</b> (Def. 4.10), de grado $n$ en $\lambda$.</p>
-  <p>Para $n=2$: $|A-\lambda I|=\lambda^2-(\operatorname{tr}A)\lambda+|A|$. Para $n=3$: $-\lambda^3+(\operatorname{tr}A)\lambda^2-c\,\lambda+|A|$, con $c$ la suma de los menores principales de orden $2$ (no hace falta memorizarla).</p>
+  <details class="ampl"><summary>Fórmulas para $n=2$ y $n=3$</summary>
+  <p>Para $n=2$: $|A-\lambda I|=\lambda^2-(\operatorname{tr}A)\lambda+|A|$. Para $n=3$: $-\lambda^3+(\operatorname{tr}A)\lambda^2-c\,\lambda+|A|$, con $c$ la suma de los menores principales de orden $2$ (no hace falta memorizarla).</p></details>
   <span class="src" data-l="U" data-ref="U Definiciones 4.9 y 4.10, p. 152-153">U p.152-153</span>
   <span class="src" data-l="L" data-ref="Lay §5.2, ecuación característica (Ej. 1, p. 274); recuadro «λ es valor propio de A si y solo si satisface la ecuación característica», polinomio característico y multiplicidad, p. 276">L §5.2 p.274 (Ej. 1) y p.276</span>
 </div>
@@ -231,8 +233,10 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="box warn"><span class="h">Cuidado con el signo y con la reducción por filas</span>
   <ul>
     <li>$|A-\lambda I|$ resta $\lambda$ solo en la <b>diagonal</b>. Y $|A+kI|=|A-(-k)I|$ es el polinomio evaluado en $\lambda=-k$ (no en $k$).</li>
-    <li>Lay lo advierte (§5.1, p.268): <b>la reducción por filas no sirve</b> para hallar valores propios. Escalonar $A$ cambia los valores propios (por ejemplo, $\begin{pmatrix}1&1\cr0&2\end{pmatrix}$ tiene valores $1,2$; con $F_2\to F_2/2$ pasa a $\begin{pmatrix}1&1\cr0&1\end{pmatrix}$, que solo tiene el $1$). Sí se puede operar sobre $A-\lambda I$ <b>una vez fijado</b> $\lambda$ para resolver el sistema $(A-\lambda I)X=0$, y por filas o columnas dentro del determinante $|A-\lambda I|$ (con las reglas del tema 1.3).</li>
+    <li><b>La reducción por filas no sirve</b> para hallar valores propios: escalonar $A$ los cambia. Sí se puede operar sobre $A-\lambda I$ <b>una vez fijado</b> $\lambda$, y por filas o columnas dentro del determinante $|A-\lambda I|$ (reglas del tema 1.3).</li>
   </ul>
+  <details class="ampl"><summary>Ejemplo de que escalonar cambia los valores propios</summary>
+  <p>$\begin{pmatrix}1&1\cr0&2\end{pmatrix}$ tiene valores $1,2$; con $F_2\to F_2/2$ pasa a $\begin{pmatrix}1&1\cr0&1\end{pmatrix}$, que solo tiene el $1$ (Lay §5.1, p.268).</p></details>
   <span class="src" data-l="L" data-ref="Lay §5.1, Advertencia: la reducción por filas no sirve para hallar valores propios, p. 268">L §5.1 p.268</span>
 </div>
 
@@ -262,24 +266,23 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <p class="motiva"><b>❓ Para empezar:</b> El polinomio que acabas de calcular se obtuvo con una base concreta. Si describes la misma aplicación lineal con otra base, la matriz cambia por completo. ¿Cambiará también el polinomio y, con él, los valores propios?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
-  <p>La matriz de un endomorfismo cambia según la base que elijas (matrices semejantes), pero «las direcciones que no se giran» son propiedad del endomorfismo, no de la base. Por eso los <b>valores propios</b> tienen que ser los mismos en todas las matrices semejantes; y con ellos, el polinomio característico, la traza y el determinante.</p>
+  <p>«Las direcciones que no se giran» son propiedad del endomorfismo, no de la base: los <b>valores propios</b> (y con ellos el polinomio característico, la traza y el determinante) son los mismos en todas las matrices semejantes.</p>
 </div>
 
 <div class="box thm"><span class="h">Teorema 4.4</span>
   <p>El polinomio característico es <b>invariante frente a cambios de base</b>: si $A'=P^{-1}AP$, entonces $|A'-\lambda I|=|A-\lambda I|$.</p>
-  <details class="ampl"><summary>Ampliación: prueba (se puede saltar en una primera lectura)</summary>
-<p><i>Prueba:</i> $A'-\lambda I=P^{-1}AP-\lambda P^{-1}P=P^{-1}(A-\lambda I)P$, luego $|A'-\lambda I|=|P^{-1}||A-\lambda I||P|=|A-\lambda I|$, porque $|P^{-1}||P|=1$.</p>
-</details>
+  <details class="ampl"><summary>Prueba</summary>
+  <p>$A'-\lambda I=P^{-1}AP-\lambda P^{-1}P=P^{-1}(A-\lambda I)P$, luego $|A'-\lambda I|=|P^{-1}||A-\lambda I||P|=|A-\lambda I|$, porque $|P^{-1}||P|=1$.</p></details>
   <p><b>Consecuencias:</b> matrices semejantes tienen los mismos valores propios (con las mismas multiplicidades algebraicas), la misma <b>traza</b> y el mismo <b>determinante</b>. Se habla, pues, del polinomio característico de un endomorfismo.</p>
-  <p id="dim-invariante"><b>También se conserva $\dim L_\lambda$</b> <span class="src" data-l="P" data-ref="Justificación propia a partir de la prueba del Teorema 4.4, U p. 153">propio</span>: de $A'-\lambda I=P^{-1}(A-\lambda I)P$ y de que el rango no cambia al multiplicar por matrices regulares, $\operatorname{rang}(A'-\lambda I)=\operatorname{rang}(A-\lambda I)$ y por tanto $d=n-\operatorname{rang}(A-\lambda I)$ es el mismo.</p>
+  <p id="dim-invariante"><b>También se conserva $\dim L_\lambda$</b> <span class="src" data-l="P" data-ref="Justificación propia a partir de la prueba del Teorema 4.4, U p. 153">propio</span>, porque $\operatorname{rang}(A'-\lambda I)=\operatorname{rang}(A-\lambda I)$ (el rango no cambia al multiplicar por matrices regulares).</p>
   <span class="src" data-l="U" data-ref="U Teorema 4.4, p. 153">U p.153</span>
   <span class="src" data-l="L" data-ref="Lay §5.2, Teorema 4: matrices similares tienen el mismo polinomio característico, p. 277">L §5.2 p.277</span>
 </div>
 
 <div class="box thm"><span class="h">Traza = suma y determinante = producto de los valores propios <small>(deducción propia)</small></span>
-  <p>Si todas las raíces de $|A-\lambda I|$ son reales, $\lambda_1,\dots,\lambda_n$ (repetidas según su multiplicidad algebraica), y como el coeficiente de $\lambda^n$ es $(-1)^n$:
-  $$|A-\lambda I|=(\lambda_1-\lambda)(\lambda_2-\lambda)\cdots(\lambda_n-\lambda).$$
-  Haciendo $\lambda=0$: $|A|=\lambda_1\lambda_2\cdots\lambda_n$. Comparando los coeficientes de $\lambda^{n-1}$ (el coeficiente es $(-1)^{n-1}\operatorname{tr}A$): $\operatorname{tr}A=\lambda_1+\cdots+\lambda_n$. (Con raíces complejas también es cierto, pero aquí solo se trabaja con $\lambda\in\mathbb R$.)</p>
+  <p>Si las raíces de $|A-\lambda I|$ son reales ($\lambda_1,\dots,\lambda_n$, repetidas según su $\alpha$): $$|A|=\lambda_1\lambda_2\cdots\lambda_n,\qquad\operatorname{tr}A=\lambda_1+\cdots+\lambda_n.$$</p>
+  <details class="ampl"><summary>Deducción</summary>
+  <p>Como el coeficiente de $\lambda^n$ es $(-1)^n$: $|A-\lambda I|=(\lambda_1-\lambda)(\lambda_2-\lambda)\cdots(\lambda_n-\lambda)$. Haciendo $\lambda=0$: $|A|=\lambda_1\cdots\lambda_n$. Comparando los coeficientes de $\lambda^{n-1}$ (que es $(-1)^{n-1}\operatorname{tr}A$): $\operatorname{tr}A=\lambda_1+\cdots+\lambda_n$. (Con raíces complejas también es cierto.)</p></details>
   <p><b>Ejemplo.</b> $A=\begin{pmatrix}1&1&0\cr0&3&3\cr0&4&2\end{pmatrix}$ tiene $\lambda=1$ (vector $(1,0,0)$). Sin calcular el cúbico: $\operatorname{tr}A=6\Rightarrow\lambda_2+\lambda_3=5$; $|A|=1\cdot(6-12)=-6\Rightarrow\lambda_2\lambda_3=-6$. Son las raíces de $t^2-5t-6=0$: $6$ y $-1$.</p>
   <span class="src" data-l="P" data-ref="Deducción propia a partir de U Def. 4.10 y p. 153; verificado con sympy">propio</span>
 </div>
@@ -460,7 +463,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Para una matriz regular e idempotente ($A^2=A$), decidir qué es cierto de sus valores propios.</dd>
     <dt>Cómo lo pienso</dt><dd>Me dan una propiedad algebraica ($A^2=A$): la uso aplicándola a un vector propio. Si $Av=\lambda v$, multiplicando por $A$ aparece $\lambda^2$ y, por la hipótesis, también $\lambda$. De ahí salen los únicos valores posibles. La regularidad me descarta uno de ellos. Y debo asegurarme de que el valor que queda se alcanza.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. $0$ es valor propio $\iff|A|=0$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Calculo $A^2v$ de dos maneras e igualo; uso que $v\neq0$; descarto el $0$ por regularidad.</dd>
   </dl></div>
   <ol class="steps">
@@ -485,7 +488,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Con la ecuación característica dada, comparar determinantes de $A-tI$ para varios $t$.</dd>
     <dt>Cómo lo pienso</dt><dd>$|A-tI|$ es el polinomio característico evaluado en $t$. Se anula exactamente en los valores propios. Así que cada determinante es 0 o no según si $t$ es raíz.</dd>
-    <dt>Qué uso</dt><dd><b>Truco:</b> $|A-tI|=p(t)$ para cualquier número $t$; es $0$ exactamente cuando $t$ es valor propio.</dd>
+    <dt>Qué uso</dt><dd><b>Truco:</b> $|A-tI|=p(t)$, que vale $0$ exactamente cuando $t$ es valor propio — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Leo las raíces del polinomio y evalúo en cada $t$.</dd>
   </dl></div>
   <ol class="steps">
@@ -512,7 +515,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Con las tres raíces dadas, comparar determinantes.</dd>
     <dt>Cómo lo pienso</dt><dd>Igual: $|A-tI|=0$ si $t$ es raíz y $\neq0$ si no. Una igualdad entre un determinante nulo y uno no nulo es falsa.</dd>
-    <dt>Qué uso</dt><dd><b>Truco:</b> $|A-tI|=p(t)$ para cualquier número $t$; es $0$ exactamente cuando $t$ es valor propio.</dd>
+    <dt>Qué uso</dt><dd><b>Truco:</b> $|A-tI|=p(t)$, que vale $0$ exactamente cuando $t$ es valor propio — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Miro cuáles de $t=1,-1,-2$ son raíces.</dd>
   </dl></div>
   <ol class="steps">
@@ -534,7 +537,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Relación entre semejanza y misma ecuación característica.</dd>
     <dt>Cómo lo pienso</dt><dd>Semejantes ⇒ mismo polinomio: lo demuestro con determinantes. El recíproco lo dudo: busco dos matrices con igual polinomio que no se parezcan (la identidad es una opción: solo es semejante a sí misma).</dd>
-    <dt>Qué uso</dt><dd><b>Invariantes por semejanza (Teor. 4.4):</b> matrices semejantes tienen el mismo polinomio característico, determinante y traza. $\operatorname{tr}A=\sum\lambda_i$ y $|A|=\prod\lambda_i$.</dd>
+    <dt>Qué uso</dt><dd><b>Teor. 4.4</b> (U p.153): semejantes $\Rightarrow$ mismo polinomio, det y traza; $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Demostración para A; contraejemplo con $I$ y una triangular para B.</dd>
   </dl></div>
   <ol class="steps">
@@ -559,7 +562,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores propios de una matriz con parámetro $a\neq0$.</dd>
     <dt>Cómo lo pienso</dt><dd>Veo potencias de $a$ y de $1/a$ en posiciones simétricas: sospecho que al desarrollar el determinante se simplificarán. Los valores propios no dependerán de $a$.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Desarrollo $|A-\lambda I|$ por Sarrus y factorizo por divisores del término independiente.</dd>
   </dl></div>
   <ol class="steps">
@@ -582,7 +585,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar el valor propio asociado a un vector propio dado.</dd>
     <dt>Cómo lo pienso</dt><dd>No necesito el polinomio: si $X$ es propio, $AX$ es un múltiplo de $X$. Calculo $AX$ y veo qué múltiplo es.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Multiplico y comparo componente a componente.</dd>
   </dl></div>
   <ol class="steps">
@@ -608,7 +611,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores y subespacios propios de la matriz del 4.16.</dd>
     <dt>Cómo lo pienso</dt><dd>Hay una columna que, sumada a otra, deja un factor común: ahorro cuentas. Después, para cada valor, resuelvo un sistema homogéneo.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. <b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Operaciones de columna en el determinante y $(A-\lambda I)X=0$ para cada $\lambda$.</dd>
   </dl></div>
   <ol class="steps">
@@ -641,7 +644,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Describir el conjunto de los vectores propios de un valor dado.</dd>
     <dt>Cómo lo pienso</dt><dd>Primero hallo los valores propios: si solo hay uno, «un valor determinado» es ese. Los vectores propios (más el cero) forman un subespacio: debo darlo con ecuaciones, no con una base cualquiera.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Polinomio, $L_\lambda$ como solución de un sistema y comparo con las opciones.</dd>
   </dl></div>
   <ol class="steps">
@@ -670,7 +673,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Para $\lambda=2$: multiplicidad algebraica, cartesianas y paramétricas de su subespacio propio.</dd>
     <dt>Cómo lo pienso</dt><dd>Veo que la matriz tiene una columna casi nula: el determinante se desarrolla fácil. Para $\lambda=2$, $A-2I$ tendrá filas repetidas y bajará de rango.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. <b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Polinomio, $(A-2I)X=0$ y parametrización.</dd>
   </dl></div>
   <ol class="steps">
@@ -701,7 +704,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Comparar los valores propios de $AB$ y $BA$ con $A$ regular.</dd>
     <dt>Cómo lo pienso</dt><dd>Pienso en semejanza: si puedo escribir $BA=A^{-1}(AB)A$, serán semejantes y compartirán valores propios.</dd>
-    <dt>Qué uso</dt><dd><b>Invariantes por semejanza (Teor. 4.4):</b> matrices semejantes tienen el mismo polinomio característico, determinante y traza. $\operatorname{tr}A=\sum\lambda_i$ y $|A|=\prod\lambda_i$.</dd>
+    <dt>Qué uso</dt><dd><b>Teor. 4.4</b> (U p.153): semejantes $\Rightarrow$ mismo polinomio, det y traza; $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Compruebo la relación y refuto las otras con $A=I,B=2I$.</dd>
   </dl></div>
   <ol class="steps">
@@ -723,7 +726,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Determinante de una matriz de orden 6 semejante a una diagonal con multiplicidades dadas.</dd>
     <dt>Cómo lo pienso</dt><dd>El determinante es el producto de los valores propios con sus multiplicidades; no necesito $A$.</dd>
-    <dt>Qué uso</dt><dd><b>Invariantes por semejanza (Teor. 4.4):</b> matrices semejantes tienen el mismo polinomio característico, determinante y traza. $\operatorname{tr}A=\sum\lambda_i$ y $|A|=\prod\lambda_i$.</dd>
+    <dt>Qué uso</dt><dd><b>Teor. 4.4</b> (U p.153): semejantes $\Rightarrow$ mismo polinomio, det y traza; $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Escribo la diagonal y multiplico.</dd>
   </dl></div>
   <ol class="steps">
@@ -745,7 +748,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar $a,b,c$ sabiendo dos vectores propios.</dd>
     <dt>Cómo lo pienso</dt><dd>Cada vector propio da una ecuación vectorial $AX=\mu X$ con $\mu$ desconocido: seis ecuaciones en cinco incógnitas, que se encadenan.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Planteo las dos igualdades y resuelvo desde las ecuaciones con una sola incógnita.</dd>
   </dl></div>
   <ol class="steps">
@@ -774,7 +777,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Completar una simétrica con un vector propio y hallar valores y vectores propios.</dd>
     <dt>Cómo lo pienso</dt><dd>La simetría me da casi todas las entradas; el vector propio fija la que falta. Con dos filas proporcionales sé que $0$ es valor propio, y la traza me da el otro.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. <b>Invariantes por semejanza (Teor. 4.4):</b> matrices semejantes tienen el mismo polinomio característico, determinante y traza. $\operatorname{tr}A=\sum\lambda_i$ y $|A|=\prod\lambda_i$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>. <b>Teor. 4.4</b>: $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Simetría, $AX=\lambda X$, traza y determinante.</dd>
   </dl></div>
   <ol class="steps">
@@ -810,7 +813,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores y subespacios propios de una $2\times2$.</dd>
     <dt>Cómo lo pienso</dt><dd>Atajo: polinomio $\lambda^2-\operatorname{tr}\lambda+\det$.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Polinomio y sistemas homogéneos.</dd>
   </dl></div>
   <ol class="steps">
@@ -835,7 +838,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ver que una matriz real puede no tener valores propios.</dd>
     <dt>Cómo lo pienso</dt><dd>Es un giro de $90^\circ$: ningún vector mantiene su dirección.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Calculo el polinomio y miro si tiene raíces reales.</dd>
   </dl></div>
   <ol class="steps">
@@ -854,7 +857,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores propios de una $2\times2$ con raíz doble.</dd>
     <dt>Cómo lo pienso</dt><dd>Un solo valor propio doble; la pregunta es cuántos vectores propios independientes tiene.</dd>
-    <dt>Qué uso</dt><dd><b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.11, Teor. 4.5</b> (U p.155-158): $d=n-\operatorname{rang}(A-\lambda I)$ y $1\le d\le\alpha$ — <a href="#s5">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Rango de $A-2I$.</dd>
   </dl></div>
   <ol class="steps">
@@ -873,7 +876,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores y subespacios propios de una triangular.</dd>
     <dt>Cómo lo pienso</dt><dd>En una triangular los valores propios son los de la diagonal.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Sistema triangular para cada $\lambda$.</dd>
   </dl></div>
   <ol class="steps">
@@ -898,7 +901,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar $m$ para que $\lambda=3$ sea valor propio.</dd>
     <dt>Cómo lo pienso</dt><dd>$\lambda$ es valor propio si $|A-\lambda I|=0$. Imponerlo da $m$.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. <b>Invariantes por semejanza (Teor. 4.4):</b> matrices semejantes tienen el mismo polinomio característico, determinante y traza. $\operatorname{tr}A=\sum\lambda_i$ y $|A|=\prod\lambda_i$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>. <b>Teor. 4.4</b>: $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Determinante de $A-3I$ igualado a cero.</dd>
   </dl></div>
   <ol class="steps">
@@ -917,7 +920,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Polinomio característico y subespacios propios de una matriz muy regular.</dd>
     <dt>Cómo lo pienso</dt><dd>Todas las filas suman lo mismo: $(1,1,1)$ es vector propio con ese valor. Eso acelera el polinomio.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. <b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Sumo columnas para sacar un factor y comparo $d$ y $\alpha$.</dd>
   </dl></div>
   <ol class="steps">
@@ -943,7 +946,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores propios y multiplicidades de una matriz por bloques.</dd>
     <dt>Cómo lo pienso</dt><dd>El bloque aislado $2$ separa el cálculo; el resto es un $2\times2$.</dd>
-    <dt>Qué uso</dt><dd><b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.11, Teor. 4.5</b> (U p.155-158): $d=n-\operatorname{rang}(A-\lambda I)$ y $1\le d\le\alpha$ — <a href="#s5">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Desarrollo por la fila aislada y el rango de $A-2I$.</dd>
   </dl></div>
   <ol class="steps">
@@ -964,7 +967,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores propios de una $3\times3$ sin desarrollar el cúbico.</dd>
     <dt>Cómo lo pienso</dt><dd>Conozco un valor propio por el vector dado. Con traza y determinante, los otros dos son raíces de un cuadrático.</dd>
-    <dt>Qué uso</dt><dd><b>Invariantes por semejanza (Teor. 4.4):</b> matrices semejantes tienen el mismo polinomio característico, determinante y traza. $\operatorname{tr}A=\sum\lambda_i$ y $|A|=\prod\lambda_i$.</dd>
+    <dt>Qué uso</dt><dd><b>Teor. 4.4</b> (U p.153): semejantes $\Rightarrow$ mismo polinomio, det y traza; $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Traza y determinante.</dd>
   </dl></div>
   <ol class="steps">
@@ -988,7 +991,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Qué pasa con los valores propios de $A^k$, $A^{-1}$ y $q(A)$.</dd>
     <dt>Cómo lo pienso</dt><dd>Mismo vector, mismos cálculos: cada potencia multiplica por $\lambda$ otra vez.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Aplico $A$ repetidamente a $v$.</dd>
   </dl></div>
   <ol class="steps">
@@ -1011,7 +1014,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Estudiar cómo cambia $d$ con un parámetro.</dd>
     <dt>Cómo lo pienso</dt><dd>El polinomio no depende del parámetro (triangular), pero el rango de $A-2I$ sí.</dd>
-    <dt>Qué uso</dt><dd><b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.11, Teor. 4.5</b> (U p.155-158): $d=n-\operatorname{rang}(A-\lambda I)$ y $1\le d\le\alpha$ — <a href="#s5">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Rango por casos de $a$.</dd>
   </dl></div>
   <ol class="steps">
@@ -1053,26 +1056,27 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Dada $B=\begin{pmatrix}a&1&2\cr0&b&-1\cr4&-3&c\end{pmatrix}$ con $a,b,c\in\mathbb R$, calcule $a$, $b$ y $c$ para que $\begin{pmatrix}1\cr1\cr1\end{pmatrix}$ sea un autovector asociado al autovalor $7$ de $B$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Que $(1,1,1)$ sea autovector de autovalor $7$ significa $B(1,1,1)^t=7(1,1,1)^t$. Escribe las tres ecuaciones (una por fila) y despeja.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Traducir «autovector de autovalor $7$» a ecuaciones. Resultado: $a=4$, $b=8$, $c=6$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar $a,b,c$ para que $(1,1,1)$ sea autovector con autovalor 7.</dd>
     <dt>Cómo lo pienso</dt><dd>No necesito el polinomio: me dan vector y valor. Basta $BX=7X$.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Cada componente de $BX$ es la suma de la fila: tres ecuaciones con una incógnita cada una.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Qué hay que imponer</b> (Def. 4.6-4.7): $X=(1,1,1)^t$ es autovector con autovalor $7$ si $X\neq0$ y $BX=7X$. Como $X\neq0$, solo queda la igualdad matricial. No hace falta el polinomio característico: nos dan a la vez el vector y el valor.</li>
+    <li><b>Planteamiento</b> (Def. 4.6-4.7). $X=(1,1,1)^t\neq0$ es autovector de $B$ con autovalor $7$ si $BX=7X$.</li>
     <li><b>Calcular $BX$</b> (cada componente es la suma de la fila):
-      $$BX=\begin{pmatrix}a+1+2\\b-1\\4-3+c\end{pmatrix}=\begin{pmatrix}a+3\\b-1\\c+1\end{pmatrix}.$$</li>
+$$BX=\begin{pmatrix}a+1+2\\b-1\\4-3+c\end{pmatrix}=\begin{pmatrix}a+3\\b-1\\c+1\end{pmatrix}.$$</li>
     <li><b>Igualar a $7X=(7,7,7)^t$</b> componente a componente:
-      $$a+3=7,\qquad b-1=7,\qquad c+1=7.$$</li>
-    <li><b>Resolver:</b>
-      $$a=4,\qquad b=8,\qquad c=6$$
-      <p>(cada ecuación tiene una sola incógnita).</p></li>
-    <li><b>Comprobación:</b> con
-      $$B=\begin{pmatrix}4&1&2\\0&8&-1\\4&-3&6\end{pmatrix},\qquad B(1,1,1)^t=(7,7,7)^t.$$
-      <p>(Polinomio $-(\lambda-7)(\lambda^2-11\lambda+16)$: $7$ es raíz.)</p></li>
-  </ol>
+$$a+3=7,\qquad b-1=7,\qquad c+1=7.$$</li>
+    <li><b>Resolver</b> (una incógnita por ecuación): $$\boxed{a=4,\quad b=8,\quad c=6.}$$</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>No hace falta el polinomio característico: nos dan a la vez el vector y el valor, y $X\neq0$ ya se cumple.</li>
+      <li><b>Comprobación:</b> con $B=\begin{pmatrix}4&1&2\\0&8&-1\\4&-3&6\end{pmatrix}$, $B(1,1,1)^t=(7,7,7)^t$. El polinomio característico es $-(\lambda-7)(\lambda^2-11\lambda+16)$: $7$ es raíz.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> «$X$ es autovector de autovalor $\lambda_0$» $\Rightarrow$ $AX=\lambda_0X$ (más $X\neq0$): se multiplica, se igualan componentes y se resuelven los parámetros.</div>
   <p><b>Error típico:</b> calcular el polinomio característico con tres parámetros (enorme e innecesario); o igualar $BX$ a $X$ en vez de a $7X$.</p>
 </details>
@@ -1083,24 +1087,26 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q(x_1,x_2,x_3)=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ una forma cuadrática. Halle la matriz $A$ asociada a $Q$. Calcule el autovalor correspondiente al autovector $(2,1,1)$ de $A$. Halle la signatura de $Q$. <i>(Este apartado es el segundo; los otros son del tema 6.)</i></p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Primero la matriz simétrica de $Q$ (término cruzado repartido a medias). Luego multiplica por $(2,1,1)^t$ y mira por qué número queda multiplicado.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Calcular el valor propio de un vector propio dado. Resultado: $A=\begin{pmatrix}6&2&2\cr2&0&4\cr2&4&0\end{pmatrix}$, $\lambda=8$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de una forma cuadrática y autovalor de un autovector dado.</dd>
     <dt>Cómo lo pienso</dt><dd>La matriz sale de los coeficientes (mitad en los cruzados). El autovalor se lee multiplicando.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Matriz simétrica y $AX$.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Dato</b> (tema 6.2): la diagonal de $A$ son los coeficientes de los cuadrados y fuera de ella va la mitad del coeficiente de cada producto cruzado:
-      $$A=\begin{pmatrix}6&2&2\\2&0&4\\2&4&0\end{pmatrix}.$$</li>
-    <li><b>Qué se pide</b> (Def. 4.7): el $\lambda$ tal que $AX=\lambda X$, con $X=(2,1,1)^t$. El enunciado afirma que $X$ es autovector, así que basta ver qué múltiplo de $X$ es $AX$.</li>
-    <li><b>Calcular:</b>
-      $$AX=\begin{pmatrix}12+2+2\\4+0+4\\4+4+0\end{pmatrix}=\begin{pmatrix}16\\8\\8\end{pmatrix}=8\begin{pmatrix}2\\1\\1\end{pmatrix}.$$</li>
-    <li><b>Conclusión:</b> $\lambda=8$. Las tres componentes dan el mismo cociente ($16/2=8/1=8/1=8$); si no coincidieran, $X$ no sería autovector.</li>
-    <li><b>Para el 3.er apartado</b> ya conocemos una raíz:
-      $$|A-\lambda I|=-(\lambda-8)(\lambda-2)(\lambda+4),$$
-      <p>así que basta dividir por $(\lambda-8)$ con Ruffini.</p></li>
-  </ol>
+    <li><b>Matriz de $Q$</b> (tema 6.2): en la diagonal los coeficientes de los cuadrados y fuera de ella la mitad del coeficiente de cada producto cruzado:
+$$A=\begin{pmatrix}6&2&2\\2&0&4\\2&4&0\end{pmatrix}.$$</li>
+    <li><b>Autovalor de $X=(2,1,1)^t$</b> (Def. 4.7): el $\lambda$ con $AX=\lambda X$:
+$$AX=\begin{pmatrix}12+2+2\\4+0+4\\4+4+0\end{pmatrix}=\begin{pmatrix}16\\8\\8\end{pmatrix}=8\begin{pmatrix}2\\1\\1\end{pmatrix}.$$</li>
+    <li><b>Conclusión:</b> $\boxed{\lambda=8}$.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Las tres componentes dan el mismo cociente ($16/2=8/1=8/1=8$); si no coincidieran, $X$ no sería autovector. El enunciado afirma que lo es.</li>
+      <li><b>Para el 3.er apartado</b> ya se conoce una raíz: $|A-\lambda I|=-(\lambda-8)(\lambda-2)(\lambda+4)$, así que basta dividir por $(\lambda-8)$ con Ruffini. Los otros apartados son del tema 6.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> autovalor de un autovector conocido: calcula $AX$ y compara con $X$; el cociente común de las componentes no nulas es $\lambda$.</div>
   <p><b>Error típico:</b> calcular todo el polinomio y luego adivinar cuál raíz «corresponde» al vector; no comprobar que el cociente es el mismo en todas las componentes.</p>
 </details>
@@ -1111,28 +1117,31 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $(1,1,0)$ y $(-1,0,1)$ son vectores propios de la matriz de filas $(a,1,2)$, $(b,2,1)$, $(c,-1,1)$, hallar los valores propios asociados a dichos vectores propios.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Cada vector propio tiene su propio valor propio: multiplica la matriz por cada uno y compara. Los parámetros $a,b,c$ se fijan con ambas condiciones.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Es el Ejercicio 4.22 de E con la pregunta abierta. Resultado: $a=2$, $b=1$, $c=1$, $\lambda=3$ (para $(1,1,0)$), $\mu=0$ (para $(-1,0,1)$).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar los valores propios asociados a dos vectores propios con $a,b,c$ desconocidos.</dd>
     <dt>Cómo lo pienso</dt><dd>Dos ecuaciones vectoriales con incógnitas $\lambda,\mu,a,b,c$: se encadenan.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Planteo y resuelvo en cadena.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Planteamiento</b> (Def. 4.6-4.7).
-      $$A=\begin{pmatrix}a&1&2\\b&2&1\\c&-1&1\end{pmatrix}.$$
-      <p>Sea $\lambda$ el valor propio de $u=(1,1,0)$ y $\mu$ el de $v=(-1,0,1)$; son incógnitas junto con $a,b,c$.</p></li>
+    <li><b>Planteamiento</b> (Def. 4.6-4.7). $A=\begin{pmatrix}a&1&2\\b&2&1\\c&-1&1\end{pmatrix}$. Sea $\lambda$ el valor propio de $u=(1,1,0)$ y $\mu$ el de $v=(-1,0,1)$; son incógnitas junto con $a,b,c$.</li>
     <li><b>Para $u$:</b>
-      $$Au=\begin{pmatrix}a+1\\b+2\\c-1\end{pmatrix}=\lambda\begin{pmatrix}1\\1\\0\end{pmatrix}:\qquad a+1=\lambda,\ b+2=\lambda,\ c-1=0.$$</li>
+$$Au=\begin{pmatrix}a+1\\b+2\\c-1\end{pmatrix}=\lambda\begin{pmatrix}1\\1\\0\end{pmatrix}:\qquad a+1=\lambda,\ b+2=\lambda,\ c-1=0.$$</li>
     <li><b>Para $v$:</b>
-      $$Av=\begin{pmatrix}-a+2\\-b+1\\-c+1\end{pmatrix}=\mu\begin{pmatrix}-1\\0\\1\end{pmatrix}:\qquad-a+2=-\mu,\ -b+1=0,\ -c+1=\mu.$$</li>
-    <li><b>Resolver</b> (seis ecuaciones, cinco incógnitas; se encadenan):
-      $$c=1;\quad\mu=-c+1=0;\quad b=1;\quad-a+2=0\Rightarrow a=2;\quad\lambda=a+1=3,$$
-      <p>y la ecuación sobrante $b+2=3=\lambda$ ✓ (si fallara, no existiría tal matriz).</p></li>
-    <li><b>Respuesta:</b> $\lambda=3$ para $(1,1,0)$ y $\mu=0$ para $(-1,0,1)$. Que $0$ sea valor propio es posible: significa $Av=0$, $v\in\operatorname{Nuc}A$ (lo que no puede ser nulo es el <b>vector</b>).</li>
-    <li><b>Comprobación:</b>
-      $$A=\begin{pmatrix}2&1&2\\1&2&1\\1&-1&1\end{pmatrix}\ \text{tiene polinomio}\ -\lambda(\lambda-3)(\lambda-2).$$</li>
-  </ol>
+$$Av=\begin{pmatrix}-a+2\\-b+1\\-c+1\end{pmatrix}=\mu\begin{pmatrix}-1\\0\\1\end{pmatrix}:\qquad-a+2=-\mu,\ -b+1=0,\ -c+1=\mu.$$</li>
+    <li><b>Resolver</b> (se encadenan, empezando por las ecuaciones de una incógnita):
+$$c=1;\quad\mu=-c+1=0;\quad b=1;\quad-a+2=0\Rightarrow a=2;\quad\lambda=a+1=3.$$
+La ecuación sobrante $b+2=3=\lambda$ se cumple.</li>
+    <li><b>Respuesta:</b> $\boxed{\lambda=3\ \text{para }(1,1,0),\qquad\mu=0\ \text{para }(-1,0,1),}$ con $a=2$, $b=1$, $c=1$.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Es el Ejercicio 4.22 de E con la pregunta abierta. Seis ecuaciones y cinco incógnitas: la sobrante sirve de control (si fallara, no existiría tal matriz).</li>
+      <li>Que $0$ sea valor propio es posible: significa $Av=0$, $v\in\operatorname{Nuc}A$ (lo que no puede ser nulo es el <b>vector</b>).</li>
+      <li><b>Comprobación:</b> $A=\begin{pmatrix}2&1&2\\1&2&1\\1&-1&1\end{pmatrix}$ tiene polinomio $-\lambda(\lambda-3)(\lambda-2)$.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> con autovectores dados y parámetros en la matriz, escribe $Au=\lambda u$, $Av=\mu v$ con $\lambda,\mu$ como incógnitas adicionales y resuelve el sistema lineal, empezando por las ecuaciones de una sola incógnita.</div>
   <p><b>Error típico:</b> pensar que el valor propio $0$ «no vale»; usar la misma letra $\lambda$ para los dos vectores.</p>
 </details>
@@ -1143,25 +1152,29 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun"><b>Feb. 2017:</b> sabiendo que $A=(a_{ij})$ es la matriz de un endomorfismo simétrico cuyas dos primeras columnas son $(4,2,2)$, $(2,1,1)$ y que $(2,1,-2)$ es un vector propio, el elemento $a_{33}$ es: A) $3$; B) $\tfrac{11}2$; C) $-1$; D) ninguno. <b>Feb. 2022:</b> igual enunciado, abierto: halle la matriz $A$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Una simétrica con dos columnas dadas deja libre un solo elemento, el de la diagonal. Impón $AX=\lambda X$ con el vector propio dado (hay que hallar también $\lambda$).</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Es el Ejercicio 4.23 A de E. Resultado: B ($a_{33}=\tfrac{11}2$, con $\lambda=3$). Solo se usa la simetría para rellenar la matriz y la definición de autovector: es de este tema (y el 5.3 debe enlazar aquí).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Completar una simétrica con un autovector dado.</dd>
     <dt>Cómo lo pienso</dt><dd>Simetría y una ecuación del autovector fijan la entrada que falta.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>$AX=\lambda X$.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
     <li><b>Completar con la simetría</b> ($a_{ij}=a_{ji}$): las dos primeras columnas dan $a_{31}=2$, $a_{32}=1$; por simetría $a_{13}=2$, $a_{23}=1$. Solo queda libre $a_{33}=m$:
-      $$A=\begin{pmatrix}4&2&2\\2&1&1\\2&1&m\end{pmatrix}.$$</li>
-    <li><b>Imponer el vector propio</b> (Def. 4.6): existe $\lambda\in\mathbb R$ con $AX=\lambda X$, $X=(2,1,-2)^t$. El valor $\lambda$ es otra incógnita.</li>
-    <li><b>Calcular:</b>
-      $$AX=\begin{pmatrix}8+2-4\\4+1-2\\4+1-2m\end{pmatrix}=\begin{pmatrix}6\\3\\5-2m\end{pmatrix}.$$</li>
+$$A=\begin{pmatrix}4&2&2\\2&1&1\\2&1&m\end{pmatrix}.$$</li>
+    <li><b>Imponer el vector propio</b> (Def. 4.6): existe $\lambda\in\mathbb R$ con $AX=\lambda X$, $X=(2,1,-2)^t$; $\lambda$ es otra incógnita.
+$$AX=\begin{pmatrix}8+2-4\\4+1-2\\4+1-2m\end{pmatrix}=\begin{pmatrix}6\\3\\5-2m\end{pmatrix}.$$</li>
     <li><b>Igualar a $\lambda X=(2\lambda,\lambda,-2\lambda)^t$:</b>
-      $$6=2\lambda,\quad3=\lambda\ (\text{compatibles: }\lambda=3),\quad5-2m=-6\Rightarrow m=\tfrac{11}2.$$</li>
+$$6=2\lambda,\quad3=\lambda\ (\text{compatibles: }\lambda=3),\quad5-2m=-6\Rightarrow m=\tfrac{11}2.$$</li>
     <li><b>Respuesta:</b> $a_{33}=\tfrac{11}2$ (opción B) y
-      $$A=\begin{pmatrix}4&2&2\\2&1&1\\2&1&\tfrac{11}2\end{pmatrix}.$$
-      <p>Comprobación: $A(2,1,-2)^t=(6,3,-6)^t=3(2,1,-2)^t$; valores propios $0,3,\tfrac{15}2$.</p></li>
-  </ol>
+$$A=\begin{pmatrix}4&2&2\\2&1&1\\2&1&\tfrac{11}2\end{pmatrix}.$$</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Es el Ejercicio 4.23 A de E. Solo se usa la simetría para rellenar la matriz y la definición de autovector: es de este tema (el 5.3 debe enlazar aquí).</li>
+      <li><b>Comprobación:</b> $A(2,1,-2)^t=(6,3,-6)^t=3(2,1,-2)^t$; valores propios $0,3,\tfrac{15}2$.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> primero rellena todo lo que dé la estructura (simetría); después $AX=\lambda X$ con $\lambda$ incógnita: las filas sin parámetros fijan $\lambda$ y la que lo tiene lo despeja.</div>
   <p><b>Error típico:</b> suponer que la 3.ª columna es $(2,1,1)$ o dejar $a_{13},a_{23}$ como incógnitas (no se usa la simetría); suponer $\lambda=1$. Misma pregunta: <a href="#ej4-23">E 4.23</a>.</p>
 </details>
@@ -1175,16 +1188,22 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si la suma de dos autovectores de 5 es autovector de 5.</dd>
     <dt>Cómo lo pienso</dt><dd>La suma conserva $AX=5X$, pero un autovector debe ser <b>no nulo</b>. ¿Puede la suma ser nula?</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. Un autovector debe ser <b>no nulo</b>.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>. Un autovector es siempre <b>no nulo</b>.</dd>
     <dt>Por dónde empiezo</dt><dd>Compruebo la ecuación y busco $v=-u$.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
     <li><b>Definición</b> (Def. 4.6): $w$ es autovector de $A$ asociado a $5$ si <b>(i)</b> $Aw=5w$ y <b>(ii)</b> $w\neq0$. Hay que comprobar las dos para $w=u+v$.</li>
-    <li><b>Condición (i): siempre se cumple.</b> $A(u+v)=Au+Av=5u+5v=5(u+v)$.</li>
-    <li><b>Condición (ii): puede fallar.</b> Si $Au=5u$, también $A(-u)=-5u=5(-u)$ y $-u\neq0$: $v=-u$ es autovector de $5$. Pero $u+v=0$ no lo es.</li>
-    <li><b>Contraejemplo concreto:</b> $A=\begin{pmatrix}5&0\cr0&5\end{pmatrix}$, $u=(1,0)$, $v=(-1,0)$: ambos cumplen $Ax=5x$ y son no nulos, y $u+v=(0,0)$.</li>
-    <li><b>Conclusión:</b> falsa en general. Versión correcta: «si $u+v\neq0$, entonces $u+v$ es autovector de $5$», y «$u+v\in L_5$ siempre», porque $L_5=\{X:(A-5I)X=0\}$ es el conjunto de soluciones de un sistema homogéneo, que es un subespacio (contiene al $0$ y es cerrado por sumas y múltiplos).</li>
-  </ol>
+    <li><b>Condición (i): siempre se cumple.</b> $$A(u+v)=Au+Av=5u+5v=5(u+v).$$</li>
+    <li><b>Condición (ii): puede fallar.</b> Si $Au=5u$, también $A(-u)=5(-u)$ y $-u\neq0$: $v=-u$ es autovector de $5$, pero $u+v=0$ no lo es.</li>
+    <li><b>Contraejemplo:</b> $A=\begin{pmatrix}5&0\\0&5\end{pmatrix}$, $u=(1,0)$, $v=(-1,0)$: ambos cumplen $Ax=5x$ y son no nulos, y $u+v=(0,0)$.</li>
+    <li><b>Conclusión:</b> la afirmación es <b>falsa</b> en general. Es cierta si $u+v\neq0$.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li><b>Versión correcta:</b> «$u+v\in L_5$ siempre», porque $L_5=\{X:(A-5I)X=0\}$ es el conjunto de soluciones de un sistema homogéneo, que es un subespacio (contiene al $0$ y es cerrado por sumas y múltiplos).</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> en «¿es autovector?» comprueba las <b>dos</b> condiciones, $Aw=\lambda w$ <b>y</b> $w\neq0$. Para refutar, un contraejemplo numérico: aquí, $v=-u$.</div>
   <p><b>Error típico:</b> confundir «autovector de $\lambda$» con «elemento del subespacio propio $L_\lambda$» ($L_\lambda$ = autovectores de $\lambda$ <b>más el $0$</b>).</p>
 </details>
@@ -1197,20 +1216,27 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si el polinomio característico de $A$ es $(\lambda+8)^2(\lambda-3)^2$, justifique si es cierto o no que $|A+8I|=|A-3I|$, donde $I$ es la matriz identidad de orden $4$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$|A+8I|$ y $|A-3I|$ son el polinomio característico evaluado en $\lambda=-8$ y $\lambda=3$. Cuidado con el signo y con el orden $4$.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Es el truco de E 4.12-4.13. Resultado: $|A+8I|=|A-3I|=0$ (correcta, muy escueta).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Comparar $|A+8I|$ y $|A-3I|$.</dd>
     <dt>Cómo lo pienso</dt><dd>Cada uno es el polinomio evaluado en un punto: evalúo.</dd>
-    <dt>Qué uso</dt><dd><b>Truco:</b> $|A-tI|=p(t)$ para cualquier número $t$; es $0$ exactamente cuando $t$ es valor propio.</dd>
+    <dt>Qué uso</dt><dd><b>Truco:</b> $|A-tI|=p(t)$, que vale $0$ exactamente cuando $t$ es valor propio — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Escribo $A+8I=A-(-8)I$.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Qué significa el dato</b> (Def. 4.10): el polinomio característico es $p(\lambda)=|A-\lambda I|$. Por tanto, para <b>cualquier</b> número $t$, $|A-tI|=p(t)$. (Su grado es $4$: $A$ es $4\times4$, de acuerdo con $I$ de orden $4$.)</li>
-    <li><b>Reescribir $A+8I=A-(-8)I$:</b> $|A+8I|=p(-8)=(-8+8)^2(-8-3)^2=0\cdot121=0$.</li>
-    <li><b>Igual con $A-3I$:</b> $|A-3I|=p(3)=(3+8)^2(3-3)^2=121\cdot0=0$.</li>
-    <li><b>Conclusión: cierto</b>, ambos valen $0$. Interpretación: $-8$ y $3$ son valores propios (raíces de la ecuación característica, Def. 4.9); $\lambda$ es valor propio exactamente cuando $A-\lambda I$ es singular.</li>
-    <li><b>Información extra:</b> $\alpha(-8)=2$, $\alpha(3)=2$; $|A|=p(0)=8^2\cdot3^2=576$; por el Teor. 4.5, $1\le d\le2$ para cada uno, así que con este dato <b>no</b> se sabe si $A$ es diagonalizable (tema 4.3).</li>
-  </ol>
+    <li><b>Qué significa el dato</b> (Def. 4.10): $p(\lambda)=|A-\lambda I|$, luego para <b>cualquier</b> número $t$, $|A-tI|=p(t)$. Aquí $p(\lambda)=(\lambda+8)^2(\lambda-3)^2$.</li>
+    <li><b>Primer determinante:</b> $A+8I=A-(-8)I$, así que
+$$|A+8I|=p(-8)=(-8+8)^2(-8-3)^2=0\cdot121=0.$$</li>
+    <li><b>Segundo determinante:</b>
+$$|A-3I|=p(3)=(3+8)^2(3-3)^2=121\cdot0=0.$$</li>
+    <li><b>Conclusión: es cierto</b>, $|A+8I|=|A-3I|=0$ ($-8$ y $3$ son raíces de la ecuación característica, es decir, valores propios).</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>El grado de $p$ es $4$, de acuerdo con $I$ de orden $4$. Interpretación: $\lambda$ es valor propio exactamente cuando $A-\lambda I$ es singular (Def. 4.9).</li>
+      <li><b>Información extra:</b> $\alpha(-8)=2$, $\alpha(3)=2$; $|A|=p(0)=8^2\cdot3^2=576$; por el Teor. 4.5, $1\le d\le2$ para cada uno, así que con este dato <b>no</b> se sabe si $A$ es diagonalizable (tema 4.3).</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> $|A-tI|=p(t)$: para $|A+kI|$ evalúa el polinomio en $t=-k$. Si $t$ es raíz, el determinante es $0$.</div>
   <p><b>Error típico:</b> evaluar en $+8$ en vez de $-8$; intentar «reconstruir» $A$.</p>
 </details>
@@ -1221,19 +1247,25 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es una matriz de orden $3$ y la salida de <code>eigenvalues(A)</code> es <code>[[2,-1,1],[1,1,1]]</code>, explique qué información está dando MAXIMA con dicha salida.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La salida de Maxima viene en dos listas: la primera son los valores propios y la segunda sus multiplicidades algebraicas. Interprétalas.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Aunque Maxima está fuera del temario, la pregunta es de teoría de este tema: multiplicidad algebraica. Resultado: «tres autovalores simples $\{2,-1,1\}$».</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Interpretar la salida de Maxima de valores propios.</dd>
     <dt>Cómo lo pienso</dt><dd>Dos listas: valores y multiplicidades.</dd>
-    <dt>Qué uso</dt><dd><b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.11, Teor. 4.5</b> (U p.155-158): $d=n-\operatorname{rang}(A-\lambda I)$ y $1\le d\le\alpha$ — <a href="#s5">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Leo y deduzco consecuencias.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Formato:</b> dos listas; la primera son los <b>valores propios distintos</b> y la segunda, en el mismo orden, su <b>multiplicidad algebraica</b> (Def. 4.11).</li>
+    <li><b>Formato</b> de la salida: dos listas; la primera contiene los <b>valores propios distintos</b> y la segunda, en el mismo orden, su <b>multiplicidad algebraica</b> (Def. 4.11).</li>
     <li><b>Lectura:</b> $\lambda_1=2$, $\lambda_2=-1$, $\lambda_3=1$, cada uno con $\alpha_i=1$ (simples). Como $1+1+1=3$ es el orden de $A$, no hay más raíces.</li>
-    <li><b>Polinomio:</b> $|A-\lambda I|=(2-\lambda)(-1-\lambda)(1-\lambda)=-\lambda^3+2\lambda^2+\lambda-2$ (coeficiente principal $-1$ para $n=3$).</li>
-    <li><b>Consecuencias que se pueden añadir:</b> $|A|=p(0)=2\cdot(-1)\cdot1=-2$ (regular, pues ningún valor propio es $0$); $\operatorname{tr}A=2-1+1=2$; por el Teor. 4.5, $1\le d_i\le\alpha_i=1$: cada subespacio propio es una recta; y tres vectores propios (uno por valor distinto) son libres: base de $\mathbb R^3$, $A$ diagonalizable (tema 4.3).</li>
-  </ol>
+    <li><b>Polinomio característico:</b>
+$$|A-\lambda I|=(2-\lambda)(-1-\lambda)(1-\lambda)=-\lambda^3+2\lambda^2+\lambda-2.$$</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Maxima está fuera del temario, pero la pregunta es de teoría de este tema: multiplicidad algebraica.</li>
+      <li><b>Consecuencias que se pueden añadir:</b> $|A|=p(0)=2\cdot(-1)\cdot1=-2$ (regular, pues ningún valor propio es $0$); $\operatorname{tr}A=2-1+1=2$; por el Teor. 4.5, $1\le d_i\le\alpha_i=1$: cada subespacio propio es una recta; y tres vectores propios (uno por valor distinto) son libres: base de $\mathbb R^3$, $A$ diagonalizable (tema 4.3).</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> salida <code>[[valores],[multiplicidades]]</code>: escribe $p(\lambda)=\prod(\lambda_i-\lambda)^{\alpha_i}$ y saca det (producto), traza (suma) y la cota $1\le d_i\le\alpha_i$.</div>
   <p><b>Error típico:</b> leer la segunda lista como «multiplicidad geométrica» o como otro grupo de valores propios ($1,1,1$). La misma salida es la de <a href="#ej4-17">E 4.17</a>.</p>
 </details>
@@ -1246,21 +1278,27 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Escribir la matriz de un endomorfismo de $\mathbb R^3$ tal que el subespacio de vectores propios asociados al valor propio $0$ sea el plano de ecuación $x+y-2z=0$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Si el plano $x+y-2z=0$ es el núcleo de $A$ (valor propio $0$), $A$ debe anular una base del plano. Elige la base y define $A$ por lo que hace con una base de $\mathbb R^3$ completada.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Un problema «inverso»: construir $A$. Resultado: base $\{(1,1,1),(1,-1,0)\}$ y, por ejemplo, $\begin{pmatrix}1&1&-2\cr2&2&-4\cr1&1&-2\end{pmatrix}$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Construir una matriz con $L_0$ igual a un plano dado.</dd>
     <dt>Cómo lo pienso</dt><dd>$L_0$ es el núcleo: quiero una matriz cuyo núcleo sea ese plano. Dimensión 2 ⇒ rango 1 ⇒ filas proporcionales.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. $L_0=\operatorname{Nuc}A$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>. $L_0=\operatorname{Nuc}A$.</dd>
     <dt>Por dónde empiezo</dt><dd>Filas múltiplos de los coeficientes del plano.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Traducir la condición</b> (Def. 4.8): $L_0=\{X:(A-0I)X=0\}=\operatorname{Nuc}A$. Se pide una matriz $3\times3$ cuyo <b>núcleo sea exactamente</b> el plano $\Pi:x+y-2z=0$ (ni más grande ni más pequeño).</li>
-    <li><b>Dimensiones</b> (tema 3.2): $\dim\operatorname{Nuc}A=2\Rightarrow\operatorname{rang}A=3-2=1$. Una matriz de rango $1$ tiene todas sus filas proporcionales a una fila no nula.</li>
-    <li><b>Elegir la fila:</b> $AX=0$ debe equivaler a la única ecuación $x+y-2z=0$: basta que cada fila sea múltiplo de $(1,1,-2)$ y alguna no nula. La más sencilla:
-      $$A=\begin{pmatrix}1&1&-2\\0&0&0\\0&0&0\end{pmatrix}.$$</li>
-    <li><b>Comprobación:</b> $AX=0\iff x+y-2z=0$, luego $\operatorname{Nuc}A=\Pi$ (base $\{(-1,1,0),(2,0,1)\}$). Como $\operatorname{Nuc}A\neq\{0\}$, $0$ es valor propio con $L_0=\Pi$. Polinomio $-\lambda^2(\lambda-1)$; $\alpha(0)=2=d(0)$.</li>
-    <li><b>Método alternativo</b> (el del tema 4.3): $A=PDP^{-1}$ con $P$ de columnas una base de $\Pi$ y un vector fuera de $\Pi$, y $D=\operatorname{diag}(0,0,\mu)$, $\mu\neq0$. Es más largo (hay que invertir $P$).</li>
-  </ol>
+    <li><b>Traducir la condición</b> (Def. 4.8): $L_0=\{X:(A-0I)X=0\}=\operatorname{Nuc}A$. Se pide una matriz $3\times3$ cuyo núcleo sea <b>exactamente</b> el plano $\Pi:x+y-2z=0$.</li>
+    <li><b>Dimensiones</b> (tema 3.2): $\dim\operatorname{Nuc}A=2\Rightarrow\operatorname{rang}A=3-2=1$: todas las filas de $A$ son proporcionales a una fila no nula.</li>
+    <li><b>Elegir la fila:</b> $AX=0$ debe equivaler a la única ecuación $x+y-2z=0$, así que cada fila es múltiplo de $(1,1,-2)$ y alguna es no nula. La más sencilla:
+$$A=\begin{pmatrix}1&1&-2\\0&0&0\\0&0&0\end{pmatrix}.$$</li>
+    <li><b>Comprobación:</b> $AX=0\iff x+y-2z=0$, luego $\operatorname{Nuc}A=\Pi$ y, como es distinto de $\{0\}$, $0$ es valor propio con $L_0=\Pi$.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Base de $\Pi$: $\{(-1,1,0),(2,0,1)\}$. Polinomio característico $-\lambda^2(\lambda-1)$; $\alpha(0)=2=d(0)$.</li>
+      <li><b>Otra solución con base propia:</b> la base $\{(1,1,1),(1,-1,0)\}$ de $\Pi$ da, por ejemplo, $A=\begin{pmatrix}1&1&-2\\2&2&-4\\1&1&-2\end{pmatrix}$ (cada fila es múltiplo de $(1,1,-2)$).</li>
+      <li><b>Método alternativo</b> (el del tema 4.3): $A=PDP^{-1}$ con $P$ de columnas una base de $\Pi$ y un vector fuera de $\Pi$, y $D=\operatorname{diag}(0,0,\mu)$, $\mu\neq0$. Es más largo (hay que invertir $P$).</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> «subespacio propio de $\lambda$» $=\operatorname{Nuc}(A-\lambda I)$. Para $\lambda=0$, construye una matriz cuyas filas sean combinaciones de las ecuaciones cartesianas del subespacio, con tantas filas independientes como ecuaciones (rango $=n-\dim$).</div>
   <p><b>Error típico:</b> dar la matriz nula ($L_0=\mathbb R^3$, demasiado grande) o una con dos filas independientes (núcleo $=$ recta, demasiado pequeño).</p>
 </details>
@@ -1271,28 +1309,28 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hallar los vectores propios del endomorfismo $f:\wp_3(x)\to\wp_3(x)$ definido por la derivada, siendo $\wp_3(x)$ el espacio de polinomios reales de grado <b>menor que $3$</b>: $f(p(x))=p'(x)$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz de la derivada en la base $\{1,x,x^2\}$ y aplica la receta; al final traduce los vectores propios de coordenadas a polinomios.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Los vectores propios (polinomios) y no solo los valores propios. Resultado: matriz $\begin{pmatrix}0&1&0\cr0&0&2\cr0&0&0\end{pmatrix}$, valor propio $0$, «$\{(1,0,0)\}$ son todos los vectores propios». Correcta en el fondo pero <b>imprecisa</b>: $\{(1,0,0)\}$ es una <i>base</i> de $L_0$, no «todos»; los vectores propios son las constantes <b>no nulas</b>; y el paso a «$\lambda=b=c=0$» no se justifica.</p>
-  <h4>Método 1: matriz asociada</h4>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Vectores propios de la derivada en polinomios de grado $<3$.</dd>
     <dt>Cómo lo pienso</dt><dd>La derivada baja el grado, así que no puede dar un múltiplo de un polinomio salvo si lo anula.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Resuelvo $p'=\lambda p$ por coeficientes.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
     <li><b>Base y coordenadas:</b> $B=\{1,x,x^2\}$; $p=a+bx+cx^2$ tiene coordenadas $(a,b,c)$.</li>
-    <li><b>Matriz de $f$</b> (columnas = coordenadas de las imágenes, tema 3.3): $f(1)=0$, $f(x)=1$, $f(x^2)=2x$: $A=\begin{pmatrix}0&1&0\cr0&0&2\cr0&0&0\end{pmatrix}$.</li>
-    <li><b>Ecuación característica:</b> $A-\lambda I$ es triangular: $|A-\lambda I|=-\lambda^3=0\Rightarrow\lambda=0$, $\alpha=3$.</li>
-    <li><b>Subespacio propio $L_0$:</b> $AX=0\iff b=0,\ 2c=0$. $\operatorname{rang}A=2$, $d=1$ ($1\le1\le3$). $L_0=\{(a,0,0)\}=\langle(1,0,0)\rangle$: los polinomios constantes.</li>
-    <li><b>Respuesta:</b> único valor propio $0$; vectores propios: polinomios constantes $p(x)=a$, $a\neq0$.</li>
-  </ol>
-  <h4>Método 2: con la definición, sin matriz</h4>
-  <ol class="steps">
-    <li>Buscamos $p=a+bx+cx^2\neq0$ y $\lambda$ con $p'=\lambda p$: $b+2cx=\lambda a+\lambda bx+\lambda cx^2$.</li>
-    <li>Igualando coeficientes: $x^2$: $0=\lambda c$; $x$: $2c=\lambda b$; término independiente: $b=\lambda a$.</li>
-    <li><b>Caso $\lambda\neq0$:</b> $c=0$, luego $b=0$, luego $a=0$: sería $p=0$, imposible. No hay valores propios distintos de $0$.</li>
-    <li><b>Caso $\lambda=0$:</b> $c=0$, $b=0$, $a$ libre: $p=a$, $a\neq0$. (Interpretación: la derivada baja el grado, así que $p'$ solo puede ser múltiplo de $p$ si $p'=0$.)</li>
-  </ol>
+    <li><b>Matriz de $f$</b> (columnas = coordenadas de las imágenes, tema 3.3): $f(1)=0$, $f(x)=1$, $f(x^2)=2x$:
+$$A=\begin{pmatrix}0&1&0\\0&0&2\\0&0&0\end{pmatrix}.$$</li>
+    <li><b>Ecuación característica:</b> $A-\lambda I$ es triangular, luego $|A-\lambda I|=-\lambda^3=0\Rightarrow\lambda=0$, $\alpha=3$.</li>
+    <li><b>Subespacio propio $L_0$:</b> $AX=0\iff b=0,\ 2c=0$. Así $\operatorname{rang}A=2$, $d=1$ y $L_0=\{(a,0,0)\}=\langle(1,0,0)\rangle$: los polinomios constantes.</li>
+    <li><b>Respuesta:</b> el único valor propio es $0$ y los vectores propios son los polinomios constantes $p(x)=a$, $a\neq0$.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li><b>Método 2: con la definición, sin matriz.</b> Se busca $p=a+bx+cx^2\neq0$ y $\lambda$ con $p'=\lambda p$: $b+2cx=\lambda a+\lambda bx+\lambda cx^2$. Igualando coeficientes: $x^2$: $0=\lambda c$; $x$: $2c=\lambda b$; término independiente: $b=\lambda a$.</li>
+      <li><b>Caso $\lambda\neq0$:</b> $c=0$, luego $b=0$, luego $a=0$: sería $p=0$, imposible. No hay valores propios distintos de $0$. <b>Caso $\lambda=0$:</b> $c=0$, $b=0$, $a$ libre: $p=a$, $a\neq0$. (La derivada baja el grado, así que $p'$ solo puede ser múltiplo de $p$ si $p'=0$.)</li>
+      <li>Se da la respuesta en polinomios (no en coordenadas) y sin el polinomio $0$.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> endomorfismo de polinomios: o matriz en la base canónica y se procede como con matrices, o se impone $f(p)=\lambda p$ igualando coeficientes <b>discutiendo $\lambda=0$ / $\lambda\neq0$</b>. Los vectores propios se dan como polinomios y no nulos.</div>
   <p><b>Error típico:</b> dar «$(1,0,0)$» como respuesta (es una base, en coordenadas: traducir a polinomios); incluir el polinomio $0$; dividir por $\lambda$ sin separar el caso $\lambda=0$. Atención al convenio: aquí $\wp_3$ es grado $\lt3$; en otros exámenes (p. ej. Sept. 2025) es grado $\le3$; se sigue el convenio de cada enunciado.</p>
 </details>
@@ -1305,32 +1343,35 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La matriz asociada a un endomorfismo $f$ es $\begin{pmatrix}1&2&1\cr4&3&0\cr5&6&7\end{pmatrix}$. Calcular todos los vectores $(x,y,z)\in\mathbb R^3$ que cumplen $f(x,y,z)=\lambda(x,y,z)$ para algún $\lambda\in\mathbb R$ (1,5 ptos.).</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Te piden los vectores propios para cualquier $\lambda$ real: calcula $|A-\lambda I|$, localiza las raíces reales y resuelve $(A-\lambda I)X=0$ para cada una.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Resultado: los $\lambda$ posibles son las raíces de $-x^3+11x^2-18x-26$ («reales pero no enteras») y los vectores son las soluciones de $(1-\lambda)x+2y+z=0$, $4x+(3-\lambda)y=0$, $5x+6y+(7-\lambda)z=0$. Correcta pero <b>incompleta</b>: no localiza las raíces, no resuelve el sistema y no menciona el vector $0$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Todos los vectores con $f(X)=\lambda X$ para algún $\lambda$.</dd>
     <dt>Cómo lo pienso</dt><dd>Son los subespacios propios más el cero. Hace falta el polinomio de grado 3.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Desarrollo, localizo raíces y subespacios.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><b>Interpretar</b> (Def. 4.6-4.7): los $X\neq0$ que cumplen la condición son los vectores propios; además $X=0$ la cumple para todo $\lambda$. El conjunto pedido es $\bigcup_\lambda L_\lambda$ (unión de los subespacios propios, que ya incluyen el $0$).</li>
+    <li><b>Interpretar</b> (Def. 4.6-4.7): los $X\neq0$ con $f(X)=\lambda X$ son los vectores propios, y $X=0$ la cumple para todo $\lambda$. El conjunto pedido es $\bigcup_\lambda L_\lambda$ (los subespacios propios ya incluyen el $0$).</li>
     <li><b>Ecuación característica</b> (Def. 4.9), desarrollando por la 3.ª columna, que tiene un cero:
-      $$p(\lambda)=\begin{vmatrix}1-\lambda&2&1\\4&3-\lambda&0\\5&6&7-\lambda\end{vmatrix}=1\cdot\begin{vmatrix}4&3-\lambda\\5&6\end{vmatrix}+(7-\lambda)\begin{vmatrix}1-\lambda&2\\4&3-\lambda\end{vmatrix}$$
-      $$=(24-15+5\lambda)+(7-\lambda)(\lambda^2-4\lambda-5)=-\lambda^3+11\lambda^2-18\lambda-26.$$
-      <p>Coherencia: coeficiente de $\lambda^2$ = traza $=11$; $p(0)=|A|=-26$.</p></li>
-    <li><b>Raíces racionales:</b> las candidatas enteras son los divisores de $26$:
-      $$p(1)=-34,\quad p(-1)=4,\quad p(2)=-26,\quad p(-2)=62,\quad p(13)\neq0,\ \dots$$
-      <p>ninguna es raíz. Las raíces no son enteras.</p></li>
-    <li><b>Localizarlas (Bolzano, de Cálculo):</b>
-      $$p(-1)=4>0,\ p(0)=-26<0;\qquad p(3)=-8<0,\ p(4)=14>0;\qquad p(8)=22>0,\ p(9)=-26<0.$$
-      <p>Hay una raíz en cada intervalo $(-1,0)$, $(3,4)$, $(8,9)$ y, como el grado es $3$, no hay más: <b>tres valores propios reales y simples</b>, $\lambda_1\approx-0{,}904$, $\lambda_2\approx3{,}370$, $\lambda_3\approx8{,}534$ (suma $11$ = traza, producto $-26$ = $|A|$).</p></li>
-    <li><b>Subespacios propios</b> (Def. 4.8). Para cada raíz, $(A-\lambda I)X=0$ dejando $\lambda$ como letra: de la 2.ª ecuación, $4x+(3-\lambda)y=0$: tomamos $x=\lambda-3$, $y=4$; de la 1.ª,
-      $$z=-(1-\lambda)x-2y=(\lambda-1)(\lambda-3)-8=\lambda^2-4\lambda-5=(\lambda-5)(\lambda+1);$$
-      <p>la 3.ª se cumple sola, porque al sustituir resulta $p(\lambda)=0$ (por eso el sistema tiene solución no trivial). Luego</p>
-      $$L_{\lambda_i}=\big\langle(\lambda_i-3,\ 4,\ (\lambda_i-5)(\lambda_i+1))\big\rangle,\quad i=1,2,3,$$
-      <p>rectas ($d_i=1=\alpha_i$, Teor. 4.5), con generador no nulo (2.ª componente $4$).</p></li>
+$$p(\lambda)=\begin{vmatrix}1-\lambda&2&1\\4&3-\lambda&0\\5&6&7-\lambda\end{vmatrix}=1\cdot\begin{vmatrix}4&3-\lambda\\5&6\end{vmatrix}+(7-\lambda)\begin{vmatrix}1-\lambda&2\\4&3-\lambda\end{vmatrix}$$
+$$=(24-15+5\lambda)+(7-\lambda)(\lambda^2-4\lambda-5)=-\lambda^3+11\lambda^2-18\lambda-26.$$</li>
+    <li><b>Localizar las raíces</b> (Bolzano):
+$$p(-1)=4>0,\ p(0)=-26<0;\qquad p(3)=-8<0,\ p(4)=14>0;\qquad p(8)=22>0,\ p(9)=-26<0.$$
+Hay una raíz en cada intervalo $(-1,0)$, $(3,4)$, $(8,9)$ y, como el grado es $3$, no hay más: <b>tres valores propios reales y simples</b>, $\lambda_1\approx-0{,}904$, $\lambda_2\approx3{,}370$, $\lambda_3\approx8{,}534$.</li>
+    <li><b>Subespacios propios</b> (Def. 4.8). Para cada raíz resolvemos $(A-\lambda I)X=0$ dejando $\lambda$ como letra. De la 2.ª ecuación, $4x+(3-\lambda)y=0$: $x=\lambda-3$, $y=4$. De la 1.ª,
+$$z=-(1-\lambda)x-2y=(\lambda-1)(\lambda-3)-8=\lambda^2-4\lambda-5=(\lambda-5)(\lambda+1).$$
+La 3.ª se cumple sola, porque al sustituir resulta $p(\lambda)=0$. Luego
+$$L_{\lambda_i}=\big\langle(\lambda_i-3,\ 4,\ (\lambda_i-5)(\lambda_i+1))\big\rangle,\quad i=1,2,3,$$
+rectas ($d_i=1=\alpha_i$, Teor. 4.5).</li>
     <li><b>Respuesta:</b> $X=0$ y los múltiplos no nulos de $(\lambda_i-3,4,(\lambda_i-5)(\lambda_i+1))$, con $\lambda_i$ las tres raíces reales de $\lambda^3-11\lambda^2+18\lambda+26=0$. Numéricamente, aprox. $(-3{,}904,\ 4,\ -0{,}567)$, $(0{,}370,\ 4,\ -7{,}122)$, $(5{,}534,\ 4,\ 33{,}689)$.</li>
-  </ol>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li><b>Coherencia del polinomio:</b> el coeficiente de $\lambda^2$ es la traza ($11$) y $p(0)=|A|=-26$; las tres raíces suman $11$ y su producto es $-26$.</li>
+      <li><b>Raíces racionales:</b> las candidatas enteras son los divisores de $26$: $p(1)=-34$, $p(-1)=4$, $p(2)=-26$, $p(-2)=62$, $p(13)\neq0,\dots$; ninguna es raíz, así que las raíces no son enteras.</li>
+      <li>El generador $(\lambda_i-3,4,\dots)$ es no nulo porque su 2.ª componente es $4$.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> si las raíces no son «bonitas»: compruébalo con los divisores del término independiente, sepáralas con cambios de signo y resuelve $(A-\lambda I)X=0$ <b>con $\lambda$ como letra</b> usando dos ecuaciones independientes; la tercera se cumple por ser $p(\lambda)=0$.</div>
   <p><b>Error típico:</b> concluir «no hay valores propios» porque no salen enteros; resolver con $\lambda$ genérico y obtener solo $X=0$ (es lo que pasa si $\lambda$ no es raíz); dar solo los $\lambda$ y no los <b>vectores</b>.</p>
 </details>
@@ -1341,30 +1382,31 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $a,b\in\mathbb R$ y $A=\begin{pmatrix}2a-b&0&2a-2b\cr1&a&2\cr-a+b&0&-a+2b\end{pmatrix}$. Calcule los autovalores de $A$ en función de $a,b$, con $a\neq b$ (1,5 puntos). <i>(El 2.º apartado, «diagonalizable si $a=b$», es del tema 4.3.)</i></p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Desarrolla $|A-\lambda I|$ por la fila o columna con más ceros para que aparezca un factor $(a-\lambda)$ y te quede un polinomio de grado $2$.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p><b>Qué se pide.</b> Resultado: $p(\lambda)=(a-\lambda)(\lambda^2-(a+b)\lambda+ab)$, autovalores $a$ (doble) y $b$ (simple).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Autovalores con dos parámetros.</dd>
     <dt>Cómo lo pienso</dt><dd>Hay una columna con dos ceros: desarrollo por ella. El resto es un $2\times2$.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. <b>Invariantes por semejanza (Teor. 4.4):</b> matrices semejantes tienen el mismo polinomio característico, determinante y traza. $\operatorname{tr}A=\sum\lambda_i$ y $|A|=\prod\lambda_i$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>. <b>Teor. 4.4</b>: $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Desarrollo por esa columna y factorizo.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
     <li><b>Ecuación característica</b> (Def. 4.9):
-      $$p(\lambda)=\begin{vmatrix}2a-b-\lambda&0&2a-2b\\1&a-\lambda&2\\-a+b&0&-a+2b-\lambda\end{vmatrix}.$$</li>
+$$p(\lambda)=\begin{vmatrix}2a-b-\lambda&0&2a-2b\\1&a-\lambda&2\\-a+b&0&-a+2b-\lambda\end{vmatrix}.$$</li>
     <li><b>Desarrollar por la 2.ª columna</b> (dos ceros): único término, el elemento $(2,2)$, $a-\lambda$, con signo $(-1)^{2+2}=+$:
-      $$p(\lambda)=(a-\lambda)\begin{vmatrix}2a-b-\lambda&2a-2b\\-a+b&-a+2b-\lambda\end{vmatrix}.$$</li>
+$$p(\lambda)=(a-\lambda)\begin{vmatrix}2a-b-\lambda&2a-2b\\-a+b&-a+2b-\lambda\end{vmatrix}.$$</li>
     <li><b>El determinante $2\times2$:</b>
-      $$(2a-b-\lambda)(-a+2b-\lambda)=\lambda^2-(a+b)\lambda-2a^2+5ab-2b^2$$
-      <p>(la suma $(2a-b)+(-a+2b)=a+b$); y</p>
-      $$-(2a-2b)(b-a)=2(a-b)^2=2a^2-4ab+2b^2.$$
-      <p>Suma: $\lambda^2-(a+b)\lambda+ab$.</p></li>
-    <li><b>Factorizar:</b> dos números de suma $a+b$ y producto $ab$: $(\lambda-a)(\lambda-b)$. Por tanto
-      $$p(\lambda)=(a-\lambda)(\lambda-a)(\lambda-b)=-(\lambda-a)^2(\lambda-b).$$</li>
-    <li><b>Valores propios y multiplicidades</b> (Def. 4.11), con $a\neq b$: $\lambda=a$ ($\alpha=2$) y $\lambda=b$ ($\alpha=1$). La hipótesis $a\neq b$ garantiza que son dos valores distintos.</li>
-    <li><b>Comprobación:</b> traza $=(2a-b)+a+(-a+2b)=2a+b=a+a+b$ ✓.</li>
-    <li><b>Extra que prepara el 4.3</b> (no pedido): $A-aI$ tiene todas las filas proporcionales a $(1,0,2)$, rango $1$, luego
-      $$L_a=\{x+2z=0\}=\langle(0,1,0),(-2,0,1)\rangle,\quad d_a=2=\alpha_a;\qquad L_b=\langle(a-b,\ 1,\ -(a-b))\rangle.$$</li>
-  </ol>
+$$(2a-b-\lambda)(-a+2b-\lambda)=\lambda^2-(a+b)\lambda-2a^2+5ab-2b^2,\qquad-(2a-2b)(b-a)=2a^2-4ab+2b^2.$$
+Suma: $\lambda^2-(a+b)\lambda+ab$.</li>
+    <li><b>Factorizar</b> (suma $a+b$ y producto $ab$):
+$$p(\lambda)=(a-\lambda)(\lambda-a)(\lambda-b)=-(\lambda-a)^2(\lambda-b).$$</li>
+    <li><b>Valores propios</b> (Def. 4.11), con $a\neq b$: $\boxed{\lambda=a\ (\alpha=2),\qquad\lambda=b\ (\alpha=1).}$</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>La hipótesis $a\neq b$ garantiza que son dos valores distintos. <b>Control:</b> traza $=(2a-b)+a+(-a+2b)=2a+b=a+a+b$.</li>
+      <li><b>Extra que prepara el 4.3</b> (no pedido): $A-aI$ tiene todas las filas proporcionales a $(1,0,2)$, rango $1$, luego $L_a=\{x+2z=0\}=\langle(0,1,0),(-2,0,1)\rangle$, $d_a=2=\alpha_a$, y $L_b=\langle(a-b,\ 1,\ -(a-b))\rangle$. El apartado «diagonalizable si $a=b$» es del tema 4.3.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> matriz con parámetros: desarrolla $|A-\lambda I|$ por la fila o columna con más ceros para sacar un factor lineal $(c-\lambda)$ <b>sin expandir todo</b>; el resto es una cuadrática que se factoriza buscando suma y producto; comprueba con la traza.</div>
   <p><b>Error típico:</b> expandir el $3\times3$ entero y no saber factorizar un cúbico con parámetros; olvidar la multiplicidad (decir «autovalores $a$ y $b$» sin decir que $a$ es doble).</p>
 </details>
@@ -1380,7 +1422,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores propios y subespacios de una simétrica $2\times2$.</dd>
     <dt>Cómo lo pienso</dt><dd>Polinomio de grado 2 y dos sistemas.</dd>
-    <dt>Qué uso</dt><dd><b>Valor y vector propio (Def. 4.6-4.7, U p.148):</b> $\lambda\in\mathbb R$ es valor propio de $A$ si existe $X\neq0$ con $AX=\lambda X$; entonces $X$ es vector propio. <b>Ecuación característica (Def. 4.9):</b> $|A-\lambda I|=0$; sus raíces son los valores propios. <b>Subespacio propio</b> $L_\lambda=\operatorname{Nuc}(A-\lambda I)$. <b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.6-4.9</b> (U p.151-153): $AX=\lambda X$ con $X\neq0$; $|A-\lambda I|=0$; $L_\lambda=\operatorname{Nuc}(A-\lambda I)$ — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Raíces y $(A-\lambda I)X=0$.</dd>
   </dl></div>
   <ol class="steps">
@@ -1404,7 +1446,7 @@ $$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\ne
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Discutir $d$ según un parámetro.</dd>
     <dt>Cómo lo pienso</dt><dd>Triangular: los valores propios no dependen de $a$.</dd>
-    <dt>Qué uso</dt><dd><b>Multiplicidades (Def. 4.11 y Teor. 4.5):</b> $\alpha(\lambda)$ = multiplicidad de la raíz $\lambda$ en el polinomio característico; $d(\lambda)=\dim L_\lambda=n-\operatorname{rang}(A-\lambda I)$; siempre $1\le d\le\alpha$.</dd>
+    <dt>Qué uso</dt><dd><b>Def. 4.11, Teor. 4.5</b> (U p.155-158): $d=n-\operatorname{rang}(A-\lambda I)$ y $1\le d\le\alpha$ — <a href="#s5">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Rango de $A-I$ por casos.</dd>
   </dl></div>
   <ol class="steps">
