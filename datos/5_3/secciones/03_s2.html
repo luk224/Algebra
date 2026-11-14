@@ -1,0 +1,54 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Dos hechos clave: valores propios reales y ejes perpendiculares <span class="src" data-l="U" data-ref="U §5.3, Propiedades de los valores y de los vectores propios y Ejemplos 5.31-5.32, p. 221-223">U p.221-223</span> <span class="src" data-l="L" data-ref="Lay §7.1, Teorema 1, p. 395-396">L p.395-396</span></h2>
+
+<h3>2.1 Los valores propios de una simétrica son reales</h3>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>En general el polinomio característico de una matriz real puede tener raíces <b>complejas</b> (un giro de $90^\circ$ no tiene ninguna dirección propia real: $\lambda^2+1=0$). Para una simétrica $2\times2$, $\begin{pmatrix}a&b\cr b&c\end{pmatrix}$, el discriminante del polinomio $\lambda^2-(a+c)\lambda+(ac-b^2)$ vale
+  $$(a+c)^2-4(ac-b^2)=(a-c)^2+4b^2=(a-c)^2+(2b)^2\ \ge 0,$$
+  una <b>suma de cuadrados</b>: nunca es negativa. Eso mismo ocurre en cualquier tamaño, aunque la razón es más sutil (hay que pasar por números complejos).</p>
+</div>
+
+<div class="box thm"><span class="h">Propiedad de los valores propios</span>
+  <p>Todas las raíces de la ecuación característica de una matriz <b>simétrica real</b> son reales.</p>
+  <p><b>Demostración (la de U, con un pequeño arreglo).</b> Sea $\lambda\in\mathbb C$ una raíz de $|A-\lambda I|=0$. Existe $X\in\mathbb C^n$, $X\neq0$, con $AX=\lambda X$.</p>
+  <ol class="steps">
+    <li>Conjuga: como $A$ es real, $\bar A=A$ y queda $A\bar X=\bar\lambda\bar X$ (así $\bar\lambda$ es valor propio con vector propio $\bar X$).</li>
+    <li>Multiplica $AX=\lambda X$ por $\bar X^t$ a la izquierda: $\bar X^tAX=\lambda\,\bar X^tX$.</li>
+    <li>Traspón $A\bar X=\bar\lambda\bar X$: $\bar X^tA^t=\bar\lambda\bar X^t$; con $A^t=A$ y multiplicando por $X$ a la derecha: $\bar X^tAX=\bar\lambda\,\bar X^tX$.</li>
+    <li>Restando: $(\lambda-\bar\lambda)\,\bar X^tX=0$. Pero $\bar X^tX=|x_1|^2+\dots+|x_n|^2\gt0$ porque $X\neq0$. Luego $\lambda=\bar\lambda$: $\lambda$ es real. $\blacksquare$</li>
+  </ol>
+  <p>En un examen basta con la idea: se conjuga, se usa $A^t=A$ y se compara.</p>
+  <span class="src" data-l="U" data-ref="U §5.3, «Propiedad de los valores propios» y su demostración, p. 221">U p.221</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.26 B, p. 184">E 5.26 B p.184</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.31 de U: una simétrica $3\times3$ con un valor propio doble</span>
+  <p>$A=\begin{pmatrix}1&0&1\cr0&2&0\cr1&0&1\end{pmatrix}$ (simétrica). Su ecuación característica es
+  $$\begin{vmatrix}1-\lambda&0&1\cr0&2-\lambda&0\cr1&0&1-\lambda\end{vmatrix}=(1-\lambda)^2(2-\lambda)-(2-\lambda)=(2-\lambda)\big[(1-\lambda)^2-1\big]=(2-\lambda)\lambda(\lambda-2)=0 .$$
+  Los valores propios son reales: $\lambda_1=2$ con multiplicidad algebraica $\alpha_1=2$ y $\lambda_2=0$ con $\alpha_2=1$. Comprobación con la traza: $2+2+0=4=1+2+1$. Esta matriz es el hilo conductor de toda la sección (Ej. 5.31–5.34).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.31, p. 222">U p.222</span>
+</div>
+
+<h3>2.2 Los vectores propios de valores propios distintos son perpendiculares</h3>
+
+<div class="box thm"><span class="h">Propiedad de los vectores propios</span>
+  <p>Si $A$ es una matriz simétrica real de orden $n$, los subespacios de vectores propios asociados a <b>valores propios distintos</b> son <b>ortogonales</b> con el producto escalar estándar: si $Av_1=\lambda_1v_1$, $Av_2=\lambda_2v_2$ y $\lambda_1\neq\lambda_2$, entonces $v_1\cdot v_2=0$.</p>
+  <p><b>Demostración</b> (U la enuncia sin probarla; esta es la de Lay, tres líneas):</p>
+  $$\lambda_1(v_1\cdot v_2)=(Av_1)\cdot v_2=v_1^tA^tv_2=v_1^tAv_2=v_1\cdot(Av_2)=\lambda_2(v_1\cdot v_2).$$
+  <p>Luego $(\lambda_1-\lambda_2)(v_1\cdot v_2)=0$ y, como $\lambda_1\neq\lambda_2$, $v_1\cdot v_2=0$. El único paso que usa la simetría es $A^t=A$ (es $Ax\cdot y=x\cdot Ay$ de la sección 1). $\blacksquare$</p>
+  <span class="src" data-l="U" data-ref="U §5.3, «Propiedad de los vectores propios», p. 222 (sin demostración)">U p.222</span>
+  <span class="src" data-l="L" data-ref="Lay §7.1, Teorema 1 y demostración, p. 395-396">L p.395-396</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.32 de U: los subespacios propios de la matriz anterior, y su ortogonalidad</span>
+  <ol class="steps">
+    <li><b>$L(2)$ ($\lambda=2$).</b> $(A-2I)X=0$: $\begin{pmatrix}-1&0&1\cr0&0&0\cr1&0&-1\end{pmatrix}X=0\iff x_1-x_3=0$. Con parámetros $x_1=\alpha,\ x_3=\alpha,\ x_2=\beta$: $X=\alpha(1,0,1)+\beta(0,1,0)$. Base $\{(1,0,1),(0,1,0)\}$, $\dim L(2)=2=\alpha_1$: un <b>plano</b>.</li>
+    <li><b>$L(0)$ ($\lambda=0$).</b> $AX=0$: $x_1+x_3=0,\ x_2=0$. Base $\{(1,0,-1)\}$: una <b>recta</b>, $\dim L(0)=1=\alpha_2$.</li>
+    <li><b>Diagonalizable:</b> $d_i=\alpha_i$ para los dos valores propios (U Teor. 4.7).</li>
+    <li><b>$L(2)\perp L(0)$.</b> Basta comprobar que una base de uno es ortogonal a una base del otro: $(1,0,1)\cdot(1,0,-1)=0$ y $(0,1,0)\cdot(1,0,-1)=0$. En concreto, $(4,3,4)=4(1,0,1)+3(0,1,0)\in L(2)$ y $(3,0,-3)\in L(0)$ cumplen $(4,3,4)\cdot(3,0,-3)=12-12=0$. Geométricamente: el plano $x_1=x_3$ y la recta $\langle(1,0,-1)\rangle$ (su normal) son perpendiculares.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.32, p. 222-223 (la última componente de los vectores columna aparece como x2 en vez de x3 en el original)">U p.222-223</span>
+</div>
+
+
