@@ -72,9 +72,9 @@ el más cargado —14—):
 
 ## Estado
 
-- [ ] F0 infraestructura
-- [ ] F1 piloto 3.5
-- [ ] F1 piloto 4.3
+- [x] F0 infraestructura (15-11-2026: bloques `redaccion`/`comentarios` en `datos_tema.py`, CSS, validación, `examenes.py`, regla 19 de CLAUDE.md, `prompt_academia.md`)
+- [x] F1 piloto 3.5 (15-11-2026: 3 redacciones de examen, 15 «Qué uso» acortados, teoría plegada)
+- [x] F1 piloto 4.3 (15-11-2026, vía agente redactor-tema: 13 redacciones de examen, 35 «Qué uso» acortados, teoría plegada; −11% de texto visible)
 - [ ] Aprobación del usuario
 - [ ] F2 módulos 4 · 6 · 5 · 1 · 2 · 3
 - [ ] F3 cierre

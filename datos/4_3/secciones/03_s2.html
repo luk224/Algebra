@@ -10,23 +10,31 @@
 </div>
 
 <div class="box intu"><span class="h">El diagrama de U: tres caminos para llegar al mismo sitio</span>
-  <p>Sea $f$ un endomorfismo de $V$. Con la base $B$ su matriz es $A$; con una base $B'$ formada por vectores propios, su matriz es $\Lambda$. Los cambios de coordenadas son $P$ (de $B'$ a $B$) y $P^{-1}$ (de $B$ a $B'$):</p>
+  <p>Con la base $B$ la matriz de $f$ es $A$; con una base $B'$ de vectores propios, es $\Lambda$. Los cambios de coordenadas son $P$ (de $B'$ a $B$) y $P^{-1}$ (de $B$ a $B'$):</p>
   $$\begin{array}{ccc}(V,B)&\xrightarrow{\ \ A\ \ }&(V,B)\cr P\Big\uparrow&&\Big\downarrow P^{-1}\cr(V,B')&\xrightarrow{\ \ \Lambda\ \ }&(V,B')\end{array}$$
-  <p>Sea $x'$ un vector cualquiera dado en la base $B'$. <b>Camino largo</b> (sin usar $\Lambda$): (1) pasar $x'$ a la base $B$, $x=Px'$; (2) aplicar $f$ con la matriz $A$, $f(x)=Ax=APx'$; (3) volver a expresar el resultado en $B'$, $(f(x))'=P^{-1}APx'$. <b>Camino directo:</b> $(f(x))'=\Lambda x'$. Los dos caminos dan el mismo vector, para todo $x'$, y por eso $\Lambda=P^{-1}AP$. Además, como $P$ es una matriz de cambio de coordenadas, <b>cada columna de $P$ es un vector de la base $B'$</b>, es decir, un <b>vector propio</b>.</p>
+  <p>Los dos caminos de $x'$ (dado en $B'$) a $(f(x))'$ dan el mismo vector, y por eso $\Lambda=P^{-1}AP$. Además, <b>cada columna de $P$ es un vector de la base $B'$</b>, es decir, un <b>vector propio</b>.</p>
+  <details class="ampl"><summary>Los dos caminos, paso a paso</summary>
+  <p><b>Camino largo</b> (sin usar $\Lambda$): (1) pasar $x'$ a la base $B$, $x=Px'$; (2) aplicar $f$ con la matriz $A$, $f(x)=Ax=APx'$; (3) volver a expresar el resultado en $B'$, $(f(x))'=P^{-1}APx'$. <b>Camino directo:</b> $(f(x))'=\Lambda x'$.</p>
+  </details>
   <span class="src" data-l="U" data-ref="U §4.3.2, diagrama de cambio de base y comprobación de Λ = P⁻¹AP, p. 161-162">U p.161-162</span>
 </div>
 
 <div class="box thm"><span class="h">Teorema 4.6 — diagonalizable $\iff$ hay una base de vectores propios</span>
   <p>Un endomorfismo $f$ de $V$ es diagonalizable si y solo si <b>existe una base de $V$ formada por vectores propios de $f$</b>.</p>
+  <details class="ampl"><summary>Demostración</summary>
   <p><i>($\Rightarrow$)</i> Si la matriz de $f$ en la base $B=\{e_1,\dots,e_n\}$ es diagonal, $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$, entonces $f(e_j)=(0,\dots,\lambda_j,\dots,0)=\lambda_je_j$: cada $e_j$ es un vector propio. <i>($\Leftarrow$)</i> Si los vectores de la base $B=\{e_1,\dots,e_n\}$ son propios, $f(e_j)=\lambda_je_j$, y la matriz de $f$ en $B$ tiene por columnas $(0,\dots,\lambda_j,\dots,0)$: es la diagonal $\Lambda$.</p>
+  </details>
   <span class="src" data-l="U" data-ref="U Teorema 4.6 y demostración, p. 162-163">U p.162-163</span>
   <span class="src" data-l="L" data-ref="Lay §5.3, Teorema 5: A diagonalizable si y solo si tiene n vectores propios linealmente independientes, p. 282">L §5.3 Teor. 5 p.282</span>
 </div>
 
 <div class="box thm"><span class="h">Por qué las columnas de $P$ son propios y la diagonal de $\Lambda$ son los valores propios (misma idea que Lay)</span>
-  <p>Escribe $P=(p_1\ p_2\ \cdots\ p_n)$ por columnas y $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$. Multiplicar $A$ por $P$ columna a columna da $AP=(Ap_1\ \cdots\ Ap_n)$, y multiplicar $P$ por una diagonal multiplica cada columna por su número: $P\Lambda=(\lambda_1p_1\ \cdots\ \lambda_np_n)$. Por tanto
+  <p>Con $P=(p_1\ \cdots\ p_n)$ por columnas y $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$:
   $$\Lambda=P^{-1}AP\iff AP=P\Lambda\iff Ap_j=\lambda_jp_j\ \text{ para cada }j=1,\dots,n.$$
-  Es decir, cada columna $p_j$ es un vector propio (no nulo, porque $P$ es regular) de valor propio $\lambda_j$, el elemento $j$ de la diagonal. Fíjate en la consecuencia práctica: <b>el orden de los valores propios en $\Lambda$ está ligado al orden de las columnas de $P$</b>, y <b>para comprobar un resultado no hace falta invertir $P$: basta verificar $AP=P\Lambda$</b>.</p>
+  Cada columna $p_j$ es un vector propio de valor propio $\lambda_j$. Consecuencia práctica: <b>el orden de $\Lambda$ está ligado al de las columnas de $P$</b>, y <b>para comprobar basta verificar $AP=P\Lambda$</b> (sin invertir $P$).</p>
+  <details class="ampl"><summary>Por qué</summary>
+  <p>Multiplicar $A$ por $P$ columna a columna da $AP=(Ap_1\ \cdots\ Ap_n)$, y multiplicar $P$ por una diagonal multiplica cada columna por su número: $P\Lambda=(\lambda_1p_1\ \cdots\ \lambda_np_n)$. Los $p_j$ son no nulos porque $P$ es regular.</p>
+  </details>
   <span class="src" data-l="L" data-ref="Lay §5.3, demostración del Teorema 5: AP = PD columna a columna, p. 283">L §5.3 p.283</span>
   <span class="src" data-l="U" data-ref="U §4.3.2, las columnas de P son vectores propios, p. 162 y p. 166">U p.162, 166</span>
 </div>
@@ -39,7 +47,7 @@
 </div>
 
 <div class="box warn"><span class="h">Solo se diagonalizan endomorfismos (matrices cuadradas)</span>
-  <p>La Def. 4.12 habla de $A\in\mathcal M_{n\times n}$: la operación $P^{-1}AP$ <b>solo existe si $A$ es cuadrada</b> (autoevaluación de U, ítem 2). Preguntar si una aplicación $f:\mathbb R^2\to\mathbb R^3$ «es diagonalizable» no tiene sentido: no es un endomorfismo, no hay valores propios ($f(x)\in\mathbb R^3$ no puede ser múltiplo de $x\in\mathbb R^2$). Así aparece en X Sept. 2017 (A), problema b), que se resuelve en el <a href="tema_3_2_nucleo_imagen.html#ex-sep17a-pb">tema 3.2</a>.</p>
+  <p>$P^{-1}AP$ <b>solo existe si $A$ es cuadrada</b> (autoevaluación de U, ítem 2). Para una aplicación $f:\mathbb R^2\to\mathbb R^3$ no hay valores propios ($f(x)\in\mathbb R^3$ no puede ser múltiplo de $x\in\mathbb R^2$): preguntar si «es diagonalizable» no tiene sentido (X Sept. 2017 (A), problema b), <a href="tema_3_2_nucleo_imagen.html#ex-sep17a-pb">tema 3.2</a>).</p>
 </div>
 
 <div class="box tip"><span class="h">Qué se deduce de $\Lambda=P^{-1}AP$ (ya resuelto en otros temas)</span>
