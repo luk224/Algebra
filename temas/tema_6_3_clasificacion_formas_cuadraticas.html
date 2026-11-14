@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/6_3/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,11 +8,13 @@
 <title>Álgebra · 6.3 Clasificación de las formas cuadráticas</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
 <script defer src="../assets/animaciones.js"></script>
 <script defer src="../assets/tres-d.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -38,10 +40,41 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Clasificar una forma cuadrática es decir qué signo toma $Q(x)$ sobre los vectores $x\neq0$; se decide mirando solo la matriz simétrica $A$ de $Q$.</p>
+  <ol>
+    <li><b>Cinco clases.</b> Definida positiva ($Q>0$ si $x\neq0$), definida negativa ($Q<0$), semidefinida positiva ($Q\ge0$ y se anula en algún $x\neq0$), semidefinida negativa, e indefinida (toma valores de ambos signos). Un solo vector de signo contrario basta para refutar; para afirmar «definida» hacen falta los criterios.</li>
+    <li><b>Valores propios.</b> Con $A$ simétrica, los signos de sus valores propios lo deciden todo: todos $>0$ es DP, todos $<0$ es DN, todos $\ge0$ con algún $0$ es SP (análogo SN), y de ambos signos es indefinida. Si $Q=X^tMX$ con $M$ no simétrica, usa $\tfrac12(M+M^t)$.</li>
+    <li><b>Forma canónica.</b> Con $P$ ortogonal de vectores propios unitarios, $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$ (mismo orden que en $P$). No es única, pero el número de coeficientes positivos (signatura) y no nulos (rango) sí lo es: ley de inercia.</li>
+    <li><b>Sylvester (sin valores propios).</b> DP $\iff$ $\Delta_1,\dots,\Delta_n>0$; DN $\iff$ signos alternos empezando por $\Delta_1<0$. Para semidefinidas solo es «$\Rightarrow$» ($|A|=0$ y los demás de la rama): si no encaja, no concluyas nada. Ideal con parámetros.</li>
+    <li><b>Invariantes.</b> DP: rango $=$ sig $=n$; DN: rango $=n$, sig $=0$; SP: rango $=$ sig $<n$; SN: rango $<n$, sig $=0$; indefinida: rango $\neq$ sig y sig $\neq0$.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>7 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 8 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 4 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>Hallar una forma canónica y la base <small>(3 de 7)</small></td><td>Diagonaliza la matriz simétrica con una base ortonormal de vectores propios.</td>
+      <td><a href="#ej6-18">6.18</a> · <a href="#ej6-19">6.19</a> · <a href="#ej6-17">6.17</a></td>
+      <td><a href="#ex-feb18a-b">Feb. 18 A problema, apartado b)</a> · <a href="#ex-feb22a2-6">Feb. 22 A2 ej. 6</a> · <a href="#ex-feb24a-6">Feb. 24 (1.ª) preg. 6</a></td></tr>
+    <tr><td>Clasificar una forma cuadrática <small>(0 de 7)</small></td><td>Mira los signos de los valores propios o de los menores de Sylvester de la matriz simétrica.</td>
+      <td><a href="#ej6-19">6.19</a> · <a href="#ej6-20">6.20</a> · <a href="#ej6-21">6.21</a> · <a href="#ej6-22">6.22</a> · <a href="#ej6-23">6.23</a> · <a href="#ej6-24">6.24</a></td>
+      <td>—</td></tr>
+    <tr><td>Clasificar según un parámetro <small>(2 de 7)</small></td><td>Escribe los menores de Sylvester como polinomios en el parámetro y resuelve las desigualdades de cada rama.</td>
+      <td><a href="#ej6-23">6.23</a> · <a href="#ej6-24">6.24</a></td>
+      <td><a href="#ex-feb25b-8b">Feb. 25 (2.ª) p. 8, 2.º apartado</a> · <a href="#ex-feb26b-6">Feb. 26 (2.ª) preg. 6</a></td></tr>
+    <tr><td>Rango y signatura <small>(2 de 7)</small></td><td>Cuenta coeficientes no nulos (rango) y positivos (signatura) de una forma canónica, y compáralos con $n$.</td>
+      <td><a href="#ej6-22">6.22</a></td>
+      <td><a href="#ex-ene22a1-6">Ene. 22 A1 ej. 6</a> · <a href="#ex-sep25-8">Sept. 25 p. 8, apartado 3.º</a></td></tr>
+  </table>
+  <p><small>Casi todos los ejercicios se reducen a diagonalizar una matriz simétrica o a mirar signos de menores y valores propios; los de examen se reparten entre la forma canónica con su base, la clasificación con parámetro y los invariantes.</small></p>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §6.3.1 Elementos didácticos y objetivos, p. 258-259">U p.258-259</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §6.3.1 Elementos didácticos y objetivos, p. 258-259">U p.258-259</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>Una forma cuadrática es una máquina que a cada vector $x$ le asigna un número $Q(x)$. Clasificarla es preguntarse <b>qué signos puede escupir esa máquina</b>: ¿siempre positivos (como $x_1^2+x_2^2$, el cuadrado de la longitud)?, ¿siempre negativos?, ¿de los dos tipos (como $x_1^2-x_2^2$)?, ¿nunca negativos pero a veces cero? Comprobarlo con todos los vectores es imposible; el truco es que, al elegir una base buena (la de vectores propios ortonormales), la máquina se reduce a $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$ y el signo de cada sumando lo decide el signo de su $\lambda_i$. Todo el tema es sacarle partido a esa frase.</p>
@@ -79,7 +112,7 @@
 
 <div class="box warn"><span class="h">Convenios y avisos de este tema (fíjalos desde ya)</span>
   <ul>
-    <li><b>Notación.</b> Se escribe $Q(x)=X^tAX$ con $X$ la columna de coordenadas; «sig» es la <b>signatura</b> en el sentido de U (número de coeficientes <b>positivos</b> de una forma canónica), no «positivos menos negativos» como en otros libros.</li>
+    <li><b>Notación.</b> Se escribe $Q(x)=X^tAX$ con $X$ la columna de coordenadas; «sig» es la <b>signatura</b> en el sentido de U (número de coeficientes <b>positivos</b> de una forma canónica).</li>
     <li><b>Orden de $\Lambda$ y $P$.</b> Si $P=(u_1\,u_2\,\dots)$ tiene los vectores propios en un orden, $\Lambda$ lleva los valores propios <b>en ese mismo orden</b>.</li>
     <li><b>Congruencia, no semejanza.</b> Para formas cuadráticas la matriz nueva es $P^tAP$. Sólo si $P$ es <b>ortogonal</b> coincide con $P^{-1}AP=\Lambda$. Con vectores propios <b>sin normalizar</b> los signos salen bien, pero los números no.</li>
     <li>E 6.24 <b>no justifica</b> que sólo $\pm\sqrt2$ sirvan (falta la condición necesaria $|A|=0$).</li>
@@ -92,7 +125,7 @@
 </div>
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>Las cinco clases de formas cuadráticas <span class="src" data-l="U" data-ref="U §6.3.1, Definición 6.12, Ejemplo 6.23, Figuras 6.1-6.2, p. 264-266">U p.264-266</span> <span class="src" data-l="L" data-ref="Lay §7.2, «Clasificación de formas cuadráticas», Figura 4, p. 405">L p.405</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>Las cinco clases de formas cuadráticas <span class="src" data-l="U" data-ref="U §6.3.1, Definición 6.12, Ejemplo 6.23, Figuras 6.1-6.2, p. 264-266">U p.264-266</span> <span class="src" data-l="L" data-ref="Lay §7.2, «Clasificación de formas cuadráticas», Figura 4, p. 405">L p.405</span></h2>
 
 <div class="box intu"><span class="h">Idea: la gráfica $z=Q(x_1,x_2)$ en $\mathbb R^2$</span>
   <p>En $\mathbb R^2$ puedes dibujar $Q$ como una superficie: la altura sobre el punto $(x_1,x_2)$ es $z=Q(x_1,x_2)$. Siempre pasa por el origen (porque $Q(0)=0$) y, como $Q(\lambda x)=\lambda^2Q(x)$, <b>sube o baja como una parábola</b> en cada dirección. Según el signo de $Q$ en las distintas direcciones sale: un <b>cuenco</b> (todo positivo: <i>definida positiva</i>, p. ej. $x_1^2+x_2^2$), una <b>cúpula</b> (todo negativo: <i>definida negativa</i>, $-x_1^2-x_2^2$), una <b>silla de montar</b> (sube en un sentido y baja en el otro: <i>indefinida</i>, $x_1^2-x_2^2$), o un <b>canal</b> (sube en una dirección y es plano en otra: <i>semidefinida</i>, $x_1^2$, que vale 0 a lo largo de todo el eje $x_2$).</p>
@@ -143,14 +176,14 @@
 
 <div class="box warn"><span class="h">Errores típicos</span>
   <ul>
-    <li><b>«Semidefinida» exige que se anule en algún $x\neq0$.</b> Si $Q\ge0$ pero sólo se anula en $x=0$, es <i>definida</i> positiva. (U Def. 6.12 separa los dos casos; Lay agrupa «semidefinida» de forma más laxa: <b>manda U</b>.)</li>
+    <li><b>«Semidefinida» exige que se anule en algún $x\neq0$.</b> Si $Q\ge0$ pero sólo se anula en $x=0$, es <i>definida</i> positiva. (U Def. 6.12 separa los dos casos.)</li>
     <li><b>Una forma indefinida no es «semi»</b> nada: Lay lo recuerda en su ejercicio 22 d) (p. 407): «una forma cuadrática indefinida es positiva semidefinida o negativa semidefinida» es <b>falso</b>.</li>
     <li>Para refutar «definida positiva» basta <b>un</b> vector con $Q(x)\le0$, $x\neq0$; para afirmarla hay que probar <b>todos</b> (por eso se necesitan los criterios).</li>
   </ul>
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>Forma canónica: quitar los términos cruzados <span class="src" data-l="U" data-ref="U §6.3, Ejemplos 6.19-6.21, Definición 6.10, p. 259-263">U p.259-263</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 4 (teorema de los ejes principales), Ejemplo 5, p. 403-404">L p.403</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>Forma canónica: quitar los términos cruzados <span class="src" data-l="U" data-ref="U §6.3, Ejemplos 6.19-6.21, Definición 6.10, p. 259-263">U p.259-263</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 4 (teorema de los ejes principales), Ejemplo 5, p. 403-404">L p.403</span></h2>
 
 <div class="box intu"><span class="h">Idea: girar los ejes hasta que desaparezca el cruzado</span>
   <p>Una elipse inclinada, como $5x_1^2-4x_1x_2+5x_2^2=48$, tiene un término cruzado $-4x_1x_2$ porque sus ejes <b>no</b> coinciden con los de coordenadas. Si giras los ejes hasta alinearlos con los de la elipse, la ecuación pasa a $3y_1^2+7y_2^2=48$: sólo cuadrados, y se lee de un vistazo (los números $3$ y $7$ son los valores propios de la matriz). Eso es una <b>forma canónica</b>: <b>una base</b> en la que $Q$ sólo tiene términos cuadrados. Y el giro lo da una matriz ortogonal $P$ con las columnas = vectores propios unitarios de $A$ (los <b>ejes principales</b>).</p>
@@ -209,7 +242,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>Ley de inercia y signatura <span class="src" data-l="U" data-ref="U §6.3, Teorema de Sylvester (ley de inercia), Definición 6.11, Ejemplo 6.22, p. 263-264">U p.263-264</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>Ley de inercia y signatura <span class="src" data-l="U" data-ref="U §6.3, Teorema de Sylvester (ley de inercia), Definición 6.11, Ejemplo 6.22, p. 263-264">U p.263-264</span></h2>
 
 <div class="box intu"><span class="h">Idea: lo que se conserva al cambiar de base</span>
   <p>La forma canónica depende de la base (los números $1,4$ o $1,8$ del apartado anterior), pero algo no cambia: <b>cuántos coeficientes son positivos, cuántos negativos y cuántos nulos</b>. Es como medir la temperatura en °C o °F: el número cambia, pero «hace calor o hace frío» no. Esos conteos son lo que clasifica.</p>
@@ -237,7 +270,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Clasificar por los valores propios <span class="src" data-l="U" data-ref="U §6.3, Caracterización de la clasificación de las formas cuadráticas, Ejemplo 6.24, p. 266-267">U p.266-267</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 5 (formas cuadráticas y valores propios), Ejemplo 6, p. 405-406">L p.405-406</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Clasificar por los valores propios <span class="src" data-l="U" data-ref="U §6.3, Caracterización de la clasificación de las formas cuadráticas, Ejemplo 6.24, p. 266-267">U p.266-267</span> <span class="src" data-l="L" data-ref="Lay §7.2, Teorema 5 (formas cuadráticas y valores propios), Ejemplo 6, p. 405-406">L p.405-406</span></h2>
 
 <div class="box intu"><span class="h">Idea: el signo lo ponen los $\lambda_i$</span>
   <p>En la base de vectores propios, $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$. Cada $y_i^2\ge0$, así que cada sumando tiene el signo de su $\lambda_i$. Si todos los $\lambda_i>0$, la suma es positiva salvo que todos los $y_i$ valgan 0, o sea $x=0$: definida positiva. Si alguno es negativo, basta tomar el vector que sólo tiene esa coordenada no nula y $Q$ es negativa ahí. <b>Lo único que hay que saber de $A$ son los signos de sus valores propios.</b></p>
@@ -293,7 +326,7 @@
 </div>
 
 <!-- ============================ 5 ============================ -->
-<h2 id="s5"><span class="n">5</span>Criterio de Sylvester (menores principales) <span class="src" data-l="U" data-ref="U §6.3.2, Criterio de Sylvester para la clasificación de formas cuadráticas, Ejemplo 6.25, p. 267-268">U p.267-268</span></h2>
+<h2 id="s5" data-vista="teoria"><span class="n">5</span>Criterio de Sylvester (menores principales) <span class="src" data-l="U" data-ref="U §6.3.2, Criterio de Sylvester para la clasificación de formas cuadráticas, Ejemplo 6.25, p. 267-268">U p.267-268</span></h2>
 
 <div class="box intu"><span class="h">Idea: clasificar sin calcular valores propios</span>
   <p>Calcular valores propios de una matriz $3\times3$ obliga a resolver una ecuación de grado 3, y con un parámetro $a$ dentro es muy incómodo. El criterio de Sylvester se apoya sólo en <b>determinantes de las esquinas superiores izquierdas</b> de $A$ (los <b>menores principales</b>), que son polinomios sencillos en el parámetro. La idea: si miras sólo las primeras $k$ variables ($x_{k+1}=\dots=0$), $Q$ se reduce a una forma con matriz «la esquina $k\times k$», y su determinante $\Delta_k$ va dando información acumulada de los signos de los valores propios.</p>
@@ -358,7 +391,7 @@
 </div>
 
 <!-- ============================ 6 ============================ -->
-<h2 id="s6"><span class="n">6</span>Invariantes: rango y signatura <span class="src" data-l="U" data-ref="U §6.3.2, Definición 6.13, clasificación por invariantes, Ejemplos 6.26-6.28, p. 268-270">U p.268-270</span></h2>
+<h2 id="s6" data-vista="teoria"><span class="n">6</span>Invariantes: rango y signatura <span class="src" data-l="U" data-ref="U §6.3.2, Definición 6.13, clasificación por invariantes, Ejemplos 6.26-6.28, p. 268-270">U p.268-270</span></h2>
 
 <div class="box def"><span class="h">Definición 6.13 — invariantes</span>
   <p>Los <b>invariantes</b> de $Q$ son las propiedades de cualquier matriz asociada que <b>no dependen de la base</b>. Son invariantes el <b>rango</b> y la <b>signatura</b> (el rango, por ser congruentes las matrices de $Q$; la signatura, por la ley de inercia).</p>
@@ -394,7 +427,7 @@
 </div>
 
 <!-- ============================ 7 ============================ -->
-<h2 id="s7"><span class="n">7</span>Superficies de nivel: cómo se ve cada clase en $\mathbb R^3$ <span class="src" data-l="P" data-ref="Sección propia: anticipo de las cuádricas del tema 6.5; la clasificación es U p. 264-270 y los ejes principales L p. 403">propio</span></h2>
+<h2 id="s7" data-vista="teoria"><span class="n">7</span>Superficies de nivel: cómo se ve cada clase en $\mathbb R^3$ <span class="src" data-l="P" data-ref="Sección propia: anticipo de las cuádricas del tema 6.5; la clasificación es U p. 264-270 y los ejes principales L p. 403">propio</span></h2>
 
 <div class="box intu"><span class="h">Idea: de «signos» a «formas»</span>
   <p>En el apartado 1 la clasificación se veía como la gráfica $z=Q(x_1,x_2)$ en $\mathbb R^3$. En $\mathbb R^3$ no puedes dibujar la gráfica (sería de dimensión 4), pero sí las <b>superficies de nivel</b> $Q(x)=c$, los puntos donde la forma vale exactamente $c$ (como las <i>curvas de nivel</i> de un mapa topográfico, pero una dimensión más). En la base de ejes principales, $\lambda_1y_1^2+\lambda_2y_2^2+\lambda_3y_3^2=c$ y la <b>signatura decide la forma</b>:</p>
@@ -428,15 +461,77 @@
 </div>
 
 <!-- ============================ 8 ============================ -->
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 6.3»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-canonica">
+  <h3>Tipo 1 — Hallar una forma canónica y la base</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> El enunciado pide «una base en la que $Q$ sea suma de cuadrados», «una forma canónica» o «una matriz de paso ortogonal».</p>
+  <ol class="pasos">
+    <li>Escribe la matriz simétrica $A$ de $Q$ (cada término cruzado $c\,x_ix_j$ da $c/2$ en las posiciones $ij$ y $ji$).</li>
+    <li>Resuelve $|A-\lambda I|=0$ para obtener los valores propios (todos reales por ser $A$ simétrica).</li>
+    <li>Halla un vector propio por valor propio; si hay uno doble, una base de su subespacio propio ortogonalizada con Gram-Schmidt.</li>
+    <li>Normaliza cada vector: $B'=\{u_1,\dots,u_n\}$ y $P=(u_1\ \dots\ u_n)$.</li>
+    <li>Escribe $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$ respetando el orden de las columnas de $P$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $Q=x_1^2+4x_1x_2+x_2^2$: $A=\begin{pmatrix}1&2\\2&1\end{pmatrix}$, $\lambda=3$ con $\tfrac1{\sqrt2}(1,1)$ y $\lambda=-1$ con $\tfrac1{\sqrt2}(1,-1)$. En esa base $Q=3y_1^2-y_2^2$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> No normalizar los vectores (los coeficientes dejan de ser los valores propios) · No ortogonalizar dentro de un subespacio propio doble · Cambiar el orden de los $\lambda_i$ respecto de las columnas de $P$ · Escribir $a$ en vez de $a/2$ fuera de la diagonal</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-18">6.18</a> · <a href="#ej6-19">6.19</a> · <a href="#ej6-17">6.17</a> · <a href="#ej-propio-2">Propio P2</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18a-b">Feb. 18 A problema, apartado b)</a> · <a href="#ex-feb22a2-6">Feb. 22 A2 ej. 6</a> · <a href="#ex-feb24a-6">Feb. 24 (1.ª) preg. 6</a></p>
+</section>
+
+<section class="ficha" id="tipo-clasif">
+  <h3>Tipo 2 — Clasificar una forma cuadrática</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «Clasifique la forma cuadrática», «¿es definida positiva?», «¿es semidefinida?».</p>
+  <ol class="pasos">
+    <li>Forma la matriz simétrica $A$ de $Q$ (si te dan $M$ no simétrica, $A=\tfrac12(M+M^t)$).</li>
+    <li>Prueba lo rápido: $\Delta_1,\dots,\Delta_{n-1},|A|$ de Sylvester; en $2\times2$, el signo de $|A|$ y de $a_{11}$ lo deciden casi todo.</li>
+    <li>Si Sylvester no encaja en ninguna rama, calcula los valores propios (o busca dos vectores con $Q$ de signo opuesto).</li>
+    <li>Aplica la tabla: todos $>0$ DP, todos $<0$ DN, $\ge0$ con algún $0$ SP, $\le0$ con algún $0$ SN, ambos signos indefinida.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $Q=2x_1^2+2x_1x_2+x_2^2$: $A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$, $\Delta_1=2>0$, $|A|=1>0$: definida positiva.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Clasificar por los signos de los coeficientes del polinomio · Decir «semidefinida» solo porque $|A|=0$ (puede ser indefinida) · Usar Sylvester para negar una semidefinida · Olvidar la matriz simétrica cuando $M$ no lo es</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-19">6.19</a> · <a href="#ej6-20">6.20</a> · <a href="#ej6-21">6.21</a> · <a href="#ej6-22">6.22</a> · <a href="#ej6-23">6.23</a> · <a href="#ej6-24">6.24</a> · <a href="#ej-propio-1">Propio P1</a> · <a href="#ej-propio-2">Propio P2</a> · <a href="#ej-propio-3">Propio P3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb25b-8b">Feb. 25 (2.ª) p. 8, 2.º apartado</a> · <a href="#ex-sep25-8">Sept. 25 p. 8, apartado 3.º</a> · <a href="#ex-feb26b-6">Feb. 26 (2.ª) preg. 6</a></p>
+</section>
+
+<section class="ficha" id="tipo-param">
+  <h3>Tipo 3 — Clasificar según un parámetro</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «¿Para qué valores de $a$ es $Q$ definida positiva / semidefinida?» o «según los valores de $\alpha$».</p>
+  <ol class="pasos">
+    <li>Forma la matriz simétrica con el parámetro (ojo: $a\,x_ix_j$ da $a/2$).</li>
+    <li>Calcula $\Delta_1,\dots,\Delta_{n-1},|A|$ como polinomios en el parámetro.</li>
+    <li>Definida positiva: exige todos $>0$ e intersecta las soluciones (rama «$\iff$», da el conjunto exacto).</li>
+    <li>Semidefinida: impón $|A|=0$, despeja el parámetro y comprueba en cada valor la clase real (por valores propios, pues Sylvester solo da «$\Rightarrow$»).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $Q=2x_1^2+2x_1x_2+a\,x_2^2$: $A=\begin{pmatrix}2&1\\1&a\end{pmatrix}$, $\Delta_1=2>0$, $|A|=2a-1>0\iff a>\tfrac12$: es DP exactamente para $a>\tfrac12$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Olvidar comprobar los valores frontera (donde un menor se anula) · Pensar que «$|A|=0$» ya garantiza semidefinida · Resolver mal las desigualdades de grado 2 o 3 · Poner $a$ en vez de $a/2$ en el término cruzado</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-23">6.23</a> · <a href="#ej6-24">6.24</a> · <a href="#ej-propio-3">Propio P3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb25b-8b">Feb. 25 (2.ª) p. 8, 2.º apartado</a> · <a href="#ex-feb26b-6">Feb. 26 (2.ª) preg. 6</a></p>
+</section>
+
+<section class="ficha" id="tipo-invar">
+  <h3>Tipo 4 — Rango y signatura</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> El enunciado da o pide «rango», «signatura», o dice «rango $=$ signatura $=2$».</p>
+  <ol class="pasos">
+    <li>Obtén los valores propios de $A$ (o una forma canónica); no hace falta la base.</li>
+    <li>Rango = número de valores propios $\neq0$; signatura = número de positivos; negativos = rango $-$ signatura.</li>
+    <li>Si no puedes resolver la ecuación característica, usa $\operatorname{tr}A=\sum\lambda_i$, $|A|=\prod\lambda_i$ o un vector propio dado ($Av=\lambda v$).</li>
+    <li>Compara con $n$ y aplica la tabla de invariantes.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}2&1&0\\1&2&0\\0&0&0\end{pmatrix}$ tiene valores propios $3,1,0$: rango $=2$, signatura $=2<3$: semidefinida positiva.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Confundir signatura con (positivos $-$ negativos) o con el rango · Contar el $0$ como positivo · Concluir «definida» sin comparar el rango con $n$</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-22">6.22</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-ene22a1-6">Ene. 22 A1 ej. 6</a> · <a href="#ex-sep25-8">Sept. 25 p. 8, apartado 3.º</a></p>
+</section>
+
 <!-- ============================ 9 ============================ -->
-<h2 id="ejercicios"><span class="n">9</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §6.3, Ej. 6.17-6.24, p. 216-221">E p.216-221</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">9</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §6.3, Ej. 6.17-6.24, p. 216-221">E p.216-221</span></h2>
 
 <p>La sección 6.3 de E empieza en la p.215 y tiene los ejercicios <b>6.17 a 6.24</b> (pp. 216-221). Se agrupan por método. El E 6.16 (rango) está en el <a href="tema_6_2_formas_cuadraticas.html#ej6-16">tema 6.2</a>.</p>
 
 <h3 id="bloqueI">Bloque I — Forma canónica en $\mathbb R^2$ (E 6.18, 6.19 A)</h3>
 
-<details class="sol" id="ej6-18"><summary>Ejercicio 6.18 — base en la que $Q=x_1^2+x_2^2+4x_1x_2$ es suma de cuadrados <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.18, p. 217">E p.217</span></summary>
-  <p class="enun">Sea $Q(x_1,x_2)=x_1^2+x_2^2+4x_1x_2$ una forma cuadrática de $\mathbb R^2$. Se pide dar una base respecto de la cual $Q$ se pueda expresar como una suma de cuadrados.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q(x_1,x_2)=x_1^2+x_2^2+4x_1x_2$ una forma cuadrática de $\mathbb R^2$. Se pide dar una base respecto de la cual $Q$ se pueda expresar como una suma de cuadrados.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Forma la matriz simétrica de $Q$ y busca una base ortonormal de vectores propios: en ella $Q$ solo tendrá cuadrados. Ojo con que los vectores propios estén normalizados y con el orden de los valores propios.</p></details>
+<details class="sol" id="ej6-18"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.18 — base en la que $Q=x_1^2+x_2^2+4x_1x_2$ es suma de cuadrados <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.18, p. 217">E p.217</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Dar una base en la que $Q$ sea suma de cuadrados.</dd>
     <dt>Cómo lo pienso</dt><dd>Tengo $x_1^2+x_2^2+4x_1x_2$ con término cruzado. Diagonalizar la matriz simétrica da los ejes principales.</dd>
@@ -462,8 +557,9 @@
   <p><b>Error típico:</b> dar la base sin normalizar y escribir los valores propios como coeficientes: con $P$ no ortogonal, $P^tAP\neq P^{-1}AP$.</p>
 </details>
 
-<details class="sol" id="ej6-19"><summary>Ejercicio 6.19 — forma canónica y clasificación de $f=x_1y_1-2x_1y_2-2x_2y_1+3x_2y_2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.19, p. 218">E p.218</span></summary>
-  <p class="enun">Dada $f((x_1,x_2),(y_1,y_2))=x_1y_1-2x_1y_2-2x_2y_1+3x_2y_2$, si $Q$ es su forma cuadrática asociada se pide: A) La expresión canónica de $Q$. B) Clasificar la forma cuadrática.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Dada $f((x_1,x_2),(y_1,y_2))=x_1y_1-2x_1y_2-2x_2y_1+3x_2y_2$, si $Q$ es su forma cuadrática asociada se pide: A) La expresión canónica de $Q$. B) Clasificar la forma cuadrática.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$Q$ es la forma cuadrática de $f$: la matriz de $f$ ya es simétrica y es la de $Q$. Diagonalízala con una base ortonormal para la forma canónica y mira los signos de los valores propios para clasificar.</p></details>
+<details class="sol" id="ej6-19"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.19 — forma canónica y clasificación de $f=x_1y_1-2x_1y_2-2x_2y_1+3x_2y_2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.19, p. 218">E p.218</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Forma canónica y clasificación de una forma dada por su bilineal.</dd>
     <dt>Cómo lo pienso</dt><dd>Primero obtengo $Q(x)=f(x,x)$; luego diagonalizo y miro los signos de los valores propios.</dd>
@@ -489,8 +585,9 @@
 
 <h3 id="bloqueII">Bloque II — Forma canónica en $\mathbb R^3$ (E 6.17)</h3>
 
-<details class="sol" id="ej6-17"><summary>Ejercicio 6.17 — subespacios propios y matriz de paso ortogonal de $2x_1x_2+2x_1x_3+2x_2x_3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.17, p. 216">E p.216</span></summary>
-  <p class="enun">Sabiendo que $2x_1x_2+2x_1x_3+2x_2x_3$ es la expresión de la forma cuadrática $Q$ en una base dada, se piden: A) Unas ecuaciones de los subespacios propios de la matriz asociada $A$. B) Una matriz de paso ortogonal que la diagonalice.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sabiendo que $2x_1x_2+2x_1x_3+2x_2x_3$ es la expresión de la forma cuadrática $Q$ en una base dada, se piden: A) Unas ecuaciones de los subespacios propios de la matriz asociada $A$. B) Una matriz de paso ortogonal que la diagonalice.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz simétrica (los cruzados se parten a la mitad) y halla sus valores propios. Con un valor propio doble, el subespacio propio tiene dimensión 2: tendrás que ortogonalizar dentro de él.</p></details>
+<details class="sol" id="ej6-17"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 6.17 — subespacios propios y matriz de paso ortogonal de $2x_1x_2+2x_1x_3+2x_2x_3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.17, p. 216">E p.216</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Subespacios propios y matriz de paso ortogonal de una forma sin cuadrados.</dd>
     <dt>Cómo lo pienso</dt><dd>La matriz tiene ceros en la diagonal y unos fuera: valor propio doble. Esto exige ortogonalizar.</dd>
@@ -523,8 +620,9 @@
 
 <p>El apartado B del Ejercicio 6.19 (indefinida por el signo de $2\pm\sqrt5$) está resuelto en el Bloque I.</p>
 
-<details class="sol" id="ej6-20"><summary>Ejercicio 6.20 — $Q=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$ con $a=-1$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.20, p. 218">E p.218</span></summary>
-  <p class="enun">La forma cuadrática $Q:\mathbb R^3\to\mathbb R$ definida por $Q(x_1,x_2,x_3)=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$ con $a=-1$ es: A) Definida positiva. B) Semidefinida negativa.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La forma cuadrática $Q:\mathbb R^3\to\mathbb R$ definida por $Q(x_1,x_2,x_3)=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$ con $a=-1$ es: A) Definida positiva. B) Semidefinida negativa.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Sustituye $a=-1$ y mira si el polinomio es un cuadrado perfecto más otro término: ¿puede ser positivo? ¿se anula en algún vector no nulo?</p></details>
+<details class="sol" id="ej6-20"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 6.20 — $Q=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$ con $a=-1$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.20, p. 218">E p.218</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar $Q$ para $a=-1$.</dd>
     <dt>Qué se usa</dt><dd><b>Clasificación (Def. 6.7, U p.258):</b> definida positiva $(Q>0\ \forall x\neq0)$, semidefinida positiva $(Q\ge0)$, definida/semidefinida negativa e indefinida. Por los <b>valores propios</b> de $A$: todos $>0$ DP; $\ge0$ con algún $0$ SP; todos $<0$ DN; $\le0$ con algún $0$ SN; de ambos signos indefinida.</dd>
@@ -544,8 +642,9 @@
   <p><b>Error típico:</b> conformarse con «$|A|=0$ luego es semidefinida» sin mirar el signo de los otros valores propios.</p>
 </details>
 
-<details class="sol" id="ej6-21"><summary>Ejercicio 6.21 — clasificar $x_1^2+2x_2^2+2x_3^2+4x_2x_3$ y $2x_1x_2+4x_1x_3+x_2^2-2x_2x_3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.21, p. 219">E p.219</span></summary>
-  <p class="enun">Clasifíquense las siguientes formas cuadráticas: A) $Q(x_1,x_2,x_3)=x_1^2+2x_2^2+2x_3^2+4x_2x_3$. B) $Q(x_1,x_2,x_3)=2x_1x_2+4x_1x_3+x_2^2-2x_2x_3$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Clasifíquense las siguientes formas cuadráticas: A) $Q(x_1,x_2,x_3)=x_1^2+2x_2^2+2x_3^2+4x_2x_3$. B) $Q(x_1,x_2,x_3)=2x_1x_2+4x_1x_3+x_2^2-2x_2x_3$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>En cada apartado forma la matriz simétrica y decide por valores propios o por Sylvester; si Sylvester no encaja en ninguna rama, calcula los valores propios o busca dos vectores de signo opuesto.</p></details>
+<details class="sol" id="ej6-21"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.21 — clasificar $x_1^2+2x_2^2+2x_3^2+4x_2x_3$ y $2x_1x_2+4x_1x_3+x_2^2-2x_2x_3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.21, p. 219">E p.219</span></summary>
   <p><b>A)</b></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Clasificar dos formas cuadráticas de $\mathbb R^3$.</dd>
@@ -578,8 +677,9 @@
 
 <h3 id="bloqueIV">Bloque IV — Rango y signatura (E 6.22)</h3>
 
-<details class="sol" id="ej6-22"><summary>Ejercicio 6.22 — forma cuadrática de $f(x,y)=2x_1y_1-2x_1y_2-\dots+2x_3y_3$: ¿definida positiva? ¿rango 2? ¿signatura 3? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.22, p. 220">E p.220</span></summary>
-  <p class="enun">La forma cuadrática asociada a la forma bilineal definida por $f(x,y)=2x_1y_1-2x_1y_2-2x_2y_1-3x_2y_3-3x_3y_2-\tfrac12x_1y_3-\tfrac12x_3y_1+2x_3y_3$: A) Es definida positiva. B) Tiene rango 2. C) Tiene signatura 3.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La forma cuadrática asociada a la forma bilineal definida por $f(x,y)=2x_1y_1-2x_1y_2-2x_2y_1-3x_2y_3-3x_3y_2-\tfrac12x_1y_3-\tfrac12x_3y_1+2x_3y_3$: A) Es definida positiva. B) Tiene rango 2. C) Tiene signatura 3.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Primero la matriz de $f$ (simétrica, así que es la de $Q$). Después calcula rango y signatura mediante los valores propios o una forma canónica, y contrasta con cada afirmación.</p></details>
+<details class="sol" id="ej6-22"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 6.22 — forma cuadrática de $f(x,y)=2x_1y_1-2x_1y_2-\dots+2x_3y_3$: ¿definida positiva? ¿rango 2? ¿signatura 3? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.22, p. 220">E p.220</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Decidir definida positiva, rango y signatura de una forma dada por su bilineal.</dd>
     <dt>Qué se usa</dt><dd><b>Clasificación (Def. 6.7, U p.258):</b> definida positiva $(Q>0\ \forall x\neq0)$, semidefinida positiva $(Q\ge0)$, definida/semidefinida negativa e indefinida. Por los <b>valores propios</b> de $A$: todos $>0$ DP; $\ge0$ con algún $0$ SP; todos $<0$ DN; $\le0$ con algún $0$ SN; de ambos signos indefinida. <b>Forma canónica (Teor. 6.2-6.3):</b> diagonalizando $A$ ortogonalmente, $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$ en la base de vectores propios ortonormales. <b>Signatura</b> = (nº positivos, nº negativos); rango = nº de $\lambda\neq0$. También se puede completar cuadrados.</dd>
@@ -602,8 +702,9 @@
 
 <h3 id="bloqueV">Bloque V — Sylvester con parámetro: definida positiva (E 6.23)</h3>
 
-<details class="sol" id="ej6-23"><summary>Ejercicio 6.23 — $Q=2x_1^2+\alpha x_2^2+2x_3^2+\alpha x_1x_3+2x_2x_3$ según $\alpha$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.23, p. 220">E p.220</span></summary>
-  <p class="enun">Sea $Q:\mathbb R^3\to\mathbb R$ la forma cuadrática definida en la base canónica por $Q(x_1,x_2,x_3)=2x_1^2+\alpha x_2^2+2x_3^2+\alpha x_1x_3+2x_2x_3$ siendo $\alpha\in\mathbb R$. Entonces se verifica: A) $Q$ es definida positiva para cierto valor de $\alpha$. B) $Q$ es indefinida para cualquier valor de $\alpha$. C) $Q$ es definida negativa para ciertos valores de $\alpha$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q:\mathbb R^3\to\mathbb R$ la forma cuadrática definida en la base canónica por $Q(x_1,x_2,x_3)=2x_1^2+\alpha x_2^2+2x_3^2+\alpha x_1x_3+2x_2x_3$ siendo $\alpha\in\mathbb R$. Entonces se verifica: A) $Q$ es definida positiva para cierto valor de $\alpha$. B) $Q$ es indefinida para cualquier valor de $\alpha$. C) $Q$ es definida negativa para ciertos valores de $\alpha$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz con $\alpha$ (el cruzado $\alpha x_1x_3$ aporta $\alpha/2$) y calcula los menores $\Delta_1,\Delta_2,|A|$ como polinomios en $\alpha$. Plantea cuándo serían todos positivos y cuándo alternarían signo.</p></details>
+<details class="sol" id="ej6-23"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 6.23 — $Q=2x_1^2+\alpha x_2^2+2x_3^2+\alpha x_1x_3+2x_2x_3$ según $\alpha$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.23, p. 220">E p.220</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar según el parámetro $\alpha$.</dd>
     <dt>Qué se usa</dt><dd><b>Sylvester (Teor. 6.5):</b> DP $\iff$ todos los menores principales $\Delta_k>0$; DN $\iff$ signos alternados $(-1)^k\Delta_k>0$. Si algún $\Delta_k=0$ el criterio <i>no decide</i> sin más (semidefinidas: mirar todos los menores principales).</dd>
@@ -624,8 +725,9 @@
 
 <h3 id="bloqueVI">Bloque VI — Semidefinida con parámetro (E 6.24)</h3>
 
-<details class="sol" id="ej6-24"><summary>Ejercicio 6.24 — valores de $a$ para que $Q=x_1^2+4x_2^2+2x_3^2+2ax_1x_2+2x_1x_3$ sea semidefinida positiva <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.24, p. 221">E p.221</span></summary>
-  <p class="enun">Se pide calcular los valores de $a$ para que la forma cuadrática $Q(x_1,x_2,x_3)=x_1^2+4x_2^2+2x_3^2+2ax_1x_2+2x_1x_3$ sea semidefinida positiva.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide calcular los valores de $a$ para que la forma cuadrática $Q(x_1,x_2,x_3)=x_1^2+4x_2^2+2x_3^2+2ax_1x_2+2x_1x_3$ sea semidefinida positiva.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Semidefinida positiva exige primero $|A|=0$: resuélvelo para $a$ y después comprueba para cada valor obtenido si de verdad es SP (Sylvester solo da «⇒»).</p></details>
+<details class="sol" id="ej6-24"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 6.24 — valores de $a$ para que $Q=x_1^2+4x_2^2+2x_3^2+2ax_1x_2+2x_1x_3$ sea semidefinida positiva <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.24, p. 221">E p.221</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores de $a$ para semidefinida positiva.</dd>
     <dt>Cómo lo pienso</dt><dd>Semidefinida exige <b>todos</b> los menores principales $\ge0$, no solo los líderes.</dd>
@@ -647,8 +749,9 @@
 
 <h3 id="propios">Ejemplos propios (de fácil a difícil)</h3>
 
-<details class="sol" id="ej-propio-1"><summary>Propio P1 — clasificar tres formas de $\mathbb R^2$ con la receta 2×2 <span class="src" data-l="P" data-ref="Ejemplo propio; método del atajo 2×2 y criterio de Sylvester, U p. 266-267">propio</span></summary>
-  <p class="enun">Clasifica: a) $Q=2x_1^2+2x_1x_2+x_2^2$. b) $Q=-x_1^2+2x_1x_2-x_2^2$. c) $Q=x_1^2+6x_1x_2+x_2^2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Clasifica: a) $Q=2x_1^2+2x_1x_2+x_2^2$. b) $Q=-x_1^2+2x_1x_2-x_2^2$. c) $Q=x_1^2+6x_1x_2+x_2^2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Con matrices $2\times2$ no hace falta resolver la ecuación característica: el signo de $|A|$ y el de la diagonal bastan.</p></details>
+<details class="sol" id="ej-propio-1"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Propio P1 — clasificar tres formas de $\mathbb R^2$ con la receta 2×2 <span class="src" data-l="P" data-ref="Ejemplo propio; método del atajo 2×2 y criterio de Sylvester, U p. 266-267">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar tres formas con la receta $2\times2$.</dd>
     <dt>Qué se usa</dt><dd><b>Sylvester (Teor. 6.5):</b> DP $\iff$ todos los menores principales $\Delta_k>0$; DN $\iff$ signos alternados $(-1)^k\Delta_k>0$. Si algún $\Delta_k=0$ el criterio <i>no decide</i> sin más (semidefinidas: mirar todos los menores principales).</dd>
@@ -669,8 +772,9 @@
   <p><b>Error típico</b> de c): «todos los coeficientes son positivos, luego es positiva». Lo decide la matriz, no los coeficientes (cf. Lay Ej. 6, p. 406).</p>
 </details>
 
-<details class="sol" id="ej-propio-2"><summary>Propio P2 — forma canónica en $\mathbb R^3$ con valor propio doble <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.17 p. 216 y Gram-Schmidt U p. 207-208">propio</span></summary>
-  <p class="enun">$Q=2x_1^2+2x_2^2+2x_3^2+2x_1x_2+2x_1x_3+2x_2x_3$. Halla una base ortonormal en la que sea canónica y clasifícala.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$Q=2x_1^2+2x_2^2+2x_3^2+2x_1x_2+2x_1x_3+2x_2x_3$. Halla una base ortonormal en la que sea canónica y clasifícala.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Con todos los términos iguales fuera de la diagonal, la matriz es $I+$(algo sencillo): sus valores propios salen casi sin cuentas. Con el doble, ortogonaliza dentro de su subespacio propio.</p></details>
+<details class="sol" id="ej-propio-2"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio P2 — forma canónica en $\mathbb R^3$ con valor propio doble <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.17 p. 216 y Gram-Schmidt U p. 207-208">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Forma canónica en $\mathbb R^3$ con valor propio doble.</dd>
     <dt>Qué se usa</dt><dd><b>Forma canónica (Teor. 6.2-6.3):</b> diagonalizando $A$ ortogonalmente, $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$ en la base de vectores propios ortonormales. <b>Signatura</b> = (nº positivos, nº negativos); rango = nº de $\lambda\neq0$. También se puede completar cuadrados.</dd>
@@ -688,8 +792,9 @@
   <div class="recipe"><b>Receta:</b> la de la forma canónica; el valor propio doble exige Gram-Schmidt dentro de su subespacio.</div>
 </details>
 
-<details class="sol" id="ej-propio-3"><summary>Propio P3 — clasificar para <b>todo</b> valor del parámetro (Sylvester no siempre basta) <span class="src" data-l="P" data-ref="Ejemplo propio; criterio de Sylvester U p. 267 y caracterización por valores propios U p. 266">propio</span></summary>
-  <p class="enun">$Q=a\,x_1^2+2x_1x_2+a\,x_2^2+x_3^2$, $a\in\mathbb R$. Clasifícala según $a$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$Q=a\,x_1^2+2x_1x_2+a\,x_2^2+x_3^2$, $a\in\mathbb R$. Clasifícala según $a$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $\Delta_1,\Delta_2,|A|$ y obtén los valores de $a$ donde cada rama de Sylvester se cumple; los valores frontera y los casos que no encajan hay que mirarlos aparte con los valores propios.</p></details>
+<details class="sol" id="ej-propio-3"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio P3 — clasificar para <b>todo</b> valor del parámetro (Sylvester no siempre basta) <span class="src" data-l="P" data-ref="Ejemplo propio; criterio de Sylvester U p. 267 y caracterización por valores propios U p. 266">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar para todo valor del parámetro.</dd>
     <dt>Qué se usa</dt><dd><b>Clasificación (Def. 6.7, U p.258):</b> definida positiva $(Q>0\ \forall x\neq0)$, semidefinida positiva $(Q\ge0)$, definida/semidefinida negativa e indefinida. Por los <b>valores propios</b> de $A$: todos $>0$ DP; $\ge0$ con algún $0$ SP; todos $<0$ DN; $\le0$ con algún $0$ SN; de ambos signos indefinida. <b>Sylvester (Teor. 6.5):</b> DP $\iff$ todos los menores principales $\Delta_k>0$; DN $\iff$ signos alternados $(-1)^k\Delta_k>0$. Si algún $\Delta_k=0$ el criterio <i>no decide</i> sin más (semidefinidas: mirar todos los menores principales).</dd>
@@ -715,14 +820,15 @@
 </details>
 
 <!-- ============================ 10 ============================ -->
-<h2 id="examenes"><span class="n">10</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">10</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025), <b>5 ejercicios de cuestiones y 2 apartados de problema</b> tienen como contenido principal este tema. Se agrupan por método (los bloques I-IV de aquí corresponden a los métodos de los bloques I, II, IV y V de E 6.17-6.24 de arriba). Los de frontera con 5.3, 6.2 y 6.4 están al final en «Para practicar».</p>
 
 <h3 id="exI">Bloque I — Forma canónica en $\mathbb R^2$</h3>
 
-<details class="sol" id="ex-feb22a2-6"><summary>Feb. 2022 (tipo A2), ejercicio 6 — forma canónica de $Q=x_1^2+x_2^2+4x_1x_2$ <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A2; fichero Febrero22A2), ejercicio 6">X Feb. 2022 (A2) ej. 6</span></summary>
-  <p class="enun">Si $Q(x_1,x_2)=x_1^2+x_2^2+4x_1x_2$ es una forma cuadrática de $\mathbb R^2$, se pide calcular una forma canónica asociada a $Q$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $Q(x_1,x_2)=x_1^2+x_2^2+4x_1x_2$ es una forma cuadrática de $\mathbb R^2$, se pide calcular una forma canónica asociada a $Q$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Matriz simétrica de $Q$, valores propios y coeficientes de la forma canónica. Indica también la base y el orden de los valores propios.</p></details>
+<details class="sol" id="ex-feb22a2-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2022 (tipo A2), ejercicio 6 — forma canónica de $Q=x_1^2+x_2^2+4x_1x_2$ <span class="src" data-l="X" data-ref="Feb. 2022 (tipo A2; fichero Febrero22A2), ejercicio 6">X Feb. 2022 (A2) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Hallar una forma canónica de una $Q$ de $\mathbb R^2$.</dd>
     <dt>Qué se usa</dt><dd><b>Forma canónica (Teor. 6.2-6.3):</b> diagonalizando $A$ ortogonalmente, $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$ en la base de vectores propios ortonormales. <b>Signatura</b> = (nº positivos, nº negativos); rango = nº de $\lambda\neq0$. También se puede completar cuadrados.</dd>
@@ -741,8 +847,9 @@
 </details>
 
 
-<details class="sol" id="ex-feb24a-6"><summary>Feb. 2024 (1.ª semana), pregunta 6 — forma canónica de $Q=x_1^2+4x_1x_2-2x_2^2$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª semana), pregunta 6">X Feb. 2024 (1.ª) P6</span></summary>
-  <p class="enun">Sea $Q(x_1,x_2)=x_1^2+4x_1x_2-2x_2^2$ una forma cuadrática (definida con respecto a la base canónica $B$). Halle una expresión canónica de $Q$, es decir, halle una base con respecto a la cual $Q$ sólo tenga términos cuadrados.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q(x_1,x_2)=x_1^2+4x_1x_2-2x_2^2$ una forma cuadrática (definida con respecto a la base canónica $B$). Halle una expresión canónica de $Q$, es decir, halle una base con respecto a la cual $Q$ sólo tenga términos cuadrados.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Matriz $\begin{pmatrix}1&2\\2&-2\end{pmatrix}$: halla sus valores propios y vectores propios unitarios; la base pedida son esos vectores, y $Q$ es la suma con los valores propios como coeficientes.</p></details>
+<details class="sol" id="ex-feb24a-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2024 (1.ª semana), pregunta 6 — forma canónica de $Q=x_1^2+4x_1x_2-2x_2^2$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª semana), pregunta 6">X Feb. 2024 (1.ª) P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Hallar una base en la que $Q$ solo tenga cuadrados.</dd>
     <dt>Qué se usa</dt><dd><b>Forma canónica (Teor. 6.2-6.3):</b> diagonalizando $A$ ortogonalmente, $Q=\lambda_1y_1^2+\dots+\lambda_ny_n^2$ en la base de vectores propios ortonormales. <b>Signatura</b> = (nº positivos, nº negativos); rango = nº de $\lambda\neq0$. También se puede completar cuadrados.</dd>
@@ -767,8 +874,9 @@
 
 <h3 id="exII">Bloque II — Forma canónica en $\mathbb R^3$</h3>
 
-<details class="sol" id="ex-feb18a-b"><summary>Feb. 2018 (tipo A), problema b) — base en la que $Q=x_1^2+2x_2^2+4x_2x_3+2x_3^2$ es canónica <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), problema, apartado b) (1 punto)">X Feb. 2018 (A) prob. b)</span></summary>
-  <p class="enun">Hallar una base en la que la forma cuadrática $Q(x_1,x_2,x_3)=x_1^2+2x_2^2+4x_2x_3+2x_3^2$ se exprese en forma canónica (sólo tiene términos cuadrados) (1 pto.).</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hallar una base en la que la forma cuadrática $Q(x_1,x_2,x_3)=x_1^2+2x_2^2+4x_2x_3+2x_3^2$ se exprese en forma canónica (sólo tiene términos cuadrados) (1 pto.).</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La matriz de $Q$ tiene la forma diagonal por bloques $1\oplus$(bloque $2\times2$). Halla valores propios, un vector propio de cada uno y normalízalos; todos son ortogonales entre sí.</p></details>
+<details class="sol" id="ex-feb18a-b"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2018 (tipo A), problema b) — base en la que $Q=x_1^2+2x_2^2+4x_2x_3+2x_3^2$ es canónica <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), problema, apartado b) (1 punto)">X Feb. 2018 (A) prob. b)</span></summary>
   <p>Es el Ejemplo 6.19 (U p.259). Desarrollo completo:</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Hallar una base en la que $Q$ sea canónica.</dd>
@@ -796,8 +904,9 @@
 
 <h3 id="exIII">Bloque III — Signatura, rango e invariantes</h3>
 
-<details class="sol" id="ex-ene22a1-6"><summary>Ene. 2022 (tipo A1), ejercicio 6 — clasificar $Q$ de $\mathbb R^3$ con rango = signatura = 2 <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A1), ejercicio 6">X Ene. 2022 (A1) ej. 6</span></summary>
-  <p class="enun">Clasificar, si es posible, la forma cuadrática $Q$ de $\mathbb R^3$ tal que $\operatorname{rango}(Q)=\operatorname{signatura}(Q)=2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Clasificar, si es posible, la forma cuadrática $Q$ de $\mathbb R^3$ tal que $\operatorname{rango}(Q)=\operatorname{signatura}(Q)=2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Traduce rango y signatura a «cuántos coeficientes de la forma canónica son no nulos y cuántos son positivos»; compara con $n=3$.</p></details>
+<details class="sol" id="ex-ene22a1-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ene. 2022 (tipo A1), ejercicio 6 — clasificar $Q$ de $\mathbb R^3$ con rango = signatura = 2 <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A1), ejercicio 6">X Ene. 2022 (A1) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar $Q$ con rango = signatura = 2 en $\mathbb R^3$.</dd>
     <dt>Qué se usa</dt><dd><b>Clasificación (Def. 6.7, U p.258):</b> definida positiva $(Q>0\ \forall x\neq0)$, semidefinida positiva $(Q\ge0)$, definida/semidefinida negativa e indefinida. Por los <b>valores propios</b> de $A$: todos $>0$ DP; $\ge0$ con algún $0$ SP; todos $<0$ DN; $\le0$ con algún $0$ SN; de ambos signos indefinida.</dd>
@@ -813,8 +922,9 @@
   <p><b>Error típico:</b> contestar «definida positiva» porque «todos los términos son positivos»: falta uno (el nulo), y $Q$ se anula en $v_3\neq0$.</p>
 </details>
 
-<details class="sol" id="ex-sep25-8"><summary>Sept. 2025, problema 8, 3.er apartado — signatura de $Q=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ <span class="src" data-l="X" data-ref="Sept. 2025, problema 8, apartado 3.º (1 punto)">X Sept. 2025 P8 (c)</span></summary>
-  <p class="enun">Sea $Q(x_1,x_2,x_3)=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ una forma cuadrática. Halle la matriz $A$ asociada a $Q$. (0.5 PUNTOS) Calcule el autovalor correspondiente al autovector $(2,1,1)$ de $A$. (0.5 PUNTOS) Halle la signatura de $Q$. (1 PUNTO)</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q(x_1,x_2,x_3)=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ una forma cuadrática. Halle la matriz $A$ asociada a $Q$. (0.5 PUNTOS) Calcule el autovalor correspondiente al autovector $(2,1,1)$ de $A$. (0.5 PUNTOS) Halle la signatura de $Q$. (1 PUNTO)</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>El vector propio dado te regala un valor propio con $Av=\lambda v$. Los otros dos salen de la traza y del determinante: te bastan sus signos para la signatura.</p></details>
+<details class="sol" id="ex-sep25-8"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2025, problema 8, 3.er apartado — signatura de $Q=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ <span class="src" data-l="X" data-ref="Sept. 2025, problema 8, apartado 3.º (1 punto)">X Sept. 2025 P8 (c)</span></summary>
   <p><i>(El 1.er apartado, la matriz $A=\begin{pmatrix}6&2&2\\2&0&4\\2&4&0\end{pmatrix}$, está en el <a href="tema_6_2_formas_cuadraticas.html#ex-sep25-8">tema 6.2</a>, y el 2.º, el autovalor de $(2,1,1)$, en el <a href="tema_4_2_valores_vectores_propios.html#ex-sep25-p8b">tema 4.2</a>. Resultado: $A(2,1,1)^t=(16,8,8)^t=8\,(2,1,1)^t$, luego $\lambda=8$.)</i></p>
   <p><b>3.er apartado.</b></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
@@ -836,8 +946,9 @@
 
 <h3 id="exIV">Bloque IV — Sylvester con parámetro: definida positiva</h3>
 
-<details class="sol" id="ex-feb26b-6"><summary>Feb. 2026 (2.ª semana), pregunta 6 — $Q=2x_1^2+a\,x_1x_2+6x_2^2$ definida positiva <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª semana), pregunta 6">X Feb. 2026 (2.ª) P6</span></summary>
-  <p class="enun">Sea $Q$ la forma cuadrática de $\mathbb R^2$ definida por $Q(x_1,x_2)=2x_1^2+ax_1x_2+6x_2^2$ con $a\in\mathbb R$. Determine para qué valores del parámetro $a$ la forma cuadrática $Q$ es definida positiva.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q$ la forma cuadrática de $\mathbb R^2$ definida por $Q(x_1,x_2)=2x_1^2+ax_1x_2+6x_2^2$ con $a\in\mathbb R$. Determine para qué valores del parámetro $a$ la forma cuadrática $Q$ es definida positiva.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Es $2\times2$: la definida positiva pide $\Delta_1>0$ y $|A|>0$. Recuerda que el término cruzado $a\,x_1x_2$ entra en la matriz como $a/2$.</p></details>
+<details class="sol" id="ex-feb26b-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2026 (2.ª semana), pregunta 6 — $Q=2x_1^2+a\,x_1x_2+6x_2^2$ definida positiva <span class="src" data-l="X" data-ref="Feb. 2026 (2.ª semana), pregunta 6">X Feb. 2026 (2.ª) P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $a$ para que $Q$ sea definida positiva.</dd>
     <dt>Qué se usa</dt><dd><b>Sylvester (Teor. 6.5):</b> DP $\iff$ todos los menores principales $\Delta_k>0$; DN $\iff$ signos alternados $(-1)^k\Delta_k>0$. Si algún $\Delta_k=0$ el criterio <i>no decide</i> sin más (semidefinidas: mirar todos los menores principales).</dd>
@@ -856,8 +967,9 @@
   <p><b>Error típico:</b> poner $a$ en vez de $a/2$ fuera de la diagonal (saldría $|a|&lt;2\sqrt3$); olvidar la raíz negativa ($a>-4\sqrt3$).</p>
 </details>
 
-<details class="sol" id="ex-feb25b-8b"><summary>Feb. 2025 (2.ª semana), problema 8, 2.º apartado — Sylvester para $Q=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2a\,x_1x_3$ <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª semana), problema 8, 2.º apartado (1,5 puntos)">X Feb. 2025 (2.ª) P8 (b)</span></summary>
-  <p class="enun">Sea $a\in\mathbb R$ y consideremos la forma cuadrática $Q(x_1,x_2,x_3)=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2ax_1x_3$. Halle la matriz asociada a $Q$ (0.5 PUNTOS). Use el criterio de Sylvester para determinar los valores de $a\in\mathbb R$ para los que $Q$ es definida positiva. (1.5 PUNTOS)</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $a\in\mathbb R$ y consideremos la forma cuadrática $Q(x_1,x_2,x_3)=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2ax_1x_3$. Halle la matriz asociada a $Q$ (0.5 PUNTOS). Use el criterio de Sylvester para determinar los valores de $a\in\mathbb R$ para los que $Q$ es definida positiva. (1.5 PUNTOS)</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Sylvester para definida positiva es una equivalencia: calcula $\Delta_1,\Delta_2,\Delta_3=|A|$ en función de $a$ y exige que los tres sean positivos.</p></details>
+<details class="sol" id="ex-feb25b-8b"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2025 (2.ª semana), problema 8, 2.º apartado — Sylvester para $Q=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2a\,x_1x_3$ <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª semana), problema 8, 2.º apartado (1,5 puntos)">X Feb. 2025 (2.ª) P8 (b)</span></summary>
   <p><i>(El 1.er apartado está en el <a href="tema_6_2_formas_cuadraticas.html#ex-feb25b-8">tema 6.2</a>.)</i></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $a$ para definida positiva con Sylvester.</dd>
@@ -892,7 +1004,7 @@
 </table>
 
 <!-- ============================ 11 ============================ -->
-<h2 id="chuleta"><span class="n">11</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">11</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <div class="box thm"><span class="h">Fórmulas y reglas clave (con sus hipótesis)</span>
   <table>
@@ -942,6 +1054,27 @@
   <span class="src" data-l="P" data-ref="Errores recopilados de E §6.3, U §6.3, Lay §7.2 y de las soluciones oficiales de los exámenes">propio</span>
 </div>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>¿Cómo es $Q=x_1^2+4x_1x_2+x_2^2$?</p>
+    <ul class="opts"><li>Definida positiva, porque los coeficientes $1,4,1$ son positivos.<span class="why">Los signos de los coeficientes no deciden: hay que mirar la matriz y sus valores propios.</span></li><li>Semidefinida positiva.<span class="why">Eso exigiría $|A|=0$; aquí $|A|=1-4=-3\neq0$.</span></li><li data-ok>Indefinida.</li><li>Definida negativa.<span class="why">$Q(1,0)=1>0$, así que no puede ser negativa en todo $x\neq0$.</span></li></ul>
+    <p class="fb">$A=\begin{pmatrix}1&2\\2&1\end{pmatrix}$, $|A|=-3<0$: valores propios $3$ y $-1$ de signos opuestos. Por ejemplo $Q(1,1)=6>0$ y $Q(1,-1)=-2<0$.</p></div>
+  <div class="qp"><p>$Q=x_1^2+2x_1x_2+x_2^2-x_3^2$ tiene $|A|=0$. ¿Cómo es?</p>
+    <ul class="opts"><li>Semidefinida negativa.<span class="why">Eso exigiría todos los valores propios $\le0$, pero $Q(1,0,0)=1>0$.</span></li><li>Semidefinida positiva, porque $|A|=0$.<span class="why">$|A|=0$ solo dice que hay un valor propio nulo; hay que mirar el resto.</span></li><li data-ok>Indefinida.</li><li>Definida positiva.<span class="why">Una definida positiva tiene $|A|>0$; aquí $|A|=0$.</span></li></ul>
+    <p class="fb">Los valores propios son $2,\,0,\,-1$: hay uno positivo y uno negativo, luego es indefinida, aunque haya un $0$ (comprobación: $Q(1,0,0)=1>0$ y $Q(0,0,1)=-1<0$).</p></div>
+  <div class="qp"><p>Una forma cuadrática de $\mathbb R^3$ tiene rango $2$ y signatura $0$. ¿Cómo es?</p>
+    <ul class="opts"><li>Definida negativa.<span class="why">Para ser definida negativa el rango tendría que ser $3$.</span></li><li data-ok>Semidefinida negativa.</li><li>Indefinida.<span class="why">Indefinida necesita al menos un coeficiente positivo; con signatura $0$ no hay ninguno.</span></li><li>Semidefinida positiva.<span class="why">Eso pediría signatura igual al rango; aquí no hay coeficientes positivos.</span></li></ul>
+    <p class="fb">Hay $2$ coeficientes no nulos y ninguno positivo, así que ambos son negativos; el tercero es $0$. Rango $<n$ y signatura $0$: semidefinida negativa.</p></div>
+  <div class="qp"><p>¿Para qué valores de $a$ es $Q=x_1^2+2a\,x_1x_2+4x_2^2$ definida positiva?</p>
+    <ul class="opts"><li>$a<2$<span class="why">Falta $a>-2$: con $a=-5$, por ejemplo, $|A|=4-25<0$.</span></li><li data-ok>$-2<a<2$</li><li>$-2\le a\le2$<span class="why">En $a=\pm2$ se tiene $|A|=0$: es semidefinida, no definida.</span></li><li>$a>-2$<span class="why">Falta $a<2$: con $a=3$, $|A|=4-9<0$ y es indefinida.</span></li></ul>
+    <p class="fb">$A=\begin{pmatrix}1&a\\a&4\end{pmatrix}$, $\Delta_1=1>0$ y $\Delta_2=4-a^2>0\iff|a|<2$.</p></div>
+  <div class="qp"><p>$Q=x_1^2+4x_1x_2+x_2^2$ se escribe $3y_1^2-y_2^2$ en una base. ¿Cuál NO puede ser una forma canónica de $Q$ en otra base?</p>
+    <ul class="opts"><li>$6y_1^2-2y_2^2$<span class="why">Sí puede (base ortogonal sin normalizar $(1,1),(1,-1)$): cambian los números, no los signos.</span></li><li>$y_1^2-y_2^2$<span class="why">Sí puede: reescalando los vectores se cambian los coeficientes sin cambiar los signos.</span></li><li data-ok>$3y_1^2+y_2^2$</li><li>$-y_1^2+3y_2^2$<span class="why">Sí puede: es la misma con los vectores propios en el otro orden.</span></li></ul>
+    <p class="fb">La ley de inercia exige un coeficiente positivo y otro negativo (signatura $1$, rango $2$). $3y_1^2+y_2^2$ tendría signatura $2$.</p></div>
+  <div class="qp"><p>$Q=x_2^2$ en $\mathbb R^2$ tiene $\Delta_1=0$ y $|A|=0$. ¿Qué dice Sylvester y cuál es la clase?</p>
+    <ul class="opts"><li>No es semidefinida porque $\Delta_1$ no es positivo.<span class="why">La rama de semidefinidas es solo «$\Rightarrow$»: que no se cumpla no prueba que no sea semidefinida.</span></li><li data-ok>No decide; por valores propios ($0$ y $1$) es semidefinida positiva.</li><li>Es indefinida, porque $\Delta_1=0$.<span class="why">$Q=x_2^2\ge0$ en todos los vectores, no toma valores negativos.</span></li><li>Es definida positiva.<span class="why">$Q(1,0)=0$ con $(1,0)\neq0$.</span></li></ul>
+    <p class="fb">Ninguna rama de Sylvester se cumple, así que el criterio no concluye. Los valores propios de $\operatorname{diag}(0,1)$ son $0$ y $1$: $Q\ge0$ y se anula en $(1,0)$.</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>
