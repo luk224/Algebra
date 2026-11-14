@@ -1,0 +1,78 @@
+/* Capa pedagógica opcional (piloto en el tema 2.3): pestañas Teoría / Ejercicios / Examen, fuentes ocultas por defecto,
+   pistas, niveles de dificultad, bloques «ampliación» y autoevaluación. Se activa con <html class="pilot">. */
+
+/* ---- Fuentes: ocultas salvo que el estudiante pulse «Mostrar fuentes» ---- */
+@media screen{
+  html.pilot:not(.con-fuentes) main .src:not(#panel-fuentes .src),
+  html.pilot:not(.con-fuentes) .legend,
+  html.pilot:not(.con-fuentes) .chips span:not(:last-child){display:none}
+  html.pilot:not(.con-fuentes) details.fuentes-toggle,
+  html.pilot:not(.con-fuentes) h2#fuentes,
+  html.pilot:not(.con-fuentes) #panel-fuentes{display:none}
+  html.pilot:not(.con-fuentes) .side-toc a[href="#fuentes"],
+  html.pilot:not(.con-fuentes) .mnav-list a[href="#fuentes"]{display:none}
+}
+#btn-fuentes[aria-pressed="true"]{border-color:var(--acc);color:var(--acc)}
+
+/* ---- Pestañas de vista ---- */
+.vistas{position:sticky;top:var(--tbh,45px);z-index:15;display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px;padding:8px 0;
+  background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd);font:600 14.5px var(--sans)}
+.vistas button{font:inherit;background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:99px;padding:6px 14px;cursor:pointer}
+.vistas button[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+:root[data-theme="dark"] .vistas button[aria-selected="true"]{color:#10131b}
+.vistas .cnt{opacity:.75;font-weight:500;margin-left:3px}
+@media screen{
+  html[data-vista="teoria"] main .vista-ejercicios,html[data-vista="teoria"] main .vista-examen,
+  html[data-vista="ejercicios"] main .vista-teoria,html[data-vista="ejercicios"] main .vista-examen,
+  html[data-vista="examen"] main .vista-teoria,html[data-vista="examen"] main .vista-ejercicios{display:none}
+}
+@media print{.vistas,.quiz,.pista{display:none!important}}
+
+/* ---- Lo esencial / qué cae ---- */
+.box.esencial{border-left:6px solid var(--acc);background:color-mix(in srgb,var(--acc) 6%,var(--card))}
+.box.esencial ol{margin:.4em 0 .2em;padding-left:1.3em}
+.box.esencial li{margin:.35em 0}
+table.queCae td:first-child{font-weight:600}
+table.queCae a{white-space:nowrap;color:var(--acc)}
+
+/* ---- Pistas y niveles ---- */
+details.pista{margin:.9em 0 -.3em;font:15px/1.5 var(--sans)}
+details.pista>summary{cursor:pointer;color:var(--mut);font-weight:600;list-style:none}
+details.pista>summary::-webkit-details-marker{display:none}
+details.pista>summary::before{content:"💡 "}
+details.pista[open]>summary{color:var(--acc)}
+details.pista>p{margin:.4em 0 0;padding:8px 12px;border-left:3px solid var(--acc);background:color-mix(in srgb,var(--acc) 7%,transparent);border-radius:0 8px 8px 0}
+.nivel{display:inline-block;font:700 12px/1 var(--sans);letter-spacing:.05em;color:#b5701a;margin-right:6px;vertical-align:baseline}
+:root[data-theme="dark"] .nivel{color:#f0b35a}
+
+/* ---- Ampliación (nivel 3: se puede saltar) ---- */
+details.ampl{border:1px dashed var(--bd);border-radius:10px;padding:0 14px;margin:1em 0;font-size:.97em}
+details.ampl>summary{cursor:pointer;padding:9px 0;font:600 14.5px var(--sans);color:var(--mut)}
+details.ampl[open]>summary{color:var(--acc);border-bottom:1px solid var(--bd);margin-bottom:8px}
+details.ampl>summary::before{content:"＋ "}
+details.ampl[open]>summary::before{content:"－ "}
+
+/* ---- Autoevaluación ---- */
+.quiz{border:2px solid var(--acc);border-radius:12px;padding:12px 18px 16px;margin:1.4em 0;background:var(--card)}
+.quiz>.h{display:block;font:700 16px var(--sans);color:var(--acc);margin-bottom:.4em}
+.quiz .qp{margin:1em 0;padding-top:.7em;border-top:1px solid var(--bd)}
+.quiz .qp:first-of-type{border-top:0;padding-top:0}
+.quiz .qp>p{margin:.2em 0 .5em;font-weight:600}
+.quiz ul.opts{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.quiz ul.opts li{border:1px solid var(--bd);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--bg)}
+.quiz ul.opts li:hover,.quiz ul.opts li:focus-visible{border-color:var(--acc);outline:none}
+.quiz .qp.hecha ul.opts li{cursor:default}
+.quiz li.ok{border-color:#2e9e5b;background:color-mix(in srgb,#2e9e5b 14%,var(--bg))}
+.quiz li.ok::after{content:"  ✓ correcta";font:700 12.5px var(--sans);color:#2e9e5b}
+.quiz li.mal{border-color:#d4542a;background:color-mix(in srgb,#d4542a 12%,var(--bg))}
+.quiz li.mal::after{content:"  ✗";font:700 13px var(--sans);color:#d4542a}
+.quiz .fb{margin:.6em 0 0;padding:8px 12px;border-left:3px solid var(--acc);background:color-mix(in srgb,var(--acc) 7%,transparent);border-radius:0 8px 8px 0;font:15px/1.5 var(--sans)}
+.quiz .score{margin:1em 0 0;font:600 15px var(--sans)}
+.quiz .reset{font:inherit;font-size:14px;margin-left:10px;background:none;border:1px solid var(--bd);border-radius:8px;padding:3px 10px;cursor:pointer;color:var(--fg)}
+
+/* ---- Enunciado visible antes de la pista y la solución ---- */
+.ejer-enun{margin:1.3em 0 0;padding:10px 14px;border:1px solid var(--bd);border-left:5px solid #b5701a;border-radius:10px;background:var(--card)}
+.ejer-enun .lbl{display:block;font:700 11.5px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:#b5701a;margin-bottom:2px}
+:root[data-theme="dark"] .ejer-enun{border-left-color:#f0b35a}
+:root[data-theme="dark"] .ejer-enun .lbl{color:#f0b35a}
+.ejer-enun .enun{margin:.2em 0 0}
