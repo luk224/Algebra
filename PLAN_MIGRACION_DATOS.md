@@ -46,7 +46,7 @@ Antes de cada commit: `construir_todo.py` → `TODO OK`, nº de `class="sol"` = 
 - Los PDF (`herramientas/exportar_pdf.py`) imprimen «Lo esencial», «Qué cae», fichas y «Si te atascas»; ocultan pistas, autoevaluación, series, pestañas y el aviso «GENERADO».
 
 ### Siguientes pasos (candidatos, por orden; ninguno es obligatorio)
-1. **Teoría en tarjetas cortas** (idea → definición → ejemplo mínimo → error típico), con el resto en «Ampliación». Es lo único del piloto sin hacer: exige reescribir secciones de teoría (`secciones/*.html`); probar primero en un tema (p. ej. 2.3) y, si convence, extender por módulos con agentes + `revisor-tema`.
+1. ~~Teoría en tarjetas cortas~~ **HECHO (versión automática, reversible):** con `tarjetas: true` en `tema.yaml` (activo en los 26) `capa.tarjetas` mantiene visibles la intuición, definiciones, teoremas, errores típicos, animaciones y el primer ejemplo de cada apartado, y pliega los demás ejemplos y los «trucos» en «Más ejemplos y trucos (N)» (137 plegados; se abren al imprimir). Para desactivarlo: `tarjetas: false` y `construir_todo.py`. Una reescritura manual de la teoría sigue sin hacerse (no hace falta salvo que el usuario la pida).
 2. **Tabla de notación** global con búsqueda (no hecha de F7.3).
 3. **Revisar a mano** una muestra de las 147 preguntas motivadoras y de las 58 consignas (las escribieron agentes sin revisor); p. ej. 3.2 `s4` está algo enrevesada.
 4. **Más prácticas** donde aún hay un solo generador por tema (ver `tipos[].series`); priorizar los temas de `prioridades.html` (1.2, 3.2, 6.2, 5.1, 1.3, 1.4, 4.3, 4.2).

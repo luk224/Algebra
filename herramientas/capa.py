@@ -121,6 +121,48 @@ def ampliaciones(cuerpo):
     return pat.sub(f, cuerpo)
 
 
+def _cajas(sec):
+    """Posiciones (inicio, fin, clase, encabezado) de las <div class="box …"> de primer nivel de un fragmento (con anidación real de <div>)."""
+    out, i = [], 0
+    while True:
+        m = re.compile(r'<div class="box (\w+)"[^>]*>').search(sec, i)
+        if not m: return out
+        depth, fin = 0, None
+        for x in re.finditer(r'<(/?)div\b', sec[m.start():]):
+            depth += -1 if x.group(1) else 1
+            if depth == 0: fin = sec.index('>', m.start() + x.end() - 1) + 1; break
+        if fin is None: return out
+        h = re.search(r'<span class="h">(.*?)</span>', sec[m.start():fin], re.S)
+        out.append((m.start(), fin, m.group(1), re.sub(r'<[^>]+>', '', h.group(1)) if h else ''))
+        i = fin
+
+
+def tarjetas(cuerpo):
+    """Primera lectura más corta: en cada apartado de teoría se mantienen visibles la intuición, las definiciones, los teoremas, los errores
+    típicos, las animaciones y el primer ejemplo; los demás ejemplos y los «trucos» se pliegan en «Más ejemplos y trucos»."""
+    partes = re.split(r'(?=<h2 id=")', cuerpo)
+    res = []
+    for p in partes:
+        m = re.match(r'<h2 id="([^"]+)"', p)
+        if not m or m.group(1) in ('prereq', 'chuleta', 'ejercicios', 'examenes', 'tipos', 'fuentes'): res.append(p); continue
+        cajas = _cajas(p); vistos_ex = 0; plegar = []
+        for (a, b, k, h) in cajas:
+            es_anim = bool(re.search(r'anim-|d3-|sarrus-demo|<figure|<svg', p[a:b])) or bool(re.search(r'animaci|interactivo|laboratorio', h, re.I))
+            if k == 'ex' and not es_anim:
+                vistos_ex += 1
+                if vistos_ex > 1: plegar.append((a, b))
+            elif k == 'tip' and not es_anim: plegar.append((a, b))
+        # agrupar cajas contiguas (solo espacio entre ellas)
+        grupos = []
+        for a, b in plegar:
+            if grupos and p[grupos[-1][1]:a].strip() == '': grupos[-1][1] = b; grupos[-1][2] += 1
+            else: grupos.append([a, b, 1])
+        for a, b, n in reversed(grupos):
+            p = p[:a] + f'<details class="ampl"><summary>Más ejemplos y trucos ({n})</summary>\n' + p[a:b] + '\n</details>' + p[b:]
+        res.append(p)
+    return ''.join(res)
+
+
 def motivacion(cfg, cuerpo):
     """Pregunta motivadora tras cada <h2> de teoría (`motivacion: {id_seccion: texto}`) y consigna tras el encabezado de cada animación
     (`consignas: [{animacion: texto del encabezado, consigna: …, pregunta: …}]`)."""
@@ -138,7 +180,9 @@ def motivacion(cfg, cuerpo):
 
 def aplicar(cfg, cuerpo, ejs, tabla):
     """Devuelve (cfg con carcasa de la capa, cuerpo con las piezas insertadas)."""
-    cuerpo = con_vistas(ampliaciones(motivacion(cfg, cuerpo)))
+    cuerpo = ampliaciones(motivacion(cfg, cuerpo))
+    if cfg.get('tarjetas'): cuerpo = tarjetas(cuerpo)
+    cuerpo = con_vistas(cuerpo)
     pre = atascas(cfg) + esencial(cfg) + que_cae(cfg, ejs, tabla)
     t = tipos(cfg)
     if t:
