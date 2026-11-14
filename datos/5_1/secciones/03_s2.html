@@ -1,0 +1,70 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>La matriz de Gram: un producto escalar «en una tabla» <span class="src" data-l="U" data-ref="U §5.1.2, Definición 5.2, Teorema 5.1 y Ejemplos 5.4-5.8, p. 195-199">U p.195-199</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: la tabla de todos los productos de la base</span>
+  <p>Por la bilinealidad, saber $u\bullet v$ para <b>cualquier</b> par de vectores es lo mismo que saber $e_i\bullet e_j$ para los vectores de una base: el resto se reconstruye sumando. Esos $n^2$ números se ponen en una tabla, la <b>matriz de Gram</b> $G$. Es el «carnet de identidad» del producto escalar <i>en esa base</i>.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.2 — matriz de Gram (o métrica)</span>
+  <p>Si $B=\{e_1,\dots,e_n\}$ es una base de un espacio euclídeo $V$, la <b>matriz de Gram</b> del producto escalar en $B$ es $G=(g_{ij})$ con $g_{ij}=e_i\bullet e_j$. Si $X$ e $Y$ son las coordenadas de $x$ e $y$ en $B$:
+  $$x\bullet y=X^tGY=\sum_{i,j}g_{ij}\,x_iy_j .$$</p>
+  <span class="src" data-l="U" data-ref="U §5.1.2, Definición 5.2, p. 196">U p.196</span>
+</div>
+
+<div class="box thm"><span class="h">Propiedades de la matriz de Gram</span>
+  <p>$G$ depende de la base elegida (aunque el producto sea el mismo); es <b>simétrica</b> ($g_{ij}=g_{ji}$, por la propiedad 1); y $g_{ii}=e_i\bullet e_i>0$. <b>Pero no toda matriz simétrica con diagonal positiva es de Gram</b>: la positividad exige más (siguiente cuadro).</p>
+  <span class="src" data-l="U" data-ref="U §5.1.2, p. 197: propiedades de G y «no toda matriz puede ser de Gram»">U p.197</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo en $\mathbb R^2$ — Ejemplos 5.4 y 5.5 de U</span>
+  <ol class="steps">
+    <li><b>Estándar:</b> $e_i\cdot e_j=1$ si $i=j$ y $0$ si no, así que $G=I$ (Ej. 5.4).</li>
+    <li><b>Otro producto:</b> $x\bullet y=4x_1y_1+x_1y_2+x_2y_1+9x_2y_2$. El coeficiente de $x_iy_j$ es $g_{ij}$: $G=\begin{pmatrix}4&1\cr1&9\end{pmatrix}$ (Ej. 5.5). Ahora $e_1\bullet e_1=4$ (así $\|e_1\|=2$) y $e_1\bullet e_2=1\ne0$: <b>la base canónica ya no es ortogonal</b>.</li>
+    <li><b>Evaluar:</b> con $u=(2,1)$, $v=(7,0)$ (Ej. 5.6): $GV=\begin{pmatrix}28\cr7\end{pmatrix}$ y $u\bullet v=U^t(GV)=2\cdot28+1\cdot7=63$. El estándar daría $14$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.4, 5.5 (p. 197) y 5.6 (p. 198)">U p.197-198</span>
+</div>
+
+<div class="box thm"><span class="h">Criterio: ¿cuándo una matriz $G$ es de un producto escalar?</span>
+  <p>$G$ define un producto escalar $x\bullet y=X^tGY$ si y solo si es <b>simétrica</b> (propiedad 1) y <b>definida positiva</b>: $X^tGX>0$ para todo $X\neq0$ (propiedades 4-5). Comprobación práctica, el <b>criterio de Sylvester</b>: todos los menores principales $\Delta_1=g_{11}$, $\Delta_2=\begin{vmatrix}g_{11}&g_{12}\cr g_{21}&g_{22}\end{vmatrix}$, …, $\Delta_n=|G|$ son $>0$. (Se estudia en el tema 6.3; aquí se usa como herramienta, o bien se completan cuadrados.)</p>
+  <span class="src" data-l="U" data-ref="U §6.3.2, Criterio de Sylvester, p. 267; anticipado aquí" >U p.267 (tema 6.3)</span>
+  <span class="src" data-l="P" data-ref="Formulación propia del criterio para matrices de Gram">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo: qué falla en una $G$ «aparentemente buena»</span>
+  <p>$G=\begin{pmatrix}2&3\cr3&1\end{pmatrix}$ es simétrica y con diagonal positiva, pero $\Delta_2=2-9=-7\lt 0$. Testigo: $x=(1,-1)$, $x\bullet x=2-3-3+1=-3\lt 0$. <b>No</b> es de Gram. (Sylvester tiene la última palabra: «simétrica y diagonal positiva» son condiciones <i>necesarias</i>, no suficientes.)</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, cf. enunciado defectuoso de Feb. 2024 (2.ª sem.) p.5">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Animación 2D: el mismo par de vectores, distintos productos</span>
+  <p>Elige $G=\begin{pmatrix}a&b\cr b&c\end{pmatrix}$ y dos vectores (sus <b>coordenadas</b> en la base de $G$). El programa calcula $u\bullet v$, las normas, el ángulo y si son ortogonales, y dibuja los vectores con sus <b>longitudes y ángulos reales</b> para ese producto. Prueba los casos: con «<b>Propio: (2,1,1) con u ⟂ v</b>» los vectores $(1,0)$ y $(-1,2)$ son ortogonales aunque con el estándar no lo sean; con «<b>No definida positiva</b>» el programa te da el vector testigo $x\bullet x\le0$.</p>
+  <div class="anim-gram" data-g="4,1,9" data-u="2,1" data-v="7,0"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-gram); G de U Ejemplo 5.5 p. 197">P</span>
+</div>
+
+<h3 id="cambio-base">Cómo cambia $G$ al cambiar de base</h3>
+<div class="box thm"><span class="h">Teorema 5.1 — cambio de base</span>
+  <p>Si $G$ y $G'$ son las matrices de Gram del mismo producto escalar en las bases $B$ y $B'$, y $Q$ es la matriz de cambio de base de $B'$ a $B$ (columnas: los vectores de $B'$ escritos en $B$, convenio del <a href="tema_3_5_inversa_cambios_base.html">tema 3.5</a>), entonces
+  $$G'=Q^tGQ .$$
+  Es decir, $G'$ y $G$ son <b>congruentes</b>. Consecuencias: mismo rango (siempre $n$) y $\det G'=(\det Q)^2\det G$, y la congruencia por sí sola solo conserva el <b>signo</b> de $\det G$ (no su valor). Que ese signo sea positivo viene de que $G$ es definida positiva ($\Delta_n=|G|>0$); también se ve así: en una base ortonormal (Gram-Schmidt) $G=I$, luego en cualquier otra base $\det G=(\det Q)^2>0$.</p>
+  <p>Es un caso del cambio de base de <b>cualquier</b> forma bilineal ($A'=P^tAP$, Teor. 6.1): la matriz de Gram es la de una forma bilineal simétrica y definida positiva. Teoría y más ejemplos en el <a href="tema_6_1_formas_bilineales.html#s3">tema 6.1</a> (allí se desarrolla X Feb. 2022 (A1) ej. 5 sobre dos matrices de Gram: <a href="tema_6_1_formas_bilineales.html#ex-feb22a1-5">#ex-feb22a1-5</a>).</p>
+  <span class="src" data-l="U" data-ref="U §5.1.2, Teorema 5.1, p. 198">U p.198</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.7 y 5.8 de U — de la canónica a una base «rescalada»</span>
+  <p>Con $G=\begin{pmatrix}4&1\cr1&9\end{pmatrix}$ y $B'=\{(\tfrac12,0),(0,\tfrac13)\}$: $Q=\begin{pmatrix}\tfrac12&0\cr0&\tfrac13\end{pmatrix}$ y
+  $$G'=Q^tGQ=\begin{pmatrix}\tfrac12&0\cr0&\tfrac13\end{pmatrix}\begin{pmatrix}4&1\cr1&9\end{pmatrix}\begin{pmatrix}\tfrac12&0\cr0&\tfrac13\end{pmatrix}=\begin{pmatrix}1&\tfrac16\cr\tfrac16&1\end{pmatrix}.$$
+  Con $u=(1,1)_{B'}$ y $v=(2,0)_{B'}$ (Ej. 5.8): $u\bullet v=(1,1)G'(2,0)^t=2\left(1+\tfrac16\right)=\tfrac73$. En la base nueva los vectores tienen norma 1 ($g'_{ii}=1$), pero siguen sin ser ortogonales ($g'_{12}=\frac16$).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.7 y 5.8, p. 198-199">U p.198-199</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen: Gram del estándar en otra base</span>
+  <p>Si el producto es el estándar y los vectores de la base nueva son las columnas de $Q$ (en la canónica, $G=I$), entonces $G'=Q^tIQ=Q^tQ$: <b>tabla de productos escalares</b> de los vectores de la base, y $\det G'=(\det Q)^2$. El ejercicio de examen con dos matrices de Gram del mismo producto en dos bases (Ene. 2022, ej. 5) está resuelto en el <a href="tema_4_1_relaciones_equivalencia.html#ex-ene22a-5">tema 4.1</a>.</p>
+  <span class="src" data-l="P" data-ref="Truco propio a partir del Teorema 5.1 (U p. 198) y U Ejemplo 5.4 p. 197">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico: $G'=Q^{-1}GQ$ o $Q$ por filas</span>
+  <p>El cambio de base de una <b>aplicación lineal</b> es $A'=Q^{-1}AQ$ (semejanza, tema 4.1); el de un <b>producto escalar</b> es $Q^tGQ$ (congruencia). No se mezclan: la semejanza conserva el determinante y la congruencia no (lo multiplica por $(\det Q)^2$). Además, $Q$ lleva los vectores de $B'$ <b>por columnas</b>: si los pones por filas obtendrás $QGQ^t$.</p>
+  <span class="src" data-l="P" data-ref="Aviso propio; cf. E Ejercicio 5.4 p. 163 y U Teorema 5.1 p. 198">propio</span>
+</div>
+

@@ -1,0 +1,53 @@
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Gram-Schmidt: fabricar una base ortogonal <span class="src" data-l="U" data-ref="U §5.1.5, método de ortonormalización de Gram-Schmidt, p. 207-208; Ejemplo 5.21, p. 208-209">U p.207-209</span> <span class="src" data-l="L" data-ref="Lay §6.4, Proceso de Gram-Schmidt, p. 354-359; Teorema 11 en p. 355">L §6.4 p.354-359</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: «endereza» cada vector quitándole su sombra</span>
+  <p>Tienes tres varillas $u_1,u_2,u_3$ que no son perpendiculares y quieres tres perpendiculares que sigan «abarcando» lo mismo. <b>Paso 1:</b> te quedas con la primera. <b>Paso 2:</b> a la segunda le quitas su <b>sombra</b> sobre la primera (la parte que va en la dirección de $e_1$); lo que sobra es perpendicular a $e_1$. <b>Paso 3:</b> a la tercera le quitas las sombras sobre $e_1$ <b>y</b> sobre $e_2$ (ahora sí se pueden restar por separado porque $e_1\perp e_2$). Al final, si quieres longitud $1$, divides cada una entre su norma.</p>
+</div>
+
+<div class="box thm"><span class="h">Método de Gram-Schmidt</span>
+  <p>Dada una <b>base</b> (o un sistema libre) $\{u_1,\dots,u_p\}$ de un espacio euclídeo:</p>
+  <p><b>Paso 1 — ortogonalizar:</b>
+  $$e_1=u_1,\qquad e_2=u_2-\frac{u_2\bullet e_1}{e_1\bullet e_1}e_1,\qquad e_3=u_3-\frac{u_3\bullet e_1}{e_1\bullet e_1}e_1-\frac{u_3\bullet e_2}{e_2\bullet e_2}e_2,\ \dots$$
+  $$e_k=u_k-\sum_{i\lt k}\frac{u_k\bullet e_i}{e_i\bullet e_i}\,e_i .$$
+  <b>Paso 2 — normalizar:</b> $e_k'=e_k/\|e_k\|$. Resultado: $\{e_k\}$ ortogonal y $\{e_k'\}$ ortonormal, con $\langle e_1,\dots,e_k\rangle=\langle u_1,\dots,u_k\rangle$ para cada $k$. Consecuencia: <b>todo espacio euclídeo de dimensión finita posee bases ortonormales</b>.</p>
+  <span class="src" data-l="U" data-ref="U §5.1.5, método de ortonormalización de Gram-Schmidt, p. 207-208">U p.207-208</span>
+  <span class="src" data-l="L" data-ref="Lay §6.4, Teorema 11 (Proceso de Gram-Schmidt), p. 355; Figuras 1 y 2, p. 354-355">L p.354-355</span>
+</div>
+
+<div class="box tip"><span class="h">Receta</span>
+  <ol>
+    <li>Comprueba que el sistema es libre (si no, en algún paso saldrá $e_k=0$).</li>
+    <li>$e_1=u_1$. Para cada $k$ calcula las sombras de $u_k$ sobre los $e_i$ <b>ya ortogonalizados</b> (no sobre los $u_i$ originales) y réstalas.</li>
+    <li><b>Control en cada paso:</b> $e_k\bullet e_i=0$ para todo $i\lt k$.</li>
+    <li>Para evitar fracciones puedes <b>reescalar</b> cada $e_i$ a un múltiplo entero: la ortogonalidad no cambia y, al normalizar, el factor desaparece.</li>
+    <li>Normaliza al final (o no, si solo piden base ortogonal).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U §5.1.5 p. 207-208">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.21 de U — $\{(1,0,1),(1,1,0),(0,0,2)\}$ (producto estándar)</span>
+  <ol class="steps">
+    <li><b>$e_1=u_1=(1,0,1)$,</b> $e_1\cdot e_1=2$.</li>
+    <li><b>$e_2$.</b> $u_2\cdot e_1=1$, así que $e_2=(1,1,0)-\frac12(1,0,1)=\left(\frac12,1,-\frac12\right)$. Control: $e_2\cdot e_1=\frac12-\frac12=0$ ✓; $e_2\cdot e_2=\frac32$.</li>
+    <li><b>$e_3$.</b> $u_3\cdot e_1=2$ y $u_3\cdot e_2=-1$: $e_3=(0,0,2)-\frac22(1,0,1)-\frac{-1}{3/2}\left(\frac12,1,-\frac12\right)=\left(-\frac23,\frac23,\frac23\right)$. Control: $e_3\cdot e_1=-\frac23+\frac23=0$ ✓, $e_3\cdot e_2=-\frac13+\frac23-\frac13=0$ ✓.</li>
+    <li><b>Normalizar:</b> $\|e_1\|=\sqrt2$, $\|e_2\|=\sqrt{3/2}$, $\|e_3\|=\frac2{\sqrt3}$:
+      $$\tfrac1{\sqrt2}(1,0,1),\quad\left(\tfrac{\sqrt6}6,\tfrac{\sqrt6}3,-\tfrac{\sqrt6}6\right),\quad\left(-\tfrac{\sqrt3}3,\tfrac{\sqrt3}3,\tfrac{\sqrt3}3\right).$$</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.21, p. 208-209">U p.208-209</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_l_6_4_fig1.png" alt="Construcción de una base ortogonal v1, v2 en un plano W de R3: v2 = x2 menos su proyección p sobre v1" loading="lazy" style="max-width:300px"><figcaption>Lay, Figura 1 del §6.4: $v_1=x_1$ y $v_2=x_2-p$, con $p$ la sombra de $x_2$ sobre $v_1$ (paso 2). <span class="src" data-l="L" data-ref="Lay §6.4, Figura 1, p. 354">L p.354</span></figcaption></figure>
+<figure class="bookfig"><img src="../assets/img/fig_l_6_4_fig2.png" alt="Construcción de v3 restando a x3 su proyección sobre el plano W2 generado por v1 y v2'" loading="lazy" style="max-width:460px"><figcaption>Lay, Figura 2 del §6.4: $v_3=x_3-\operatorname{proy}_{W_2}x_3$ (paso 3: se resta la proyección sobre el plano ya construido). <span class="src" data-l="L" data-ref="Lay §6.4, Figura 2, p. 355">L p.355</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Animación 3D: Gram-Schmidt paso a paso</span>
+  <p>Avanza con «Siguiente» y mira el dibujo: en el paso 2 aparece la sombra de $u_2$ sobre $e_1$ y el resto $e_2$ (con su ángulo recto rojo); en el paso 3 se resta la sombra sobre el <b>plano</b> $\langle e_1,e_2\rangle$ y queda $e_3$ perpendicular a él; el paso 4 normaliza. Empieza con el sistema del Ejemplo 5.21; con «Dependiente (falla)» verás por qué Gram-Schmidt exige un sistema libre. Si tu navegador no admite 3D, quedan los números.</p>
+  <div class="d3-proy" data-modo="gs" data-a="1,0,1" data-b="1,1,0" data-c="0,0,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/tres-d.js, d3-proy modo gs); vectores de U Ejemplo 5.21 p. 208-209">P</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <p>(i) Proyectar $u_3$ sobre $u_1,u_2$ <b>originales</b> en vez de sobre $e_1,e_2$ (solo vale si ya eran ortogonales). (ii) Normalizar «a medias» y luego usar la fórmula con $e_i\bullet e_i$ equivocado (si $e_i$ ya es unitario, $e_i\bullet e_i=1$ y se simplifica; si no, no). (iii) Olvidar que con un producto no estándar los $\bullet$ y las normas usan $G$. (iv) Responder «la canónica» a «calcula una base ortonormal a partir de esta base»: es ortonormal solo con el estándar y no muestra el método.</p>
+  <span class="src" data-l="P" data-ref="Avisos propios; cf. X Sept. 2019 (A) ej. 5 y Feb. 2019 (B) ej. 5">propio</span>
+</div>
+
