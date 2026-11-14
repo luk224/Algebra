@@ -1,0 +1,30 @@
+<!-- ============================ 7 ============================ -->
+<h2 id="s7"><span class="n">7</span>Método de Gauss-Jordan <span class="src" data-l="U" data-ref="U §1.4.3, p. 43-44">U p.43-44</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: un paso más que Gauss</span>
+  <p>Gauss-Jordan hace todo lo de Gauss y además <b>anula también por encima</b> de cada pivote, no solo por debajo. El resultado es la matriz escalonada <b>reducida</b>: cada pivote vale 1 y es el único elemento no nulo de su columna. Si el sistema es determinado, la última columna de esa matriz reducida <b>ya es la solución</b>: no hace falta retrosustituir.</p>
+</div>
+
+<div class="box ex"><span class="h">Animación: Gauss-Jordan (sistema compatible indeterminado)</span>
+  <p>Gauss-Jordan normaliza cada pivote a 1 y anula <b>también por encima</b>, de modo que la solución se lee directamente. Aquí la tercera ecuación es la suma de las dos primeras, así que sobra una ecuación y queda un parámetro libre. Prueba a cambiar el último término de la fila 3 para ver un sistema incompatible.</p>
+  <div class="anim-gauss" data-modo="gj" data-m="1,1,1,6;2,-1,1,3;3,0,2,9" data-n="3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
+<div class="box thm"><span class="h">Comparación de coste y para qué sirve</span>
+  <p>Gauss-Jordan tiene complejidad $\sim n^3/2$, más cara que Gauss ($\sim n^3/3$): para resolver <b>un único</b> sistema no es lo más eficiente. Su utilidad principal es <b>calcular la matriz inversa</b>: aplicando Gauss-Jordan a $(A\mid I)$ se llega a $(I\mid A^{-1})$ (idea ya vista en 1.2, aquí formalizada como el mismo algoritmo que resuelve sistemas).</p>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 43-44">U p.43-44</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.32 de U — Gauss-Jordan sobre el Ejemplo 1.26</span>
+  <p>Partiendo de la triangular ya obtenida en el Ejemplo 1.26 (§3), $\left(\begin{array}{ccc|c}6&2&1&-1\\0&2&1&7\\0&0&\frac12&\frac16\end{array}\right)$, Gauss-Jordan normaliza y anula también por encima de cada pivote, llegando directamente a
+  $$\left(\begin{array}{ccc|c}1&0&0&-\frac43\\0&1&0&\frac{10}{3}\\0&0&1&\frac13\end{array}\right),$$
+  es decir, la solución $x=-\frac43,\ y=\frac{10}{3},\ z=\frac13$ se lee directamente, sin retrosustitución: el mismo resultado que en el Ejemplo 1.26.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.32, p. 43-44">U p.43-44</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Pensar que Gauss-Jordan es siempre mejor por dar la solución «directamente»: es más caro en operaciones; conviene sobre todo para hallar inversas, no para resolver un único sistema aislado (para eso, Gauss es más barato).</p>
+</div>
+

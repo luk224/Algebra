@@ -1,0 +1,17 @@
+<!-- ============================ 10 ============================ -->
+<h2 id="s10"><span class="n">10</span>Qué usar cuándo <span class="src" data-l="P" data-ref="Tabla propia de síntesis, a partir de U §1.4.3">P</span></h2>
+
+<table>
+  <tr><th>Situación</th><th>Método recomendado</th><th>Por qué</th></tr>
+  <tr><td>Resolver <b>un</b> sistema $AX=B$ concreto</td><td>Gauss</td><td>El más barato ($\sim n^3/3$); no necesitas la escalonada reducida.</td></tr>
+  <tr><td>Calcular la <b>matriz inversa</b> $A^{-1}$</td><td>Gauss-Jordan sobre $(A\mid I)$</td><td>Da directamente $(I\mid A^{-1})$; el coste extra frente a Gauss se compensa porque ya obtienes toda la inversa, no solo una solución.</td></tr>
+  <tr><td>Resolver <b>varios</b> sistemas $AX=B_1,B_2,\dots$ con la <b>misma</b> $A$</td><td>Factorización $LU$ (calculada una sola vez)</td><td>El trabajo caro (triangularizar $A$) se hace una vez; cada $B_i$ nuevo solo cuesta $\sim n^2$ (dos sustituciones triangulares).</td></tr>
+  <tr><td>Sistema con parámetros, pequeño <b>y</b> cuadrado ($n\le3$)</td><td>Cramer, o determinante + rango de menores</td><td>Aprovecha lo visto en 1.3; solo donde $|A|\neq0$; en los valores que anulan $|A|$, usar rangos de la ampliada (evita escalonar con parámetros, aunque para $n$ grande Gauss con parámetros es más manejable).</td></tr>
+  <tr><td>Necesitas $\det A$ y ya tienes $A=LU$ (o vas a resolver sistemas de todos modos)</td><td>$\det A=\det U$ (producto de la diagonal de $U$)</td><td>Gratis a partir de la factorización, sin desarrollar por adjuntos.</td></tr>
+  <tr><td>Sistema con parámetro que puede anular un pivote</td><td>Gauss/Gauss-Jordan discutiendo el pivote (no dividir por una expresión que se puede anular)</td><td>Evita perder el caso especial al dividir prematuramente entre una expresión con el parámetro (Ejercicio <a href="#ej1-40">1.40</a>).</td></tr>
+</table>
+
+<div class="box warn"><span class="h">Requisito de $LU$ (recordatorio)</span>
+  <p>$LU$ (sin permutar) exige poder triangularizar $A$ <b>solo con reemplazos</b>, sin intercambiar filas. Si un pivote sale $0$ y no se puede evitar el intercambio, hay que usar la versión permutada $PA=LU$ (§9) y recordar permutar también $B$.</p>
+</div>
+

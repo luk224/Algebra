@@ -1,0 +1,42 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Sistemas equivalentes y operaciones elementales <span class="src" data-l="U" data-ref="U §1.4.2, p. 31-32">U p.31-32</span></h2>
+
+<div class="box def"><span class="h">Definición 1.7 — sistemas equivalentes</span>
+  <p>Dos sistemas (con las mismas incógnitas) son <b>equivalentes</b> si tienen exactamente el mismo conjunto de soluciones.</p>
+  <span class="src" data-l="U" data-ref="U Definición 1.7, p. 31">U p.31</span>
+</div>
+
+<div class="box def"><span class="h">Tres operaciones elementales sobre las ecuaciones</span>
+  <ol>
+    <li><b>Intercambiar</b> dos ecuaciones de posición.</li>
+    <li><b>Multiplicar</b> una ecuación por un escalar $\alpha\neq0$.</li>
+    <li><b>Reemplazar</b> una ecuación por su suma con un múltiplo de otra: $E_i\to E_i+\alpha E_j$.</li>
+  </ol>
+  <p>Son idénticas a las operaciones elementales por filas de la matriz ampliada, vistas ya en 1.2 para escalonar.</p>
+  <span class="src" data-l="U" data-ref="U §1.4.2, p. 31">U p.31</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 1.5</span>
+  <p>Si la matriz ampliada de un sistema se transforma en otra mediante operaciones elementales por filas, el sistema resultante es <b>equivalente</b> al original.</p>
+  <p><b>Idea de la demostración:</b> cada operación elemental corresponde a multiplicar $(A\mid B)$ por una matriz elemental $E$ (Tema 1.2) por la izquierda; $E$ es invertible y $E^{-1}$ es también una matriz elemental. Si $X$ cumple $AX=B$, entonces $(EA)X=EB$: toda solución del sistema original lo es del nuevo. Y como la operación se puede deshacer (con $E^{-1}$, también elemental), toda solución del nuevo sistema es también solución del original. Por tanto tienen el mismo conjunto de soluciones.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 1.5, p. 32">U p.32</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.26 de U — escalonando paso a paso, con la cuenta de por qué es equivalente</span>
+  <p>Sistema $2y+z=7,\ 6x+2y+z=-1,\ 2x+y+z=1$:
+  $$(A\mid B)=\left(\begin{array}{ccc|c}0&2&1&7\\6&2&1&-1\\2&1&1&1\end{array}\right)\xrightarrow{F_1\leftrightarrow F_2}\left(\begin{array}{ccc|c}6&2&1&-1\\0&2&1&7\\2&1&1&1\end{array}\right)\xrightarrow{F_3\to F_3-\frac13F_1}\left(\begin{array}{ccc|c}6&2&1&-1\\0&2&1&7\\0&\frac13&\frac23&\frac43\end{array}\right)\xrightarrow{F_3\to F_3-\frac16F_2}\left(\begin{array}{ccc|c}6&2&1&-1\\0&2&1&7\\0&0&\frac12&\frac16\end{array}\right).$$</p>
+  <p>Cada flecha es una operación elemental por filas, así que por el Teorema 1.5 el sistema final es equivalente al inicial. Es triangular: por retrosustitución, $\frac12z=\frac16\Rightarrow z=\frac13$; $2y+\frac13=7\Rightarrow y=\frac{10}{3}$; $6x+2\cdot\frac{10}{3}+\frac13=-1\Rightarrow x=-\frac43$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.26, p. 32-33">U p.32-33</span>
+</div>
+
+<div class="box tip"><span class="h">Regla de Cramer, de paso</span>
+  <p>Para un sistema <b>cuadrado</b> ($m=n$) con $\operatorname{rang}(A)=n$ (es decir, $\det A\neq0$), la incógnita $x_i$ se puede calcular directamente sin escalonar:
+  $$x_i=\frac{\det(A_i)}{\det(A)},$$
+  donde $A_i$ es $A$ con su columna $i$ sustituida por $B$. Es rápida para sistemas pequeños o con parámetros (aprovechando los menores ya calculados), pero exige calcular $n+1$ determinantes: para $n$ grande, Gauss es mucho más barato.</p>
+  <span class="src" data-l="U" data-ref="U §1.4.2, p. 33 (regla de Cramer)">U p.33</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Aplicar Cramer cuando $\det A=0$: la fórmula divide entre $\det A$, así que no tiene sentido; hay que clasificar primero por rangos.</p>
+</div>
+

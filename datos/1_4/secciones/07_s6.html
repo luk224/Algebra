@@ -1,0 +1,66 @@
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Método de Gauss <span class="src" data-l="U" data-ref="U §1.4.3, p. 38-43">U p.38-43</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Gauss es exactamente el escalonamiento del Tema 1.2, pero <b>normalizando cada pivote a 1</b> a medida que se avanza, y aplicado a la matriz <b>ampliada</b>. Al final queda un sistema triangular, que se resuelve de abajo arriba (<b>retrosustitución</b>).</p>
+</div>
+
+<div class="box ex"><span class="h">Animación: método de Gauss sobre un sistema</span>
+  <p>Solo se anula <b>por debajo</b> de cada pivote. Cuando la matriz queda escalonada, se resuelve de abajo hacia arriba. Puedes editar la matriz ampliada (la última columna es el término independiente).</p>
+  <div class="anim-gauss" data-modo="gauss" data-m="1,1,1,6;2,1,-1,1;1,-1,2,5" data-n="3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
+<div class="box thm"><span class="h">Pasos del algoritmo</span>
+  <p>U lo enuncia para un sistema cualquiera (no hace falta que sea cuadrado): véase el Ejemplo 1.30 más abajo, con 3 ecuaciones y 5 incógnitas.</p>
+  <ol class="steps">
+    <li><b>Localizar el pivote</b> de la columna actual: un elemento no nulo en esa columna, en la fila actual o debajo (si el de la posición actual es $0$, intercambiar filas).</li>
+    <li><b>Normalizar</b>: dividir toda la fila del pivote por su valor, para que quede $1$.</li>
+    <li><b>Eliminar por debajo</b>: hacer $0$ todos los elementos debajo del pivote con reemplazos $F_i\to F_i-\lambda F_{\text{pivote}}$. Si una columna no tiene ningún elemento no nulo disponible para pivote, se pasa directamente a la siguiente columna (esa incógnita quedará libre).</li>
+    <li><b>Repetir</b> los pasos 1-3 para la siguiente columna, hasta agotar filas o columnas.</li>
+    <li>Si queda una fila del tipo $(0\ 0\ \cdots\ 0\mid b)$ con $b\neq0$: el sistema es <b>incompatible</b>, parar.</li>
+    <li><b>Retrosustitución</b>: con la matriz ya triangular (o escalonada), despejar la última incógnita con pivote, sustituirla en la ecuación anterior, y así hasta la primera.</li>
+  </ol>
+  <p>Complejidad aproximada: $\sim n^3/3$ operaciones, muy inferior a la de Cramer para $n$ grande.</p>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 39 (PASOS 1-6)">U p.39</span>
+  <span class="src" data-l="L" data-ref="Lay §1.2, algoritmo de reducción por filas (forma escalonada y escalonada reducida), p. 12-14">L p.12-14</span>
+</div>
+
+<div class="box tip"><span class="h">Cómo leer la clasificación directamente en la escalonada (A)</span>
+  <p>Una vez la ampliada está escalonada, el criterio general es: si aparece una fila $(0\cdots0\mid b)$ con $b\neq0$, el sistema es <b>incompatible</b> de inmediato; si no aparece ninguna fila así, es compatible, y entonces se compara el <b>número de pivotes</b> con el <b>número de incógnitas</b>: si coinciden, es <b>determinado</b>; si hay menos pivotes que incógnitas, es <b>indeterminado</b> (ojo: no basta con mirar si hay una fila nula $(0\cdots0\mid0)$, porque un sistema con menos ecuaciones que incógnitas puede ser indeterminado sin que aparezca ninguna fila nula). En el caso particular de las diapositivas de A —un sistema cuadrado $3\times3$ con pivotes en la diagonal— este criterio se reduce exactamente al de su ejemplo: sin filas nulas de coeficientes, determinado; con una fila $(0\,0\,0\mid0)$, indeterminado; con $(0\,0\,0\mid b)$, $b\neq0$, incompatible.</p>
+  <span class="src" data-l="A" data-ref="Método de Gauss">A</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo propio — Gauss con pivotes normalizados, $3\times3$ determinado</span>
+  <p>$\begin{cases}2x+4y-2z=4\\x+3y+z=10\\3x+y+2z=11\end{cases}$. $(A\mid B)=\left(\begin{array}{ccc|c}2&4&-2&4\\1&3&1&10\\3&1&2&11\end{array}\right)$; $F_1\to\frac12F_1$: $(1,2,-1,2)$; $F_2\to F_2-F_1$: $(0,1,2,8)$; $F_3\to F_3-3F_1$: $(0,-5,5,5)$; $F_3\to F_3+5F_2$: $(0,0,15,45)$; $F_3\to\frac1{15}F_3$: $(0,0,1,3)$:
+  $$\left(\begin{array}{ccc|c}1&2&-1&2\\0&1&2&8\\0&0&1&3\end{array}\right).$$
+  Tres pivotes: compatible determinado. Retrosustitución: $z=3$, $y=8-2z=2$, $x=2-2y+z=1$. Solución $(1,2,3)$, comprobada con sympy.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.29 de U — Gauss detecta un sistema incompatible</span>
+  <p>$x+2y+z=2,\ -x+2y-z=0,\ x+y+z=4$. Escalonando la ampliada, la tercera fila termina siendo $(0\ 0\ 0\mid\tfrac52)$: una fila de coeficientes nulos con término independiente $\tfrac52\neq0$, así que el sistema es <b>incompatible</b> (paso 5 del algoritmo): no hace falta seguir ni retrosustituir.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.29, p. 39-41">U p.39-41</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.30 de U — Gauss en un sistema no cuadrado, indeterminado con 2 parámetros</span>
+  <p>Sistema de 3 ecuaciones y 5 incógnitas $(x,y,z,t,v)$ cuya ampliada, ya escalonada por Gauss, tiene pivotes solo en las columnas de $x$, $y$ y $t$: las columnas de $z$ y $v$ quedan sin pivote (paso 3 del algoritmo: se pasa a la siguiente columna). Con $z=a,\ v=b$ como parámetros, la retrosustitución da
+  $$x=2-3a+b,\quad y=7-5a,\quad z=a,\quad t=-1-2b,\quad v=b,\qquad a,b\in\mathbb R.$$
+  Este ejemplo muestra que Gauss se aplica igual a un sistema no cuadrado: basta con que, al llegar a una columna sin ningún elemento no nulo disponible, se pase a la siguiente sin crear un pivote ahí.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.30, p. 39-41">U p.39-41</span>
+</div>
+
+<div class="box tip"><span class="h">Además</span>
+  <p>Existe un pseudocódigo completo del algoritmo para implementarlo en un ordenador (p.41-42), y se distinguen los <b>métodos de eliminación</b> (Gauss, Gauss-Jordan) de los <b>métodos de descomposición</b> (como $LU$, §8) dentro de los métodos exactos (p.38); el <b>pivoteo parcial</b> (elegir en cada columna el mayor elemento en valor absoluto, intercambiando filas) y el <b>pivoteo total</b> (buscar el mayor elemento en toda la submatriz restante, intercambiando también columnas) son estrategias para reducir el error de redondeo (nota 20, p.42).</p>
+</div>
+
+<div class="box def"><span class="h">Def. 1.8 — sistemas mal condicionados</span>
+  <p>Un sistema está <b>mal condicionado</b> cuando pequeños cambios en los coeficientes producen cambios <b>drásticos</b> en la solución; es una propiedad del <b>sistema</b> en sí, no del método usado para resolverlo. Ejemplo 1.31 de U: $x_1+2x_2=10,\ 1.05x_1+2x_2=10.4$ tiene solución exacta $(8,1)$; cambiando el segundo coeficiente de $1.05$ a $1.1$ (un cambio pequeño, sin redondeo de por medio), la solución pasa a $(4,3)$: cambia por completo. Ningún método de resolución exacto puede arreglar esto: el problema está en los propios datos del sistema.</p>
+  <span class="src" data-l="U" data-ref="U Definición 1.8 y Ejemplo 1.31, p. 42-43">U p.42-43</span>
+</div>
+
+<div class="box warn"><span class="h">No confundir con el pivoteo</span>
+  <p>El <b>pivoteo</b> (parcial o total, mencionado arriba) es un remedio distinto, contra un problema distinto: el <b>error de redondeo</b> que aparece cuando se divide entre un pivote muy pequeño o cercano a cero durante Gauss. No corrige el mal condicionamiento del sistema (que es exacto, como en el Ejemplo 1.31, sin ningún redondeo): un sistema mal condicionado sigue siendo sensible a los datos por muy bien que se pivotee.</p>
+</div>
+

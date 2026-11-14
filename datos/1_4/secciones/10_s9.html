@@ -1,0 +1,37 @@
+<!-- ============================ 9 ============================ -->
+<h2 id="s9"><span class="n">9</span>Factorización $LU$ permutada y usos de $LU$ <span class="src" data-l="U" data-ref="U §1.4.3, p. 50-51">U p.50-51</span></h2>
+
+<div class="box warn"><span class="h">Cuándo NO existe la $LU$ sin permutar</span>
+  <p>Si al triangularizar $A$ aparece un $0$ en la posición del pivote y no se puede arreglar sin <b>intercambiar filas</b>, la factorización $LU$ (tal como se ha definido) <b>no existe</b>. Ejemplo mínimo (propio): $A=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ es regular ($\det A=-1$), pero si $A=LU$ con $L=\begin{pmatrix}1&0\\l&1\end{pmatrix}$, la entrada $(1,1)$ obligaría a $u_{11}=0$ y la $(2,1)$ a $l\,u_{11}=1$, es decir $0=1$: imposible. El remedio es permutar filas primero.</p>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 50 (motivación de la LU permutada)">U p.50</span>
+  <span class="src" data-l="P" data-ref="Contraejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: cuándo falla la $LU$ sin permutar</span>
+  <p>Esta $A$ tiene un $0$ donde debería ir el primer pivote: la animación se detiene y avisa. Cambia un valor (p. ej. $a_{11}=1$) con «✎ Cambiar A y B» y verás cómo ya sí se puede factorizar.</p>
+  <div class="anim-lu" data-a="0,-2,1;3,1,4;1,1,2" data-b="0,3,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia sobre la A del Ejemplo 1.37 de U, p. 50">P</span>
+</div>
+
+<div class="box def"><span class="h">$LU$ permutada</span>
+  <p>Cuando hace falta intercambiar filas, se busca una matriz de permutación $P$ (la identidad con las mismas filas reordenadas que se aplicaron a $A$) tal que $PA$ sí se pueda triangularizar sin más intercambios: $PA=LU$. (Dato adicional, no imprescindible para el examen: si $A$ es regular, existe $LU$ sin permutar $\iff$ todos sus menores principales —los que se forman con las primeras $k$ filas y columnas, para $k=1,\dots,n$— son no nulos.)</p>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 50">U p.50</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.37 de U — $PA=LU$ y resolución de $AX=B$</span>
+  <p>$A=\begin{pmatrix}0&-2&1\\3&1&4\\1&1&2\end{pmatrix}$, $B=(0,3,1)^t$. $F_1\leftrightarrow F_2$ da $PA=\begin{pmatrix}3&1&4\\0&-2&1\\1&1&2\end{pmatrix}$. Triangularizando: $U=\begin{pmatrix}3&1&4\\0&-2&1\\0&0&1\end{pmatrix}$, $L=\begin{pmatrix}1&0&0\\0&1&0\\\frac13&-\frac13&1\end{pmatrix}$. Para resolver $AX=B$: como $PA=LU$, se tiene $AX=B\iff PAX=PB\iff LUX=PB$ (¡se permuta también $B$!). Con $PB=(3,0,1)^t$: $LY=PB$ da $Y=(3,0,0)^t$; $UX=Y$ da $X=(1,0,0)^t$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.37, p. 50-51">U p.50-51</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Resolver $LY=B$ en lugar de $LY=PB$: al permutar $A$, hay que permutar $B$ exactamente igual (con la misma $P$), o el sistema que se resuelve ya no es el original.</p>
+</div>
+
+<div class="box thm"><span class="h">Otros usos de $LU$</span>
+  <ul>
+    <li><b>Inversa:</b> $A^{-1}=U^{-1}L^{-1}$ (invertir dos triangulares, cada una más barata que invertir $A$ directamente).</li>
+    <li><b>Determinante:</b> $\det(A)=\det(L)\det(U)=1\cdot\det(U)$ (porque $\det L=1$, producto de la diagonal), y $\det(U)$ es simplemente el producto de la diagonal de $U$. Con $PA=LU$: $\det(P)\det(A)=\det(U)$, y $\det P=\pm1$ según la paridad de la permutación.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 51">U p.51</span>
+</div>
+

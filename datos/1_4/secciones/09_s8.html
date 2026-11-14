@@ -1,0 +1,77 @@
+<!-- ============================ 8 ============================ -->
+<h2 id="s8"><span class="n">8</span>Factorización $LU$ <span class="src" data-l="U" data-ref="U §1.4.3, p. 45-49">U p.45-49</span></h2>
+
+<div class="box intu"><span class="h">Motivación: ¿por qué otro método más?</span>
+  <p>Si hay que resolver $AX=B_1$, $AX=B_2$, $AX=B_3,\dots$ con la <b>misma</b> $A$ pero distintos términos independientes, repetir Gauss completo cada vez es un desperdicio: la parte cara (triangularizar $A$) es siempre la misma. La factorización $LU$ hace ese trabajo <b>una sola vez</b>, guardándolo en dos matrices $L$ y $U$, y luego cada sistema nuevo se resuelve muy barato.</p>
+</div>
+
+<div class="box def"><span class="h">Definición</span>
+  <p>$A=LU$ con $L$ triangular inferior <b>con unos en la diagonal</b> y $U$ triangular superior. $U$ es el resultado de escalonar $A$ usando <b>solo reemplazos</b> $F_i\to F_i+\lambda F_j$ ($j\lt i$), <b>sin normalizar los pivotes y sin intercambiar filas</b>. $L$ recoge, en la posición $(i,j)$, el multiplicador usado (con el signo cambiado) para anular esa posición.</p>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 45-46">U p.45-46</span>
+</div>
+
+<div class="box warn"><span class="h">Ojo: NO es lo mismo que el Gauss del §6</span>
+  <p>En el método de Gauss del §6 normalizábamos cada pivote a $1$ (paso 2 del algoritmo). Para $LU$, en cambio, <b>nunca se normaliza</b>: se deja el pivote tal cual salga y solo se usan reemplazos para anular lo de debajo. Si normalizaras, la $U$ resultante no coincidiría con la de la factorización (y perderías la información que va a parar a $L$). En realidad, la propia U permite omitir la normalización también en Gauss (nota 17, p.38): normalizar es solo una comodidad para leer la solución al final, no un paso obligatorio. De hecho, el Ejemplo 1.26 (§3) escalona <b>sin normalizar</b> los pivotes; solo el Ejercicio 1.37 de E normaliza. No te desconciertes si ves las dos variantes.</p>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 45 (aplicando el Método de Gauss sin normalizar los pivotes)">U p.45</span>
+</div>
+
+<div class="box thm"><span class="h">Algoritmo</span>
+  <ol class="steps">
+    <li><b>PASO 1 — triangularizar $A$ a $U$:</b> aplicar reemplazos $F_i\to F_i+\lambda F_j$ sucesivos hasta obtener una triangular superior $U$. Si $U=E_p\cdots E_1A$ (producto de las matrices elementales de cada reemplazo), entonces $A=(E_p\cdots E_1)^{-1}U$.</li>
+    <li><b>PASO 2 — construir $L$:</b> $L=E_1^{-1}\cdots E_p^{-1}$. Como la inversa de un reemplazo $F_i\to F_i+\lambda F_j$ es $F_i\to F_i-\lambda F_j$, en la práctica basta colocar, en la posición $(i,j)$ de $L$, <b>el multiplicador $\lambda$ usado, con el signo cambiado</b> (y unos en la diagonal). Este atajo vale cuando los reemplazos se hacen <b>columna a columna y en orden</b> (de izquierda a derecha, de arriba abajo), que es lo habitual.</li>
+  </ol>
+  <p>Complejidad: Gauss cuesta $\sim n^3/3$ y $LU$ $\sim2n^3/3$, es decir, el <b>doble</b>. Con esas cifras: resolver 1 sistema por Gauss cuesta $n^3/3$; factorizar y resolverlo por $LU$ cuesta $2n^3/3$ (el doble, más caro); pero cada sistema <i>adicional</i> con la misma $A$ cuesta $n^3/3$ más por Gauss y solo $\sim n^2$ (despreciable frente a $n^3$) por $LU$: con el 2.º sistema adicional (3 sistemas en total) el coste acumulado se empata, aproximadamente $n^3$ por ambos caminos, y a partir del 3.º sistema adicional $LU$ sale claramente más barato.</p>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 45-46 (PASO 1-2, fórmulas 1.6-1.7)">U p.45-46</span>
+</div>
+
+
+<div class="box intu"><span class="h">La idea de $L$ en una frase</span>
+  <p>Al escalonar, cada vez que haces $F_i\to F_i-m\,F_j$ estás <i>gastando</i> información de $A$. $L$ es el <b>cuaderno donde apuntas esos $m$</b>: si algún día quieres deshacer todo el proceso (volver de $U$ a $A$), basta volver a <i>sumar</i> esos múltiplos en orden inverso, y eso es justo multiplicar por $L$. Por eso $A=LU$: «$U$» es el resultado y «$L$» el registro de cómo llegaste.</p>
+  <p><b>Receta práctica (3 reglas):</b> (1) trabaja columna por columna, de izquierda a derecha y de arriba abajo; (2) para cada posición que anulas, calcula $m=\dfrac{\text{elemento a anular}}{\text{pivote}}$ y haz $F_i\to F_i-m\,F_j$; (3) <b>apunta ese mismo $m$</b> (con su signo, tal cual lo restaste) en la posición $(i,j)$ de $L$. Diagonal de $L$ = unos; encima de la diagonal, ceros.</p>
+</div>
+
+<div class="box ex"><span class="h">Animación: $A=LU$ paso a paso y resolución de $AX=B$ (Ejemplos 1.34 y 1.36 de U)</span>
+  <p>Pulsa «Siguiente» (o «Reproducir»): en cada paso verás el multiplicador $m$ que se calcula, la operación sobre $U$ y cómo ese mismo $m$ aparece en $L$. Después se resuelve $LY=B$ (de arriba abajo) y $UX=Y$ (de abajo arriba). Puedes cambiar $A$ y $B$ con «✎ Cambiar A y B».</p>
+  <div class="anim-lu" data-a="2,2,2;4,7,7;6,18,22" data-b="2,2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia sobre los datos de U Ej. 1.34 y 1.36, p. 47-49">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.33 de U — $2\times2$, el caso más simple</span>
+  <p>$A=\begin{pmatrix}3&2\\1&1\end{pmatrix}$. $F_2\to F_2-\frac13F_1$: $(1,1)-\frac13(3,2)=(0,\frac13)$. Así
+  $$U=\begin{pmatrix}3&2\\0&\frac13\end{pmatrix},\qquad L=\begin{pmatrix}1&0\\\frac13&1\end{pmatrix}$$
+  (el multiplicador usado fue $-\frac13$; en $L$ va con el signo cambiado, $+\frac13$). Comprobación: $LU=\begin{pmatrix}3&2\\1&1\end{pmatrix}=A$ ✓.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.33, p. 46-47">U p.46-47</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.34 de U — $3\times3$</span>
+  <p>$A=\begin{pmatrix}2&2&2\\4&7&7\\6&18&22\end{pmatrix}$ ($\det A=24$). $F_2\to F_2-2F_1$: $(0,3,3)$; $F_3\to F_3-3F_1$: $(0,12,16)$; $F_3\to F_3-4F_2$: $(0,0,4)$:
+  $$U=\begin{pmatrix}2&2&2\\0&3&3\\0&0&4\end{pmatrix},\qquad L=\begin{pmatrix}1&0&0\\2&1&0\\3&4&1\end{pmatrix}.$$
+  Los multiplicadores fueron $-2$, $-3$, $-4$: en $L$ van con el signo cambiado, en la posición que anularon.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.34, p. 47-48">U p.47-48</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.35 de U — con fracciones</span>
+  <p>$A=\begin{pmatrix}4&-2&1\\-3&-1&4\\1&-1&2\end{pmatrix}$ ($\det A=-8$). Triangularizando con reemplazos se obtiene
+  $$U=\begin{pmatrix}4&-2&1\\0&-\frac52&\frac{19}{4}\\0&0&\frac45\end{pmatrix},\qquad L=\begin{pmatrix}1&0&0\\-\frac34&1&0\\\frac14&\frac15&1\end{pmatrix}.$$</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.35, p. 48">U p.48</span>
+</div>
+
+<div class="box thm"><span class="h">Resolver $AX=B$ con $L$ y $U$ ya calculadas</span>
+  <p>Como $A=LU$: $AX=B\iff LUX=B$. Llamando $Y=UX$, se resuelve en dos pasos, ambos triangulares y por tanto muy baratos:</p>
+  <ol class="steps">
+    <li><b>PASO 1:</b> resolver $LY=B$ (sustitución <b>progresiva</b>, de la primera ecuación hacia abajo, porque $L$ es triangular inferior).</li>
+    <li><b>PASO 2:</b> resolver $UX=Y$ (retrosustitución, de la última ecuación hacia arriba, porque $U$ es triangular superior).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §1.4.3, p. 49 (resolución de AX=B vía LU)">U p.49</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.36 de U — aplicando $L$ y $U$ del Ejemplo 1.34</span>
+  <p>Con $A,L,U$ del Ejemplo 1.34 y $B=(2,2,1)^t$: resolviendo $LY=B$ (progresiva): $y_1=2$; $2y_1+y_2=2\Rightarrow y_2=-2$; $3y_1+4y_2+y_3=1\Rightarrow y_3=1-6+8=3$: $Y=(2,-2,3)^t$. Resolviendo $UX=Y$ (retrosustitución): $4z=3\Rightarrow z=\frac34$; $3y+3z=-2\Rightarrow y=-\frac23-\frac34=-\frac{17}{12}$; $2x+2y+2z=2\Rightarrow x=1-y-z=1+\frac{17}{12}-\frac34=\frac53$:
+  $$X=\left(\tfrac53,-\tfrac{17}{12},\tfrac34\right)^t.$$</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.36, p. 49">U p.49</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Resolver $UY=B$ y luego $LX=Y$: el orden está cambiado. Como $A=LU$, primero hay que «deshacer» $L$ (la que está más a la izquierda en $LU X=B$): se resuelve $LY=B$ primero, y $UX=Y$ después (ver el Ejercicio <a href="#ej1-44">1.44</a>).</p>
+</div>
+
