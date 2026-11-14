@@ -54,7 +54,7 @@
     <li><b>Atajos con las dimensiones.</b> Si $\operatorname{rang}A$ es igual al número de ecuaciones, la ampliada no puede tener más rango: el sistema es compatible. Un homogéneo $AX=0$ siempre es compatible (tiene $X=0$) y es determinado solo si $\operatorname{rang}A=n$. Si $A$ es regular, el sistema es determinado.</li>
     <li><b>Con parámetros.</b> Si $A$ es cuadrada, $\det A\neq0$ da el caso determinado; los valores que anulan $\det A$ se sustituyen y se estudian aparte comparando rangos.</li>
     <li><b>Equivalentes y paramétricas.</b> Las operaciones elementales sobre ecuaciones (equivalentemente, sobre filas de la ampliada) no cambian las soluciones. Para pasar a paramétricas, las incógnitas libres son los parámetros; el número de ecuaciones cartesianas es $n$ menos el de parámetros independientes.</li>
-    <li><b>Métodos.</b> Gauss escalona y retrosustituye; Gauss-Jordan deja la forma reducida. $A=LU$ (sin normalizar pivotes, $L$ con los multiplicadores) resuelve $LY=B$ y luego $UX=Y$; si hubo intercambios, $PA=LU$ y se resuelve con $PB$. $\det L=1$, luego $\det A=\det U$.</li>
+    <li><b>Métodos.</b> Gauss escalona y retrosustituye; Gauss-Jordan deja la forma reducida. $A=LU$ (sin normalizar pivotes, $L$ con los multiplicadores) resuelve $LY=B$ y luego $UX=Y$; si hubo intercambios, $PA=LU$ y se resuelve con $PB$. $\det L=1$, luego sin intercambios $\det A=\det U$ (con $PA=LU$, $\det A=\pm\det U$, signo según el número de intercambios).</li>
   </ol>
 </div>
 
@@ -614,13 +614,13 @@
   <h3>Tipo 5 — Factorización LU</h3>
   <p class="senal"><b>Cómo lo reconoces:</b> «Calcule la factorización $LU$», «resuelva usando $LU$», preguntas teóricas sobre existencia, unicidad o usos de $LU$.</p>
   <ol class="pasos">
-    <li>Escalona $A$ solo con operaciones $F_i\to F_i-\ell_{ij}F_j$ ($i>j$), sin normalizar ni intercambiar filas: el resultado es $U$.</li>
-    <li>Coloca cada multiplicador $\ell_{ij}$ en la posición $(i,j)$ de $L$, con $1$ en la diagonal y $0$ encima.</li>
+    <li>Escalona $A$ solo con reemplazos $F_i\to F_i+\lambda F_j$ ($i>j$), sin normalizar ni intercambiar filas: el resultado es $U$.</li>
+    <li>En la posición $(i,j)$ de $L$ coloca el multiplicador usado con el signo cambiado, $-\lambda$, con $1$ en la diagonal y $0$ encima.</li>
     <li>Comprueba que $LU=A$.</li>
     <li>Para resolver $AX=B$: resuelve $LY=B$ (hacia delante) y después $UX=Y$ (hacia atrás). Si hubo intercambios, $PA=LU$ y se resuelve $LY=PB$.</li>
   </ol>
   <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}2&1\\4&5\end{pmatrix}$: con $F_2\to F_2-2F_1$ resulta $U=\begin{pmatrix}2&1\\0&3\end{pmatrix}$ y $L=\begin{pmatrix}1&0\\2&1\end{pmatrix}$. Para $B=(3,9)^t$: $LY=B$ da $Y=(3,3)^t$ y $UX=Y$ da $X=(1,1)^t$.</div>
-  <p class="fallos"><b>Dónde se falla:</b> Poner en $L$ el multiplicador con el signo cambiado · Resolver primero $UX=Y$ y luego $LY=B$ (el orden es primero $L$) · Olvidar permutar también $B$ cuando hay $PA=LU$ · Decir que $\det A=\det L$ en vez de $\det U$</p>
+  <p class="fallos"><b>Dónde se falla:</b> Poner en $L$ el multiplicador $\lambda$ de $F_i\to F_i+\lambda F_j$ sin cambiarle el signo · Resolver primero $UX=Y$ y luego $LY=B$ (el orden es primero $L$) · Olvidar permutar también $B$ cuando hay $PA=LU$ · Decir que $\det A=\det L$ en vez de $\det U$</p>
   <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej1-38">1.38</a> · <a href="#ej1-42">1.42</a> · <a href="#ej1-43">1.43</a> · <a href="#ej1-44">1.44</a> · <a href="#sol-1_4-17">Ejemplo propio 2</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep17e1">Sept. 17 A ej. 1</a> · <a href="#ex-feb18c">Feb. 18 A problema, apartado c)</a> · <a href="#ex-feb20b">Feb. 20 B (1.ª) ej. 1</a></p>
 </section>
 
@@ -802,7 +802,7 @@
     <li><b>C es falsa:</b> ampliada con 4 columnas $\Rightarrow n=3$ incógnitas; $B=(0,0,0)^t\Rightarrow$ homogéneo, siempre compatible; $\operatorname{rang}(A)=2<3\Rightarrow$ indeterminado, con infinitas soluciones (no solo la nula).</li>
     <li><b>A, análisis:</b> $A$ es $4\times5$ con $\operatorname{rang}A=4$; la ampliada tiene 4 filas, así $\operatorname{rang}(A\mid B)\le4$ y $\ge\operatorname{rang}(A)=4$: es $4$, luego compatible; pero $4<5=n$, así que es <b>indeterminado</b>, no determinado. El enunciado literal de A solo dice «compatible y se puede hallar por Gauss-Jordan», lo que es cierto (Gauss-Jordan también da la solución general de un indeterminado); si se lee «su solución» como «su única solución», sería falsa.</li>
   </ol>
-  <p><b>Respuesta (según E): B</b>; A es falsa <i>si</i> «su solución» se entiende como «su única solución» — leída literalmente, A es cierta (B sigue siendo la única respuesta cierta sin ambigüedad).</p>
+  <p><b>Respuesta: B.</b> A no sirve como respuesta: el sistema es compatible <i>indeterminado</i> (1 parámetro), no tiene una única solución.</p>
   <div class="recipe"><b>Receta:</b> $n=$ columnas de $A=$ columnas de la ampliada $-1$; si $\operatorname{rang}A=m$ (máximo por filas), compatible; si además $m\lt n$, indeterminado. Regular $\Rightarrow$ cuadrada de rango máximo $\Rightarrow$ determinado.</div>
   <p><b>Error típico:</b> confundir el número de columnas de la ampliada con el de incógnitas (hay una menos).</p>
 </details>
@@ -1130,7 +1130,7 @@
   <p><b>Error típico:</b> escribir solo «$A=LU$» sin decir qué son $L$ y $U$ ni bajo qué hipótesis.</p>
 </details>
 
-<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Enunciar algún método numérico para resolver un sistema de ecuaciones lineales y mostrar sus pasos, es decir, cómo se aplica.. Modelo con el <b>método de Gauss</b> (U §1.4.3, p.38-39); también valdría $LU$.</p></div>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Enunciar algún método numérico para resolver un sistema de ecuaciones lineales y mostrar sus pasos, es decir, cómo se aplica.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Elige el método (Gauss, por ejemplo), enuncia sus pasos generales y ilústralos con un sistema pequeño de tu elección.</p></details>
 <details class="sol" id="ex-feb19pb"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2019 (tipo A), problema, apartado b) — enunciar un método numérico y mostrar sus pasos <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), problema, apartado b)">X Feb. 2019 (A)</span></summary>
   <ol class="steps">
@@ -1198,7 +1198,7 @@
     <ul class="opts"><li data-ok>Incompatible</li><li>Compatible determinado<span class="why">El determinante de $A$ es $0$: no puede ser determinado.</span></li><li>Compatible indeterminado<span class="why">Que $\det A=0$ no basta: aquí $\operatorname{rang}A=1$ pero $\operatorname{rang}(A\mid B)=2$, y para que fuese indeterminado deberían coincidir.</span></li><li>Tiene exactamente dos soluciones<span class="why">Un sistema lineal tiene 0, 1 o infinitas soluciones; nunca exactamente dos.</span></li></ul>
     <p class="fb">La segunda ecuación equivale a $x+y=2{,}5$, que contradice la primera. Con rangos: $\operatorname{rang}A=1\neq2=\operatorname{rang}(A\mid B)$.</p></div>
   <div class="qp"><p>Un sistema homogéneo $AX=0$ tiene matriz ampliada de 4 columnas y $\operatorname{rang}A=2$. ¿Qué se puede afirmar?</p>
-    <ul class="opts"><li>Solo tiene la solución nula<span class="why">Has contado 4 incógnitas, pero la ampliada tiene $n+1$ columnas: $n=3$, y como $\operatorname{rang}A=2<3$ hay más soluciones.</span></li><li data-ok>Es compatible indeterminado con 1 parámetro</li><li>Es incompatible<span class="why">Un homogéneo siempre tiene la solución $X=0$, así que nunca es incompatible.</span></li><li>Es compatible indeterminado con 2 parámetros<span class="why">Los parámetros son $n-\operatorname{rang}A=3-2=1$; el 2 es el rango, no el número de parámetros.</span></li></ul>
+    <ul class="opts"><li>Solo tiene la solución nula<span class="why">Solo la nula exigiría $\operatorname{rang}A=n$; aquí $n=3$ (la ampliada tiene $n+1=4$ columnas) y $\operatorname{rang}A=2<3$, así que hay infinitas soluciones.</span></li><li data-ok>Es compatible indeterminado con 1 parámetro</li><li>Es incompatible<span class="why">Un homogéneo siempre tiene la solución $X=0$, así que nunca es incompatible.</span></li><li>Es compatible indeterminado con 2 parámetros<span class="why">Los parámetros son $n-\operatorname{rang}A=3-2=1$; el 2 es el rango, no el número de parámetros.</span></li></ul>
     <p class="fb">La ampliada tiene $n+1=4$ columnas, luego $n=3$. Es siempre compatible y $\operatorname{rang}A=2<3$: $3-2=1$ parámetro libre.</p></div>
   <div class="qp"><p>Para el sistema $x+y=1,\ x+ay=2$, ¿para qué valor de $a$ es incompatible?</p>
     <ul class="opts"><li>$a=0$<span class="why">Con $a=0$ el determinante es $-1\neq0$: $A$ es regular y el sistema es determinado.</span></li><li data-ok>$a=1$</li><li>$a=2$<span class="why">Con $a=2$, $\det A=1\neq0$: determinado, con solución única.</span></li><li>Es compatible para todo $a$<span class="why">Para $a=1$ el determinante es $0$ y las ecuaciones $x+y=1$, $x+y=2$ se contradicen.</span></li></ul>

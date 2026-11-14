@@ -49,7 +49,7 @@ esencial:
   - |-
     <b>Equivalentes y paramétricas.</b> Las operaciones elementales sobre ecuaciones (equivalentemente, sobre filas de la ampliada) no cambian las soluciones. Para pasar a paramétricas, las incógnitas libres son los parámetros; el número de ecuaciones cartesianas es $n$ menos el de parámetros independientes.
   - |-
-    <b>Métodos.</b> Gauss escalona y retrosustituye; Gauss-Jordan deja la forma reducida. $A=LU$ (sin normalizar pivotes, $L$ con los multiplicadores) resuelve $LY=B$ y luego $UX=Y$; si hubo intercambios, $PA=LU$ y se resuelve con $PB$. $\det L=1$, luego $\det A=\det U$.
+    <b>Métodos.</b> Gauss escalona y retrosustituye; Gauss-Jordan deja la forma reducida. $A=LU$ (sin normalizar pivotes, $L$ con los multiplicadores) resuelve $LY=B$ y luego $UX=Y$; si hubo intercambios, $PA=LU$ y se resuelve con $PB$. $\det L=1$, luego sin intercambios $\det A=\det U$ (con $PA=LU$, $\det A=\pm\det U$, signo según el número de intercambios).
 tipos:
 - id: clasif
   nombre: |-
@@ -148,9 +148,9 @@ tipos:
     «Calcule la factorización $LU$», «resuelva usando $LU$», preguntas teóricas sobre existencia, unicidad o usos de $LU$.
   pasos:
   - |-
-    Escalona $A$ solo con operaciones $F_i\to F_i-\ell_{ij}F_j$ ($i>j$), sin normalizar ni intercambiar filas: el resultado es $U$.
+    Escalona $A$ solo con reemplazos $F_i\to F_i+\lambda F_j$ ($i>j$), sin normalizar ni intercambiar filas: el resultado es $U$.
   - |-
-    Coloca cada multiplicador $\ell_{ij}$ en la posición $(i,j)$ de $L$, con $1$ en la diagonal y $0$ encima.
+    En la posición $(i,j)$ de $L$ coloca el multiplicador usado con el signo cambiado, $-\lambda$, con $1$ en la diagonal y $0$ encima.
   - |-
     Comprueba que $LU=A$.
   - |-
@@ -158,7 +158,7 @@ tipos:
   ejemplo: |-
     $A=\begin{pmatrix}2&1\\4&5\end{pmatrix}$: con $F_2\to F_2-2F_1$ resulta $U=\begin{pmatrix}2&1\\0&3\end{pmatrix}$ y $L=\begin{pmatrix}1&0\\2&1\end{pmatrix}$. Para $B=(3,9)^t$: $LY=B$ da $Y=(3,3)^t$ y $UX=Y$ da $X=(1,1)^t$.
   fallos: |-
-    Poner en $L$ el multiplicador con el signo cambiado · Resolver primero $UX=Y$ y luego $LY=B$ (el orden es primero $L$) · Olvidar permutar también $B$ cuando hay $PA=LU$ · Decir que $\det A=\det L$ en vez de $\det U$
+    Poner en $L$ el multiplicador $\lambda$ de $F_i\to F_i+\lambda F_j$ sin cambiarle el signo · Resolver primero $UX=Y$ y luego $LY=B$ (el orden es primero $L$) · Olvidar permutar también $B$ cuando hay $PA=LU$ · Decir que $\det A=\det L$ en vez de $\det U$
 quiz:
 - p: |-
     Un sistema tiene 4 ecuaciones, 6 incógnitas y $\operatorname{rang}A=4$. ¿Cómo es?
@@ -211,7 +211,7 @@ quiz:
       Solo tiene la solución nula
     ok: false
     why: |-
-      Has contado 4 incógnitas, pero la ampliada tiene $n+1$ columnas: $n=3$, y como $\operatorname{rang}A=2<3$ hay más soluciones.
+      Solo la nula exigiría $\operatorname{rang}A=n$; aquí $n=3$ (la ampliada tiene $n+1=4$ columnas) y $\operatorname{rang}A=2<3$, así que hay infinitas soluciones.
   - t: |-
       Es compatible indeterminado con 1 parámetro
     ok: true

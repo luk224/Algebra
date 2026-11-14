@@ -552,7 +552,7 @@ Es frecuente llamar a $\langle S\rangle$ la <b>envoltura lineal</b> de $S$.</p>
   <p class="senal"><b>Cómo lo reconoces:</b> «halle el rango de…», «un sistema libre que genere lo mismo», «dimensión de $\langle S\rangle$».</p>
   <ol class="pasos">
     <li>Escribe los vectores como filas de una matriz.</li>
-    <li>Escalona con operaciones elementales por filas, sin intercambiar el sentido de las operaciones de combinación.</li>
+    <li>Escalona con operaciones elementales por filas (intercambiar filas, multiplicar una fila por un número $\ne0$, sumar a una fila un múltiplo de otra): no cambian el rango.</li>
     <li>Cuenta las filas no nulas: es el rango $=\operatorname{Dim}\langle S\rangle$.</li>
     <li>Esas filas no nulas forman un sistema libre generador de $\langle S\rangle$; para saber si un vector pertenece, añádelo y mira si el rango crece.</li>
   </ol>
@@ -703,13 +703,13 @@ Es frecuente llamar a $\langle S\rangle$ la <b>envoltura lineal</b> de $S$.</p>
       $$\lambda(1,0,-1)+\mu(0,1,-1)=(\lambda,\mu,-\lambda-\mu)=0\ \Longrightarrow\ \lambda=\mu=0,$$
       <p>y genera $U$. Por la relación libres–generadores (U p.81), cualquier sistema generador de $U$ tiene <b>al menos 2</b> vectores. A y C tienen uno: no pueden generar $U$.</p></li>
   </ol>
-  <p><i>(sympy: $x_1+x_2+x_3$ vale $0$ en los vectores de B y $1$ en $(0,1,0)$; $\operatorname{rang}(S)=2$ y $\operatorname{rang}(S\cup\{(0,1,0)\})=3$, luego $(0,1,0)\notin\langle S\rangle=U$.)</i> E en C solo dice que «en general» no estarán en $U$; la razón decisiva es que el propio generador $(0,1,0)\notin U$.</p>
+  <p><i>(sympy: $x_1+x_2+x_3$ vale $0$ en los vectores de B y $1$ en $(0,1,0)$; $\operatorname{rang}(S)=2$ y $\operatorname{rang}(S\cup\{(0,1,0)\})=3$, luego $(0,1,0)\notin\langle S\rangle=U$.)</i> En C la razón decisiva es que el propio generador $(0,1,0)\notin U$.</p>
   <div class="recipe"><b>Receta:</b> para ver si $T$ genera un subespacio $U$ dado por ecuaciones: (i) comprueba que cada vector de $T$ cumple las ecuaciones de $U$; (ii) escribe el vector genérico de $U$ con parámetros, sepáralo como combinación de vectores fijos y comprueba que esos son combinación de los de $T$.</div>
   <p><b>Error típico:</b> comprobar solo (i): en A, $(1,0,-1)\in U$ y aun así no lo genera.</p>
   <p><b>Teoría:</b> Def. 2.4, U p.71 · subespacio más pequeño, U p.72 · libre, U p.74 · libres–generadores, U p.81</p>
 </details>
 
-<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide justificar si son generadores del subespacio $U$ del Ejercicio 2.17 los conjuntos: A) $S_1=\{(1,0,-1),(0,2,-2)\}$. B) $S_2=\{(1,0,-1),(0,1,-1),(1,1,-2)\}$. C) $S_3=\{(1,0,-1),(0,1,-1),(1,1,-2),(3,0,-3)\}$. D) $S_4=\{(1,1,-2),(3,0,-3)\}$. E) $S,S_1,S_2,S_3$ y $S_4$ son equivalentes.</p></div>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide justificar si son generadores del subespacio $U:\ x_1+x_2+x_3=0$ del Ejercicio 2.17 (generado por $S=\{(1,0,-1),(0,1,-1)\}$) los conjuntos: A) $S_1=\{(1,0,-1),(0,2,-2)\}$. B) $S_2=\{(1,0,-1),(0,1,-1),(1,1,-2)\}$. C) $S_3=\{(1,0,-1),(0,1,-1),(1,1,-2),(3,0,-3)\}$. D) $S_4=\{(1,1,-2),(3,0,-3)\}$. E) $S,S_1,S_2,S_3$ y $S_4$ son equivalentes.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Para cada conjunto calcula el rango y comprueba que sus vectores están en $U$: si el rango es 2 y todos están en $U$, generan $U$.</p></details>
 <details class="sol" id="ej2-18"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.18 — cinco sistemas equivalentes para el mismo plano <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.18, p. 61">E p.61</span></summary>
   <p>Aquí $S=\{u_1,u_2\}$ con $u_1=(1,0,-1)$, $u_2=(0,1,-1)$, que en el Ej. 2.17-B generaba $U$. Idea: partir de $S$ y llegar a cada $S_i$ con cambios que no alteran el subespacio generado (Teoremas 2.1 y 2.2, U p.79).</p>
@@ -1088,7 +1088,7 @@ Es frecuente llamar a $\langle S\rangle$ la <b>envoltura lineal</b> de $S$.</p>
 
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halle los valores de $x$ e $y$ para que las matrices $A=\begin{pmatrix}x&y\\5&-18\end{pmatrix}$, $B=\begin{pmatrix}1&2\\-1&3\end{pmatrix}$, $C=\begin{pmatrix}0&1\\2&-7\end{pmatrix}$ sean linealmente dependientes.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Pasa las tres matrices a vectores de $\mathbb R^4$ y exige rango menor que 3; ojo, la condición da varias ecuaciones que fijan $x$ e $y$ a la vez.</p></details>
-<details class="sol" id="ex-feb24"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Feb. 2024 (1.ª sem.), pregunta 2 — dependencia lineal en un espacio de matrices <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), pregunta 2">X Feb. 2024 (1.ª)</span></summary>
+<details class="sol" id="ex-feb24"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2024 (1.ª sem.), pregunta 2 — dependencia lineal en un espacio de matrices <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), pregunta 2">X Feb. 2024 (1.ª)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar $x,y$ para que tres matrices sean dependientes.</dd>
     <dt>Cómo lo pienso</dt><dd>Igual que el Ej. 2.20: matrices como vectores de 4 entradas; dos matrices fijas y una con parámetros. Compruebo que las dos fijas no son proporcionales y pido que la tercera sea combinación de ellas.</dd>
