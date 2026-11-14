@@ -152,7 +152,83 @@ def extraer_en_memoria(codigo):
         e = parse_sol(s, st, en, attrs, pre, codigo, n)
         ejs.append(e); esq.append(s[ult:ini] + '{{ejercicio:%s}}' % e['id']); ult = en
     esq.append(s[ult:])
-    return dict(codigo=codigo, archivo=str(archivo_tema(codigo).relative_to(RAIZ))), ''.join(esq), ejs
+    cfg, cuerpo = partir_pagina(''.join(esq))
+    cfg = dict(codigo=codigo, archivo=str(archivo_tema(codigo).relative_to(RAIZ)), **cfg)
+    return cfg, cuerpo, ejs
+
+
+# ------------------------------------------------------------------ carcasa (cabecera, hero y pie comunes) y secciones
+PLANTILLA = RAIZ / 'datos' / '_plantilla' / 'tema.html'
+TAIL_INI = '<h2 id="fuentes"'
+LEYENDA = {'U': ('Álgebra para Ingenieros (UNED) — libro oficial', 'oficial'), 'E': ('Ejercicios de Álgebra para Ingenieros (UNED)', 'ejercicios'),
+           'L': ('Lay, Álgebra Lineal y sus Aplicaciones', 'Lay'), 'A': ('Apuntes de tutoría ETSI (solo tema 1)', 'tutoría'),
+           'X': ('Examen de convocatorias anteriores (Álgebra, UNED)', 'examen'), 'P': ('Explicación o ejemplo propio, sin página en los libros', 'propio')}
+
+
+def leyenda_html(letras):
+    return '\n'.join(f'    <span class="src" data-l="{l}" data-ref="{LEYENDA[l][0]}">{l}</span> {LEYENDA[l][1]}' for l in letras)
+
+
+
+def partir_pagina(esq):
+    """Separa el HTML de un tema (con los ejercicios ya sustituidos por marcadores) en: parámetros de la carcasa + cuerpo."""
+    t = re.search(r'<title>Álgebra · (.*?)</title>', esq)
+    res = esq[t.end():esq.index('</head>')]
+    css = re.findall(r'<link rel="stylesheet" href="\.\./assets/([^"]+)">', res)
+    js = re.findall(r'<script defer src="\.\./assets/([^"]+)"></script>', res)
+    if re.sub(r'\s+', '', res) != re.sub(r'\s+', '', recursos_html(css, js)): raise ValueError('cabecera con recursos no estándar')
+    cls = re.search(r'<html lang="es"([^>]*)>', esq).group(1)
+    h = re.search(r'<header class="hero">\s*<div class="kick">(.*?)</div>\s*<h1>(.*?)</h1>\s*<p>(.*?)</p>\s*<div class="chips">(.*?)</div>\s*<div class="legend">(.*?)</div>\s*</header>', esq, re.S)
+    if not h: raise ValueError('hero no estándar')
+    letras = re.findall(r'<span class="src" data-l="([A-Z])"', h.group(5))
+    if re.sub(r'\s+', '', h.group(5)) != re.sub(r'\s+', '', leyenda_html(letras) + '\n    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.\n  '): raise ValueError('leyenda no estándar')
+    chips = re.findall(r'<span>(.*?)</span>', h.group(4), re.S)
+    if ''.join(f'<span>{c}</span>' for c in chips) != h.group(4).strip(): raise ValueError('chips no estándar')
+    cuerpo = esq[h.end():esq.index(TAIL_INI)]
+    cfg = dict(html_class=cls.strip(), titulo=t.group(1), css=css, js=js, kicker=h.group(1).strip(), h1=h.group(2).strip(), resumen=h.group(3).strip(), chips=[c.strip() for c in chips], leyenda=letras)
+    return cfg, cuerpo
+
+
+def recursos_html(css, js):
+    return '\n'.join([f'<link rel="stylesheet" href="../assets/{c}">' for c in css] + [f'<script defer src="../assets/{j}"></script>' for j in js])
+
+
+def render_pagina(cfg, cuerpo):
+    pl = PLANTILLA.read_text(encoding='utf8')
+    cls = ' ' + cfg['html_class'] if cfg.get('html_class') else ''
+    chips = ''.join(f'<span>{c}</span>' for c in cfg['chips'])
+    for k, v in (('{{html_class}}', cls), ('{{titulo}}', cfg['titulo']), ('{{recursos}}', recursos_html(cfg['css'], cfg['js'])), ('{{kicker}}', cfg['kicker']),
+                 ('{{h1}}', cfg['h1']), ('{{resumen}}', cfg['resumen']), ('{{chips}}', chips), ('{{leyenda}}', leyenda_html(cfg['leyenda']))):
+        pl = pl.replace(k, v)
+    return pl.replace('{{cuerpo}}', cuerpo)    # el cuerpo va el último: puede contener llaves de LaTeX
+
+
+def crear_plantilla(codigo='4.2'):
+    """Genera datos/_plantilla/tema.html a partir de un tema de referencia (una sola vez; después se edita a mano)."""
+    s = archivo_tema(codigo).read_text(encoding='utf8')
+    cfg, cuerpo, _ = extraer_en_memoria(codigo)
+    h = re.search(r'<header class="hero">\s*<div class="kick">(.*?)</div>\s*<h1>(.*?)</h1>\s*<p>(.*?)</p>\s*<div class="chips">(.*?)</div>', s, re.S)
+    pl = s[:h.start()] + '<header class="hero">\n  <div class="kick">{{kicker}}</div>\n  <h1>{{h1}}</h1>\n  <p>{{resumen}}</p>\n  <div class="chips">{{chips}}</div>' + s[h.end():]
+    pl = re.sub(r'(<div class="legend">\n)(?:    <span class="src".*?</span> [^\n]*\n)+', r'\1{{leyenda}}\n', pl, count=1)
+    pl = pl.replace(f'<html lang="es">', '<html lang="es"{{html_class}}>', 1).replace(f'<title>Álgebra · {cfg["titulo"]}</title>', '<title>Álgebra · {{titulo}}</title>')
+    i = pl.index('</title>') + 8; j = pl.index('</head>')
+    pl = pl[:i] + '\n{{recursos}}\n' + pl[j:]
+    a = pl.index('</header>') + 9; b = pl.index(TAIL_INI)
+    pl = pl[:a] + '\n{{cuerpo}}' + pl[b:]
+    PLANTILLA.parent.mkdir(parents=True, exist_ok=True); PLANTILLA.write_text(pl, encoding='utf8')
+    print('plantilla escrita:', PLANTILLA.relative_to(RAIZ))
+
+
+def dividir_secciones(cuerpo):
+    """Corta el cuerpo en fragmentos, uno por cada <h2> (con el comentario separador que lo precede, si lo hay). Sin pérdida: ''.join(...) == cuerpo."""
+    cortes = []
+    for m in re.finditer(r'<h2\b[^>]*>', cuerpo):
+        ini = m.start()
+        c = re.search(r'<!--[^\n]*?-->[ \t]*\n(?:[ \t]*\n)*\Z', cuerpo[:ini])
+        cortes.append((c.start() if c else ini, m.group(0)))
+    pos = [0] + [c[0] for c in cortes] + [len(cuerpo)]
+    nombres = ['inicio'] + [re.search(r'id="([^"]+)"', c[1]).group(1) if 'id="' in c[1] else f'h2_{i}' for i, c in enumerate(cortes, 1)]
+    return [(f'{i:02d}_{n}.html', cuerpo[pos[i]:pos[i + 1]]) for i, n in enumerate(nombres)]
 
 
 def volcar(obj):
@@ -169,10 +245,17 @@ def volcar(obj):
 def extraer(codigo):
     cfg, pag, ejs = extraer_en_memoria(codigo)
     d = carpeta(codigo); d.mkdir(parents=True, exist_ok=True)
-    (d / 'pagina.html').write_text(pag, encoding='utf8')
+    sec = d / 'secciones'
+    if sec.exists():
+        for f in sec.glob('*.html'): f.unlink()
+    sec.mkdir(exist_ok=True)
+    partes = dividir_secciones(pag)
+    assert ''.join(t for _, t in partes) == pag
+    for nombre, texto in partes: (sec / nombre).write_text(texto, encoding='utf8')
+    if (d / 'pagina.html').exists(): (d / 'pagina.html').unlink()
     (d / 'tema.yaml').write_text(volcar(cfg), encoding='utf8')
     (d / 'ejercicios.yaml').write_text(volcar(ejs), encoding='utf8')
-    print(f'{codigo}: {len(ejs)} ejercicios -> {d.relative_to(RAIZ)}/')
+    print(f'{codigo}: {len(ejs)} ejercicios y {len(partes)} secciones -> {d.relative_to(RAIZ)}/')
 
 
 # ------------------------------------------------------------------ construir
@@ -208,7 +291,8 @@ def cargar(codigo):
     try: ejs = yaml.safe_load((d / 'ejercicios.yaml').read_text(encoding='utf8'))
     except yaml.YAMLError as e:
         raise SystemExit(f'YAML mal formado en {d / "ejercicios.yaml"}: {e}\nConsejo: todo el texto va en bloques literales («campo: |-» y el texto indentado debajo), sin comillas ni escapes.')
-    return cfg, (d / 'pagina.html').read_text(encoding='utf8'), ejs
+    cuerpo = ''.join(f.read_text(encoding='utf8') for f in sorted((d / 'secciones').glob('*.html')))
+    return cfg, cuerpo, ejs
 
 
 def construir_desde(cfg, pag, ejs):
@@ -216,10 +300,10 @@ def construir_desde(cfg, pag, ejs):
     usados = set()
     def sub(m):
         usados.add(m.group(1)); return render(por[m.group(1)])
-    out = re.sub(r'\{\{ejercicio:([^}]+)\}\}', sub, pag)
+    cuerpo = re.sub(r'\{\{ejercicio:([^}]+)\}\}', sub, pag)
     sobran = set(por) - usados
-    if sobran: raise ValueError('ejercicios en el YAML que la plantilla no usa: ' + ', '.join(sorted(sobran)))
-    return out
+    if sobran: raise ValueError('ejercicios en el YAML que las secciones no usan: ' + ', '.join(sorted(sobran)))
+    return render_pagina(cfg, cuerpo)
 
 
 def construir_texto(codigo):
@@ -321,7 +405,7 @@ def validar(codigo):
     ids = [e['id'] for e in ejs]
     if len(ids) != len(set(ids)): err.append('ids repetidos: ' + ', '.join(i for i in set(ids) if ids.count(i) > 1))
     marc = re.findall(r'\{\{ejercicio:([^}]+)\}\}', pag)
-    if sorted(marc) != sorted(ids): err.append('marcadores de la plantilla y registros no coinciden')
+    if sorted(marc) != sorted(ids): err.append('marcadores de las secciones y registros no coinciden')
     for e in ejs:
         w = e['id']
         for c in ('id', 'clase', 'titulo', 'cuerpo'):
@@ -362,7 +446,7 @@ def migrar(codigo):
     return True
 
 
-ORDENES = {'migrar': migrar, 'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar, 'probar': lambda c: probar_todos() if c == 'todos' else probar(c)}
+ORDENES = {'plantilla': crear_plantilla, 'migrar': migrar, 'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar, 'probar': lambda c: probar_todos() if c == 'todos' else probar(c)}
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or sys.argv[1] not in ORDENES: sys.exit(__doc__)

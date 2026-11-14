@@ -1,0 +1,60 @@
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Teorema 1.1: matriz de paso y algoritmo de la inversa <span class="src" data-l="U" data-ref="U p. 18">U p.18</span></h2>
+
+<div class="box thm"><span class="h">Teorema 1.1</span>
+  <p>Si $B$ se obtiene de $A\in\mathcal M_{m\times n}$ mediante $p$ operaciones elementales por filas $O_1,\dots,O_p$ (con $E_i$ la matriz elemental de $O_i$), entonces
+  $$B=E_pE_{p-1}\cdots E_1A=EA,\qquad E=E_pE_{p-1}\cdots E_1.$$
+  Equivalentemente, si $(A\mid I_m)\xrightarrow{\text{mismas operaciones}}(B\mid E)$, entonces $B=EA$. Como $E$ es regular (producto de regulares), $E^{-1}=E_1^{-1}E_2^{-1}\cdots E_p^{-1}$. A $E$ se le llama <b>matriz de paso</b> de $A$ a $B$.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 1.1, p. 18">U p.18</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: el algoritmo de la inversa $(A\mid I)\to(I\mid A^{-1})$</span>
+  <p>Cada paso es una operación elemental por filas aplicada a <b>toda</b> la matriz ampliada. Se marca el pivote (azul), la fila que cambia (naranja) y el elemento que se anula. Al terminar, la mitad derecha es la inversa. Puedes cambiar la matriz (si no es invertible, el algoritmo lo detecta).</p>
+  <div class="anim-gauss" data-modo="inversa" data-m="2,1;5,3"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
+<div class="box thm"><span class="h">Algoritmo para calcular la inversa</span>
+  <p>Si $A$ es cuadrada de orden $n$ y regular, y $(A\mid I_n)\xrightarrow{\text{op. por filas}}(I_n\mid E)$, entonces por el Teorema 1.1, $I_n=EA$, luego $E=A^{-1}$. Si en algún paso aparece una fila nula en la parte izquierda, $A$ <b>no</b> es regular y es imposible llegar a $I_n$: se para el proceso.</p>
+  <span class="src" data-l="U" data-ref="U p. 18-19 · L §2.2, algoritmo [A|I]→[I|A⁻¹], pp. 106-108">U p.18-19</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.9-1.10 de U — varias operaciones seguidas</span>
+  <p>Con $A=\begin{pmatrix}1&2\\5&3\\2&2\\4&2\end{pmatrix}$, se hacen (en este orden) $F_1\to F_1-2F_2$ y luego $F_3\leftrightarrow F_4$:
+  $$A\xrightarrow{F_1\to F_1-2F_2}\begin{pmatrix}-9&-4\\5&3\\2&2\\4&2\end{pmatrix}\xrightarrow{F_3\leftrightarrow F_4}\begin{pmatrix}-9&-4\\5&3\\4&2\\2&2\end{pmatrix}=B.$$
+  Las matrices elementales asociadas son $E_1=\begin{pmatrix}1&-2&0&0\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}$ (de $F_1\to F_1-2F_2$) y $E_2=\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}$ (de $F_3\leftrightarrow F_4$), y se cumple $B=E_2E_1A$: <b>la última operación realizada queda más a la izquierda</b> en el producto.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 1.9-1.10, p. 17">U p.17</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Escribir $B=E_1E_2A$ en vez de $E_2E_1A$: como el producto no es conmutativo, el orden de las matrices elementales en el producto es el <b>inverso</b> al orden temporal en que se hicieron las operaciones (la última operación es la matriz más a la izquierda).</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.11 de U</span>
+  <p>Con $A=\begin{pmatrix}2&0\\4&1\end{pmatrix}$:
+  $$\left(\begin{array}{cc|cc}2&0&1&0\\4&1&0&1\end{array}\right)\xrightarrow{F_1\to\frac12F_1}\left(\begin{array}{cc|cc}1&0&\frac12&0\\4&1&0&1\end{array}\right)\xrightarrow{F_2\to F_2-4F_1}\left(\begin{array}{cc|cc}1&0&\frac12&0\\0&1&-2&1\end{array}\right),$$
+  $$A^{-1}=\begin{pmatrix}\frac12&0\\-2&1\end{pmatrix}.$$</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.11, p. 19">U p.19</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo alternativo — método de Gauss para la inversa (A)</span>
+  <p>Variante sin fracciones a medio camino: en vez de normalizar cada pivote a $1$ nada más aparecer (como en el Ejemplo 1.11), primero se iguala la <b>columna</b> que se quiere anular a un múltiplo común de sus dos entradas, se resta, y solo al final se divide para dejar $1$s en la diagonal. Con $A=\begin{pmatrix}3&5\\4&8\end{pmatrix}$:</p>
+  <ol class="steps">
+    <li>$\left(\begin{array}{cc|cc}3&5&1&0\\4&8&0&1\end{array}\right)$. La primera columna es $\binom{3}{4}$; $\operatorname{mcm}(3,4)=12$, así que se multiplica $F_1$ por $4$ y $F_2$ por $3$ para que ambas tengan un $12$ ahí:
+    $$\xrightarrow[F_2\to3F_2]{F_1\to4F_1}\left(\begin{array}{cc|cc}12&20&4&0\\12&24&0&3\end{array}\right).$$</li>
+    <li>Con el $12$ igualado, $F_2\to F_2-F_1$ anula la columna 1 en la fila 2:
+    $$\left(\begin{array}{cc|cc}12&20&4&0\\0&4&-4&3\end{array}\right).$$</li>
+    <li>Ahora toca anular la columna 2 por encima del pivote $4$: para no arrastrar fracciones, se iguala también esa columna a un múltiplo común ($20$ y $4$, $\operatorname{mcm}=20$, o directamente $F_1\to F_1-5F_2$ ya que $20=5\cdot4$):
+    $$\xrightarrow{F_1\to F_1-5F_2}\left(\begin{array}{cc|cc}12&0&24&-15\\0&4&-4&3\end{array}\right).$$</li>
+    <li>Por último se normaliza cada fila dividiendo por su pivote ($F_1\to\frac1{12}F_1$, $F_2\to\frac14F_2$):
+    $$\left(\begin{array}{cc|cc}1&0&2&-\frac{15}{12}\\0&1&-1&\frac34\end{array}\right)\;\Rightarrow\;A^{-1}=\begin{pmatrix}2&-\frac{15}{12}\\-1&\frac34\end{pmatrix}.$$</li>
+  </ol>
+  <p>Se comprueba con $AA^{-1}=I_2$.</p>
+  <span class="src" data-l="A" data-ref="Inversa de una matriz con el método de Gauss">A</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen</span>
+  <p>Comprueba siempre el resultado multiplicando $AA^{-1}$ (o $A^{-1}A$): es rápido y detecta casi cualquier error de arrastre de fracciones. En el examen, escribir la comprobación también demuestra que dominas la definición de inversa (U p.13), no solo el algoritmo.</p>
+</div>
+

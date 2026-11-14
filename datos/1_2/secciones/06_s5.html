@@ -1,0 +1,63 @@
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Operaciones y matrices elementales <span class="src" data-l="U" data-ref="U §1.2.2-1.2.3, p. 14-16">U p.14-16</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Cuando resuelves un sistema «a mano» haces cosas como intercambiar dos ecuaciones o sumarle a una un múltiplo de otra. Cada una de esas acciones sobre las <b>filas</b> de una matriz se puede reproducir <b>multiplicando por la izquierda</b> por una matriz muy concreta: la matriz elemental de esa operación. Es la pieza que conecta «hacer Gauss a mano» con «multiplicar matrices», y es la base del algoritmo de la inversa.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia">P</span>
+</div>
+
+<div class="box def"><span class="h">Operaciones elementales por filas</span>
+  <p>Con $A\in\mathcal M_{m\times n}$, se denota $F_i$ la fila $i$-ésima. Las tres operaciones elementales por filas son:</p>
+  <ol>
+    <li>Permutar dos filas: $F_i\leftrightarrow F_j$.</li>
+    <li>Multiplicar una fila por un escalar $\alpha\ne0$: $F_i\to\alpha F_i$.</li>
+    <li>Sumar a una fila un múltiplo de otra: $F_i\to F_i+\alpha F_j$.</li>
+  </ol>
+  <p>Análogamente se definen las operaciones elementales por columnas ($C_i$).</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 14">U p.14</span>
+</div>
+
+<div class="box def"><span class="h">Definición 1.2 (matriz elemental)</span>
+  <p>Una <b>matriz elemental</b> (por filas) es la matriz cuadrada que resulta al realizar <b>una sola</b> operación elemental por filas en la matriz identidad.</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.2, p. 15">U p.15</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.7 de U — reconocer matrices elementales</span>
+  <p>$E_1=\begin{pmatrix}1&0&0\\0&2&0\\0&0&1\end{pmatrix}$ viene de $F_2\to2F_2$ en $I_3$. $E_2=\begin{pmatrix}1&0&0&5\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}$ viene de $F_1\to F_1+5F_4$ en $I_4$. $E_3=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}$ viene de $F_1\leftrightarrow F_2$ en $I_3$. $E_4=\begin{pmatrix}1&-1\\0&1\end{pmatrix}$ viene de $F_1\to F_1-F_2$ en $I_2$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.7, p. 15">U p.15</span>
+</div>
+
+<div class="box thm"><span class="h">Las matrices elementales son regulares</span>
+  <p>Cada operación se deshace con otra del mismo tipo, y esa operación «inversa» da la matriz inversa:</p>
+  <ol>
+    <li>La inversa de $F_i\leftrightarrow F_j$ es ella misma.</li>
+    <li>La inversa de $F_i\to\alpha F_i$ ($\alpha\ne0$) es $F_i\to\frac1\alpha F_i$.</li>
+    <li>La inversa de $F_i\to F_i+\alpha F_j$ es $F_i\to F_i-\alpha F_j$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U p. 16">U p.16</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.8 de U — inversa de una elemental</span>
+  <p>$E=\begin{pmatrix}1&0&0\\0&1&-4\\0&0&1\end{pmatrix}$ viene de $F_2\to F_2-4F_3$ en $I_3$. La operación que la deshace es $F_2\to F_2+4F_3$, así que
+  $$E^{-1}=\begin{pmatrix}1&0&0\\0&1&4\\0&0&1\end{pmatrix},\qquad EE^{-1}=I_3.$$</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.8, p. 16">U p.16</span>
+</div>
+
+<div class="box thm"><span class="h">Operación por filas = multiplicar por la izquierda</span>
+  <p>Hacer una operación elemental por filas en $A\in\mathcal M_{m\times n}$ equivale a multiplicar por la izquierda la matriz elemental asociada $E\in\mathcal M_{m\times m}$: el resultado es $EA$. Análogamente, hacer una operación elemental por <b>columnas</b> equivale a multiplicar por la <b>derecha</b>: $AF$. Como el producto no es conmutativo, hay que respetar el lado.</p>
+  <span class="src" data-l="U" data-ref="U p. 16 (texto y nota al margen)">U p.16</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico — mismo tipo de operación, dos lados distintos</span>
+  <p>Sea $A=\begin{pmatrix}2&1&3\\0&5&4\\1&7&6\end{pmatrix}$ y $E=\begin{pmatrix}1&0&0\\0&1&0\\0&3&1\end{pmatrix}$ (viene de $F_3\to F_3+3F_2$ en $I_3$).</p>
+  <ol class="steps">
+    <li><b>Por la izquierda ($EA$, operación por filas):</b> se suma $3F_2$ a $F_3$: $EA=\begin{pmatrix}2&1&3\\0&5&4\\1&22&18\end{pmatrix}$, pues $(1,7,6)+3(0,5,4)=(1,22,18)$.</li>
+    <li><b>Por la derecha ($AE$, operación por columnas):</b> la misma $E$, leída por columnas sobre $I_3$, es $C_2\to C_2+3C_3$ (el «3» de $E$ está en la posición $(3,2)$, así que al multiplicar por la derecha afecta a la columna 2 sumándole $3$ veces la columna 3 — <b>los índices se cruzan</b> respecto al caso por filas). $AE=\begin{pmatrix}2&10&3\\0&17&4\\1&25&6\end{pmatrix}$, pues $(1,5,7)^t+3(3,4,6)^t=(10,17,25)^t$.</li>
+  </ol>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 1.15, p. 18">E p.18</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Pensar que $AE$ hace «lo mismo» que $EA$ pero por columnas con los mismos índices: si $E$ tiene el escalar en la posición $(i,j)$ (con $i\ne j$), por filas es $F_i\to F_i+\alpha F_j$ pero por columnas es $C_j\to C_j+\alpha C_i$ (los índices se invierten). Repasa el <a href="#ej1-15">Ejercicio 1.15</a> más abajo, donde se ve con tres matrices elementales distintas.</p>
+</div>
+

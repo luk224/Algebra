@@ -1,0 +1,55 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Producto de matrices <span class="src" data-l="U" data-ref="U §1.2.2, p. 12-13">U p.12-13</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Para multiplicar $A$ por $B$, cada elemento del resultado es «fila de $A$ punto columna de $B$»: se recorren a la vez, se multiplican término a término y se suman. Por eso hace falta que la fila de $A$ y la columna de $B$ tengan <b>la misma longitud</b>: el número de columnas de $A$ debe coincidir con el número de filas de $B$.</p>
+  <span class="src" data-l="L" data-ref="Lay §2.1, producto fila por columna, p. 96-97">L p.96-97</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: el producto fila × columna</span>
+  <p>Pulsa <b>Siguiente</b>: en cada paso se resalta una <span style="color:var(--acc)"><b>fila de A</b></span> y una <span style="color:var(--sec)"><b>columna de B</b></span>; se multiplican elemento a elemento y se suman para dar <b>un</b> elemento de C. Observa por qué las dimensiones tienen que encajar.</p>
+  <div class="anim-prod" data-a="1,2,0;-1,3,1" data-b="2,1;0,-1;3,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
+<div class="box def"><span class="h">Definición</span>
+  <p>Si $A\in\mathcal M_{m\times n}$ y $B\in\mathcal M_{n\times r}$, existe la matriz producto $P=AB\in\mathcal M_{m\times r}$ y
+  $$p_{ij}=\sum_{k=1}^n a_{ik}b_{kj}.$$
+  En general $AB$ <b>no está definido</b> si los tamaños no encajan. Si $A$ es cuadrada de orden $n$, $AI_n=I_nA=A$.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 12">U p.12</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico $2\times2$</span>
+  <p>Sean $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$, $B=\begin{pmatrix}2&0\\1&1\end{pmatrix}$.
+  $$AB=\begin{pmatrix}1\cdot2+2\cdot1&1\cdot0+2\cdot1\\0\cdot2+1\cdot1&0\cdot0+1\cdot1\end{pmatrix}=\begin{pmatrix}4&2\\1&1\end{pmatrix},\qquad BA=\begin{pmatrix}2&4\\1&3\end{pmatrix}.$$
+  $AB\ne BA$: <b>el producto de matrices no es conmutativo</b>, ni siquiera en $2\times2$. En general, $AB=BA$ solo en casos particulares.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box thm"><span class="h">Propiedades del producto</span>
+  <p>Asociativa: $(AB)C=A(BC)$. Distributiva por la izquierda/derecha: $A(B+C)=AB+AC$, $(A+B)C=AC+BC$. Asociativa con el escalar: $\alpha(AB)=(\alpha A)B$. Existen ambos productos $AB$ y $BA$ si $A\in\mathcal M_{m\times n}$ y $B\in\mathcal M_{n\times m}$; además, $AB$ y $BA$ tienen el <b>mismo tamaño</b> si y solo si $A$ y $B$ son cuadradas del mismo orden.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 12-13">U p.12-13</span>
+</div>
+
+<div class="box warn"><span class="h">Imprecisión de U</span>
+  <p>U (p.12) afirma literalmente que «existen ambos productos $AB$ y $BA$ si y solo si $A$ y $B$ son cuadradas del mismo orden». Es una imprecisión: si $A\in\mathcal M_{m\times n}$ y $B\in\mathcal M_{n\times m}$ (no necesariamente cuadradas, ni $m=n$) ya existen los dos productos, aunque $AB\in\mathcal M_{m\times m}$ y $BA\in\mathcal M_{n\times n}$ pueden tener tamaños distintos entre sí. Lo que sí es cierto es que $AB$ y $BA$ tienen el mismo tamaño exactamente cuando $A,B$ son cuadradas del mismo orden.</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 12">U p.12</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Usar identidades notables de números con matrices: $(A+B)^2=A^2+2AB+B^2$ y $A^2-B^2=(A+B)(A-B)$ son <b>falsas en general</b>, porque desarrollarlas exige que $AB=BA$ y eso no se puede suponer. Lo correcto es $(A+B)^2=A^2+AB+BA+B^2$ (ver <a href="#ej1-8">Ejercicio 1.8</a> más abajo).</p>
+</div>
+
+<div class="box def"><span class="h">Matriz traspuesta</span>
+  <p>$A^t$ se obtiene cambiando la fila $i$ por la columna $i$ (es decir, $(A^t)_{ij}=a_{ji}$). Propiedades: $(A^t)^t=A$, $(A+B)^t=A^t+B^t$, $(AB)^t=B^tA^t$ (<b>el orden se invierte</b>).</p>
+  <span class="src" data-l="U" data-ref="U §1.2.2, p. 13">U p.13</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.4 de U — traspuesta de un producto</span>
+  <p>Con $A=\begin{pmatrix}2&1&2\\5&4&3\end{pmatrix}\in\mathcal M_{2\times3}$ y $B=\begin{pmatrix}1&2&3&3\\4&2&5&6\\0&1&3&2\end{pmatrix}\in\mathcal M_{3\times4}$, existe $AB\in\mathcal M_{2\times4}$:
+  $$AB=\begin{pmatrix}6&8&17&16\\21&21&44&45\end{pmatrix},\qquad (AB)^t=\begin{pmatrix}6&21\\8&21\\17&44\\16&45\end{pmatrix}.$$
+  $(AB)^t$ también se podría calcular como $B^tA^t$ (ver comprobación numérica en el <a href="#ejp-1">Ejemplo propio 1</a> más abajo).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.4, p. 13">U p.13</span>
+</div>
+

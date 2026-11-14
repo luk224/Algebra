@@ -1,0 +1,53 @@
+<!-- ============================ 8 ============================ -->
+<h2 id="s8"><span class="n">8</span>Matrices escalonadas <span class="src" data-l="U" data-ref="U §1.2.4, p. 19-21">U p.19-21</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Una matriz escalonada es la que, dibujada, forma una «escalera»: cada fila empieza más a la derecha que la anterior, y las filas de solo ceros quedan al final. Es la forma más simple a la que se puede llevar cualquier matriz usando solo operaciones por filas, y sirve para leer el rango a simple vista.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 1.3</span>
+  <p>$A\in\mathcal M_{m\times n}$ es <b>escalonada</b> (por filas) si: (i) el primer elemento no nulo de cada fila (el <b>pivote</b>) tiene ceros debajo; (ii) cada fila empieza con más ceros que la anterior; (iii) las filas nulas (si las hay) son las últimas.<br>
+  Es escalonada <b>con pivotes normalizados</b> si además todos los pivotes valen 1. Es <b>escalonada reducida</b> si, además de tener los pivotes a 1, todos los elementos <b>por encima</b> de cada pivote también son cero.</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.3, p. 20">U p.20</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.12 de U — matrices escalonadas</span>
+  <p>Son <b>escalonadas</b>:
+  $$\begin{pmatrix}1&0&2&3&4&2\\0&0&0&2&3&0\\0&0&0&0&3&4\end{pmatrix},\qquad\begin{pmatrix}1&2\\0&3\\0&0\\0&0\end{pmatrix},\qquad\begin{pmatrix}4&0&3&0&-1&4&2\\0&2&5&0&0&3&7\\0&0&0&1&2&5&-1\end{pmatrix}.$$
+  En las tres, cada pivote (primer elemento no nulo de su fila) tiene ceros debajo, cada fila empieza con más ceros que la anterior y las filas nulas (si las hay) están al final: los pivotes «forman una escalera».</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.12, p. 20">U p.20</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.12 de U — matrices NO escalonadas</span>
+  <ul>
+    <li>$\begin{pmatrix}2&2&3\\0&1&5\\0&2&0\\0&0&1\end{pmatrix}$: falla (i), hay un $2$ <b>debajo</b> del pivote $1$ de la fila 2.</li>
+    <li>$\begin{pmatrix}1&0&2&3&4&2\\0&0&0&2&3&0\\0&0&0&3&3&4\end{pmatrix}$: falla (ii), las filas 2 y 3 empiezan con el mismo número de ceros (su pivote cae en la misma columna).</li>
+    <li>$\begin{pmatrix}1&0&2&3&4\\0&0&0&0&1\\0&0&-3&2&2\end{pmatrix}$: falla (ii), la fila 3 empieza <b>antes</b> (con menos ceros) que la fila 2.</li>
+    <li>$\begin{pmatrix}1&2\\0&3\\0&2\\0&1\end{pmatrix}$: falla (i), hay elementos no nulos <b>debajo</b> del pivote $3$ de la fila 1.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.12, p. 20">U p.20</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que basta con que la matriz «tenga pinta» de escalera para serlo: hay que comprobar <b>las tres condiciones</b> de la Def. 1.3 una por una, elemento a elemento. Compárense $\begin{pmatrix}1&2\\0&3\\0&0\\0&0\end{pmatrix}$ (escalonada) y $\begin{pmatrix}1&2\\0&3\\0&2\\0&1\end{pmatrix}$ (no escalonada): son casi idénticas, pero en la segunda hay elementos no nulos debajo del pivote de la primera fila.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 1.4</span>
+  <p>Se llama matriz escalonada (o escalonada reducida) <b>de</b> $A\in\mathcal M_{m\times n}$ a una matriz escalonada (o escalonada reducida) $B\in\mathcal M_{m\times n}$ que se obtiene mediante operaciones elementales por filas en $A$. En consecuencia, $A$ es equivalente por filas a <b>cualquiera</b> de sus matrices escalonadas, y además se puede calcular la matriz de paso asociada (Teorema 1.1).</p>
+  <span class="src" data-l="U" data-ref="U Def. 1.4, p. 20">U p.20</span>
+</div>
+
+<div class="box thm"><span class="h">Unicidad</span>
+  <p>Toda $A\in\mathcal M_{m\times n}$ se puede llevar a forma escalonada (o escalonada reducida) mediante operaciones por filas. La matriz escalonada <b>no es única</b> (depende de las operaciones elegidas), pero la escalonada <b>reducida sí es única</b>.</p>
+  <span class="src" data-l="U" data-ref="U p. 21">U p.21</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.13-1.14 de U</span>
+  <p>Con $A=\begin{pmatrix}1&2\\2&3\\1&1\end{pmatrix}$: escalonando $(A\mid I_3)$ con $F_2\to F_2-2F_1$, $F_3\to F_3-F_1$, $F_3\to F_3-F_2$ (las mismas operaciones actúan a la vez sobre $A$ y sobre $I_3$) se pasa de
+  $$\left(\begin{array}{cc|ccc}1&2&1&0&0\\2&3&0&1&0\\1&1&0&0&1\end{array}\right)\longrightarrow\left(\begin{array}{cc|ccc}1&2&1&0&0\\0&-1&-2&1&0\\0&0&1&-1&1\end{array}\right)=(A_e\mid E).$$
+  A la izquierda de la barra queda la escalonada y a la derecha la matriz de paso:
+  $$A_e=\begin{pmatrix}1&2\\0&-1\\0&0\end{pmatrix}=EA,\qquad E=\begin{pmatrix}1&0&0\\-2&1&0\\1&-1&1\end{pmatrix}.$$
+  Otras escalonadas válidas de la misma $A$ son $\begin{pmatrix}1&2\\0&1\\0&0\end{pmatrix}$ o $\begin{pmatrix}2&4\\0&1\\0&0\end{pmatrix}$: distintas, pero <b>todas</b> tienen 2 filas no nulas. La escalonada reducida, en cambio, es única: $\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 1.13-1.14, p. 21">U p.21</span>
+</div>
+
