@@ -1,0 +1,63 @@
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Aplicación bilineal y forma bilineal <span class="src" data-l="U" data-ref="U §6.1.1, Definiciones 6.1-6.2 y Ejemplos 6.1-6.3, p. 244-245">U p.244-245</span></h2>
+
+<div class="box intu"><span class="h">Idea: lineal en cada entrada, por separado</span>
+  <p>Piensa en el área de un rectángulo, $\text{ancho}\times\text{alto}$. Si duplicas el ancho (el alto fijo), el área se duplica; si sumas dos anchos, las áreas se suman. Lo mismo con el alto. Es «lineal en cada variable». Pero <b>no</b> es lineal en el par: si duplicas ancho <i>y</i> alto, el área se multiplica por $4$, no por $2$. Eso es una función bilineal: <b>$f(\lambda x,\lambda y)=\lambda^2f(x,y)$</b>, no $\lambda f(x,y)$. Otros ejemplos: el producto escalar $u\cdot v$ y el determinante $2\times2$ de dos vectores $\det(x,y)=x_1y_2-x_2y_1$ (área con signo del paralelogramo que forman).</p>
+  <svg class="fig" viewBox="0 0 330 120" role="img" aria-label="Esquema: dos vectores x e y entran en la máquina f y sale un número real; f es lineal en x con y fijo y lineal en y con x fijo">
+    <line class="a" x1="62" y1="30" x2="128" y2="52"></line>
+    <line class="b" x1="62" y1="92" x2="128" y2="70"></line>
+    <text x="40" y="34" text-anchor="middle" class="lg">x</text>
+    <text x="40" y="96" text-anchor="middle" class="lg">y</text>
+    <rect class="pl1" x="130" y="34" width="80" height="52" rx="9"></rect>
+    <text x="170" y="68" text-anchor="middle" class="lg bd">f</text>
+    <line class="ax" x1="212" y1="60" x2="262" y2="60"></line>
+    <polygon class="pt" points="270,60 259,55 259,65"></polygon>
+    <text x="300" y="65" text-anchor="middle" class="lg">número</text>
+    <text class="sm" x="170" y="108" text-anchor="middle">lineal en x (con y fijo) y lineal en y (con x fijo)</text>
+  </svg>
+  <span class="src" data-l="P" data-ref="Analogía propia del área y esquema propio; el determinante 2×2 como forma bilineal es ejemplo propio (ver ejemplo propio 1)">propio</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.1 — aplicación bilineal</span>
+  <p>Sean $E,F,V$ tres espacios vectoriales. Una aplicación $f:E\times F\to V$ es <b>bilineal</b> si es lineal en cada variable:</p>
+  <table>
+    <tr><th>Lineal en la 1.ª variable</th><th>Lineal en la 2.ª variable</th></tr>
+    <tr><td>$f(x+x',y)=f(x,y)+f(x',y)$</td><td>$f(x,y+y')=f(x,y)+f(x,y')$</td></tr>
+    <tr><td>$f(\lambda x,y)=\lambda f(x,y)$</td><td>$f(x,\lambda y)=\lambda f(x,y)$</td></tr>
+  </table>
+  <p>para todo $x,x'\in E$, $y,y'\in F$, $\lambda\in\mathbb R$. Dicho de otro modo: si fijas $y$, la aplicación $x\mapsto f(x,y)$ es lineal; si fijas $x$, $y\mapsto f(x,y)$ es lineal. Esas dos aplicaciones lineales (las «asociadas» $f_1$ y $f_2$) son el método práctico para comprobar la definición: con $a\in E$ fijo, $f_1(y)=f(a,y)$; con $b\in F$ fijo, $f_2(x)=f(x,b)$; $f$ es bilineal si y solo si todas las $f_1$ y todas las $f_2$ son lineales (tema 3.1).</p>
+  <span class="src" data-l="U" data-ref="U §6.1.1, Definición 6.1, p. 244; objetivos de la sección, p. 243">U p.243-244</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, introducción de §6.1, p. 201 (aplicaciones lineales asociadas)">E p.201</span>
+</div>
+
+<div class="box def"><span class="h">Definición 6.2 — forma bilineal</span>
+  <p>Una <b>forma bilineal</b> es una aplicación bilineal $f:E\times E\to\mathbb R$: los dos factores son el <b>mismo</b> espacio $E$ y el resultado es un <b>número real</b>.</p>
+  <span class="src" data-l="U" data-ref="U §6.1.1, Definición 6.2, p. 245">U p.245</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 6.1-6.3 de U — bilineal, pero no forma bilineal</span>
+  <p>$f:\mathbb R^2\times\mathbb R^3\to\mathbb R$, $f(x,y)=x_1y_2+x_2y_3$ con $x=(x_1,x_2)$, $y=(y_1,y_2,y_3)$.</p>
+  <p><b>Método de U 1: fijar una variable.</b> Con $a=(2,-1)\in\mathbb R^2$ fijo, $f_1(y)=f(a,y)=2y_2-y_3$ es lineal ($\mathbb R^3\to\mathbb R$: suma de múltiplos de coordenadas). Con $b=(b_1,b_2,b_3)$ fijo, $f_2(x)=x_1b_2+x_2b_3$ es lineal ($\mathbb R^2\to\mathbb R$). Como valen para <b>cualquier</b> $a$ y $b$, $f$ es bilineal. <b>Método 2</b>, las cuatro igualdades:</p>
+  <ol class="steps">
+    <li><b>Suma en la 1.ª variable.</b> $f(x+x',y)=(x_1+x_1')y_2+(x_2+x_2')y_3=(x_1y_2+x_2y_3)+(x_1'y_2+x_2'y_3)=f(x,y)+f(x',y)$.</li>
+    <li><b>Producto en la 1.ª:</b> $f(\lambda x,y)=\lambda x_1y_2+\lambda x_2y_3=\lambda f(x,y)$.</li>
+    <li><b>Suma y producto en la 2.ª variable</b>, igual: $f(x,y+y')=f(x,y)+f(x,y')$ y $f(x,\lambda y)=\lambda f(x,y)$. Por tanto es una aplicación <b>bilineal</b> (Ej. 6.1-6.2).</li>
+    <li><b>Pero no es forma bilineal</b> (Ej. 6.3): sale de $\mathbb R^2\times\mathbb R^3$ y $\mathbb R^2\neq\mathbb R^3$. La Def. 6.2 exige el producto de un espacio por <b>sí mismo</b>.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.1.1, Ejemplos 6.1 y 6.2, p. 244-245, y Ejemplo 6.3, p. 245">U p.244-245</span>
+</div>
+
+<div class="box tip"><span class="h">Truco: reconocer una forma bilineal con la mirada</span>
+  <p>Una expresión polinómica $f(x,y)$ es bilineal si y solo si <b>cada sumando lleva exactamente un $x_i$ y exactamente un $y_j$, ambos a la primera potencia</b>: es un polinomio de la forma $\sum a_{ij}x_iy_j$. Señales de que <b>no</b> lo es: un término constante ($x_1y_1+1$), un término solo en $x$ o solo en $y$ ($x_1+y_2$), una potencia ($x_1^2y_1$), o un producto $x_1x_2$. Para <b>probarlo</b> escribe las cuatro igualdades de la Def. 6.1 con letras generales; para <b>refutarlo</b> basta un contraejemplo numérico, o recordar que toda bilineal cumple $f(0,y)=0$ (sección 2). Un número concreto nunca demuestra bilinealidad.</p>
+  <span class="src" data-l="P" data-ref="Truco propio; se apoya en la expresión analítica de U p.246 (polinomio homogéneo Σ aᵢⱼ xᵢ yⱼ) y en las propiedades de U p.248">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Otros ejemplos de aplicaciones bilineales</span>
+  <p>El <b>producto vectorial</b> $\mathbb R^3\times\mathbb R^3\to\mathbb R^3$, $(u,v)\mapsto u\times v$, es bilineal (lineal en $u$ y en $v$) pero <b>no</b> es forma bilineal: llega a $\mathbb R^3$, no a $\mathbb R$. En cambio $(X,Y)\mapsto\operatorname{tr}(X^tY)$ en $\mathcal M_{2\times2}$ sí es forma bilineal (el producto escalar usual de matrices): $\operatorname{tr}(X^tY)=\sum x_{ij}y_{ij}$.</p>
+  <span class="src" data-l="P" data-ref="Ejemplos propios; la traza de XᵗY como producto escalar de matrices aparece en X Feb. 2026 (2.ª sem.) p.5, tema 5.1">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Creer que «bilineal» significa «grado 1 en total». $x_1+y_2$ tiene grado 1, pero <b>no</b> es bilineal (falla $f(\lambda x,y)=\lambda f(x,y)$: queda $\lambda x_1+y_2\neq\lambda x_1+\lambda y_2$). Y al revés: $x_1y_2$ tiene grado <b>2</b> y sí es bilineal, porque en cada variable por separado el grado es 1. Tampoco confundas bilineal con lineal en el par $(x,y)$: $f(x+x',y+y')$ <b>no</b> es $f(x,y)+f(x',y')$.</p>
+</div>
+
