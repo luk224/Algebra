@@ -1,0 +1,59 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>El sentido contrario: la matriz inversa <span class="src" data-l="U" data-ref="U §3.5.3, p. 135 (cambio inverso y regularidad); Autoevaluación del cap. 3, ítems 8 y 9, p. 137-138, soluciones p. 311">U p.135</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Si $Q$ traduce del idioma nuevo al antiguo, ¿cómo traducir del antiguo al nuevo? <b>Deshaciendo</b> lo que hace $Q$. «Deshacer» una matriz es multiplicar por su inversa. Y esto siempre es posible, porque un diccionario entre dos bases no pierde información: dos vectores distintos tienen descripciones distintas en cualquier base.</p>
+</div>
+
+<div class="box thm"><span class="h">Las matrices de cambio de base son regulares y el cambio contrario es la inversa</span>
+  <p>Sea $R$ la matriz del cambio contrario, $x_{B'}=R\,x_B$ (columnas de $R$ = vectores de $B$ escritos en $B'$). Entonces
+  $$R=Q^{-1},\qquad\det Q\neq0,\qquad\det(Q^{-1})=\frac1{\det Q}.$$
+  <b>Demostración (con los dos lados).</b> Para todo vector, $x_{B'}=R\,x_B=RQ\,x_{B'}$. Tomando $x_{B'}=(1,0,\dots,0),\dots,(0,\dots,0,1)$ se obtienen las columnas de $RQ$, que son las de $I$: $RQ=I$. Del mismo modo, $x_B=Q\,x_{B'}=QR\,x_B$ para todo $x_B$ da $QR=I$. Por la definición de inversa (U p.13, $AB=BA=I$), $R=Q^{-1}$. Como $Q$ tiene inversa, es regular, y $\det(RQ)=\det R\det Q=1$ (U p.26).</p>
+  <span class="src" data-l="U" data-ref="U §3.5.3, «Las matrices de cambio de base son regulares (tienen inversa)», p. 135">U p.135</span>
+</div>
+
+<div class="box ex"><span class="h">Cómo calcular $Q^{-1}$: tres caminos (con $Q$ de E 3.33-3.34)</span>
+  <p>Sea $Q=\begin{pmatrix}1&0&-1\cr0&1&0\cr1&1&0\end{pmatrix}$ (columnas $(1,0,1)$, $(0,1,1)$, $(-1,0,0)$: la base $B'$ de E 3.33).</p>
+  <ol class="steps">
+    <li><b>Camino 1 — despejar los vectores antiguos en función de los nuevos</b> (es el método de U, Ej. 3.31, p.137). Con $B$ canónica: $e'_1=e_1+e_3$, $e'_2=e_2+e_3$, $e'_3=-e_1$. De la 3.ª: $e_1=-e'_3$; de la 1.ª: $e_3=e'_1-e_1=e'_1+e'_3$; de la 2.ª: $e_2=e'_2-e_3=-e'_1+e'_2-e'_3$. Esas coordenadas, <b>por columnas</b> ($e_1=(0,0,-1)_{B'}$, $e_2=(-1,1,-1)_{B'}$, $e_3=(1,0,1)_{B'}$):
+    $$Q^{-1}=\begin{pmatrix}0&-1&1\cr0&1&0\cr-1&-1&1\end{pmatrix}.$$</li>
+    <li><b>Camino 2 — Gauss-Jordan</b> $(Q\mid I)\sim(I\mid Q^{-1})$ (U p.18). Se anula la 3.ª fila de la columna 1 restando la 1.ª, luego la columna 2 restando la 2.ª, y se limpia el $-1$ de la 1.ª fila sumando la 3.ª:
+    $$\left(\begin{array}{ccc|ccc}1&0&-1&1&0&0\cr0&1&0&0&1&0\cr1&1&0&0&0&1\end{array}\right)\xrightarrow{F_3-F_1}\left(\begin{array}{ccc|ccc}1&0&-1&1&0&0\cr0&1&0&0&1&0\cr0&1&1&-1&0&1\end{array}\right)\xrightarrow{F_3-F_2}\left(\begin{array}{ccc|ccc}1&0&-1&1&0&0\cr0&1&0&0&1&0\cr0&0&1&-1&-1&1\end{array}\right)$$
+    $$\xrightarrow{F_1+F_3}\left(\begin{array}{ccc|ccc}1&0&0&0&-1&1\cr0&1&0&0&1&0\cr0&0&1&-1&-1&1\end{array}\right).$$
+    El bloque derecho es $Q^{-1}$, el mismo de arriba.</li>
+    <li><b>Camino 3 — fórmula de la adjunta</b> (U p.27): $Q^{-1}=\frac1{|Q|}(\operatorname{Adj}Q)^t$, con $|Q|=1$ (desarrollo por la 2.ª fila). Más lento en $3\times3$; útil en $2\times2$ (se intercambian los de la diagonal y se cambia el signo de los otros dos, dividiendo por el determinante).</li>
+    <li><b>Comprobación $Q^{-1}Q=I$:</b> fila 1 de $Q^{-1}$ por las columnas de $Q$: $(0,-1,1)\cdot(1,0,1)=1$, $(0,-1,1)\cdot(0,1,1)=0$, $(0,-1,1)\cdot(-1,0,0)=0$ ✓; las otras dos filas dan $(0,1,0)$ y $(0,0,1)$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.31, cálculo de P^{-1} «expresando los vectores de S en función de los de S'», p. 137; Gauss-Jordan §1.2, p. 18; adjunta §1.3, p. 27">U p.18, 27, 137</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.36, p. 112-113">E p.112-113</span>
+  <span class="src" data-l="L" data-ref="Lay §2.2, Teorema 4 (inversa 2×2), p. 103-104; §2.3, Teorema 8 (caracterizaciones de matrices invertibles), p. 112">L §2.2-2.3 p.103-112</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: matriz inversa por Gauss-Jordan (cambio de base $\mathbb R^2$)</span>
+  <p>Para el cambio de la animación anterior, $Q=\begin{pmatrix}1&-1\cr1&1\end{pmatrix}$, la inversa es $Q^{-1}=\tfrac12\begin{pmatrix}1&1\cr-1&1\end{pmatrix}$ (cambio de la canónica a $B'$): $x_{B'}=Q^{-1}(3,1)^t=(2,-1)$. (En la animación, $A$ es nuestra $Q$.) Sigue las operaciones por filas $(Q\mid I)\sim(I\mid Q^{-1})$ y edita la matriz con «✎» para probar con las de los ejercicios.</p>
+  <div class="anim-gauss" data-modo="inversa" data-m="1,-1;1,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-gauss modo inversa); Q=[[1,-1],[1,1]]">P</span>
+</div>
+
+<div class="box tip"><span class="h">Autoevaluación de U sobre este apartado (cap. 3, p.137-138; soluciones p.311)</span>
+  <ul>
+    <li><b>Ítem 3.</b> «La misma matriz $A$ puede corresponder a dos aplicaciones lineales $f$ y $g$ diferentes para distintas bases»: <b>Verdadero.</b> U (p.311): $f$ es la identidad de $\mathbb R^2$ con las bases canónicas y $g(x_1,x_2)=(x_1,2x_2)$ con la base $\{(1,0),(0,\tfrac12)\}$ en la salida y la canónica en la llegada: ambas tienen matriz $I_2$.</li>
+    <li><b>Ítem 8.</b> «Las matrices de cambio de base son singulares»: <b>Falso.</b> Son regulares y su inversa está asociada al cambio de base inverso.</li>
+    <li><b>Ítem 9.</b> «Las aplicaciones lineales asociadas a un cambio de base son la identidad»: <b>Verdadero.</b> Escribir el mismo vector respecto de otra base es aplicar la identidad.</li>
+    <li><b>Ítem 4.</b> «Una matriz $A$ determina una aplicación lineal que no depende de las bases elegidas»: <b>Falso.</b> <b>Ítem 10.</b> «Aunque se cambien las bases, la matriz asociada no varía»: <b>Falso</b> (la matriz se construye con las bases; varía con ellas).</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Autoevaluación del capítulo 3, ítems 3, 4, 8, 9 y 10, enunciados p. 137-138; soluciones p. 311">U p.137-138, 311</span>
+</div>
+
+<div class="box tip"><span class="h">Ya resuelto en el tema 3.3</span>
+  <p>El ítem 8 aparece tal cual en el examen de <a href="tema_3_3_ecuaciones_matriz_asociada.html#ex-sep17a-3">Sept. 2017 (A), ejercicio 3</a> (opción A: «las matrices de cambio de base son singulares», falsa). La justificación es la de este apartado.</p>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>Usar $Q$ en vez de $Q^{-1}$</b> al pasar de antigua a nueva: con $Q$ de E 3.33, $Q(-2,2,3)^t=(-5,2,0)\neq(1,2,3)$.</li>
+    <li><b>Despejar y poner las coordenadas por filas</b>: se obtiene $(Q^{-1})^t$.</li>
+    <li><b>Creer que se puede perder la regularidad</b>: si al calcular sale $\det Q=0$, es que los vectores «nuevos» no forman base (o hay un error de cálculo).</li>
+  </ul>
+</div>
+

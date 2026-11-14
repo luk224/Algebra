@@ -1,0 +1,78 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>La matriz de una aplicación lineal al cambiar las bases <span class="src" data-l="U" data-ref="U §3.5.3, Def. 3.15 y Ejemplo 3.31, p. 135-137">U p.135-137</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: el «rodeo» por las bases antiguas</span>
+  <p>Conoces la matriz $A$ de $f$ con las bases antiguas ($B$ en $V$, $S$ en $W$) y quieres la de las bases nuevas ($B'$, $S'$). Recibes un vector en idioma «nuevo» de $V$. Lo <b>traduces</b> al antiguo ($Q$), <b>aplicas $f$</b> con la matriz que ya conoces ($A$) y obtienes la imagen en el idioma antiguo de $W$; por último la <b>traduces</b> al idioma nuevo de $W$ ($P^{-1}$). Las matrices se leen <b>de derecha a izquierda</b>: lo que actúa primero va a la derecha.</p>
+</div>
+
+<figure style="margin:1em 0">
+<svg class="fig" style="width:100%" viewBox="0 0 480 250" role="img" aria-label="Diagrama de cambio de base: (V,B') a (W,S') por A' arriba; (V,B) a (W,S) por A abajo; flecha Q de (V,B') a (V,B) a la izquierda; flecha P inversa de (W,S) a (W,S') a la derecha">
+  <text x="60" y="52" class="bd lg" style="font-size:19px" text-anchor="middle">(V, B′)</text>
+  <text x="420" y="52" class="bd lg" style="font-size:19px" text-anchor="middle">(W, S′)</text>
+  <text x="60" y="212" class="bd lg" style="font-size:19px" text-anchor="middle">(V, B)</text>
+  <text x="420" y="212" class="bd lg" style="font-size:19px" text-anchor="middle">(W, S)</text>
+  <line x1="125" y1="46" x2="340" y2="46" class="a"/>
+  <polygon points="338,39 354,46 338,53" class="pt"/>
+  <text x="240" y="34" class="bd" style="font-size:19px" text-anchor="middle">A′ = P⁻¹AQ</text>
+  <line x1="125" y1="206" x2="340" y2="206" class="a"/>
+  <polygon points="338,199 354,206 338,213" class="pt"/>
+  <text x="240" y="196" class="bd" style="font-size:19px" text-anchor="middle">A</text>
+  <line x1="60" y1="68" x2="60" y2="178" class="b"/>
+  <polygon points="53,176 60,192 67,176" class="pb"/>
+  <text x="38" y="128" class="bd" style="font-size:19px" text-anchor="middle">Q</text>
+  <line x1="420" y1="178" x2="420" y2="68" class="b"/>
+  <polygon points="413,70 420,54 427,70" class="pb"/>
+  <text x="448" y="128" class="bd" style="font-size:19px" text-anchor="middle">P⁻¹</text>
+</svg>
+<figcaption>Esquema propio (el diagrama de U p.136 no tiene número de figura): el camino de arriba equivale a «bajar» por $Q$, aplicar $A$ y «subir» por $P^{-1}$. <span class="src" data-l="P" data-ref="Figura propia a partir del diagrama de U p. 135-136">propio</span></figcaption>
+</figure>
+
+<div class="box def"><span class="h">Definición 3.15 — fórmula de cambio de base en una aplicación lineal</span>
+  <p>Sea $f:V\to W$ lineal, con matriz $A$ respecto de las bases $B$ de $V$ y $S$ de $W$, y matriz $A'$ respecto de $B'$ y $S'$. Sean $Q$ la matriz del cambio de coordenadas de $B'$ a $B$ en $V$, y $P$ la de $S'$ a $S$ en $W$. Entonces
+  $$A'=P^{-1}\,A\,Q,\qquad\text{es decir,}\qquad \big(f(x_{B'})\big)_{S'}=P^{-1}AQ\,x_{B'}.$$
+  <b>Tamaños:</b> si $\dim V=m$ y $\dim W=n$: $(n\times n)(n\times m)(m\times m)=n\times m$. Si los tamaños no «encajan», se han intercambiado los papeles de $P$ y $Q$.</p>
+  <span class="src" data-l="U" data-ref="U Definición 3.15, p. 136 (Q: de B' a B; P: de S' a S)">U p.136</span>
+</div>
+
+<div class="box intu"><span class="h">Por qué (en una línea) y qué hay por columnas</span>
+  <p>$Q$ traduce $x_{B'}\mapsto x_B$; $A$ lleva $x_B$ a $(f(x))_S$ (Def. 3.4); y $P^{-1}$ traduce $(f(x))_S\mapsto(f(x))_{S'}$. Por la matriz de la composición (Def. 3.12), el rodeo completo tiene matriz $P^{-1}AQ$. Para comprobar: $AQ$ tiene por columnas las imágenes $f(e'_j)$ <b>en la base antigua</b> $S$, y $P^{-1}$ las pasa a coordenadas en $S'$ (es la Def. 3.4 aplicada con matrices).</p>
+  <span class="src" data-l="P" data-ref="Explicación propia a partir de U Def. 3.12 p. 126, Def. 3.4 p. 116 y Def. 3.15 p. 136">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 3.31 (U) — $f:\mathbb R^2\to\mathbb R^3$ con bases nuevas en salida y llegada</span>
+  <p>$B=\{e_1,e_2\}$, $B'=\{e'_1=e_1+e_2,\ e'_2=e_1-e_2\}$; $S=\{s_1,s_2,s_3\}$, $S'=\{s'_1=s_1+s_3,\ s'_2=s_1-s_2,\ s'_3=s_2\}$; $f(1,2)=(1,0,-1)$ y $f(0,1)=(2,1,0)$ en las bases $B$ y $S$. Se piden la matriz de $f$ en $B,S$; en $B',S'$; y la imagen en $S'$ de $(2,3)_{B'}$.</p>
+  <ol class="steps">
+    <li><b>$A$ (Def. 3.4).</b> $f(e_2)=f(0,1)=(2,1,0)_S$; por linealidad $f(1,2)=f(e_1)+2f(e_2)$, luego $f(e_1)=(1,0,-1)-2(2,1,0)=(-3,-2,-1)_S$:
+    $$A=\begin{pmatrix}-3&2\cr-2&1\cr-1&0\end{pmatrix}.$$</li>
+    <li><b>$Q$</b> (salida, de $B'$ a $B$): $e'_1=(1,1)_B$, $e'_2=(1,-1)_B$, luego $Q=\begin{pmatrix}1&1\cr1&-1\end{pmatrix}$.</li>
+    <li><b>$P$</b> (llegada, de $S'$ a $S$): $s'_1=(1,0,1)_S$, $s'_2=(1,-1,0)_S$, $s'_3=(0,1,0)_S$, luego $P=\begin{pmatrix}1&1&0\cr0&-1&1\cr1&0&0\end{pmatrix}$, $\det P=1$.</li>
+    <li><b>$P^{-1}$ despejando la base antigua</b> (U p.137): $s_2=s'_3$; $s_1=s'_2+s_2=s'_2+s'_3$; $s_3=s'_1-s_1=s'_1-s'_2-s'_3$. Esas coordenadas por columnas:
+    $$P^{-1}=\begin{pmatrix}0&0&1\cr1&0&-1\cr1&1&-1\end{pmatrix}.$$</li>
+    <li><b>$A'=P^{-1}AQ$</b> (tamaños: $3\times3\cdot3\times2\cdot2\times2=3\times2$ ✓). Primero $AQ$ (sus columnas son $f(e'_1)$, $f(e'_2)$ en $S$):
+    $$AQ=\begin{pmatrix}-3+2&-3-2\cr-2+1&-2-1\cr-1&-1\end{pmatrix}=\begin{pmatrix}-1&-5\cr-1&-3\cr-1&-1\end{pmatrix},\qquad A'=P^{-1}(AQ)=\begin{pmatrix}-1&-1\cr0&-4\cr-1&-7\end{pmatrix}.$$
+    <b>Comprobación de la columna 1:</b> $f(e'_1)=-s_1-s_2-s_3$ y $-1s'_1+0s'_2-1s'_3=-(s_1+s_3)-s_2=-s_1-s_2-s_3$ ✓.</li>
+    <li><b>Imagen de $(2,3)_{B'}$:</b> $A'\binom23=(-5,-12,-23)_{S'}$. <b>Con un vector:</b> $(2,3)_{B'}=5e_1-e_2$ y $A\binom5{-1}=(-17,-11,-5)_S$; y $-5s'_1-12s'_2-23s'_3=-5(s_1+s_3)-12(s_1-s_2)-23s_2=-17s_1-11s_2-5s_3$ ✓.</li>
+  </ol>
+  <p><b>Método:</b> (1) $A$ en las bases antiguas; (2) $Q$ y $P$ por columnas; (3) $P^{-1}$ despejando o por Gauss-Jordan; (4) $A'=P^{-1}AQ$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 3.31, p. 136-137">U p.136-137</span>
+</div>
+
+<div class="box def"><span class="h">Caso importante: endomorfismos ($V=W$, misma base en salida y llegada)</span>
+  <p>Si $f:V\to V$ y se usa la misma base en la salida y en la llegada, entonces $S=B$, $S'=B'$ y <b>$P=Q$</b>. La fórmula queda
+$$\boxed{A'=Q^{-1}AQ}\qquad\text{(entro con }Q\text{, aplico }A\text{, salgo con }Q^{-1}\text{)}.$$
+Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>semejantes</b> (Def. 4.5, U p.148): son la matriz <i>del mismo endomorfismo</i> en dos bases. En el tema 4 se escribe como $P^{-1}AP$, con $P$ = cambio de $B'$ a $B$ (la $Q$ de aquí). Es el punto de partida del tema 4: si se elige una base de vectores propios, $A'$ resulta <b>diagonal</b> (diagonalización).</p>
+  <p><b>Control útil:</b> $\det A'=\det A$, porque $\det(Q^{-1}AQ)=\det Q^{-1}\det A\det Q=\det A$ (U p.26). Otra relación se justifica en el tema 4 (la traza). Pero ojo: este control <b>no detecta</b> haber escrito $QAQ^{-1}$ en vez de $Q^{-1}AQ$; compruébalo siempre con un vector o con una columna (Def. 3.4).</p>
+  <span class="src" data-l="U" data-ref="U Def. 3.15, p. 136 con V=W; Def. 4.5 (matrices semejantes), p. 148">U p.136, 148</span>
+  <span class="src" data-l="L" data-ref="Lay §5.4 Vectores propios y transformaciones lineales, [T]_B, p. 289-290; Teorema 8 (A = PDP^{-1} y la B-matriz de x→Ax), p. 291">L §5.4 p.289-291</span>
+</div>
+
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>Invertir el orden</b> y calcular $QAQ^{-1}$ (o $PAQ^{-1}$): el tamaño puede cuadrar, pero la matriz es otra. La inversa va <b>a la izquierda</b>.</li>
+    <li><b>Usar $P$ en lugar de $P^{-1}$</b> (o $Q^{-1}$ en lugar de $Q$): $PAQ$ tiene el tamaño correcto pero es falso.</li>
+    <li><b>Detenerse en $AQ$</b>: son las imágenes de la base nueva expresadas en la base <b>antigua</b> de llegada, no en la nueva.</li>
+    <li><b>No confundir la fórmula con la de formas bilineales.</b> En las aplicaciones lineales es $Q^{-1}AQ$ (los exámenes escriben $P^{-1}AP$); en las <b>formas bilineales y cuadráticas</b> (tema 6.1) es $P^tAP$ (<i>congruencia</i>, no semejanza). Aparece en exámenes (Feb. 2026 1.ª sem., pregunta 6; Sept. 2018 A, ejercicio 6).</li>
+  </ul>
+</div>
+
