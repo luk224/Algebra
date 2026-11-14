@@ -1,0 +1,50 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Del polinomio a la matriz simétrica (y al revés) <span class="src" data-l="U" data-ref="U §6.2.2, «Para obtener la matriz A (simétrica)… se desdoblan los términos rectangulares», Ejemplo 6.16, p. 257">U p.257</span> <span class="src" data-l="L" data-ref="Lay §7.2, Ejemplo 2, p. 401">L p.401</span></h2>
+
+<div class="box intu"><span class="h">Idea: el término cruzado se parte por la mitad</span>
+  <p><i>Vocabulario:</i> los productos cruzados $x_ix_j$ ($i\neq j$), por oposición a los cuadrados $x_i^2$.</p>
+  <p>En $Q=X^tAX$ la matriz $A$ es simétrica, así que el término $a_{12}x_1x_2$ aparece <b>dos veces</b>: $a_{12}x_1x_2+a_{21}x_2x_1=2a_{12}x_1x_2$. Si el polinomio dice «$6x_1x_2$», entonces $2a_{12}=6$ y $a_{12}=a_{21}=3$. Es como repartir una cantidad a partes iguales entre dos posiciones simétricas. Los cuadrados no se tocan: van enteros a la diagonal.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia; U lo formula como «desdoblar los términos rectangulares», p. 257">propio</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: matriz de $Q$ a partir del polinomio (U: «desdoblar los términos rectangulares»)</span>
+  <ol>
+    <li>El coeficiente de $x_i^2$ va a la <b>diagonal</b>, posición $(i,i)$.</li>
+    <li>El coeficiente $c$ de $x_ix_j$ ($i\neq j$) se <b>divide entre 2</b> y se coloca en $(i,j)$ <b>y</b> en $(j,i)$.</li>
+    <li>Lo que no aparece es $0$.</li>
+    <li><b>Comprobación</b> (hazla siempre en el examen): calcula $X^tAX$ y comprueba que devuelve el polinomio, o evalúa los dos en un vector concreto.</li>
+  </ol>
+  <p>Al revés, de $A$ al polinomio: $Q=\sum a_{ii}x_i^2+2\sum_{i&lt;j}a_{ij}x_ix_j$ (el cruzado lleva un 2).</p>
+  <span class="src" data-l="U" data-ref="U §6.2.2, procedimiento y fórmula general, p. 257">U p.257</span>
+  <span class="src" data-l="P" data-ref="Receta y comprobación propias">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 6.16 de U</span>
+  <p>$Q(x_1,x_2,x_3)=2x_1^2+2x_1x_2-6x_2x_3+x_2^2+5x_3^2$.</p>
+  <ol class="steps">
+    <li>Diagonal: $a_{11}=2$, $a_{22}=1$, $a_{33}=5$.</li>
+    <li>$2x_1x_2=x_1x_2+x_2x_1\Rightarrow a_{12}=a_{21}=1$. $-6x_2x_3=-3x_2x_3-3x_3x_2\Rightarrow a_{23}=a_{32}=-3$. No hay $x_1x_3\Rightarrow a_{13}=a_{31}=0$.</li>
+    <li>$A=\begin{pmatrix}2&1&0\\1&1&-3\\0&-3&5\end{pmatrix}$. Comprobación: $X^tAX=2x_1^2+x_2^2+5x_3^2+2x_1x_2-6x_2x_3$ ✓.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.2.2, Ejemplo 6.16, p. 257">U p.257</span>
+</div>
+
+<div class="box ex"><span class="h">Al revés: del polinomio a la bilineal simétrica $f(x,y)$</span>
+  <p>Si $Q=x_1^2-2x_1x_2+x_2^2$, su matriz es $A=\begin{pmatrix}1&-1\\-1&1\end{pmatrix}$ y la bilineal simétrica que la genera es $f(x,y)=X^tAY=x_1y_1-x_1y_2-x_2y_1+x_2y_2$: cada cruzado $c\,x_ix_j$ se reparte en $\tfrac c2x_iy_j+\tfrac c2x_jy_i$. Es el Ej. 6.15 de U leído al revés (allí se pasaba de $f$ a $Q$).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio; sentido inverso del Ejemplo 6.15 de U, p. 256">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico propio: una $M$ cualquiera y la matriz de $Q$</span>
+  <p>$Q(x_1,x_2)=x_1^2+4x_1x_2+3x_2^2$ se obtiene de la matriz <b>no simétrica</b> $M=\begin{pmatrix}1&4\\0&3\end{pmatrix}$ (el 4 está entero en una posición), pero también de la <b>simétrica</b> $S=\begin{pmatrix}1&2\\2&3\end{pmatrix}$ (el 4 partido en $2+2$). En $x=(1,2)$: con el polinomio $1+8+12=21$; con $S$, $Sx=(5,8)^t$ y $X^tSX=5+16=21$ ✓. Ambas valen, pero «la matriz de $Q$» es $S=\tfrac12(M+M^t)$.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio (propio P2 de la sección 7), verificado con sympy">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: forma cuadrática, parte simétrica y cambio de base (2D)</span>
+  <div class="anim-cuadratica" data-m="1,4,0,3" data-p="1,-2,0,1" data-x="2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (assets/animaciones.js, anim-cuadratica); presets con E 6.15, M no simétrica, triangular, antisimétrica (Q ≡ 0), x₁x₂ que se diagonaliza y P singular">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Poner el coeficiente <b>entero</b> en $a_{12}$ y en $a_{21}$: con $-2x_1x_2$ pondrías $-2$ y $-2$, y entonces $X^tAX$ da $-4x_1x_2$. Lo correcto es $-1$ y $-1$. Y no olvides que si el coeficiente es impar, la matriz tiene <b>fracciones</b> (p. ej. $5x_1x_2\Rightarrow\tfrac52$), como en Sept. 2023.</p>
+</div>
+
