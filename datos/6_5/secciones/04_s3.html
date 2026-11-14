@@ -1,0 +1,63 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Giro y traslación: cómo se llega a la reducida <span class="src" data-l="U" data-ref="U §6.5.3 Obtención de la ecuación reducida de una cuádrica, Ej. 6.40, p. 295-298">U p.295-298</span></h2>
+
+<div class="box intu"><span class="h">Idea: girar y centrar (otra vez)</span>
+  <p>Una superficie torcida y desplazada tiene una ecuación fea. <b>Primero se gira</b> hasta que los ejes coincidan con los de la superficie: eso se hace diagonalizando ortogonalmente la parte cuadrática (tema 5.3) y borra todos los $x_ix_j$. <b>Después se centra</b>: completando cuadrados se desplaza el origen al centro de la superficie (o al vértice, si no tiene centro) y se borran los términos lineales. Lo que queda es una reducida de la Def. 6.22. En el giro la parte lineal también se transforma: esto lo olvida casi todo el mundo.</p>
+  <span class="src" data-l="U" data-ref="U §6.5.3, p. 293 y 295-296: «generalmente basta con un giro y/o traslación»; diagonalizar la matriz de f2 = giro en R3">U p.293-296</span>
+  <span class="src" data-l="P" data-ref="Explicación propia; el procedimiento es el de U p. 295-298">propio</span>
+</div>
+
+<div class="box thm"><span class="h">Procedimiento (reducida de una cuádrica)</span>
+  <ol class="steps">
+    <li><b>Giro.</b> $M$ (parte cuadrática) es simétrica ⇒ existe $P$ ortogonal con $P^tMP=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ (valores propios reales; columnas de $P$ = vectores propios unitarios, perpendiculares dos a dos; si un valor propio es doble, Gram-Schmidt en su subespacio). Conviene $\det P=1$ (giro y no simetría): si sale $-1$, se cambia el signo de una columna. Con $X=PX'$:
+    $$f_2=\lambda_1x_1'^2+\lambda_2x_2'^2+\lambda_3x_3'^2,\qquad f_1=2(a_{01}\ a_{02}\ a_{03})\,P\,X'.$$</li>
+    <li><b>Traslación.</b> Para cada $\lambda_i\neq0$ se completa el cuadrado ($\lambda_i x_i'^2+\beta_ix_i'=\lambda_i(x_i'+\tfrac{\beta_i}{2\lambda_i})^2-\tfrac{\beta_i^2}{4\lambda_i}$) y se traslada. Si un $\lambda_i=0$ (paraboloide o cilindro parabólico) el término lineal en esa variable <b>no se puede eliminar</b>: queda como $x_i$ en la reducida y la traslación en ese eje se usa para absorber la constante.</li>
+    <li><b>Reconocer.</b> Se pasa la constante al otro miembro, se divide para dejar $1$ ó $-1$ y se compara con la Def. 6.22 (ordenando $a\ge b$…).</li>
+    <li><b>Control.</b> Si hay centro único, la constante final es $d=|A|/A_{00}$ (apartado 4). Y el centro, en coordenadas originales, anula las tres derivadas parciales.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §6.5.3, procedimiento p. 293 y 295-296; traslación al centro, p. 296">U p.293-296</span>
+  <span class="src" data-l="P" data-ref="Detalle del caso con valor propio nulo y del control d = |A|/A00, propios; ver apartado 4">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 6.40 de U — reducir $2x_1x_2+2x_1x_3+2x_2x_3-6x_1-6x_2-4x_3+9=0$</span>
+  <ol class="steps">
+    <li><b>Coeficientes y matriz.</b> $a_{12}=a_{13}=a_{23}=1$, $a_{11}=a_{22}=a_{33}=0$, $a_{01}=-3$, $a_{02}=-3$, $a_{03}=-2$, $a_{00}=9$. $M=\begin{pmatrix}0&1&1\\1&0&1\\1&1&0\end{pmatrix}$.</li>
+    <li><b>Valores propios</b> (U p.296): $|M-\lambda I|=-(\lambda-2)(\lambda+1)^2$ ⇒ $\lambda_1=-1$ (doble) y $\lambda_2=2$. (Control: traza $0=-1-1+2$.)</li>
+    <li><b>Vectores propios.</b> Para $\lambda=2$: $(1,1,1)$. Para $\lambda=-1$: el plano $x_1+x_2+x_3=0$, con base $(1,-1,0)$, $(1,0,-1)$. Hay que <b>ortogonalizar</b> (Gram-Schmidt): $(1,0,-1)-\tfrac12(1,-1,0)=\tfrac12(1,1,-2)$. Unitarios: $u_1=\tfrac1{\sqrt2}(1,-1,0)$, $u_2=\tfrac1{\sqrt6}(1,1,-2)$, $u_3=\tfrac1{\sqrt3}(1,1,1)$.</li>
+    <li><b>Matriz de paso</b> $P=(u_1\ u_2\ u_3)$: $P^tP=I$, $\det P=1$ y $P^tMP=\operatorname{diag}(-1,-1,2)$ (comprobado). Sin términos cruzados: $f_2=-x_1'^2-x_2'^2+2x_3'^2$.</li>
+    <li><b>Parte lineal girada:</b> $2(-3,-3,-2)P=\big(0,\ -\tfrac4{\sqrt6},\ -\tfrac{16}{\sqrt3}\big)$ (el primer término se anula porque $(-3,-3,-2)\perp u_1$). La ecuación en $x'$ es (U p.297)
+    $$-x_1'^2-x_2'^2+2x_3'^2-\tfrac4{\sqrt6}\,x_2'-\tfrac{16}{\sqrt3}\,x_3'+9=0.$$</li>
+    <li><b>Completar cuadrados</b> (sacando el coeficiente de cada cuadrado): $-\big(x_2'^2+\tfrac4{\sqrt6}x_2'\big)=-\big(x_2'+\tfrac2{\sqrt6}\big)^2+\tfrac23$; $\ 2\big(x_3'^2-\tfrac8{\sqrt3}x_3'\big)=2\big(x_3'-\tfrac4{\sqrt3}\big)^2-\tfrac{32}3$. Constante: $9+\tfrac23-\tfrac{32}3=-1$:
+    $$-x_1'^2-\big(x_2'+\tfrac2{\sqrt6}\big)^2+2\big(x_3'-\tfrac4{\sqrt3}\big)^2-1=0.$$</li>
+    <li><b>Traslación:</b> $x_1''=x_1'$, $x_2''=x_2'+\tfrac2{\sqrt6}$, $x_3''=x_3'-\tfrac4{\sqrt3}$. Queda $-x_1''^2-x_2''^2+2x_3''^2-1=0$; multiplicando por $-1$ (así lo escribe U, p.298), la <b>ecuación reducida</b>
+    $$x_1''^2+x_2''^2-2x_3''^2+1=0\iff x_1''^2+x_2''^2-\dfrac{x_3''^2}{1/2}=-1:$$
+    <b>hiperboloide elíptico, no reglado o de dos hojas</b> ($a=b=1$, $c=\tfrac1{\sqrt2}$, $p=-1$; de revolución, con el eje $u_3\parallel(1,1,1)$).</li>
+    <li><b>Centro</b> en coordenadas originales: en $x'$ es $(0,-\tfrac2{\sqrt6},\tfrac4{\sqrt3})$ y $X=PX'=(1,1,2)$; comprueba $Mc=(3,3,2)^t=-(a_{01},a_{02},a_{03})^t$ ✓. <b>Control con invariantes:</b> $|A|=-2$, $A_{00}=2$, $d=|A|/A_{00}=-1$ ✓ (la constante final).</li>
+  </ol>
+  <p>Observa el signo: lo que sale al completar cuadrados es $-x_1''^2-x_2''^2+2x_3''^2-1=0$; U lo multiplica por $-1$ y no es un error de signo, es la misma superficie.</p>
+  <span class="src" data-l="U" data-ref="U §6.5.3, Ejemplo 6.40, p. 296-298: valores propios p. 296, ecuación girada p. 297, reducida p. 298">U p.296-298</span>
+  <span class="src" data-l="P" data-ref="Pasos intermedios (Gram-Schmidt, completar cuadrados, centro y control) rehechos con sympy; U da los resultados">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Animación 3D: giro + traslación en el ejercicio E 6.41</span>
+  <div class="d3-cuadrica" data-a="1,0,0;0,0,-0.5;0,-0.5,0" data-b="-2,0,4" data-c="5"></div>
+  <span class="src" data-l="P" data-ref="Componente propio (assets/tres-d.js, d3-cuadrica) con la cuádrica de E 6.41, p. 236-237">P</span>
+</div>
+
+<div class="box tip"><span class="h">Qué mirar en la animación</span>
+  <ul>
+    <li>$x_1^2-x_2x_3-2x_1+4x_3+5=0$ es el <a href="#ej6-41">ejercicio E 6.41</a>: un <b>hiperboloide de dos hojas</b> con el centro en $(1,4,0)$ y los ejes <b>girados</b> respecto a los de coordenadas (por el término $x_2x_3$). Los ejes principales apuntan en las direcciones de los vectores propios de $M$.</li>
+    <li>Lo que se busca al reducir es llevar el origen al centro y los ejes de coordenadas a esas direcciones.</li>
+  </ul>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>Girar solo la parte cuadrática</b> y olvidar la lineal: en $X=PX'$ la fila $(a_{01},a_{02},a_{03})$ se multiplica por $P$ <b>por la derecha</b> (no por $P^t$) y no se olvida el factor 2.</li>
+    <li><b>Vectores propios sin normalizar</b> o sin ortogonalizar cuando el valor propio es doble: $P$ debe cumplir $P^tP=I$.</li>
+    <li><b>Una $P$ con $\det P=-1$</b> diagonaliza igual, pero es una simetría y no un giro; basta cambiar el signo de una columna.</li>
+    <li><b>Completar mal un cuadrado con coeficiente negativo</b>: $-\tfrac12(x-2\sqrt2)^2=-\tfrac12x^2+2\sqrt2x-4$, así que hay que <i>sumar</i> $4$ al compensar.</li>
+    <li><b>Intentar completar el cuadrado de una variable cuyo $\lambda$ es 0</b>: no hay cuadrado; esa variable queda lineal (paraboloide).</li>
+  </ul>
+</div>
+
