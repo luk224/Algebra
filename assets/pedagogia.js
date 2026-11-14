@@ -75,6 +75,9 @@
     });
     window.addEventListener('hashchange', function () { irA(location.hash); });
 
+    /* al imprimir se abren las ampliaciones plegadas */
+    window.addEventListener('beforeprint', function () { d.querySelectorAll('details.ampl').forEach(function (x) { x.open = true; }); });
+
     /* ---- Autoevaluación ---- */
     d.querySelectorAll('.quiz').forEach(function (qz) {
       var qs = [].slice.call(qz.querySelectorAll('.qp')), score = qz.querySelector('.score');

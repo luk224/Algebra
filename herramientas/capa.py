@@ -113,6 +113,14 @@ def quiz(cfg):
     return '\n'.join(o)
 
 
+def ampliaciones(cuerpo):
+    """Pliega en «Ampliación» los párrafos de demostración o prueba (nivel 3: se pueden saltar en una primera lectura)."""
+    pat = re.compile(r'<p>(?:<i>|<b>)(Demostraci[oó]n|Prueba|Idea de la prueba)(.*?)</p>', re.S)
+    def f(m):
+        return '<details class="ampl"><summary>Ampliación: ' + m.group(1).lower() + ' (se puede saltar en una primera lectura)</summary>\n' + m.group(0) + '\n</details>'
+    return pat.sub(f, cuerpo)
+
+
 def motivacion(cfg, cuerpo):
     """Pregunta motivadora tras cada <h2> de teoría (`motivacion: {id_seccion: texto}`) y consigna tras el encabezado de cada animación
     (`consignas: [{animacion: texto del encabezado, consigna: …, pregunta: …}]`)."""
@@ -130,7 +138,7 @@ def motivacion(cfg, cuerpo):
 
 def aplicar(cfg, cuerpo, ejs, tabla):
     """Devuelve (cfg con carcasa de la capa, cuerpo con las piezas insertadas)."""
-    cuerpo = con_vistas(motivacion(cfg, cuerpo))
+    cuerpo = con_vistas(ampliaciones(motivacion(cfg, cuerpo)))
     pre = atascas(cfg) + esencial(cfg) + que_cae(cfg, ejs, tabla)
     t = tipos(cfg)
     if t:

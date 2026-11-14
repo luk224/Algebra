@@ -277,7 +277,9 @@ def render(e):
         nv = f'<span class="nivel" title="Dificultad: {NOMBRE_NIVEL[e["nivel"]]}">{est}</span>'
     else: nv = ''
     o.append(f'<details class="sol" id="{e["id"]}"><summary>{nv}{e["titulo"]}{src}</summary>')
-    for b in e['cuerpo']:
+    # el resultado va PRIMERO (el estudiante ve adónde se llega y luego cómo): los bloques `resultado` se colocan antes del plan
+    cuerpo = sorted(e['cuerpo'], key=lambda b: 0 if 'resultado' in b else 1)
+    for b in cuerpo:
         (k, v), = b.items()
         if k == 'plan':
             filas = ''.join(f'\n    <dt>{a}</dt><dd>{c}</dd>' for a, c in v['filas'])
@@ -285,6 +287,7 @@ def render(e):
         elif k == 'pasos': o.append('  <ol class="steps">\n' + '\n'.join(f'    <li>{p}</li>' for p in v) + '\n  </ol>')
         elif k == 'receta': o.append(f'  <div class="recipe"><b>Receta:</b> {v}</div>')
         elif k == 'enun': o.append(f'  <p class="enun">{v}</p>')
+        elif k == 'resultado': o.append(f'  <p class="res-first"><b>Resultado:</b> {v}</p>')
         elif k in ETIQUETAS: o.append(f'  <p><b>{ETIQUETAS[k]}:</b> {v}</p>')
         elif k == 'html': o.append('  ' + v)
         else: raise ValueError('bloque desconocido: ' + k)

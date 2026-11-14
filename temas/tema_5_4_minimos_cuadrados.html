@@ -499,6 +499,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcúlese el error cuadrático cometido en $AX=B$, si $A=\begin{pmatrix}2&1\\1&-2\\3&1\end{pmatrix}$ y $B=\begin{pmatrix}3\\-1\\2\end{pmatrix}$, al sustituir $X$ por $X_0=\begin{pmatrix}1\\-1\end{pmatrix}$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Se trata de evaluar, no de resolver: calcula el vector $AX_0-B$ y mide su longitud. «Error cuadrático» es la norma (raíz de la suma de cuadrados), no su cuadrado.</p></details>
 <details class="sol" id="ej5-35"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 5.35 — error cuadrático al sustituir $X_0$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.35, p. 192">E p.192</span></summary>
+  <p class="res-first"><b>Resultado:</b> error $=2\sqrt5\approx4{,}472$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Calcular el error cuadrático cometido al sustituir un vector $X_0$.</dd>
     <dt>Cómo lo pienso</dt><dd>El «error» es cuánto se aleja $AX_0$ de $B$. Se mide con el cuadrado de la norma del residuo.</dd>
@@ -512,7 +513,6 @@
     <li><b>Restar $B$:</b> $AX_0-B=(1-3,\ 3+1,\ 2-2)=(-2,4,0)$.</li>
     <li><b>Norma:</b> $\sqrt{4+16+0}=\sqrt{20}=2\sqrt5\approx4{,}4721$.</li>
   </ol>
-  <p><b>Resultado:</b> error $=2\sqrt5\approx4{,}472$.</p>
   <div class="recipe"><b>Receta:</b> error cuadrático en un $X_0$ dado: multiplica $AX_0$, resta $B$ y calcula la norma (raíz de la suma de cuadrados).</div>
   <p><b>Error típico:</b> olvidar la raíz y dar $20$ (eso es $\|AX_0-B\|^2$). <b>Teoría:</b> U §5.4.2, Def. 5.14 y Ej. 5.35, p.227.</p>
 </details>
@@ -587,6 +587,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hállese la solución por mínimos cuadrados del sistema del Ejercicio 5.35 y su error cuadrático asociado.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Forma $A^tA$ y $A^tB$ con la $A$ y la $B$ del Ejercicio 5.35, resuelve el sistema $A^tAX=A^tB$ y después mide el residuo $AX_0-B$.</p></details>
 <details class="sol" id="ej5-37"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 5.37 — mínimos cuadrados del sistema de E 5.35 y su error <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.37, p. 193">E p.193</span></summary>
+  <p class="res-first"><b>Resultado:</b> $X_0=\left(\frac35,\frac{13}{15}\right)^t$, error $\frac2{\sqrt3}$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Solución por mínimos cuadrados del sistema del 5.35 y su error.</dd>
     <dt>Cómo lo pienso</dt><dd>El sistema tiene más ecuaciones que incógnitas: seguramente incompatible. Las ecuaciones normales dan la mejor aproximación.</dd>
@@ -606,7 +607,6 @@
     $$\|AX_0-B\|=\sqrt{\tfrac{196+4+100}{225}}=\sqrt{\tfrac43}=\tfrac2{\sqrt3}=\tfrac{2\sqrt3}3\approx1{,}1547.$$</li>
     <li><b>Comprobación</b> (caracterización 2 de U p.229): el residuo $B-AX_0=\left(\frac{14}{15},\frac2{15},-\frac23\right)$ es ortogonal a las columnas: $\frac{28+2-30}{15}=0$ y $\frac{14-4-10}{15}=0$ ✓. Y $1{,}1547<4{,}472$ (error de E 5.35), como debe ser: $X_0=(1,-1)$ era peor.</li>
   </ol>
-  <p><b>Resultado:</b> $X_0=\left(\frac35,\frac{13}{15}\right)^t$, error $\frac2{\sqrt3}$.</p>
   <div class="recipe"><b>Receta:</b> columnas independientes ⇒ calcula $A^tA$ (productos escalares de columnas) y $A^tB$, resuelve el sistema $n\times n$ y comprueba que $B-AX_0$ es ortogonal a cada columna.</div>
   <p><b>Error típico:</b> resolver $AX=B$ «quitando una ecuación», o escribir $AA^t$ (es $3\times3$ y singular) en lugar de $A^tA$. <b>Teoría:</b> U §5.4.2, p.228-229.</p>
 </details>
@@ -614,6 +614,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Utilizando la factorización $QR$ del Ejercicio 5.23 (tema 5.2), se pide calcular la solución por mínimos cuadrados del sistema asociado a $\begin{pmatrix}1&0&1\\0&1&2\\-1&2&1\\0&1&1\end{pmatrix}\begin{pmatrix}x\\y\\z\end{pmatrix}=\begin{pmatrix}0\\1\\1\\1\end{pmatrix}$. (La factorización es la de la matriz $A$ de este sistema.)</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Si ya tienes $A=QR$, las ecuaciones normales se simplifican a $RX=Q^tB$. Calcula $Q^tB$ y resuelve ese sistema triangular de abajo arriba.</p></details>
 <details class="sol" id="ej5-38"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.38 — mínimos cuadrados con la factorización $QR$ de E 5.23 <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.38, p. 194 (matriz leída del PDF de E)">E p.194</span></summary>
+  <p class="res-first"><b>Resultado:</b> $x=-\frac16,\ y=\frac13,\ z=\frac13$.</p>
   <p><b>Datos</b> (E 5.23 del tema <a href="tema_5_2_matrices_ortogonales.html#ej5-23">5.2</a>, Gram-Schmidt de las columnas de esta misma $A$): $Q=\begin{pmatrix}\frac1{\sqrt2}&\frac12&-\frac1{2\sqrt3}\\0&\frac12&\frac{\sqrt3}2\\-\frac1{\sqrt2}&\frac12&-\frac1{2\sqrt3}\\0&\frac12&-\frac1{2\sqrt3}\end{pmatrix}$, $R=\begin{pmatrix}\sqrt2&-\sqrt2&0\\0&2&\frac52\\0&0&\frac{\sqrt3}2\end{pmatrix}$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Resolver un problema de mínimos cuadrados con la factorización $QR$.</dd>
@@ -635,7 +636,6 @@
       $$A^tA=\begin{pmatrix}2&-2&0\\-2&6&5\\0&5&7\end{pmatrix},$$
       <p>$A^tB=(-1,4,4)^t$; con $\left(-\frac16,\frac13,\frac13\right)$: $-\frac13-\frac23=-1$ ✓, $\frac13+2+\frac53=4$ ✓, $\frac53+\frac73=4$ ✓. Residuo $B-AX=\left(-\frac16,0,-\frac16,\frac13\right)$, error $\frac1{\sqrt6}\approx0{,}408$.</p></li>
   </ol>
-  <p><b>Resultado:</b> $x=-\frac16,\ y=\frac13,\ z=\frac13$.</p>
   <div class="recipe"><b>Receta:</b> con $A=QR$: calcula $Q^tB$ (producto escalar de cada columna de $Q$ con $B$) y resuelve $RX=Q^tB$ de abajo arriba; no hace falta formar $A^tA$.</div>
   <p><b>Error típico:</b> invertir $R$ o usar $Q^{-1}$ ($Q$ no es cuadrada). <b>Teoría:</b> U §5.4.2, p.232 (Ej. 5.40, p.232-233); QR en U §5.2.2, p.218.</p>
 </details>
@@ -674,6 +674,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide calcular la recta que ajusta por mínimos cuadrados los datos $x=1,2,3,4,5$; $\ y=2,\,1{,}5,\,2{,}5,\,1,\,2$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>El modelo es $y=mx+n$: cada punto da una ecuación $mx_i+n=y_i$. Escribe la matriz con una columna de $x_i$ y otra de unos, y aplica las ecuaciones normales.</p></details>
 <details class="sol" id="ej5-40"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 5.40 — recta por cinco puntos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.40, p. 196">E p.196</span></summary>
+  <p class="res-first"><b>Resultado:</b> $y=-0{,}05x+1{,}95$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Recta de mínimos cuadrados por cinco puntos.</dd>
     <dt>Cómo lo pienso</dt><dd>Cada punto da una ecuación $mx_i+n=y_i$: cinco ecuaciones, dos incógnitas. La matriz tiene columnas $x_i$ y unos.</dd>
@@ -691,7 +692,6 @@
       $$n=\frac{55\cdot9-15\cdot26{,}5}{50}=\frac{495-397{,}5}{50}=\frac{39}{20}.$$</li>
     <li><b>Recta:</b> $y=-\frac1{20}x+\frac{39}{20}$. <b>Comprobación:</b> la 2.ª normal dice $\sum(y_i-mx_i-n)=0$: $9+\frac{15}{20}-5\cdot\frac{39}{20}=9+0{,}75-9{,}75=0$ ✓. (Con la forma centrada: $\bar x=3$, $\sum(x-3)y=-4-1{,}5+0+1+4=-0{,}5$, $\sum(x-3)^2=10$, $m=-0{,}05$ ✓.)</li>
   </ol>
-  <p><b>Resultado:</b> $y=-0{,}05x+1{,}95$.</p>
   <div class="recipe"><b>Receta (recta de m.c.):</b> fila $(x_i,1)$ por dato; normales $\begin{pmatrix}\sum x_i^2&\sum x_i\\\sum x_i&N\end{pmatrix}\begin{pmatrix}m\\n\end{pmatrix}=\begin{pmatrix}\sum x_iy_i\\\sum y_i\end{pmatrix}$ ($N$ = número de datos); resolver por Cramer.</div>
   <p><b>Error típico:</b> poner $N=1$ en la esquina (es el número de datos, $\sum1$) o intercambiar el orden de las incógnitas entre $A$ y $X$. <b>Teoría:</b> U §5.4.3, Def. 5.16 y Ej. 5.41, p.233-234.</p>
 </details>
@@ -699,6 +699,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Los datos mensuales del INE del índice general de precios al consumo (IPC) en la Comunidad de Madrid son: nov. 2011: $101{,}120$; dic. 2011: $101{,}512$; ene. 2012: $100{,}423$; feb. 2012: $100{,}567$; mar. 2012: $101{,}119$. Utilizando la línea de mínimos cuadrados asociada, estímese el IPC de julio de 2012 suponiendo que continúe la tendencia.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Numera los meses $x=1,2,\dots,5$ y ajusta una recta a los datos. Para julio de 2012, ¿qué valor de $x$ corresponde contando desde noviembre de 2011?</p></details>
 <details class="sol" id="ej5-41"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.41 — recta y pronóstico del IPC <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.41, p. 197">E p.197</span></summary>
+  <p class="res-first"><b>Resultado:</b> IPC estimado $\approx100{,}38$ (exactos: $m=-\frac{947}{10000}$, $n=\frac{1012323}{10000}$, $y(9)=\frac{5019}{50}$).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Recta de mínimos cuadrados y pronóstico a medio plazo con datos mensuales.</dd>
     <dt>Cómo lo pienso</dt><dd>Numero los meses $1,2,\dots$ y ajusto una recta. Luego evalúo en el mes pedido.</dd>
@@ -720,7 +721,6 @@
     <li><b>$n$</b> de la 2.ª normal $15m+5n=\sum y_i$: $n=\bar y-3m=100{,}9482+0{,}2841=101{,}2323$.</li>
     <li><b>Recta:</b> $y=-0{,}0947x+101{,}2323$. <b>Pronóstico</b> julio 2012: $y(9)=101{,}2323-0{,}8523=100{,}38$.</li>
   </ol>
-  <p><b>Resultado:</b> IPC estimado $\approx100{,}38$ (exactos: $m=-\frac{947}{10000}$, $n=\frac{1012323}{10000}$, $y(9)=\frac{5019}{50}$).</p>
   <div class="recipe"><b>Receta:</b> con $x_i$ equiespaciados, centra: $m=\frac{\sum(x_i-\bar x)y_i}{\sum(x_i-\bar x)^2}$, $n=\bar y-m\bar x$; para pronosticar, sustituye el $x$ del instante pedido.</div>
   <p><b>Error típico:</b> numerar mal el mes objetivo (julio es $x=9$, no $8$) o restar números grandes con pocos decimales (cancelación): mejor centrar. <b>Teoría:</b> U §5.4.3, p.233 y Ej. 5.43 (pronóstico), p.237.</p>
 </details>
@@ -754,6 +754,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcúlese el plano que mejor se ajuste, por mínimos cuadrados, a los puntos $(x,y,z)=(1,3,1),(2,2,3),(3,1,-1),(5,4,2),(6,5,2)$, y estímese el valor de $z$ para $(x,y)=(7,8)$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Ahora el modelo es un plano $z=ax+by+c$: cada punto aporta una fila $(x_i,\,y_i,\,1)$ y el vector $B$ lleva las alturas $z_i$. Después, sustituye $(7,8)$.</p></details>
 <details class="sol" id="ej5-43"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 5.43 — plano de mínimos cuadrados y estimación en $(7,8)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.43, p. 199">E p.199</span></summary>
+  <p class="res-first"><b>Resultado:</b> $z=-\frac{23}{91}x+\frac{331}{455}y+\frac1{13}$; $z(7,8)\approx4{,}128$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Plano de mínimos cuadrados y estimación en un punto.</dd>
     <dt>Cómo lo pienso</dt><dd>Plano $z=ax+by+c$: tres coeficientes y cinco puntos.</dd>
@@ -770,7 +771,6 @@
     <li><p><b>Estimación</b> en $(7,8)$:</p>
       $$z=-\frac{23}{91}\cdot7+\frac{331}{455}\cdot8+\frac1{13}=\frac{-805+2648+35}{455}=\frac{1878}{455}\approx4{,}1275.$$</li>
   </ol>
-  <p><b>Resultado:</b> $z=-\frac{23}{91}x+\frac{331}{455}y+\frac1{13}$; $z(7,8)\approx4{,}128$.</p>
   <div class="recipe"><b>Receta:</b> plano de m.c.: fila $(x_i,y_i,1)$, normales con $\sum x^2,\sum xy,\sum x,\sum y^2,\sum y,N$ y segundo miembro $\sum xz,\sum yz,\sum z$.</div>
   <p><b>Error típico:</b> pensar que el plano pasa por algún punto (con más de $3$ puntos no coplanares, en general no pasa por ninguno). <b>Teoría:</b> U §5.4.3, p.237 (Ej. 5.44, p.237-238).</p>
 </details>
@@ -927,6 +927,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $A=\begin{pmatrix}2&1\\1&2\\1&1\end{pmatrix}$ y $B=\begin{pmatrix}2\\0\\-3\end{pmatrix}$. El sistema $AX=B$ es incompatible. Aplique el método de mínimos cuadrados para obtener el $X=\begin{pmatrix}x_1\\x_2\end{pmatrix}$ que hace mínima la distancia de $AX$ a $B$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>El sistema es incompatible, así que no se resuelve directamente. Forma $A^tA$ y $A^tB$ y resuelve las ecuaciones normales; explica el porqué en el desarrollo.</p></details>
 <details class="sol" id="ex-feb23a-8"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2023 (1.ª semana), pregunta 8 (2 puntos) — mínimos cuadrados de $AX=B$ incompatible <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª semana), pregunta 8">X Feb. 2023 (1.ª) P8</span></summary>
+  <p class="res-first"><b>Resultado:</b> $X=(1,-1)^t$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Mínimos cuadrados de un sistema incompatible $3\times2$.</dd>
     <dt>Cómo lo pienso</dt><dd>Tres ecuaciones y dos incógnitas.</dd>
@@ -945,7 +946,6 @@
     <li><b>Resolver</b> $6x_1+5x_2=1,\ 5x_1+6x_2=-1$: restando, $x_1-x_2=2$; sumando, $11(x_1+x_2)=0$. Luego $x_1=1$, $x_2=-1$.</li>
     <li><b>Comprobación:</b> $AX=(1,-1,0)$, residuo $B-AX=(1,1,-3)$, ortogonal a $(2,1,1)$ ($2+1-3=0$ ✓) y a $(1,2,1)$ ($1+2-3=0$ ✓). Distancia mínima $\sqrt{11}$.</li>
   </ol>
-  <p><b>Resultado:</b> $X=(1,-1)^t$.</p>
   <div class="recipe"><b>Receta:</b> normales ⇒ resolver ⇒ comprobar la ortogonalidad del residuo. Con $A^tA=\begin{pmatrix}p&q\\q&p\end{pmatrix}$, sumar y restar las dos ecuaciones acelera el cálculo.</div>
   <p><b>Teoría:</b> U §5.4.2, p.227-229. Igual que E 5.37. Puedes ver este caso en la animación 3D de la sección 1 (preset «Feb. 2023 (A) ej. 8»).</p>
 </details>
@@ -953,6 +953,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcular el error cuadrático cometido en $AX=B$ al sustituir $X$ por $\begin{pmatrix}1\\2\end{pmatrix}$, siendo $A=\begin{pmatrix}1&2\\2&-1\\3&3\end{pmatrix}$ y $B=\begin{pmatrix}1\\2\\-3\end{pmatrix}$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>No hay que hallar la solución por mínimos cuadrados: solo calcula $AX-B$ con el $X$ dado y su norma (con raíz).</p></details>
 <details class="sol" id="ex-feb19a-5"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2019 (tipo A), ejercicio 5 — error cuadrático al sustituir un $X$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo A), ejercicio 5">X Feb. 2019 (A) ej. 5</span></summary>
+  <p class="res-first"><b>Resultado:</b> error $=\sqrt{164}=2\sqrt{41}$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Error cuadrático al sustituir un $X$ dado.</dd>
     <dt>Cómo lo pienso</dt><dd>Es cuánto falla ese $X$.</dd>
@@ -966,7 +967,6 @@
     <li><b>$AX-B$:</b> $(5-1,\ 0-2,\ 9+3)=(4,-2,12)$.</li>
     <li><b>Norma:</b> $\sqrt{4^2+(-2)^2+12^2}=\sqrt{164}=2\sqrt{41}\approx12{,}8$. (Basta dejarlo sin desarrollar, al no haber calculadora; Ejemplo 5.35 de U.)</li>
   </ol>
-  <p><b>Resultado:</b> error $=\sqrt{164}=2\sqrt{41}$.</p>
   <p><b>Ampliación (propia).</b> ¿Cuánto podría mejorarse? La solución por mínimos cuadrados de este sistema es $X_0=\left(\frac5{23},-\frac{18}{23}\right)$ (sección 2) y su error es $\frac{6\sqrt{115}}{23}\approx2{,}80$: el $X=(1,2)$ del examen es unas cuatro veces y media peor.</p>
   <div class="recipe"><b>Receta:</b> producto $AX$, resta $B$, norma. Sin calculadora, deja la raíz sin simplificar.</div>
   <p><b>Error típico:</b> dar $164$ (sin raíz) o equivocar el signo con el $-3$ de $B$ ($9-(-3)=12$, no $6$). <b>Teoría:</b> U Def. 5.14 y Ej. 5.35, p.227; E 5.35.</p>
@@ -998,6 +998,7 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">a) (1,5 ptos.) Hallar la factorización $QR$ de $A=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\\\frac1{\sqrt2}&0\\0&0\end{pmatrix}$. b) (1,5 ptos.) Resolver el siguiente problema de mínimos cuadrados $AX=B$ siendo $A$ la matriz del apartado a) y $B=\begin{pmatrix}1\\1\\1\end{pmatrix}$. <i>(El apartado a) es del tema 5.2; se resume lo necesario.)</i></p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Con la $A=QR$ del apartado a), las ecuaciones normales se reducen a $RX=Q^tB$: multiplica $Q^t$ por $B$ y resuelve el sistema triangular.</p></details>
 <details class="sol" id="ex-feb20b-pb"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2020 (tipo B), problema, apartado b) (1,5 puntos) — $RX=Q^tB$ <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B), problema, apartado b)">X Feb. 2020 (B) pb. b)</span></summary>
+  <p class="res-first"><b>Resultado:</b> $X=(\sqrt2,0)^t$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Resolver $RX=Q^tB$ para un problema de mínimos cuadrados.</dd>
     <dt>Cómo lo pienso</dt><dd>Sistema triangular por la factorización.</dd>
@@ -1016,7 +1017,6 @@
       $$A^tA=\begin{pmatrix}1&1\\1&2\end{pmatrix},$$
       <p>$A^tB=(\sqrt2,\sqrt2)^t$ ⇒ $x+y=\sqrt2$, $x+2y=\sqrt2$ ⇒ $y=0$, $x=\sqrt2$ ✓.</p></li>
   </ol>
-  <p><b>Resultado:</b> $X=(\sqrt2,0)^t$.</p>
   <div class="recipe"><b>Receta:</b> $Q^tB$ (productos escalares de las columnas de $Q$ con $B$), sistema triangular, sustitución regresiva. Si piden $QR$, no las normales (solo como comprobación).</div>
   <p><b>Teoría:</b> U §5.4.2, p.232 (Ej. 5.40, p.232-233); U §5.2.2, p.218. Hace pareja con E 5.38 y con el Propio P5.</p>
 </details>
