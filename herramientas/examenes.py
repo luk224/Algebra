@@ -39,7 +39,7 @@ def construir_registro():
         if not x: err.append(f'{cod} {e["id"]}: sin fuente X'); continue
         m = re.match(r'(Ene|Feb|Sept)\.?\s*(\d{4})', x['ref'])
         if not m: err.append(f'{cod} {e["id"]}: convocatoria no reconocible en «{x["ref"]}»'); continue
-        completo = any('pasos' in b for b in e['cuerpo'])   # con desarrollo paso a paso; si no, es un enlace o un resumen que remite a otro tema
+        completo = any('pasos' in b or 'redaccion' in b for b in e['cuerpo'])   # con desarrollo paso a paso; si no, es un enlace o un resumen que remite a otro tema
         r = dict(id=e['id'], tema=cod, convocatoria=f'{m.group(2)}-{MES[m.group(1)]:02d}', referencia=x['ref'], titulo=texto(e['titulo']), desarrollo='completo' if completo else 'enlace')
         if e.get('problema'): r['problema'] = e['problema']
         reg.append(r)

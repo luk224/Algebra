@@ -40,7 +40,7 @@ def exportar(paginas, destinos, color=False):
             pg.emulate_media(media="print")
             if color:
                 pg.evaluate("document.documentElement.classList.add('print-color')")
-            pg.evaluate("document.querySelectorAll('details.sol').forEach(x => x.open = true)")
+            pg.evaluate("document.querySelectorAll('details.sol, details.ampl').forEach(x => x.open = true)")
             pg.evaluate("window.ocultarNotasDeFuentes && window.ocultarNotasDeFuentes()")
             pg.wait_for_timeout(400)
             cab = ('<div style="font:8px system-ui,sans-serif;color:#555;width:100%;padding:0 15mm;text-align:right">'

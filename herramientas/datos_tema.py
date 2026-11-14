@@ -27,6 +27,10 @@ ESQUEMA de un ejercicio (ejercicios.yaml es una lista de estos registros):
               pasos:    [HTML de cada paso]
               receta:   HTML tras «Receta:»
               resultado / error / teoria:  HTML tras la etiqueta «Resultado:» / «Error típico:» / «Teoría:»
+              redaccion:   lista de pasos (u HTML suelto): la solución LIMPIA tal cual se escribiría a mano en el examen
+                           (caja «✍️ Así se redacta en el examen»). Obligatoria en los ejercicios `clase: examen` (plan D1).
+              comentarios: lista de puntos (u HTML suelto) con lo didáctico que NO se escribiría en el examen: comprobaciones,
+                           controles de traza/determinante, otras vías, avisos (details.ampl «Comentarios y comprobaciones»).
               html:     HTML libre (cualquier otro bloque, comentario o texto suelto)
   FORMATO NUEVO (capa pedagógica; solo si existen estos campos, que van juntos):
   nivel      1, 2 ó 3 (★☆☆ básico, ★★☆ nivel examen, ★★★ difícil)
@@ -285,6 +289,12 @@ def render(e):
             filas = ''.join(f'\n    <dt>{a}</dt><dd>{c}</dd>' for a, c in v['filas'])
             o.append(f'  <div class="plan"><span class="h">{v["titulo"]}</span><dl>{filas}\n  </dl></div>')
         elif k == 'pasos': o.append('  <ol class="steps">\n' + '\n'.join(f'    <li>{p}</li>' for p in v) + '\n  </ol>')
+        elif k == 'redaccion':
+            dentro = ('<ol class="steps">\n' + '\n'.join(f'    <li>{p}</li>' for p in v) + '\n  </ol>') if isinstance(v, list) else v
+            o.append(f'  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>\n  {dentro}</div>')
+        elif k == 'comentarios':
+            dentro = ('<ul class="coment">\n' + '\n'.join(f'      <li>{p}</li>' for p in v) + '\n    </ul>') if isinstance(v, list) else v
+            o.append(f'  <details class="ampl"><summary>Comentarios y comprobaciones</summary>\n    {dentro}\n  </details>')
         elif k == 'receta': o.append(f'  <div class="recipe"><b>Receta:</b> {v}</div>')
         elif k == 'enun': o.append(f'  <p class="enun">{v}</p>')
         elif k == 'resultado': o.append(f'  <p class="res-first"><b>Resultado:</b> {v}</p>')
@@ -497,7 +507,8 @@ def validar(codigo):
         tipos = [next(iter(b)) for b in e.get('cuerpo', [])]
         if nuevo and 'enun' in tipos: err.append(f'{w}: formato nuevo con bloque «enun» en el cuerpo')
         if not nuevo and 'enun' not in tipos: avisos.append(f'{w}: sin enunciado')
-        if 'pasos' not in tipos: avisos.append(f'{w}: sin bloque «pasos»')
+        if 'pasos' not in tipos and 'redaccion' not in tipos: avisos.append(f'{w}: sin bloque «pasos» ni «redaccion»')
+        if e.get('clase') == 'examen' and 'redaccion' not in tipos: avisos.append(f'{w}: ejercicio de examen sin bloque «redaccion» (plan_academia, D1)')
         if e.get('clase') == 'examen' and not any(f['l'] == 'X' for f in e.get('fuentes', [])): err.append(f'{w}: un ejercicio de examen necesita fuente X')
         if not e.get('fuentes'): avisos.append(f'{w}: sin fuentes')
         if re.search(r'errata|solucionario|la oficial', ' '.join(str(v) for v in e.values()), re.I): avisos.append(f'{w}: menciona erratas o la solución oficial (regla 8 bis)')
