@@ -1,6 +1,10 @@
-# Correcciones pendientes de la revisión de la capa pedagógica (F5.3)
+# Correcciones de la revisión de la capa pedagógica (F5.3) — APLICADAS
 
-Revisión con agentes `revisor-tema` (prompt: `herramientas/prompt_revision_capa.md`). **Ninguna de estas correcciones está aplicada.**
+> **Estado (14-nov-2026, tarde):** revisados los 26 temas salvo 6.4 y 6.5 (en curso). Aplicadas todas las correcciones de los informes de 1.2-6.3 (commits «Correcciones de la revisión de la capa…»). Lo que sigue es el registro de lo que se corrigió; no hace falta volver a aplicarlo. Quedan solo los avisos de la última sección (sin verificar).
+
+## Registro original
+
+Revisión con agentes `revisor-tema` (prompt: `herramientas/prompt_revision_capa.md`). Todas aplicadas (salvo `ex-feb20b` de 1.4, que usa una convención equivalente y coherente consigo misma, y `ex-feb18a-4` de 4.1, pendiente de revisar).
 Recibidas: 1.2, 1.3, 1.4, 1.5 (sin errores), 2.1, 2.2, 2.4, 3.1, 3.3, 3.4, 3.5. **Faltan por revisar** (los agentes fallaron por el límite de uso): 2.3, 3.2, 4.1-4.4, 5.1-5.4, 6.1-6.5; repetir la revisión de esos temas con el mismo prompt.
 Cómo aplicar: editar el campo en `datos/X_Y/{tema,ejercicios}.yaml` (bloques `|-`), `datos_tema.py validar X.Y`, `construir X.Y`, `estado x`, commit.
 
