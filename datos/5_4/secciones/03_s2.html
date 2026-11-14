@@ -1,0 +1,57 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Las ecuaciones normales: cómo se calcula <span class="src" data-l="U" data-ref="U §5.4.2, ecuaciones normales y caracterizaciones, p. 228-229">U p.228-229</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 13, p. 361">L p.361</span></h2>
+
+<div class="box intu"><span class="h">Idea: «perpendicular al plano» = «perpendicular a cada columna»</span>
+  <p>El residuo $b-Ax_0$ tiene que ser perpendicular al plano. Un vector es perpendicular a un plano si y solo si es perpendicular a <b>cada vector que lo genera</b>, es decir, a cada columna. Escribir «el residuo es perpendicular a la columna $C_i$» es $C_i^t(b-Ax_0)=0$. Apilando las $n$ condiciones, las filas $C_i^t$ forman justamente la matriz $A^t$, y queda una sola ecuación matricial. Y esa ecuación ya no habla de proyecciones: es un sistema de ecuaciones normal y corriente, de $n$ ecuaciones con $n$ incógnitas.</p>
+</div>
+
+<div class="box thm"><span class="h">Ecuaciones normales y caracterizaciones</span>
+  <p>De $C_i^t(B-AX_0)=0$ para $i=1,\dots,n$ se obtiene $A^t(B-AX_0)=0$, o sea
+  $$\boxed{A^tA\,X=A^tB}\qquad\text{(ecuaciones normales de }AX=B).$$
+  Son equivalentes (U p.229):</p>
+  <ol>
+    <li>$x_0$ es solución por mínimos cuadrados, es decir, $\|Ax-b\|$ es mínimo para $x=x_0$.</li>
+    <li>$b-Ax_0$ es ortogonal a $\langle\operatorname{Col}A\rangle$ (a todas las columnas).</li>
+    <li>$X_0$ es solución de $A^tAX=A^tB$.</li>
+    <li>$x_0$ es solución de $Ax=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$.</li>
+  </ol>
+  <p><b>La solución por mínimos cuadrados siempre existe</b> (el sistema $Ax=\operatorname{Proy}b$ siempre es compatible). El vector $Ax_0=\operatorname{Proy}b$ es <b>único</b>; la $x_0$ puede no serlo (sección 3).</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, ecuaciones normales (p. 228) y caracterizaciones (p. 229)">U p.228-229</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 13: las soluciones de mínimos cuadrados de Ax = b son las soluciones de AᵗAx = Aᵗb, p. 361">L Teor. 13 p.361</span>
+</div>
+
+<div class="box tip"><span class="h">Cómo escribir $A^tA$ y $A^tB$ sin multiplicar a ciegas</span>
+  <p>El elemento $(i,j)$ de $A^tA$ es el <b>producto escalar de la columna $C_i$ por la columna $C_j$</b>; el $i$-ésimo de $A^tB$ es $C_i\cdot B$. Así $A^tA$ es simétrica ($C_i\cdot C_j=C_j\cdot C_i$) y su diagonal son las normas al cuadrado. Si $A$ es $m\times n$, $A^tA$ es $n\times n$ y $A^tB$ es $n\times1$ (da igual cuántas ecuaciones había).</p>
+  <span class="src" data-l="P" data-ref="Truco propio a partir de la definición del producto A^t A (U §1.2, p. 11-13)">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.37 de U — el mismo sistema, por ecuaciones normales</span>
+  <p>$A=\begin{pmatrix}1&0\\1&0\\0&1\end{pmatrix}$, $B=\begin{pmatrix}1\\0\\-5\end{pmatrix}$ (el de la sección 1).</p>
+  <ol class="steps">
+    <li>Columnas: $C_1=(1,1,0)$, $C_2=(0,0,1)$. $C_1\cdot C_1=2$, $C_1\cdot C_2=0$, $C_2\cdot C_2=1$ $\Rightarrow$ $A^tA=\begin{pmatrix}2&0\\0&1\end{pmatrix}$.</li>
+    <li>$C_1\cdot B=1+0+0=1$, $C_2\cdot B=-5$ $\Rightarrow$ $A^tB=\begin{pmatrix}1\\-5\end{pmatrix}$.</li>
+    <li>Sistema $\begin{pmatrix}2&0\\0&1\end{pmatrix}\begin{pmatrix}x_1\\x_2\end{pmatrix}=\begin{pmatrix}1\\-5\end{pmatrix}$: $2x_1=1,\ x_2=-5$. Misma solución, $\left(\frac12,-5\right)$, sin haber proyectado nada.</li>
+    <li><b>Comprobación</b> (caracterización 2): el residuo $B-AX_0=\left(\frac12,-\frac12,0\right)$ es ortogonal a $C_1$ ($\frac12-\frac12=0$) y a $C_2$ ($0$) ✓.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplo 5.37, p. 231">U p.231</span>
+</div>
+
+<div class="box ex"><span class="h">Otro ejemplo (el de la sección 1): $A$ de $3\times2$ con $A^tA$ no diagonal</span>
+  <p>Para $A=\begin{pmatrix}1&2\\2&-1\\3&3\end{pmatrix}$, $B=\begin{pmatrix}1\\2\\-3\end{pmatrix}$ (U Ej. 5.35):</p>
+  <ol class="steps">
+    <li>$A^tA=\begin{pmatrix}1+4+9&2-2+9\\9&4+1+9\end{pmatrix}=\begin{pmatrix}14&9\\9&14\end{pmatrix}$, $A^tB=\begin{pmatrix}1+4-9\\2-2-9\end{pmatrix}=\begin{pmatrix}-4\\-9\end{pmatrix}$.</li>
+    <li>$\det=196-81=115$. Cramer: $x_1=\dfrac{-4\cdot14+9\cdot9}{115}=\dfrac{25}{115}=\dfrac5{23}$, $x_2=\dfrac{14\cdot(-9)+9\cdot4}{115}=\dfrac{-90}{115}=-\dfrac{18}{23}$.</li>
+    <li>Error: $AX_0=\left(\frac{5-36}{23},\frac{10+18}{23},\frac{15-54}{23}\right)=\frac1{23}(-31,28,-39)$; $AX_0-B=\frac1{23}(-54,-18,30)$, de norma $\frac{\sqrt{2916+324+900}}{23}=\frac{\sqrt{4140}}{23}=\frac{6\sqrt{115}}{23}\approx2{,}80$ (frente a $22{,}5$ del $X=(4,2)$ de antes).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Ejemplo propio sobre la A y B del Ejemplo 5.35 de U (p. 227); resultado verificado con sympy">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos</span>
+  <ul>
+    <li><b>$AA^t$ en lugar de $A^tA$.</b> Para $A$ de $3\times2$, $A^tA$ es $2\times2$ (el tamaño de las incógnitas) y $AA^t$ es $3\times3$ y singular.</li>
+    <li><b>Multiplicar solo el lado izquierdo por $A^t$:</b> hay que multiplicar <b>ambos</b> miembros: $A^tAX=A^t\,B$.</li>
+    <li><b>Resolver el sistema original «quitando» una ecuación.</b> Eso no minimiza nada; da una solución exacta de un subsistema.</li>
+    <li>Pensar que las normales pueden ser incompatibles: <b>siempre</b> tienen solución (aunque $AX=B$ no).</li>
+  </ul>
+</div>
+

@@ -1,0 +1,53 @@
+<!-- ============================ 9 ============================ -->
+<h2 id="chuleta"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
+  <table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Error cuadrático</td><td>$\|Ax_0-b\|$ (Def. 5.14)</td><td>Es la <b>norma</b>, no su cuadrado; producto escalar estándar</td></tr>
+    <tr><td>Solución por mínimos cuadrados</td><td>$x_0$ con $\|Ax_0-b\|\le\|Ax-b\|$ para todo $x$ (Def. 5.15)</td><td><b>Siempre existe</b>. Si $AX=B$ es compatible, son sus soluciones exactas (error $0$)</td></tr>
+    <tr><td>Geometría</td><td>$Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$; $b-Ax_0\perp$ cada columna</td><td>Teor. 5.4. El vector $Ax_0$ y el error son <b>únicos</b></td></tr>
+    <tr><td>Ecuaciones normales</td><td>$A^tAX=A^tB$ ($n\times n$)</td><td>Siempre compatible. $(A^tA)_{ij}=C_i\cdot C_j$, $(A^tB)_i=C_i\cdot B$</td></tr>
+    <tr><td>Unicidad</td><td>solución única ⇔ columnas independientes ⇔ $A^tA$ regular; entonces $x_0=(A^tA)^{-1}A^tb$</td><td>Si no: $x_0\in x_p+\operatorname{Nuc}A$ (variedad afín de dimensión $n-\operatorname{rang}A$; en general no es subespacio: lo es, $=\operatorname{Nuc}A$, solo si $A^tB=0$)</td></tr>
+    <tr><td>Con $QR$</td><td>$A=QR\Rightarrow RX=Q^tB$ (regresiva)</td><td>Columnas de $A$ independientes; $Q^tQ=I$ pero $Q$ no es cuadrada</td></tr>
+    <tr><td>Error mínimo</td><td>$\|b-Ax_0\|^2=\|b\|^2-\|Ax_0\|^2$ (Pitágoras)</td><td>Porque $Ax_0\perp b-Ax_0$ (útil para comprobar)</td></tr>
+    <tr><td>Recta $y=mx+n$</td><td>filas $(x_i,1)$; $\begin{pmatrix}\sum x^2&\sum x\\\sum x&N\end{pmatrix}\binom mn=\binom{\sum xy}{\sum y}$</td><td>Al menos dos $x_i$ distintos. $\sum e_i=0$, $\sum x_ie_i=0$; pasa por $(\bar x,\bar y)$</td></tr>
+    <tr><td>Parábola / plano</td><td>filas $(x_i^2,x_i,1)$ / $(x_i,y_i,1)$</td><td>Lineal en los coeficientes. Solución única ⇔ columnas independientes (parábola: al menos 3 abscisas distintas; plano: puntos no alineados en $(x,y)$). Con más datos que incógnitas el sistema suele ser incompatible</td></tr>
+    <tr><td>Ajuste vs interpolación</td><td>$N$ puntos ⇒ polinomio de grado $N-1$ pasa por todos</td><td>El de mínimos cuadrados (menor grado) en general no pasa por ninguno</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §5.4, Definiciones 5.14-5.16 y resultados de las pp. 226-238">U p.226-238</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5-6.6, Teoremas 13-15 y rectas de mínimos cuadrados, p. 360-371">L p.360-371</span>
+</div>
+
+<div class="box tip"><span class="h">Lista de comprobación: «sé hacer…»</span>
+  <ul class="checklist">
+    <li>Calcular el <b>error cuadrático</b> de un $X_0$ dado (producto, resta, norma) (E 5.35; X Feb. 2019).</li>
+    <li>Explicar por qué una solución por mínimos cuadrados es una proyección y por qué el residuo es ortogonal a las columnas (E 5.34; sección 1).</li>
+    <li>Escribir y justificar las <b>ecuaciones normales</b> $A^tAX=A^tB$ (X Sept. 2018) y resolverlas con $A^tA$ de $2\times2$ y $3\times3$ (E 5.37; X Feb. 2023).</li>
+    <li>Comprobar el resultado: $A^t(B-AX_0)=0$ y que el error baja respecto de otro $X$.</li>
+    <li>Decidir si la solución es <b>única</b> (columnas independientes) y, si no, dar el conjunto $x_p+\operatorname{Nuc}A$ con sus parámetros (E 5.39; Propio P4).</li>
+    <li>Resolver con la <b>$QR$</b>: $Q^tB$ y sustitución regresiva (E 5.38; X Feb. 2020; Propio P5).</li>
+    <li><b>Ajustar</b> una recta, una parábola o un plano y hacer un <b>pronóstico</b> (E 5.40–5.43; Propios P2-P3); centrar los $x$ para ahorrar cuentas.</li>
+    <li>Contestar verdadero/falso sobre mínimos cuadrados con la definición y la caracterización de la unicidad (E 5.36, 5.44).</li>
+    <li>Explicar «en qué consiste el método y cómo se halla la solución» con ejemplo (X Feb. 2017, Feb. 2018).</li>
+    <li>Detectar los <b>errores de E</b> (5.39, 5.41, 5.42) comprobando siempre las normales.</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Lista de comprobación propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li><b>Dar $\|Ax_0-b\|^2$ como error cuadrático</b> (el error es la norma, con raíz).</li>
+    <li><b>$AA^t$ en lugar de $A^tA$</b>, o multiplicar por $A^t$ solo un miembro.</li>
+    <li><b>Dar una sola solución cuando $A^tA$ es singular:</b> hay infinitas ($x_p+\operatorname{Nuc}A$); el error es el mismo para todas.</li>
+    <li><b>Llamar «subespacio» al conjunto de soluciones</b> cuando hay infinitas: es una variedad afín $x_p+\operatorname{Nuc}A$ (en general no es subespacio; pasa por el origen solo si $A^tB=0$, y entonces es $\operatorname{Nuc}A$) (E 5.39).</li>
+    <li><b>Invertir $R$ o $Q$</b> en el método $QR$ ($Q$ no es cuadrada); o resolver por normales cuando el enunciado pide la $QR$.</li>
+    <li><b>En la recta:</b> $N=1$ en la esquina de $A^tA$, intercambiar el orden de $(m,n)$ entre $A$ y $X$, o numerar mal el instante de un pronóstico.</li>
+    <li><b>Redondear coeficientes antes de pronosticar</b> (U Ej. 5.43: $0{,}46$ frente a $0{,}506$).</li>
+    <li><b>Pensar que la recta de mínimos cuadrados pasa por algún dato</b> (E 5.44 D) o que el plano pasa por tres de los puntos.</li>
+    
+    <li><b>No justificar:</b> «lo que no se justifica no se puntúa». Cita la definición, las normales y comprueba la ortogonalidad del residuo.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Errores recopilados de E §5.4, U §5.4 y de las soluciones oficiales de los exámenes">propio</span>
+</div>
+

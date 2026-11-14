@@ -1,0 +1,31 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Con la factorización $QR$ <span class="src" data-l="U" data-ref="U §5.4.2, «Solución por mínimos cuadrados a partir de la factorización QR» y Ejemplo 5.40, p. 232-233">U p.232-233</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 15, p. 365">L Teor. 15 p.365</span></h2>
+
+<div class="box intu"><span class="h">Idea: ¿para qué otra vía?</span>
+  <p>Las ecuaciones normales exigen multiplicar $A^tA$, que puede ser engorroso (y numéricamente delicado, avisa Lay en p.364). Si ya tienes $A=QR$ (tema 5.2), $Q$ tiene columnas <b>ortonormales</b>: la proyección sobre $\langle\operatorname{Col}Q\rangle$ es trivial y el sistema que queda es <b>triangular</b>, que se resuelve de abajo arriba sin invertir nada.</p>
+</div>
+
+<div class="box thm"><span class="h">Solución por mínimos cuadrados a partir de $A=QR$</span>
+  <p>Si $A=QR$ (con $Q^tQ=I$, $R$ triangular superior regular), la solución por mínimos cuadrados de $AX=B$ es la del sistema triangular
+  $$\boxed{R\,X=Q^tB}.$$</p>
+  <p><b>Por qué.</b> Las normales son $A^tAX=A^tB$. Con $A=QR$: $A^tA=R^tQ^tQR=R^tR$ y $A^tB=R^tQ^tB$. Queda $R^tRX=R^tQ^tB$; como $R^t$ es regular, se cancela: $RX=Q^tB$. Así que da la <b>misma</b> solución que las normales, y es única (las columnas de $A$ son independientes: si no, no habría $QR$ con $R$ regular, U p.218).</p>
+  <p><b>Aviso de Lay:</b> la solución es $\hat x=R^{-1}Q^tb$, pero «<i>se debería calcular como la solución exacta de $Rx=Q^tb$</i>», por sustitución regresiva, en vez de invertir $R$.</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, «Solución por mínimos cuadrados a partir de la factorización QR», p. 232; factorización QR en U §5.2.2, p. 218">U p.232, 218</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 15 y nota numérica, p. 365">L Teor. 15 p.365</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.40 de U — mínimos cuadrados con $QR$</span>
+  <p>$A=QR$ con $Q=\begin{pmatrix}\frac1{\sqrt2}&\frac1{\sqrt2}\\\frac1{\sqrt2}&-\frac1{\sqrt2}\\0&0\end{pmatrix}$, $R=\begin{pmatrix}1&1\\0&1\end{pmatrix}$, y $B=\begin{pmatrix}1\\1\\1\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Producto de $Q^t$ por $B$</b> (cada columna de $Q$ por $B$): $q_1\cdot B=\frac1{\sqrt2}+\frac1{\sqrt2}=\sqrt2$, $q_2\cdot B=\frac1{\sqrt2}-\frac1{\sqrt2}=0$. Luego $Q^tB=(\sqrt2,0)^t$.</li>
+    <li><b>Sistema triangular</b> $RX=Q^tB$: $\ x+y=\sqrt2,\ \ y=0$.</li>
+    <li><b>Sustitución regresiva:</b> $y=0$; $x=\sqrt2$. Solución: $X=(\sqrt2,0)^t$.</li>
+    <li><b>Qué ha pasado.</b> $A=QR=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\\\frac1{\sqrt2}&0\\0&0\end{pmatrix}$ tiene la 3.ª fila nula: la 3.ª ecuación es $0=1$ y el sistema es incompatible. $AX=(1,1,0)$ es la proyección de $(1,1,1)$ sobre el plano $z=0$, y el error es $1$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplo 5.40, p. 232-233">U p.232-233</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Escribir $X=R^{-1}Q^tB$ e invertir $R$ (más cuentas, más fallos), o usar «$Q^{-1}$»: $Q$ es $m\times n$ con $m>n$, <b>no es cuadrada</b>, solo cumple $Q^tQ=I$ (no $QQ^t=I$); solo si $m=n$ $Q$ es ortogonal y el sistema es compatible. Y si el enunciado dice «por la factorización $QR$», hacerlo por las normales <b>no puntúa</b> (el examen de Feb. 2020 avisa: «lo que se realiza por otra vía distinta a la pedida no se puntúa»); úsalas solo como comprobación.</p>
+</div>
+

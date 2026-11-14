@@ -1,0 +1,40 @@
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>¿Es única? Columnas independientes y dependientes <span class="src" data-l="U" data-ref="U §5.4.2, caracterización de la unicidad, p. 229 y Ejemplo 5.39, p. 231-232">U p.229-232</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 14, p. 363">L p.363</span></h2>
+
+<div class="box thm"><span class="h">Caracterización de la unicidad</span>
+  <p>Para $A$ de $m\times n$ son equivalentes:</p>
+  <ol>
+    <li>La solución por mínimos cuadrados de $Ax=b$ es <b>única</b> (para cada $b$).</li>
+    <li>Las columnas de $A$ son <b>linealmente independientes</b> ($\operatorname{rang}A=n$).</li>
+    <li>$A^tA$ es <b>regular</b> (invertible).</li>
+  </ol>
+  <p>En tal caso $x_0=(A^tA)^{-1}A^tb$ (fórmula de Lay, útil sobre todo cuando $A^tA$ es $2\times2$ o para teoría; en la práctica se resuelve el sistema).</p>
+  <span class="src" data-l="U" data-ref="U §5.4.2, caracterización de la unicidad, p. 229">U p.229</span>
+  <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 14 y fórmula (4), p. 363">L Teor. 14 p.363</span>
+</div>
+
+<div class="box intu"><span class="h">Por qué (argumento propio; U lo enuncia sin demostrar)</span>
+  <p>Si $A^tAx=0$, multiplica por $x^t$: $x^tA^tAx=(Ax)^t(Ax)=\|Ax\|^2=0$, luego $Ax=0$. O sea $\operatorname{Nuc}(A^tA)=\operatorname{Nuc}A$. Si las columnas son independientes, $Ax=0$ solo tiene la solución $x=0$, así que $A^tA$ (cuadrada) solo anula al $0$: es regular. Y viceversa. Además, si $x_0$ y $x_0'$ son dos soluciones de las normales, $A^tA(x_0-x_0')=0$, así que $x_0-x_0'\in\operatorname{Nuc}A$.</p>
+  <p><b>Consecuencia práctica:</b> si las columnas son dependientes, <b>el conjunto de soluciones por mínimos cuadrados es $x_p+\operatorname{Nuc}A$</b> (una solución particular de las normales más el núcleo de $A$): una <b>variedad afín</b> de dimensión $n-\operatorname{rang}A$. En general <b>no es un subespacio</b>: pasa por el origen solo si $A^tB=0$ (es decir, $b\perp$ columnas) y entonces es exactamente $\operatorname{Nuc}A$.</p>
+  <span class="src" data-l="P" data-ref="Argumento propio: Nuc(AᵗA) = Nuc(A); consecuencia x_p + Nuc A, verificada con E 5.39 y el ejemplo propio P4">propio</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_u_5_4_fig54.png" alt="Figura 5.4 de U: la aplicación A lleva R^n a R^m; dos puntos x0 y x0' distintos van al mismo A x0 = Proy b sobre el plano ⟨Col A⟩" loading="lazy"><figcaption>Si las columnas son dependientes, <b>varias</b> $x_0,x_0'$ dan el <b>mismo</b> $Ax_0=\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$: el error es único, la solución no. <span class="src" data-l="U" data-ref="U §5.4.2, Figura 5.4, p. 230">U Fig. 5.4 p.230</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Ejemplo 5.39 de U — infinitas soluciones por mínimos cuadrados</span>
+  <p>$A=\begin{pmatrix}1&1&0&0\\0&2&0&1\\2&2&0&0\end{pmatrix}$, $B=\begin{pmatrix}5\\0\\0\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Incompatible y no única.</b> La 3.ª fila es el doble de la 1.ª, así que $\operatorname{rang}A=2$; la ampliada tiene rango $3$ (la 1.ª y la 3.ª fila piden $x_1+x_2=5$ y $2x_1+2x_2=0$). Como $\operatorname{rang}A=2<4=n$, las columnas son dependientes: la solución por mínimos cuadrados <b>no es única</b>.</li>
+    <li><b>Ecuaciones normales:</b> $A^tA=\begin{pmatrix}5&5&0&0\\5&9&0&2\\0&0&0&0\\0&2&0&1\end{pmatrix}$, $A^tB=\begin{pmatrix}5\\5\\0\\0\end{pmatrix}$ (la columna 3 de $A$ es nula: fila y columna de ceros).</li>
+    <li><b>Resolver:</b> $5x_1+5x_2=5\Rightarrow x_1=1-x_2$; y $5x_1+9x_2+2x_4=5\Rightarrow5(1-x_2)+9x_2+2x_4=5\Rightarrow4x_2+2x_4=0\Rightarrow x_4=-2x_2$. La 3.ª ecuación es $0=0$ ($x_3$ libre), la 4.ª ($2x_2+x_4=0$) repite la anterior. Poniendo $x_2=\lambda$, $x_3=\mu$:
+    $$(x_1,x_2,x_3,x_4)=(1-\lambda,\ \lambda,\ \mu,\ -2\lambda)=\underbrace{(1,0,0,0)}_{x_p}+\lambda(-1,1,0,-2)+\mu(0,0,1,0).$$</li>
+    <li><b>Es $x_p+\operatorname{Nuc}A$:</b> $\operatorname{Nuc}A$ se obtiene de $x_1+x_2=0,\ 2x_2+x_4=0$: $\langle(-1,1,0,-2),(0,0,1,0)\rangle$, de dimensión $4-2=2$ ✓.</li>
+    <li><b>Mismo error para todas</b> (U): $A(1,0,0,0)=A(1,0,2,0)=(1,0,2)$, y $\|(1,0,2)-(5,0,0)\|=\|(-4,0,2)\|=\sqrt{20}\approx4{,}47$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.2, Ejemplo 5.39, p. 231-232">U p.231-232</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Contestar «la solución es…» con una sola solución cuando $A^tA$ es singular. Si las normales salen compatibles indeterminadas, hay que dar <b>todas</b> las soluciones (con parámetros), y decir que $AX_0$ y el error son los mismos para todas. Y no confundas: <b>el sistema $AX=B$ incompatible</b> y <b>las normales con infinitas soluciones</b> son cosas distintas (las normales siempre son compatibles).</p>
+</div>
+

@@ -1,0 +1,92 @@
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Modelos lineales: ajustar una recta, una parábola o un plano <span class="src" data-l="U" data-ref="U §5.4.3 Aplicación a modelos lineales, p. 233-238">U p.233-238</span> <span class="src" data-l="L" data-ref="Lay §6.6 Aplicaciones a modelos lineales, p. 368-371">L p.368-371</span></h2>
+
+<div class="box intu"><span class="h">Idea: la recta que «menos falla»</span>
+  <p>Tienes datos medidos $(x_i,y_i)$ que casi parecen alineados, pero no del todo. Quieres la recta $y=mx+n$ que mejor los describa. Si esa recta pasara por <b>todos</b> los puntos se cumpliría $mx_i+n=y_i$ para cada $i$: un sistema con una ecuación por dato y solo <b>dos incógnitas, $m$ y $n$</b>. Casi siempre es incompatible, y la solución por mínimos cuadrados es la recta que hace mínima la suma de los <b>cuadrados de los errores verticales</b> $e_i=y_i-(mx_i+n)$. Ojo con los papeles: las <b>incógnitas</b> son $m$ y $n$; los $x_i,y_i$ son datos (números), y van en la matriz $A$ y en $B$.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 5.16 — recta de mínimos cuadrados</span>
+  <p>La recta $y=mx+n$ que mejor se aproxima a los puntos observados $\{(x_i,y_i)\}_{i=1}^N$ mediante mínimos cuadrados (minimiza $\sum e_i^2$, con $e_i=|mx_i+n-y_i|$) es la <b>recta de mínimos cuadrados</b>. Se obtiene resolviendo por mínimos cuadrados
+  $$\underbrace{\begin{pmatrix}x_1&1\\x_2&1\\\vdots&\vdots\\x_N&1\end{pmatrix}}_{A}\begin{pmatrix}m\\n\end{pmatrix}=\underbrace{\begin{pmatrix}y_1\\y_2\\\vdots\\y_N\end{pmatrix}}_{B},\qquad A^tA=\begin{pmatrix}\sum x_i^2&\sum x_i\\\sum x_i&N\end{pmatrix},\quad A^tB=\begin{pmatrix}\sum x_iy_i\\\sum y_i\end{pmatrix}.$$
+  Tiene solución única si hay al menos dos valores distintos de $x_i$ (así las columnas $(x_i)$ y $(1,\dots,1)$ son independientes). La solución es
+  $$m=\frac{N\sum x_iy_i-\sum x_i\sum y_i}{N\sum x_i^2-\left(\sum x_i\right)^2},\qquad n=\frac{\sum x_i^2\sum y_i-\sum x_i\sum x_iy_i}{N\sum x_i^2-\left(\sum x_i\right)^2}.$$</p>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Definición 5.16 y cálculo de la recta, p. 233">U p.233</span>
+  <span class="src" data-l="L" data-ref="Lay §6.6, rectas de mínimos cuadrados (recta de regresión) y sistema (1), p. 368-369">L p.368-369</span>
+  <span class="src" data-l="P" data-ref="Fórmulas explícitas de m y n por Cramer, desarrollo propio sobre las ecuaciones normales de U p. 233">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.41 de U — recta por cuatro puntos</span>
+  <p>Puntos $(2,3),(4,2),(5,1),(7,\tfrac12)$.</p>
+  <ol class="steps">
+    <li><b>Sumas</b> ($N=4$): $\sum x=18$, $\sum x^2=4+16+25+49=94$, $\sum y=\frac{13}2$, $\sum xy=6+8+5+\frac72=\frac{45}2$.</li>
+    <li><b>Normales</b> $A^tAX=A^tB$: $\begin{pmatrix}94&18\\18&4\end{pmatrix}\begin{pmatrix}m\\n\end{pmatrix}=\begin{pmatrix}45/2\\13/2\end{pmatrix}$. $\det=376-324=52$.</li>
+    <li><b>Resolver:</b> $m=\dfrac{4\cdot\frac{45}2-18\cdot\frac{13}2}{52}=\dfrac{90-117}{52}=-\dfrac{27}{52}$, $\ n=\dfrac{94\cdot\frac{13}2-18\cdot\frac{45}2}{52}=\dfrac{611-405}{52}=\dfrac{103}{26}$.</li>
+    <li><b>Recta:</b> $y=-\dfrac{27}{52}x+\dfrac{103}{26}$ ($\approx-0{,}52x+3{,}96$).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Ejemplo 5.41, p. 233-234 y Figura 5.5, p. 235">U p.233-235</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_u_5_4_fig55.png" alt="Figura 5.5 de U: cuatro puntos marcados con una cruz, la recta de mínimos cuadrados y un segmento vertical entre un valor observado y el valor estimado" loading="lazy"><figcaption>Los cuatro puntos del Ejemplo 5.41 y su recta. El segmento negro es el error de un dato (valor observado menos valor estimado); la recta hace mínima la suma de los cuadrados de estos segmentos. <span class="src" data-l="U" data-ref="U §5.4.3, Figura 5.5, p. 235">U Fig. 5.5 p.235</span></figcaption></figure>
+
+<div class="box ex"><span class="h">Animación: recta de mínimos cuadrados con puntos editables</span>
+  <div class="anim-minimos" data-p="2,3;4,2;5,1;7,0.5"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (assets/animaciones.js, anim-minimos); presets con U Ej. 5.41, E 5.40, Lay §6.6 Ej. 1, ejemplo propio P2 y E 5.44 D">P</span>
+</div>
+
+<div class="box tip"><span class="h">Truco: centrar los $x$ ahorra cuentas (forma de desviación media de Lay)</span>
+  <p>Si restas la media $\bar x$ a todos los $x_i$, las columnas $(x_i-\bar x)$ y $(1,\dots,1)$ pasan a ser <b>ortogonales</b> ($\sum(x_i-\bar x)=0$) y las normales quedan <b>diagonales</b>: con $x_i^*=x_i-\bar x$,
+  $$m=\frac{\sum x_i^*\,y_i}{\sum (x_i^*)^2},\qquad n=\bar y-m\,\bar x.$$
+  Es especialmente cómodo con $x_i$ equiespaciados (meses, años: $x=1,\dots,5$ ⇒ $x^*=-2,-1,0,1,2$) o con valores de $y$ grandes (E 5.41). Y deja ver una propiedad útil: <b>la recta pasa siempre por el punto de medias $(\bar x,\bar y)$</b>.</p>
+  <span class="src" data-l="L" data-ref="Lay §6.6, forma de desviación media, p. 370">L p.370</span>
+  <span class="src" data-l="P" data-ref="Fórmulas centradas verificadas en E 5.40 y E 5.41 (sympy)">propio</span>
+</div>
+
+<figure class="bookfig"><img src="../assets/img/fig_l_6_6_fig2.png" alt="Dibujo de Lay: cuatro puntos y su recta de mínimos cuadrados con ordenada en el origen pequeña y pendiente positiva" loading="lazy"><figcaption>Lay, Ejemplo 1 de §6.6: puntos $(2,1),(5,2),(7,3),(8,3)$; ecuaciones normales $\begin{pmatrix}4&22\\22&142\end{pmatrix}\beta=\begin{pmatrix}9\\57\end{pmatrix}$, $\det=4\cdot142-22^2=84$, $\beta_0=\frac{24}{84}=\frac27$, $\beta_1=\frac{30}{84}=\frac5{14}$ ⇒ $y=\frac27+\frac5{14}x$. <span class="src" data-l="L" data-ref="Lay §6.6, Ejemplo 1 y Figura 2, p. 370">L Ej. 1 p.370</span></figcaption></figure>
+
+<h3>Más allá de la recta: parábola y plano</h3>
+
+<div class="box intu"><span class="h">«Lineal» quiere decir lineal en los <i>coeficientes</i></span>
+  <p>El método sirve siempre que la función a ajustar sea una combinación lineal de funciones <b>conocidas</b> con <b>coeficientes incógnita</b>. Una parábola $y=ax^2+bx+c$ no es una recta, pero sí es lineal en $a,b,c$: cada dato da la ecuación $a\,x_i^2+b\,x_i+c=y_i$ y la matriz tiene una fila $(x_i^2,\ x_i,\ 1)$ por dato. Con tres variables, un plano $z=ax+by+c$ tiene filas $(x_i,\ y_i,\ 1)$. Todo lo demás (normales, unicidad, error) es idéntico; solo cambia cuántas columnas tiene $A$.</p>
+  <table>
+    <tr><th>Modelo</th><th>Incógnitas</th><th>Fila de $A$ por dato</th><th>Dato en $B$</th></tr>
+    <tr><td>Recta $y=mx+n$</td><td>$m,n$</td><td>$(x_i,\ 1)$</td><td>$y_i$</td></tr>
+    <tr><td>Parábola $y=ax^2+bx+c$</td><td>$a,b,c$</td><td>$(x_i^2,\ x_i,\ 1)$</td><td>$y_i$</td></tr>
+    <tr><td>Plano $z=ax+by+c$</td><td>$a,b,c$</td><td>$(x_i,\ y_i,\ 1)$</td><td>$z_i$</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §5.4.3, modelo con ternas z = ax + by + c, p. 237; Ejemplo 5.44, p. 237-238">U p.237-238</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.42 (parábola), p. 198, y Ej. 5.43 (plano), p. 199">E 5.42-5.43 p.198-199</span>
+  <span class="src" data-l="P" data-ref="Tabla y razonamiento propios sobre U p. 237 y E 5.42">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 5.42 y 5.43 de U — pronóstico (con una aclaración sobre el redondeo)</span>
+  <p>U ajusta el porcentaje $y$ de alumnos que aprobaron alguna asignatura de Ingeniería en cada semestre (de 2007 a 2009), con $x=1,\dots,6$; el pronóstico $x=10$ corresponde al 2.º semestre de 2011. Datos: $(1;0{,}20),(2;0{,}25),(3;0{,}35),(4;0{,}15),(5;0{,}30),(6;0{,}45)$.</p>
+  <ol class="steps">
+    <li>$N=6$, $\sum x=21$, $\sum x^2=91$, $\sum y=1{,}7$, $\sum xy=6{,}55$. Normales: $\begin{pmatrix}91&21\\21&6\end{pmatrix}\begin{pmatrix}m\\n\end{pmatrix}=\begin{pmatrix}6{,}55\\1{,}7\end{pmatrix}$, $\det=546-441=105$.</li>
+    <li>$m=\frac{6\cdot6{,}55-21\cdot1{,}7}{105}=\frac{3{,}6}{105}=\frac6{175}\approx0{,}0343$ y $n=\frac{91\cdot1{,}7-21\cdot6{,}55}{105}=\frac{17{,}15}{105}=\frac{49}{300}\approx0{,}1633$. U redondea a $y=0{,}03x+0{,}16$ (p.237).</li>
+    <li><b>Pronóstico</b> para $x=10$ (U, Ej. 5.43): con los coeficientes redondeados $0{,}03\cdot10+0{,}16=0{,}46$ ($46\%$). <b>Con los coeficientes exactos:</b> $\frac6{175}\cdot10+\frac{49}{300}=\frac{1063}{2100}\approx0{,}506$ ($50{,}6\%$). La diferencia viene solo del redondeo: <b>no redondees antes de pronosticar</b>.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Ejemplos 5.42 y 5.43, p. 235-237">U p.235-237</span>
+  <span class="src" data-l="P" data-ref="Valores exactos m = 6/175, n = 49/300 y pronóstico 1063/2100: cálculo propio, verificado con sympy">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.44 de U — plano por cuatro puntos</span>
+  <p>Puntos $(x,y,z)$: $(1,-1,3),(2,3,-2),(1,1,1),(1,3,4)$. Modelo $z=ax+by+c$, filas $(x_i,y_i,1)$:</p>
+  <ol class="steps">
+    <li>$A=\begin{pmatrix}1&-1&1\\2&3&1\\1&1&1\\1&3&1\end{pmatrix}$, $B=\begin{pmatrix}3\\-2\\1\\4\end{pmatrix}$.</li>
+    <li>$A^tA=\begin{pmatrix}7&9&5\\9&20&6\\5&6&4\end{pmatrix}$, $A^tB=\begin{pmatrix}4\\4\\6\end{pmatrix}$ (productos escalares de columnas).</li>
+    <li>Resolviendo por Cramer ($\det A^tA=24$; $\Delta_a=-124$, $\Delta_b=6$, $\Delta_c=182$): $(a,b,c)=\left(-\frac{124}{24},\frac6{24},\frac{182}{24}\right)=\left(-\frac{31}6,\frac14,\frac{91}{12}\right)$, es decir, $z=-\frac{31}6x+\frac14y+\frac{91}{12}$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §5.4.3, Ejemplo 5.44, p. 237-238">U p.237-238</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos en los modelos</span>
+  <ul>
+    <li><b>Poner mal las columnas:</b> en la recta de U la columna de unos va <b>a la derecha</b> y las incógnitas son $(m,n)$; si la pones a la izquierda (como Lay), las incógnitas son $(n,m)$.</li>
+    <li>Escribir $N=1$ (o el número de variables) en la esquina de $A^tA$: ahí va <b>el número de datos</b> ($\sum1=N$).</li>
+    <li><b>Creer que la recta pasa por algún dato</b> (E 5.44 D): en general no pasa por ninguno.</li>
+    <li>Confundir <b>ajuste</b> con <b>interpolación</b> (E 5.44 C): un polinomio de grado $N-1$ pasa por los $N$ puntos (error $0$); el de mínimos cuadrados, de menor grado, no.</li>
+    <li>Redondear coeficientes demasiado pronto: se nota en el pronóstico (ver arriba).</li>
+  </ul>
+</div>
+
+<!-- ============================ 6 ============================ -->
