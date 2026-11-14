@@ -129,3 +129,26 @@ m.append('<h1>Mapa de dependencias</h1>\n<p>Cada flecha va del tema que conviene
 m.append(''.join(s)); m.append(PIE)
 (RAIZ / 'mapa.html').write_text('\n'.join(m), encoding='utf8')
 print(f'chuletas.html ({len(temas)} temas), glosario.html ({len(entradas)} definiciones), mapa.html')
+
+# ---------------- tabla de notación
+NOT = yaml.safe_load((RAIZ / 'datos' / 'notacion.yaml').read_text(encoding='utf8'))
+url = {t['cod']: t['url'] for t in temas}
+n = [CABECERA.format(titulo='Notación', extra='.es input#q{font:16px var(--sans);width:100%;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg)}.es td.sim{white-space:nowrap}')]
+n.append('<h1>Tabla de notación</h1>\n<p>Los símbolos que más se usan, qué significan y dónde se explican. Escribe para filtrar (símbolo, palabra o tema).</p>\n<input id="q" type="search" placeholder="Buscar: núcleo, traspuesta, 5.1…" aria-label="Buscar">\n<p id="n" class="no-print" style="color:var(--mut);font:13.5px var(--sans)"></p>\n<table id="lista"><thead><tr><th>Símbolo</th><th>Significado</th><th>Tema</th></tr></thead><tbody>')
+grupo = None
+for e in NOT:
+    if e['g'] != grupo:
+        grupo = e['g']; n.append(f'<tr class="grp"><th colspan="3">{H.escape(grupo)}</th></tr>')
+    n.append(f'<tr class="ent" data-k="{H.escape((e["g"] + " " + e["s"] + " " + e["d"] + " " + e["t"]).lower())}"><td class="sim">${e["s"]}$</td><td>{H.escape(e["d"])}</td><td><a href="{url[e["t"]]}">{e["t"]}</a></td></tr>')
+n.append('''</tbody></table>
+<script>
+(function(){var q=document.getElementById('q'),L=[].slice.call(document.querySelectorAll('.ent')),G=[].slice.call(document.querySelectorAll('.grp')),n=document.getElementById('n');
+function f(){var s=q.value.toLowerCase().trim(),k=0;L.forEach(function(e){var ok=!s||e.dataset.k.indexOf(s)>=0;e.hidden=!ok;if(ok)k++});
+G.forEach(function(g){var r=g.nextElementSibling,v=false;while(r&&r.classList.contains('ent')){if(!r.hidden)v=true;r=r.nextElementSibling}g.hidden=!v});
+n.textContent=k+' de '+L.length+' símbolos'}
+q.addEventListener('input',f);f();
+window.addEventListener('load',function(){try{renderMathInElement(document.getElementById('lista'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}catch(e){}});})();
+</script>''')
+n.append(PIE)
+(RAIZ / 'notacion.html').write_text('\n'.join(n), encoding='utf8')
+print(f'notacion.html ({len(NOT)} símbolos)')
