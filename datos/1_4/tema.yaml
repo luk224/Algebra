@@ -36,3 +36,256 @@ leyenda:
 - A
 - P
 - X
+esencial:
+  intro: |-
+    Un sistema es una pregunta sobre las columnas de $A$; casi todo se decide con rangos y se calcula con operaciones por filas.
+  items:
+  - |-
+    <b>Clasificar sin resolver (Rouché-Frobenius).</b> Con $n$ incógnitas: $\operatorname{rang}A\neq\operatorname{rang}(A\mid B)\Rightarrow$ incompatible; $\operatorname{rang}A=\operatorname{rang}(A\mid B)=n\Rightarrow$ determinado; $=k<n\Rightarrow$ indeterminado con $n-k$ parámetros. Nunca hay «exactamente dos» soluciones: o 0, o 1, o infinitas.
+  - |-
+    <b>Atajos con las dimensiones.</b> Si $\operatorname{rang}A$ es igual al número de ecuaciones, la ampliada no puede tener más rango: el sistema es compatible. Un homogéneo $AX=0$ siempre es compatible (tiene $X=0$) y es determinado solo si $\operatorname{rang}A=n$. Si $A$ es regular, el sistema es determinado.
+  - |-
+    <b>Con parámetros.</b> Si $A$ es cuadrada, $\det A\neq0$ da el caso determinado; los valores que anulan $\det A$ se sustituyen y se estudian aparte comparando rangos.
+  - |-
+    <b>Equivalentes y paramétricas.</b> Las operaciones elementales sobre ecuaciones (equivalentemente, sobre filas de la ampliada) no cambian las soluciones. Para pasar a paramétricas, las incógnitas libres son los parámetros; el número de ecuaciones cartesianas es $n$ menos el de parámetros independientes.
+  - |-
+    <b>Métodos.</b> Gauss escalona y retrosustituye; Gauss-Jordan deja la forma reducida. $A=LU$ (sin normalizar pivotes, $L$ con los multiplicadores) resuelve $LY=B$ y luego $UX=Y$; si hubo intercambios, $PA=LU$ y se resuelve con $PB$. $\det L=1$, luego $\det A=\det U$.
+tipos:
+- id: clasif
+  nombre: |-
+    Clasificar un sistema (con o sin parámetros)
+  receta: |-
+    Comparar $\operatorname{rang}A$, $\operatorname{rang}(A\mid B)$ y el número de incógnitas $n$.
+  senal: |-
+    «Clasifique», «discuta», «¿es compatible?», «para qué valores de $a$…», o datos como dimensiones y rangos sin números concretos.
+  pasos:
+  - |-
+    Identifica $m$ (ecuaciones), $n$ (incógnitas, columnas de $A$) y escribe la ampliada $(A\mid B)$.
+  - |-
+    Calcula $\operatorname{rang}A$ y $\operatorname{rang}(A\mid B)$ (escalonando o con menores). Con parámetros: si $A$ es cuadrada, $\det A=0$ marca los valores críticos.
+  - |-
+    Si los rangos difieren, es incompatible; si son iguales a $n$, determinado; si son iguales a $k<n$, indeterminado con $n-k$ parámetros.
+  - |-
+    Con parámetros, sustituye cada valor crítico y repite la comparación de rangos; el resto de valores dan el caso general.
+  ejemplo: |-
+    $x+2y=3,\ 2x+4y=7$: $\operatorname{rang}A=1$ (filas proporcionales) pero $\operatorname{rang}(A\mid B)=2$ (el menor de las columnas 1 y 3 vale $1\cdot7-3\cdot2=1\neq0$), luego es incompatible.
+  fallos: |-
+    Concluir «incompatible» solo porque $\det A=0$ (puede ser indeterminado) · Contar las columnas de la ampliada como incógnitas ($n+1$ columnas) · Olvidar que un homogéneo nunca es incompatible
+- id: resolver
+  nombre: |-
+    Resolver por Gauss o Gauss-Jordan
+  receta: |-
+    Escalonar la ampliada por filas y despejar desde la última ecuación.
+  senal: |-
+    «Resuelva», «calcule las soluciones», «halle $X$»; también sistemas con incógnitas matriciales, que se resuelven combinando ecuaciones igual que con números.
+  pasos:
+  - |-
+    Escribe la ampliada $(A\mid B)$ con la barra vertical.
+  - |-
+    Elige el pivote de la primera columna (intercambia filas si es $0$) y anula por reemplazo todo lo que hay debajo; repite con la siguiente columna.
+  - |-
+    Si aparece una fila $(0\ \cdots\ 0\mid c)$ con $c\neq0$, es incompatible; una fila de ceros se descarta.
+  - |-
+    Despeja desde la última fila hacia arriba (Gauss) o anula también por encima y normaliza (Gauss-Jordan, forma reducida). Las incógnitas sin pivote son parámetros libres.
+  ejemplo: |-
+    $x+y+z=6,\ 2y+z=7,\ x+z=4$: con $F_3\to F_3-F_1$ queda $-y=-2$, luego $y=2$; de la segunda $z=7-4=3$; de la primera $x=6-2-3=1$. Solución $(1,2,3)$.
+  fallos: |-
+    Errores de signo al restar filas · Operar con una columna que no es la del pivote actual · Olvidar aplicar a la columna de términos independientes la misma operación · Dar la solución sin comprobarla en el sistema original
+- id: cartparam
+  nombre: |-
+    Pasar de paramétricas a cartesianas (y al revés)
+  receta: |-
+    Eliminar los parámetros, o resolver y dejar libres las incógnitas sin pivote.
+  senal: |-
+    «Calcule unas ecuaciones cartesianas / paramétricas», solución dada con parámetros $\alpha,\beta$.
+  pasos:
+  - |-
+    Cuenta incógnitas $n$ y parámetros independientes $r$: harán falta $n-r$ ecuaciones cartesianas.
+  - |-
+    De paramétricas a cartesianas: despeja los parámetros en las ecuaciones que los contienen solos y sustitúyelos en las demás.
+  - |-
+    De cartesianas a paramétricas: resuelve por Gauss; las incógnitas sin pivote son los parámetros y las demás se expresan en función de ellos.
+  - |-
+    Comprueba con un punto: sustituye valores de los parámetros en las cartesianas.
+  ejemplo: |-
+    $x=\alpha,\ y=\beta,\ z=\alpha+\beta$: dos parámetros y tres incógnitas dan $3-2=1$ ecuación. Como $\alpha=x$ y $\beta=y$, queda $z=x+y$, es decir, $x+y-z=0$.
+  fallos: |-
+    Dar menos ecuaciones de las necesarias (la solución queda demasiado grande) · Tomar como parámetros incógnitas que no son libres · No comprobar con un punto concreto
+- id: equiv
+  nombre: |-
+    Sistemas equivalentes
+  receta: |-
+    Dos sistemas son equivalentes si tienen las mismas soluciones; las operaciones elementales lo garantizan.
+  senal: |-
+    «¿Son equivalentes?», «escriba dos sistemas equivalentes», «obtenga un sistema equivalente».
+  pasos:
+  - |-
+    Para fabricar uno equivalente: aplica a la ampliada una operación elemental (intercambiar, multiplicar por $c\neq0$, sumar a una fila un múltiplo de otra).
+  - |-
+    Para comparar dos sistemas dados: resuelve ambos (o escalona sus ampliadas hasta la forma reducida) y compara los conjuntos de soluciones.
+  - |-
+    Justifica con el teorema: las operaciones elementales sobre las filas no cambian el conjunto de soluciones.
+  ejemplo: |-
+    $x+y=2,\ 2x+2y=4$ es equivalente a $x+y=2$: la operación $F_2\to F_2-2F_1$ da la fila $(0\ 0\mid0)$, que se puede suprimir. Ambos tienen como soluciones $\{(t,2-t)\}$.
+  fallos: |-
+    Pensar que dos sistemas con el mismo número de ecuaciones son equivalentes · Multiplicar una fila por $0$ (no es operación elemental) · Comparar solo los rangos sin comparar las soluciones
+- id: lu
+  nombre: |-
+    Factorización LU
+  receta: |-
+    Escalonar $A$ por reemplazos sin normalizar y guardar los multiplicadores en $L$.
+  senal: |-
+    «Calcule la factorización $LU$», «resuelva usando $LU$», preguntas teóricas sobre existencia, unicidad o usos de $LU$.
+  pasos:
+  - |-
+    Escalona $A$ solo con operaciones $F_i\to F_i-\ell_{ij}F_j$ ($i>j$), sin normalizar ni intercambiar filas: el resultado es $U$.
+  - |-
+    Coloca cada multiplicador $\ell_{ij}$ en la posición $(i,j)$ de $L$, con $1$ en la diagonal y $0$ encima.
+  - |-
+    Comprueba que $LU=A$.
+  - |-
+    Para resolver $AX=B$: resuelve $LY=B$ (hacia delante) y después $UX=Y$ (hacia atrás). Si hubo intercambios, $PA=LU$ y se resuelve $LY=PB$.
+  ejemplo: |-
+    $A=\begin{pmatrix}2&1\\4&5\end{pmatrix}$: con $F_2\to F_2-2F_1$ resulta $U=\begin{pmatrix}2&1\\0&3\end{pmatrix}$ y $L=\begin{pmatrix}1&0\\2&1\end{pmatrix}$. Para $B=(3,9)^t$: $LY=B$ da $Y=(3,3)^t$ y $UX=Y$ da $X=(1,1)^t$.
+  fallos: |-
+    Poner en $L$ el multiplicador con el signo cambiado · Resolver primero $UX=Y$ y luego $LY=B$ (el orden es primero $L$) · Olvidar permutar también $B$ cuando hay $PA=LU$ · Decir que $\det A=\det L$ en vez de $\det U$
+quiz:
+- p: |-
+    Un sistema tiene 4 ecuaciones, 6 incógnitas y $\operatorname{rang}A=4$. ¿Cómo es?
+  opciones:
+  - t: |-
+      Compatible indeterminado con 2 parámetros
+    ok: true
+  - t: |-
+      Compatible determinado
+    ok: false
+    why: |-
+      Determinado exigiría $\operatorname{rang}A=n=6$, y aquí el rango es 4.
+  - t: Incompatible
+    ok: false
+    why: |-
+      La ampliada tiene 4 filas, luego su rango no puede pasar de 4: coincide con el de $A$ y el sistema es compatible.
+  - t: |-
+      Compatible indeterminado con 4 parámetros
+    ok: false
+    why: |-
+      Los parámetros son $n-\operatorname{rang}A=6-4=2$, no el rango.
+  fb: |-
+    $\operatorname{rang}A=4$ es el máximo posible con 4 filas, así que $\operatorname{rang}(A\mid B)=4$; como $4<6$, es indeterminado con $6-4=2$ parámetros.
+- p: |-
+    ¿Cómo es el sistema $x+y=2,\ 2x+2y=5$?
+  opciones:
+  - t: Incompatible
+    ok: true
+  - t: |-
+      Compatible determinado
+    ok: false
+    why: |-
+      El determinante de $A$ es $0$: no puede ser determinado.
+  - t: |-
+      Compatible indeterminado
+    ok: false
+    why: |-
+      Que $\det A=0$ no basta: aquí $\operatorname{rang}A=1$ pero $\operatorname{rang}(A\mid B)=2$, y para que fuese indeterminado deberían coincidir.
+  - t: |-
+      Tiene exactamente dos soluciones
+    ok: false
+    why: |-
+      Un sistema lineal tiene 0, 1 o infinitas soluciones; nunca exactamente dos.
+  fb: |-
+    La segunda ecuación equivale a $x+y=2{,}5$, que contradice la primera. Con rangos: $\operatorname{rang}A=1\neq2=\operatorname{rang}(A\mid B)$.
+- p: |-
+    Un sistema homogéneo $AX=0$ tiene matriz ampliada de 4 columnas y $\operatorname{rang}A=2$. ¿Qué se puede afirmar?
+  opciones:
+  - t: |-
+      Solo tiene la solución nula
+    ok: false
+    why: |-
+      Has contado 4 incógnitas, pero la ampliada tiene $n+1$ columnas: $n=3$, y como $\operatorname{rang}A=2<3$ hay más soluciones.
+  - t: |-
+      Es compatible indeterminado con 1 parámetro
+    ok: true
+  - t: |-
+      Es incompatible
+    ok: false
+    why: |-
+      Un homogéneo siempre tiene la solución $X=0$, así que nunca es incompatible.
+  - t: |-
+      Es compatible indeterminado con 2 parámetros
+    ok: false
+    why: |-
+      Los parámetros son $n-\operatorname{rang}A=3-2=1$; el 2 es el rango, no el número de parámetros.
+  fb: |-
+    La ampliada tiene $n+1=4$ columnas, luego $n=3$. Es siempre compatible y $\operatorname{rang}A=2<3$: $3-2=1$ parámetro libre.
+- p: |-
+    Para el sistema $x+y=1,\ x+ay=2$, ¿para qué valor de $a$ es incompatible?
+  opciones:
+  - t: |-
+      $a=0$
+    ok: false
+    why: |-
+      Con $a=0$ el determinante es $-1\neq0$: $A$ es regular y el sistema es determinado.
+  - t: |-
+      $a=1$
+    ok: true
+  - t: |-
+      $a=2$
+    ok: false
+    why: |-
+      Con $a=2$, $\det A=1\neq0$: determinado, con solución única.
+  - t: |-
+      Es compatible para todo $a$
+    ok: false
+    why: |-
+      Para $a=1$ el determinante es $0$ y las ecuaciones $x+y=1$, $x+y=2$ se contradicen.
+  fb: |-
+    $\det A=a-1$. Si $a\neq1$, determinado. Si $a=1$: $\operatorname{rang}A=1$ y $\operatorname{rang}(A\mid B)=2$ (por $x+y=1$ y $x+y=2$), incompatible.
+- p: |-
+    En $A=LU$ para $A=\begin{pmatrix}1&2\\3&7\end{pmatrix}$ (sin intercambios), ¿cuál es $L$?
+  opciones:
+  - t: |-
+      $\begin{pmatrix}1&0\\3&1\end{pmatrix}$
+    ok: true
+  - t: |-
+      $\begin{pmatrix}1&0\\-3&1\end{pmatrix}$
+    ok: false
+    why: |-
+      El $-3$ es el que se usa en la operación $F_2-3F_1$; en $L$ se escribe el multiplicador con el signo cambiado, $+3$.
+  - t: |-
+      $\begin{pmatrix}1&2\\0&1\end{pmatrix}$
+    ok: false
+    why: |-
+      Esa es $U$ (el resultado de escalonar), no $L$.
+  - t: |-
+      $\begin{pmatrix}1&0\\0&1\end{pmatrix}$
+    ok: false
+    why: |-
+      Con $L=I$ sería $A=U$, pero $A$ no es triangular.
+  fb: |-
+    $F_2\to F_2-3F_1$ da $U=\begin{pmatrix}1&2\\0&1\end{pmatrix}$ y el multiplicador $3$ va a $L$: $LU=\begin{pmatrix}1&2\\3&7\end{pmatrix}$.
+- p: |-
+    Con $A=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ y $B=(2,3)^t$ se usa $PA=LU$ con $P=A$. ¿Cuál es la solución de $AX=B$?
+  opciones:
+  - t: |-
+      $X=(3,2)^t$
+    ok: true
+  - t: |-
+      $X=(2,3)^t$
+    ok: false
+    why: |-
+      Es el resultado de resolver $LY=B$ sin permutar $B$: hay que usar $PB=(3,2)^t$.
+  - t: |-
+      $X=(0,0)^t$
+    ok: false
+    why: |-
+      Esa es la solución del homogéneo; aquí $B\neq0$ y $A$ es regular con $X=A^{-1}B$.
+  - t: |-
+      No tiene solución
+    ok: false
+    why: |-
+      $\det A=-1\neq0$: $A$ es regular y el sistema es compatible determinado.
+  fb: |-
+    $PA=I=LU$ con $L=U=I$, y $LY=PB=(3,2)^t$ da $Y=(3,2)^t=X$. Comprobación: $A(3,2)^t=(2,3)^t$.
+capa: true
+que_cae_nota: |-
+  Los ejercicios de examen de este tema son sobre todo preguntas teóricas cortas de clasificación por rangos y de factorización $LU$; los problemas largos piden discutir y resolver con un parámetro.
