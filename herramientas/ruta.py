@@ -53,15 +53,15 @@ html = '''<!DOCTYPE html>
 <main>
 <h1>Ruta de estudio hasta las PEC</h1>
 <p>Dime cuántas horas por semana puedes dedicar y calculo qué temas te caben antes de cada PEC, empezando por los que más rinden en el examen (ver <a href="prioridades.html">prioridades</a>) y respetando lo que cada tema necesita antes. Marca lo que ya has estudiado y el plan se recalcula. Todo se guarda solo en este navegador.</p>
-<div class="ctl"><label>Horas por semana: <input type="number" id="hs" min="1" max="60" value="10"></label><span id="hoy"></span></div>
+<div class="ctl"><label>Horas por semana: <input type="number" id="hs" min="1" max="60" value="5"></label><span id="hoy"></span></div>
 <div id="out"></div>
 <p class="res">Las horas por tema son estimaciones de la cabecera de cada tema y las dependencias son orientativas. Fechas: PEC1 (módulos 1-3) del 27 al 30 de noviembre de 2026; PEC2 (módulos 4-6) del 15 al 18 de enero de 2027.</p>
 </main>
 <script type="application/json" id="datos">__DATOS__</script>
 <script>
 (function(){
-  var D=JSON.parse(document.getElementById('datos').textContent), KEY='ruta_v1', S={hs:10,hecho:{}};
-  try{var g=JSON.parse(localStorage.getItem(KEY));if(g){S.hs=g.hs||10;S.hecho=g.hecho||{}}}catch(e){}
+  var D=JSON.parse(document.getElementById("datos").textContent), KEY="ruta_v1", S={hs:5,hecho:{}};
+  try{var g=JSON.parse(localStorage.getItem(KEY));if(g){S.hs=g.hs||5;S.hecho=g.hecho||{}}}catch(e){}
   function guarda(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
   var hs=document.getElementById('hs');hs.value=S.hs;
   function f(d){return d.toLocaleDateString('es-ES',{day:'numeric',month:'short'})}
@@ -97,7 +97,7 @@ html = '''<!DOCTYPE html>
     h+=(hoy<=fin1?bloque('PEC 1 · módulos 1-3 (27-30 nov)',/^[123]\\./,ini1,p1):'<div class="pec"><h2>PEC 1</h2><p class="res">Ya ha pasado.</p></div>');
     h+=bloque('PEC 2 · módulos 4-6 (15-18 ene)',/^[456]\\./,ini2>p2?p2:ini2,p2);
     document.getElementById('out').innerHTML=h}
-  hs.onchange=function(){S.hs=Math.max(1,parseInt(hs.value,10)||10);guarda();pinta()};
+  hs.onchange=function(){S.hs=Math.max(1,parseInt(hs.value,10)||5);guarda();pinta()};
   document.getElementById('out').addEventListener('change',function(e){if(e.target.dataset.c){S.hecho[e.target.dataset.c]=e.target.checked;guarda();pinta()}});
   document.getElementById('btn-tema').onclick=function(){var r=document.documentElement,d=r.getAttribute('data-theme')==='dark';r.setAttribute('data-theme',d?'light':'dark');try{localStorage.setItem('tema',d?'light':'dark')}catch(e){}};
   pinta();

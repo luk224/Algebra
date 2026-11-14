@@ -124,7 +124,7 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
 
 
 
-- [ ] **8.3** Revisar la columna «Necesitas antes» de `prioridades.html` (dependencias orientativas, criterio del autor) y las horas estimadas de cada tema.
+- [x] **8.3** Revisar la columna «Necesitas antes» de `prioridades.html` (dependencias orientativas, criterio del autor) y las horas estimadas de cada tema. *(hecho: el usuario da por buenas las dependencias y las horas; horas semanales por defecto: 5)*
 
 ## Riesgos y cómo se evitan
 | Riesgo | Medida |

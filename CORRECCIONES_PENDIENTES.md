@@ -70,10 +70,5 @@ Cómo aplicar: editar el campo en `datos/X_Y/{tema,ejercicios}.yaml` (bloques `|
 - `ex-feb22a-e3.enunciado`: añadir al final «<i>(El examen pide calcular los subespacios núcleo e imagen de $f$, tema 3.2; aquí solo se demuestra la linealidad, que es el paso previo.)</i>»
 - Regla 8 bis: `ej3-3`, eliminar el bloque `html` «Además se pierde un «≠»…»; `ej3-9` paso (D) → «<b>(D)</b> Trata de Maxima, que <b>no entra en examen</b>. No se desarrolla.»
 
-## Pendiente de revisar a mano (no aplicado a propósito: exige recalcular o ver el texto exacto)
-- 6.5 `ej6-41`: la solución da la matriz de paso con $\det P=-1$ mientras la ficha exige $\det P=1$. Cambiar el signo de la 3.ª columna a $(-1,0,0)^t$; entonces la parte lineal girada es $(2\sqrt2,-2\sqrt2,2)$, el cuadrado queda $(x_3'+1)^2-1$ y la traslación es $x_3''=x_3'+1$ (la reducida y el centro $(1,4,0)$ no cambian). Verificar con `.d3-cuadrica`/sympy.
-- 6.5 `ej6-39` paso de opciones («A) falsa (tal como está escrita)… C) verdadera (leyendo «cono real»)» → «A) falsa. B) verdadera. C) verdadera: es un cono real.») y `ej-propio-2` `fuentes.ref` («Ejemplo propio; real o imaginario con d = F(c); verificado con sympy»).
-- 6.4 `ej-propio-4` `fuentes.ref` («Ejemplo propio; cuadro de U p. 286; verificado con sympy»).
-- 4.1 `ex-feb18a-4`: en la base {(1,0),(1,1)} la matriz de f(x,y)=(x+y,2y) es diag(1,2), no A'=(2 1; 0 1); y «del apartado 4» no se refiere a nada del tema.
-- 1.4 `ex-feb20b`: convención de signo del multiplicador en L (equivalente a la del libro; unificar si se quiere).
-- 4.2 `secciones/05_s4.html` l.20: quitar «, corrigiendo la fórmula de U p.153, exacta solo para $n$ par» (regla 8 bis).
+## Restos: aplicados (14-nov-2026)
+6.5 `ej6-41` (matriz de paso con det P = +1, verificada con sympy; centro (1,4,0) intacto), 6.5 `ej6-39` y `ej-propio-2`, 6.4 `ej-propio-4`, 4.1 `ex-feb18a-4` (A' en {(1,1),(0,1)}, D en {(1,0),(1,1)}), 4.2 `05_s4`. Queda solo, a propósito: 1.4 `ex-feb20b` (convención de signo del multiplicador en L, equivalente a la del libro).
