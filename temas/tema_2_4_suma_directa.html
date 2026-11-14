@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/2_4/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,11 +8,13 @@
 <title>Álgebra · 2.4 Operaciones entre subespacios. Suma directa</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
 <script defer src="../assets/tres-d.js"></script>
 <script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -38,10 +40,43 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Cuatro operaciones entre subespacios (intersección, unión, suma, suma directa) y una fórmula que las une, la de Grassmann.</p>
+  <ol>
+    <li><b>Intersección</b> $U_1\cap U_2$: vectores que están en los dos; <b>siempre es subespacio</b>. Se calcula juntando las ecuaciones cartesianas de ambos (si hay generadores, pásalos antes a cartesianas).</li>
+    <li><b>Unión</b> $U_1\cup U_2$: <b>en general no es subespacio</b> (la suma de un vector de cada uno se sale). Solo lo es si $U_1\subset U_2$ o $U_2\subset U_1$.</li>
+    <li><b>Suma</b> $U_1+U_2=\{u_1+u_2\}$: el menor subespacio que contiene a la unión. Una base se obtiene escalonando los generadores de los dos juntos.</li>
+    <li><b>Grassmann:</b> $\operatorname{Dim}(U_1+U_2)+\operatorname{Dim}(U_1\cap U_2)=\operatorname{Dim}U_1+\operatorname{Dim}U_2$. Con tres dimensiones justificadas, despejas la cuarta.</li>
+    <li><b>Suma directa</b> $\iff U_1\cap U_2=\{0\}$ (descomposición única). <b>Suplementarios</b> en $V$: además $\operatorname{Dim}U_1+\operatorname{Dim}U_2=\operatorname{Dim}V$; el suplementario existe pero <b>no es único</b>.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>9 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 7 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 5 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>Calcular una intersección <small>(3 de 9)</small></td><td>Junta las condiciones de los dos subespacios y resuelve el sistema homogéneo.</td>
+      <td><a href="#ej2-31">2.31</a> · <a href="#ej2-33">2.33</a> · <a href="#ej2-35">2.35</a> · <a href="#ej2-36">2.36</a></td>
+      <td><a href="#ex-feb19b">Feb. 19 B ej. 2</a> · <a href="#ex-sep19a">Sept. 19 A ej. 2</a> · <a href="#ex-feb20a">Ene. 20 A problema a)</a></td></tr>
+    <tr><td>Suma de subespacios: base y ecuaciones <small>(3 de 9)</small></td><td>Une los generadores, escalona y quédate con las filas no nulas.</td>
+      <td><a href="#ej2-32">2.32</a> · <a href="#ej2-33">2.33</a> · <a href="#ej2-36">2.36</a></td>
+      <td><a href="#ex-ene22">Ene. 22 A ej. 2</a> · <a href="#ex-sep22">Sept. 22 problema b)</a> · <a href="#ex-sep24">Sept. 24 p. 7</a></td></tr>
+    <tr><td>Dimensiones y fórmula de Grassmann <small>(2 de 9)</small></td><td>Calcula tres dimensiones con rangos y despeja la cuarta.</td>
+      <td><a href="#ej2-31">2.31</a> · <a href="#ej2-34">2.34</a> · <a href="#ej2-36">2.36</a> · <a href="#ej2-37">2.37</a></td>
+      <td><a href="#ex-feb24p7">Feb. 24 (1.ª) p. 7</a> · <a href="#ex-feb25">Feb. 25 (2.ª) preg. 2</a></td></tr>
+    <tr><td>¿La suma es directa? <small>(1 de 9)</small></td><td>La suma es directa si y solo si la intersección es $\{0\}$.</td>
+      <td><a href="#ej2-32">2.32</a> · <a href="#ej2-34">2.34</a> · <a href="#ej2-35">2.35</a> · <a href="#ej2-37">2.37</a></td>
+      <td><a href="#ex-feb18b">Feb. 18 B ej. 2</a></td></tr>
+    <tr><td>Suplementarios: comprobar o construir <small>(0 de 9)</small></td><td>Suplementario = intersección nula y dimensiones que suman $\operatorname{Dim}V$; se construye completando una base.</td>
+      <td><a href="#ej2-34">2.34</a></td>
+      <td>—</td></tr>
+  </table>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §2.4.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 89-90">U p.89-90</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §2.4.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 89-90">U p.89-90</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>Imagina dos «hojas de papel» infinitas (dos planos por el origen) en el espacio. <b>Intersección</b>: la línea por donde se cruzan. <b>Suma</b>: todos los puntos a los que llegas si te permites moverte por la primera hoja <i>y luego</i> por la segunda. <b>Suma directa</b>: caso especial en que las dos hojas no comparten ninguna dirección de movimiento (solo el origen), de modo que para llegar a un punto solo hay <b>un</b> reparto posible del camino entre ambas. Es como mover una grúa: una cinta que corre por el suelo (un plano) más un ascensor vertical (una recta): la posición final es «parte horizontal + parte vertical», y esa descomposición es única. Con dos cintas que comparten un carril, en cambio, hay infinitas maneras de repartir el recorrido.</p>
@@ -76,7 +111,7 @@
 
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>El subespacio generado, el menor que contiene a $S$ <span class="src" data-l="U" data-ref="U §2.4.2 Ejemplo 2.31 y Teorema 2.8, p. 90-91">U p.90-91</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>El subespacio generado, el menor que contiene a $S$ <span class="src" data-l="U" data-ref="U §2.4.2 Ejemplo 2.31 y Teorema 2.8, p. 90-91">U p.90-91</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Si te dan unos cuantos vectores sueltos $S$ y quieres un subespacio que los contenga, hay muchos candidatos: un plano que los contiene, todo $\mathbb R^3$… Pero el subespacio <b>más pequeño</b> que los contiene es el que se obtiene «mezclando» únicamente esos vectores: el subespacio generado $\langle S\rangle$. Cualquier otro subespacio que contenga a $S$ tiene que contener también todas sus combinaciones lineales, así que contiene a $\langle S\rangle$.</p>
@@ -98,7 +133,7 @@
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>Intersección de subespacios <span class="src" data-l="U" data-ref="U §2.4.2 Intersección de subespacios y Ejemplos 2.32-2.33, p. 91-92">U p.91-92</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>Intersección de subespacios <span class="src" data-l="U" data-ref="U §2.4.2 Intersección de subespacios y Ejemplos 2.32-2.33, p. 91-92">U p.91-92</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>La intersección $U_1\cap U_2$ son los vectores que están <b>a la vez</b> en $U_1$ y en $U_2$. En $\mathbb R^3$: dos planos distintos por el origen se cortan en una <b>recta</b>; un plano y una recta que no está contenida en él se cortan solo en el origen. Como un vector de la intersección pertenece a los dos subespacios, debe cumplir <b>las condiciones de los dos</b>: por eso se calcula <b>juntando las ecuaciones cartesianas</b>.</p>
@@ -186,7 +221,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>Unión de subespacios <span class="src" data-l="U" data-ref="U §2.4.2 Unión de subespacios y Ejemplo 2.34, p. 92-93">U p.92-93</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>Unión de subespacios <span class="src" data-l="U" data-ref="U §2.4.2 Unión de subespacios y Ejemplo 2.34, p. 92-93">U p.92-93</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>La unión $U_1\cup U_2$ es simplemente «los vectores que están en $U_1$ <b>o</b> en $U_2$». Si pones los dos ejes de $\mathbb R^2$ juntos obtienes una «cruz»: sumas un vector del eje horizontal con uno del vertical y te sales de la cruz. Un subespacio tiene que ser cerrado para la suma, y la unión, en general, no lo es.</p>
@@ -260,7 +295,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Suma de subespacios <span class="src" data-l="U" data-ref="U §2.4.2 Definición 2.12 y Ejemplos 2.35-2.36, p. 93-95">U p.93-95</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Suma de subespacios <span class="src" data-l="U" data-ref="U §2.4.2 Definición 2.12 y Ejemplos 2.35-2.36, p. 93-95">U p.93-95</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>La unión se queda corta (no es subespacio) y lo que queremos es el subespacio <b>más pequeño</b> que contenga a $U_1$ y a $U_2$ a la vez (Teor. 2.8 aplicado a la unión). Ese subespacio está formado por todos los vectores que se obtienen <b>sumando</b> un vector de $U_1$ y uno de $U_2$: «muévete un poco por $U_1$ y luego un poco por $U_2$».</p>
@@ -306,7 +341,7 @@
 </div>
 
 <!-- ============================ 5 ============================ -->
-<h2 id="s5"><span class="n">5</span>Fórmula de Grassmann (o de la dimensión) <span class="src" data-l="U" data-ref="U §2.4.2 Fórmula de Grassmann y Ejemplos 2.37-2.38, p. 95">U p.95</span></h2>
+<h2 id="s5" data-vista="teoria"><span class="n">5</span>Fórmula de Grassmann (o de la dimensión) <span class="src" data-l="U" data-ref="U §2.4.2 Fórmula de Grassmann y Ejemplos 2.37-2.38, p. 95">U p.95</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Si sumas $\operatorname{Dim}U_1+\operatorname{Dim}U_2$ estás contando <b>dos veces</b> las direcciones que $U_1$ y $U_2$ comparten (las de $U_1\cap U_2$). Para obtener la dimensión de la suma hay que restar esa parte repetida. Ejemplo: dos planos de $\mathbb R^3$ que comparten una recta: $2+2$ direcciones contadas, 1 repetida, $2+2-1=3$ direcciones distintas: la suma es todo $\mathbb R^3$.</p>
@@ -337,7 +372,7 @@
 </div>
 
 <!-- ============================ 6 ============================ -->
-<h2 id="s6"><span class="n">6</span>Suma directa <span class="src" data-l="U" data-ref="U §2.4.3 Definición 2.13, Ejemplos 2.39-2.42 y caracterización, p. 96-97">U p.96-97</span></h2>
+<h2 id="s6" data-vista="teoria"><span class="n">6</span>Suma directa <span class="src" data-l="U" data-ref="U §2.4.3 Definición 2.13, Ejemplos 2.39-2.42 y caracterización, p. 96-97">U p.96-97</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>En una suma $U_1+U_2$ cada vector se puede escribir como $u_1+u_2$, pero ¿de cuántas maneras? Si $U_1$ y $U_2$ comparten una dirección, puedes «repartir» el movimiento en esa dirección entre las dos hojas como quieras: infinitas descomposiciones. Si solo comparten el origen, el reparto está forzado: hay <b>una única</b> descomposición. A ese caso privilegiado se le llama <b>suma directa</b> y se escribe $U_1\oplus U_2$.</p>
@@ -392,7 +427,7 @@
 </div>
 
 <!-- ============================ 7 ============================ -->
-<h2 id="s7"><span class="n">7</span>Subespacios suplementarios <span class="src" data-l="U" data-ref="U §2.4.3 Definición 2.14, Ejemplo 2.43 y Teorema 2.9, p. 97-98">U p.97-98</span></h2>
+<h2 id="s7" data-vista="teoria"><span class="n">7</span>Subespacios suplementarios <span class="src" data-l="U" data-ref="U §2.4.3 Definición 2.14, Ejemplo 2.43 y Teorema 2.9, p. 97-98">U p.97-98</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Dos subespacios son <b>suplementarios</b> si «se reparten» el espacio sin solaparse: juntos lo llenan todo (la suma es $V$) y no comparten nada más que el origen (la suma es directa). Es la situación de la figura del plano $x_3=0$ y el eje $x_3$: cada vector es «parte horizontal + parte vertical». Importante: dado $U$, su suplementario <b>no es único</b>: cualquier recta que no esté en un plano es suplementaria suya.</p>
@@ -439,13 +474,86 @@
   </ul>
 </div>
 
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 2.4»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-inter">
+  <h3>Tipo 1 — Calcular una intersección</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> El enunciado pide «$U_1\cap U_2$», «vectores comunes» o «ecuaciones/base de la intersección».</p>
+  <ol class="pasos">
+    <li>Escribe cada subespacio en ecuaciones cartesianas (si viene por generadores, elimina parámetros o usa el determinante).</li>
+    <li>Junta todas las ecuaciones en un único sistema homogéneo.</li>
+    <li>Resuelve: los parámetros libres dan las paramétricas y su número es la dimensión.</li>
+    <li>Comprueba que los vectores obtenidos cumplen las ecuaciones de los dos subespacios (y con Grassmann, si puedes).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $U=\{x_1=0\}$ y $W=\langle(1,1,0),(0,1,1)\rangle$. Cartesiana de $W$: $\begin{vmatrix}x_1&x_2&x_3\\1&1&0\\0&1&1\end{vmatrix}=x_1-x_2+x_3=0$. Junto con $x_1=0$ queda $x_2=x_3$: $U\cap W=\langle(0,1,1)\rangle$, y $(0,1,1)$ es el segundo generador de $W$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Buscar generadores comunes en lugar de vectores comunes · Escribir $\{(0,1,1)\}$ en vez de $\langle(0,1,1)\rangle$ · No comprobar el resultado en las dos ecuaciones</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-31">2.31</a> · <a href="#ej2-33">2.33</a> · <a href="#ej2-35">2.35</a> · <a href="#ej2-36">2.36</a> · <a href="#sol-2_4-9">Ejemplo propio 2</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb19b">Feb. 19 B ej. 2</a> · <a href="#ex-sep19a">Sept. 19 A ej. 2</a> · <a href="#ex-feb20a">Ene. 20 A problema a)</a> · <a href="#ex-ene22">Ene. 22 A ej. 2</a> · <a href="#ex-feb24p7">Feb. 24 (1.ª) p. 7</a> · <a href="#ex-sep24">Sept. 24 p. 7</a></p>
+</section>
+
+<section class="ficha" id="tipo-suma">
+  <h3>Tipo 2 — Suma de subespacios: base y ecuaciones</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> Piden «$U_1+U_2$», una base, una dimensión o unas ecuaciones de la suma; o «demostrar que $E=F$».</p>
+  <ol class="pasos">
+    <li>Escribe una base (o generadores) de cada subespacio.</li>
+    <li>Pon todos los vectores por filas en una matriz y escalona.</li>
+    <li>Las filas no nulas son una base de $U_1+U_2$; su número es la dimensión.</li>
+    <li>Si piden cartesianas, pásalas desde esa base (el vector $x$ añadido no sube el rango).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $U=\langle(1,0,1,0),(0,1,0,1)\rangle$, $W=\langle(1,1,1,1),(0,0,1,0)\rangle$. Como $(1,1,1,1)=(1,0,1,0)+(0,1,0,1)$ sale una fila nula: $U+W$ tiene base $\{(1,0,1,0),(0,1,0,1),(0,0,1,0)\}$ y dimensión 3.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Creer que $\operatorname{Dim}(U_1+U_2)=\operatorname{Dim}U_1+\operatorname{Dim}U_2$ · Confundir suma con unión · Dar como base los generadores sin quitar los ligados</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-32">2.32</a> · <a href="#ej2-33">2.33</a> · <a href="#ej2-36">2.36</a> · <a href="#sol-2_4-9">Ejemplo propio 2</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb20a">Ene. 20 A problema a)</a> · <a href="#ex-ene22">Ene. 22 A ej. 2</a> · <a href="#ex-sep22">Sept. 22 problema b)</a> · <a href="#ex-feb24p7">Feb. 24 (1.ª) p. 7</a> · <a href="#ex-sep24">Sept. 24 p. 7</a></p>
+</section>
+
+<section class="ficha" id="tipo-grassmann">
+  <h3>Tipo 3 — Dimensiones y fórmula de Grassmann</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> Piden «dimensión» de la suma o la intersección, estudios con parámetro, o posibles dimensiones sin vectores concretos.</p>
+  <ol class="pasos">
+    <li>Halla $\operatorname{Dim}U_1$ y $\operatorname{Dim}U_2$ (rango de sus generadores o $n-$ nº de ecuaciones independientes).</li>
+    <li>Halla $\operatorname{Dim}(U_1+U_2)$ como rango de todos los generadores juntos.</li>
+    <li>Despeja: $\operatorname{Dim}(U_1\cap U_2)=\operatorname{Dim}U_1+\operatorname{Dim}U_2-\operatorname{Dim}(U_1+U_2)$.</li>
+    <li>Sin vectores concretos, acota: $\max(\operatorname{Dim}U_1,\operatorname{Dim}U_2)\le\operatorname{Dim}(U_1+U_2)\le\operatorname{Dim}V$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> En $\mathbb R^5$, $\operatorname{Dim}U=3$ y $\operatorname{Dim}W=4$. Como $4\le\operatorname{Dim}(U+W)\le5$, la intersección tiene $3+4-\operatorname{Dim}(U+W)\in\{2,3\}$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Escribir Grassmann con $\operatorname{Dim}V$ o con la unión · Suponer $U_1+U_2=V$ sin probarlo · Olvidar que los generadores pueden ser ligados al contar la dimensión</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-31">2.31</a> · <a href="#ej2-34">2.34</a> · <a href="#ej2-36">2.36</a> · <a href="#ej2-37">2.37</a> · <a href="#sol-2_4-10">Ejemplo propio 3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb24p7">Feb. 24 (1.ª) p. 7</a> · <a href="#ex-sep24">Sept. 24 p. 7</a> · <a href="#ex-feb25">Feb. 25 (2.ª) preg. 2</a></p>
+</section>
+
+<section class="ficha" id="tipo-directa">
+  <h3>Tipo 4 — ¿La suma es directa?</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> Aparece «suma directa», «$\oplus$», «descomposición única» o «distintas formas de escribir $v=u_1+u_2$».</p>
+  <ol class="pasos">
+    <li>Calcula $U_1\cap U_2$ (o $\operatorname{Dim}$ con Grassmann).</li>
+    <li>Si es $\{0\}$ la suma es directa y $\operatorname{Dim}(U_1\oplus U_2)=\operatorname{Dim}U_1+\operatorname{Dim}U_2$; si no, no lo es.</li>
+    <li>Para descomponer un vector, impón $v=u_1+u_2$ con $u_i\in U_i$ y resuelve; en suma directa sale una sola solución.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $U=\langle(1,0,0),(0,1,0)\rangle$ y $W=\langle(1,1,1)\rangle$: $(a,b,0)=t(1,1,1)\Rightarrow t=0$, luego $U\cap W=\{0\}$. La suma es directa y de dimensión $2+1=3$: $U\oplus W=\mathbb R^3$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Decir «es directa» porque $\operatorname{Dim}U_1+\operatorname{Dim}U_2\le n$ · Aplicar el criterio por parejas a tres o más sumandos · Olvidar que una recta dentro de un plano no es suma directa con él</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-32">2.32</a> · <a href="#ej2-34">2.34</a> · <a href="#ej2-35">2.35</a> · <a href="#ej2-37">2.37</a> · <a href="#sol-2_4-8">Ejemplo propio 1</a> · <a href="#sol-2_4-10">Ejemplo propio 3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18b">Feb. 18 B ej. 2</a></p>
+</section>
+
+<section class="ficha" id="tipo-suplementario">
+  <h3>Tipo 5 — Suplementarios: comprobar o construir</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «¿Son suplementarios?», «halla un suplementario de…», «$V=U_1\oplus U_2$».</p>
+  <ol class="pasos">
+    <li>Para comprobar: verifica $U_1\cap U_2=\{0\}$ y $\operatorname{Dim}U_1+\operatorname{Dim}U_2=\operatorname{Dim}V$.</li>
+    <li>Para construir: toma una base de $U$ y complétala a una base de $V$ añadiendo vectores canónicos.</li>
+    <li>Los vectores añadidos generan un suplementario; comprueba con el rango o el determinante que la lista completa es base.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $U=\langle(1,1,0)\rangle\subset\mathbb R^3$. Añado $(0,1,0),(0,0,1)$: $\det\begin{pmatrix}1&1&0\\0&1&0\\0&0&1\end{pmatrix}=1\neq0$ es base, y $\langle(0,1,0),(0,0,1)\rangle$ es un suplementario de $U$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Hablar de «el» suplementario como si fuera único · Añadir un vector canónico sin ver que ya está en $U$ · Tomar el complemento conjuntista $V\setminus U$</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-34">2.34</a> · <a href="#sol-2_4-8">Ejemplo propio 1</a> · <a href="#sol-2_4-9">Ejemplo propio 2</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18b">Feb. 18 B ej. 2</a> · <a href="#ex-feb20a">Ene. 20 A problema a)</a> · <a href="#ex-sep22">Sept. 22 problema b)</a></p>
+</section>
+
 <!-- ============================ 8 ============================ -->
-<h2 id="ejercicios"><span class="n">8</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §2.4, Ejercicios 2.31-2.37, p. 70-78">E p.70-78</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">8</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, §2.4, Ejercicios 2.31-2.37, p. 70-78">E p.70-78</span></h2>
 
 <p>Los siete ejercicios de E para esta sección (2.31–2.37; el 2.37 es el último del capítulo 2). Cada uno enseña un método reutilizable (recuadro «Receta»). Orden de estudio sugerido, de fácil a difícil: <b>2.32 → 2.31 → 2.33 → 2.35 → 2.34 → 2.36 → 2.37</b>. Aquí se presentan en el orden del libro; las soluciones están plegadas, pulsa «Mostrar soluciones» o el ejercicio.</p>
 
-<details class="sol" id="ej2-31"><summary>Ejercicio 2.31 — intersección de dos subespacios de $\mathbb R^3$: ecuaciones y dimensión <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.31, p. 71">E p.71</span></summary>
-  <p class="enun">Sabiendo que $L_1=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0\}$ y $L_2=\langle(-1,0,2),(0,1,1)\rangle$, se pide: A) Ecuaciones del subespacio $L_1\cap L_2$. B) Dimensión del subespacio $L_1\cap L_2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sabiendo que $L_1=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0\}$ y $L_2=\langle(-1,0,2),(0,1,1)\rangle$, se pide: A) Ecuaciones del subespacio $L_1\cap L_2$. B) Dimensión del subespacio $L_1\cap L_2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Un vector de la intersección cumple las condiciones de los dos subespacios a la vez. Pasa $L_2$ a ecuaciones cartesianas, júntalas con la de $L_1$ y cuenta los parámetros libres.</p></details>
+<details class="sol" id="ej2-31"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 2.31 — intersección de dos subespacios de $\mathbb R^3$: ecuaciones y dimensión <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.31, p. 71">E p.71</span></summary>
   <p><i>Idea.</i> Un vector está en $L_1\cap L_2$ si cumple <b>a la vez</b> las condiciones de $L_1$ y de $L_2$. Las condiciones que se pueden «juntar» son las <b>ecuaciones cartesianas</b>: lo primero es pasar $L_2$ (dado por generadores) a cartesianas.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuaciones y dimensión de la intersección de un plano dado por una ecuación y otro dado por generadores.</dd>
@@ -483,8 +591,9 @@
   <p><b>Teoría:</b> Def. 2.4, U p.71 · Teor. 2.5, U p.88 · intersección, U p.91 · Grassmann, U p.95</p>
 </details>
 
-<details class="sol" id="ej2-32"><summary>Ejercicio 2.32 — suma con $H\subset G$: ecuaciones paramétricas y ¿es directa? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.32, p. 72">E p.72</span></summary>
-  <p class="enun">Siendo $H=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0,\ x_2=x_3\}$ y $G=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0\}$, se pide: A) Unas ecuaciones paramétricas de $H+G$. B) Comprobar si $H+G$ es suma directa.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Siendo $H=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0,\ x_2=x_3\}$ y $G=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0\}$, se pide: A) Unas ecuaciones paramétricas de $H+G$. B) Comprobar si $H+G$ es suma directa.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Compara las ecuaciones de $H$ y de $G$: ¿está uno dentro del otro? Si es así, la suma ya la conoces; para la directa, mira la intersección.</p></details>
+<details class="sol" id="ej2-32"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.32 — suma con $H\subset G$: ecuaciones paramétricas y ¿es directa? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.32, p. 72">E p.72</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Con $H\subset G$ hallar paramétricas de $H+G$ y decidir si la suma es directa.</dd>
     <dt>Cómo lo pienso</dt><dd>Me fijo antes que nada en si hay inclusión: si $H\subset G$, sumar $H$ a $G$ no añade nada, $H+G=G$, y la intersección es todo $H$. Una suma directa exige intersección nula; aquí la intersección es $H$, que no es nula.</dd>
@@ -513,8 +622,9 @@
   <p><b>Teoría:</b> Def. 2.12, U p.93 · Def. 2.13, U p.96 · caracterización, U p.97 · Grassmann, U p.95</p>
 </details>
 
-<details class="sol" id="ej2-33"><summary>Ejercicio 2.33 — demostrar que $E=F$ y hallar cartesianas <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.33, p. 73">E p.73</span></summary>
-  <p class="enun">Sean $E$ el subespacio de $\mathbb R^3$ generado por $(1,0,-1)$ y $(0,1,-1)$ y $F$ el subespacio generado por $(1,1,-2)$, $(2,1,-3)$ y $(0,1,-1)$, se pide: A) Demostrar que $E=F$. B) Ecuaciones cartesianas de $F$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $E$ el subespacio de $\mathbb R^3$ generado por $(1,0,-1)$ y $(0,1,-1)$ y $F$ el subespacio generado por $(1,1,-2)$, $(2,1,-3)$ y $(0,1,-1)$, se pide: A) Demostrar que $E=F$. B) Ecuaciones cartesianas de $F$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Para probar $E=F$ mira las dimensiones y si los generadores de uno están en el otro (rango). Las cartesianas salen de que $x$ añadido a los generadores no suba el rango.</p></details>
+<details class="sol" id="ej2-33"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.33 — demostrar que $E=F$ y hallar cartesianas <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.33, p. 73">E p.73</span></summary>
   <p><i>Idea.</i> Dos subespacios son iguales si cada uno está contenido en el otro. Con dimensiones es más cómodo: si $E\subset F$ y $\operatorname{Dim}E=\operatorname{Dim}F$, entonces $E=F$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Demostrar que dos subespacios, dados por generadores, son iguales, y hallar cartesianas.</dd>
@@ -545,8 +655,9 @@
   <p><b>Teoría:</b> Teor. 2.5 y 2.6, U p.88 · Teor. 2.8, U p.91 · cartesianas, U p.71</p>
 </details>
 
-<details class="sol" id="ej2-34"><summary>Ejercicio 2.34 — base, suplementario y Grassmann en $\mathbb R^4$ (V/F) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.34, p. 74">E p.74</span></summary>
-  <p class="enun">Se pide comprobar si los conjuntos $U_1=\{(x_1,x_2,x_3,x_4)\mid x_4=-x_3\}$, subespacio de $\mathbb R^4$, y $B_1=\{(1,0,0,0),(0,1,0,0),(0,0,1,-1)\}$ y $B_2=\{(0,0,0,1)\}$ verifican: A) $B_1$ es base de $U_1$. B) $B_2$ es base de un suplementario, $U_2$, de $U_1$. C) Una base de $U_1$ y otra de $U_2$ forman base de $\mathbb R^4$. D) La dimensión de $U_1\cap U_2$ es cero.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide comprobar si los conjuntos $U_1=\{(x_1,x_2,x_3,x_4)\mid x_4=-x_3\}$, subespacio de $\mathbb R^4$, y $B_1=\{(1,0,0,0),(0,1,0,0),(0,0,1,-1)\}$ y $B_2=\{(0,0,0,1)\}$ verifican: A) $B_1$ es base de $U_1$. B) $B_2$ es base de un suplementario, $U_2$, de $U_1$. C) Una base de $U_1$ y otra de $U_2$ forman base de $\mathbb R^4$. D) La dimensión de $U_1\cap U_2$ es cero.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Cada apartado se reduce a comprobar dos cosas: cuántos vectores hay frente a la dimensión, y si la intersección es solo el vector nulo.</p></details>
+<details class="sol" id="ej2-34"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.34 — base, suplementario y Grassmann en $\mathbb R^4$ (V/F) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.34, p. 74">E p.74</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Cuatro afirmaciones sobre una base de $U_1$, un suplementario, una base de $\mathbb R^4$ y la dimensión de la intersección.</dd>
     <dt>Cómo lo pienso</dt><dd>Todas giran en torno a «suplementario»: suma que da todo $\mathbb R^4$ y intersección nula. Si las dimensiones suman 4 y la intersección es nula, entonces la unión de bases es base. Compruebo cada afirmación contra esa definición.</dd>
@@ -580,8 +691,9 @@
   <p><b>Teoría:</b> Def. 2.9, U p.82 · Teor. 2.6 y 2.7, U p.88-89 · Grassmann, U p.95 · Def. 2.14, U p.97</p>
 </details>
 
-<details class="sol" id="ej2-35"><summary>Ejercicio 2.35 — intersección, suma directa y descomposición única (V/F) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.35, p. 75-76">E p.75-76</span></summary>
-  <p class="enun">Siendo $L_1=\langle(1,0,0),(0,0,1)\rangle$ y $L_2=\langle(1,1,1)\rangle$, se pide comprobar si se verifica: A) $L_1\cap L_2$ no es un subespacio vectorial. B) $(x_1,x_2,x_3)=\alpha(1,1,1)$ son ecuaciones paramétricas de $L_1\cap L_2$. C) $L_1+L_2$ es suma directa. D) Hay distintas posibilidades de descomponer el vector $(2,5,9)$ como suma de un vector de $L_1$ y uno de $L_2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Siendo $L_1=\langle(1,0,0),(0,0,1)\rangle$ y $L_2=\langle(1,1,1)\rangle$, se pide comprobar si se verifica: A) $L_1\cap L_2$ no es un subespacio vectorial. B) $(x_1,x_2,x_3)=\alpha(1,1,1)$ son ecuaciones paramétricas de $L_1\cap L_2$. C) $L_1+L_2$ es suma directa. D) Hay distintas posibilidades de descomponer el vector $(2,5,9)$ como suma de un vector de $L_1$ y uno de $L_2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $L_1\cap L_2$ buscando cuándo $\alpha(1,1,1)$ está en $L_1$. Con la intersección decides la suma directa y la unicidad de la descomposición.</p></details>
+<details class="sol" id="ej2-35"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.35 — intersección, suma directa y descomposición única (V/F) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.35, p. 75-76">E p.75-76</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Cuatro afirmaciones sobre la intersección, suma directa y descomposición única de un vector.</dd>
     <dt>Cómo lo pienso</dt><dd>Sé que la intersección de subespacios siempre es subespacio. Para ver si es solo el cero, miro si algún vector de la recta cumple la ecuación del plano. Si la suma es directa, la descomposición de cualquier vector es única.</dd>
@@ -612,8 +724,9 @@
   <p><b>Teoría:</b> intersección, U p.91 · Grassmann, U p.95 · Def. 2.13, U p.96 · caracterización y Def. 2.14, U p.97</p>
 </details>
 
-<details class="sol" id="ej2-36"><summary>Ejercicio 2.36 — dimensiones de $L_1,L_2,L_1\cap L_2$ y $L_1+L_2$ en $\mathbb R^4$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.36, p. 77">E p.77</span></summary>
-  <p class="enun">Si $L_1$ y $L_2$ son $L_1=\langle(1,0,1,1),(1,0,0,0),(0,0,1,1)\rangle$ y $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$, se pide estudiar las dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y de la suma $L_1+L_2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $L_1$ y $L_2$ son $L_1=\langle(1,0,1,1),(1,0,0,0),(0,0,1,1)\rangle$ y $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$, se pide estudiar las dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y de la suma $L_1+L_2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escalona los generadores de $L_1$ y de $L_2$ por separado para sus dimensiones; luego escalona todos juntos para la suma y despeja la intersección con Grassmann.</p></details>
+<details class="sol" id="ej2-36"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 2.36 — dimensiones de $L_1,L_2,L_1\cap L_2$ y $L_1+L_2$ en $\mathbb R^4$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.36, p. 77">E p.77</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$ en $\mathbb R^4$.</dd>
     <dt>Cómo lo pienso</dt><dd>Tengo tres dimensiones fáciles de calcular (rango de generadores) y una que puedo obtener de Grassmann. Así que calculo suma e intersección por separado, o una de ellas por la fórmula.</dd>
@@ -644,8 +757,9 @@
   <p><b>Teoría:</b> Teor. 2.1, U p.79 · Teor. 2.5, U p.88 · intersección, U p.91 · suma y Grassmann, U p.94-95</p>
 </details>
 
-<details class="sol" id="ej2-37"><summary>Ejercicio 2.37 — dimensiones de $A$ y $B$ y ¿es $A+B=A\oplus B$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.37, p. 78">E p.78</span></summary>
-  <p class="enun">Si $A$ es el subespacio de $\mathbb R^4$ generado por $\{(1,2,1,1),(-1,0,1,0),(2,2,0,1)\}$ y $B=\{(x_1,x_2,x_3,x_4)\mid 2x_1-2x_2+2x_3-x_4=0\}$ es otro subespacio de $\mathbb R^4$, se pide estudiar las dimensiones de $A$ y de $B$, y demostrar si verifica que $A+B=A\oplus B$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es el subespacio de $\mathbb R^4$ generado por $\{(1,2,1,1),(-1,0,1,0),(2,2,0,1)\}$ y $B=\{(x_1,x_2,x_3,x_4)\mid 2x_1-2x_2+2x_3-x_4=0\}$ es otro subespacio de $\mathbb R^4$, se pide estudiar las dimensiones de $A$ y de $B$, y demostrar si verifica que $A+B=A\oplus B$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula primero $\operatorname{Dim}A$ (rango) y $\operatorname{Dim}B$ (una ecuación en $\mathbb R^4$). Para la suma directa necesitas la intersección: impón la ecuación de $B$ al vector genérico de $A$.</p></details>
+<details class="sol" id="ej2-37"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 2.37 — dimensiones de $A$ y $B$ y ¿es $A+B=A\oplus B$? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 2.37, p. 78">E p.78</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Dimensiones de $A$ y $B$ y si $A+B=A\oplus B$.</dd>
     <dt>Cómo lo pienso</dt><dd>$A$ viene dado por generadores y $B$ por una ecuación. $B$ es un hiperplano de $\mathbb R^4$ (dimensión 3). La suma es directa solo si $A\cap B=\{0\}$; con $\dim A+\dim B=2+3=5>4$ eso sería imposible: la intersección no puede ser trivial.</dd>
@@ -679,8 +793,9 @@
 
 <h3>Ejemplos propios, de dificultad creciente</h3>
 
-<details class="sol" id="sol-2_4-8"><summary>Ejemplo propio 1 (fácil) — suplementario en $\mathbb R^3$ y descomposición de un vector <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
-  <p class="enun">En $\mathbb R^3$, sean $U_1=\{x_1+x_2+x_3=0\}$ y $U_2=\langle(1,1,1)\rangle$. (a) Prueba que $\mathbb R^3=U_1\oplus U_2$. (b) Descompón $v=(3,0,0)$ como suma de un vector de $U_1$ y otro de $U_2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">En $\mathbb R^3$, sean $U_1=\{x_1+x_2+x_3=0\}$ y $U_2=\langle(1,1,1)\rangle$. (a) Prueba que $\mathbb R^3=U_1\oplus U_2$. (b) Descompón $v=(3,0,0)$ como suma de un vector de $U_1$ y otro de $U_2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula la intersección de $U_1$ y $U_2$ y compara $\operatorname{Dim}U_1+\operatorname{Dim}U_2$ con la dimensión del espacio. Para descomponer, impón que una parte esté en $U_2$ y el resto en $U_1$.</p></details>
+<details class="sol" id="sol-2_4-8"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejemplo propio 1 (fácil) — suplementario en $\mathbb R^3$ y descomposición de un vector <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Probar que $\mathbb R^3=U_1\oplus U_2$ y descomponer un vector.</dd>
     <dt>Cómo lo pienso</dt><dd>Plano más recta fuera del plano suman todo $\mathbb R^3$. Compruebo que $(1,1,1)$ no cumple la ecuación del plano. Para descomponer: busco el múltiplo de $(1,1,1)$ que, restado a $v$, deja un vector del plano.</dd>
@@ -705,8 +820,9 @@
   <p><b>Error típico:</b> dar $U_1\cap U_2$ por vacía: nunca lo es, contiene al $0$; «suma directa» significa $U_1\cap U_2=\{0\}$, no $\varnothing$.</p>
 </details>
 
-<details class="sol" id="sol-2_4-9"><summary>Ejemplo propio 2 (medio) — suma e intersección en $\mathbb R^4$ por generadores, y un suplementario de la suma <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
-  <p class="enun">En $\mathbb R^4$, $U=\langle(1,1,0,0),(0,1,1,0)\rangle$ y $W=\langle(1,0,-1,0),(0,0,1,1)\rangle$. Halla $\operatorname{Dim}$, una base y ecuaciones cartesianas de $U+W$ y de $U\cap W$; ¿es directa la suma? Halla un suplementario de $U+W$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">En $\mathbb R^4$, $U=\langle(1,1,0,0),(0,1,1,0)\rangle$ y $W=\langle(1,0,-1,0),(0,0,1,1)\rangle$. Halla $\operatorname{Dim}$, una base y ecuaciones cartesianas de $U+W$ y de $U\cap W$; ¿es directa la suma? Halla un suplementario de $U+W$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escalona los cuatro generadores juntos para la suma; con Grassmann sabes qué dimensión debe salir en la intersección. El suplementario se obtiene completando una base de la suma.</p></details>
+<details class="sol" id="sol-2_4-9"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 2 (medio) — suma e intersección en $\mathbb R^4$ por generadores, y un suplementario de la suma <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Suma e intersección de dos subespacios de $\mathbb R^4$ dados por generadores, y un suplementario de la suma.</dd>
     <dt>Cómo lo pienso</dt><dd>Suma: uno todos los generadores y quito los sobrantes. Intersección: por Grassmann la dimensión, y el vector concreto lo encuentro buscando combinaciones comunes. Un suplementario se obtiene completando una base de la suma hasta una de $\mathbb R^4$.</dd>
@@ -734,8 +850,9 @@
   <p><b>Error típico:</b> tomar como base de $U+W$ los cuatro vectores «porque generan»: son ligados (rango 3).</p>
 </details>
 
-<details class="sol" id="sol-2_4-10"><summary>Ejemplo propio 3 (difícil) — Grassmann con parámetro <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
-  <p class="enun">En $\mathbb R^4$, $U=\langle(1,0,1,0),(0,1,0,1)\rangle$ y $W_a=\langle(1,1,a,1),(0,1,1,a)\rangle$, $a\in\mathbb R$. Estudia, según $a$, $\operatorname{Dim}(U+W_a)$ y $\operatorname{Dim}(U\cap W_a)$. ¿Para qué valores es $\mathbb R^4=U\oplus W_a$?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">En $\mathbb R^4$, $U=\langle(1,0,1,0),(0,1,0,1)\rangle$ y $W_a=\langle(1,1,a,1),(0,1,1,a)\rangle$, $a\in\mathbb R$. Estudia, según $a$, $\operatorname{Dim}(U+W_a)$ y $\operatorname{Dim}(U\cap W_a)$. ¿Para qué valores es $\mathbb R^4=U\oplus W_a$?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz con los cuatro vectores y estudia su rango según $a$; Grassmann te da la intersección. Será directa cuando la suma sea todo $\mathbb R^4$ con intersección nula.</p></details>
+<details class="sol" id="sol-2_4-10"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejemplo propio 3 (difícil) — Grassmann con parámetro <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Estudiar según $a$ la dimensión de $U+W_a$ y $U\cap W_a$ y cuándo la suma es directa y da $\mathbb R^4$.</dd>
     <dt>Cómo lo pienso</dt><dd>Los cuatro generadores forman una matriz cuadrada $4\times4$ que depende de $a$. Si su determinante es no nulo, los cuatro son independientes y la suma es todo $\mathbb R^4$ con intersección nula. Los valores de $a$ que lo anulan son los casos especiales.</dd>
@@ -763,7 +880,7 @@
 </details>
 
 <!-- ============================ 9 ============================ -->
-<h2 id="examenes"><span class="n">9</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">9</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>Preguntas de exámenes de otros años que caen en este tema. Se ordenan de más fácil a más difícil. Tres hechos «puente» (propios, consecuencias directas de lo anterior) se usan en casi todas:</p>
 <ul>
@@ -772,8 +889,9 @@
   <li><b>(H3) Comprobar o construir un suplementario:</b> $W'$ es suplementario de $W$ en $V$ ($\operatorname{Dim}V=n$) $\iff W\cap W'=\{0\}$ y $\operatorname{Dim}W+\operatorname{Dim}W'=n$ (§7).</li>
 </ul>
 
-<details class="sol" id="ex-feb18b"><summary>Feb. 2018 (tipo B), ejercicio 2 — suma directa, intersección y suplementarios con $U_1\subset U_2$ (V/F) <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicio 2">X Feb. 2018 (B)</span></summary>
-  <p class="enun">Considerar $U_1=\{(x_1,x_2,x_3,x_4): x_1=x_2=x_3=x_4\}$ y $U_2=\{(x_1,x_2,x_3,x_4): x_1=x_2;\ x_3=x_4\}$. Justificar si son o no ciertas las siguientes afirmaciones: A) Su suma, $U_1+U_2$, es directa; B) La dimensión de $U_1\cap U_2$ es 0; C) $U_1$ y $U_2$ son subespacios suplementarios.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Considerar $U_1=\{(x_1,x_2,x_3,x_4): x_1=x_2=x_3=x_4\}$ y $U_2=\{(x_1,x_2,x_3,x_4): x_1=x_2;\ x_3=x_4\}$. Justificar si son o no ciertas las siguientes afirmaciones: A) Su suma, $U_1+U_2$, es directa; B) La dimensión de $U_1\cap U_2$ es 0; C) $U_1$ y $U_2$ son subespacios suplementarios.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Fíjate en si un subespacio está contenido en el otro: eso decide la intersección y, con las dimensiones, si son suplementarios.</p></details>
+<details class="sol" id="ex-feb18b"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2018 (tipo B), ejercicio 2 — suma directa, intersección y suplementarios con $U_1\subset U_2$ (V/F) <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicio 2">X Feb. 2018 (B)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Tres afirmaciones sobre dos subespacios con $U_1\subset U_2$.</dd>
     <dt>Cómo lo pienso</dt><dd>Compruebo antes la posible inclusión: si todo vector de $U_1$ cumple las ecuaciones de $U_2$, la suma es $U_2$, la intersección es $U_1$ y las afirmaciones se deciden solas.</dd>
@@ -799,8 +917,9 @@
   <p><b>Error típico:</b> pensar que la suma es directa «porque $1+2\le4$» o «porque las bases juntas son 3 vectores»: el criterio es la intersección. Si las bases juntas son ligadas, la suma <b>no</b> es directa.</p>
 </details>
 
-<details class="sol" id="ex-feb19b"><summary>Feb. 2019 (tipo B), ejercicio 2 — intersección de dos subespacios dados por cartesianas <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), ejercicio 2">X Feb. 2019 (B)</span></summary>
-  <p class="enun">Encontrar unas ecuaciones paramétricas del subespacio $U_1\cap U_2$ siendo $U_1=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4: x_1=2x_2;\ x_3=x_4\}$ y $U_2=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4: x_1=2x_3\}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Encontrar unas ecuaciones paramétricas del subespacio $U_1\cap U_2$ siendo $U_1=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4: x_1=2x_2;\ x_3=x_4\}$ y $U_2=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4: x_1=2x_3\}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Junta las cuatro ecuaciones en un sistema homogéneo, resuélvelo y escribe la solución con parámetros.</p></details>
+<details class="sol" id="ex-feb19b"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2019 (tipo B), ejercicio 2 — intersección de dos subespacios dados por cartesianas <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), ejercicio 2">X Feb. 2019 (B)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Paramétricas de $U_1\cap U_2$ si ambos vienen por cartesianas.</dd>
     <dt>Cómo lo pienso</dt><dd>Intersección = juntar ecuaciones. Tres ecuaciones en $\mathbb R^4$: espero una recta si son independientes.</dd>
@@ -825,8 +944,9 @@
   <p><b>Error típico:</b> dar como «paramétricas» unas ecuaciones que aún tienen relaciones entre las $x_i$ (eso son cartesianas), o poner tantos parámetros «a ojo» sin calcular el rango (aquí saldría un plano en lugar de una recta).</p>
 </details>
 
-<details class="sol" id="ex-sep19a"><summary>Sept. 2019 (tipo A), ejercicio 2 — intersección de dos planos dados por generadores <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), ejercicio 2">X Sept. 2019 (A)</span></summary>
-  <p class="enun">En el espacio vectorial $\mathbb R^3$ se consideran los subespacios: $S$ generado por los vectores $\{(1,0,1),(0,2,0)\}$ y $T$ generado por $\{(1,1,2),(0,0,1)\}$. Calcular el subespacio $S\cap T$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">En el espacio vectorial $\mathbb R^3$ se consideran los subespacios: $S$ generado por los vectores $\{(1,0,1),(0,2,0)\}$ y $T$ generado por $\{(1,1,2),(0,0,1)\}$. Calcular el subespacio $S\cap T$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe el vector genérico de $S$ y pásalo a las ecuaciones cartesianas de $T$ (que obtienes eliminando parámetros); lo que quede es la intersección.</p></details>
+<details class="sol" id="ex-sep19a"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2019 (tipo A), ejercicio 2 — intersección de dos planos dados por generadores <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), ejercicio 2">X Sept. 2019 (A)</span></summary>
   <p><b>Método 1: pasar a cartesianas y juntar.</b></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Calcular $S\cap T$ para dos planos de $\mathbb R^3$ dados por generadores.</dd>
@@ -857,8 +977,9 @@
   <p><b>Error típico:</b> «como $S$ y $T$ no tienen generadores en común, $S\cap T=\{0\}$». <b>Falso</b>: la intersección se calcula con los <b>vectores</b> de los subespacios, no con los conjuntos de generadores. Dos planos distintos de $\mathbb R^3$ por el origen siempre se cortan en una recta ($2+2-3=1$).</p>
 </details>
 
-<details class="sol" id="ex-feb25"><summary>Feb. 2025 (2.ª sem.), pregunta 2 — posibles dimensiones con Grassmann, sin vectores concretos <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª sem.), pregunta 2">X Feb. 2025 (2.ª)</span></summary>
-  <p class="enun">Sea $V$ un espacio vectorial de dimensión 9. Consideremos dos subespacios de $V$, $M$ y $N$. Si la dimensión de $M$ es 5 y la dimensión de $M\cap N$ es 3, señale todas las posibles dimensiones del subespacio $N$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $V$ un espacio vectorial de dimensión 9. Consideremos dos subespacios de $V$, $M$ y $N$. Si la dimensión de $M$ es 5 y la dimensión de $M\cap N$ es 3, señale todas las posibles dimensiones del subespacio $N$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Acota con lo que sabes sin vectores concretos: $M+N$ contiene a $M$ y está dentro de $V$. Despeja $\operatorname{Dim}N$ con Grassmann y mira qué valores de $\operatorname{Dim}(M+N)$ son posibles.</p></details>
+<details class="sol" id="ex-feb25"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2025 (2.ª sem.), pregunta 2 — posibles dimensiones con Grassmann, sin vectores concretos <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª sem.), pregunta 2">X Feb. 2025 (2.ª)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Posibles dimensiones de $N$ sabiendo $\dim V=9$, $\dim M=5$, $\dim(M\cap N)=3$.</dd>
     <dt>Cómo lo pienso</dt><dd>Es un problema de aritmética de dimensiones: la fórmula de Grassmann une las cuatro. La incógnita $\dim(M+N)$ está acotada: no baja de 5 ni sube de 9.</dd>
@@ -880,8 +1001,9 @@
   <p><b>Error típico:</b> escribir Grassmann con $\operatorname{Dim}V$ en lugar de $\operatorname{Dim}(M+N)$ (saldría solo $\operatorname{Dim}N=7$), o con $M\cup N$ en lugar de $M+N$.</p>
 </details>
 
-<details class="sol" id="ex-ene22"><summary>Ene. 2022 (tipo A), ejercicio 2 — $F+G$, $F\cup G$ y $F\cap G$ cuando $G\subset F$ (polinomios) <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A), ejercicio 2">X Ene. 2022 (A)</span></summary>
-  <p class="enun">Si $\{x^2,1\}$ y $\{x^2+1\}$ son sistemas generadores de dos subespacios $F$ y $G$, respectivamente, hallar $F+G$, $F\cup G$ y $F\cap G$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $\{x^2,1\}$ y $\{x^2+1\}$ son sistemas generadores de dos subespacios $F$ y $G$, respectivamente, hallar $F+G$, $F\cup G$ y $F\cap G$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Mira si el generador de $G$ ya está en $F$. Si un subespacio contiene al otro, suma e intersección se leen sin calcular.</p></details>
+<details class="sol" id="ex-ene22"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ene. 2022 (tipo A), ejercicio 2 — $F+G$, $F\cup G$ y $F\cap G$ cuando $G\subset F$ (polinomios) <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A), ejercicio 2">X Ene. 2022 (A)</span></summary>
   <p><i>Los vectores son polinomios; se trabaja en los polinomios de grado $\le2$, con base canónica $\{1,x,x^2\}$. Este ejercicio ilustra también la cuestión de la unión de subespacios del <a href="tema_2_1_espacios_vectoriales.html#s5">tema 2.1</a> (cuándo la unión sí es subespacio).</i></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar $F+G$, $F\cup G$ y $F\cap G$ para dos subespacios de polinomios.</dd>
@@ -910,8 +1032,9 @@
   <p><b>Error típico:</b> decir «$F\cap G=\{0\}$ porque los generadores son distintos», o afirmar que la unión «nunca» es subespacio.</p>
 </details>
 
-<details class="sol" id="ex-sep22"><summary>Sept. 2022, problema b) — base, cartesianas y paramétricas de $F+G$ y un suplementario <span class="src" data-l="X" data-ref="Sept. 2022, problema b)">X Sept. 2022</span></summary>
-  <p class="enun">Consideramos en $\mathbb R^3$ los subespacios vectoriales $F=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_3=x_2,\ x_1=-x_2\}$ y $G=\{\lambda(0,1,1),\ \forall\lambda\in\mathbb R\}$. Se pide calcular una base, las ecuaciones cartesianas y paramétricas del subespacio $F+G$. Hallar un subespacio suplementario de $F+G$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Consideramos en $\mathbb R^3$ los subespacios vectoriales $F=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_3=x_2,\ x_1=-x_2\}$ y $G=\{\lambda(0,1,1),\ \forall\lambda\in\mathbb R\}$. Se pide calcular una base, las ecuaciones cartesianas y paramétricas del subespacio $F+G$. Hallar un subespacio suplementario de $F+G$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Saca generadores de $F$ y $G$, escalónalos juntos para la base de la suma; las cartesianas salen de esa base. El suplementario completa la base hasta $\mathbb R^3$.</p></details>
+<details class="sol" id="ex-sep22"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2022, problema b) — base, cartesianas y paramétricas de $F+G$ y un suplementario <span class="src" data-l="X" data-ref="Sept. 2022, problema b)">X Sept. 2022</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Base, cartesianas y paramétricas de $F+G$ y un suplementario.</dd>
     <dt>Cómo lo pienso</dt><dd>Dos subespacios de dimensión 1 en $\mathbb R^3$: su suma, si son distintos, es un plano. Un suplementario del plano es una recta que no esté en él.</dd>
@@ -941,8 +1064,9 @@
   <p><b>Error típico:</b> elegir un vector canónico sin comprobarlo: $(1,0,0)$ <b>sí</b> cumple $x_2=x_3$ ($0=0$), está en $F+G$ (de hecho $(1,0,0)=-(-1,1,1)+(0,1,1)$) y $\langle(1,0,0)\rangle$ <b>no</b> es suplementario.</p>
 </details>
 
-<details class="sol" id="ex-feb20a"><summary>Ene. 2020 (tipo A), problema a) — definir un subespacio, intersección y suplementario de la suma <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), problema a)">X Ene. 2020 (A)</span></summary>
-  <p class="enun">En el espacio vectorial $\mathbb R^3$, con las operaciones habituales, definir un subespacio $U$ de dimensión 2 mediante unas ecuaciones paramétricas (0.5 ptos.) y calcular el subespacio intersección $U\cap V$, indicando qué dimensión tiene, siendo $V$ el subespacio generado por $\{(1,1,1),(2,1,0),(0,1,2)\}$ (0.5 ptos.). Calcular un subespacio suplementario al subespacio $U+V$. (1 pto.)</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">En el espacio vectorial $\mathbb R^3$, con las operaciones habituales, definir un subespacio $U$ de dimensión 2 mediante unas ecuaciones paramétricas (0.5 ptos.) y calcular el subespacio intersección $U\cap V$, indicando qué dimensión tiene, siendo $V$ el subespacio generado por $\{(1,1,1),(2,1,0),(0,1,2)\}$ (0.5 ptos.). Calcular un subespacio suplementario al subespacio $U+V$. (1 pto.)</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Elige tú un plano sencillo y calcula su intersección con $V$ pasando $V$ a cartesianas. El suplementario de $U+V$ completa una base de la suma.</p></details>
+<details class="sol" id="ex-feb20a"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ene. 2020 (tipo A), problema a) — definir un subespacio, intersección y suplementario de la suma <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), problema a)">X Ene. 2020 (A)</span></summary>
   <p><i>La respuesta depende del $U$ elegido.</i></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Definir un subespacio de dimensión 2, hallar su intersección con otro y un suplementario de la suma.</dd>
@@ -973,8 +1097,9 @@
   <p><b>Error típico:</b> responder «no tiene suplementario» o dar una recta: $\{0\}$ es un subespacio (el trivial) y es el suplementario de todo el espacio.</p>
 </details>
 
-<details class="sol" id="ex-sep24"><summary>Sept. 2024, problema 7 — definiciones, bases de la suma y de la intersección, y la unión <span class="src" data-l="X" data-ref="Sept. 2024, problema 7">X Sept. 2024</span></summary>
-  <p class="enun">(a) Sea $V$ un espacio vectorial, y $U_1$, $U_2$ subespacios vectoriales de $V$. Defina los subespacios suma $U_1+U_2$ e intersección $U_1\cap U_2$. (0.5 puntos) (b) Sean $U_1=\langle(2,0,2,1),(0,3,1,0)\rangle$ y $U_2=\{(x,y,z,t)\in\mathbb R^4: x=0,\ y-3z=0\}$ subespacios de $\mathbb R^4$. Calcule de manera razonada una base de $U_1+U_2$ y una base de $U_1\cap U_2$. (1 punto) (c) Considere el conjunto $U_1\cup U_2$ para los $U_1$, $U_2$ de (b). Determine de manera razonada si $U_1\cup U_2$ es o no un subespacio vectorial de $\mathbb R^4$. (0.5 puntos)</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">(a) Sea $V$ un espacio vectorial, y $U_1$, $U_2$ subespacios vectoriales de $V$. Defina los subespacios suma $U_1+U_2$ e intersección $U_1\cap U_2$. (0.5 puntos) (b) Sean $U_1=\langle(2,0,2,1),(0,3,1,0)\rangle$ y $U_2=\{(x,y,z,t)\in\mathbb R^4: x=0,\ y-3z=0\}$ subespacios de $\mathbb R^4$. Calcule de manera razonada una base de $U_1+U_2$ y una base de $U_1\cap U_2$. (1 punto) (c) Considere el conjunto $U_1\cup U_2$ para los $U_1$, $U_2$ de (b). Determine de manera razonada si $U_1\cup U_2$ es o no un subespacio vectorial de $\mathbb R^4$. (0.5 puntos)</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Para la base de la suma escalona los generadores de ambos (pasando $U_2$ a generadores). Para la unión, busca un vector suma de uno de cada subespacio que quede fuera.</p></details>
+<details class="sol" id="ex-sep24"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2024, problema 7 — definiciones, bases de la suma y de la intersección, y la unión <span class="src" data-l="X" data-ref="Sept. 2024, problema 7">X Sept. 2024</span></summary>
   <p><b>(a) Definiciones</b> (U p.91 y Def. 2.12, p.93):
     $$U_1\cap U_2=\{v\in V:\ v\in U_1\ \text{y}\ v\in U_2\},\qquad U_1+U_2=\{u_1+u_2:\ u_1\in U_1,\ u_2\in U_2\}.$$
     Ambos son subespacios de $V$. Conviene añadir que $U_1+U_2$ es el menor subespacio que contiene a $U_1\cup U_2$ (U p.93).</p>
@@ -1009,8 +1134,9 @@
   <p><b>Error típico:</b> confundir suma con unión («$U_1+U_2=U_1\cup U_2$»): la suma es un subespacio, mucho más grande; la unión, en general, ni siquiera es subespacio.</p>
 </details>
 
-<details class="sol" id="ex-feb24p7"><summary>Feb. 2024 (1.ª sem.), problema 7 — Grassmann en $\mathbb R^4$: dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), problema 7">X Feb. 2024 (1.ª) P7</span></summary>
-  <p class="enun">Sean $L_1$ y $L_2$ subespacios de $\mathbb R^4$: $L_1=\langle(3,-4,0,1),(2,2,0,-4),(1,-6,0,5)\rangle$, $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$. Calcule de manera razonada las dimensiones de $L_1$ (0.5 p.), $L_2$ (0.5 p.), $L_1\cap L_2$ (0.5 p.) y $L_1+L_2$ (0.5 p.).</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $L_1$ y $L_2$ subespacios de $\mathbb R^4$: $L_1=\langle(3,-4,0,1),(2,2,0,-4),(1,-6,0,5)\rangle$, $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$. Calcule de manera razonada las dimensiones de $L_1$ (0.5 p.), $L_2$ (0.5 p.), $L_1\cap L_2$ (0.5 p.) y $L_1+L_2$ (0.5 p.).</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Empieza por los rangos: $L_1$ tiene generadores posiblemente ligados. Después la suma por rango y la intersección con Grassmann.</p></details>
+<details class="sol" id="ex-feb24p7"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2024 (1.ª sem.), problema 7 — Grassmann en $\mathbb R^4$: dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª sem.), problema 7">X Feb. 2024 (1.ª) P7</span></summary>
   <p><i>Las dimensiones de $L_1$ y $L_2$ (pasos 1 y 2) se desarrollan con detalle en el <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb24p7">tema 2.3</a>; aquí se resumen y se desarrolla lo propio de este tema: intersección, suma y Grassmann.</i> Llamamos $v_1=(3,-4,0,1)$, $v_2=(2,2,0,-4)$, $v_3=(1,-6,0,5)$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$.</dd>
@@ -1064,7 +1190,7 @@
 </div>
 
 <!-- ============================ CHULETA ============================ -->
-<h2 id="chuleta"><span class="n">10</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">10</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <table>
   <tr><th>Resultado</th><th>Fórmula / idea</th><th>Hipótesis</th></tr>
@@ -1106,6 +1232,27 @@
   </ol>
 </div>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>Dos planos distintos de $\mathbb R^3$ por el origen se cortan en…</p>
+    <ul class="opts"><li>Solo el vector $0$<span class="why">Entonces la suma tendría dimensión $2+2=4>3$, imposible en $\mathbb R^3$.</span></li><li data-ok>Una recta</li><li>Un plano<span class="why">Eso solo pasa si los planos coinciden, y son distintos.</span></li><li>Depende de los planos<span class="why">No: Grassmann fija el resultado, porque la suma de dos planos distintos es todo $\mathbb R^3$.</span></li></ul>
+    <p class="fb">Dos planos distintos suman $\mathbb R^3$ (dimensión 3), luego $\operatorname{Dim}(U_1\cap U_2)=2+2-3=1$: una recta.</p></div>
+  <div class="qp"><p>En $\mathbb R^6$, $\operatorname{Dim}U_1=3$, $\operatorname{Dim}U_2=4$ y $\operatorname{Dim}(U_1\cap U_2)=2$. ¿Cuánto vale $\operatorname{Dim}(U_1+U_2)$?</p>
+    <ul class="opts"><li>7<span class="why">Has sumado $3+4$ sin restar la intersección (y además la suma no puede superar $\operatorname{Dim}\mathbb R^6=6$).</span></li><li data-ok>5</li><li>6<span class="why">Solo valdría 6 si la intersección tuviera dimensión 1; no basta con que la suma «llene» el espacio.</span></li><li>2<span class="why">Confundes suma con intersección: la suma contiene a $U_2$, luego su dimensión es al menos 4.</span></li></ul>
+    <p class="fb">Grassmann: $\operatorname{Dim}(U_1+U_2)=3+4-2=5$.</p></div>
+  <div class="qp"><p>En $\mathbb R^2$, $U_1=\langle(1,0)\rangle$ y $U_2=\langle(0,1)\rangle$. ¿Es $U_1\cup U_2$ un subespacio?</p>
+    <ul class="opts"><li>Sí, porque $U_1$ y $U_2$ lo son<span class="why">La unión de subespacios no hereda la propiedad: hay que mirar si es cerrada para la suma.</span></li><li data-ok>No: $(1,0)+(0,1)=(1,1)$ no está en ninguno de los dos</li><li>No, porque no contiene al vector $0$<span class="why">Sí lo contiene ($0$ está en los dos ejes); el fallo es otro: no es cerrada para la suma.</span></li><li>Sí, porque su suma es $\mathbb R^2$<span class="why">Confundes unión con suma: la suma sí es $\mathbb R^2$, pero la unión es solo la «cruz» de los dos ejes.</span></li></ul>
+    <p class="fb">La unión no es cerrada para la suma: $(1,1)\notin U_1\cup U_2$. Solo sería subespacio si uno contuviera al otro.</p></div>
+  <div class="qp"><p>En $\mathbb R^3$, $U=\{x_3=0\}$ y $W=\langle(1,1,0)\rangle$. ¿Es directa la suma $U+W$?</p>
+    <ul class="opts"><li>Sí, porque $2+1\le3$<span class="why">El tamaño no decide: hay que mirar la intersección.</span></li><li data-ok>No, porque $W\subset U$ y $U\cap W=W\neq\{0\}$</li><li>Sí, porque son suplementarios<span class="why">Serían suplementarios con intersección nula; aquí $W$ está dentro de $U$.</span></li><li>No, porque $U+W=\mathbb R^3$<span class="why">Falso: $U+W=U$, de dimensión 2. Lo que impide la suma directa es la intersección no nula.</span></li></ul>
+    <p class="fb">$(1,1,0)$ cumple $x_3=0$, luego $W\subset U$ y $U\cap W=W$ (recta). Con intersección no nula, hay infinitas descomposiciones.</p></div>
+  <div class="qp"><p>En $\mathbb R^3$, $U=\langle(1,0,0)\rangle$. ¿Cuál de estos subespacios es un suplementario de $U$?</p>
+    <ul class="opts"><li>$\langle(2,0,0)\rangle$<span class="why">Es la misma recta que $U$: intersección no nula y dimensiones que suman 2.</span></li><li>$\langle(0,1,0)\rangle$<span class="why">Intersección nula, pero $1+1=2\neq3$: la suma es solo un plano.</span></li><li>$\langle(1,1,0),(0,1,0)\rangle$<span class="why">Contiene a $(1,1,0)-(0,1,0)=(1,0,0)$, que está en $U$: la intersección no es $\{0\}$.</span></li><li data-ok>$\langle(0,1,0),(0,0,1)\rangle$</li></ul>
+    <p class="fb">$\{(1,0,0),(0,1,0),(0,0,1)\}$ es base de $\mathbb R^3$: intersección nula y $1+2=3$.</p></div>
+  <div class="qp"><p>$U=\langle(1,1,0),(0,1,1)\rangle$ y $W=\langle(1,2,1)\rangle$ en $\mathbb R^3$. ¿Cuánto vale $\operatorname{Dim}(U+W)$?</p>
+    <ul class="opts"><li>3<span class="why">Has sumado $2+1$ sin ver que $(1,2,1)=(1,1,0)+(0,1,1)\in U$.</span></li><li data-ok>2</li><li>1<span class="why">La suma contiene a $U$, que ya tiene dimensión 2.</span></li><li>4<span class="why">Ninguna suma en $\mathbb R^3$ supera la dimensión 3.</span></li></ul>
+    <p class="fb">$W\subset U$, luego $U+W=U$ (dimensión 2) y la intersección es $W$ (dimensión 1): $2+1=2+1$.</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>
