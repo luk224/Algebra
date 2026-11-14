@@ -65,7 +65,7 @@
       for (var p = el.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS') p.open = true;
       return true;
     }
-    setV('teoria');
+    setV('todo');
     if (location.hash && irA(location.hash)) setTimeout(function () { var e = d.getElementById(decodeURIComponent(location.hash.slice(1))); if (e) e.scrollIntoView(); }, 50);
     d.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href^="#"]');
