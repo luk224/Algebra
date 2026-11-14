@@ -37,3 +37,262 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Una matriz ortogonal es la que gira o refleja sin deformar. Esto es lo que hay que llevarse.
+  items:
+  - |-
+    <b>Definición y criterio.</b> $A\in\mathcal M_{m\times n}$ es ortogonal si sus columnas forman un sistema <b>ortonormal</b>, es decir, $A^tA=I_n$. Si además es cuadrada ($m=n$), basta $A^tA=I$ para tener $A^{-1}=A^t$, y entonces las <b>filas</b> también son ortonormales.
+  - |-
+    <b>Qué conserva.</b> Producto escalar, normas, ángulos y distancias: $(Ax)\cdot(Ay)=x\cdot y$. Además $\det A=\pm1$ (cuadrada) y los únicos valores propios reales posibles son $\pm1$. Ojo: ortogonal no implica diagonalizable en $\mathbb R$.
+  - |-
+    <b>Producto e inversa.</b> El producto de ortogonales y la inversa (=traspuesta) de una ortogonal son ortogonales. Un sistema $AX=B$ con $A$ ortogonal cuadrada se resuelve sin eliminar: $X=A^tB$.
+  - |-
+    <b>Giros y simetrías.</b> En $\mathbb R^2$ las ortogonales son los giros ($\det=1$) y las simetrías ($\det=-1$). En $\mathbb R^3$, con $\det=1$ es un giro de eje el vector fijo y ángulo dado por $\operatorname{tr}=1+2\cos\theta$.
+  - |-
+    <b>Factorización $QR$.</b> Si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt) y $R=Q^tA$ triangular superior con diagonal positiva. Para resolver $AX=B$: $RX=Q^tB$.
+tipos:
+- id: comp
+  nombre: |-
+    ¿Es ortogonal esta matriz?
+  receta: |-
+    Calcula $A^tA$ (o compara columnas) y mira si sale la identidad.
+  senal: |-
+    «Compruebe si es ortogonal», «¿es ortogonal $A$?» o una matriz con $\frac1{\sqrt2}$, $\frac13$... en las entradas.
+  pasos:
+  - |-
+    Comprueba que cada columna tiene norma 1.
+  - |-
+    Comprueba que las columnas son perpendiculares dos a dos (producto escalar 0); o calcula directamente $A^tA$.
+  - |-
+    Si $A^tA=I$, es ortogonal. En el caso cuadrado, $A^{-1}=A^t$ y $\det A=\pm1$.
+  - |-
+    Si es $m\times n$ con $m>n$, solo cuenta $A^tA=I_n$ (no exijas $AA^t=I$).
+  ejemplo: |-
+    $A=\frac15\begin{pmatrix}3&-4\\4&3\end{pmatrix}$: columnas $\frac15(3,4)$ y $\frac15(-4,3)$ de norma $1$ y producto $-12+12=0$, luego $A^tA=I$ y $A$ es ortogonal con $A^{-1}=A^t$.
+  fallos: |-
+    Mirar solo la perpendicularidad y olvidar la norma (la $\begin{pmatrix}1&1\\-1&1\end{pmatrix}$ no es ortogonal: $A^tA=2I$) · exigir $AA^t=I$ a una matriz no cuadrada · confundir «columnas ortogonales» con «matriz ortogonal».
+- id: param
+  nombre: |-
+    Hallar o completar una matriz ortogonal
+  receta: |-
+    Impón columnas (o filas) unitarias y perpendiculares y resuelve las ecuaciones.
+  senal: |-
+    Una matriz con entradas desconocidas ($s$, $t$, $a$, $b$) o con solo la primera fila dada, y se pide que sea ortogonal.
+  pasos:
+  - |-
+    Escribe las condiciones: cada fila (o columna) tiene norma 1 y cada par es perpendicular.
+  - |-
+    Resuelve primero las ecuaciones más sencillas (una incógnita), sustituye y despeja el resto.
+  - |-
+    Si sobra libertad en el signo, la matriz no es única: da todas las soluciones.
+  - |-
+    Verifica al final $A^tA=I$ (y el determinante si te lo piden).
+  ejemplo: |-
+    Ortogonales $2\times2$ con primera fila $\left(\frac35,\frac45\right)$: la segunda fila es unitaria y perpendicular, luego es $\pm\left(-\frac45,\frac35\right)$. Hay dos: $\frac15\begin{pmatrix}3&4\\-4&3\end{pmatrix}$ y $\frac15\begin{pmatrix}3&4\\4&-3\end{pmatrix}$.
+  fallos: |-
+    Dar una sola solución cuando hay dos · imponer unitaria pero olvidar la perpendicularidad · fiarse de una solución sin comprobar que cumple todas las ecuaciones.
+- id: prop
+  nombre: |-
+    Demostrar o aplicar propiedades de las ortogonales
+  receta: |-
+    Parte de $A^tA=I$ y deduce lo pedido con traspuestas, determinantes y normas.
+  senal: |-
+    «Demuéstrese que...», «¿es cierto que...?», valores propios, producto, inversa, resolver $AX=B$ con $A$ ortogonal.
+  pasos:
+  - |-
+    Escribe la hipótesis: $A^tA=I$ (o $A^{-1}=A^t$ si es cuadrada).
+  - |-
+    Para normas y productos escalares: $(Ax)\cdot(Ay)=(Ax)^t(Ay)=x^tA^tAy=x\cdot y$.
+  - |-
+    Para determinantes: $\det(A^tA)=(\det A)^2=1$, luego $\det A=\pm1$.
+  - |-
+    Para valores propios: si $Ax=\lambda x$, entonces $\|x\|=\|Ax\|=|\lambda|\|x\|$ y $\lambda=\pm1$.
+  - |-
+    Para falsedades, busca un contraejemplo (un giro en $\mathbb R^2$, una matriz no cuadrada).
+  ejemplo: |-
+    $A$ ortogonal cuadrada y $AX=B$: multiplicando por $A^t$, $X=A^tB$. Con $A=\frac13\begin{pmatrix}2&-1&2\\2&2&-1\\-1&2&2\end{pmatrix}$ y $B=(3,0,3)^t$ sale $X=(1,1,4)^t$.
+  fallos: |-
+    Escribir $A^{-1}=A^t$ sin saber que $A$ es cuadrada · afirmar que los valores propios son $\pm1$ cuando son complejos (un giro no tiene valores propios reales) · deducir que una ortogonal es diagonalizable.
+- id: giro
+  nombre: |-
+    Giro o simetría: eje, plano y ángulo
+  receta: |-
+    Distingue por $\det$ y traza; el eje sale de $(A-I)x=0$ y el ángulo de $\operatorname{tr}A=1+2\cos\theta$.
+  senal: |-
+    «Prueba que es un giro», «halla el eje y el ángulo», matriz de la simetría respecto de un plano, composición de giros.
+  pasos:
+  - |-
+    Comprueba que es ortogonal y calcula $\det A$: $+1$ es giro, $-1$ es simetría (o simetría con giro).
+  - |-
+    En un giro de $\mathbb R^3$, el eje es el subespacio fijo: resuelve $(A-I)x=0$.
+  - |-
+    El ángulo sale de la traza: $\operatorname{tr}A=1+2\cos\theta$.
+  - |-
+    Para la simetría respecto de un plano con normal $n$: $S=I-2\dfrac{nn^t}{n^tn}$.
+  ejemplo: |-
+    $P=\begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix}$: ortogonal con $\det P=1$, así que es un giro. $(P-I)x=0$ da el eje $(1,1,1)$ y $\operatorname{tr}P=0=1+2\cos\theta$ da $\cos\theta=-\frac12$, o sea $\theta=120^\circ$.
+  fallos: |-
+    Olvidar comprobar la ortogonalidad primero · tomar $\cos\theta=\operatorname{tr}A$ (hay que restar 1 y dividir entre 2) · confundir plano de simetría con eje de giro · afirmar que dos giros conmutan (en $\mathbb R^3$ no lo hacen en general).
+- id: qr
+  nombre: |-
+    Factorización $QR$ y sistemas
+  receta: |-
+    Gram-Schmidt sobre las columnas da $Q$; después $R=Q^tA$; el sistema se reduce a $RX=Q^tB$.
+  senal: |-
+    «Hallar la factorización $QR$», «resolver el sistema usando $QR$», explicar en qué consiste $QR$.
+  pasos:
+  - |-
+    Comprueba que las columnas de $A$ son independientes.
+  - |-
+    Aplica Gram-Schmidt a las columnas y normaliza: esas son las columnas de $Q$.
+  - |-
+    Calcula $R=Q^tA$, que debe salir triangular superior con diagonal positiva; verifica $A=QR$.
+  - |-
+    Para $AX=B$: resuelve $RX=Q^tB$ de abajo arriba y comprueba que el sistema es compatible.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&3\\2&3\\2&0\end{pmatrix}$: $q_1=\frac13(1,2,2)$; $a_2\cdot q_1=3$, $a_2-3q_1=(2,1,-2)$ de norma 3, $q_2=\frac13(2,1,-2)$. Así $Q=\frac13\begin{pmatrix}1&2\\2&1\\2&-2\end{pmatrix}$ y $R=\begin{pmatrix}3&3\\0&3\end{pmatrix}$.
+  fallos: |-
+    Olvidar normalizar · calcular $R$ con la proyección mal (los coeficientes son $q_i\cdot a_j$) · resolver $RX=Q^tB$ sin comprobar la compatibilidad del sistema original · poner $Q$ cuadrada cuando $A$ es $m\times n$ con $m>n$.
+quiz:
+- p: |-
+    ¿Es ortogonal $A=\begin{pmatrix}1&1\\-1&1\end{pmatrix}$?
+  opciones:
+  - t: |-
+      Sí, porque sus columnas son perpendiculares
+    ok: false
+    why: |-
+      Son perpendiculares ($1-1=0$), pero de norma $\sqrt2$, no 1: falta la normalización.
+  - t: |-
+      No: las columnas son perpendiculares pero no unitarias ($A^tA=2I$)
+    ok: true
+  - t: |-
+      No, porque sus columnas no son perpendiculares
+    ok: false
+    why: |-
+      Sí lo son: $(1,-1)\cdot(1,1)=0$. Lo que falla es la norma.
+  - t: |-
+      Sí, porque $\det A\neq0$
+    ok: false
+    why: |-
+      Que el determinante sea no nulo solo dice que es invertible; ortogonal exige $\det=\pm1$ y además $A^tA=I$.
+  fb: |-
+    $A^tA=2I\neq I$. Dividiendo por $\sqrt2$ sí se obtiene una ortogonal.
+- p: |-
+    Una matriz ortogonal $3\times3$ tiene $\det=1$ y traza $-1$. ¿Qué es?
+  opciones:
+  - t: |-
+      Un giro de $90^\circ$
+    ok: false
+    why: |-
+      Para $90^\circ$, $\operatorname{tr}=1+2\cos90^\circ=1$.
+  - t: |-
+      Un giro de $180^\circ$ (simetría axial)
+    ok: true
+  - t: |-
+      Una simetría respecto de un plano
+    ok: false
+    why: |-
+      Esas tienen $\det=-1$; aquí $\det=+1$.
+  - t: |-
+      La identidad
+    ok: false
+    why: |-
+      La identidad tiene traza 3.
+  fb: |-
+    Con $\det=1$ es un giro y $-1=1+2\cos\theta$ da $\cos\theta=-1$: $\theta=180^\circ$.
+- p: |-
+    $A$ es ortogonal y $\|x\|=3$. ¿Cuánto vale $\|Ax\|$?
+  opciones:
+  - t: |-
+      $3$
+    ok: true
+  - t: |-
+      $9$
+    ok: false
+    why: |-
+      Has elevado al cuadrado sin motivo: la norma se conserva, no se eleva.
+  - t: |-
+      Depende de $A$
+    ok: false
+    why: |-
+      Toda ortogonal conserva la norma ($\|Ax\|^2=x^tA^tAx=x^tx$).
+  - t: |-
+      $\pm3$
+    ok: false
+    why: |-
+      Una norma nunca es negativa.
+  fb: |-
+    $\|Ax\|^2=x^tA^tAx=x^tx=\|x\|^2$, luego $\|Ax\|=3$.
+- p: |-
+    $A=\frac13\begin{pmatrix}2&-1&2\\2&2&-1\\-1&2&2\end{pmatrix}$ es ortogonal. La solución de $AX=(3,0,3)^t$ es…
+  opciones:
+  - t: |-
+      $(1,1,4)^t$
+    ok: true
+  - t: |-
+      $(3,0,3)^t$
+    ok: false
+    why: |-
+      Eso sería con $A=I$. Hay que multiplicar por $A^t$.
+  - t: |-
+      $(1,0,1)^t$
+    ok: false
+    why: |-
+      Dividir por 3 no basta: $X=A^tB$, no $B/3$.
+  - t: |-
+      $(2,2,-1)^t$
+    ok: false
+    why: |-
+      Es una fila (columna) de $3A$, no la solución.
+  fb: |-
+    $X=A^{-1}B=A^tB=\frac13(6-3,\,-3+6,\,6+6)=(1,1,4)^t$. Comprobación: $A(1,1,4)^t=(3,0,3)^t$.
+- p: |-
+    $A=\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$ ($3\times2$). ¿Es ortogonal?
+  opciones:
+  - t: |-
+      Sí: $A^tA=I_2$, sus columnas son ortonormales
+    ok: true
+  - t: |-
+      No, solo las matrices cuadradas pueden ser ortogonales
+    ok: false
+    why: |-
+      La definición vale para $m\times n$: columnas ortonormales ($A^tA=I_n$).
+  - t: |-
+      No, porque $AA^t\neq I_3$
+    ok: false
+    why: |-
+      Para una no cuadrada solo se exige $A^tA=I_n$; $AA^t=I_3$ es imposible (rango 2).
+  - t: |-
+      Sí, y además $A^t$ también es ortogonal
+    ok: false
+    why: |-
+      $(A^t)^tA^t=AA^t\neq I_3$: la traspuesta de una ortogonal no cuadrada no es ortogonal.
+  fb: |-
+    Las columnas $(1,0,0)$ y $(0,1,0)$ son ortonormales, luego es ortogonal. Pero $AA^t=\operatorname{diag}(1,1,0)\neq I_3$.
+- p: |-
+    ¿Cuál de estos números puede ser valor propio real de una matriz ortogonal?
+  opciones:
+  - t: |-
+      $2$
+    ok: false
+    why: |-
+      Entonces $\|Ax\|=2\|x\|$, y una ortogonal conserva la norma.
+  - t: |-
+      $-1$
+    ok: true
+  - t: |-
+      $\frac12$
+    ok: false
+    why: |-
+      Encogería los vectores; las ortogonales conservan la norma.
+  - t: |-
+      $0$
+    ok: false
+    why: |-
+      Una ortogonal es invertible ($\det=\pm1$), así que $0$ no puede ser valor propio.
+  fb: |-
+    Los valores propios reales de una ortogonal cumplen $|\lambda|=1$, es decir, $\pm1$. $-I$ es ortogonal y tiene $\lambda=-1$.
+capa: true
+que_cae_nota: |-
+  Cada ejercicio se ha clasificado por su pregunta principal; los de giros y simetrías en $\mathbb R^3$ suelen mezclar comprobar la ortogonalidad con identificar eje y ángulo.

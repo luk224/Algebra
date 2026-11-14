@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/5_2/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,11 +8,13 @@
 <title>Álgebra · 5.2 Matrices ortogonales</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
 <script defer src="../assets/animaciones.js"></script>
 <script defer src="../assets/tres-d.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -38,10 +40,44 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Una matriz ortogonal es la que gira o refleja sin deformar. Esto es lo que hay que llevarse.</p>
+  <ol>
+    <li><b>Definición y criterio.</b> $A\in\mathcal M_{m\times n}$ es ortogonal si sus columnas forman un sistema <b>ortonormal</b>, es decir, $A^tA=I_n$. Si además es cuadrada ($m=n$), basta $A^tA=I$ para tener $A^{-1}=A^t$, y entonces las <b>filas</b> también son ortonormales.</li>
+    <li><b>Qué conserva.</b> Producto escalar, normas, ángulos y distancias: $(Ax)\cdot(Ay)=x\cdot y$. Además $\det A=\pm1$ (cuadrada) y los únicos valores propios reales posibles son $\pm1$. Ojo: ortogonal no implica diagonalizable en $\mathbb R$.</li>
+    <li><b>Producto e inversa.</b> El producto de ortogonales y la inversa (=traspuesta) de una ortogonal son ortogonales. Un sistema $AX=B$ con $A$ ortogonal cuadrada se resuelve sin eliminar: $X=A^tB$.</li>
+    <li><b>Giros y simetrías.</b> En $\mathbb R^2$ las ortogonales son los giros ($\det=1$) y las simetrías ($\det=-1$). En $\mathbb R^3$, con $\det=1$ es un giro de eje el vector fijo y ángulo dado por $\operatorname{tr}=1+2\cos\theta$.</li>
+    <li><b>Factorización $QR$.</b> Si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt) y $R=Q^tA$ triangular superior con diagonal positiva. Para resolver $AX=B$: $RX=Q^tB$.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>7 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 10 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 5 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>¿Es ortogonal esta matriz? <small>(1 de 7)</small></td><td>Calcula $A^tA$ (o compara columnas) y mira si sale la identidad.</td>
+      <td><a href="#ej5-21">5.21</a> · <a href="#ej5-25">5.25</a></td>
+      <td><a href="#ex-sep25-5">Sept. 25 preg. 5</a></td></tr>
+    <tr><td>Hallar o completar una matriz ortogonal <small>(2 de 7)</small></td><td>Impón columnas (o filas) unitarias y perpendiculares y resuelve las ecuaciones.</td>
+      <td><a href="#ej5-17">5.17</a></td>
+      <td><a href="#ex-ene22a-pb">Ene. 22 A problema b)</a> · <a href="#ex-sep23-4">Sept. 23 preg. 4</a></td></tr>
+    <tr><td>Demostrar o aplicar propiedades de las ortogonales <small>(2 de 7)</small></td><td>Parte de $A^tA=I$ y deduce lo pedido con traspuestas, determinantes y normas.</td>
+      <td><a href="#ej5-16">5.16</a> · <a href="#ej5-18">5.18</a> · <a href="#ej5-19">5.19</a> · <a href="#ej5-20">5.20</a> · <a href="#ej5-22">5.22</a></td>
+      <td><a href="#ex-feb18b-5">Feb. 18 B ej. 5</a> · <a href="#ex-feb24a-5">Feb. 24 (1.ª) preg. 5</a></td></tr>
+    <tr><td>Giro o simetría: eje, plano y ángulo <small>(0 de 7)</small></td><td>Distingue por $\det$ y traza; el eje sale de $(A-I)x=0$ y el ángulo de $\operatorname{tr}A=1+2\cos\theta$.</td>
+      <td><a href="#ej5-17">5.17</a> · <a href="#ej5-25">5.25</a></td>
+      <td>—</td></tr>
+    <tr><td>Factorización $QR$ y sistemas <small>(2 de 7)</small></td><td>Gram-Schmidt sobre las columnas da $Q$; después $R=Q^tA$; el sistema se reduce a $RX=Q^tB$.</td>
+      <td><a href="#ej5-22">5.22</a> · <a href="#ej5-23">5.23</a> · <a href="#ej5-24">5.24</a></td>
+      <td><a href="#ex-feb19b-pb">Feb. 19 B problema b)</a> · <a href="#ex-feb20b-pa">Feb. 20 B (1.ª) problema a)</a></td></tr>
+  </table>
+  <p><small>Cada ejercicio se ha clasificado por su pregunta principal; los de giros y simetrías en $\mathbb R^3$ suelen mezclar comprobar la ortogonalidad con identificar eje y ángulo.</small></p>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §5.2.1 Elementos didácticos, p. 214">U p.214</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §5.2.1 Elementos didácticos, p. 214">U p.214</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>Gira una hoja de papel sobre la mesa, o dale la vuelta como si la vieras en un espejo: <b>no se estira ni se encoge</b>, las longitudes y los ángulos del dibujo siguen igual. Una <b>matriz ortogonal</b> es exactamente la tabla de números que hace eso. Se reconoce con una sola cuenta, $A^tA=I$: sus columnas son <b>vectores de longitud 1 perpendiculares entre sí</b> (un sistema ortonormal, tema 5.1). Y de ahí sale casi todo: la inversa es la traspuesta, el determinante vale $\pm1$, los únicos valores propios reales posibles son $\pm1$, y en $\mathbb R^2$ y $\mathbb R^3$ solo hay giros y simetrías. Además, aplicar Gram-Schmidt a las columnas de una matriz cualquiera da su <b>factorización $QR$</b> ($Q$ ortogonal, $R$ triangular).</p>
@@ -87,7 +123,7 @@
 </div>
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>Matriz ortogonal: columnas ortonormales <span class="src" data-l="U" data-ref="U §5.2.1, Def. 5.13, Ejemplos 5.24-5.25 y Teorema 5.5, p. 214-215">U p.214-215</span> <span class="src" data-l="L" data-ref="Lay §6.2, Teorema 6, p. 343">L §6.2 p.343</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>Matriz ortogonal: columnas ortonormales <span class="src" data-l="U" data-ref="U §5.2.1, Def. 5.13, Ejemplos 5.24-5.25 y Teorema 5.5, p. 214-215">U p.214-215</span> <span class="src" data-l="L" data-ref="Lay §6.2, Teorema 6, p. 343">L §6.2 p.343</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva: columnas = «regla y escuadra» perfectas</span>
   <p>Las columnas de una matriz $A$ son las <b>imágenes de los vectores de la base canónica</b>: $A\,e_1=$ columna 1, $A\,e_2=$ columna 2… Si la transformación $X\mapsto AX$ no deforma nada, entonces $Ae_1,Ae_2,\dots$ (que son las imágenes de unos vectores de longitud $1$ y perpendiculares) tienen que seguir siendo de longitud $1$ y perpendiculares. Eso es justo lo que pide la definición: las columnas son un <b>sistema ortonormal</b>.</p>
@@ -139,7 +175,7 @@
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>Matrices cuadradas: la inversa es la traspuesta <span class="src" data-l="U" data-ref="U §5.2.1, Teorema 5.6 y Ejemplos 5.26-5.27, p. 216-217">U p.216-217</span> <span class="src" data-l="L" data-ref="Lay §6.2, definición de matriz ortogonal y Ejemplo 7, p. 344">L p.344</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>Matrices cuadradas: la inversa es la traspuesta <span class="src" data-l="U" data-ref="U §5.2.1, Teorema 5.6 y Ejemplos 5.26-5.27, p. 216-217">U p.216-217</span> <span class="src" data-l="L" data-ref="Lay §6.2, definición de matriz ortogonal y Ejemplo 7, p. 344">L p.344</span></h2>
 
 <div class="box thm"><span class="h">Teorema 5.6 — $A^{-1}=A^t$</span>
   <p>Si $A$ es <b>cuadrada</b> de orden $n$: $\quad A\ \text{ortogonal}\iff A^{-1}=A^t\quad(\iff A^tA=I_n)$. Equivalentemente: una matriz cuadrada de orden $n$ es ortogonal si y solo si sus columnas forman una <b>base ortonormal de $\mathbb R^n$</b>.</p>
@@ -172,7 +208,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>Qué conserva una matriz ortogonal <span class="src" data-l="U" data-ref="U §5.2.1, propiedades de una matriz ortogonal, p. 217" >U p.217</span> <span class="src" data-l="L" data-ref="Lay §6.2, Teorema 7: ‖Ux‖ = ‖x‖, (Ux)·(Uy) = x·y, p. 343">L p.343</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>Qué conserva una matriz ortogonal <span class="src" data-l="U" data-ref="U §5.2.1, propiedades de una matriz ortogonal, p. 217" >U p.217</span> <span class="src" data-l="L" data-ref="Lay §6.2, Teorema 7: ‖Ux‖ = ‖x‖, (Ux)·(Uy) = x·y, p. 343">L p.343</span></h2>
 
 <div class="box intu"><span class="h">Idea: lo que mide el producto escalar, no cambia</span>
   <p>Longitudes, distancias y ángulos se definen <b>solo</b> con el producto escalar (tema 5.1). Si una matriz conserva el producto escalar, conserva todo lo demás «de regalo». Y conserva el producto escalar porque, al calcular $(AX)^t(AY)$, aparece justo $A^tA=I$.</p>
@@ -212,7 +248,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Giros y simetrías en $\mathbb R^2$: todas las ortogonales $2\times2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.17, p. 175">E 5.17 p.175</span> <span class="src" data-l="U" data-ref="U §5.2.1, Observación y Ejemplo 5.28, p. 217">U p.217</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Giros y simetrías en $\mathbb R^2$: todas las ortogonales $2\times2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.17, p. 175">E 5.17 p.175</span> <span class="src" data-l="U" data-ref="U §5.2.1, Observación y Ejemplo 5.28, p. 217">U p.217</span></h2>
 
 <div class="box intu"><span class="h">Idea: solo hay dos formas de mover el plano sin deformarlo</span>
   <p>Hay que mandar $e_1$ a algún punto de la circunferencia unidad (eso fija un ángulo $\theta$) y $e_2$ a uno de los <b>dos</b> puntos de la circunferencia perpendiculares a él. O $e_2$ queda «a la izquierda» de $e_1$ (como siempre: es un <b>giro</b>), o queda «a la derecha» (el plano se ha <b>dado la vuelta</b>, como en un espejo: es una <b>simetría</b>). No hay más.</p>
@@ -250,7 +286,7 @@
 </div>
 
 <!-- ============================ 5 ============================ -->
-<h2 id="s5"><span class="n">5</span>Giros y simetrías en $\mathbb R^3$: eje, ángulo y plano <span class="src" data-l="P" data-ref="Desarrollo propio a partir de U p. 217 (observación sobre giros y simetrías en R^n) y E Ej. 5.25 p. 182">propio</span></h2>
+<h2 id="s5" data-vista="teoria"><span class="n">5</span>Giros y simetrías en $\mathbb R^3$: eje, ángulo y plano <span class="src" data-l="P" data-ref="Desarrollo propio a partir de U p. 217 (observación sobre giros y simetrías en R^n) y E Ej. 5.25 p. 182">propio</span></h2>
 
 <p>En $\mathbb R^n$ las ortogonales «están relacionadas con giros y simetrías» (U p.217). Lo siguiente lo usa E 5.25 (un giro en $\mathbb R^3$) y sirve para entender qué es una ortogonal $3\times3$. Si vas justo de tiempo, lee la tabla y el truco de la traza.</p>
 
@@ -300,7 +336,7 @@
 </div>
 
 <!-- ============================ 6 ============================ -->
-<h2 id="s6"><span class="n">6</span>Transformaciones ortogonales y cambio entre bases ortonormales <span class="src" data-l="U" data-ref="U §5.2.1, observación tras las propiedades, p. 217">U p.217</span></h2>
+<h2 id="s6" data-vista="teoria"><span class="n">6</span>Transformaciones ortogonales y cambio entre bases ortonormales <span class="src" data-l="U" data-ref="U §5.2.1, observación tras las propiedades, p. 217">U p.217</span></h2>
 
 <div class="box def"><span class="h">Transformación ortogonal</span>
   <p>Un <b>endomorfismo</b> $f:V\to V$ de un espacio euclídeo cuya matriz asociada $A$ (fijadas las bases, que han de ser ortonormales) es ortogonal conserva normas, ángulos, ortogonalidad y distancias: es «compatible con la estructura euclídea de $V$». Estas aplicaciones se llaman <b>transformaciones ortogonales</b>, y en $\mathbb R^n$ con el producto estándar están relacionadas con los giros y simetrías.</p>
@@ -326,7 +362,7 @@
 </div>
 
 <!-- ============================ 7 ============================ -->
-<h2 id="s7"><span class="n">7</span>Factorización $QR$ <span class="src" data-l="U" data-ref="U §5.2.2, Factorización QR, Ejemplos 5.29-5.30, p. 218-220">U p.218-220</span> <span class="src" data-l="L" data-ref="Lay §6.4, Teorema 12 (factorización QR) y Ejemplo 4, p. 357-358">L §6.4 p.357-358</span></h2>
+<h2 id="s7" data-vista="teoria"><span class="n">7</span>Factorización $QR$ <span class="src" data-l="U" data-ref="U §5.2.2, Factorización QR, Ejemplos 5.29-5.30, p. 218-220">U p.218-220</span> <span class="src" data-l="L" data-ref="Lay §6.4, Teorema 12 (factorización QR) y Ejemplo 4, p. 357-358">L §6.4 p.357-358</span></h2>
 
 <div class="box intu"><span class="h">Idea: Gram-Schmidt contado con matrices</span>
   <p>Gram-Schmidt convierte las columnas $c_1,\dots,c_n$ de $A$ en vectores ortonormales $q_1,\dots,q_n$, cuidando que cada $c_j$ solo use $q_1,\dots,q_j$ (los anteriores y él mismo). Escribe $c_j$ como combinación de los $q$'s: $c_j=r_{1j}q_1+\dots+r_{jj}q_j$. Los $q$'s forman la matriz $Q$ (columnas ortonormales) y los coeficientes $r_{ij}$ forman una matriz $R$ que es <b>triangular superior</b> (porque $c_j$ no usa los $q$ posteriores). Eso es $A=QR$: «una matriz cualquiera = una ortogonal por una triangular».</p>
@@ -389,16 +425,92 @@
 </div>
 
 <!-- ============================ 8 ============================ -->
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 5.2»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-comp">
+  <h3>Tipo 1 — ¿Es ortogonal esta matriz?</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «Compruebe si es ortogonal», «¿es ortogonal $A$?» o una matriz con $\frac1{\sqrt2}$, $\frac13$... en las entradas.</p>
+  <ol class="pasos">
+    <li>Comprueba que cada columna tiene norma 1.</li>
+    <li>Comprueba que las columnas son perpendiculares dos a dos (producto escalar 0); o calcula directamente $A^tA$.</li>
+    <li>Si $A^tA=I$, es ortogonal. En el caso cuadrado, $A^{-1}=A^t$ y $\det A=\pm1$.</li>
+    <li>Si es $m\times n$ con $m>n$, solo cuenta $A^tA=I_n$ (no exijas $AA^t=I$).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\frac15\begin{pmatrix}3&-4\\4&3\end{pmatrix}$: columnas $\frac15(3,4)$ y $\frac15(-4,3)$ de norma $1$ y producto $-12+12=0$, luego $A^tA=I$ y $A$ es ortogonal con $A^{-1}=A^t$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Mirar solo la perpendicularidad y olvidar la norma (la $\begin{pmatrix}1&1\\-1&1\end{pmatrix}$ no es ortogonal: $A^tA=2I$) · exigir $AA^t=I$ a una matriz no cuadrada · confundir «columnas ortogonales» con «matriz ortogonal».</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej5-21">5.21</a> · <a href="#ej5-25">5.25</a> · <a href="#ej-propio-1">Propio 1</a> · <a href="#ej-propio-4">Propio 4</a> · <a href="#ej-propio-7">Propio 7</a> · <a href="#ex-propio-B">Propio B</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep25-5">Sept. 25 preg. 5</a></p>
+</section>
+
+<section class="ficha" id="tipo-param">
+  <h3>Tipo 2 — Hallar o completar una matriz ortogonal</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> Una matriz con entradas desconocidas ($s$, $t$, $a$, $b$) o con solo la primera fila dada, y se pide que sea ortogonal.</p>
+  <ol class="pasos">
+    <li>Escribe las condiciones: cada fila (o columna) tiene norma 1 y cada par es perpendicular.</li>
+    <li>Resuelve primero las ecuaciones más sencillas (una incógnita), sustituye y despeja el resto.</li>
+    <li>Si sobra libertad en el signo, la matriz no es única: da todas las soluciones.</li>
+    <li>Verifica al final $A^tA=I$ (y el determinante si te lo piden).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> Ortogonales $2\times2$ con primera fila $\left(\frac35,\frac45\right)$: la segunda fila es unitaria y perpendicular, luego es $\pm\left(-\frac45,\frac35\right)$. Hay dos: $\frac15\begin{pmatrix}3&4\\-4&3\end{pmatrix}$ y $\frac15\begin{pmatrix}3&4\\4&-3\end{pmatrix}$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Dar una sola solución cuando hay dos · imponer unitaria pero olvidar la perpendicularidad · fiarse de una solución sin comprobar que cumple todas las ecuaciones.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej5-17">5.17</a> · <a href="#ej-propio-2">Propio 2</a> · <a href="#ej-propio-3">Propio 3</a> · <a href="#ex-propio-A">Propio A</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-ene22a-pb">Ene. 22 A problema b)</a> · <a href="#ex-sep23-4">Sept. 23 preg. 4</a></p>
+</section>
+
+<section class="ficha" id="tipo-prop">
+  <h3>Tipo 3 — Demostrar o aplicar propiedades de las ortogonales</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «Demuéstrese que...», «¿es cierto que...?», valores propios, producto, inversa, resolver $AX=B$ con $A$ ortogonal.</p>
+  <ol class="pasos">
+    <li>Escribe la hipótesis: $A^tA=I$ (o $A^{-1}=A^t$ si es cuadrada).</li>
+    <li>Para normas y productos escalares: $(Ax)\cdot(Ay)=(Ax)^t(Ay)=x^tA^tAy=x\cdot y$.</li>
+    <li>Para determinantes: $\det(A^tA)=(\det A)^2=1$, luego $\det A=\pm1$.</li>
+    <li>Para valores propios: si $Ax=\lambda x$, entonces $\|x\|=\|Ax\|=|\lambda|\|x\|$ y $\lambda=\pm1$.</li>
+    <li>Para falsedades, busca un contraejemplo (un giro en $\mathbb R^2$, una matriz no cuadrada).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A$ ortogonal cuadrada y $AX=B$: multiplicando por $A^t$, $X=A^tB$. Con $A=\frac13\begin{pmatrix}2&-1&2\\2&2&-1\\-1&2&2\end{pmatrix}$ y $B=(3,0,3)^t$ sale $X=(1,1,4)^t$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Escribir $A^{-1}=A^t$ sin saber que $A$ es cuadrada · afirmar que los valores propios son $\pm1$ cuando son complejos (un giro no tiene valores propios reales) · deducir que una ortogonal es diagonalizable.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej5-16">5.16</a> · <a href="#ej5-18">5.18</a> · <a href="#ej5-19">5.19</a> · <a href="#ej5-20">5.20</a> · <a href="#ej5-22">5.22</a> · <a href="#ej-propio-11">Propio 11</a> · <a href="#ej-propio-12">Propio 12</a> · <a href="#autoeval-6">Cuestión 6</a> · <a href="#ex-propio-B">Propio B</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18b-5">Feb. 18 B ej. 5</a> · <a href="#ex-feb24a-5">Feb. 24 (1.ª) preg. 5</a></p>
+</section>
+
+<section class="ficha" id="tipo-giro">
+  <h3>Tipo 4 — Giro o simetría: eje, plano y ángulo</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «Prueba que es un giro», «halla el eje y el ángulo», matriz de la simetría respecto de un plano, composición de giros.</p>
+  <ol class="pasos">
+    <li>Comprueba que es ortogonal y calcula $\det A$: $+1$ es giro, $-1$ es simetría (o simetría con giro).</li>
+    <li>En un giro de $\mathbb R^3$, el eje es el subespacio fijo: resuelve $(A-I)x=0$.</li>
+    <li>El ángulo sale de la traza: $\operatorname{tr}A=1+2\cos\theta$.</li>
+    <li>Para la simetría respecto de un plano con normal $n$: $S=I-2\dfrac{nn^t}{n^tn}$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $P=\begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix}$: ortogonal con $\det P=1$, así que es un giro. $(P-I)x=0$ da el eje $(1,1,1)$ y $\operatorname{tr}P=0=1+2\cos\theta$ da $\cos\theta=-\frac12$, o sea $\theta=120^\circ$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Olvidar comprobar la ortogonalidad primero · tomar $\cos\theta=\operatorname{tr}A$ (hay que restar 1 y dividir entre 2) · confundir plano de simetría con eje de giro · afirmar que dos giros conmutan (en $\mathbb R^3$ no lo hacen en general).</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej5-17">5.17</a> · <a href="#ej5-25">5.25</a> · <a href="#ej-propio-4">Propio 4</a> · <a href="#ej-propio-5">Propio 5</a> · <a href="#ej-propio-6">Propio 6</a> · <a href="#ej-propio-7">Propio 7</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18b-5">Feb. 18 B ej. 5</a> · <a href="#ex-feb24a-5">Feb. 24 (1.ª) preg. 5</a></p>
+</section>
+
+<section class="ficha" id="tipo-qr">
+  <h3>Tipo 5 — Factorización $QR$ y sistemas</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «Hallar la factorización $QR$», «resolver el sistema usando $QR$», explicar en qué consiste $QR$.</p>
+  <ol class="pasos">
+    <li>Comprueba que las columnas de $A$ son independientes.</li>
+    <li>Aplica Gram-Schmidt a las columnas y normaliza: esas son las columnas de $Q$.</li>
+    <li>Calcula $R=Q^tA$, que debe salir triangular superior con diagonal positiva; verifica $A=QR$.</li>
+    <li>Para $AX=B$: resuelve $RX=Q^tB$ de abajo arriba y comprueba que el sistema es compatible.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}1&3\\2&3\\2&0\end{pmatrix}$: $q_1=\frac13(1,2,2)$; $a_2\cdot q_1=3$, $a_2-3q_1=(2,1,-2)$ de norma 3, $q_2=\frac13(2,1,-2)$. Así $Q=\frac13\begin{pmatrix}1&2\\2&1\\2&-2\end{pmatrix}$ y $R=\begin{pmatrix}3&3\\0&3\end{pmatrix}$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Olvidar normalizar · calcular $R$ con la proyección mal (los coeficientes son $q_i\cdot a_j$) · resolver $RX=Q^tB$ sin comprobar la compatibilidad del sistema original · poner $Q$ cuadrada cuando $A$ es $m\times n$ con $m>n$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej5-22">5.22</a> · <a href="#ej5-23">5.23</a> · <a href="#ej5-24">5.24</a> · <a href="#ej-propio-8">Propio 8</a> · <a href="#ej-propio-9">Propio 9</a> · <a href="#ej-propio-10">Propio 10</a> · <a href="#ex-propio-C">Propio C</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb19b-pb">Feb. 19 B problema b)</a> · <a href="#ex-feb20b-pa">Feb. 20 B (1.ª) problema a)</a></p>
+</section>
+
 <!-- ============================ 9 ============================ -->
-<h2 id="ejercicios"><span class="n">9</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §5.2, Ej. 5.16-5.25, p. 174-182">E p.174-182</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">9</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §5.2, Ej. 5.16-5.25, p. 174-182">E p.174-182</span></h2>
 
 <p>Los Ejercicios 5.16 a 5.25 de E son los de esta sección (los anteriores, hasta el 5.15, son del tema 5.1; desde la p.183 empieza la sección 5.3). <b>Orden de estudio recomendado</b> (de fácil a difícil): <b>5.25 → 5.21 → 5.19 → 5.16 → 5.17 → 5.18 → 5.20 → 5.23 → 5.24 → 5.22</b>. Abajo están en el orden del libro. Pulsa «Mostrar soluciones» arriba para abrirlas todas.</p>
 
 
 <h3 id="bloqueI">Bloque I — ¿Es ortogonal? Propiedades (E 5.16–5.21, 5.25)</h3>
 
-<details class="sol" id="ej5-16"><summary>Ejercicio 5.16 — una ortogonal conserva la norma <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.16, p. 175">E p.175</span></summary>
-  <p class="enun">Demuéstrese que si $A$ es una matriz ortogonal de orden $m\times n$ y $\bar x\in\mathbb R^n$ entonces $\|A\bar x\|=\|\bar x\|$ considerando el producto escalar estándar.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Demuéstrese que si $A$ es una matriz ortogonal de orden $m\times n$ y $\bar x\in\mathbb R^n$ entonces $\|A\bar x\|=\|\bar x\|$ considerando el producto escalar estándar.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Parte de $\|Ax\|^2=(Ax)^t(Ax)$ y usa la definición de matriz ortogonal ($A^tA=I$). ¿Qué te queda a la derecha?</p></details>
+<details class="sol" id="ej5-16"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 5.16 — una ortogonal conserva la norma <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.16, p. 175">E p.175</span></summary>
   <p><b>Idea.</b> Primero se prueba que conserva el <b>producto escalar</b>; la norma sale porque se define con él.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Probar que una matriz ortogonal conserva la norma.</dd>
@@ -419,8 +531,9 @@
   <p><b>Error típico:</b> usar $AA^t=I$ en lugar de $A^tA=I$: si $A$ no es cuadrada, $AA^t\neq I_m$ y la prueba no funciona. Lo que aparece al desarrollar $(AX)^t(AY)$ es $A^tA$. <b>Teoría:</b> U Teor. 5.5 p.215 y propiedades p.217; U Def. 5.3 p.199.</p>
 </details>
 
-<details class="sol" id="ej5-17"><summary>Ejercicio 5.17 — caracterizar las ortogonales $2\times2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.17, p. 175">E p.175</span></summary>
-  <p class="enun">Se pide caracterizar las matrices ortogonales de $\mathcal M_{2\times2}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide caracterizar las matrices ortogonales de $\mathcal M_{2\times2}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Una ortogonal $2\times2$ tiene dos columnas unitarias y perpendiculares. Escribe la primera como $(\cos\theta,\sin\theta)$ y pregúntate cuántos vectores unitarios perpendiculares a ella existen.</p></details>
+<details class="sol" id="ej5-17"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.17 — caracterizar las ortogonales $2\times2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.17, p. 175">E p.175</span></summary>
   <p><b>Idea.</b> Solo hay <b>giros</b> ($\det=1$) y <b>simetrías</b> ($\det=-1$), cada una con un ángulo.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Caracterizar las matrices ortogonales $2\times2$.</dd>
@@ -451,8 +564,9 @@
   <p><b>Error típico:</b> creer que toda ortogonal $2\times2$ es un giro ($\begin{pmatrix}0&1\cr1&0\end{pmatrix}$ tiene $\det=-1$); decir que $S_\theta$ refleja respecto de la recta de ángulo $\theta$ (es $\theta/2$). <b>Teoría:</b> U Teor. 5.5 p.215, Ej. 5.28 p.217.</p>
 </details>
 
-<details class="sol" id="ej5-18"><summary>Ejercicio 5.18 — rango, $n\le m$, $\det=\pm1$, $A^t$ y el sistema $AX=B$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.18, p. 176">E p.176</span></summary>
-  <p class="enun">Si $A\in\mathcal M_{m\times n}$ es una matriz ortogonal se pide probar: A) $\operatorname{rang}(A)=n$. B) $n\le m$. C) Si $m=n$, entonces $\det(A)=-1$ o bien $\det(A)=1$. D) En general, $A^t$ no es necesariamente ortogonal. E) El sistema $AX=B$ es compatible determinado o incompatible.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A\in\mathcal M_{m\times n}$ es una matriz ortogonal se pide probar: A) $\operatorname{rang}(A)=n$. B) $n\le m$. C) Si $m=n$, entonces $\det(A)=-1$ o bien $\det(A)=1$. D) En general, $A^t$ no es necesariamente ortogonal. E) El sistema $AX=B$ es compatible determinado o incompatible.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Cada apartado sale de $A^tA=I_n$: toma rangos para A y B, determinantes para C, busca un contraejemplo no cuadrado para D y piensa en $AX=B$ con rango $n$ para E.</p></details>
+<details class="sol" id="ej5-18"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 5.18 — rango, $n\le m$, $\det=\pm1$, $A^t$ y el sistema $AX=B$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.18, p. 176">E p.176</span></summary>
   <p><b>Punto de partida.</b> Sean $\bar c_1,\dots,\bar c_n\in\mathbb R^m$ las columnas. Por la Def. 5.13, son ortonormales: $\bar c_i\cdot\bar c_j=0$ si $i\neq j$ y $\|\bar c_i\|=1$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Cinco propiedades de una ortogonal $m\times n$.</dd>
@@ -476,8 +590,9 @@
   <p><b>Error típico:</b> «$\det A=\pm1\Rightarrow A$ ortogonal» (falso); decir que $A^t$ nunca es ortogonal (en cuadradas siempre lo es). <b>Teoría:</b> U Def. 5.13 p.214, Teor. 5.5-5.6 p.215-216; U Teor. 5.2 p.206; U p.26, p.30.</p>
 </details>
 
-<details class="sol" id="ej5-19"><summary>Ejercicio 5.19 — resolver $AX=B$ con $A$ ortogonal: $X=A^tB$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.19, p. 177">E p.177</span></summary>
-  <p class="enun">Si $AX=B$ es un sistema de ecuaciones lineales compatible determinado y $A$ es una matriz ortogonal, ¿es posible simplificar el cálculo de la solución de dicho sistema?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $AX=B$ es un sistema de ecuaciones lineales compatible determinado y $A$ es una matriz ortogonal, ¿es posible simplificar el cálculo de la solución de dicho sistema?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Si $A^tA=I$, ¿quién es $A^{-1}$? Fíjate en qué ocurre al multiplicar por la izquierda los dos miembros de $AX=B$.</p></details>
+<details class="sol" id="ej5-19"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 5.19 — resolver $AX=B$ con $A$ ortogonal: $X=A^tB$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.19, p. 177">E p.177</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Simplificar la resolución de $AX=B$ cuando $A$ es ortogonal.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -495,8 +610,9 @@
   <p><b>Error típico:</b> aplicar $X=A^tB$ a un sistema rectangular sin verificar compatibilidad. <b>Teoría:</b> U Teor. 5.5 p.215, Teor. 5.6 p.216, Ej. 5.27 p.216-217.</p>
 </details>
 
-<details class="sol" id="ej5-20"><summary>Ejercicio 5.20 — valores propios de una ortogonal (test) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.20, p. 177">E p.177</span></summary>
-  <p class="enun">Si $A$ es una matriz ortogonal cuadrada, sus posibles valores propios son: A) Todos los reales positivos. B) $0$ y $1$. C) $\pm1$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es una matriz ortogonal cuadrada, sus posibles valores propios son: A) Todos los reales positivos. B) $0$ y $1$. C) $\pm1$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Si $Ax=\lambda x$ con $x\neq0$, calcula la norma de los dos lados y compara con $\|Ax\|=\|x\|$.</p></details>
+<details class="sol" id="ej5-20"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.20 — valores propios de una ortogonal (test) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.20, p. 177">E p.177</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Posibles valores propios de una ortogonal.</dd>
     <dt>Cómo lo pienso</dt><dd>Una ortogonal conserva normas: un valor propio solo puede ser $\pm1$ (si es real).</dd>
@@ -523,8 +639,9 @@
   <p><b>Error típico:</b> leer C como «siempre tiene los valores propios $1$ y $-1$» o «siempre es diagonalizable». <b>Teoría:</b> U Def. 4.6-4.9 p.151-152; U p.217; U p.238 (cuestión 6).</p>
 </details>
 
-<details class="sol" id="ej5-21"><summary>Ejercicio 5.21 — ¿son ortogonales estas matrices? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.21, p. 178">E p.178</span></summary>
-  <p class="enun">Compruébese si las matrices siguientes son ortogonales: A) $A$ simétrica de orden $n$ tal que $A^2=I_n$. B) $A=\begin{pmatrix}1&0\cr0&1\cr1&0\cr0&0\end{pmatrix}$. C) $A$ de orden $m\times n$ tal que $AA^t=I_m$. D) Las matrices elementales.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Compruébese si las matrices siguientes son ortogonales: A) $A$ simétrica de orden $n$ tal que $A^2=I_n$. B) $A=\begin{pmatrix}1&0\cr0&1\cr1&0\cr0&0\end{pmatrix}$. C) $A$ de orden $m\times n$ tal que $AA^t=I_m$. D) Las matrices elementales.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>En cada apartado calcula $A^tA$ (o recuerda qué pide la definición para una matriz no cuadrada). Para A, usa que $A^t=A$.</p></details>
+<details class="sol" id="ej5-21"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.21 — ¿son ortogonales estas matrices? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.21, p. 178">E p.178</span></summary>
   <p><b>Criterio en todos los apartados:</b> $A$ ortogonal $\iff A^tA=I_n$ (Teor. 5.5).</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si cuatro tipos de matrices son ortogonales.</dd>
@@ -556,8 +673,9 @@
   <p><b>Error típico:</b> confundir «columnas ortogonales» con «matriz ortogonal» (B); confundir $AA^t$ con $A^tA$ en rectangulares (C). <b>Teoría:</b> U Teor. 5.5-5.6 p.215-216; U Def. 1.2 p.15-16.</p>
 </details>
 
-<details class="sol" id="ej5-25"><summary>Ejercicio 5.25 — ¿es ortogonal esta $3\times3$? (y qué hace) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.25, p. 182">E p.182</span></summary>
-  <p class="enun">Compruébese si $A=\begin{pmatrix}\frac1{\sqrt2}&0&\frac1{\sqrt2}\cr0&1&0\cr-\frac1{\sqrt2}&0&\frac1{\sqrt2}\end{pmatrix}$ es ortogonal.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Compruébese si $A=\begin{pmatrix}\frac1{\sqrt2}&0&\frac1{\sqrt2}\cr0&1&0\cr-\frac1{\sqrt2}&0&\frac1{\sqrt2}\end{pmatrix}$ es ortogonal.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Comprueba que las columnas son unitarias y perpendiculares dos a dos (o calcula $A^tA$); después mira el determinante y la traza para saber si es giro o simetría.</p></details>
+<details class="sol" id="ej5-25"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.25 — ¿es ortogonal esta $3\times3$? (y qué hace) <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.25, p. 182">E p.182</span></summary>
   <p><b>Tres caminos, como el libro; en el examen basta uno bien justificado.</b></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Comprobar que una $3\times3$ es ortogonal y saber qué hace.</dd>
@@ -586,8 +704,9 @@
 
 <h3 id="bloqueII">Bloque II — Factorización $QR$ (E 5.22–5.24)</h3>
 
-<details class="sol" id="ej5-22"><summary>Ejercicio 5.22 — propiedades de $Q$ y $R$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.22, p. 179">E p.179</span></summary>
-  <p class="enun">Se pide deducir, en términos generales, las propiedades de las matrices $Q$ y $R$ de la factorización $QR$ de una matriz $A\in\mathcal M_{m\times n}$ cuyas columnas son linealmente independientes.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Se pide deducir, en términos generales, las propiedades de las matrices $Q$ y $R$ de la factorización $QR$ de una matriz $A\in\mathcal M_{m\times n}$ cuyas columnas son linealmente independientes.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Aplica Gram-Schmidt a las columnas de $A$: $Q$ recoge los vectores ortonormales y $R$ los coeficientes. ¿Qué se deduce de $Q^tQ$ y de la forma de $R$?</p></details>
+<details class="sol" id="ej5-22"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejercicio 5.22 — propiedades de $Q$ y $R$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.22, p. 179">E p.179</span></summary>
   <p><b>Idea.</b> Gram-Schmidt convierte las columnas $\bar c_1,\dots,\bar c_n$ en una base ortonormal $\bar u_1,\dots,\bar u_n$ del mismo subespacio, de modo que cada $\bar c_j$ <b>solo usa</b> $\bar u_1,\dots,\bar u_j$. Escrito en forma matricial, eso es $A=QR$ con $R$ triangular.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Propiedades de $Q$ y $R$ en la factorización $QR$.</dd>
@@ -615,8 +734,9 @@
   <p><b>Error típico:</b> olvidar que $r_{jj}=\|\bar e_j\|$ (el vector <b>ortogonalizado</b>), no la norma de $\bar c_j$. <b>Teoría:</b> U §5.2.2 p.218; U §5.1.5 p.207-208; Teor. 5.3 p.207.</p>
 </details>
 
-<details class="sol" id="ej5-23"><summary>Ejercicio 5.23 — calcular una $QR$ de una $4\times3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.23, p. 180">E p.180</span></summary>
-  <p class="enun">Calcúlese una factorización $QR$ de $A=\begin{pmatrix}1&0&1\cr0&1&2\cr-1&2&1\cr0&1&1\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcúlese una factorización $QR$ de $A=\begin{pmatrix}1&0&1\cr0&1&2\cr-1&2&1\cr0&1&1\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Aplica Gram-Schmidt a las tres columnas de $A$, normalizando cada vector; luego obtén $R=Q^tA$, que debe salir triangular superior.</p></details>
+<details class="sol" id="ej5-23"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.23 — calcular una $QR$ de una $4\times3$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.23, p. 180">E p.180</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Calcular una $QR$ de una $4\times3$.</dd>
     <dt>Qué se usa</dt><dd><b>Factorización $QR$:</b> si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt aplicado a las columnas) y $R=Q^tA$ triangular superior con diagonal positiva. $AX=B\iff RX=Q^tB$ (se resuelve hacia arriba).</dd>
@@ -641,8 +761,9 @@
   <p><b>Error típico:</b> restar al calcular $\bar e_3$ la proyección sobre $\bar c_1,\bar c_2$ (columnas originales) en vez de sobre $\bar e_1,\bar e_2$. <b>Teoría:</b> U §5.2.2 p.218-220 (Ej. 5.29); U §5.1.5 p.207-208.</p>
 </details>
 
-<details class="sol" id="ej5-24"><summary>Ejercicio 5.24 — resolver un sistema con la $QR$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.24, p. 181">E p.181</span></summary>
-  <p class="enun">Utilizando la factorización $QR$, se pide resolver $\begin{pmatrix}1&0&1\cr0&1&2\cr-1&2&1\cr0&1&1\end{pmatrix}\begin{pmatrix}x\cr y\cr z\end{pmatrix}=\begin{pmatrix}1\cr2\cr1\cr1\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Utilizando la factorización $QR$, se pide resolver $\begin{pmatrix}1&0&1\cr0&1&2\cr-1&2&1\cr0&1&1\end{pmatrix}\begin{pmatrix}x\cr y\cr z\end{pmatrix}=\begin{pmatrix}1\cr2\cr1\cr1\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Sustituye $A=QR$ en $AX=B$ y multiplica por $Q^t$ por la izquierda: te queda un sistema triangular. Ojo: comprueba al final que el sistema es compatible.</p></details>
+<details class="sol" id="ej5-24"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 5.24 — resolver un sistema con la $QR$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.24, p. 181">E p.181</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Resolver un sistema usando la $QR$.</dd>
     <dt>Qué se usa</dt><dd><b>Factorización $QR$:</b> si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt aplicado a las columnas) y $R=Q^tA$ triangular superior con diagonal positiva. $AX=B\iff RX=Q^tB$ (se resuelve hacia arriba).</dd>
@@ -665,8 +786,9 @@
 
 <h3 id="propios">Ejemplos propios, de fácil a difícil</h3>
 
-<details class="sol" id="ej-propio-1"><summary>Propio 1 — ¿es ortogonal? Inversa y determinante <span class="src" data-l="P" data-ref="Ejemplo propio; Def. 5.13 y Teor. 5.5-5.6, U p. 214-216">propio</span></summary>
-  <p class="enun">Decide si son ortogonales: A) $\frac15\begin{pmatrix}3&-4\cr4&3\end{pmatrix}$; B) $\begin{pmatrix}1&1\cr-1&1\end{pmatrix}$; C) $\frac13\begin{pmatrix}2&-2&1\cr1&2&2\cr2&1&-2\end{pmatrix}$. Para las que lo sean, da la inversa y el determinante.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Decide si son ortogonales: A) $\frac15\begin{pmatrix}3&-4\cr4&3\end{pmatrix}$; B) $\begin{pmatrix}1&1\cr-1&1\end{pmatrix}$; C) $\frac13\begin{pmatrix}2&-2&1\cr1&2&2\cr2&1&-2\end{pmatrix}$. Para las que lo sean, da la inversa y el determinante.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $A^tA$ en cada caso, o comprueba que las columnas son unitarias y perpendiculares. Si lo son, la inversa es la traspuesta.</p></details>
+<details class="sol" id="ej-propio-1"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Propio 1 — ¿es ortogonal? Inversa y determinante <span class="src" data-l="P" data-ref="Ejemplo propio; Def. 5.13 y Teor. 5.5-5.6, U p. 214-216">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Decidir si tres matrices son ortogonales; inversa y determinante.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -682,8 +804,9 @@
   <p><b>Error típico:</b> olvidar el factor común al calcular normas (la columna $(2,1,2)$ mide $3$, no $1$).</p>
 </details>
 
-<details class="sol" id="ej-propio-2"><summary>Propio 2 — completar una ortogonal $2\times2$ con una fila dada <span class="src" data-l="P" data-ref="Ejemplo propio, tipo X Sept. 2023 p. 4; E Ej. 5.17">propio</span></summary>
-  <p class="enun">Halla todas las matrices ortogonales de orden $2$ cuya primera fila sea $\left(\frac35,\frac45\right)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla todas las matrices ortogonales de orden $2$ cuya primera fila sea $\left(\frac35,\frac45\right)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La fila dada ya es unitaria. Los vectores unitarios de $\mathbb R^2$ perpendiculares a ella son solo dos: encuéntralos girando 90 grados.</p></details>
+<details class="sol" id="ej-propio-2"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 2 — completar una ortogonal $2\times2$ con una fila dada <span class="src" data-l="P" data-ref="Ejemplo propio, tipo X Sept. 2023 p. 4; E Ej. 5.17">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matrices ortogonales $2\times2$ con primera fila dada.</dd>
     <dt>Cómo lo pienso</dt><dd>La fila es unitaria; la segunda debe ser unitaria y ortogonal: dos posibilidades.</dd>
@@ -703,8 +826,9 @@
   <p><b>Error típico:</b> dar una única solución: siempre hay dos.</p>
 </details>
 
-<details class="sol" id="ej-propio-3"><summary>Propio 3 — ortogonal $3\times3$ con parámetros <span class="src" data-l="P" data-ref="Ejemplo propio; cf. U Ejemplo 5.25, p. 215">propio</span></summary>
-  <p class="enun">Halla $a,b,c$ para que $M=\begin{pmatrix}\frac13&\frac23&a\cr\frac23&\frac13&b\cr\frac23&-\frac23&c\end{pmatrix}$ sea ortogonal. ¿Para cuál es $\det M=1$?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla $a,b,c$ para que $M=\begin{pmatrix}\frac13&\frac23&a\cr\frac23&\frac13&b\cr\frac23&-\frac23&c\end{pmatrix}$ sea ortogonal. ¿Para cuál es $\det M=1$?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Impón que la tercera columna sea unitaria y perpendicular a las otras dos; ¿qué vector es perpendicular a ambas a la vez? Después elige el signo para que $\det=1$.</p></details>
+<details class="sol" id="ej-propio-3"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 3 — ortogonal $3\times3$ con parámetros <span class="src" data-l="P" data-ref="Ejemplo propio; cf. U Ejemplo 5.25, p. 215">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Completar una ortogonal $3\times3$ con parámetros.</dd>
     <dt>Cómo lo pienso</dt><dd>La tercera columna es perpendicular a las dos primeras y unitaria; el signo decide $\det$.</dd>
@@ -722,8 +846,9 @@
   <p><b>Error típico:</b> imponer normas antes que perpendicularidad y acabar con un sistema no lineal innecesariamente difícil.</p>
 </details>
 
-<details class="sol" id="ej-propio-4"><summary>Propio 4 — simetría respecto de un plano (reflexión de Householder) $H=I-2\bar u\bar u^t$ <span class="src" data-l="P" data-ref="Ejemplo propio; E Ej. 5.21 A, p. 178">propio</span></summary>
-  <p class="enun">Sea $\bar w=(1,1,1)$ y $\bar u=\bar w/\|\bar w\|$. Calcula $H=I-2\bar u\bar u^t$, prueba que es simétrica y ortogonal y describe qué hace.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $\bar w=(1,1,1)$ y $\bar u=\bar w/\|\bar w\|$. Calcula $H=I-2\bar u\bar u^t$, prueba que es simétrica y ortogonal y describe qué hace.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $\bar u\bar u^t$ (matriz $3\times3$), forma $H$ y comprueba $H^t=H$ y $H^tH=I$. Para interpretarla, mira cómo actúa sobre $\bar u$ y sobre vectores perpendiculares a $\bar u$.</p></details>
+<details class="sol" id="ej-propio-4"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 4 — simetría respecto de un plano (reflexión de Householder) $H=I-2\bar u\bar u^t$ <span class="src" data-l="P" data-ref="Ejemplo propio; E Ej. 5.21 A, p. 178">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Reflexión de Householder $H=I-2uu^t$.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$. <b>Giros y simetrías:</b> ortogonal con $\det=1$ es giro (en $\mathbb R^3$: eje = vector propio de $\lambda=1$, ángulo por $\operatorname{tr}A=1+2\cos\theta$); con $\det=-1$ es simetría (respecto de un plano si $\operatorname{tr}A=1$) o simetría rotatoria.</dd>
@@ -743,8 +868,9 @@
   <p><b>Error típico:</b> usar $\bar w$ sin normalizar en $I-2\bar w\bar w^t$ (no sale ortogonal).</p>
 </details>
 
-<details class="sol" id="ej-propio-5"><summary>Propio 5 — giro en $\mathbb R^3$: eje y ángulo <span class="src" data-l="P" data-ref="Ejemplo propio; traza y semejanza, U Teorema 4.4 p. 153; E Ej. 5.20 p. 177">propio</span></summary>
-  <p class="enun">Prueba que $P=\begin{pmatrix}0&0&1\cr1&0&0\cr0&1&0\end{pmatrix}$ es la matriz de un giro y halla su eje y su ángulo.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Prueba que $P=\begin{pmatrix}0&0&1\cr1&0&0\cr0&1&0\end{pmatrix}$ es la matriz de un giro y halla su eje y su ángulo.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Comprueba que es ortogonal con $\det=1$. El eje es el vector fijo: resuelve $(P-I)x=0$. El ángulo sale de la traza: $\operatorname{tr}P=1+2\cos\theta$.</p></details>
+<details class="sol" id="ej-propio-5"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 5 — giro en $\mathbb R^3$: eje y ángulo <span class="src" data-l="P" data-ref="Ejemplo propio; traza y semejanza, U Teorema 4.4 p. 153; E Ej. 5.20 p. 177">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Probar que una matriz es un giro y hallar eje y ángulo.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$. <b>Giros y simetrías:</b> ortogonal con $\det=1$ es giro (en $\mathbb R^3$: eje = vector propio de $\lambda=1$, ángulo por $\operatorname{tr}A=1+2\cos\theta$); con $\det=-1$ es simetría (respecto de un plano si $\operatorname{tr}A=1$) o simetría rotatoria.</dd>
@@ -764,8 +890,9 @@
   <p><b>Error típico:</b> usar $\cos\theta=\frac{\operatorname{tr}A}3$ o $\frac{\operatorname{tr}A}2$; buscar el eje en $\operatorname{Nuc}(A+I)$.</p>
 </details>
 
-<details class="sol" id="ej-propio-6"><summary>Propio 6 — simetría respecto de un plano en $\mathbb R^3$ <span class="src" data-l="P" data-ref="Ejemplo propio; proyección sobre un vector, U Def. 5.12 p. 211">propio</span></summary>
-  <p class="enun">Halla la matriz (en la base canónica) de la simetría ortogonal $S$ respecto del plano $\pi:x+2y+2z=0$. Comprueba que es ortogonal con $\det S=-1$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla la matriz (en la base canónica) de la simetría ortogonal $S$ respecto del plano $\pi:x+2y+2z=0$. Comprueba que es ortogonal con $\det S=-1$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Un vector se descompone en parte del plano y parte normal: $S=I-2\,\dfrac{nn^t}{n^tn}$ con $n$ la normal al plano. Calcula $nn^t$ y comprueba ortogonalidad y determinante.</p></details>
+<details class="sol" id="ej-propio-6"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio 6 — simetría respecto de un plano en $\mathbb R^3$ <span class="src" data-l="P" data-ref="Ejemplo propio; proyección sobre un vector, U Def. 5.12 p. 211">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Matriz de la simetría ortogonal respecto de un plano.</dd>
     <dt>Qué se usa</dt><dd><b>Giros y simetrías:</b> ortogonal con $\det=1$ es giro (en $\mathbb R^3$: eje = vector propio de $\lambda=1$, ángulo por $\operatorname{tr}A=1+2\cos\theta$); con $\det=-1$ es simetría (respecto de un plano si $\operatorname{tr}A=1$) o simetría rotatoria.</dd>
@@ -784,8 +911,9 @@
   <p><b>Error típico:</b> calcular la <b>proyección</b> $I-\frac{\bar n\bar n^t}{\bar n^t\bar n}$ (no ortogonal, $\det=0$) en vez de la simetría (factor $2$).</p>
 </details>
 
-<details class="sol" id="ej-propio-7"><summary>Propio 7 — composición de dos giros: no conmutan <span class="src" data-l="P" data-ref="Ejemplo propio; det(AB) = det A det B, U p. 26">propio</span></summary>
-  <p class="enun">$R_z=\begin{pmatrix}0&-1&0\cr1&0&0\cr0&0&1\end{pmatrix}$ (giro de $90^\circ$ alrededor de $OZ$) y $R_x=\begin{pmatrix}1&0&0\cr0&0&-1\cr0&1&0\end{pmatrix}$ (giro de $90^\circ$ alrededor de $OX$). Calcula $R_zR_x$ y $R_xR_z$, prueba que son giros y halla eje y ángulo.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$R_z=\begin{pmatrix}0&-1&0\cr1&0&0\cr0&0&1\end{pmatrix}$ (giro de $90^\circ$ alrededor de $OZ$) y $R_x=\begin{pmatrix}1&0&0\cr0&0&-1\cr0&1&0\end{pmatrix}$ (giro de $90^\circ$ alrededor de $OX$). Calcula $R_zR_x$ y $R_xR_z$, prueba que son giros y halla eje y ángulo.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Multiplica las dos matrices en los dos órdenes. Cada producto es ortogonal con $\det=1$: busca su eje (vector fijo) y su ángulo por la traza.</p></details>
+<details class="sol" id="ej-propio-7"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio 7 — composición de dos giros: no conmutan <span class="src" data-l="P" data-ref="Ejemplo propio; det(AB) = det A det B, U p. 26">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Componer dos giros y ver que no conmutan.</dd>
     <dt>Qué se usa</dt><dd><b>Giros y simetrías:</b> ortogonal con $\det=1$ es giro (en $\mathbb R^3$: eje = vector propio de $\lambda=1$, ángulo por $\operatorname{tr}A=1+2\cos\theta$); con $\det=-1$ es simetría (respecto de un plano si $\operatorname{tr}A=1$) o simetría rotatoria.</dd>
@@ -803,8 +931,9 @@
   <p><b>Error típico:</b> multiplicar en el orden equivocado ($R_zR_x$ es «primero $R_x$, luego $R_z$»).</p>
 </details>
 
-<details class="sol" id="ej-propio-8"><summary>Propio 8 — $QR$ de una $3\times2$ <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.2.2 p. 218-220">propio</span></summary>
-  <p class="enun">Factoriza $A=\begin{pmatrix}1&3\cr2&3\cr2&0\end{pmatrix}$ como $QR$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Factoriza $A=\begin{pmatrix}1&3\cr2&3\cr2&0\end{pmatrix}$ como $QR$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Gram-Schmidt sobre las dos columnas: $q_1=a_1/\|a_1\|$; resta a $a_2$ su proyección sobre $q_1$ y normaliza. $R=Q^tA$.</p></details>
+<details class="sol" id="ej-propio-8"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 8 — $QR$ de una $3\times2$ <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.2.2 p. 218-220">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>$QR$ de una $3\times2$.</dd>
     <dt>Qué se usa</dt><dd><b>Factorización $QR$:</b> si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt aplicado a las columnas) y $R=Q^tA$ triangular superior con diagonal positiva. $AX=B\iff RX=Q^tB$ (se resuelve hacia arriba).</dd>
@@ -823,8 +952,9 @@
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-9"><summary>Propio 9 — $QR$ de una $3\times3$ <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.2.2 p. 218-220">propio</span></summary>
-  <p class="enun">Factoriza $A=\begin{pmatrix}1&3&5\cr2&3&1\cr2&0&1\end{pmatrix}$ como $QR$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Factoriza $A=\begin{pmatrix}1&3&5\cr2&3&1\cr2&0&1\end{pmatrix}$ como $QR$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Igual que con dos columnas, pero la tercera se ortogonaliza respecto de $q_1$ y $q_2$. Los coeficientes de proyección van a la diagonal superior de $R$.</p></details>
+<details class="sol" id="ej-propio-9"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 9 — $QR$ de una $3\times3$ <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.2.2 p. 218-220">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>$QR$ de una $3\times3$.</dd>
     <dt>Qué se usa</dt><dd><b>Factorización $QR$:</b> si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt aplicado a las columnas) y $R=Q^tA$ triangular superior con diagonal positiva. $AX=B\iff RX=Q^tB$ (se resuelve hacia arriba).</dd>
@@ -842,8 +972,9 @@
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-10"><summary>Propio 10 — resolver $AX=B$ con la $QR$ <span class="src" data-l="P" data-ref="Ejemplo propio; E Ej. 5.24 p. 181">propio</span></summary>
-  <p class="enun">Resuelve $A\bar x=(4,2,5)^t$ con la $A$ del Propio 9 usando su $QR$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Resuelve $A\bar x=(4,2,5)^t$ con la $A$ del Propio 9 usando su $QR$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Con $A=QR$, el sistema $A\bar x=\bar b$ equivale a $R\bar x=Q^t\bar b$: calcula el segundo miembro y resuelve hacia atrás.</p></details>
+<details class="sol" id="ej-propio-10"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 10 — resolver $AX=B$ con la $QR$ <span class="src" data-l="P" data-ref="Ejemplo propio; E Ej. 5.24 p. 181">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Resolver $AX=B$ con la $QR$.</dd>
     <dt>Qué se usa</dt><dd><b>Factorización $QR$:</b> si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt aplicado a las columnas) y $R=Q^tA$ triangular superior con diagonal positiva. $AX=B\iff RX=Q^tB$ (se resuelve hacia arriba).</dd>
@@ -857,8 +988,9 @@
   </ol>
 </details>
 
-<details class="sol" id="ej-propio-11"><summary>Propio 11 — producto, inversa y cambio de base entre bases ortonormales <span class="src" data-l="P" data-ref="Ejemplo propio; Gram de una base ortonormal es I, U p. 196; U §5.3 p. 223">propio</span></summary>
-  <p class="enun">Sean $A,B$ ortogonales de orden $n$. Prueba: (a) $AB$ es ortogonal; (b) $A^{-1}=A^t$ es ortogonal; (c) la matriz de cambio de base entre dos bases ortonormales de $\mathbb R^n$ es ortogonal.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $A,B$ ortogonales de orden $n$. Prueba: (a) $AB$ es ortogonal; (b) $A^{-1}=A^t$ es ortogonal; (c) la matriz de cambio de base entre dos bases ortonormales de $\mathbb R^n$ es ortogonal.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Parte de $A^tA=I$ y $B^tB=I$ y calcula $(AB)^t(AB)$. Para (c), la matriz de cambio entre bases ortonormales es la de Gram con productos escalares de vectores ortonormales.</p></details>
+<details class="sol" id="ej-propio-11"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 11 — producto, inversa y cambio de base entre bases ortonormales <span class="src" data-l="P" data-ref="Ejemplo propio; Gram de una base ortonormal es I, U p. 196; U §5.3 p. 223">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Propiedades de grupo de las ortogonales y del cambio entre bases ortonormales.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -875,7 +1007,9 @@
   <p><b>Error típico:</b> pensar que la <b>suma</b> de ortogonales es ortogonal: $I+I=2I$ no lo es.</p>
 </details>
 
-<details class="sol" id="ej-propio-12"><summary>Propio 12 — ortogonal no es diagonalizable (en general); nota de adelanto del tema 5.4 (mínimos cuadrados, no se pide aquí) <span class="src" data-l="P" data-ref="Nota propia; Teor. 5.7, U p. 223; E Ej. 5.20 p. 177">propio</span></summary>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">¿Una matriz ortogonal es siempre diagonalizable? Justifica con un ejemplo, y aclara la diferencia con «ortogonalmente diagonalizable».</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Piensa en un giro de 90 grados: ¿tiene algún vector que quede en su recta? Relaciona eso con el significado de diagonalizar sobre $\mathbb R$.</p></details>
+<details class="sol" id="ej-propio-12"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio 12 — ortogonal no es diagonalizable (en general); nota de adelanto del tema 5.4 (mínimos cuadrados, no se pide aquí) <span class="src" data-l="P" data-ref="Nota propia; Teor. 5.7, U p. 223; E Ej. 5.20 p. 177">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Una ortogonal puede no ser diagonalizable (nota).</dd>
     <dt>Qué se usa</dt><dd><b>Valores propios de una ortogonal:</b> si $Ax=\lambda x$ entonces $\|Ax\|=\|x\|$ obliga a $|\lambda|=1$; los reales solo pueden ser $\pm1$.</dd>
@@ -890,8 +1024,9 @@
 
 <h3 id="autoeval">Autoevaluación de U (p.238-239) que corresponde a este tema</h3>
 
-<details class="sol" id="autoeval-6"><summary>Cuestión 6 — «Si $\lambda\in\mathbb R$ es un valor propio de una matriz ortogonal $A$ entonces $\lambda=1$ o $\lambda=-1$» <span class="src" data-l="U" data-ref="U Ejercicios de Autoevaluación, cuestión 6, p. 238; solución p. 313">U p.238 · 313</span></summary>
-  <p class="enun">Determínese si es verdadera la afirmación.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Determínese si es verdadera la afirmación.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Si $Ax=\lambda x$, compara $\|Ax\|$ con $\|x\|$. ¿Qué dice eso de $|\lambda|$ y qué valores reales cumplen esa condición?</p></details>
+<details class="sol" id="autoeval-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Cuestión 6 — «Si $\lambda\in\mathbb R$ es un valor propio de una matriz ortogonal $A$ entonces $\lambda=1$ o $\lambda=-1$» <span class="src" data-l="U" data-ref="U Ejercicios de Autoevaluación, cuestión 6, p. 238; solución p. 313">U p.238 · 313</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Decidir si el valor propio real de una ortogonal es $\pm1$.</dd>
     <dt>Qué se usa</dt><dd><b>Valores propios de una ortogonal:</b> si $Ax=\lambda x$ entonces $\|Ax\|=\|x\|$ obliga a $|\lambda|=1$; los reales solo pueden ser $\pm1$.</dd>
@@ -905,7 +1040,7 @@
 </details>
 
 <!-- ============================ 10 ============================ -->
-<h2 id="examenes"><span class="n">10</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">10</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025), <b>7 ejercicios o apartados</b> tienen las matrices ortogonales como contenido principal, más tres enlaces a otros temas. Se agrupan por método: <b>A</b> transformación ortogonal (definición y ejemplo); <b>B</b> comprobar que una matriz es ortogonal; <b>C</b> completar una matriz o hallar parámetros; <b>D</b> factorización $QR$.</p>
 
@@ -920,8 +1055,9 @@
 
 <h3 id="metodoA">Método A — Transformación ortogonal: definición y ejemplo</h3>
 
-<details class="sol" id="ex-feb18b-5"><summary>Feb. 2018 (tipo B), ejercicio 5 — definir transformación ortogonal y dar un ejemplo en $\mathbb R^2$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicio 5">X Feb. 2018 (B) ej. 5</span></summary>
-  <p class="enun">Defina transformación ortogonal y enuncie un ejemplo en $\mathbb R^2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Defina transformación ortogonal y enuncie un ejemplo en $\mathbb R^2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Enuncia la definición: una aplicación lineal que conserva el producto escalar (equivalentemente, su matriz en base ortonormal es ortogonal). Para el ejemplo, elige un giro o una simetría de $\mathbb R^2$.</p></details>
+<details class="sol" id="ex-feb18b-5"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2018 (tipo B), ejercicio 5 — definir transformación ortogonal y dar un ejemplo en $\mathbb R^2$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicio 5">X Feb. 2018 (B) ej. 5</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Definir transformación ortogonal y dar un ejemplo en $\mathbb R^2$.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -941,8 +1077,9 @@
   <p><b>Error típico:</b> (i) contar el método de Gram-Schmidt: «ortogonal» aquí se refiere a la aplicación, no a una base (error muy frecuente en Feb. 2024); (ii) dar un ejemplo sin comprobarlo; (iii) dar como ejemplo $f(x)=2x$: conserva la perpendicularidad pero $f(u)\cdot f(v)=4\,u\cdot v$ y $(2I)^t(2I)=4I\neq I$.</p>
 </details>
 
-<details class="sol" id="ex-feb24a-5"><summary>Feb. 2024 (1.ª sem.), pregunta 5 — definir transformación ortogonal $T:V\to V$ y ejemplo en $\mathbb R^2$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª semana), pregunta 5">X Feb. 2024 (1.ª) P5</span></summary>
-  <p class="enun">Sea $V$ un espacio vectorial dotado de un producto escalar $\bullet$. Defina transformación ortogonal $T:V\to V$ y dé un ejemplo de transformación ortogonal $T:\mathbb R^2\to\mathbb R^2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $V$ un espacio vectorial dotado de un producto escalar $\bullet$. Defina transformación ortogonal $T:V\to V$ y dé un ejemplo de transformación ortogonal $T:\mathbb R^2\to\mathbb R^2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La transformación ortogonal conserva el producto escalar: $T(u)\bullet T(v)=u\bullet v$. Como ejemplo, una matriz $2\times2$ de columnas unitarias y perpendiculares.</p></details>
+<details class="sol" id="ex-feb24a-5"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2024 (1.ª sem.), pregunta 5 — definir transformación ortogonal $T:V\to V$ y ejemplo en $\mathbb R^2$ <span class="src" data-l="X" data-ref="Feb. 2024 (1.ª semana), pregunta 5">X Feb. 2024 (1.ª) P5</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Definir transformación ortogonal $T:V\to V$ y ejemplo.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -967,8 +1104,9 @@
 
 <h3 id="metodoB">Método B — Comprobar que una matriz es ortogonal</h3>
 
-<details class="sol" id="ex-sep25-5"><summary>Sept. 2025, pregunta 5 — $A$ simétrica con $A^2=I_n$: ¿es ortogonal? <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 5">X Sept. 2025 P5</span></summary>
-  <p class="enun">Sea $A\in\mathcal M_{n\times n}$ una matriz simétrica de orden $n$ tal que $A^2=I_n$. Razone si la matriz $A$ es o no ortogonal.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $A\in\mathcal M_{n\times n}$ una matriz simétrica de orden $n$ tal que $A^2=I_n$. Razone si la matriz $A$ es o no ortogonal.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Si $A$ es simétrica, $A^t=A$. Calcula $A^tA$ usando la hipótesis $A^2=I$.</p></details>
+<details class="sol" id="ex-sep25-5"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2025, pregunta 5 — $A$ simétrica con $A^2=I_n$: ¿es ortogonal? <span class="src" data-l="X" data-ref="Sept. 2025, pregunta 5">X Sept. 2025 P5</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Una simétrica con $A^2=I$ ¿es ortogonal?</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -991,8 +1129,9 @@
 
 <h3 id="metodoC">Método C — Completar una matriz o hallar parámetros para que sea ortogonal</h3>
 
-<details class="sol" id="ex-sep23-4"><summary>Sept. 2023, pregunta 4 — ortogonal de orden 2 con primera fila $\left(\frac{\sqrt2}2,\frac{\sqrt2}2\right)$ <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 4">X Sept. 2023 P4</span></summary>
-  <p class="enun">Calcule una matriz ortogonal de orden 2 tal que su primera fila sea $\left(\frac{\sqrt2}2\ \ \frac{\sqrt2}2\right)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcule una matriz ortogonal de orden 2 tal que su primera fila sea $\left(\frac{\sqrt2}2\ \ \frac{\sqrt2}2\right)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La fila dada ya es unitaria. La segunda debe ser unitaria y perpendicular a ella: dos candidatos, intercambiando coordenadas y cambiando un signo.</p></details>
+<details class="sol" id="ex-sep23-4"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Sept. 2023, pregunta 4 — ortogonal de orden 2 con primera fila $\left(\frac{\sqrt2}2,\frac{\sqrt2}2\right)$ <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 4">X Sept. 2023 P4</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Matriz ortogonal de orden 2 con primera fila dada.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -1014,8 +1153,9 @@
   <p><b>Error típico:</b> (i) imponer solo que las columnas sean unitarias y olvidar la perpendicularidad: $a=b=\frac{\sqrt2}2$ da $\frac{\sqrt2}2\begin{pmatrix}1&1\cr1&1\end{pmatrix}$, con $\det=0$; (ii) creer que la solución es única: el enunciado pide «una», así que basta una solución ($A_1$); conviene mencionar que hay dos; (iii) confundir fila con columna: aquí da igual por ser cuadrada, pero hay que decir por qué.</p>
 </details>
 
-<details class="sol" id="ex-ene22a-pb"><summary>Ene. 2022 (tipo A, fichero Febrero22A1-v2), problema b) — valores de $s,t$ para que una matriz sea ortogonal <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A, fichero Algebra_Febrero22A1-v2), problema b)">X Ene. 2022 (A) pb. b)</span></summary>
-  <p class="enun">Hallar, si es posible, los valores de $s$ y $t$ tales que la matriz $A$ de filas $\left(\frac27,\frac t7,\frac s7\right),\ \left(\frac37,\frac s7,\frac27\right),\ \left(\frac s7,\frac{-2}7,\frac t7\right)$ es ortogonal.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hallar, si es posible, los valores de $s$ y $t$ tales que la matriz $A$ de filas $\left(\frac27,\frac t7,\frac s7\right),\ \left(\frac37,\frac s7,\frac27\right),\ \left(\frac s7,\frac{-2}7,\frac t7\right)$ es ortogonal.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Impón que las filas sean unitarias y perpendiculares entre sí; de las ecuaciones más sencillas salen $s$ y $t$ (puede que no haya solución, comprueba todas).</p></details>
+<details class="sol" id="ex-ene22a-pb"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ene. 2022 (tipo A, fichero Febrero22A1-v2), problema b) — valores de $s,t$ para que una matriz sea ortogonal <span class="src" data-l="X" data-ref="Ene. 2022 (tipo A, fichero Algebra_Febrero22A1-v2), problema b)">X Ene. 2022 (A) pb. b)</span></summary>
   <p>$A=\frac17\begin{pmatrix}2&t&s\cr3&s&2\cr s&-2&t\end{pmatrix}$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $s,t$ para que una $3\times3$ sea ortogonal.</dd>
@@ -1037,8 +1177,9 @@
 
 <h3 id="metodoD">Método D — Factorización $QR$</h3>
 
-<details class="sol" id="ex-feb19b-pb"><summary>Feb. 2019 (tipo B), problema b) — explicar en qué consiste la factorización $QR$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), problema b)">X Feb. 2019 (B) pb. b)</span></summary>
-  <p class="enun">Explicar en qué consiste el método de factorización $QR$ de una matriz $A$ tal que el sistema de vectores definido por las columnas de $A$, $\operatorname{Col}A$, es linealmente independiente.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Explicar en qué consiste el método de factorización $QR$ de una matriz $A$ tal que el sistema de vectores definido por las columnas de $A$, $\operatorname{Col}A$, es linealmente independiente.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Es una pregunta teórica: describe el proceso de Gram-Schmidt sobre las columnas, qué matrices $Q$ y $R$ resultan y qué propiedades tienen.</p></details>
+<details class="sol" id="ex-feb19b-pb"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2019 (tipo B), problema b) — explicar en qué consiste la factorización $QR$ <span class="src" data-l="X" data-ref="Feb. 2019 (tipo B), problema b)">X Feb. 2019 (B) pb. b)</span></summary>
   <p><b>Modelo de respuesta.</b></p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Explicar el método $QR$.</dd>
@@ -1063,8 +1204,9 @@
   <p><b>Error típico:</b> (i) normalizar las filas en lugar de las columnas; (ii) $R=AQ^t$ o $QA$: es $Q^tA$; (iii) $R=Q^{-1}A$ con $Q$ no cuadrada (no tiene inversa); (iv) confundir con la $R=Q^{-1}$ del cambio de base (tema 3.5).</p>
 </details>
 
-<details class="sol" id="ex-feb20b-pa"><summary>Feb. 2020 (tipo B, 1.ª sem.), problema a) — $QR$ de $\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\cr\frac1{\sqrt2}&0\cr0&0\end{pmatrix}$ (= Ej. 5.30 de U) <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B, 1.ª semana), problema a)">X Feb. 2020 (B) pb. a)</span></summary>
-  <p class="enun">Hallar la factorización $QR$ de la matriz $A=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\cr\frac1{\sqrt2}&0\cr0&0\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hallar la factorización $QR$ de la matriz $A=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\cr\frac1{\sqrt2}&0\cr0&0\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Las columnas ya son casi ortogonales: calcula sus normas y su producto escalar antes de aplicar Gram-Schmidt; puede ahorrarte pasos.</p></details>
+<details class="sol" id="ex-feb20b-pa"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2020 (tipo B, 1.ª sem.), problema a) — $QR$ de $\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\cr\frac1{\sqrt2}&0\cr0&0\end{pmatrix}$ (= Ej. 5.30 de U) <span class="src" data-l="X" data-ref="Feb. 2020 (tipo B, 1.ª semana), problema a)">X Feb. 2020 (B) pb. a)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Hallar la $QR$ de una $3\times2$.</dd>
     <dt>Qué se usa</dt><dd><b>Factorización $QR$:</b> si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt aplicado a las columnas) y $R=Q^tA$ triangular superior con diagonal positiva. $AX=B\iff RX=Q^tB$ (se resuelve hacia arriba).</dd>
@@ -1092,8 +1234,9 @@
 
 <h3 id="practicar-ex">Ejemplos propios con estos esquemas</h3>
 
-<details class="sol" id="ex-propio-A"><summary>Propio A — completar una ortogonal $2\times2$ con una entrada dada <span class="src" data-l="P" data-ref="Ejemplo propio; Teor. 5.5 y E Ej. 5.17">propio</span></summary>
-  <p class="enun">Halla <b>todas</b> las matrices ortogonales $A=\begin{pmatrix}\frac35&a\cr b&c\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halla <b>todas</b> las matrices ortogonales $A=\begin{pmatrix}\frac35&a\cr b&c\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La columna $(3/5,b)$ debe ser unitaria; con eso obtienes $b$ (dos signos). La segunda columna es unitaria y perpendicular a la primera.</p></details>
+<details class="sol" id="ex-propio-A"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio A — completar una ortogonal $2\times2$ con una entrada dada <span class="src" data-l="P" data-ref="Ejemplo propio; Teor. 5.5 y E Ej. 5.17">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Todas las ortogonales $2\times2$ con una entrada dada.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$.</dd>
@@ -1113,8 +1256,9 @@
   <div class="recipe"><b>Receta:</b> en $2\times2$ la columna que falta es la otra girada $\pm90^\circ$.</div>
 </details>
 
-<details class="sol" id="ex-propio-B"><summary>Propio B — una ortogonal $3\times3$: comprobar, invertir, coordenadas, valores propios <span class="src" data-l="P" data-ref="Ejemplo propio; U Teor. 5.5, 5.6, 5.3 y E Ej. 5.19, 5.27">propio</span></summary>
-  <p class="enun">Sea $A=\frac13\begin{pmatrix}2&-1&2\cr2&2&-1\cr-1&2&2\end{pmatrix}$. a) Comprueba que es ortogonal y da $A^{-1}$. b) Coordenadas de $x=(3,0,3)$ en la base ortonormal $\operatorname{Col}A$. c) Resuelve $AX=(1,1,1)^t$. d) Comprueba que conserva el producto escalar de $u=(1,2,3)$ y $v=(1,0,-1)$. e) $\det A$ y valores propios reales.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $A=\frac13\begin{pmatrix}2&-1&2\cr2&2&-1\cr-1&2&2\end{pmatrix}$. a) Comprueba que es ortogonal y da $A^{-1}$. b) Coordenadas de $x=(3,0,3)$ en la base ortonormal $\operatorname{Col}A$. c) Resuelve $AX=(1,1,1)^t$. d) Comprueba que conserva el producto escalar de $u=(1,2,3)$ y $v=(1,0,-1)$. e) $\det A$ y valores propios reales.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $A^tA$ primero: si es $I$, todo lo demás es inmediato ($A^{-1}=A^t$, coordenadas $x_i=x\cdot e_i$, $X=A^tB$) y los valores propios reales solo pueden ser $\pm1$.</p></details>
+<details class="sol" id="ex-propio-B"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio B — una ortogonal $3\times3$: comprobar, invertir, coordenadas, valores propios <span class="src" data-l="P" data-ref="Ejemplo propio; U Teor. 5.5, 5.6, 5.3 y E Ej. 5.19, 5.27">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Una ortogonal $3\times3$: comprobar, invertir, coordenadas, valores propios.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz ortogonal (Def. 5.9, U p.214):</b> $A$ ($m\times n$) con columnas ortonormales: $A^tA=I_n$. Si es cuadrada, $A^{-1}=A^t$, $\det A=\pm1$ y filas y columnas son bases ortonormales. Conserva el producto escalar y la norma: $(Ax)\bullet(Ay)=x\bullet y$. <b>Giros y simetrías:</b> ortogonal con $\det=1$ es giro (en $\mathbb R^3$: eje = vector propio de $\lambda=1$, ángulo por $\operatorname{tr}A=1+2\cos\theta$); con $\det=-1$ es simetría (respecto de un plano si $\operatorname{tr}A=1$) o simetría rotatoria.</dd>
@@ -1132,8 +1276,9 @@
   <div class="recipe"><b>Receta:</b> con una ortogonal todo es «trasponer»: inversa $A^t$, coordenadas $A^tx$, solución de $AX=B$ es $A^tB$.</div>
 </details>
 
-<details class="sol" id="ex-propio-C"><summary>Propio C — $QR$ de una $3\times3$ y sistema triangular <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.2.2 p. 218; E Ej. 5.23-5.24">propio</span></summary>
-  <p class="enun">Calcula la $QR$ de $A=\begin{pmatrix}1&3&5\cr2&3&1\cr2&0&1\end{pmatrix}$ y úsala para resolver $AX=(9,0,9)^t$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcula la $QR$ de $A=\begin{pmatrix}1&3&5\cr2&3&1\cr2&0&1\end{pmatrix}$ y úsala para resolver $AX=(9,0,9)^t$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Primero la $QR$ por Gram-Schmidt ($R=Q^tA$); luego $R\bar x=Q^t\bar b$ es un sistema triangular que se resuelve de abajo arriba.</p></details>
+<details class="sol" id="ex-propio-C"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio C — $QR$ de una $3\times3$ y sistema triangular <span class="src" data-l="P" data-ref="Ejemplo propio; U §5.2.2 p. 218; E Ej. 5.23-5.24">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>$QR$ de una $3\times3$ y sistema triangular.</dd>
     <dt>Qué se usa</dt><dd><b>Factorización $QR$:</b> si las columnas de $A$ son independientes, $A=QR$ con $Q$ de columnas ortonormales (Gram-Schmidt aplicado a las columnas) y $R=Q^tA$ triangular superior con diagonal positiva. $AX=B\iff RX=Q^tB$ (se resuelve hacia arriba).</dd>
@@ -1160,7 +1305,7 @@
 </ul>
 
 <!-- ============================ 11 ============================ -->
-<h2 id="chuleta"><span class="n">11</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">11</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
   <table>
@@ -1215,6 +1360,27 @@
   <span class="src" data-l="P" data-ref="Errores recopilados de E §5.2 y de las soluciones oficiales de los exámenes">propio</span>
 </div>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>¿Es ortogonal $A=\begin{pmatrix}1&1\\-1&1\end{pmatrix}$?</p>
+    <ul class="opts"><li>Sí, porque sus columnas son perpendiculares<span class="why">Son perpendiculares ($1-1=0$), pero de norma $\sqrt2$, no 1: falta la normalización.</span></li><li data-ok>No: las columnas son perpendiculares pero no unitarias ($A^tA=2I$)</li><li>No, porque sus columnas no son perpendiculares<span class="why">Sí lo son: $(1,-1)\cdot(1,1)=0$. Lo que falla es la norma.</span></li><li>Sí, porque $\det A\neq0$<span class="why">Que el determinante sea no nulo solo dice que es invertible; ortogonal exige $\det=\pm1$ y además $A^tA=I$.</span></li></ul>
+    <p class="fb">$A^tA=2I\neq I$. Dividiendo por $\sqrt2$ sí se obtiene una ortogonal.</p></div>
+  <div class="qp"><p>Una matriz ortogonal $3\times3$ tiene $\det=1$ y traza $-1$. ¿Qué es?</p>
+    <ul class="opts"><li>Un giro de $90^\circ$<span class="why">Para $90^\circ$, $\operatorname{tr}=1+2\cos90^\circ=1$.</span></li><li data-ok>Un giro de $180^\circ$ (simetría axial)</li><li>Una simetría respecto de un plano<span class="why">Esas tienen $\det=-1$; aquí $\det=+1$.</span></li><li>La identidad<span class="why">La identidad tiene traza 3.</span></li></ul>
+    <p class="fb">Con $\det=1$ es un giro y $-1=1+2\cos\theta$ da $\cos\theta=-1$: $\theta=180^\circ$.</p></div>
+  <div class="qp"><p>$A$ es ortogonal y $\|x\|=3$. ¿Cuánto vale $\|Ax\|$?</p>
+    <ul class="opts"><li data-ok>$3$</li><li>$9$<span class="why">Has elevado al cuadrado sin motivo: la norma se conserva, no se eleva.</span></li><li>Depende de $A$<span class="why">Toda ortogonal conserva la norma ($\|Ax\|^2=x^tA^tAx=x^tx$).</span></li><li>$\pm3$<span class="why">Una norma nunca es negativa.</span></li></ul>
+    <p class="fb">$\|Ax\|^2=x^tA^tAx=x^tx=\|x\|^2$, luego $\|Ax\|=3$.</p></div>
+  <div class="qp"><p>$A=\frac13\begin{pmatrix}2&-1&2\\2&2&-1\\-1&2&2\end{pmatrix}$ es ortogonal. La solución de $AX=(3,0,3)^t$ es…</p>
+    <ul class="opts"><li data-ok>$(1,1,4)^t$</li><li>$(3,0,3)^t$<span class="why">Eso sería con $A=I$. Hay que multiplicar por $A^t$.</span></li><li>$(1,0,1)^t$<span class="why">Dividir por 3 no basta: $X=A^tB$, no $B/3$.</span></li><li>$(2,2,-1)^t$<span class="why">Es una fila (columna) de $3A$, no la solución.</span></li></ul>
+    <p class="fb">$X=A^{-1}B=A^tB=\frac13(6-3,\,-3+6,\,6+6)=(1,1,4)^t$. Comprobación: $A(1,1,4)^t=(3,0,3)^t$.</p></div>
+  <div class="qp"><p>$A=\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$ ($3\times2$). ¿Es ortogonal?</p>
+    <ul class="opts"><li data-ok>Sí: $A^tA=I_2$, sus columnas son ortonormales</li><li>No, solo las matrices cuadradas pueden ser ortogonales<span class="why">La definición vale para $m\times n$: columnas ortonormales ($A^tA=I_n$).</span></li><li>No, porque $AA^t\neq I_3$<span class="why">Para una no cuadrada solo se exige $A^tA=I_n$; $AA^t=I_3$ es imposible (rango 2).</span></li><li>Sí, y además $A^t$ también es ortogonal<span class="why">$(A^t)^tA^t=AA^t\neq I_3$: la traspuesta de una ortogonal no cuadrada no es ortogonal.</span></li></ul>
+    <p class="fb">Las columnas $(1,0,0)$ y $(0,1,0)$ son ortonormales, luego es ortogonal. Pero $AA^t=\operatorname{diag}(1,1,0)\neq I_3$.</p></div>
+  <div class="qp"><p>¿Cuál de estos números puede ser valor propio real de una matriz ortogonal?</p>
+    <ul class="opts"><li>$2$<span class="why">Entonces $\|Ax\|=2\|x\|$, y una ortogonal conserva la norma.</span></li><li data-ok>$-1$</li><li>$\frac12$<span class="why">Encogería los vectores; las ortogonales conservan la norma.</span></li><li>$0$<span class="why">Una ortogonal es invertible ($\det=\pm1$), así que $0$ no puede ser valor propio.</span></li></ul>
+    <p class="fb">Los valores propios reales de una ortogonal cumplen $|\lambda|=1$, es decir, $\pm1$. $-I$ es ortogonal y tiene $\lambda=-1$.</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>
