@@ -113,9 +113,24 @@ def quiz(cfg):
     return '\n'.join(o)
 
 
+def motivacion(cfg, cuerpo):
+    """Pregunta motivadora tras cada <h2> de teoría (`motivacion: {id_seccion: texto}`) y consigna tras el encabezado de cada animación
+    (`consignas: [{animacion: texto del encabezado, consigna: …, pregunta: …}]`)."""
+    for sid, txt in (cfg.get('motivacion') or {}).items():
+        pat = re.compile(r'(<h2 id="%s"[^>]*>.*?</h2>)' % re.escape(sid), re.S)
+        assert pat.search(cuerpo), f'motivacion: no existe la sección {sid}'
+        cuerpo = pat.sub(lambda m: m.group(1) + f'\n<p class="motiva"><b>❓ Para empezar:</b> {txt}</p>', cuerpo, count=1)
+    for c in cfg.get('consignas') or []:
+        pat = re.compile(r'(<span class="h">[^<]*' + re.escape(c['animacion']) + r'[^<]*</span>)')
+        assert len(pat.findall(cuerpo)) == 1, f'consignas: «{c["animacion"]}» aparece {len(pat.findall(cuerpo))} veces'
+        extra = f' <b>Responde observando:</b> {c["pregunta"]}' if c.get('pregunta') else ''
+        cuerpo = pat.sub(lambda m: m.group(1) + f'\n  <p class="consigna"><b>🔎 Qué mirar:</b> {c["consigna"]}{extra}</p>', cuerpo, count=1)
+    return cuerpo
+
+
 def aplicar(cfg, cuerpo, ejs, tabla):
     """Devuelve (cfg con carcasa de la capa, cuerpo con las piezas insertadas)."""
-    cuerpo = con_vistas(cuerpo)
+    cuerpo = con_vistas(motivacion(cfg, cuerpo))
     pre = atascas(cfg) + esencial(cfg) + que_cae(cfg, ejs, tabla)
     t = tipos(cfg)
     if t:
