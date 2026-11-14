@@ -116,6 +116,7 @@
 
 <!-- ============================ 1 ============================ -->
 <h2 id="s1" data-vista="teoria"><span class="n">1</span>Determinantes de orden 2 y 3 <span class="src" data-l="U" data-ref="U §1.3, p. 23">U p.23</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Dos vectores de $\mathbb R^2$ forman un paralelogramo. ¿Existe un único número, calculado solo con sus coordenadas, que diga cuánto área encierran y, de paso, si los vectores están alineados? ¿Y con tres vectores de $\mathbb R^3$?</p>
 
 <div class="box def"><span class="h">Definición</span>
   <p>Si $A$ es una matriz cuadrada de orden $n$, su <b>determinante</b> es un número real, denotado $\det(A)$ o $|A|$. El determinante <b>solo está definido para matrices cuadradas</b>: si $A$ no es cuadrada, «$\det A$» no existe (no es que valga 0, es que la expresión no tiene sentido).</p>
@@ -130,12 +131,14 @@
 </div>
 
 <div class="box ex"><span class="h">Interactivo: el determinante $2\times2$ es un área con signo</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Mueve los vectores del paralelogramo y fíjate en el valor del determinante y en el área sombreada. Lleva un vector hasta alinearlo con el otro, o cámbialos de orden. <b>Responde observando:</b> ¿Qué valor toma el determinante cuando los vectores quedan sobre la misma recta? ¿Y qué le ocurre al signo si intercambias los dos vectores?</p>
   <p>Las columnas de $A$ son dos vectores $u$ y $v$. El determinante $ad-bc$ es el <b>área del paralelogramo</b> que forman, con signo según la orientación. Mueve los deslizadores: verás que $\det=0$ justo cuando $u$ y $v$ quedan alineados (matriz no invertible).</p>
   <div class="anim-area" data-v="2,1,0,2"></div>
   <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
 </div>
 
 <div class="box ex"><span class="h">Interactivo 3D: el determinante $3\times3$ es un volumen</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Gira la escena y modifica los tres vectores. Fíjate en el paralelepípedo que forman y en el valor del determinante, sobre todo cuando uno de los vectores cae en el plano de los otros dos. <b>Responde observando:</b> ¿Qué pasa con el volumen cuando los tres vectores son coplanarios? Con los vectores iniciales, ¿cuánto vale el determinante?</p>
   <p>Igual que el $2\times2$ era un área, el determinante de una matriz $3\times3$ es el <b>volumen con signo</b> del paralelepípedo que forman sus columnas. Si $\det=0$ el paralelepípedo se aplasta en un plano. Gira la figura y prueba los casos.</p>
   <div class="d3-vect" data-modo="det" data-u="2,0,0" data-v="1,2,0" data-w="0,1,3"></div>
   <span class="src" data-l="P" data-ref="Figura 3D propia (componente assets/tres-d.js, three.js)">P</span>
@@ -155,6 +158,7 @@
 
 <!-- ============================ 2 ============================ -->
 <h2 id="s2" data-vista="teoria"><span class="n">2</span>Desarrollo por adjuntos (o por cofactores) <span class="src" data-l="U" data-ref="U §1.3, p. 24">U p.24</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Calcular a mano un determinante $4\times4$ parece una pesadilla. ¿Se podrá reducirlo a varios determinantes más pequeños, y elegir por dónde empezar para que casi todos se anulen?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Sarrus solo funciona para $3\times3$. Para calcular un determinante de cualquier orden $n$, se «baja» el problema a $n$ determinantes de orden $n-1$: se elige una fila (o columna), y por cada elemento de esa fila se calcula el determinante que queda al tachar su fila y su columna (el <b>menor complementario</b>), con un signo que alterna en tablero de ajedrez. Se llama <b>desarrollo por adjuntos</b> (o por cofactores).</p>
@@ -162,6 +166,7 @@
 </div>
 
 <div class="box ex"><span class="h">Animación: desarrollo por adjuntos paso a paso</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Avanza paso a paso el desarrollo por una fila y luego por otra o por una columna. Fíjate en el signo de cada adjunto y en cómo cada término es un elemento por un determinante $2\times2$. <b>Responde observando:</b> ¿Sale el mismo resultado desarrollando por cualquier fila o columna? ¿Qué fila o columna te habría ahorrado más cuentas?</p>
   <p>Se elige una fila o columna; para cada elemento se tacha su fila y su columna (gris), se calcula el determinante $2\times2$ que queda (el <b>menor</b>, en azul) y se multiplica por el signo del «tablero de ajedrez». Prueba con distintas líneas: el resultado no cambia, pero con una línea con ceros hay menos trabajo.</p>
   <div class="anim-adj" data-m="2,1,3;0,-1,4;1,2,1"></div>
   <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
@@ -200,6 +205,7 @@
 
 <!-- ============================ 3 ============================ -->
 <h2 id="s3" data-vista="teoria"><span class="n">3</span>Permutaciones y la fórmula de Leibniz <span class="src" data-l="U" data-ref="U §1.3, p. 24-26">U p.24-26</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Con $n=3$ el determinante tiene $6$ sumandos, y con $n=10$ más de tres millones. ¿De dónde sale exactamente esa cuenta, y por qué cada sumando lleva un signo $+$ o $-$ que parece caprichoso?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva antes de la definición formal</span>
   <p>Piensa en un determinante $n\times n$ como una manera de <b>elegir un elemento de cada fila y de cada columna, sin repetir ninguna columna</b>, multiplicarlos todos, y sumar (con signo) sobre <b>todas las formas posibles</b> de hacer esa elección. En $2\times2$ solo hay dos formas de elegir «un elemento por fila y por columna sin repetir»: la diagonal principal $(a_{11},a_{22})$ y la diagonal secundaria $(a_{12},a_{21})$; por eso la fórmula tiene dos términos, uno con $+$ y otro con $-$. En $3\times3$ hay $3!=6$ formas, que son justamente los 6 términos de Sarrus. El «signo» de cada elección se llama <b>signo de la permutación</b> y depende solo de cómo estén desordenadas las columnas elegidas, no de los valores $a_{ij}$.</p>
@@ -253,12 +259,14 @@
 
 <!-- ============================ 4 ============================ -->
 <h2 id="s4" data-vista="teoria"><span class="n">4</span>Regla de Sarrus <span class="src" data-l="U" data-ref="U §1.3, p. 26">U p.26</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Para matrices $3\times3$ existe un truco visual con diagonales que da el determinante sin desarrollar nada. ¿Cómo funciona, y por qué falla si lo intentas con una matriz $4\times4$?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Sarrus es un atajo visual para no tener que pensar en las 6 permutaciones de $S_3$: se repiten las dos primeras <b>filas debajo</b> de la matriz (también vale copiar las dos primeras columnas a la derecha: salen los mismos seis productos) y se suman los productos de las tres «diagonales» que bajan (con $+$) y se restan los de las tres que suben (con $-$).</p>
 </div>
 
 <div class="box ex"><span class="h">Cómo funciona, paso a paso (animación)</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Avanza con los pasos y fíjate en qué productos se suman (diagonales que bajan) y cuáles se restan (diagonales que suben). Cambia un número de la matriz y mira qué productos cambian. <b>Responde observando:</b> ¿Qué pasa con el determinante si dos filas son iguales? Pruébalo en la animación.</p>
   <p>Pulsa <b>Reproducir</b> o avanza con <b>Siguiente</b>. Verás cómo se copian debajo las dos primeras filas, cómo se trazan las tres diagonales que bajan (azul, suman) y las tres que suben (naranja, restan), y cómo se obtiene el determinante. <b>Puedes cambiar los números de la matriz</b> para practicar con otros.</p>
   <noscript><p><i>(Esta animación necesita JavaScript. Texto equivalente: se copian las filas 1 y 2 debajo de la matriz; se suman los productos de las tres diagonales descendentes y se restan los de las tres ascendentes.)</i></p></noscript>
   <div class="sarrus-demo" data-m="2,1,3,0,-1,4,1,2,1"></div>
@@ -287,6 +295,7 @@
 
 <!-- ============================ 5 ============================ -->
 <h2 id="s5" data-vista="teoria"><span class="n">5</span>Propiedades del determinante <span class="src" data-l="U" data-ref="U §1.3, p. 26">U p.26</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Si multiplicas una fila entera por $3$, ¿qué le pasa al determinante? ¿Y si dos filas son iguales, o si traspones la matriz? Conocer estas reglas ahorra muchísimos cálculos.</p>
 
 <div class="box thm"><span class="h">Propiedades básicas</span>
   <ol>
@@ -312,6 +321,7 @@
 
 <!-- ============================ 6 ============================ -->
 <h2 id="s6" data-vista="teoria"><span class="n">6</span>Efecto de las operaciones elementales en el determinante <span class="src" data-l="U" data-ref="U §1.3, p. 27">U p.27</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Gauss escalona una matriz con operaciones elementales, pero esas operaciones alteran la matriz. ¿Cuáles cambian el determinante, cuáles no, y cómo aprovechar eso para calcular determinantes grandes escalonando?</p>
 
 <div class="box intu"><span class="h">Aviso importante: aquí SÍ cambia (salvo un caso)</span>
   <p>En el <a href="tema_1_2_algebra_matricial.html#s8">Tema 1.2</a> usábamos las tres operaciones elementales por filas para escalonar, sin preocuparnos de si «cambiaban» la matriz: el objetivo era llegar a una forma más simple equivalente. Aquí, en cambio, cada operación tiene un <b>efecto medible y distinto</b> sobre el determinante, y hay que llevar la cuenta de ese efecto para poder calcular $\det A$ a partir de una escalonada de $A$ (que es triangular, y por tanto su determinante es inmediato por la propiedad 2 del §5).</p>
@@ -360,6 +370,7 @@
 
 <!-- ============================ 7 ============================ -->
 <h2 id="s7" data-vista="teoria"><span class="n">7</span>Determinante, regularidad, rango e inversa <span class="src" data-l="U" data-ref="U §1.3, p. 27-28">U p.27-28</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> ¿Cómo saber, sin intentar invertirla, si una matriz tiene inversa? Y si la tiene, ¿hay una fórmula directa para sus entradas? ¿Qué relación guarda el determinante con el rango?</p>
 
 <div class="box thm"><span class="h">Regularidad</span>
   <p>$A$ (cuadrada de orden $n$) es <b>regular</b> $\iff$ $\det(A)\neq0$. Enlaza con el Tema 1.2: $A$ regular $\iff\operatorname{rang}(A)=n$ (U p.22), así que también $\det(A)\neq0\iff\operatorname{rang}(A)=n$.</p>

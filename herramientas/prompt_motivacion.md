@@ -11,8 +11,8 @@ Para que alguien que ve el tema por primera vez entienda **para qué sirve** cad
    `ejercicios` ni `examenes`). 1-2 frases, 20-420 caracteres: una situación concreta o un problema que el apartado va a resolver
    («¿Cuántos vectores hacen falta para describir todo un plano? ¿Y cuántos sobran?»). Sin dar la respuesta ni la definición; que genere curiosidad
    y use un ejemplo en $\mathbb R^2$/$\mathbb R^3$, una analogía o un caso numérico mínimo cuando ayude. Lenguaje llano, como en una academia.
-2. `consignas`: una por **cada animación o interactivo** del tema (cajas cuyo encabezado `<span class="h">` contiene «Animación» o «Interactivo»;
-   búscalas con `grep -n 'class="h">.*\(Animaci\|Interactivo\)' datos/X_Y/secciones/*.html`). Cada una:
+2. `consignas`: una por **cada animación o interactivo** del tema (cajas cuyo encabezado `<span class="h">` contiene «animación», «interactivo» o «laboratorio» (sin distinguir mayúsculas);
+   búscalas con `grep -n 'class="h">.*\(nimaci\|nteractivo\|aboratorio\)' datos/X_Y/secciones/*.html`). Cada una:
    - `animacion`: un trozo del texto del encabezado que **aparezca una sola vez** en el tema;
    - `consigna`: «Mueve/cambia … y fíjate en …» (1-2 frases, concreta: qué tocar y qué observar; lee el HTML/`data-*` del componente para saber qué hace);
    - `pregunta` (opcional): una pregunta que se responde observando.

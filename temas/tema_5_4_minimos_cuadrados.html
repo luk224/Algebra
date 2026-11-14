@@ -129,6 +129,7 @@
 
 <!-- ============================ 1 ============================ -->
 <h2 id="s1" data-vista="teoria"><span class="n">1</span>El problema: un sistema sin solución y la mejor aproximación <span class="src" data-l="U" data-ref="U §5.4.2, Definiciones 5.14-5.15 y Ejemplo 5.35, p. 226-228">U p.226-228</span> <span class="src" data-l="L" data-ref="Lay §6.5, definición, p. 360">L p.360</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Mides tres veces la misma cantidad y obtienes 1, 0 y $-5$ en vez de un único valor: el sistema $x=1,\ x=0,\ y=-5$ de tres ecuaciones no puede cumplirse a la vez. Si no hay solución exacta, ¿qué significa «la menos mala» y cómo se mide lo mala que es?</p>
 
 <div class="box intu"><span class="h">Idea: qué vectores sabe fabricar $A$</span>
   <p>Multiplicar $A$ por un vector $x$ es <b>mezclar las columnas</b> de $A$: $Ax=x_1C_1+\dots+x_nC_n$. Si $A$ es de $3\times2$, todo lo que $A$ puede fabricar son combinaciones de dos vectores de $\mathbb R^3$: un <b>plano</b> que pasa por el origen, $\langle\operatorname{Col}A\rangle$. Resolver $Ax=b$ es preguntar «¿está $b$ en ese plano?». Si $b$ se sale del plano, no hay solución. Entonces, el mejor «sustituto» es el punto del plano <b>más cercano</b> a $b$: el pie de la plomada que bajas desde $b$ hasta el plano. Ese punto es $\operatorname{Proy}_{\langle\operatorname{Col}A\rangle}b$ (tema 5.1) y la $x_0$ que lo fabrica es la solución por mínimos cuadrados.</p>
@@ -170,6 +171,7 @@
 <figure class="bookfig"><img src="../assets/img/fig_l_6_5_fig1.png" alt="Dibujo de Lay: el plano Col A, el vector b fuera de él, su proyección A x-gorro con un cuadradito de ángulo recto y otros dos puntos Ax más lejos de b" loading="lazy"><figcaption>El punto $A\hat x$ (la proyección) es el del plano $\operatorname{Col}A$ más cercano a $\mathbf b$; cualquier otro $A\mathbf x$ queda más lejos (Lay, Figura 1, §6.5). <span class="src" data-l="L" data-ref="Lay §6.5, Figura 1, p. 360">L p.360</span></figcaption></figure>
 
 <div class="box ex"><span class="h">Animación 3D: $b$ fuera del plano $\operatorname{Col}A$, su proyección y el residuo perpendicular</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Elige distintos presets y mueve los deslizadores del punto de prueba $A\mathbf x$ alrededor de $\hat x$. Fíjate en el segmento rojo $\mathbf b-A\hat x$, que forma ángulo recto con el plano, y en la distancia del punto de prueba a $\mathbf b$. <b>Responde observando:</b> ¿Hay algún punto de prueba que quede más cerca de $\mathbf b$ que la proyección $A\hat x$?</p>
   <div class="d3-minimos" data-a1="1,0,1" data-a2="0,1,1" data-b="1,1,3"></div>
   <span class="src" data-l="P" data-ref="Animación propia (assets/tres-d.js, d3-minimos); presets con el ejemplo propio P1, E 5.37, Feb. 2023 (A) ej. 8 y U Ej. 5.36">P</span>
 </div>
@@ -192,6 +194,7 @@
 
 <!-- ============================ 2 ============================ -->
 <h2 id="s2" data-vista="teoria"><span class="n">2</span>Las ecuaciones normales: cómo se calcula <span class="src" data-l="U" data-ref="U §5.4.2, ecuaciones normales y caracterizaciones, p. 228-229">U p.228-229</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 13, p. 361">L p.361</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Ya sabes que la mejor aproximación es un punto del plano $\operatorname{Col}A$ que queda «a plomo» bajo $\mathbf b$. ¿Se puede convertir esa condición geométrica en un sistema de ecuaciones cuadrado que resuelvas con Gauss, sin dibujar nada?</p>
 
 <div class="box intu"><span class="h">Idea: «perpendicular al plano» = «perpendicular a cada columna»</span>
   <p>El residuo $b-Ax_0$ tiene que ser perpendicular al plano. Un vector es perpendicular a un plano si y solo si es perpendicular a <b>cada vector que lo genera</b>, es decir, a cada columna. Escribir «el residuo es perpendicular a la columna $C_i$» es $C_i^t(b-Ax_0)=0$. Apilando las $n$ condiciones, las filas $C_i^t$ forman justamente la matriz $A^t$, y queda una sola ecuación matricial. Y esa ecuación ya no habla de proyecciones: es un sistema de ecuaciones normal y corriente, de $n$ ecuaciones con $n$ incógnitas.</p>
@@ -249,6 +252,7 @@
 
 <!-- ============================ 3 ============================ -->
 <h2 id="s3" data-vista="teoria"><span class="n">3</span>¿Es única? Columnas independientes y dependientes <span class="src" data-l="U" data-ref="U §5.4.2, caracterización de la unicidad, p. 229 y Ejemplo 5.39, p. 231-232">U p.229-232</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 14, p. 363">L p.363</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Dos personas resuelven el mismo problema de mínimos cuadrados y entregan soluciones $\hat x$ distintas, y las dos tienen razón. ¿Cuándo puede pasar eso, y qué propiedad de las columnas de $A$ lo impide?</p>
 
 <div class="box thm"><span class="h">Caracterización de la unicidad</span>
   <p>Para $A$ de $m\times n$ son equivalentes:</p>
@@ -289,6 +293,7 @@
 
 <!-- ============================ 4 ============================ -->
 <h2 id="s4" data-vista="teoria"><span class="n">4</span>Con la factorización $QR$ <span class="src" data-l="U" data-ref="U §5.4.2, «Solución por mínimos cuadrados a partir de la factorización QR» y Ejemplo 5.40, p. 232-233">U p.232-233</span> <span class="src" data-l="L" data-ref="Lay §6.5, Teorema 15, p. 365">L Teor. 15 p.365</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Las ecuaciones normales exigen calcular $A^tA$ y su inversa, y eso es costoso y delicado con números grandes. Si ya tienes ortogonalizadas las columnas de $A$, ¿se puede llegar a $\hat x$ resolviendo un sistema mucho más fácil?</p>
 
 <div class="box intu"><span class="h">Idea: ¿para qué otra vía?</span>
   <p>Las ecuaciones normales exigen multiplicar $A^tA$, que puede ser engorroso (y numéricamente delicado, avisa Lay en p.364). Si ya tienes $A=QR$ (tema 5.2), $Q$ tiene columnas <b>ortonormales</b>: la proyección sobre $\langle\operatorname{Col}Q\rangle$ es trivial y el sistema que queda es <b>triangular</b>, que se resuelve de abajo arriba sin invertir nada.</p>
@@ -320,6 +325,7 @@
 
 <!-- ============================ 5 ============================ -->
 <h2 id="s5" data-vista="teoria"><span class="n">5</span>Modelos lineales: ajustar una recta, una parábola o un plano <span class="src" data-l="U" data-ref="U §5.4.3 Aplicación a modelos lineales, p. 233-238">U p.233-238</span> <span class="src" data-l="L" data-ref="Lay §6.6 Aplicaciones a modelos lineales, p. 368-371">L p.368-371</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Tienes cuatro mediciones $(x_i,y_i)$ que casi, pero no del todo, caen en una recta, y quieres predecir $y$ para un $x$ nuevo. ¿Cómo se traduce «la recta que mejor se ajusta» en un sistema $AX=B$, y se puede ajustar también una parábola o un plano?</p>
 
 <div class="box intu"><span class="h">Idea: la recta que «menos falla»</span>
   <p>Tienes datos medidos $(x_i,y_i)$ que casi parecen alineados, pero no del todo. Quieres la recta $y=mx+n$ que mejor los describa. Si esa recta pasara por <b>todos</b> los puntos se cumpliría $mx_i+n=y_i$ para cada $i$: un sistema con una ecuación por dato y solo <b>dos incógnitas, $m$ y $n$</b>. Casi siempre es incompatible, y la solución por mínimos cuadrados es la recta que hace mínima la suma de los <b>cuadrados de los errores verticales</b> $e_i=y_i-(mx_i+n)$. Ojo con los papeles: las <b>incógnitas</b> son $m$ y $n$; los $x_i,y_i$ son datos (números), y van en la matriz $A$ y en $B$.</p>
@@ -349,6 +355,7 @@
 <figure class="bookfig"><img src="../assets/img/fig_u_5_4_fig55.png" alt="Figura 5.5 de U: cuatro puntos marcados con una cruz, la recta de mínimos cuadrados y un segmento vertical entre un valor observado y el valor estimado" loading="lazy"><figcaption>Los cuatro puntos del Ejemplo 5.41 y su recta. El segmento negro es el error de un dato (valor observado menos valor estimado); la recta hace mínima la suma de los cuadrados de estos segmentos. <span class="src" data-l="U" data-ref="U §5.4.3, Figura 5.5, p. 235">U Fig. 5.5 p.235</span></figcaption></figure>
 
 <div class="box ex"><span class="h">Animación: recta de mínimos cuadrados con puntos editables</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Arrastra o edita los puntos (o prueba los presets) y observa los segmentos naranjas de error y el control $\sum e_i=0$, $\sum x_ie_i=0$. Después mueve los deslizadores $\Delta m$, $\Delta n$ de la recta de prueba y mira cómo cambia su error frente al de la recta azul. <b>Responde observando:</b> ¿Puedes encontrar una recta cuyo error sea menor que el de la recta de mínimos cuadrados? ¿Y qué avisa la animación si todos los $x_i$ coinciden?</p>
   <div class="anim-minimos" data-p="2,3;4,2;5,1;7,0.5"></div>
   <span class="src" data-l="P" data-ref="Animación propia (assets/animaciones.js, anim-minimos); presets con U Ej. 5.41, E 5.40, Lay §6.6 Ej. 1, ejemplo propio P2 y E 5.44 D">P</span>
 </div>

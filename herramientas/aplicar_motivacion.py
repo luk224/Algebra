@@ -24,7 +24,10 @@ def aplicar(codigo, escribir=True):
     d = D.carpeta(codigo)
     f = d / 'motivacion_propuesta.yaml'
     if not f.exists(): sys.exit(f'{codigo}: falta {f.relative_to(D.RAIZ)}')
-    prop = yaml.safe_load(f.read_text(encoding='utf8'))
+    txt = f.read_text(encoding='utf8')
+    # `animacion: Interactivo: …` sin comillas rompe el YAML (dos puntos): se convierte en bloque literal
+    txt = re.sub(r'^(\s*)- animacion: (?![|>"\'])(.+)$', lambda m: f'{m.group(1)}- animacion: |-\n{m.group(1)}    {m.group(2).rstrip()}', txt, flags=re.M)
+    prop = yaml.safe_load(txt)
     cfg = yaml.safe_load((d / 'tema.yaml').read_text(encoding='utf8'))
     cuerpo = ''.join(x.read_text(encoding='utf8') for x in sorted((d / 'secciones').glob('*.html')))
     err = []
@@ -36,8 +39,10 @@ def aplicar(codigo, escribir=True):
         if not isinstance(v, str) or not 20 <= len(v.strip()) <= 420: err.append(f'motivacion[{k}]: entre 20 y 420 caracteres')
     falta = [s for s in teoria if s not in mot and s not in ('prereq', 'chuleta')]
     if falta: err.append('faltan preguntas para las secciones: ' + ', '.join(falta))
-    anim = re.findall(r'<span class="h">([^<]*(?:Animaci|Interactivo)[^<]*)</span>', cuerpo)
-    cons = prop.get('consignas') or []
+    anim = re.findall(r'<span class="h">([^<]*(?:animaci|interactivo|laboratorio)[^<]*)</span>', cuerpo, re.I)
+    anim = [x for x in anim if not re.match(r'\s*Qué mirar', x)]   # las cajas «Qué mirar en la animación» son guías, no animaciones
+    cons = [c for c in (prop.get('consignas') or []) if not str(c.get('animacion', '')).lstrip().startswith('Qué mirar')]
+    prop['consignas'] = cons
     for c in cons:
         n = sum(1 for a in anim if c.get('animacion', '\0') in a)
         if n != 1: err.append(f'consigna «{str(c.get("animacion"))[:40]}»: coincide con {n} encabezados de animación (debe ser 1)')

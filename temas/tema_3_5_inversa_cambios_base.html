@@ -137,6 +137,7 @@
 
 <!-- ============================ 1 ============================ -->
 <h2 id="s1" data-vista="teoria"><span class="n">1</span>La idea: un vector, varios nombres <span class="src" data-l="U" data-ref="U §3.5.2, Cambio de coordenadas, p. 131-132">U p.131-132</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Un amigo te da la posición de un tesoro como «3 pasos al este y 1 al norte», pero otro usa como ejes las diagonales del mapa. ¿Cómo puede ser la misma flecha y que cada uno escriba números distintos?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva: las bases son idiomas</span>
   <p>Una distancia de «un kilómetro» y otra de «0,62 millas» son <b>la misma</b> distancia dicha en dos unidades; el número cambia, la distancia no. Con los vectores pasa igual: el vector $x=(3,1)$ del plano es <b>una flecha concreta</b>. Con la base canónica, la describes con «3 pasos en $e_1$ y 1 en $e_2$». Con otra base $B'=\{(1,1),(-1,1)\}$ la describes como «2 pasos en $(1,1)$ y $-1$ paso en $(-1,1)$», es decir $x=(2,-1)_{B'}$, porque $2(1,1)-1(-1,1)=(3,1)$. Los dos pares de números, $(3,1)$ y $(2,-1)$, son <b>el mismo vector</b> en dos idiomas.</p>
@@ -154,6 +155,7 @@
 
 <!-- ============================ 2 ============================ -->
 <h2 id="s2" data-vista="teoria"><span class="n">2</span>Cambio de coordenadas: la matriz $Q$ <span class="src" data-l="U" data-ref="U §3.5.2, Def. 3.14, Ejemplos 3.28-3.30, p. 132-134">U p.132-134</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Conoces las coordenadas de un vector en una base «nueva» $B'$ formada por $u=(1,1)$ y $v=(-1,1)$, y quieres saber dónde cae en la canónica. ¿Existe una sola matriz que haga esa traducción para cualquier vector, y cómo se construye con $u$ y $v$?</p>
 
 <div class="box def"><span class="h">Definición 3.14 — ecuaciones de cambio de coordenadas de $B'$ a $B$</span>
   <p>Sean $B=\{e_1,\dots,e_n\}$ y $B'=\{e'_1,\dots,e'_n\}$ bases de $V$. Las ecuaciones de cambio de coordenadas de $B'$ a $B$ son
@@ -206,6 +208,7 @@
 
 
 <div class="box ex"><span class="h">Animación: un vector, dos descripciones (cambio de coordenadas en $\mathbb R^2$)</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Mueve los deslizadores de $x$ y fíjate en cómo cambian a la vez sus coordenadas en la base canónica y en $B'$ mientras la flecha es siempre la misma. Después pulsa «Base singular» y observa qué pasa con la rejilla de $B'$. <b>Responde observando:</b> ¿Por qué si $u$ y $v$ son proporcionales no se puede describir todo el plano con la base nueva?</p>
   <p>La base nueva es $B'=\{u,v\}$ con $u=(1,1)$ y $v=(-1,1)$ (escritos en la canónica). El vector $x=(3,1)$ es siempre <b>la misma flecha</b>; la animación muestra las coordenadas que le da cada base ($(3,1)$ en la canónica y $(2,-1)$ en $B'$), con la matriz $Q=\begin{pmatrix}1&-1\cr1&1\end{pmatrix}$ (columnas $u$ y $v$). Edita las entradas de $Q$ (sus columnas son $u$ y $v$), mueve $x$ con los deslizadores o pulsa «Base singular ($u\parallel v$)» para ver que si $u$ y $v$ son proporcionales no hay base.</p>
   <div class="anim-cambio" data-u="1,1" data-v="-1,1" data-x="3,1"></div>
   <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-cambio); u=(1,1), v=(-1,1), x=(3,1)">P</span>
@@ -221,6 +224,7 @@
 
 <!-- ============================ 3 ============================ -->
 <h2 id="s3" data-vista="teoria"><span class="n">3</span>El sentido contrario: la matriz inversa <span class="src" data-l="U" data-ref="U §3.5.3, p. 135 (cambio inverso y regularidad); Autoevaluación del cap. 3, ítems 8 y 9, p. 137-138, soluciones p. 311">U p.135</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Si una matriz traduce de la base nueva a la antigua, ¿cómo se traduce de vuelta, de la antigua a la nueva? ¿Siempre se puede deshacer la traducción, o hay bases para las que no existe ese camino de vuelta?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Si $Q$ traduce del idioma nuevo al antiguo, ¿cómo traducir del antiguo al nuevo? <b>Deshaciendo</b> lo que hace $Q$. «Deshacer» una matriz es multiplicar por su inversa. Y esto siempre es posible, porque un diccionario entre dos bases no pierde información: dos vectores distintos tienen descripciones distintas en cualquier base.</p>
@@ -251,6 +255,7 @@
 </div>
 
 <div class="box ex"><span class="h">Animación: matriz inversa por Gauss-Jordan (cambio de base $\mathbb R^2$)</span>
+  <p class="consigna"><b>🔎 Qué mirar:</b> Avanza paso a paso las operaciones por filas de $(Q\mid I)$ y fíjate en cómo el bloque de la izquierda se convierte en $I$ mientras el de la derecha se convierte en $Q^{-1}$. Prueba luego con una matriz de columnas proporcionales usando «✎». <b>Responde observando:</b> ¿Qué ocurre en el proceso cuando las columnas son proporcionales, y qué dice eso sobre si hay cambio de vuelta?</p>
   <p>Para el cambio de la animación anterior, $Q=\begin{pmatrix}1&-1\cr1&1\end{pmatrix}$, la inversa es $Q^{-1}=\tfrac12\begin{pmatrix}1&1\cr-1&1\end{pmatrix}$ (cambio de la canónica a $B'$): $x_{B'}=Q^{-1}(3,1)^t=(2,-1)$. (En la animación, $A$ es nuestra $Q$.) Sigue las operaciones por filas $(Q\mid I)\sim(I\mid Q^{-1})$ y edita la matriz con «✎» para probar con las de los ejercicios.</p>
   <div class="anim-gauss" data-modo="inversa" data-m="1,-1;1,1"></div>
   <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-gauss modo inversa); Q=[[1,-1],[1,1]]">P</span>
@@ -280,6 +285,7 @@
 
 <!-- ============================ 4 ============================ -->
 <h2 id="s4" data-vista="teoria"><span class="n">4</span>La matriz de una aplicación lineal al cambiar las bases <span class="src" data-l="U" data-ref="U §3.5.3, Def. 3.15 y Ejemplo 3.31, p. 135-137">U p.135-137</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Una aplicación lineal tiene una matriz $A$ cuando usas ciertas bases, pero tú prefieres trabajar con otras. ¿Cómo reescribir la matriz de la misma aplicación sin volver a calcular las imágenes una a una?</p>
 
 <div class="box intu"><span class="h">Idea intuitiva: el «rodeo» por las bases antiguas</span>
   <p>Conoces la matriz $A$ de $f$ con las bases antiguas ($B$ en $V$, $S$ en $W$) y quieres la de las bases nuevas ($B'$, $S'$). Recibes un vector en idioma «nuevo» de $V$. Lo <b>traduces</b> al antiguo ($Q$), <b>aplicas $f$</b> con la matriz que ya conoces ($A$) y obtienes la imagen en el idioma antiguo de $W$; por último la <b>traduces</b> al idioma nuevo de $W$ ($P^{-1}$). Las matrices se leen <b>de derecha a izquierda</b>: lo que actúa primero va a la derecha.</p>
@@ -358,6 +364,7 @@ Dos matrices relacionadas así, $A'=Q^{-1}AQ$ con $Q$ regular, se llaman <b>seme
 
 <!-- ============================ 5 ============================ -->
 <h2 id="s5" data-vista="teoria"><span class="n">5</span>Anticipo: aplicación inversa <span class="src" data-l="P" data-ref="Explicación propia. Base: U p.131 (objetivo) y p.311 (ítem 8), Def. 3.12 p.126">propio</span></h2>
+<p class="motiva"><b>❓ Para empezar:</b> Si una matriz $A$ representa una transformación, ¿cuándo existe otra transformación que la deshaga exactamente? ¿Qué le pasaría a un vector que $A$ manda al cero?</p>
 
 <div class="box intu"><span class="h">Idea</span>
   <p>Una matriz cuadrada regular $A$ puede verse como una matriz de cambio de base: sus columnas son una base $B'$ y $A$ es el diccionario «$B'\to$ canónica». Entonces $A^{-1}$ es el diccionario contrario, y la aplicación $g$ con matriz $A^{-1}$ <b>deshace</b> la aplicación $f$ con matriz $A$: $f\circ g=g\circ f=\mathrm{id}$ (la matriz de la composición es $AA^{-1}=A^{-1}A=I$, Def. 3.12). Eso se llama la <b>aplicación inversa</b> $f^{-1}$.</p>
