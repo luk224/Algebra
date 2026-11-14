@@ -1,0 +1,625 @@
+- id: ej1-21
+  clase: libro
+  titulo: |-
+    Ejercicio 1.21
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.21, p. 23
+    texto: |-
+      E p.23
+  cuerpo:
+  - enun: |-
+      Calcúlese el determinante de la matriz $A$ de filas $(1,2,m,4)$, $(3,2,1,m)$, $(0,1,4,0)$ y $(3m,5,1,2)$ mediante el desarrollo de la columna $C_4$, siendo $m\in\mathbb R$.
+  - pasos:
+    - |-
+      $A=\begin{pmatrix}1&2&m&4\\3&2&1&m\\0&1&4&0\\3m&5&1&2\end{pmatrix}$. Desarrollo por $C_4$: $|A|=a_{14}A_{14}+a_{24}A_{24}+a_{34}A_{34}+a_{44}A_{44}$, con $A_{i4}=(-1)^{i+4}M_{i4}$.
+    - |-
+      $a_{14}=4$, $a_{24}=m$, $a_{34}=0$, $a_{44}=2$; signos $(-1)^{i+4}$: $-,+,-,+$. Como $a_{34}=0$, no hace falta calcular $A_{34}$.
+    - |-
+      $M_{14}=\begin{vmatrix}3&2&1\\0&1&4\\3m&5&1\end{vmatrix}=21m-57$ (Sarrus), así que $A_{14}=57-21m$.
+    - |-
+      $M_{24}=\begin{vmatrix}1&2&m\\0&1&4\\3m&5&1\end{vmatrix}=-3m^2+24m-19=A_{24}$.
+    - |-
+      $M_{44}=\begin{vmatrix}1&2&m\\3&2&1\\0&1&4\end{vmatrix}=3m-17=A_{44}$.
+    - |-
+      Suma: $4(57-21m)+m(-3m^2+24m-19)+2(3m-17)=228-84m-3m^3+24m^2-19m+6m-34$.
+  - html: |-
+      <p>$$\boxed{|A|=-3m^3+24m^2-97m+194}$$ (comprobado desarrollando también por $F_3$, que también tiene dos ceros, y con sympy: coincide).</p>
+  - receta: |-
+      desarrolla por la fila o columna que te pidan (o la que tenga más ceros); escribe primero el tablero de signos $(-1)^{i+j}$ y calcula solo los menores cuyo elemento no es 0.
+  - error: |-
+      olvidar el signo $(-1)^{i+j}$ del adjunto (aquí, el $-$ de $A_{14}$), o confundir el menor $M_{ij}$ con el adjunto $A_{ij}$.
+- id: ej1-22
+  clase: libro
+  titulo: |-
+    Ejercicio 1.22
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.22, p. 23
+    texto: |-
+      E p.23
+  cuerpo:
+  - enun: |-
+      Si $a_{15}a_{2i}a_{3j}a_{42}a_{53}$ es un término del desarrollo de un determinante de orden 5, dicho término debe llevar signo negativo cuando $(i,j)$ sea: A) $(1,4)$. B) $(4,1)$. C) Lo es siempre.
+  - pasos:
+    - |-
+      Por la Definición 1.6, cada término toma un elemento de cada fila (en orden $1,\dots,5$) y un elemento de cada columna: los segundos subíndices $p=(5,i,j,2,3)$ deben ser una permutación de $\{1,\dots,5\}$.
+    - |-
+      Las columnas $5,2,3$ ya están usadas, luego $\{i,j\}=\{1,4\}$: solo hay dos opciones, $(i,j)=(1,4)$ o $(4,1)$.
+    - |-
+      Paridad de $p=(5,1,4,2,3)$ (opción A), contando intercambios hasta la identidad: $(5,1,4,2,3)\to(3,1,4,2,5)\to(3,1,2,4,5)\to(1,3,2,4,5)\to(1,2,3,4,5)$: 4 intercambios, par, $\operatorname{sig}=+1$.
+    - |-
+      Paridad de $p=(5,4,1,2,3)$ (opción B): $(5,4,1,2,3)\to(3,4,1,2,5)\to(1,4,3,2,5)\to(1,2,3,4,5)$: 3 intercambios, impar, $\operatorname{sig}=-1$.
+  - html: |-
+      <p>El término de A lleva signo $+$ (A es falsa); el de B lleva signo $-$: <b>respuesta B.</b> C es falsa (el caso A tiene signo $+$). Comprobado con sympy (<code>Permutation.signature()</code>).</p>
+  - receta: |-
+      lee los segundos subíndices en el orden de las filas: eso es la permutación $p$. Completa lo que falte para que sea una permutación completa y cuenta intercambios hasta la identidad: par $\to+$, impar $\to-$.
+  - error: |-
+      pensar que el signo depende de los valores $a_{ij}$ (depende solo de la permutación de columnas), o equivocarse contando intercambios.
+- id: ej1-23
+  clase: libro
+  titulo: |-
+    Ejercicio 1.23
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.23, p. 24
+    texto: |-
+      E p.24
+  cuerpo:
+  - enun: |-
+      Calcúlense, si es posible, los determinantes de las matrices del Ejercicio 1.13 (Tema 1.2): $A_1=\begin{pmatrix}1&0\\0&3\end{pmatrix}$, $A_2=\begin{pmatrix}1&2&0\\0&1&0\\0&0&1\end{pmatrix}$, $A_3=\begin{pmatrix}1&0&0\\0&0&1\\0&1&2\\0&0&1\end{pmatrix}$, $A_4=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix}$, $A_5=\begin{pmatrix}1&0&5&1\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}$, $A_6=\begin{pmatrix}2&1&0\\0&0&0\\0&0&1\end{pmatrix}$.
+  - pasos:
+    - |-
+      Antes de calcular, se comprueba si es cuadrada y se buscan atajos (elemental, triangular, fila de ceros).
+    - |-
+      $A_1$: elemental de $F_2\to3F_2$; $\det A_1=3$.
+    - |-
+      $A_2$: elemental de $F_1\to F_1+2F_2$ (reemplazo); $\det A_2=\det I_3=1$.
+    - |-
+      $A_3$ es $4\times3$: <b>no es cuadrada</b>, su determinante <b>no existe</b>.
+    - |-
+      $A_4$: elemental de $F_1\leftrightarrow F_3$ (permutación); $\det A_4=-1$.
+    - |-
+      $A_5$: no es elemental, pero es triangular superior; $\det A_5=1\cdot1\cdot1\cdot1=1$.
+    - |-
+      $A_6$: tiene una fila de ceros ($F_2$); $\det A_6=0$.
+  - html: |-
+      <table><tr><th>$A_1$</th><th>$A_2$</th><th>$A_3$</th><th>$A_4$</th><th>$A_5$</th><th>$A_6$</th></tr><tr><td>3</td><td>1</td><td>no existe</td><td>−1</td><td>1</td><td>0</td></tr></table>
+  - receta: |-
+      antes de calcular, busca atajos: ¿cuadrada?, ¿fila/columna de ceros?, ¿triangular?, ¿elemental? Determinante de una elemental: $-1$ (permutar), $\alpha$ (escalar), $1$ (reemplazo).
+  - error: |-
+      intentar «calcular» el determinante de $A_3$ (no existe por no ser cuadrada), o creer que hay que desarrollar $A_5$ por no ser elemental cuando basta ver que es triangular.
+- id: ej1-24
+  clase: libro
+  titulo: |-
+    Ejercicio 1.24
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.24, p. 25
+    texto: |-
+      E p.25
+  cuerpo:
+  - enun: |-
+      Si $A$ es la matriz de filas $(-1,-5,-7)$, $(2,5,6)$ y $(1,3,4)$, hállese la tercera columna de $A^{-1}$.
+  - pasos:
+    - |-
+      $A=\begin{pmatrix}-1&-5&-7\\2&5&6\\1&3&4\end{pmatrix}$. Con $A^{-1}=\frac1{|A|}(\operatorname{Adj}A)^t$, la columna 3 de $(\operatorname{Adj}A)^t$ es la <b>fila 3</b> de $\operatorname{Adj}A$: $(A_{31},A_{32},A_{33})$. No hace falta calcular los nueve adjuntos.
+    - |-
+      $A_{31}=+\begin{vmatrix}-5&-7\\5&6\end{vmatrix}=5$, $A_{32}=-\begin{vmatrix}-1&-7\\2&6\end{vmatrix}=-8$, $A_{33}=+\begin{vmatrix}-1&-5\\2&5\end{vmatrix}=5$.
+    - |-
+      Reaprovechando esos adjuntos, desarrollando $|A|$ por $F_3=(1,3,4)$: $|A|=1\cdot5+3\cdot(-8)+4\cdot5=1\neq0$: $A$ es regular.
+    - |-
+      Tercera columna de $A^{-1}$: $\frac11(5,-8,5)^t=(5,-8,5)^t$.
+  - html: |-
+      <p>$$\boxed{\text{3.ª columna de }A^{-1}=(5,-8,5)^t}$$ Comprobación: $A(5,-8,5)^t=(0,0,1)^t=e_3$ ✓, como exige $AA^{-1}=I$.</p>
+  - receta: |-
+      la columna $k$ de $A^{-1}$ es $\frac1{|A|}\times$ (adjuntos de la <b>fila</b> $k$ de $A$); y $|A|$ sale gratis desarrollando por esa misma fila.
+  - error: |-
+      olvidar la trasposición y tomar los adjuntos de la <b>columna</b> 3 (que dan la fila 3 de $A^{-1}$, no la columna); olvidar el signo $(-1)^{i+j}$ en $A_{32}$.
+- id: ej1-25
+  clase: libro
+  titulo: |-
+    Ejercicio 1.25
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.25, p. 25
+    texto: |-
+      E p.25
+  cuerpo:
+  - enun: |-
+      Si $A$ es una matriz cuadrada real de orden $n$ y $B$ la traspuesta de la matriz adjunta de $A$, calcúlese $\operatorname{rang}(B)$ suponiendo que $\operatorname{rang}(A)=n$.
+  - pasos:
+    - |-
+      $\operatorname{rang}(A)=n\Rightarrow A$ regular $\Rightarrow|A|\neq0$.
+    - |-
+      $B=(\operatorname{Adj}A)^t$, así que $A^{-1}=\frac1{|A|}B$; multiplicando por $A$ a la derecha: $I_n=A^{-1}A=\frac1{|A|}BA$, es decir $BA=|A|\,I_n$.
+    - |-
+      Tomando determinantes: $\det(BA)=\det B\det A$ (propiedad 6 del §5). Y $\det(|A|I_n)=|A|^n$ porque $|A|I_n$ es «$I_n$ multiplicada por el escalar $|A|$», y la propiedad 5 del §5 dice $\det(\alpha M)=\alpha^n\det(M)$; aquí $\alpha=|A|$, $M=I_n$ y $\det(I_n)=1$ (propiedad 2), así que $\det(|A|I_n)=|A|^n\cdot1=|A|^n$. Igualando: $|B||A|=|A|^n\Rightarrow|B|=|A|^{n-1}\neq0$ (se puede dividir porque $|A|\neq0$).
+    - |-
+      $|B|\neq0\Rightarrow B$ regular $\Rightarrow\operatorname{rang}(B)=n$.
+  - html: |-
+      <p>$$\boxed{\operatorname{rang}(B)=n}$$ (Forma más corta: $B=|A|A^{-1}$ es un escalar no nulo por una matriz regular, luego regular.) Comprobado con sympy con matrices genéricas.</p>
+  - receta: |-
+      si aparece $(\operatorname{Adj}A)^t$ con $A$ regular, sustitúyelo por $|A|A^{-1}$ y razona con eso.
+- id: ej1-26
+  clase: libro
+  titulo: |-
+    Ejercicio 1.26
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.26, p. 26
+    texto: |-
+      E p.26
+  cuerpo:
+  - enun: |-
+      Si $A$ es cuadrada de orden 4 y en sus filas se hace: multiplicar por $\frac12$ la primera, multiplicar por $\frac13$ la segunda, restar a la tercera el doble de la cuarta y trasponer, obtenemos $B$ que verifica: A) $|A|=|B|$. B) $|A|=6|B|$. C) $|A|=(2-\frac16)|B|$.
+  - html: |-
+      <table><tr><th>Paso</th><th>Operación</th><th>Efecto</th></tr><tr><td>1</td><td>$F_1\to\frac12F_1$</td><td>$\times\frac12$</td></tr><tr><td>2</td><td>$F_2\to\frac13F_2$</td><td>$\times\frac13$</td></tr><tr><td>3</td><td>$F_3\to F_3-2F_4$</td><td>no cambia</td></tr><tr><td>4</td><td>trasponer</td><td>no cambia</td></tr></table>
+  - pasos:
+    - |-
+      Encadenando los factores: $|B|=\frac12\cdot\frac13\cdot1\cdot1\cdot|A|=\frac16|A|$, es decir $|A|=6|B|$.
+  - html: |-
+      <p><b>Respuesta: B.</b> A es falsa salvo que $|A|=0$; C confunde el reemplazo (no cambia nada) con un factor $-2$. Comprobado con sympy simbólicamente.</p>
+  - receta: |-
+      recorre las operaciones anotando un factor: permutar $\to(-1)$, escalar una fila por $\alpha\to\alpha$, reemplazo $\to1$, trasponer $\to1$. El determinante final es el inicial multiplicado por el producto de los factores.
+  - error: |-
+      pensar que $F_3\to F_3-2F_4$ multiplica el determinante por $-2$. El distractor C no corresponde a ninguna regla válida de las operaciones elementales: un reemplazo de fila ($F_i\to F_i+\alpha F_j$) siempre tiene factor $1$, nunca aparece el $-2$ del coeficiente en el propio factor.
+- id: ej1-27
+  clase: libro
+  titulo: |-
+    Ejercicio 1.27
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.27, p. 27
+    texto: |-
+      E p.27
+  cuerpo:
+  - enun: |-
+      Sabiendo que $\begin{vmatrix}x&y&z\\1&0&2\\1&1&3\end{vmatrix}=1$, calcúlese $\begin{vmatrix}x&\frac14&4\\y&0&4\\z&\frac12&12\end{vmatrix}$.
+  - pasos:
+    - |-
+      Sea $M$ la primera matriz y $N$ la segunda. La columna 1 de $N$ es $(x,y,z)^t$: la fila 1 de $M$ traspuesta. Las columnas 2 y 3 de $N$ son múltiplos de las filas 2 y 3 de $M$: $C_2(N)=\frac14(1,0,2)^t$, $C_3(N)=4(1,1,3)^t$.
+    - |-
+      Sacando esos factores comunes de columnas: $|N|=\frac14\cdot4\cdot\begin{vmatrix}x&1&1\\y&0&1\\z&2&3\end{vmatrix}=1\cdot\begin{vmatrix}x&1&1\\y&0&1\\z&2&3\end{vmatrix}$.
+    - |-
+      Esa matriz es $M^t$ (comparar filas de $M$ con columnas de aquí), y $\det M^t=\det M$.
+  - html: |-
+      <p>$$\boxed{|N|=|M|=1}$$ (comprobado con sympy: ambos determinantes valen $-2x-y+z$).</p>
+  - receta: |-
+      compara las filas/columnas de la matriz pedida con las de la conocida: busca trasposición, factores comunes en una línea y aplica a cada cambio su factor correspondiente.
+  - error: |-
+      sacar el factor como si fuera de toda la matriz (elevándolo a $n$), en vez de reconocer que solo se saca de <b>columnas sueltas</b>; o no ver la trasposición e intentar comparar filas con filas.
+- id: ej1-28
+  clase: libro
+  titulo: |-
+    Ejercicio 1.28
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.28, p. 27
+    texto: |-
+      E p.27
+  cuerpo:
+  - enun: |-
+      Calcúlese el determinante de la matriz de filas $(x,a,b,c)$, $(a,x,0,0)$, $(b,0,x,0)$, $(c,0,0,x)$.
+  - pasos:
+    - |-
+      $M=\begin{pmatrix}x&a&b&c\\a&x&0&0\\b&0&x&0\\c&0&0&x\end{pmatrix}$. Desarrollo por $F_3=(b,0,x,0)$ (dos ceros): $|M|=b\,A_{31}+x\,A_{33}$.
+    - |-
+      $A_{31}=+\begin{vmatrix}a&b&c\\x&0&0\\0&0&x\end{vmatrix}$; desarrollando este $3\times3$ por su fila 2, $=-bx^2$.
+    - |-
+      $A_{33}=+\begin{vmatrix}x&a&c\\a&x&0\\c&0&x\end{vmatrix}\overset{\text{Sarrus}}{=}x^3-a^2x-c^2x$.
+    - |-
+      Suma: $b(-bx^2)+x(x^3-a^2x-c^2x)=x^4-x^2(a^2+b^2+c^2)$.
+  - html: |-
+      <p>$$\boxed{|M|=x^2(x^2-a^2-b^2-c^2)}$$ (comprobado por $C_4$, y con sympy factorizando).</p>
+  - receta: |-
+      desarrolla por la línea con más ceros; si un menor $3\times3$ vuelve a tener una línea casi nula, repite el desarrollo en vez de forzar Sarrus. Factoriza el resultado: aquí revela enseguida cuándo $M$ es singular ($x=0$ o $x^2=a^2+b^2+c^2$).
+  - error: |-
+      errores de signo en el adjunto de un elemento fuera de la diagonal (aquí $A_{14}$, en el desarrollo alternativo, lleva $-$), o tachar la fila/columna equivocada.
+- id: ej1-29
+  clase: libro
+  titulo: |-
+    Ejercicio 1.29
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.29, p. 28
+    texto: |-
+      E p.28
+  cuerpo:
+  - enun: |-
+      El rango de $\begin{pmatrix}1&2&0\\1&2+a&1\\2&4+a&1+a\end{pmatrix}$ es: A) 1 si $a=0$. B) 3 si $a\neq0$. C) 2 si $a=0$.
+  - pasos:
+    - |-
+      Reemplazos (no cambian el determinante): $F_2\to F_2-F_1$, $F_3\to F_3-2F_1$, $F_3\to F_3-F_2$ dan $\begin{pmatrix}1&2&0\\0&a&1\\0&0&a\end{pmatrix}$, triangular: $|A|=a^2$.
+    - |-
+      <b>$a\neq0$:</b> $|A|=a^2\neq0\Rightarrow\operatorname{rang}A=3$: <b>B es verdadera.</b>
+    - |-
+      <b>$a=0$:</b> $|A|=0\Rightarrow\operatorname{rang}A\le2$. Con $a=0$, el menor de filas 1-2, columnas 1 y 3: $\begin{vmatrix}1&0\\1&1\end{vmatrix}=1\neq0$, luego $\operatorname{rang}A=2$: <b>C es verdadera, A es falsa.</b>
+    - |-
+      Comprobación por escalonada con $a=0$: $\begin{pmatrix}1&2&0\\0&0&1\\0&0&0\end{pmatrix}$, ya escalonada, 2 filas no nulas: rango 2 ✓.
+  - html: |-
+      <p><b>Respuesta: B y C son ambas verdaderas; A es falsa</b> (es un test atípico con dos opciones correctas, que E reconoce explícitamente). Comprobado con sympy: rango 2 para $a=0$, rango 3 para $a\neq0$; $\det=a^2$.</p>
+  - receta: |-
+      para el rango de una matriz cuadrada con parámetro, calcula el determinante factorizado; donde no se anula, rango máximo; en cada valor que lo anula, sustituye y busca un menor no nulo del orden inmediatamente inferior (o escalona).
+  - error: |-
+      concluir «$\det=0\Rightarrow$ rango 1 o 0»: solo dice rango $\lt n$, hay que bajar de orden en orden buscando un menor no nulo.
+- id: sol-1_3-10
+  clase: propio
+  titulo: |-
+    Ejemplo propio 1 — Sarrus frente a adjuntos (fácil)
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      Calcula $\det M$ con $M=\begin{pmatrix}2&1&3\\0&-1&4\\1&2&1\end{pmatrix}$ por Sarrus y por desarrollo por la primera columna; comprueba que coinciden.
+  - pasos:
+    - |-
+      <b>Sarrus:</b> $2(-1)(1)+0\cdot2\cdot3+1\cdot4\cdot1-3(-1)(1)-4\cdot2\cdot2-0\cdot1\cdot1=-2+0+4+3-16-0=-11$.
+    - |-
+      <b>Por $C_1=(2,0,1)^t$</b> (tiene un cero): $\det M=2A_{11}+0\cdot A_{21}+1\cdot A_{31}$, con $A_{11}=\begin{vmatrix}-1&4\\2&1\end{vmatrix}=-9$ y $A_{31}=\begin{vmatrix}1&3\\-1&4\end{vmatrix}=7$: $\det M=2(-9)+7=-11$.
+  - html: |-
+      <p>$$\boxed{\det M=-11}$$ Como $\det M\neq0$, $M$ es regular.</p>
+  - receta: |-
+      Sarrus solo sirve para $3\times3$; el desarrollo por adjuntos sirve para cualquier orden y aprovecha los ceros.
+- id: sol-1_3-11
+  clase: propio
+  titulo: |-
+    Ejemplo propio 2 — singularidad por fila proporcional (medio)
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      Sin desarrollar, justifica que $N=\begin{pmatrix}1&2&-1\\3&0&2\\-2&-4&2\end{pmatrix}$ no es invertible y calcula su rango.
+  - pasos:
+    - |-
+      $F_3=(-2,-4,2)=-2F_1$: las filas 1 y 3 son proporcionales.
+    - |-
+      El reemplazo $F_3\to F_3+2F_1$ no cambia el determinante y produce una fila de ceros: $\det N=0$.
+    - |-
+      $\det N=0\Rightarrow N$ no es regular. Rango: el menor $\begin{vmatrix}1&2\\3&0\end{vmatrix}=-6\neq0$, luego $\operatorname{rang}N=2$.
+  - receta: |-
+      dos filas (o columnas) proporcionales $\Rightarrow\det=0$; justifícalo con un reemplazo que deje una fila de ceros, en vez de desarrollar directamente.
+- id: sol-1_3-12
+  clase: propio
+  titulo: |-
+    Ejemplo propio 3 — seguir el determinante a través de operaciones (medio)
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      Sea $A=\begin{pmatrix}1&2&0\\3&1&2\\0&1&1\end{pmatrix}$. Se hacen, en este orden, $F_1\leftrightarrow F_2$, $F_3\to3F_3$, $F_2\to F_2-2F_1$, obteniendo $B$. Sin calcular $\det B$ directamente, halla $\det B$, $\det B^t$ y $\det(2A)$.
+  - pasos:
+    - |-
+      $\det A$ por Sarrus: $1+0+0-0-2-6=-7$.
+    - |-
+      Factores: permutar $\to-1$; multiplicar $F_3$ por 3 $\to3$; reemplazo $\to1$: total $-3$.
+    - |-
+      $\det B=-3\cdot(-7)=21$; $\det B^t=\det B=21$; $\det(2A)=2^3\det A=-56$ (no $2\cdot(-7)=-14$).
+  - html: |-
+      <p>$$\boxed{\det B=21,\quad\det B^t=21,\quad\det(2A)=-56}$$ Comprobado con sympy.</p>
+  - receta: |-
+      encadena los factores de cada operación en el orden en que se aplican; para $\det(\alpha A)$ usa siempre $\alpha^n$, nunca $\alpha$.
+- id: sol-1_3-13
+  clase: propio
+  titulo: |-
+    Ejemplo propio 4 — determinante con parámetro, rango e inversa por adjuntos (difícil)
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      Discute, según $a\in\mathbb R$, el rango de $P=\begin{pmatrix}1&1&1\\1&a&1\\1&1&a\end{pmatrix}$ y, para $a=2$, calcula $P^{-1}$ por adjuntos.
+  - pasos:
+    - |-
+      Reemplazos $F_2\to F_2-F_1$, $F_3\to F_3-F_1$: $\begin{pmatrix}1&1&1\\0&a-1&0\\0&0&a-1\end{pmatrix}$, triangular: $\det P=(a-1)^2$.
+    - |-
+      $a\neq1$: $\det P\neq0\Rightarrow\operatorname{rang}P=3$.
+    - |-
+      $a=1$: todas las filas son $(1,1,1)$; todos los menores de orden 2 son nulos y hay un menor de orden 1 no nulo: $\operatorname{rang}P=1$ (baja <b>dos</b> unidades, no basta con suponer rango 2).
+    - |-
+      $a=2$: $\det P=1$. Adjuntos: $A_{11}=3$, $A_{12}=-1$, $A_{13}=-1$, $A_{21}=-1$, $A_{22}=1$, $A_{23}=0$, $A_{31}=-1$, $A_{32}=0$, $A_{33}=1$, así que $\operatorname{Adj}P=\begin{pmatrix}3&-1&-1\\-1&1&0\\-1&0&1\end{pmatrix}$ (simétrica, porque $P$ lo es) y $P^{-1}=\frac11(\operatorname{Adj}P)^t=\operatorname{Adj}P$.
+  - html: |-
+      <p>Comprobación: $PP^{-1}=I_3$ (sympy: $\det P=(a-1)^2$; rango 1 para $a=1$, rango 3 para $a=2$).</p>
+  - receta: |-
+      con parámetros, factoriza siempre $\det P$; cada caso que lo anula se estudia aparte comprobando menores, sin suponer que el rango baja solo en 1.
+  - error: |-
+      suponer que si $\det P=0$ el rango es siempre $n-1$: aquí, para $a=1$, baja hasta 1.
+- id: ex-sep25
+  clase: examen
+  titulo: |-
+    Sept. 2025, pregunta 1 — operaciones por columnas y determinante de la traspuesta
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2025, pregunta 1
+    texto: |-
+      X Sept. 2025
+  cuerpo:
+  - enun: |-
+      Sea $A\in\mathcal M_{6\times6}$ una matriz de orden 6 en cuyas columnas se realizan las siguientes transformaciones (en el orden indicado): se intercambia la primera columna con la sexta, se multiplica la tercera columna por 7, se le suma a la segunda columna la cuarta y la quinta. Llamamos $B$ a la matriz resultante. Sabiendo que $\det A=4$, calcule de manera razonada el determinante de la traspuesta de $B$.
+  - pasos:
+    - |-
+      <b>Por qué valen para columnas las reglas de filas (P1).</b> Una operación sobre las columnas de $A$ es la misma operación sobre las filas de $A^t$, y $\det A=\det A^t$ (U p.26).
+    - |-
+      $C_1\leftrightarrow C_6$: intercambio de dos columnas, el determinante cambia de signo: $4\cdot(-1)=-4$.
+    - |-
+      $C_3\to7C_3$: multiplicar una columna por $7\neq0$ multiplica por 7: $-4\cdot7=-28$.
+    - |-
+      $C_2\to C_2+C_4+C_5$: son dos reemplazos, $C_2\to C_2+C_4$ y luego $C_2\to C_2+C_5$ (las columnas 4 y 5 no han cambiado). Cada reemplazo $C_i\to C_i+\alpha C_j$ con $j\neq i$ no cambia el determinante: sigue valiendo $-28$. Así $\det B=-28$.
+    - |-
+      <b>Traspuesta:</b> $\det B^t=\det B=-28$ (U p.26).
+  - resultado: |-
+      $\det B^t=-28$. <i>(Sympy: con una $A$ regular aleatoria de orden 6, $\det(B^t)/\det A=-7$.)</i>
+  - receta: |-
+      recorre las operaciones en orden y acumula un factor: intercambio $\to\times(-1)$; escalar $\alpha\to\times\alpha$; sumar a una fila/columna múltiplos de <b>otras</b> $\to\times1$. La traspuesta no cambia nada.
+  - error: |-
+      creer que la traspuesta cambia el signo o invierte el determinante; o pensar que «sumar dos columnas» multiplica por 2 (eso solo pasaría con $C_2\to2C_2+\dots$, es decir, si se multiplica la propia columna que se sustituye).
+- id: ex-feb23a
+  clase: examen
+  titulo: |-
+    Feb. 2023 (1.ª sem.), pregunta 1 — determinante de orden 5 a partir de operaciones por filas
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2023 (1.ª sem.), pregunta 1
+    texto: |-
+      X Feb. 2023 (1.ª)
+  cuerpo:
+  - enun: |-
+      Sean $a,b\in\mathbb R$ y $$A=\begin{pmatrix}3&-1&0&5&4\\7&0&-3&8&2\\1&2&9&3&a\\1&4&2&-2&6\\-5&4&1&0&b\end{pmatrix}\in\mathcal M_{5\times5}.$$ Sabiendo que $\det A=15$, calcule el siguiente determinante: $$\det\begin{pmatrix}1&4&2&-2&6\\21&0&-9&24&6\\1&2&9&3&a\\3&-1&0&5&4\\-4&6&10&3&a+b\end{pmatrix}.$$
+  - html: |-
+      <p>Llamemos $F_1,\dots,F_5$ a las filas de $A$ y $M$ a la matriz pedida. La idea es <b>reconocer cada fila de $M$ como una fila de $A$ modificada</b>: no se calcula ningún determinante de orden 5 (con $a,b$ sería inviable).</p>
+  - pasos:
+    - |-
+      <b>Identificar filas.</b> Fila 1 de $M$: $(1,4,2,-2,6)=F_4$. Fila 2: $(21,0,-9,24,6)=3\cdot(7,0,-3,8,2)=3F_2$. Fila 3: $(1,2,9,3,a)=F_3$. Fila 4: $(3,-1,0,5,4)=F_1$. Fila 5: $(-4,6,10,3,a+b)=(-5+1,\,4+2,\,1+9,\,0+3,\,b+a)=F_5+F_3$.
+    - |-
+      <b>Traducir a operaciones elementales (U p.27).</b> $F_1\leftrightarrow F_4$: cambia el signo, $15\cdot(-1)=-15$. $F_2\to3F_2$: multiplica por 3, $-45$. $F_5\to F_5+F_3$: reemplazo, sigue en $-45$. (Tras el intercambio, la fila 3 sigue siendo $F_3$, así que el reemplazo es correcto en ese orden.)
+    - |-
+      Estas tres operaciones llevan exactamente $A$ a $M$.
+  - resultado: |-
+      $\det M=15\cdot(-1)\cdot3=-45$. <i>(Sympy, con $a,b$ simbólicos: $\det M/\det A=-3$ idénticamente.)</i>
+  - receta: |-
+      (1) escribe cada fila nueva como combinación de las antiguas; (2) tradúcelo a operaciones elementales; (3) multiplica $\det A$ por $(-1)^{\#\text{intercambios}}$ y por los escalares; los reemplazos no cuentan.
+  - error: |-
+      contar $F_5\to F_5+F_3$ como «multiplica por 2», o no ver que la fila 2 es un múltiplo ($\times3$) de la original.
+- id: ex-feb25b
+  clase: examen
+  titulo: |-
+    Feb. 2025 (2.ª sem.), pregunta 1 — determinante de orden 4 a partir de operaciones por filas
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2025 (2.ª sem.), pregunta 1
+    texto: |-
+      X Feb. 2025 (2.ª)
+  cuerpo:
+  - enun: |-
+      Sean $a,b\in\mathbb R$ y $$A=\begin{pmatrix}a&1&4&-7\\0&b&2&4\\1&5&a&0\\-9&-2b&1&1\end{pmatrix}\in\mathcal M_{4\times4}.$$ Sabiendo que $\det A=7$, calcule el siguiente determinante: $$\det\begin{pmatrix}a-9&1-2b&5&-6\\1&5&a&0\\0&10b&20&40\\-9&-2b&1&1\end{pmatrix}.$$
+  - pasos:
+    - |-
+      <b>Identificar filas</b> (filas de $A$: $F_1,\dots,F_4$; $M$ la matriz pedida). Fila 1 de $M$: $(a-9,\,1-2b,\,5,\,-6)=(a+(-9),\,1+(-2b),\,4+1,\,-7+1)=F_1+F_4$. Fila 2: $(1,5,a,0)=F_3$. Fila 3: $(0,10b,20,40)=10\cdot(0,b,2,4)=10F_2$. Fila 4: $F_4$.
+    - |-
+      <b>Operaciones (U p.27).</b> $F_1\to F_1+F_4$: reemplazo, sigue valiendo 7. $F_2\to10F_2$: $\times10$, 70. $F_2\leftrightarrow F_3$: cambio de signo, $-70$.
+    - |-
+      Se obtiene exactamente $M$ (la fila $10F_2$ se coloca en el lugar 3 y $F_3$ en el 2).
+  - resultado: |-
+      $\det M=7\cdot10\cdot(-1)=-70$. <i>(Sympy: $\det M/\det A=-10$ con $a,b$ simbólicos.)</i>
+  - receta: |-
+      la misma que en el ejemplo anterior (identificar filas, traducir a operaciones, acumular factores).
+  - error: |-
+      olvidar el intercambio de las filas 2 y 3: las filas «están» pero en otro orden, y eso ya es un intercambio.
+- id: ex-feb24b
+  clase: examen
+  titulo: |-
+    Feb. 2024 (2.ª sem.), pregunta 2 — $\det(ABA^t)$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2024 (2.ª sem.), pregunta 2
+    texto: |-
+      X Feb. 2024 (2.ª)
+  cuerpo:
+  - enun: |-
+      Sea $a\in\mathbb R$ y $$A=\begin{pmatrix}2&-1&0\\-1&a&9\\0&9&7\end{pmatrix}\in\mathcal M_{3\times3}.$$ Sabiendo que $\det A=5$, calcule el determinante de la matriz $ABA^t$, donde $$B=\begin{pmatrix}0&9&7\\-3&3a&27\\2&-1&0\end{pmatrix}.$$ (La matriz $A^t$ denota la traspuesta de $A$.)
+  - pasos:
+    - |-
+      <b>Determinante de un producto.</b> Por U p.26, $\det(ABA^t)=\det A\cdot\det B\cdot\det A^t$.
+    - |-
+      <b>Traspuesta.</b> $\det A^t=\det A=5$ (U p.26; vale para <b>cualquier</b> matriz cuadrada, no hace falta que $A$ sea simétrica, aunque aquí lo sea).
+    - |-
+      <b>Relacionar $B$ con $A$.</b> Filas de $A$: $F_1=(2,-1,0)$, $F_2=(-1,a,9)$, $F_3=(0,9,7)$. Filas de $B$: $(0,9,7)=F_3$; $(-3,3a,27)=3F_2$; $(2,-1,0)=F_1$. Luego $B$ sale de $A$ con $F_1\leftrightarrow F_3$ ($\times(-1)$) y $F_2\to3F_2$ ($\times3$) (U p.27): $\det B=5\cdot(-1)\cdot3=-15$.
+    - |-
+      <b>Juntar.</b> $\det(ABA^t)=5\cdot(-15)\cdot5=-375$.
+  - resultado: |-
+      $-375$. <i>(Sympy: $\det A=14a-169$, $\det B=-3\det A$; con $a=87/7$, $\det(ABA^t)=-375$.)</i>
+  - html: |-
+      <div class="box warn"><span class="h">Fallo recurrente (señalado en el propio examen)</span><p>«Decir que el determinante de un producto de matrices es la suma de los determinantes. Decir que el determinante de la matriz traspuesta de $A$ es el inverso del determinante de $A$.» Lo correcto: $\det(XY)=\det X\det Y$ y $\det A^t=\det A$.</p></div>
+  - receta: |-
+      $\det$ de un producto = producto de $\det$; $\det A^t=\det A$; para $\det B$ busca qué operaciones elementales llevan $A$ a $B$.
+  - error: |-
+      despejar $a$ de $\det A=5$ ($a=87/7$) y calcular todo a mano: posible, pero largo y propenso a errores.
+- id: ex-feb19b4
+  clase: examen
+  titulo: |-
+    Feb. 2019 (tipo B), ejercicio 4 — determinante de una matriz semejante a una diagonal de orden 2
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2019 (tipo B), ejercicio 4
+    texto: |-
+      X Feb. 2019 (B)
+  cuerpo:
+  - enun: |-
+      Si $A$ es una matriz cuadrada de orden 2 que es semejante a $\begin{pmatrix}2&0\\0&-1\end{pmatrix}$, calcule, si es posible, el valor del determinante de $A$.
+  - pasos:
+    - |-
+      <b>Qué significa «semejante».</b> Por la Definición 4.5 (U §4.1.3 p.148), existe una matriz regular $P$ con $A=P^{-1}DP$, $D=\begin{pmatrix}2&0\\0&-1\end{pmatrix}$. (Es lo mismo que $D=PAP^{-1}$; en todo este tema se usa la convención de U, $A=P^{-1}DP$.)
+    - |-
+      <b>Determinante del producto</b> (U p.26, dos veces): $\det A=\det(P^{-1})\,\det D\,\det P$.
+    - |-
+      <b>Determinante de la inversa (P2).</b> De $PP^{-1}=I$: $\det P\cdot\det P^{-1}=1$; $P$ es regular, luego $\det P\neq0$ (U p.27) y $\det P^{-1}=1/\det P$.
+    - |-
+      <b>Se cancela $P$:</b> $\det A=\dfrac1{\det P}\cdot\det D\cdot\det P=\det D$. No hace falta conocer $P$: por eso «sí es posible».
+    - |-
+      <b>$\det D$:</b> diagonal, luego triangular: producto de la diagonal (U p.26), $2\cdot(-1)=-2$.
+  - resultado: |-
+      $\det A=-2$. <i>(Sympy: con $P=\begin{pmatrix}1&2\\1&3\end{pmatrix}$, $\det(P^{-1}DP)=-2$.)</i>
+  - receta: |-
+      matrices semejantes tienen el mismo determinante: $\det(P^{-1}DP)=\det D$. Si $D$ es diagonal (o triangular), $\det D$ = producto de la diagonal = producto de los autovalores contados con su multiplicidad.
+  - error: |-
+      intentar hallar una $P$ concreta (no se pide y no hace falta), o escribir $\det(P^{-1})=-\det P$ en vez de $1/\det P$.
+- id: ex-sep24p4
+  clase: examen
+  titulo: |-
+    Sept. 2024, pregunta 4 — determinante de una matriz de orden 5 semejante a una diagonal
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2024, pregunta 4
+    texto: |-
+      X Sept. 2024
+  cuerpo:
+  - enun: |-
+      Calcule el determinante de una matriz $A$ de orden 5 que es semejante a una matriz diagonal $D$ cuyos valores propios son $-5$ y $-2$ con multiplicidades algebraicas 1 y 4, respectivamente.
+  - pasos:
+    - |-
+      <b>Semejanza.</b> Existe $P$ regular con $A=P^{-1}DP$ (Def. 4.5, U p.148).
+    - |-
+      <b>Mismo determinante.</b> Por $\det(XY)=\det X\det Y$ y $\det P^{-1}=1/\det P$ (P2): $|A|=|P^{-1}|\,|D|\,|P|=|D|$.
+    - |-
+      <b>Quién es $D$.</b> Diagonal de orden 5 cuyos valores propios son sus elementos diagonales (si $D$ es diagonal, $|D-\lambda I|=\prod(d_{ii}-\lambda)$). Con las multiplicidades dadas la diagonal tiene una vez $-5$ y cuatro veces $-2$ (el orden no afecta al producto): $D=\operatorname{diag}(-5,-2,-2,-2,-2)$.
+    - |-
+      <b>Producto de la diagonal</b> (U p.26): $|D|=(-5)\cdot(-2)^4=(-5)\cdot16=-80$.
+  - resultado: |-
+      $|A|=-80$.
+  - receta: |-
+      $\det A=\prod\lambda_i^{\,m_i}$ (cada autovalor elevado a su multiplicidad algebraica). Cuidado con el signo: $(-2)^4>0$.
+  - error: |-
+      multiplicar los autovalores sin elevarlos a su multiplicidad ($(-5)(-2)=10$).
+- id: ex-feb26b
+  clase: examen
+  titulo: |-
+    Feb. 2026 (2.ª sem.), pregunta 4 — determinante de una matriz de orden 7 semejante a una diagonal
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2026 (2.ª sem.), pregunta 4
+    texto: |-
+      X Feb. 2026 (2.ª)
+  cuerpo:
+  - enun: |-
+      Calcule el determinante de una matriz $A$ de orden 7, sabiendo que es semejante a una matriz diagonal $D$ cuyos valores propios son $-1$ y $5$ con multiplicidades algebraicas 3 y 4, respectivamente.
+  - pasos:
+    - |-
+      $A$ semejante a $D$: existe $P$ regular con $A=P^{-1}DP$ (Def. 4.5, U p.148).
+    - |-
+      $|A|=|P^{-1}|\,|D|\,|P|=\dfrac1{|P|}\,|D|\,|P|=|D|$ (U p.26 y P2).
+    - |-
+      $D$ es diagonal de orden $3+4=7$ (se comprueba que las multiplicidades suman el orden) con diagonal $(-1,-1,-1,5,5,5,5)$ en algún orden.
+    - |-
+      $|A|=|D|=(-1)^3\cdot5^4=(-1)\cdot625=-625$.
+  - resultado: |-
+      $|A|=-625$. <i>(Sympy, construyendo $A=P^{-1}DP$ con una $P$ regular de orden 7: $\det A=-625$.)</i>
+  - receta: |-
+      igual que en el ejemplo anterior: comprobar que la suma de multiplicidades es el orden y multiplicar $\lambda^{m}$.
+  - error: |-
+      $(-1)^3=-1$ (exponente impar): olvidar el signo.
+- id: ex-feb19b1
+  clase: examen
+  titulo: |-
+    Feb. 2019 (tipo B), ejercicio 1 — signo de un término del desarrollo de un determinante de orden 5
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2019 (tipo B), ejercicio 1
+    texto: |-
+      X Feb. 2019 (B)
+  cuerpo:
+  - enun: |-
+      Si $a_{15}a_{2i}a_{3j}a_{42}a_{53}$ es un término del desarrollo de un determinante de orden 5 de una matriz $A=(a_{ij})$ tal que el signo de la permutación asociada $p$, $\operatorname{sig}(p)$, es negativo, calcular el valor de $(i,j)$. <span class="src" data-l="E" data-ref="E Ej. 1.22, p.23 ">E Ej. 1.22</span> <i>(Ver también el <a href="#ej1-22">Ejercicio 1.22</a>.)</i>
+  - pasos:
+    - |-
+      <b>Forma de los términos.</b> Por la Definición 1.6 (U p.25), $\det A=\sum_{p\in S_5}\operatorname{sig}(p)\,a_{1p_1}\cdots a_{5p_5}$: cada término tiene <b>un factor de cada fila</b> (primer subíndice $1,\dots,5$) y <b>los segundos subíndices forman una permutación</b> de $\{1,\dots,5\}$ (un factor de cada columna).
+    - |-
+      <b>Permutación asociada.</b> Leyendo los segundos subíndices por filas: $p=(5,i,j,2,3)$. Ya están usadas las columnas 5, 2, 3; faltan 1 y 4. Como $i\neq j$, solo hay dos casos: $(i,j)=(1,4)$ o $(4,1)$.
+    - |-
+      <b>Paridad de $(5,1,4,2,3)$</b> (intercambios hasta la identidad, U p.25): $(5,1,4,2,3)\to(3,1,4,2,5)\to(3,1,2,4,5)\to(1,3,2,4,5)\to(1,2,3,4,5)$: 4 intercambios, <b>par</b>, signo $+1$.
+    - |-
+      <b>Paridad de $(5,4,1,2,3)$:</b> $(5,4,1,2,3)\to(3,4,1,2,5)\to(1,4,3,2,5)\to(1,2,3,4,5)$: 3 intercambios, <b>impar</b>, signo $-1$.
+    - |-
+      <b>Comprobación por inversiones.</b> $(5,1,4,2,3)$ tiene $4+0+2+0=6$ inversiones (par); $(5,4,1,2,3)$ tiene $4+3+0+0=7$ (impar). Coincide: la paridad no depende de los intercambios elegidos (U p.25).
+  - resultado: |-
+      $(i,j)=(4,1)$. <i>(Sympy, <code>Permutation.signature()</code>: $+1$ y $-1$.)</i>
+  - receta: |-
+      (1) escribe los segundos subíndices ordenando por filas; (2) completa con las columnas que faltan; (3) cuenta intercambios (o inversiones) hasta la identidad: par $\to+$, impar $\to-$.
+  - error: |-
+      leer la permutación por columnas en lugar de por filas, o pensar que el signo depende del valor de los $a_{ij}$ (es solo de la permutación).
+- id: ex-sep17a
+  clase: examen
+  titulo: |-
+    Sept. 2017 (tipo A), ejercicio 1 — factorización $LU$ y $\det A=\det U$ (test)
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2017 (tipo A), ejercicio 1
+    texto: |-
+      X Sept. 2017 (A)
+  cuerpo:
+  - enun: |-
+      La factorización $LU$ de una matriz $A$ cuadrada de orden $n$: A) Siempre es única; B) NO se puede utilizar en la resolución de $AX=B$; C) Permite calcular el determinante de $A$ ya que coincide con el determinante de $U$; D) Ninguna de las anteriores es cierta.
+  - html: |-
+      <p><b>Respuesta: C.</b> Con $A=LU$, $L$ triangular inferior de diagonal unitaria (U p.45): $\det A=\det L\cdot\det U=1\cdot\det U$ (U p.26 y p.51). El ejercicio completo (con las razones por las que A y B son falsas) está resuelto en el <a href="tema_1_4_sistemas_ecuaciones.html#ex-sep17e1">tema 1.4</a>.</p>
+- id: ex-feb18b1
+  clase: examen
+  titulo: |-
+    Feb. 2018 (tipo B), ejercicio 1 — $\det$ de orden 4 para probar que $S_1$ es base de $\mathbb R^4$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2018 (tipo B), ejercicio 1
+    texto: |-
+      X Feb. 2018 (B)
+  cuerpo:
+  - enun: |-
+      Sean el sistema $S_1$ de vectores definido por las filas de $\begin{pmatrix}4&1&-3&-4\\2&4&-4&3\\2&3&1&3\\4&0&-1&2\end{pmatrix}$ y el sistema $S_2$ definido por las filas de $\begin{pmatrix}1&1&-4\\1&5&6\\4&2&3\\-2&0&-2\end{pmatrix}$. Se pide comprobar que $S_1$ es una base de $\mathbb R^4$ y que $S_2$ es un sistema ligado de $\mathbb R^3$.
+  - pasos:
+    - |-
+      <b>Por qué basta un determinante.</b> $S_1$ tiene 4 vectores en $\mathbb R^4$ (dimensión 4): son base $\iff$ son linealmente independientes $\iff$ la matriz $S$ con ellos por filas tiene rango 4 $\iff\det S\neq0$ (U p.27).
+    - |-
+      <b>Hacer ceros en la columna 2</b> con el 1 de la posición $(1,2)$ como pivote (reemplazos: no cambian el determinante). $F_2\to F_2-4F_1$: $(2-16,\,0,\,-4+12,\,3+16)=(-14,0,8,19)$. $F_3\to F_3-3F_1$: $(2-12,\,0,\,1+9,\,3+12)=(-10,0,10,15)$. $F_4$ ya tiene 0. $$\det S=\det\begin{pmatrix}4&1&-3&-4\\-14&0&8&19\\-10&0&10&15\\4&0&-1&2\end{pmatrix}.$$
+    - |-
+      <b>Desarrollar por la columna 2</b> (U p.24): solo queda $a_{12}=1$, con signo $(-1)^{1+2}=-1$: $$\det S=-\det\begin{pmatrix}-14&8&19\\-10&10&15\\4&-1&2\end{pmatrix}.$$
+    - |-
+      <b>Sacar factor 5 de la fila 2.</b> $F_2\to\tfrac15F_2$ divide el determinante por 5, así que fuera se multiplica por 5: $$\det\begin{pmatrix}-14&8&19\\-10&10&15\\4&-1&2\end{pmatrix}=5\det\begin{pmatrix}-14&8&19\\-2&2&3\\4&-1&2\end{pmatrix}.$$
+    - |-
+      <b>Sarrus</b> (U p.26). Positivos: $(-14)(2)(2)+8\cdot3\cdot4+19\cdot(-2)(-1)=-56+96+38=78$. Negativos: $19\cdot2\cdot4+(-14)\cdot3\cdot(-1)+8\cdot(-2)\cdot2=152+42-32=162$. Determinante $=78-162=-84$.
+    - |-
+      <b>Juntar:</b> $\det S=-1\cdot5\cdot(-84)=420\neq0$: rango 4, $S_1$ libre y, con 4 vectores en dimensión 4, <b>base</b> de $\mathbb R^4$.
+    - |-
+      <b>$S_2$.</b> Son 4 vectores de $\mathbb R^3$: el rango de una matriz $4\times3$ es a lo sumo 3 $<4$, luego son linealmente dependientes (ligados). No hace falta ningún cálculo. (Sympy: rango 3.)
+  - resultado: |-
+      $\det S=420$ (sympy) $\Rightarrow$ $S_1$ base; $S_2$ ligado por tener más vectores que la dimensión.
+  - receta: |-
+      $n$ vectores de $\mathbb R^n$ son base $\iff$ el determinante de la matriz que forman es $\neq0$. Para un $4\times4$: elige una fila/columna con un 1 (o ceros), haz ceros con reemplazos, desarrolla por adjuntos y acaba con Sarrus.
+  - error: |-
+      intentar calcular un determinante para $S_2$: no es cuadrada y el determinante no está definido (U p.23).

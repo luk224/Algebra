@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álgebra · 1.3 Determinantes</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/resumen.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/resumen.js"></script>
+<script defer src="../assets/tres-d.js"></script>
+<script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/sarrus.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../index.html">← Índice de temas</a>
+  <span><button id="btn-sol" type="button">Mostrar soluciones</button> <button id="btn-tema" type="button">Claro / oscuro</button></span>
+</div></div>
+
+<div class="layout">
+<nav class="side-toc" aria-label="Índice del tema"><b>En esta página</b></nav>
+<main>
+
+<header class="hero">
+  <div class="kick">Módulo 1 · Herramientas · Tema 1.3</div>
+  <h1>Determinantes</h1>
+  <p>Un número que se calcula a partir de una matriz cuadrada y que responde de golpe a varias preguntas: ¿es invertible la matriz?, ¿cuál es su rango?, ¿cómo se calcula la inversa sin resolver sistemas? Es también la pieza que, más adelante, sirve para hallar valores propios (Tema 4) y clasificar formas cuadráticas (Tema 6).</p>
+  <div class="chips"><span>Libro oficial: Álgebra para Ingenieros, §1.3 (pp. 23-28)</span><span>Ejercicios: E Ej. 1.21-1.29 (pp. 23-28)</span><span>⏱ ~5 h de estudio</span></div>
+  <div class="legend">
+    <span class="src" data-l="U" data-ref="Álgebra para Ingenieros (UNED) — libro oficial">U</span> oficial
+    <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros (UNED)">E</span> ejercicios
+    <span class="src" data-l="L" data-ref="Lay, Álgebra Lineal y sus Aplicaciones">L</span> Lay
+    <span class="src" data-l="A" data-ref="Apuntes de tutoría ETSI (solo tema 1)">A</span> tutoría
+    <span class="src" data-l="P" data-ref="Explicación o ejemplo propio, sin página en los libros">P</span> propio
+    — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
+  </div>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §1.3, p. 23">U p.23</span></h2>
+
+<div class="box intu"><span class="h">La idea del tema en una frase</span>
+  <p>El <b>determinante</b> $\det(A)$ (o $|A|$) es un único número real asociado a cada matriz <b>cuadrada</b> $A$, calculado combinando todos sus elementos, que vale <b>cero exactamente cuando $A$ no es invertible</b>. Para $2\times2$ es una fórmula corta; para $3\times3$ tiene una regla mnemotécnica (Sarrus); para tamaños mayores se calcula «bajando» el orden con el <b>desarrollo por adjuntos</b>. Detrás de todo eso hay una única definición formal con <b>permutaciones</b>, que no hace falta usar a mano salvo para entender de dónde salen las fórmulas y las propiedades.</p>
+</div>
+
+<h3>Qué necesitas saber ya</h3>
+<ul>
+  <li>Todo lo del <a href="tema_1_2_algebra_matricial.html">Tema 1.2</a>: notación matricial, producto de matrices, matriz inversa, operaciones elementales por filas, matrices escalonadas y rango.</li>
+  <li>Resolver sistemas $2\times2$ pequeños (para el Ejemplo 1.5 de 1.2, que aquí se revisita con determinantes).</li>
+  <li>Combinatoria básica: qué es una permutación de un conjunto finito y qué es $n!$.</li>
+</ul>
+
+<h3>Mapa del tema</h3>
+<table>
+  <tr><th>Apartado</th><th>Qué contiene</th><th>Dónde está en los libros</th></tr>
+  <tr><td>1 Determinantes de orden 2 y 3</td><td>Fórmulas directas, Ejemplo 1.16</td><td>U p.23 · A "Determinantes de orden dos/tres"</td></tr>
+  <tr><td>2 Desarrollo por adjuntos</td><td>Menor, adjunto $A_{ij}$, desarrollo por fila o columna</td><td>U p.24 · L §3.1</td></tr>
+  <tr><td>3 Permutaciones y fórmula de Leibniz</td><td>$S_n$, paridad, signo, Definición 1.6</td><td>U pp.24-26</td></tr>
+  <tr><td>4 Regla de Sarrus</td><td>Fórmula mnemotécnica para $3\times3$</td><td>U p.26 · A "Determinantes de orden tres"</td></tr>
+  <tr><td>5 Propiedades del determinante</td><td>Fila de ceros, triangular, traspuesta, $\det(\alpha A)$, $\det(AB)$</td><td>U p.26 · A "Propiedades de los determinantes"</td></tr>
+  <tr><td>6 Efecto de las operaciones elementales</td><td>Permutar, escalar, reemplazo; comparación con 1.2</td><td>U p.27</td></tr>
+  <tr><td>7 Determinante, rango, inversa</td><td>$A$ regular $\iff\det A\neq0$; $A^{-1}=\frac1{|A|}(\operatorname{Adj}A)^t$; rango por menores; interpretación geométrica</td><td>U p.27-28 · L §3.3 p.179</td></tr>
+  <tr><td>8 Ejercicios</td><td>E <a href="#ej1-21">1.21</a>–1.29 + ejemplos propios</td><td>E pp.23-28</td></tr>
+  <tr><td>9 <a href="#examenes">Ejemplos de examen</a></td><td>10 preguntas de convocatorias anteriores, resueltas</td><td>X</td></tr>
+</table>
+
+<div class="box tip"><span class="h">Qué se pide en los ejercicios</span>
+  <p>Los ejercicios de esta sección piden: desarrollar un determinante por una fila o columna concreta, con parámetro (1.21); razonar sobre el signo de un término de la fórmula de Leibniz vía permutaciones (1.22); decidir cuándo existe el determinante y calcularlo con atajos —triangular, fila de ceros, elemental— (1.23); usar la matriz adjunta para hallar solo una columna de la inversa (1.24); combinar $\det(AB)=\det A\det B$ con el rango (1.25); seguir el determinante a través de una cadena de operaciones elementales (1.26); reconocer estructuras (trasposición, factores comunes) para reutilizar un determinante ya conocido (1.27); desarrollar por la línea con más ceros y factorizar (1.28); y usar el determinante y los menores para discutir el rango según un parámetro (1.29).</p>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>Determinantes de orden 2 y 3 <span class="src" data-l="U" data-ref="U §1.3, p. 23">U p.23</span></h2>
+
+<div class="box def"><span class="h">Definición</span>
+  <p>Si $A$ es una matriz cuadrada de orden $n$, su <b>determinante</b> es un número real, denotado $\det(A)$ o $|A|$. El determinante <b>solo está definido para matrices cuadradas</b>: si $A$ no es cuadrada, «$\det A$» no existe (no es que valga 0, es que la expresión no tiene sentido).</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 23 (nota al margen)">U p.23</span>
+</div>
+
+<div class="box def"><span class="h">Fórmulas directas de orden 2 y 3</span>
+  <p>Para $n=2$: $\displaystyle\begin{vmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{vmatrix}=a_{11}a_{22}-a_{12}a_{21}$.</p>
+  <p>Para $n=3$ (regla de Sarrus, se detalla en el §4):
+  $$\begin{vmatrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\\a_{31}&a_{32}&a_{33}\end{vmatrix}=a_{11}a_{22}a_{33}+a_{21}a_{32}a_{13}+a_{12}a_{23}a_{31}-a_{13}a_{22}a_{31}-a_{23}a_{32}a_{11}-a_{21}a_{12}a_{33}.$$</p>
+  <span class="src" data-l="A" data-ref="Determinantes de orden dos / Determinantes de orden tres">A</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo: el determinante $2\times2$ es un área con signo</span>
+  <p>Las columnas de $A$ son dos vectores $u$ y $v$. El determinante $ad-bc$ es el <b>área del paralelogramo</b> que forman, con signo según la orientación. Mueve los deslizadores: verás que $\det=0$ justo cuando $u$ y $v$ quedan alineados (matriz no invertible).</p>
+  <div class="anim-area" data-v="2,1,0,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Interactivo 3D: el determinante $3\times3$ es un volumen</span>
+  <p>Igual que el $2\times2$ era un área, el determinante de una matriz $3\times3$ es el <b>volumen con signo</b> del paralelepípedo que forman sus columnas. Si $\det=0$ el paralelepípedo se aplasta en un plano. Gira la figura y prueba los casos.</p>
+  <div class="d3-vect" data-modo="det" data-u="2,0,0" data-v="1,2,0" data-w="0,1,3"></div>
+  <span class="src" data-l="P" data-ref="Figura 3D propia (componente assets/tres-d.js, three.js)">P</span>
+</div>
+
+
+
+<div class="box ex"><span class="h">Ejemplo 1.16 de U</span>
+  <p>$$\begin{vmatrix}2&3\\4&1\end{vmatrix}=2\cdot1-3\cdot4=-10.$$
+  $$\begin{vmatrix}1&2&0\\3&2&2\\5&4&3\end{vmatrix}=1\cdot2\cdot3+3\cdot4\cdot0+2\cdot2\cdot5-0\cdot2\cdot5-2\cdot4\cdot1-3\cdot2\cdot3=6+0+20-0-8-18=0.$$</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.16, p. 23">U p.23</span>
+</div>
+
+<div class="box tip"><span class="h">Truco mnemotécnico $2\times2$</span>
+  <p>«Diagonal principal menos diagonal secundaria»: $a_{11}a_{22}-a_{12}a_{21}$. En $2\times2$, un determinante $0$ significa que las dos filas (o columnas) son proporcionales, coherente con lo visto en 1.2 sobre matrices singulares.</p>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Desarrollo por adjuntos (o por cofactores) <span class="src" data-l="U" data-ref="U §1.3, p. 24">U p.24</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Sarrus solo funciona para $3\times3$. Para calcular un determinante de cualquier orden $n$, se «baja» el problema a $n$ determinantes de orden $n-1$: se elige una fila (o columna), y por cada elemento de esa fila se calcula el determinante que queda al tachar su fila y su columna (el <b>menor complementario</b>), con un signo que alterna en tablero de ajedrez. Se llama <b>desarrollo por adjuntos</b> (o por cofactores).</p>
+  <span class="src" data-l="L" data-ref="Lay §3.1, desarrollo por cofactores, definición recursiva, p. 165-166">L p.165-166</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: desarrollo por adjuntos paso a paso</span>
+  <p>Se elige una fila o columna; para cada elemento se tacha su fila y su columna (gris), se calcula el determinante $2\times2$ que queda (el <b>menor</b>, en azul) y se multiplica por el signo del «tablero de ajedrez». Prueba con distintas líneas: el resultado no cambia, pero con una línea con ceros hay menos trabajo.</p>
+  <div class="anim-adj" data-m="2,1,3;0,-1,4;1,2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js)">P</span>
+</div>
+
+
+<div class="box def"><span class="h">Menor complementario y adjunto (cofactor)</span>
+  <p>Dada $A=(a_{ij})$ de orden $n$, el <b>menor complementario</b> $M_{ij}$ es el determinante de orden $n-1$ que resulta de eliminar la fila $i$ y la columna $j$ de $A$. El <b>adjunto</b> (o cofactor) es
+  $$A_{ij}=(-1)^{i+j}\,M_{ij}.$$
+  El signo $(-1)^{i+j}$ forma un «tablero de ajedrez»: $+,-,+,-,\dots$ empezando en $+$ en la posición $(1,1)$. Más adelante (§7) se usa también la palabra <b>menor</b> en un sentido más general —el determinante de <b>cualquier</b> submatriz cuadrada, no solo la que sale de tachar una fila y una columna de una matriz cuadrada— para hablar del rango; no lo confundas con este menor complementario, que es un caso particular.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 24">U p.24</span>
+</div>
+
+
+<div class="box thm"><span class="h">Desarrollo por una fila o columna</span>
+  <p>Para cualquier fila $i$: $\displaystyle|A|=\sum_{j=1}^n a_{ij}A_{ij}=a_{i1}A_{i1}+a_{i2}A_{i2}+\cdots+a_{in}A_{in}$. Análogamente, para cualquier columna $j$: $\displaystyle|A|=\sum_{i=1}^n a_{ij}A_{ij}$. El resultado <b>no depende</b> de la fila o columna elegida.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 24 (y nota 11 para columnas)">U p.24</span>
+  <span class="src" data-l="L" data-ref="Lay §3.1, Teorema 1 (el desarrollo por cofactores no depende de la fila/columna elegida), p. 166">L p.166</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.17 de U — el Ejemplo 1.16 por adjuntos</span>
+  <p>Desarrollando $\begin{vmatrix}1&2&0\\3&2&2\\5&4&3\end{vmatrix}$ por la fila $F_1=(1,2,0)$:
+  $$|A|=1\cdot A_{11}+2\cdot A_{12}+0\cdot A_{13},\quad A_{11}=+\begin{vmatrix}2&2\\4&3\end{vmatrix}=-2,\quad A_{12}=-\begin{vmatrix}3&2\\5&3\end{vmatrix}=-(9-10)=1.$$
+  $$|A|=1(-2)+2(1)+0=0,$$
+  el mismo resultado que por Sarrus. Nótese que el elemento $a_{13}=0$ ahorra calcular $A_{13}$: conviene elegir la fila o columna con más ceros.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.17, p. 24">U p.24</span>
+</div>
+
+<div class="box tip"><span class="h">Estrategia — bajar de orden repetidamente (orden 4 o más)</span>
+  <p>Con un determinante $4\times4$ como $M=\begin{pmatrix}x&a&b&c\\a&x&0&0\\b&0&x&0\\c&0&0&x\end{pmatrix}$ (ver el desarrollo numérico completo en el <a href="#ej1-28">Ejercicio 1.28</a>), desarrollando por $F_3=(b,0,x,0)$ (dos ceros) se llega a dos determinantes $3\times3$, y uno de ellos vuelve a tener una fila con dos ceros: conviene <b>repetir</b> el desarrollo por adjuntos en vez de forzar Sarrus. Así, un determinante $4\times4$ se reduce a $3\times3$ y luego a $2\times2$, aplicando la misma idea las veces que haga falta (esta es exactamente la definición recursiva de Lay).</p>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Olvidar el signo $(-1)^{i+j}$ (confundir el <b>menor</b> $M_{ij}$ con el <b>adjunto</b> $A_{ij}=(-1)^{i+j}M_{ij}$), o tachar la fila/columna equivocada. Escribe siempre primero el «tablero de signos» de la fila o columna elegida antes de calcular ningún menor.</p>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<h2 id="s3"><span class="n">3</span>Permutaciones y la fórmula de Leibniz <span class="src" data-l="U" data-ref="U §1.3, p. 24-26">U p.24-26</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva antes de la definición formal</span>
+  <p>Piensa en un determinante $n\times n$ como una manera de <b>elegir un elemento de cada fila y de cada columna, sin repetir ninguna columna</b>, multiplicarlos todos, y sumar (con signo) sobre <b>todas las formas posibles</b> de hacer esa elección. En $2\times2$ solo hay dos formas de elegir «un elemento por fila y por columna sin repetir»: la diagonal principal $(a_{11},a_{22})$ y la diagonal secundaria $(a_{12},a_{21})$; por eso la fórmula tiene dos términos, uno con $+$ y otro con $-$. En $3\times3$ hay $3!=6$ formas, que son justamente los 6 términos de Sarrus. El «signo» de cada elección se llama <b>signo de la permutación</b> y depende solo de cómo estén desordenadas las columnas elegidas, no de los valores $a_{ij}$.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia para introducir la Definición 1.6">P</span>
+</div>
+
+<div class="box def"><span class="h">Permutaciones de $\{1,\dots,n\}$</span>
+  <p>Una <b>permutación</b> de $\{1,2,\dots,n\}$ es una reordenación $p=(p_1,p_2,\dots,p_n)$ de esos $n$ números. El conjunto de todas las permutaciones se denota $S_n$ y tiene $n!$ elementos.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 24-25">U p.24-25</span>
+</div>
+
+
+<div class="box ex"><span class="h">Ejemplo 1.18 de U — $S_3$</span>
+  <p>$S_3$ tiene $3!=6$ permutaciones de $\{1,2,3\}$: $(1,2,3)$, $(1,3,2)$, $(2,1,3)$, $(2,3,1)$, $(3,1,2)$, $(3,2,1)$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.18, p. 25">U p.25</span>
+</div>
+
+<div class="box def"><span class="h">Paridad y signo de una permutación</span>
+  <p>Toda permutación $p$ se puede obtener a partir de $(1,2,\dots,n)$ mediante una serie de <b>intercambios</b> de dos posiciones. El número de intercambios necesarios no es único, pero su <b>paridad</b> (par o impar) sí lo es. Se define
+  $$\operatorname{sig}(p)=\begin{cases}+1&\text{si el número de intercambios es par}\\-1&\text{si es impar.}\end{cases}$$</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 25">U p.25</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.19 de U — paridad contando intercambios</span>
+  <p>Para $S_4$: la permutación $(1,3,2,4)$ necesita <b>un</b> intercambio para llegar a la identidad (basta cambiar $3$ y $2$ de sitio): es <b>impar</b>. La permutación $(4,2,1,3)$ necesita <b>dos</b> intercambios: $(4,2,1,3)\to(1,2,4,3)\to(1,2,3,4)$ (se intercambian primero $4$ y $1$, luego $4$ y $3$): es <b>par</b>. El número de intercambios puede variar según el camino elegido, pero su paridad siempre coincide.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.19, p. 25">U p.25</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.20 de U — signos de las 6 permutaciones de $S_3$</span>
+  <p>$(1,2,3)$: 0 intercambios, $\operatorname{sig}=+1$ (identidad). $(2,1,3)$: 1 intercambio, $-1$. $(1,3,2)$: 1 intercambio, $-1$. $(3,2,1)$: 1 intercambio, $-1$. $(2,3,1)$: 2 intercambios ($(1,2,3)\to(2,1,3)\to(2,3,1)$), $+1$. $(3,1,2)$: 2 intercambios, $+1$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.20, p. 25">U p.25</span>
+</div>
+
+<div class="box def"><span class="h">Definición 1.6 (definición formal del determinante)</span>
+  <p>Para $A=(a_{ij})$ cuadrada de orden $n$:
+  $$\det(A)=\sum_{p\in S_n}\operatorname{sig}(p)\,a_{1p_1}a_{2p_2}\cdots a_{np_n}.$$
+  Cada sumando toma un elemento de cada fila (los primeros subíndices, en orden $1,\dots,n$) y un elemento de cada columna (los segundos subíndices $p_1,\dots,p_n$, una permutación), y se suman los $n!$ productos con el signo de su permutación. Esta suma tiene exactamente $n!$ términos, tantos como permutaciones hay en $S_n$; uno de ellos es siempre el producto de la <b>diagonal principal</b> $a_{11}a_{22}\cdots a_{nn}$, que corresponde a la permutación identidad $p=(1,2,\dots,n)$ y lleva signo $+$ (0 intercambios).</p>
+  <span class="src" data-l="U" data-ref="U Definición 1.6, p. 25">U p.25</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.21 de U — de la Definición 1.6 a la fórmula $2\times2$</span>
+  <p>Para $n=2$, $S_2=\{(1,2),(2,1)\}$ con $\operatorname{sig}(1,2)=+1$ y $\operatorname{sig}(2,1)=-1$ (un intercambio). Aplicando la Definición 1.6:
+  $$\det(A)=\operatorname{sig}(1,2)\,a_{11}a_{22}+\operatorname{sig}(2,1)\,a_{12}a_{21}=a_{11}a_{22}-a_{12}a_{21},$$
+  exactamente la fórmula del §1.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.21, p. 26">U p.26</span>
+</div>
+
+<div class="box tip"><span class="h">Para qué sirve la Definición 1.6 en la práctica</span>
+  <p>En el examen casi nunca se aplica la Definición 1.6 directamente para <b>calcular</b> un determinante (para eso están Sarrus y los adjuntos); sirve para <b>razonar sobre el signo de un término concreto</b> del desarrollo (ver Ejercicio 1.22) y para entender <b>por qué</b> funcionan las propiedades del §5: todas se demuestran a partir de esta suma sobre permutaciones.</p>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>Regla de Sarrus <span class="src" data-l="U" data-ref="U §1.3, p. 26">U p.26</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>Sarrus es un atajo visual para no tener que pensar en las 6 permutaciones de $S_3$: se repiten las dos primeras <b>filas debajo</b> de la matriz (también vale copiar las dos primeras columnas a la derecha: salen los mismos seis productos) y se suman los productos de las tres «diagonales» que bajan (con $+$) y se restan los de las tres que suben (con $-$).</p>
+</div>
+
+<div class="box ex"><span class="h">Cómo funciona, paso a paso (animación)</span>
+  <p>Pulsa <b>Reproducir</b> o avanza con <b>Siguiente</b>. Verás cómo se copian debajo las dos primeras filas, cómo se trazan las tres diagonales que bajan (azul, suman) y las tres que suben (naranja, restan), y cómo se obtiene el determinante. <b>Puedes cambiar los números de la matriz</b> para practicar con otros.</p>
+  <noscript><p><i>(Esta animación necesita JavaScript. Texto equivalente: se copian las filas 1 y 2 debajo de la matriz; se suman los productos de las tres diagonales descendentes y se restan los de las tres ascendentes.)</i></p></noscript>
+  <div class="sarrus-demo" data-m="2,1,3,0,-1,4,1,2,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia de la regla de Sarrus (con la matriz del Ejemplo propio 1); la regla es la de U §1.3, p. 26">P</span>
+</div>
+
+<div class="box def"><span class="h">Fórmula</span>
+  <p>$$|A|=a_{11}a_{22}a_{33}+a_{21}a_{32}a_{13}+a_{12}a_{23}a_{31}-a_{13}a_{22}a_{31}-a_{23}a_{32}a_{11}-a_{21}a_{12}a_{33}.$$
+  Cada uno de los 6 términos corresponde a una de las 6 permutaciones de $S_3$ (Ejemplo 1.20) con su signo.</p>
+  <table>
+    <tr><th>Término</th><th>Permutación (2.º subíndices)</th><th>Signo</th></tr>
+    <tr><td>$a_{11}a_{22}a_{33}$</td><td>$(1,2,3)$</td><td>$+$</td></tr>
+    <tr><td>$a_{21}a_{32}a_{13}$</td><td>$(3,1,2)$</td><td>$+$</td></tr>
+    <tr><td>$a_{12}a_{23}a_{31}$</td><td>$(2,3,1)$</td><td>$+$</td></tr>
+    <tr><td>$a_{13}a_{22}a_{31}$</td><td>$(3,2,1)$</td><td>$-$</td></tr>
+    <tr><td>$a_{23}a_{32}a_{11}$</td><td>$(1,3,2)$</td><td>$-$</td></tr>
+    <tr><td>$a_{21}a_{12}a_{33}$</td><td>$(2,1,3)$</td><td>$-$</td></tr>
+  </table>
+  <p>Los signos coinciden con $\operatorname{sig}(p)$ del Ejemplo 1.20 (§3): Sarrus no es más que la Definición 1.6 escrita término a término para $n=3$.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 26">U p.26</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Aplicar Sarrus a matrices que <b>no</b> son $3\times3$: la regla solo vale para orden 3. Para cualquier otro orden hay que usar el desarrollo por adjuntos (§2) o, si la matriz es triangular, la propiedad del §5.</p>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Propiedades del determinante <span class="src" data-l="U" data-ref="U §1.3, p. 26">U p.26</span></h2>
+
+<div class="box thm"><span class="h">Propiedades básicas</span>
+  <ol>
+    <li>Si $A$ tiene una <b>fila (o columna) de ceros</b>, $\det(A)=0$.</li>
+    <li>Si $A$ es <b>triangular</b> (superior o inferior), $\det(A)=a_{11}a_{22}\cdots a_{nn}$ (producto de la diagonal). En particular $\det(I_n)=1$.</li>
+    <li>En general $\det(A+B)\neq\det(A)+\det(B)$: el determinante <b>no es aditivo</b>.</li>
+    <li>$\det(A)=\det(A^t)$: todo lo que vale para filas vale igual para columnas.</li>
+    <li>$\det(\alpha A)=\alpha^n\det(A)$ (¡no $\alpha\det(A)$!, $n$ es el orden de $A$).</li>
+    <li>$\det(AB)=\det(A)\det(B)$ (multiplicativo).</li>
+    <li>Si $A$ es regular, $\det(A^{-1})=\dfrac1{\det(A)}$ (se deduce de la propiedad 6 con $B=A^{-1}$: $\det(A)\det(A^{-1})=\det(AA^{-1})=\det(I_n)=1$).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 26">U p.26</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico — comprobando 3, 5 y 6</span>
+  <p>Con $A=B=I_2=\begin{pmatrix}1&0\\0&1\end{pmatrix}$: $\det A=\det B=1$, pero $\det(A+B)=\det(2I_2)=\begin{vmatrix}2&0\\0&2\end{vmatrix}=4\neq\det A+\det B=1+1=2$: confirma que el determinante <b>no es aditivo</b> (propiedad 3). Con $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$, $B=\begin{pmatrix}0&1\\1&0\end{pmatrix}$: $\det(3A)=3^2\det A=3^2\cdot2=18$ (no $3\cdot2=6$: propiedad 5). $AB=\begin{pmatrix}0&1\\2&0\end{pmatrix}$, $\det(AB)=-2=\det A\cdot\det B=2\cdot(-1)$ ✓ (propiedad 6).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Confundir «multiplicar <b>una fila</b> por $\alpha$» (multiplica $\det A$ por $\alpha$, ver §6) con «multiplicar <b>toda la matriz</b> por $\alpha$» (lo multiplica por $\alpha^n$). Son la propiedad 5 (matriz completa) y la primera regla del §6 (una sola fila): no son lo mismo.</p>
+</div>
+
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Efecto de las operaciones elementales en el determinante <span class="src" data-l="U" data-ref="U §1.3, p. 27">U p.27</span></h2>
+
+<div class="box intu"><span class="h">Aviso importante: aquí SÍ cambia (salvo un caso)</span>
+  <p>En el <a href="tema_1_2_algebra_matricial.html#s8">Tema 1.2</a> usábamos las tres operaciones elementales por filas para escalonar, sin preocuparnos de si «cambiaban» la matriz: el objetivo era llegar a una forma más simple equivalente. Aquí, en cambio, cada operación tiene un <b>efecto medible y distinto</b> sobre el determinante, y hay que llevar la cuenta de ese efecto para poder calcular $\det A$ a partir de una escalonada de $A$ (que es triangular, y por tanto su determinante es inmediato por la propiedad 2 del §5).</p>
+</div>
+
+<table>
+  <tr><th>Operación elemental (por filas o columnas)</th><th>Efecto en el determinante</th><th>¿Cambia el rango (1.2)?</th></tr>
+  <tr><td>$F_i\leftrightarrow F_j$ (permutar)</td><td>cambia de <b>signo</b>: $\times(-1)$</td><td>No</td></tr>
+  <tr><td>$F_i\to\alpha F_i$, $\alpha\neq0$ (escalar)</td><td>se multiplica por $\alpha$: $\times\alpha$</td><td>No</td></tr>
+  <tr><td>$F_i\to F_i+\alpha F_j$ (reemplazo)</td><td><b>no cambia</b></td><td>No</td></tr>
+</table>
+
+<div class="box tip"><span class="h">¿Y por columnas?</span>
+  <p>La tabla anterior está enunciada para filas. Las mismas tres reglas valen igual para <b>columnas</b>: hacer una operación sobre las columnas de $A$ es hacer la misma operación sobre las filas de $A^t$, y $\det(A)=\det(A^t)$ (propiedad 4 del §5), así que el efecto sobre el determinante es idéntico.</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico — escalonando con intercambio y reescalado</span>
+  <p>Calculemos $\det D$ con $D=\begin{pmatrix}0&4&2\\1&3&1\\2&5&3\end{pmatrix}$ escalonando, anotando cada factor.</p>
+  <ol class="steps">
+    <li>$a_{11}=0$: hace falta <b>permutar</b>. $F_1\leftrightarrow F_2$ (factor $-1$): $\begin{pmatrix}1&3&1\\0&4&2\\2&5&3\end{pmatrix}$.</li>
+    <li>Para trabajar con números más pequeños, $F_2\to\frac12F_2$ (factor $\frac12$): $\begin{pmatrix}1&3&1\\0&2&1\\2&5&3\end{pmatrix}$.</li>
+    <li>$F_3\to F_3-2F_1$ (reemplazo, factor $1$): $\begin{pmatrix}1&3&1\\0&2&1\\0&-1&1\end{pmatrix}$.</li>
+    <li>$F_3\to F_3+\frac12F_2$ (reemplazo, factor $1$): $\begin{pmatrix}1&3&1\\0&2&1\\0&0&1.5\end{pmatrix}=D_e$, ya triangular.</li>
+    <li>$\det D_e=1\cdot2\cdot1.5=3$. Factores acumulados: $(-1)\cdot\frac12\cdot1\cdot1=-\frac12$.</li>
+    <li>$\det D=\dfrac{\det D_e}{\text{producto de factores}}=\dfrac{3}{-\frac12}=-6$.</li>
+  </ol>
+  <p>Comprobación directa por Sarrus sobre $D$: $0+10+8-12-0-12=-6$ ✓ (verificado también con sympy).</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.22 de U — determinantes de matrices elementales</span>
+  <p>Retomando las 4 matrices elementales del Ejemplo 1.7 de 1.2: $E_1$ (de $F_2\to2F_2$ en $I_3$) tiene $\det E_1=2$; $E_2$ (de $F_1\to F_1+5F_4$ en $I_4$, reemplazo) tiene $\det E_2=1$; $E_3$ (de $F_1\leftrightarrow F_2$ en $I_3$, permutación) tiene $\det E_3=-1$; $E_4$ (de $F_1\to F_1-F_2$ en $I_2$, reemplazo) tiene $\det E_4=1$. Coincide con «el determinante de una elemental es $\alpha$, $-1$ o $1$ según su tipo», porque toda elemental sale de aplicar <b>una</b> operación a $I_n$, cuyo determinante es 1.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.22, p. 27">U p.27</span>
+</div>
+
+<div class="box thm"><span class="h">Consecuencia práctica: calcular un determinante escalonando</span>
+  <p>Para calcular $\det A$ de cualquier orden: se lleva $A$ a una escalonada $A_e$ (triangular superior) anotando el factor de cada operación (permutar $\to\times(-1)$, escalar $\to\times\alpha$, reemplazo $\to\times1$); entonces
+  $$\det A=\frac{1}{\text{producto de los factores anotados}}\cdot\det A_e=\frac{1}{\text{producto de los factores}}\cdot(\text{producto de la diagonal de }A_e).$$
+  Es el método más rápido para órdenes altos, y el que conecta directamente con el escalonamiento de 1.2.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia, combinando U p.27 con el escalonamiento de 1.2">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Aplicar el reemplazo con un factor: pensar que $F_i\to F_i+\alpha F_j$ multiplica el determinante por $\alpha$ (o por $1+\alpha$). El reemplazo <b>nunca</b> cambia el determinante, sea cual sea $\alpha$; es justo la operación «gratis» que permite escalonar sin alterar $\det A$ salvo por los intercambios y los reescalados de filas.</p>
+</div>
+
+<!-- ============================ 7 ============================ -->
+<h2 id="s7"><span class="n">7</span>Determinante, regularidad, rango e inversa <span class="src" data-l="U" data-ref="U §1.3, p. 27-28">U p.27-28</span></h2>
+
+<div class="box thm"><span class="h">Regularidad</span>
+  <p>$A$ (cuadrada de orden $n$) es <b>regular</b> $\iff$ $\det(A)\neq0$. Enlaza con el Tema 1.2: $A$ regular $\iff\operatorname{rang}(A)=n$ (U p.22), así que también $\det(A)\neq0\iff\operatorname{rang}(A)=n$.</p>
+  <p><b>Por qué es cierto</b> (con lo visto en el §6): al escalonar, $\det A=c\cdot\det A_e$ con $c\neq0$ (el producto de los factores de permutar/escalar; el reemplazo no aporta factor). Por otro lado, $A$ es regular $\iff$ su escalonada $A_e$ es triangular <b>sin ceros en la diagonal</b> (U p.22, Tema 1.2). Y una triangular tiene determinante no nulo exactamente cuando su diagonal no tiene ceros (propiedad 2 del §5). Encadenando ambas cosas: $A$ regular $\iff\det A_e\neq0\iff\det A=c\cdot\det A_e\neq0$ (pues $c\neq0$).</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27">U p.27</span>
+</div>
+
+<div class="box def"><span class="h">Matriz adjunta y fórmula de la inversa</span>
+  <p>La <b>matriz adjunta</b> de $A$, $\operatorname{Adj}(A)$, es la matriz cuyo elemento $(i,j)$ es el adjunto $A_{ij}$ (definido en el §2). Si $\det(A)\neq0$:
+  $$A^{-1}=\frac{1}{\det(A)}\big(\operatorname{Adj}A\big)^t.$$
+  Nótese la <b>trasposición</b>: la columna $k$ de $A^{-1}$ se obtiene con los adjuntos de la <b>fila</b> $k$ de $A$, no de su columna $k$.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27-28 (Adj, p.28; fórmula, p.27)">U p.27-28</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico $2\times2$ — comparar con el Ejemplo 1.5 de 1.2</span>
+  <p>Con $A=\begin{pmatrix}2&3\\1&5\end{pmatrix}$ (Ejemplo 1.5 del Tema 1.2, calculado allí resolviendo un sistema): $\det A=2\cdot5-3\cdot1=7\neq0$, luego $A$ es regular. Los adjuntos son $A_{11}=5$, $A_{12}=-1$, $A_{21}=-3$, $A_{22}=2$, así que $\operatorname{Adj}A=\begin{pmatrix}5&-1\\-3&2\end{pmatrix}$ y
+  $$A^{-1}=\frac17\begin{pmatrix}5&-3\\-1&2\end{pmatrix}=\begin{pmatrix}\frac57&-\frac37\\-\frac17&\frac27\end{pmatrix},$$
+  el mismo resultado que en 1.2, pero sin plantear ningún sistema: para $2\times2$, «cruzar la diagonal, cambiar de signo la secundaria y dividir por $\det A$» es la versión rápida de esta fórmula.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, comparado con U Ejemplo 1.5 (Tema 1.2, p. 14)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.23 de U — inversa $3\times3$ completa por adjuntos</span>
+  <p>Con $A=\begin{pmatrix}1&2&1\\3&2&2\\5&4&3\end{pmatrix}$ (nótese: $a_{13}=1$, no es la matriz del Ejemplo 1.16, que tenía un $0$ ahí). Por Sarrus, $|A|=6+12+20-10-8-18=2\neq0$: $A$ es regular.</p>
+  <p>Los nueve adjuntos: $A_{11}=-2$, $A_{12}=1$, $A_{13}=2$, $A_{21}=-2$, $A_{22}=-2$, $A_{23}=6$, $A_{31}=2$, $A_{32}=1$, $A_{33}=-4$, así que
+  $$\operatorname{Adj}A=\begin{pmatrix}-2&1&2\\-2&-2&6\\2&1&-4\end{pmatrix},\qquad A^{-1}=\frac12\begin{pmatrix}-2&-2&2\\1&-2&1\\2&6&-4\end{pmatrix}=\begin{pmatrix}-1&-1&1\\\frac12&-1&\frac12\\1&3&-2\end{pmatrix}.$$</p>
+  <p>Comprobación: $AA^{-1}=I_3$ (verificado con sympy).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.23, p. 28">U p.28</span>
+</div>
+
+<div class="box intu"><span class="h">Interpretación geométrica</span>
+  <p>En $\mathbb R^2$, $|\det[v_1\ v_2]|$ es el <b>área</b> del paralelogramo que forman los vectores $v_1,v_2$ (colocados como columnas). Por ejemplo, con $v_1=(1,2)$ y $v_2=(3,0)$: $\left|\det\begin{pmatrix}1&3\\2&0\end{pmatrix}\right|=|0-6|=6$: el paralelogramo que forman tiene área 6. En $\mathbb R^3$, $|\det[v_1\ v_2\ v_3]|$ es el <b>volumen</b> del paralelepípedo que forman los tres vectores. Es coherente con la propiedad de que $\det=0$ cuando hay filas/columnas proporcionales: si dos vectores son paralelos (o uno es combinación de los otros), la figura se «aplasta» y su área/volumen es 0.</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27 (interpretación geométrica)">U p.27</span>
+</div>
+
+
+<div class="box def"><span class="h">Rango por menores</span>
+  <p>El <b>rango</b> de $A\in\mathcal M_{m\times n}$ también se puede definir como el mayor orden $r$ para el que existe un menor (determinante de una submatriz cuadrada $r\times r$) <b>no nulo</b>. Coincide con la definición de 1.2 (número de filas no nulas de una escalonada), pero esta versión con menores es la que permite discutir el rango <b>según un parámetro</b> sin escalonar (ver Ejercicio 1.29).</p>
+  <span class="src" data-l="U" data-ref="U §1.3, p. 27-28">U p.27-28</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 1.24 de U — rango por menores de una matriz singular</span>
+  <p>La matriz del Ejemplo 1.16 (§1), $A=\begin{pmatrix}1&2&0\\3&2&2\\5&4&3\end{pmatrix}$, tiene $|A|=0$ (ya calculado), así que $\operatorname{rang}(A)\lt3$. El menor de filas 1-2 y columnas 1-2, $\begin{vmatrix}1&2\\3&2\end{vmatrix}=2-6=-4\neq0$, es de orden 2 y no nulo: por tanto $\operatorname{rang}(A)=2$. No hace falta escalonar para llegar a esta conclusión.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 1.24, p. 28">U p.28</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen</span>
+  <p>Para discutir el rango de una matriz cuadrada con parámetro: calcula primero $\det A$ (factorizado, si puedes). Donde $\det A\neq0$, el rango es máximo ($n$) sin más trabajo. En los valores que anulan $\det A$, sustituye ese valor y busca <b>un solo</b> menor de orden $n-1$ no nulo (basta uno); si todos son nulos, baja otra vez de orden.</p>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>Concluir que $\det A=0$ implica rango $1$ o rango $0$: solo implica $\operatorname{rang}(A)\lt n$. Hay que seguir bajando de orden, comprobando menores, hasta encontrar uno no nulo (ver Ejercicio 1.29).</p>
+</div>
+
+<!-- ============================ EJERCICIOS ============================ -->
+<h2 id="ejercicios"><span class="n">8</span>Ejercicios del libro, resueltos</h2>
+
+{{ejercicio:ej1-21}}
+
+{{ejercicio:ej1-22}}
+
+{{ejercicio:ej1-23}}
+
+{{ejercicio:ej1-24}}
+
+{{ejercicio:ej1-25}}
+
+{{ejercicio:ej1-26}}
+
+{{ejercicio:ej1-27}}
+
+{{ejercicio:ej1-28}}
+
+{{ejercicio:ej1-29}}
+
+<h3>Ejemplos propios (dificultad creciente)</h3>
+
+{{ejercicio:sol-1_3-10}}
+
+{{ejercicio:sol-1_3-11}}
+
+{{ejercicio:sol-1_3-12}}
+
+{{ejercicio:sol-1_3-13}}
+
+<!-- ============================ 9 EXAMEN ============================ -->
+<h2 id="examenes"><span class="n">9</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+
+<p>Preguntas de exámenes de otros años que caen en este tema (en los últimos años casi siempre hay una). Están agrupadas por método:</p>
+<ul>
+  <li><b>A.</b> Conocido $\det A$, calcular el de otra matriz obtenida con operaciones de filas o columnas.</li>
+  <li><b>B.</b> Determinante de productos, traspuestas y matrices semejantes a una diagonal.</li>
+  <li><b>C.</b> Permutaciones y signo de un término del desarrollo.</li>
+  <li><b>D.</b> Factorización $LU$ y determinante.</li>
+  <li><b>E.</b> (Frontera con el tema 2.3) El determinante como test de base.</li>
+</ul>
+
+<div class="box warn"><span class="h">Dos propiedades útiles (se deducen en la solución)</span>
+  <p><b>(P1) Operaciones por columnas.</b> Las operaciones elementales se enuncian <b>por filas</b> (U p.27). Hacer una operación sobre las columnas de $A$ es hacerla sobre las filas de $A^t$, y $\det A=\det A^t$ (U p.26): por tanto las tres reglas (permutar $\times(-1)$, escalar $\times\alpha$, reemplazo sin cambio) valen igual por columnas. <b>(P2) $\det(A^{-1})=1/\det A$.</b> De $AA^{-1}=I$ y $\det(AB)=\det A\det B$ (U p.26): $\det A\cdot\det A^{-1}=\det I=1$ ($I$ es triangular, U p.26), y $\det A\neq0$ por ser $A$ regular (U p.27). <span class="src" data-l="P" data-ref="Consecuencias directas de U p.26-27 (propias)">P</span></p>
+</div>
+
+<h3>A. Operaciones de filas o columnas sobre un determinante dado</h3>
+
+{{ejercicio:ex-sep25}}
+
+{{ejercicio:ex-feb23a}}
+
+{{ejercicio:ex-feb25b}}
+
+<h3>B. Productos, traspuestas y matrices semejantes</h3>
+
+{{ejercicio:ex-feb24b}}
+
+{{ejercicio:ex-feb19b4}}
+
+{{ejercicio:ex-sep24p4}}
+
+{{ejercicio:ex-feb26b}}
+
+<h3>C. Permutaciones y signo de un término del desarrollo</h3>
+
+{{ejercicio:ex-feb19b1}}
+
+<h3>D. Factorización $LU$ y determinante</h3>
+
+{{ejercicio:ex-sep17a}}
+
+<h3>E. El determinante como test de base <small>(frontera con el tema 2.3)</small></h3>
+
+{{ejercicio:ex-feb18b1}}
+
+<div class="box tip"><span class="h">Para practicar (usan determinantes pero son de otros temas)</span>
+  <span class="src" data-l="X" data-ref="Sept. 2023, preguntas 2 y 5; Ene. 2022 (tipo A), ejercicio 5; Feb. 2026 (1.ª sem.), preguntas 3 y 4">X varios</span>
+  <ul>
+    <li>X, Sept. 2023, pregunta 5 (<a href="tema_4_1_relaciones_equivalencia.html#ex-sep23-5">tema 4.1</a>, congruencia) — «dos matrices congruentes tienen el mismo determinante»: <b>falso</b>. Con $B=P^tAP$, $|B|=|P|^2|A|$; contraejemplo $A=I_2$, $P=\operatorname{diag}(2,1)$, $|B|=4$. Solo se conserva el signo. (Con semejanza, $A=P^{-1}DP$, sí se conserva: ejemplos B.)</li>
+    <li>X, Ene. 2022 (tipo A), ejercicio 5, 1.ª afirmación (tema 5.1, matrices de Gram) — los determinantes de dos matrices de Gram del mismo producto escalar en bases distintas no son iguales en general: $G=Q^tG'Q$, $|G|=|Q|^2|G'|$.</li>
+    <li>X, Feb. 2026 (1.ª sem.), pregunta 3 (tema 2.3) — ¿es una colección de 4 matrices $2\times2$ base de $\mathcal M_{2\times2}$? Se pasa a coordenadas y se estudia el determinante $4\times4$; aquí sale una fila de ceros al escalonar, $\det=0$: no es base.</li>
+    <li>X, Sept. 2023, pregunta 2 (tema 2.2) — valor de $k$ para que $(1,1,-2,k)$ sea combinación lineal de tres vectores independientes de $\mathbb R^4$: determinante $4\times4$ igual a $0$ (desarrollo por una columna): $k=-8$.</li>
+    <li>X, Feb. 2026 (1.ª sem.), pregunta 4 (tema 4.2) — con polinomio característico $p(\lambda)=(\lambda+8)^2(\lambda-3)^2$, $|A+8I|=p(-8)=0=p(3)=|A-3I|$: igualdad cierta.</li>
+  </ul>
+</div>
+
+<!-- ============================ CHULETA ============================ -->
+<h2 id="chuleta"><span class="n">10</span>Chuleta y lista de comprobación</h2>
+
+<table>
+  <tr><th>Resultado</th><th>Fórmula</th><th>Hipótesis</th></tr>
+  <tr><td>Orden 2</td><td>$|A|=a_{11}a_{22}-a_{12}a_{21}$</td><td>$A$ cuadrada de orden 2</td></tr>
+  <tr><td>Orden 3 (Sarrus)</td><td>$a_{11}a_{22}a_{33}+a_{21}a_{32}a_{13}+a_{12}a_{23}a_{31}-a_{13}a_{22}a_{31}-a_{23}a_{32}a_{11}-a_{21}a_{12}a_{33}$</td><td>$A$ cuadrada de orden 3 (¡solo orden 3!)</td></tr>
+  <tr><td>Desarrollo por adjuntos</td><td>$|A|=\sum_j a_{ij}A_{ij}$ (fila $i$) o $\sum_i a_{ij}A_{ij}$ (columna $j$), $A_{ij}=(-1)^{i+j}M_{ij}$</td><td>cualquier orden $n$; elige la línea con más ceros</td></tr>
+  <tr><td>Definición 1.6 (Leibniz)</td><td>$\det A=\sum_{p\in S_n}\operatorname{sig}(p)\,a_{1p_1}\cdots a_{np_n}$</td><td>$n!$ sumandos; base teórica de todas las propiedades</td></tr>
+  <tr><td>Fila/columna de ceros</td><td>$\det A=0$</td><td>—</td></tr>
+  <tr><td>Triangular</td><td>$\det A=a_{11}\cdots a_{nn}$</td><td>triangular superior o inferior</td></tr>
+  <tr><td>Traspuesta</td><td>$\det A=\det A^t$</td><td>—</td></tr>
+  <tr><td>Escalar</td><td>$\det(\alpha A)=\alpha^n\det A$</td><td>$n$ = orden de $A$ (no confundir con escalar <b>una fila</b>)</td></tr>
+  <tr><td>Producto</td><td>$\det(AB)=\det A\det B$</td><td>$A,B$ cuadradas del mismo orden</td></tr>
+  <tr><td>Inversa (escalar)</td><td>$\det(A^{-1})=\dfrac1{\det A}$</td><td>$A$ regular (sale de $\det(AB)=\det A\det B$ con $B=A^{-1}$)</td></tr>
+  <tr><td>Permutar filas/columnas</td><td>$\times(-1)$</td><td>una permutación de dos líneas</td></tr>
+  <tr><td>Escalar una fila/columna</td><td>$\times\alpha$</td><td>$\alpha\neq0$</td></tr>
+  <tr><td>Reemplazo</td><td>no cambia</td><td>$F_i\to F_i+\alpha F_j$, cualquier $\alpha$</td></tr>
+  <tr><td>Regularidad</td><td>$A$ regular $\iff\det A\neq0\iff\operatorname{rang}A=n$</td><td>$A$ cuadrada de orden $n$</td></tr>
+  <tr><td>Inversa por adjuntos</td><td>$A^{-1}=\frac1{\det A}(\operatorname{Adj}A)^t$</td><td>$\det A\neq0$; ¡ojo a la trasposición!</td></tr>
+  <tr><td>Rango por menores</td><td>$\operatorname{rang}A=$ mayor orden de un menor no nulo</td><td>equivalente a la definición por escalonamiento (1.2)</td></tr>
+</table>
+
+<ul class="checklist">
+  <li>Sé calcular determinantes $2\times2$ y $3\times3$ (Sarrus) directamente.</li>
+  <li>Sé desarrollar un determinante de cualquier orden por adjuntos, eligiendo la fila o columna con más ceros, sin equivocarme con el signo $(-1)^{i+j}$.</li>
+  <li>Sé de dónde sale la fórmula $2\times2$ y Sarrus a partir de la Definición 1.6 (permutaciones y su signo), y sé razonar sobre el signo de un término concreto.</li>
+  <li>Sé aplicar las propiedades: fila de ceros, triangular, traspuesta, $\det(\alpha A)=\alpha^n\det A$, $\det(AB)=\det A\det B$.</li>
+  <li>Sé el efecto de cada operación elemental sobre el determinante (permutar $\times(-1)$, escalar $\times\alpha$, reemplazo sin cambio) y lo uso para calcular determinantes escalonando.</li>
+  <li>Sé decidir la regularidad de una matriz con el determinante y relacionarlo con el rango visto en 1.2.</li>
+  <li>Sé calcular la matriz adjunta y usar $A^{-1}=\frac1{|A|}(\operatorname{Adj}A)^t$, incluida solo una fila o columna concreta de la inversa.</li>
+  <li>Sé discutir el rango de una matriz con parámetro usando el determinante y, si se anula, buscando un menor no nulo de orden inferior.</li>
+  <li>Sé interpretar $|\det|$ como área (en $\mathbb R^2$) o volumen (en $\mathbb R^3$), y reconozco la diferencia de notación entre U y Lay para el adjunto/cofactor si consulto ambos libros.</li>
+</ul>
+
+<h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
+<details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
+<div id="panel-fuentes"></div>
+</details>
+
+<footer>Resumen generado a partir de los libros indicados. Numeración de páginas: la impresa en cada libro.</footer>
+</main>
+</div>
+</body>
+</html>
