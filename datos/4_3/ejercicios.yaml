@@ -1,0 +1,1851 @@
+- id: ej4-24
+  clase: libro
+  titulo: |-
+    Ejercicio 4.24 — triangular con un único valor propio triple
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.24, p. 141
+    texto: |-
+      E p.141
+  cuerpo:
+  - enun: |-
+      Si $A$ es la matriz de filas $(1,1,1)$, $(0,1,1)$ y $(0,0,1)$, se pide: A) valores propios y su multiplicidad algebraica. B) ecuaciones cartesianas de los subespacios propios. C) ecuaciones paramétricas y un sistema generador de los subespacios anteriores. D) justificar si $A$ es diagonalizable.
+  - html: |-
+      <p><b>Qué se pide.</b> Aplicar la receta completa hasta el veredicto, con la «ficha» de cada subespacio propio.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Valores y subespacios propios de una triangular y decidir si es diagonalizable.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Es triangular con unos en la diagonal: un único valor propio con multiplicidad 3. Para que fuese diagonalizable necesitaría tres vectores propios independientes, es decir, $A-I$ de rango 0, y no lo parece: tiene unos fuera de la diagonal.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Resuelvo $(A-I)X=0$, cuento la dimensión y comparo con 3.
+  - pasos:
+    - |-
+      <b>Ecuación característica</b> (Def. 4.9, U p.152). $A-\lambda I$ es triangular superior, y el determinante de una triangular es el producto de su diagonal (U §1.3): $|A-\lambda I|=(1-\lambda)^3$.
+    - |-
+      <b>Raíces y $\alpha$ (A).</b> $(1-\lambda)^3=0\iff\lambda=1$, raíz triple: $\lambda_1=1$, $\alpha_1=3$.
+    - |-
+      <p><b>Subespacio propio $L_1$ (B).</b> $(A-I)x=0$ es</p>
+            $$\begin{pmatrix}0&1&1\cr0&0&1\cr0&0&0\end{pmatrix}\begin{pmatrix}x_1\cr x_2\cr x_3\end{pmatrix}=0\iff x_2+x_3=0,\ x_3=0\iff x_2=0,\ x_3=0$$
+            <p>(la segunda ecuación da $x_3=0$; sustituida en la primera, $x_2=0$). Ecuaciones cartesianas: $x_2=0,\ x_3=0$.</p>
+    - |-
+      <b>Paramétricas y generador (C).</b> $x_1$ no aparece en ninguna ecuación, así que es libre: $x_1=\alpha$, $x_2=0$, $x_3=0$. $L_1=\langle(1,0,0)\rangle$; sistema generador $\{(1,0,0)\}$.
+    - |-
+      <b>Multiplicidad geométrica.</b> $d_1=\dim L_1=1$. (Por rangos: $\operatorname{rang}(A-I)=2$, luego $d_1=3-2=1$, U Teor. 3.1 p.111.)
+    - |-
+      <b>Veredicto (D).</b> $\alpha_1=3\neq1=d_1$: por el Teorema 4.7, <b>$A$ no es diagonalizable</b>. Con el Teorema 4.6: haría falta $3$ vectores propios independientes (las $3$ columnas de $P$) y solo hay $1$.
+  - receta: |-
+      matriz triangular: los valores propios se leen en la diagonal; después basta un rango, $d=n-\operatorname{rang}(A-\lambda I)$, para decidir.
+  - error: |-
+      «es triangular, ya es casi diagonal, luego es diagonalizable». Ser triangular da los valores propios gratis, pero no dice nada sobre $d_i$. <b>Teoría:</b> U Def. 4.8-4.11 pp.152-155; Teor. 4.7 p.164. (Verificado con sympy.)
+- id: ej4-25
+  clase: libro
+  titulo: |-
+    Ejercicio 4.25 — simétrica $3\times3$, valor propio doble con $d=\alpha$
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.25, p. 142
+    texto: |-
+      E p.142
+  cuerpo:
+  - enun: |-
+      Si $A$ es la matriz de filas $(7,-2,1)$, $(-2,10,-2)$ y $(1,-2,7)$, justificar si: A) $A$ tiene tres valores propios diferentes. B) Existen ecuaciones cartesianas de los subespacios propios. C) La matriz $A$ es diagonalizable.
+  - html: |-
+      <p><b>Qué se pide.</b> Ver cuántos valores propios distintos hay y comprobar que el doble tiene dos vectores propios independientes.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Polinomio, subespacios propios y diagonalizabilidad de una simétrica $3\times3$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Reconozco una simétrica: sus valores propios serán reales y, si todo va bien, diagonalizable. El polinomio de grado 3 lo simplifico con operaciones entre columnas que dejen un factor común.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Factorizo el polinomio, estudio $d$ para cada valor y construyo $P$.
+  - pasos:
+    - |-
+      <p><b>Polinomio característico sin desarrollar a ciegas.</b> Haciendo $C_1\to C_1-C_3$ (no cambia el determinante) y sacando el factor común $6-\lambda$ de la columna 1:</p>
+            $$\begin{vmatrix}7-\lambda&-2&1\cr-2&10-\lambda&-2\cr1&-2&7-\lambda\end{vmatrix}=(6-\lambda)\begin{vmatrix}1&-2&1\cr0&10-\lambda&-2\cr-1&-2&7-\lambda\end{vmatrix}.$$
+            <p>Con $F_3\to F_3+F_1$:</p>
+            $$=(6-\lambda)\begin{vmatrix}1&-2&1\cr0&10-\lambda&-2\cr0&-4&8-\lambda\end{vmatrix}=(6-\lambda)\big[(10-\lambda)(8-\lambda)-8\big]=(6-\lambda)(\lambda^2-18\lambda+72),$$
+            <p>y $\lambda^2-18\lambda+72=(\lambda-6)(\lambda-12)$. Luego $|A-\lambda I|=-(\lambda-6)^2(\lambda-12)$.</p>
+    - |-
+      <b>A) Falsa.</b> $\lambda_1=12$ ($\alpha_1=1$) y $\lambda_2=6$ ($\alpha_2=2$): solo hay dos valores propios distintos.
+    - |-
+      <p><b>$L_{12}$.</b></p>
+            $$A-12I=\begin{pmatrix}-5&-2&1\cr-2&-2&-2\cr1&-2&-5\end{pmatrix}$$
+            <p>tiene rango $2$ (Gauss: $\begin{pmatrix}1&0&-1\cr0&1&2\cr0&0&0\end{pmatrix}$); $x_1=x_3$, $x_2=-2x_3$: $L_{12}=\langle(1,-2,1)\rangle$, $d=1$. Comprobación: $A(1,-2,1)^t=(12,-24,12)^t=12(1,-2,1)^t$ ✓.</p>
+    - |-
+      <p><b>$L_6$.</b></p>
+            $$A-6I=\begin{pmatrix}1&-2&1\cr-2&4&-2\cr1&-2&1\end{pmatrix}:$$
+            <p>las tres filas son proporcionales a $(1,-2,1)$, rango $1$, luego $d=3-1=2$. Ecuación $x_1-2x_2+x_3=0$ (un plano); base $\{(2,1,0),(-1,0,1)\}$.</p>
+    - |-
+      <b>B) Verdadera.</b> Todo subespacio de $\mathbb R^n$ tiene ecuaciones cartesianas (U p.71); aquí: $L_{12}$: $x_1-x_3=0,\ x_2+2x_3=0$; $L_6$: $x_1-2x_2+x_3=0$ (el número de ecuaciones independientes es $n-\dim L$: $2$ y $1$).
+    - |-
+      <p><b>C) Verdadera.</b> $d_{12}=1=\alpha_{12}$ y $d_6=2=\alpha_6$ (Teor. 4.7). Una pareja válida:</p>
+            $$P=\begin{pmatrix}1&2&-1\cr-2&1&0\cr1&0&1\end{pmatrix},$$
+            <p>$\Lambda=\operatorname{diag}(12,6,6)$ (columna 1 en $L_{12}$, columnas 2 y 3 en $L_6$, mismo orden), y $\Lambda=P^{-1}AP$.</p>
+  - html: |-
+      <p><b>Respuesta:</b> A falsa, B verdadera, C verdadera.</p>
+  - receta: |-
+      antes de desarrollar $|A-\lambda I|$, busca una combinación de filas o columnas que deje un factor $(\lambda_0-\lambda)$ común; el polinomio sale ya factorizado. Para el valor propio múltiple, el rango de $A-\lambda I$ decide.
+  - error: |-
+      concluir «no diagonalizable» solo porque hay un valor propio doble; decide $d_2$ y aquí $d_2=2$. <b>Nota:</b> $A$ es simétrica; en el <a href="tema_5_3_matrices_simetricas.html">tema 5.3</a> se verá que toda simétrica real es diagonalizable (aquí se ha comprobado directamente). <b>Teoría:</b> U §1.3; Def. 4.11 p.155; Teor. 4.7 p.164. (Verificado con sympy.)
+- id: ej4-26
+  clase: libro
+  titulo: |-
+    Ejercicio 4.26 — teoría: tres afirmaciones sobre diagonalizables y valores propios
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.26, p. 143
+    texto: |-
+      E p.143
+  cuerpo:
+  - enun: |-
+      Si $A$ es una matriz real cuadrada de orden $n$, justificar si: A) $A$ tiene un valor propio $0\iff A$ es singular. B) $A$ es diagonalizable $\iff$ todos los autovalores de $A$ son distintos. C) $A$ puede ser diagonalizable aunque tenga valores propios iguales.
+  - html: |-
+      <p><b>Qué se pide.</b> Tres preguntas de teoría: una equivalencia, otra con una flecha falsa y una existencia.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Tres afirmaciones teóricas sobre valores propios y diagonalización.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Una equivalencia es dos implicaciones: si falla una, falla la equivalencia. Busco un contraejemplo sencillo: una diagonal con valores repetidos.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Argumento con el determinante para A y la matriz $3I$ para B y C.
+  - pasos:
+    - |-
+      <b>A) Verdadera.</b> $0$ es valor propio $\iff\lambda=0$ es raíz de $|A-\lambda I|\iff|A|=0\iff A$ es singular (Def. 4.9 y caracterización de regular por el determinante, U §1.3). Lectura equivalente: existe $x\neq0$ con $Ax=0$, es decir, $\operatorname{Nuc}A\neq\{0\}$, $\operatorname{rang}A\lt n$.
+    - |-
+      <p><b>B) Falsa.</b> Son dos implicaciones. «$\Leftarrow$» (todos distintos $\Rightarrow$ diagonalizable) <b>sí</b> es cierta (U p.163). «$\Rightarrow$» (diagonalizable $\Rightarrow$ todos distintos) es falsa:</p>
+            $$A=\begin{pmatrix}3&0\cr0&3\end{pmatrix}$$
+            <p>ya es diagonal (diagonalizable con $P=I$) y su único valor propio $3$ es doble. Basta que falle una flecha para que la equivalencia sea falsa.</p>
+    - |-
+      <b>C) Verdadera.</b> El mismo ejemplo $3I_2$. Otros no triviales: E 4.25 ($\lambda=6$ doble) y E 4.32 ($\lambda=1$ triple).
+  - html: |-
+      <p><b>Respuesta:</b> A verdadera, B falsa, C verdadera.</p>
+  - receta: |-
+      una equivalencia «$\Leftrightarrow$» se refuta con un contraejemplo a una de las dos flechas; la matriz $\lambda I$ (o una diagonal con repetidos) es el contraejemplo estándar.
+  - error: |-
+      confundir condición suficiente con necesaria: «valores propios distintos» garantiza diagonalizar, pero su ausencia no lo impide (hay que comprobar $d_i=\alpha_i$). <b>Teoría:</b> U Def. 4.7, 4.9; Teor. 4.5 p.158; p.163; Teor. 4.7 p.164.
+- id: ej4-29
+  clase: libro
+  titulo: |-
+    Ejercicio 4.29 — el parámetro hace coincidir valores propios
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.29, p. 146
+    texto: |-
+      E p.146
+  cuerpo:
+  - enun: |-
+      Siendo $A$ la matriz de filas $(a,b,0)$, $(0,-1,0)$ y $(0,0,1)$ con $a,b\in\mathbb R$, $a\neq b$, $b\neq0$, justificar si es diagonalizable cuando: A) $a\neq1$ y $a\neq-1$. B) $a=1$. C) $a=-1$. D) Las opciones A), B) y C) son falsas.
+  - html: |-
+      <p><b>Qué se pide.</b> Los valores propios dependen de $a$: los casos críticos son los de $a$ que hacen coincidir dos de ellos.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Para qué valores del parámetro es diagonalizable una triangular con parámetro.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Los valores propios son $a,-1,1$. El problema aparece cuando dos coinciden; entonces hay que estudiar $d$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Detecto coincidencias y estudio los rangos en cada caso.
+  - pasos:
+    - |-
+      <b>Valores propios.</b> $A-\lambda I$ es triangular superior: $|A-\lambda I|=(a-\lambda)(-1-\lambda)(1-\lambda)$. Valores propios: $a,\ -1,\ 1$.
+    - |-
+      <b>¿Cuándo coinciden?</b> Solo si $a=1$ o $a=-1$: son los tres casos del test.
+    - |-
+      <b>A) Verdadera.</b> Si $a\neq1$ y $a\neq-1$, los tres valores propios $1,-1,a$ son distintos: $3$ valores distintos en orden $3\Rightarrow$ diagonalizable (U p.163).
+    - |-
+      <p><b>B) Verdadera.</b> Con $a=1$: $\lambda=1$ doble y $\lambda=-1$ simple.</p>
+            $$A-I=\begin{pmatrix}0&b&0\cr0&-2&0\cr0&0&0\end{pmatrix}:$$
+            <p>las filas $(0,b,0)$ y $(0,-2,0)$ son proporcionales, rango $1$, $d=3-1=2=\alpha$. $L_1=\{x_2=0\}=\langle(1,0,0),(0,0,1)\rangle$. El simple tiene $d=1=\alpha$. Diagonalizable (Teor. 4.7).</p>
+    - |-
+      <p><b>C) Falsa.</b> Con $a=-1$: $\lambda=-1$ doble y $\lambda=1$ simple.</p>
+            $$A+I=\begin{pmatrix}0&b&0\cr0&0&0\cr0&0&2\end{pmatrix};$$
+            <p>como $b\neq0$, las filas $(0,b,0)$ y $(0,0,2)$ son independientes: rango $2$, $d=1\lt2=\alpha$. Ecuaciones $bx_2=0,\ 2x_3=0$: $L_{-1}=\langle(1,0,0)\rangle$. <b>No</b> diagonalizable.</p>
+    - |-
+      <b>D) Falsa</b> (A y B son ciertas): es un test con dos opciones correctas.
+  - html: |-
+      <p><b>Papel de las hipótesis.</b> $b\neq0$ es esencial en C: con $b=0$ y $a=-1$ la matriz sería $\operatorname{diag}(-1,-1,1)$ y sí diagonalizable. La hipótesis $a\neq b$ no interviene en ningún paso: con $a=b$ las conclusiones de A, B y C son las mismas (incluso $a=b=-1$ tampoco es diagonalizable, pues $b\neq0$). Es superflua.</p>
+  - receta: |-
+      valores propios que dependen de un parámetro: los casos críticos son los valores que <b>hacen coincidir</b> dos valores propios; fuera de ellos, valores distintos $\Rightarrow$ diagonalizable; en ellos, rango de $A-\lambda I$.
+  - error: |-
+      «si hay valor doble no es diagonalizable» (falla en B), o «si es triangular con parámetro, siempre sí» (falla en C). <b>Teoría:</b> U p.163; Teor. 4.5 p.158; Teor. 4.7 p.164. (Verificado con sympy.)
+- id: ej4-27
+  clase: libro
+  titulo: |-
+    Ejercicio 4.27 — ¿para qué $a$ es diagonalizable? (Ejemplo 4.14 de U)
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.27, p. 144
+    texto: |-
+      E p.144
+  cuerpo:
+  - enun: |-
+      Si $A$ es la matriz de filas $(1,a,0)$, $(0,2,0)$ y $(a,1,1)$, justificar si es diagonalizable: A) $\forall a\neq0$. B) $a=0$. C) Para valores pares de $a$. D) En ninguno de los casos anteriores.
+  - html: |-
+      <p><b>Qué se pide.</b> Es el Ejemplo 4.14 de U (apartado 3): el parámetro no cambia los valores propios, pero sí $d_1$.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Para qué $a$ es diagonalizable una matriz con parámetro.
+      - - |-
+          Cómo lo pienso
+        - |-
+          El polinomio no depende de $a$; el valor doble es el que puede dar problemas, el simple nunca.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Rango de $A-I$ según $a$.
+  - pasos:
+    - |-
+      <b>Polinomio</b> (por la 2.ª fila): $|A-\lambda I|=(2-\lambda)(1-\lambda)^2$ para todo $a$: $\lambda_1=1$ ($\alpha=2$), $\lambda_2=2$ ($\alpha=1$).
+    - |-
+      <b>$\lambda_2=2$ es simple:</b> $d_2=1=\alpha_2$ para todo $a$ (Teor. 4.5); no hay que estudiarlo.
+    - |-
+      <b>$\lambda_1=1$:</b> el cálculo de $L_1$ está detallado en el Ejemplo 4.14 (apartado 3): $d_1=2$ si $a=0$ ($L_1=\langle(1,0,0),(0,0,1)\rangle$) y $d_1=1$ si $a\neq0$ ($L_1=\langle(0,0,1)\rangle$, porque $x_2=0$ y $ax_1=0$).
+    - |-
+      <b>Conclusión</b> (Teor. 4.7): diagonalizable $\iff d_1=2\iff a=0$.
+    - |-
+      A) <b>Falsa</b> (para $a\neq0$, $d_1=1\lt2$). B) <b>Verdadera</b>. C) <b>Falsa</b>: «pares» incluye $a=2,4,\dots$ (con $a\neq0$ no es diagonalizable); que $0$ sea par no salva la opción, que afirma la propiedad para todos los pares. D) <b>Falsa</b>, porque B es cierta.
+  - html: |-
+      <p><b>Respuesta: B.</b></p>
+  - receta: |-
+      con parámetro: (1) ¿cambia el parámetro los valores propios? (2) estudia solo los múltiples con $\operatorname{rang}(A-\lambda I)$ discutiendo según el parámetro (los casos salen de dónde se divide por una expresión que puede anularse).
+  - error: |-
+      dividir por $a$ sin separar el caso $a=0$; o creer «diagonalizable para todo $a$» porque los valores propios no dependen de $a$. <b>Teoría:</b> U Ej. 4.14 pp.164-166; Teor. 4.5 p.158; Teor. 4.7 p.164. (Verificado con sympy.)
+- id: ej4-28
+  clase: libro
+  titulo: |-
+    Ejercicio 4.28 — la matriz de paso del ejercicio anterior
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.28, p. 145
+    texto: |-
+      E p.145
+  cuerpo:
+  - enun: |-
+      Al diagonalizar la matriz $A$ del Ejercicio 4.27, justificar si los vectores columna de una matriz de paso $P$ verifican: A) Dependen del valor de $a$. B) Son $(1,0,0)$, $(0,0,1)$, $(0,1,1)$. C) Las opciones A) y B) son falsas.
+  - html: |-
+      <p><b>Qué se pide.</b> Construir una matriz de paso concreta y entender que no es única.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Matriz de paso de la matriz del 4.27.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Solo hay matriz de paso cuando la matriz es diagonalizable. Veo para qué $a$ y trabajo con ese.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Bases de $L_1$ y $L_2$; $P$ y $\Lambda$ en el mismo orden.
+  - pasos:
+    - |-
+      <p><b>Cuándo existe $P$.</b> Por E 4.27, $A$ es diagonalizable solo si $a=0$; para $a\neq0$ no existe ninguna matriz de paso. Así que solo trabajamos con</p>
+            $$A=\begin{pmatrix}1&0&0\cr0&2&0\cr0&1&1\end{pmatrix}.$$
+    - |-
+      <b>Base de $L_1$</b> (de 4.27): ecuación $x_2=0$, base $\{(1,0,0),(0,0,1)\}$.
+    - |-
+      <p><b>Base de $L_2$:</b></p>
+            $$A-2I=\begin{pmatrix}-1&0&0\cr0&0&0\cr0&1&-1\end{pmatrix}\Rightarrow x_1=0,\ x_2=x_3;$$
+            <p>base $\{(0,1,1)\}$.</p>
+    - |-
+      <p><b>$P$ y $\Lambda$ en el mismo orden:</b></p>
+            $$P=\begin{pmatrix}1&0&0\cr0&0&1\cr0&1&1\end{pmatrix},$$
+            $$\Lambda=\begin{pmatrix}1&0&0\cr0&1&0\cr0&0&2\end{pmatrix}.$$
+            <p>$|P|=-1\neq0$ (regular). <b>Comprobación sin invertir:</b></p>
+            $$AP=\begin{pmatrix}1&0&0\cr0&0&2\cr0&1&2\end{pmatrix}=P\Lambda$$
+            <p>✓ (la 3.ª columna de $AP$ es $2\cdot(0,1,1)$).</p>
+    - |-
+      <b>A) Falsa:</b> la única matriz diagonalizable de la familia es la de $a=0$; no hay «dependencia de $a$».
+    - |-
+      <b>B) Verdadera:</b> es una matriz de paso válida (asociada a $\Lambda=\operatorname{diag}(1,1,2)$). E (p.140) sí avisa de que la diagonal no es única; lo que no aclara es que <b>$P$ no es única</b> (U p.166): la matriz $Q$ de columnas $(0,0,1),(0,1,1),(1,0,0)$ da $\operatorname{diag}(1,2,1)$. La opción B debe entenderse como «<i>pueden</i> ser».
+    - |-
+      <b>C) Falsa</b>, porque B es cierta.
+  - html: |-
+      <p><b>Respuesta: B.</b></p>
+  - receta: |-
+      columnas de $P$ = bases de los $L_i$ y la diagonal de $\Lambda$ en el mismo orden; comprobar con $AP=P\Lambda$.
+  - error: |-
+      poner $\Lambda=\operatorname{diag}(2,1,1)$ con esa $P$: no se cumple $P^{-1}AP=\Lambda$ (U p.166 lo muestra). <b>Teoría:</b> U Def. 4.12 p.161; Ej. 4.14 p.166. (Verificado con sympy.)
+- id: ej4-30
+  clase: libro
+  titulo: |-
+    Ejercicio 4.30 — interpretar la salida de <code>eigenvectors</code>
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.30, p. 147
+    texto: |-
+      E p.147
+  cuerpo:
+  - enun: |-
+      Si $A$ es la matriz de filas $(-1,3,0)$, $(0,-1,0)$, $(0,2,-1)$ y al aplicar <code>eigenvectors(A);</code> de MAXIMA se obtiene <code>[[[-1],[3]],[[[1,0,0],[0,0,1]]]]</code>, podemos deducir que: A) Sus autovalores son $-1$ y $3$. B) Las dimensiones de los subespacios propios son 1, 0 y 0. C) La matriz es diagonalizable. D) Las opciones A), B) y C) son falsas.
+  - html: |-
+      <p><b>Cómo leer la salida</b> (Maxima no entra en examen, pero la salida ya hecha puede aparecer): <code>[[valores],[multiplicidades]]</code> seguido de una lista con una <b>base</b> de cada subespacio propio, en el mismo orden. <code>[[-1],[3]]</code>: un único valor propio $\lambda=-1$ con $\alpha=3$ (<b>el $3$ no es un valor propio, es la multiplicidad</b>). <code>[[[1,0,0],[0,0,1]]]</code>: una base de $L_{-1}$ con dos vectores, luego $d=2$.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Interpretar la salida de Maxima para decidir sobre diagonalizabilidad.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Conozco la matriz: calculo yo a mano valores propios y subespacio propio y comparo con la salida.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Polinomio y rango de $A+I$.
+  - pasos:
+    - |-
+      <p><b>A mano.</b></p>
+            $$|A-\lambda I|=\begin{vmatrix}-1-\lambda&3&0\cr0&-1-\lambda&0\cr0&2&-1-\lambda\end{vmatrix};$$
+            <p>por la 1.ª columna (un solo elemento no nulo):</p>
+            $$(-1-\lambda)\begin{vmatrix}-1-\lambda&0\cr2&-1-\lambda\end{vmatrix}=(-1-\lambda)^3.$$
+            <p>Único valor propio $\lambda=-1$, $\alpha=3$.</p>
+    - |-
+      $$A+I=\begin{pmatrix}0&3&0\cr0&0&0\cr0&2&0\end{pmatrix}:$$
+            <p>filas proporcionales, rango $1$, $d=3-1=2$. Ecuación $x_2=0$: $L_{-1}=\langle(1,0,0),(0,0,1)\rangle$ (coincide con Maxima).</p>
+    - |-
+      <b>A) Falsa:</b> el único autovalor es $-1$; el $3$ es su multiplicidad algebraica.
+    - |-
+      <b>B) Falsa:</b> solo hay un subespacio propio y su dimensión es $2$. (Además un subespacio propio nunca tiene dimensión $0$: $d_i\ge1$, Teor. 4.5.)
+    - |-
+      <b>C) Falsa:</b> $d=2\neq3=\alpha$ (Teor. 4.7). Faltaría una tercera columna para $P$.
+    - |-
+      <b>D) Verdadera.</b>
+  - html: |-
+      <p><b>Respuesta: D.</b></p>
+  - receta: |-
+      en la salida de <code>eigenvectors</code>: primer bloque = (valores, $\alpha$); luego, cuántos vectores hay en cada base $=d$. Diagonalizable $\iff$ en cada valor el número de vectores coincide con su $\alpha$.
+  - error: |-
+      leer <code>[[-1],[3]]</code> como «valores propios $-1$ y $3$», o aceptar dimensión $0$ para un subespacio propio. <b>Teoría:</b> U Def. 4.11 p.155; Teor. 4.5 p.158; Teor. 4.7 p.164. (Verificado con sympy.)
+- id: ej4-31
+  clase: libro
+  titulo: |-
+    Ejercicio 4.31 — reconstruir $A$ a partir de sus valores y vectores propios
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.31, p. 148
+    texto: |-
+      E p.148
+  cuerpo:
+  - enun: |-
+      Si $A$ es una matriz tal que al aplicar <code>eigenvectors(A);</code> se obtiene <code>[[[4,-2],[1,2]],[[[1,1,2]],[[1,0,-1],[0,1,1]]]]</code>, calcular: A) los autovalores y sus multiplicidades algebraicas. B) las dimensiones de los subespacios propios. C) una matriz diagonal semejante a $A$. D) una matriz de paso. E) la matriz $A$.
+  - html: |-
+      <p><b>Qué se pide.</b> El camino inverso: de los ingredientes ($P$, $\Lambda$) a la matriz, $A=P\Lambda P^{-1}$.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Reconstruir $A$ a partir de valores y vectores propios.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Si $\Lambda=P^{-1}AP$ entonces $A=P\Lambda P^{-1}$. Tengo que formar $P$ con los vectores en el orden de los valores propios.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$. Despejar: $A=P\Lambda P^{-1}$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Construyo $P$, la invierto y multiplico.
+  - pasos:
+    - |-
+      <b>A)</b> <code>[[4,-2],[1,2]]</code>: valores propios $\lambda_1=4$ ($\alpha_1=1$) y $\lambda_2=-2$ ($\alpha_2=2$). Como $1+2=3$, $A$ es $3\times3$.
+    - |-
+      <b>B)</b> <code>[1,1,2]</code> es una base de $L_4$: $d_1=1$. <code>[1,0,-1]</code>, <code>[0,1,1]</code> son una base de $L_{-2}$ (dos vectores no proporcionales): $d_2=2$. Como $d_i=\alpha_i$, $A$ es diagonalizable (Teor. 4.7).
+    - |-
+      <p><b>C)</b></p>
+            $$\Lambda=\begin{pmatrix}4&0&0\cr0&-2&0\cr0&0&-2\end{pmatrix}.$$
+    - |-
+      <p><b>D)</b> Columnas de $P$ = vectores propios en el mismo orden que $\Lambda$:</p>
+            $$P=\begin{pmatrix}1&1&0\cr1&0&1\cr2&-1&1\end{pmatrix}.$$
+            <p>Es regular (imprescindible para $P^{-1}$): por la primera fila,</p>
+            $$|P|=1\cdot(0\cdot1-1\cdot(-1))-1\cdot(1\cdot1-1\cdot2)+0=1+1=2\neq0.$$
+    - |-
+      <b>E)</b> De $\Lambda=P^{-1}AP$ se despeja $A=P\Lambda P^{-1}$ (multiplicando por $P$ a la izquierda y por $P^{-1}$ a la derecha). Inversa por Gauss-Jordan sobre $(P\mid I)$: $F_2-F_1$ y $F_3-2F_1$; luego $F_3-3F_2$ deja el pivote $-2$ en la posición $(3,3)$; se normaliza y se sube:
+            $$\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr1&0&1&0&1&0\cr2&-1&1&0&0&1\end{array}\right)\xrightarrow{F_2-F_1,\ F_3-2F_1}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&-1&1&-1&1&0\cr0&-3&1&-2&0&1\end{array}\right)\xrightarrow{F_3-3F_2}\left(\begin{array}{ccc|ccc}1&1&0&1&0&0\cr0&-1&1&-1&1&0\cr0&0&-2&1&-3&1\end{array}\right)\longrightarrow\left(\begin{array}{ccc|ccc}1&0&0&\tfrac12&-\tfrac12&\tfrac12\cr0&1&0&\tfrac12&\tfrac12&-\tfrac12\cr0&0&1&-\tfrac12&\tfrac32&-\tfrac12\end{array}\right),\qquad P^{-1}=\tfrac12\begin{pmatrix}1&-1&1\cr1&1&-1\cr-1&3&-1\end{pmatrix}.$$<p>Truco: $\Lambda P^{-1}$ multiplica la fila $i$ de $P^{-1}$ por $\lambda_i$:</p>
+            $$\Lambda P^{-1}=\tfrac12\begin{pmatrix}4&-4&4\cr-2&-2&2\cr2&-6&2\end{pmatrix}.$$
+            <p>Entonces</p>
+            $$A=P(\Lambda P^{-1})=\begin{pmatrix}1&-3&3\cr3&-5&3\cr6&-6&4\end{pmatrix}.$$
+    - |-
+      <b>Comprobación (siempre):</b> $A(1,1,2)^t=(1-3+6,\ 3-5+6,\ 6-6+8)^t=(4,4,8)^t=4(1,1,2)^t$ ✓; $A(1,0,-1)^t=(-2,0,2)^t=-2(1,0,-1)^t$ ✓; $A(0,1,1)^t=(0,-2,-2)^t=-2(0,1,1)^t$ ✓.
+  - receta: |-
+      valores y vectores propios conocidos $\Rightarrow A=P\Lambda P^{-1}$. Para ahorrar cuentas, calcula primero $\Lambda P^{-1}$ (escalar filas) y luego multiplica por $P$; comprueba con $Av_i=\lambda_iv_i$.
+  - error: |-
+      escribir $A=P^{-1}\Lambda P$ (orden equivocado) o poner los vectores como <b>filas</b> de $P$. <b>Teoría:</b> U Def. 4.12 p.161; p.162; Teor. 4.7 p.164. (Verificado con sympy: el polinomio característico de $A$ es $-(\lambda-4)(\lambda+2)^2$.)
+- id: ej4-32
+  clase: libro
+  titulo: |-
+    Ejercicio 4.32 — endomorfismo de $\mathbb R^5$ con matriz diagonal por bloques
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 4.32, p. 149
+    texto: |-
+      E p.149
+  cuerpo:
+  - enun: |-
+      Si el endomorfismo $f$ de $\mathbb R^5$ tiene asociada la matriz $A=\begin{pmatrix}1&0&0&0&0\cr0&1&0&0&0\cr0&0&1&0&0\cr0&0&0&1&1\cr0&0&0&1&1\end{pmatrix}$, justificar si $f$ verifica: A) Tiene un subespacio de vectores propios de dimensión $3$. B) Es diagonalizable. C) Hay un subespacio propio de ecuación cartesiana $x_1+x_2+x_3-x_4=0$. D) Ninguna de las anteriores.
+  - html: |-
+      <p><b>Qué se pide.</b> Una matriz $5\times5$ que se estudia por bloques: el bloque $I_3$ y el bloque $\begin{pmatrix}1&1\cr1&1\end{pmatrix}$.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Valores propios, diagonalizabilidad y subespacios de una matriz por bloques.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Hay un bloque identidad $3\times3$ y un bloque $2\times2$ de unos: el polinomio se factoriza por bloques.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Desarrollo, rango de $A-I$ y comparo con $\alpha$.
+  - pasos:
+    - |-
+      <p><b>Polinomio.</b> Desarrollando por la primera fila (solo tiene $1-\lambda$), luego otra vez por la primera del menor, y otra:</p>
+            $$|A-\lambda I|=(1-\lambda)^3\begin{vmatrix}1-\lambda&1\cr1&1-\lambda\end{vmatrix}=(1-\lambda)^3[(1-\lambda)^2-1]=(1-\lambda)^3(\lambda^2-2\lambda)=-\lambda(\lambda-1)^3(\lambda-2).$$
+            <p>Valores propios (E los numera así): $\lambda_1=0$ ($\alpha=1$), $\lambda_2=1$ ($\alpha=3$), $\lambda_3=2$ ($\alpha=1$). Suman $1+3+1=5$: todas las raíces son reales.</p>
+    - |-
+      <b>$\lambda_2=1$, el único múltiple.</b> $A-I$ tiene ceros salvo las dos últimas filas, $(0,0,0,0,1)$ y $(0,0,0,1,0)$: rango $2$, $d_2=5-2=3$. Ecuaciones cartesianas de $L_1$: $x_4=0,\ x_5=0$; base $\{e_1,e_2,e_3\}$.
+    - |-
+      <b>Los simples:</b> por $1\le d_i\le\alpha_i=1$, $d_1=d_3=1$. $L_0=\operatorname{Nuc}A$: $x_1=x_2=x_3=0$, $x_4+x_5=0$, base $\{(0,0,0,1,-1)\}$ (rango $4$). $L_2$: ecuaciones $x_1=x_2=x_3=0$, $x_4-x_5=0$, base $\{(0,0,0,1,1)\}$.
+    - |-
+      <b>A) Verdadera:</b> $L_1$ (el de $\lambda=1$) tiene dimensión $3$.
+    - |-
+      <b>B) Verdadera:</b> $d_i=\alpha_i$ para los tres valores propios (Teor. 4.7). $P$ con columnas $(0,0,0,1,-1)$, $e_1,e_2,e_3$, $(0,0,0,1,1)$ y $\Lambda=\operatorname{diag}(0,1,1,1,2)$.
+    - |-
+      <b>C) Falsa:</b> una sola ecuación cartesiana (no nula) en $\mathbb R^5$ define un subespacio de dimensión $5-1=4$ (núcleo de una matriz $1\times5$ de rango $1$, U Teor. 3.1 p.111); los subespacios propios tienen dimensiones $1,3,1$: ninguno es de dimensión $4$.
+    - |-
+      <b>D) Falsa</b>, porque A y B son verdaderas.
+  - html: |-
+      <p><b>Respuesta:</b> A y B verdaderas, C y D falsas. <b>Nota importante:</b> $A$ tiene rango $4$ (no es regular, $0$ es valor propio) y <b>es diagonalizable</b>. <b>Salida de Maxima:</b> <code>[[[0,1,2],[1,3,1]],[[[0,0,0,1,-1]],[[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0]],[[0,0,0,1,1]]]]</code>: valores $0,1,2$, multiplicidades $1,3,1$, y una base de cada subespacio.</p>
+  - receta: |-
+      matriz diagonal por bloques: el polinomio característico es el producto de los de los bloques, y los rangos de $A-\lambda I$ se suman bloque a bloque.
+  - error: |-
+      contar mal las ecuaciones: un subespacio de dimensión $k$ en $\mathbb R^n$ necesita $n-k$ ecuaciones cartesianas independientes, no $k$. <b>Teoría:</b> U §1.3; Teor. 3.1 p.111; Teor. 4.5 p.158; Teor. 4.7 p.164. (Verificado con sympy.)
+- id: ej-propio-1
+  clase: propio
+  titulo: |-
+    Ejemplo propio 1 (fácil) — $2\times2$ con dos valores propios distintos
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Diagonaliza $A=\begin{pmatrix}4&1\cr2&3\end{pmatrix}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizar una $2\times2$ con dos valores propios distintos.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Dos valores propios distintos en dimensión 2 aseguran diagonalizable.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Polinomio, vectores propios y comprobar $AP=P\Lambda$.
+  - pasos:
+    - |-
+      $$|A-\lambda I|=(4-\lambda)(3-\lambda)-2=\lambda^2-7\lambda+10=(\lambda-5)(\lambda-2).$$
+            <p>Atajo $2\times2$: $\lambda^2-(\operatorname{tr}A)\lambda+|A|$, con traza $7$ y $|A|=10$.</p>
+    - |-
+      Dos valores distintos en orden $2$ $\Rightarrow$ diagonalizable (U p.163).
+    - |-
+      <p>$\lambda=5$:</p>
+            $$A-5I=\begin{pmatrix}-1&1\cr2&-2\end{pmatrix},$$
+            <p>$x_1=x_2$, $v_1=(1,1)$. $\lambda=2$:</p>
+            $$A-2I=\begin{pmatrix}2&1\cr2&1\end{pmatrix},$$
+            <p>$2x_1+x_2=0$, $v_2=(1,-2)$.</p>
+    - |-
+      $$P=\begin{pmatrix}1&1\cr1&-2\end{pmatrix},$$
+            $$\Lambda=\begin{pmatrix}5&0\cr0&2\end{pmatrix}.$$
+            <p>Comprobación:</p>
+            $$AP=\begin{pmatrix}5&2\cr5&-4\end{pmatrix}=P\Lambda$$
+            <p>✓.</p>
+- id: ej-propio-2
+  clase: propio
+  titulo: |-
+    Ejemplo propio 2 (fácil) — $3\times3$ triangular con valores distintos
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Diagonaliza $A=\begin{pmatrix}2&1&0\cr0&3&1\cr0&0&1\end{pmatrix}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizar una triangular $3\times3$ con valores distintos.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Valores propios en la diagonal y distintos.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Un vector propio por valor.
+  - pasos:
+    - |-
+      Triangular: valores propios $2,3,1$, distintos $\Rightarrow$ diagonalizable.
+    - |-
+      <p>$\lambda=2$:</p>
+            $$A-2I=\begin{pmatrix}0&1&0\cr0&1&1\cr0&0&-1\end{pmatrix}\Rightarrow x_2=x_3=0:$$
+            <p>$(1,0,0)$. $\lambda=3$:</p>
+            $$A-3I=\begin{pmatrix}-1&1&0\cr0&0&1\cr0&0&-2\end{pmatrix}\Rightarrow x_3=0,\ x_1=x_2:$$
+            <p>$(1,1,0)$. $\lambda=1$:</p>
+            $$A-I=\begin{pmatrix}1&1&0\cr0&2&1\cr0&0&0\end{pmatrix}\Rightarrow x_3=-2x_2,\ x_1=-x_2;$$
+            <p>con $x_2=-1$: $(1,-1,2)$.</p>
+    - |-
+      $$P=\begin{pmatrix}1&1&1\cr0&1&-1\cr0&0&2\end{pmatrix},$$
+            <p>$\Lambda=\operatorname{diag}(2,3,1)$ ($|P|=2\neq0$). Verificado: $P^{-1}AP=\operatorname{diag}(2,3,1)$.</p>
+- id: ej-propio-3
+  clase: propio
+  titulo: |-
+    Ejemplo propio 3 (fácil-medio) — $\alpha\gt d$: no diagonalizable
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Estudia si son diagonalizables $A=\begin{pmatrix}3&1\cr-1&1\end{pmatrix}$ y $B=\begin{pmatrix}2&1&0\cr0&2&0\cr0&0&1\end{pmatrix}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Decidir si dos matrices con un valor doble son diagonalizables.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Un valor doble: la clave es el rango de $A-\lambda I$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Calculo $d$ y comparo con 2.
+  - pasos:
+    - |-
+      <p><b>$A$:</b> $\lambda^2-4\lambda+4=(\lambda-2)^2$, $\alpha=2$.</p>
+            $$A-2I=\begin{pmatrix}1&1\cr-1&-1\end{pmatrix}$$
+            <p>tiene rango $1$, luego $d=1\lt2$: <b>no</b> diagonalizable. (No es triangular: el valor doble no se ve a simple vista.)</p>
+    - |-
+      <p><b>$B$:</b> valores $2$ ($\alpha=2$) y $1$.</p>
+            $$B-2I=\begin{pmatrix}0&1&0\cr0&0&0\cr0&0&-1\end{pmatrix}$$
+            <p>tiene rango $2$, $d=1\lt2$: <b>no</b> diagonalizable, aunque el valor simple esté «bien».</p>
+- id: ej-propio-4
+  clase: propio
+  titulo: |-
+    Ejemplo propio 4 (medio) — el parámetro decide
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      ¿Para qué $a$ es diagonalizable $A=\begin{pmatrix}1&a&1\cr0&1&0\cr0&0&2\end{pmatrix}$? Da $P$ y $\Lambda$ cuando lo sea.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Estudiar según $a$ si es diagonalizable.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Triangular con un valor doble. Solo el doble puede fallar; decide el rango.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          $d$ según $a$ y $P,\Lambda$ si procede.
+  - pasos:
+    - |-
+      Triangular: $\lambda=1$ ($\alpha=2$), $\lambda=2$ ($\alpha=1$), para todo $a$.
+    - |-
+      $$A-I=\begin{pmatrix}0&a&1\cr0&0&0\cr0&0&1\end{pmatrix}.$$
+            <p>Si $a\neq0$, las filas $(0,a,1)$ y $(0,0,1)$ son independientes: rango $2$, $d=1$: <b>no</b>. Si $a=0$: filas $(0,0,1)$ y $(0,0,1)$, rango $1$, $d=2$: <b>sí</b>.</p>
+    - |-
+      <p>Para $a=0$: $L_1=\{x_3=0\}=\langle(1,0,0),(0,1,0)\rangle$; $L_2$:</p>
+            $$A-2I=\begin{pmatrix}-1&0&1\cr0&-1&0\cr0&0&0\end{pmatrix}\Rightarrow x_2=0,\ x_1=x_3:$$
+            <p>$(1,0,1)$.</p>
+            $$P=\begin{pmatrix}1&0&1\cr0&1&0\cr0&0&1\end{pmatrix},$$
+            <p>$\Lambda=\operatorname{diag}(1,1,2)$.</p>
+  - html: |-
+      <p><b>Solución:</b> diagonalizable $\iff a=0$.</p>
+- id: ej-propio-5
+  clase: propio
+  titulo: |-
+    Ejemplo propio 5 (medio) — potencias $A^k=P\Lambda^kP^{-1}$ (método de Lay)
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio verificado con sympy; método de Lay §5.3, Ejemplos 1 y 2, p. 281-282
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Con $A=\begin{pmatrix}4&1\cr2&3\end{pmatrix}$ del ejemplo propio 1, halla $A^k$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Calcular $A^k$ por diagonalización.
+      - - |-
+          Cómo lo pienso
+        - |-
+          $A^k=P\Lambda^kP^{-1}$. Compruebo con $k=0,1,2$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Potencias:</b> $A=P\Lambda P^{-1}\Rightarrow A^k=P\Lambda^kP^{-1}$, con $\Lambda^k$ la diagonal de las potencias.
+      - - |-
+          Por dónde empiezo
+        - |-
+          $P$, $P^{-1}$ y producto.
+  - pasos:
+    - |-
+      <p><b>Por qué funciona:</b></p>
+            $$A=P\Lambda P^{-1}\Rightarrow A^2=P\Lambda P^{-1}P\Lambda P^{-1}=P\Lambda^2P^{-1},$$
+            <p>y en general $A^k=P\Lambda^kP^{-1}$; $\Lambda^k$ se obtiene elevando la diagonal.</p>
+    - |-
+      $$P=\begin{pmatrix}1&1\cr1&-2\end{pmatrix},$$
+            <p>$|P|=-3$,</p>
+            $$P^{-1}=\frac1{-3}\begin{pmatrix}-2&-1\cr-1&1\end{pmatrix}=\frac13\begin{pmatrix}2&1\cr1&-1\end{pmatrix};$$
+            <p>$\Lambda^k=\operatorname{diag}(5^k,2^k)$.</p>
+    - |-
+      <p>$\Lambda^kP^{-1}$ multiplica la fila $i$ de $P^{-1}$ por $\lambda_i^k$:</p>
+            $$\frac13\begin{pmatrix}2\cdot5^k&5^k\cr2^k&-2^k\end{pmatrix}.$$
+            <p>Entonces</p>$$A^k=P\Lambda^kP^{-1}=\frac13\begin{pmatrix}2\cdot5^k+2^k&5^k-2^k\cr2\cdot5^k-2\cdot2^k&5^k+2\cdot2^k\end{pmatrix}.$$
+    - |-
+      <p><b>Comprobaciones:</b> $k=0$ da $I$; $k=1$ da $A$; $k=2$ da</p>
+            $$\begin{pmatrix}18&7\cr14&11\end{pmatrix}=A^2$$
+            <p>✓ (y $k=3$: $\begin{pmatrix}86&39\cr78&47\end{pmatrix}$).</p>
+- id: ej-propio-6
+  clase: propio
+  titulo: |-
+    Ejemplo propio 6 (medio) — recuperar la matriz desde valores y vectores propios
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      a) $A$ ($2\times2$) tiene $\lambda=3$ con vector $(1,1)$ y $\lambda=1$ con vector $(1,-1)$. b) $A$ ($3\times3$) tiene $\lambda=1$ con $L_1=\langle(1,0,0),(0,1,1)\rangle$ y $\lambda=2$ con $L_2=\langle(1,1,0)\rangle$. Halla $A$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Recuperar la matriz desde sus valores y vectores propios.
+      - - |-
+          Cómo lo pienso
+        - |-
+          $A=P\Lambda P^{-1}$ con el orden adecuado.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$. <b>Potencias:</b> $A=P\Lambda P^{-1}\Rightarrow A^k=P\Lambda^kP^{-1}$, con $\Lambda^k$ la diagonal de las potencias.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Construyo $P$ y $\Lambda$ y multiplico.
+  - pasos:
+    - |-
+      <p><b>a)</b></p>
+            $$P=\begin{pmatrix}1&1\cr1&-1\end{pmatrix},$$
+            $$P^{-1}=\frac12\begin{pmatrix}1&1\cr1&-1\end{pmatrix},$$
+            $$A=P\operatorname{diag}(3,1)P^{-1}=\begin{pmatrix}2&1\cr1&2\end{pmatrix}.$$
+            <p>Comprobación: $A(1,1)^t=(3,3)^t$ ✓.</p>
+    - |-
+      <p><b>b)</b></p>
+            $$P=\begin{pmatrix}1&0&1\cr0&1&1\cr0&1&0\end{pmatrix}$$
+            <p>($|P|=-1$),</p>
+            $$P^{-1}=\begin{pmatrix}1&-1&1\cr0&0&1\cr0&1&-1\end{pmatrix},$$
+            <p>$\Lambda=\operatorname{diag}(1,1,2)$.</p>
+            $$\Lambda P^{-1}=\begin{pmatrix}1&-1&1\cr0&0&1\cr0&2&-2\end{pmatrix}$$
+            $$A=P\Lambda P^{-1}=\begin{pmatrix}1&1&-1\cr0&2&-1\cr0&0&1\end{pmatrix}.$$
+            <p>Comprobación: $A(0,1,1)^t=(0,1,1)^t$ ✓; $A(1,1,0)^t=(2,2,0)^t$ ✓.</p>
+- id: ej-propio-7
+  clase: propio
+  titulo: |-
+    Ejemplo propio 7 (medio) — el orden de $\Lambda$ va ligado al de las columnas de $P$
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy; idea de U p. 166
+    texto: propio
+  cuerpo:
+  - enun: |-
+      $A=\begin{pmatrix}1&2\cr2&1\end{pmatrix}$: valores $3$ (vector $(1,1)$) y $-1$ (vector $(1,-1)$). Prueba tres parejas.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Ver que el orden de $\Lambda$ debe corresponder al de las columnas de $P$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Cada columna de $P$ va con su valor propio.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Pruebo $AP=P\Lambda$ con ambos órdenes.
+  - pasos:
+    - |-
+      <p>$\lambda^2-2\lambda-3=(\lambda-3)(\lambda+1)$. Con</p>
+            $$P=\begin{pmatrix}1&1\cr1&-1\end{pmatrix}:$$
+            $$AP=\begin{pmatrix}3&-1\cr3&1\end{pmatrix}=P\operatorname{diag}(3,-1)$$
+            <p>✓.</p>
+    - |-
+      <p>Con la <b>misma</b> $P$ y $\Lambda=\operatorname{diag}(-1,3)$:</p>
+            $$P\Lambda=\begin{pmatrix}-1&3\cr-1&-3\end{pmatrix}\neq AP.$$
+            <p><b>Falso.</b></p>
+    - |-
+      <p>Si se intercambian las columnas,</p>
+            $$Q=\begin{pmatrix}1&1\cr-1&1\end{pmatrix},$$
+            <p>entonces $Q^{-1}AQ=\operatorname{diag}(-1,3)$ ✓.</p>
+  - html: |-
+      <p><b>Moraleja</b> (U p.166): $P$ y $\Lambda$ no son únicas, pero se mueven juntas.</p>
+- id: ej-propio-8
+  clase: propio
+  titulo: |-
+    Ejemplo propio 8 (medio-difícil) — raíces complejas: no diagonalizable en $\mathbb R$
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy; U p. 167 y Lay p. 285 sobre raíces reales
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Estudia si son diagonalizables (en $\mathbb R$) $A=\begin{pmatrix}0&-1\cr1&0\end{pmatrix}$ y $B=\begin{pmatrix}1&0&0\cr0&1&-2\cr0&1&3\end{pmatrix}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizabilidad en $\mathbb R$ de dos matrices con raíces complejas.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Un giro no tiene vectores propios reales. En la otra, ¿cuántas raíces reales hay?
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Polinomio y número de raíces reales.
+  - pasos:
+    - |-
+      <b>$A$ (giro de $90^\circ$).</b> $|A-\lambda I|=\lambda^2+1$, sin raíces reales. No hay ningún vector propio real (un giro de $90^\circ$ no deja ninguna dirección fija): no existe base de vectores propios (Teor. 4.6). <b>No diagonalizable en $\mathbb R$.</b>
+    - |-
+      <p><b>$B$.</b> Desarrollando por la primera fila:</p>
+            $$(1-\lambda)\big[(1-\lambda)(3-\lambda)+2\big]=(1-\lambda)(\lambda^2-4\lambda+5);$$
+            <p>el discriminante es $16-20\lt0$. Solo $\lambda=1$ es real, con $\alpha=1=d$, pero $\sum\alpha_i=1\lt3$: <b>no diagonalizable</b> en $\mathbb R$.</p>
+  - html: |-
+      <p><b>Trampa:</b> «el único valor propio cumple $d=\alpha$» no basta; hay que comprobar antes que todas las raíces sean reales.</p>
+- id: ej-propio-9
+  clase: propio
+  titulo: |-
+    Ejemplo propio 9 (medio-difícil) — valor propio $0$ y diagonalizable a la vez
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Estudia si es diagonalizable $A=\begin{pmatrix}1&1&1\cr1&1&1\cr1&1&1\end{pmatrix}$ y diagonalízala.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizar la matriz de unos.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Rango 1 ⇒ el núcleo tiene dimensión 2 ⇒ el valor $0$ aparece al menos dos veces. La otra raíz sale de un vector obvio.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Núcleo y vector $(1,1,1)$.
+  - pasos:
+    - |-
+      $\operatorname{rang}A=1\lt3\Rightarrow|A|=0\Rightarrow0$ es valor propio (E 4.26 A) y $d_0=\dim\operatorname{Nuc}A=3-1=2$.
+    - |-
+      Como $1\le d_0\le\alpha_0$, $\alpha_0\ge2$. Además $A(1,1,1)^t=(3,3,3)^t$: $3$ es valor propio. Como $\alpha_0+\alpha_3\le3$ y $\alpha_3\ge1$: $\alpha_0=2$, $\alpha_3=1$ (coincide con $|A-\lambda I|=-\lambda^2(\lambda-3)$; la traza $3=0+0+3$).
+    - |-
+      $d_0=2=\alpha_0$, $d_3=1=\alpha_3$: <b>diagonalizable</b>. $L_0$: $x_1+x_2+x_3=0$, base $(1,-1,0),(1,0,-1)$; $L_3=\langle(1,1,1)\rangle$.
+    - |-
+      $$P=\begin{pmatrix}1&1&1\cr-1&0&1\cr0&-1&1\end{pmatrix}$$
+            <p>($|P|=3$), $\Lambda=\operatorname{diag}(0,0,3)$ (verificado con sympy).</p>
+  - html: |-
+      <p><b>Moraleja:</b> una matriz singular puede ser perfectamente diagonalizable: «singular» y «diagonalizable» son independientes.</p>
+- id: ej-propio-10
+  clase: propio
+  titulo: |-
+    Ejemplo propio 10 (difícil) — matriz idempotente ($A^2=A$): siempre diagonalizable
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy; demostración con herramientas de U (Teor. 3.1 p. 111, Teor. 4.5 p. 158, Teor. 4.7 p. 164)
+    texto: propio
+  cuerpo:
+  - enun: |-
+      a) Comprueba con $A=\begin{pmatrix}1&0&1\cr0&1&1\cr0&0&0\end{pmatrix}$ que $A^2=A$ y diagonalízala. b) Demuestra que toda $A$ de orden $n$ con $A^2=A$ es diagonalizable.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizar una idempotente y probar que toda idempotente lo es.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Valores propios solo $0$ y $1$. Si $d_0+d_1\ge n$ y $\alpha_0+\alpha_1\le n$, todo coincide.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. Si $A^2=A$, los valores propios son $0$ y $1$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Caso concreto con $d$; general con desigualdades.
+  - pasos:
+    - |-
+      <p><b>a)</b> Se multiplica y se comprueba $A^2=A$. $|A-\lambda I|=-\lambda(\lambda-1)^2$.</p>
+            $$A-I=\begin{pmatrix}0&0&1\cr0&0&1\cr0&0&-1\end{pmatrix},$$
+            <p>rango $1$, $d_1=2=\alpha_1$; $\lambda=0$ simple. Diagonalizable:</p>
+            $$P=\begin{pmatrix}1&0&1\cr0&1&1\cr0&0&-1\end{pmatrix}$$
+            <p>(columnas $(1,0,0),(0,1,0)\in L_1$ y $(1,1,-1)\in L_0$), $\Lambda=\operatorname{diag}(1,1,0)$.</p>
+    - |-
+      <b>b) Valores propios posibles.</b> Si $Av=\lambda v$, $v\neq0$, entonces $A^2v=\lambda^2v$ y $A^2v=Av=\lambda v$, luego $(\lambda^2-\lambda)v=0$ y, como $v\neq0$, $\lambda\in\{0,1\}$.
+    - |-
+      $L_0=\operatorname{Nuc}A$ tiene dimensión $n-r$, con $r=\operatorname{rang}A$ (U Teor. 3.1, p.111). Todo vector de la imagen es propio de valor $1$: si $y=Ax$, $Ay=A^2x=Ax=y$. Luego $\operatorname{Im}A\subseteq L_1$ y $d_1\ge r$.
+    - |-
+      Entonces $d_0+d_1\ge n$. Pero $d_i\le\alpha_i$ (Teor. 4.5) y $\alpha_0+\alpha_1\le n$ (grado del polinomio). Todo son igualdades: $d_0=\alpha_0$, $d_1=\alpha_1$ y $\alpha_0+\alpha_1=n$ (todas las raíces son reales). Por el Teor. 4.7, $A$ es diagonalizable, semejante a $\operatorname{diag}(1,\dots,1,0,\dots,0)$ con $r$ unos. (Los casos $A=I$ y $A=0$ valen igual con el subespacio que falta reducido a $\{0\}$.)
+- id: ex-feb25b-4
+  clase: examen
+  titulo: |-
+    Feb. 2025 (2.ª sem.), pregunta 4 — polinomio característico $(\lambda+6)(\lambda^2-1)$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2025 (2.ª sem.), pregunta 4
+    texto: |-
+      X Feb. 2025 (2.ª) P4
+  cuerpo:
+  - enun: |-
+      El polinomio característico de una matriz $A\in\mathcal M_{3\times3}$ es $\det(A-\lambda I)=(\lambda+6)(\lambda^2-1)$. Con esta información, ¿se puede saber si la matriz $A$ es diagonalizable?
+  - html: |-
+      <p><b>Qué se pide.</b> Decidir con solo el polinomio. Oficial: correcta; cita como fallo recurrente multiplicar los factores y aplicar Ruffini al cúbico, perdiendo la raíz $-6$.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Con el polinomio característico dado, ¿es diagonalizable?
+      - - |-
+          Cómo lo pienso
+        - |-
+          Tres raíces reales distintas en orden 3: diagonalizable automáticamente.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Factorizo y cuento.
+  - pasos:
+    - |-
+      <b>Hallar las raíces:</b> hay que terminar de factorizar, $\lambda^2-1=(\lambda-1)(\lambda+1)$ (diferencia de cuadrados). Queda $(\lambda+6)(\lambda-1)(\lambda+1)$, con raíces $-6$, $1$ y $-1$: <b>reales y distintas</b>.
+    - |-
+      <b>Multiplicidades:</b> cada raíz aparece una vez, $\alpha=1$ (Def. 4.11); por el Teorema 4.5, $1\le d\le\alpha=1$, luego $d=1=\alpha$ en los tres.
+    - |-
+      <b>Conclusión:</b> por el Teorema 4.7 (o el corolario de U p.163, $3$ valores distintos en orden $3$), $A$ <b>es diagonalizable</b>, semejante a $\operatorname{diag}(-6,1,-1)$. No hace falta conocer $A$.
+  - receta: |-
+      factoriza $p(\lambda)$ del todo. Si tiene $n$ raíces reales distintas, es diagonalizable sin más cuentas. Si alguna se repite, el polinomio solo no basta: hay que calcular $d=n-\operatorname{rang}(A-\lambda I)$.
+  - error: |-
+      multiplicar y aplicar Ruffini perdiendo la raíz $-6$, o resolver mal $\lambda^2=1$ y quedarse solo con $\lambda=1$.
+- id: ex-sep17a-4
+  clase: examen
+  titulo: |-
+    Sept. 2017 (A), ejercicio 4 — ¿admite una representación diagonal? (test)
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2017 (tipo A), ejercicio 4
+    texto: |-
+      X Sept. 2017 (A) ej. 4
+  cuerpo:
+  - enun: |-
+      La aplicación lineal $f(x_1,x_2)=(7x_1+4x_2,-2x_1+x_2)$ verifica que: A) Es ortogonal. B) Admite una representación matricial vía una matriz diagonal. C) Cualquier matriz asociada suya tiene rango $3$. D) Ninguna de las anteriores.
+  - html: |-
+      <p><b>Qué se pide.</b> «Admite una matriz diagonal» es «es diagonalizable» (Def. 4.12 y Teor. 4.6). Oficial: correcta (respuesta B).</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Decidir si un endomorfismo admite una matriz diagonal.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Matriz canónica y polinomio: dos raíces reales distintas.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Polinomio y refutar A y C.
+  - pasos:
+    - |-
+      <p><b>Matriz en la canónica</b> (columnas = imágenes de $e_1,e_2$, U §3.3):</p>
+            $$A=\begin{pmatrix}7&4\cr-2&1\end{pmatrix}.$$
+            <p>Es un endomorfismo de $\mathbb R^2$, así que la pregunta tiene sentido.</p>
+    - |-
+      <b>C es falsa:</b> toda matriz asociada a $f$ es $2\times2$ y su rango es $\le2$, nunca $3$.
+    - |-
+      <b>A es falsa:</b> una matriz ortogonal cumple $A^tA=I$ (tema 5.2), así que sus columnas tienen norma $1$; la primera, $(7,-2)$, tiene norma $\sqrt{53}\neq1$.
+    - |-
+      <b>B:</b> $\operatorname{tr}A=8$, $|A|=7+8=15$, $p(\lambda)=\lambda^2-8\lambda+15=(\lambda-3)(\lambda-5)$: dos valores propios reales distintos en $\mathbb R^2$ $\Rightarrow$ $f$ es diagonalizable: en la base de vectores propios su matriz es $\operatorname{diag}(3,5)$. <b>B cierta.</b>
+    - |-
+      <p><i>(Comprobación, no pedida.)</i> $\lambda=3$:</p>
+            $$A-3I=\begin{pmatrix}4&4\cr-2&-2\end{pmatrix},$$
+            <p>$v_1=(-1,1)$; $\lambda=5$:</p>
+            $$A-5I=\begin{pmatrix}2&4\cr-2&-4\end{pmatrix},$$
+            <p>$v_2=(-2,1)$. Con</p>
+            $$P=\begin{pmatrix}-1&-2\cr1&1\end{pmatrix},$$
+            <p>$P^{-1}AP=\operatorname{diag}(3,5)$.</p>
+  - html: |-
+      <p><b>Respuesta: B.</b></p>
+  - receta: |-
+      «admite una matriz diagonal» = «es diagonalizable». En una $2\times2$ basta ver que $p(\lambda)$ tiene dos raíces reales distintas.
+  - error: |-
+      pensar que, como $A$ no es diagonal, B es falsa. B dice que <b>existe</b> una base en la que la matriz es diagonal, no que lo sea la de la base canónica.
+- id: ex-feb19a-4
+  clase: examen
+  titulo: |-
+    Feb. 2019 (A), ejercicio 4 — diagonal semejante a una triangular con diagonal $1,2,3$ (Ejemplo 4.13 de U)
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2019 (tipo A), ejercicio 4
+    texto: |-
+      X Feb. 2019 (A) ej. 4
+  cuerpo:
+  - enun: |-
+      Escribir, si es posible, una matriz diagonal y semejante a $\begin{pmatrix}1&1&1\cr0&2&1\cr0&0&3\end{pmatrix}$.
+  - html: |-
+      <p><b>Qué se pide.</b> Es exactamente el Ejemplo 4.13 de U (p.164); solo se pide la matriz diagonal.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Hallar una diagonal semejante a una triangular.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Triangular con diagonal $1,2,3$ distinta ⇒ diagonalizable.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable.
+      - - |-
+          Por dónde empiezo
+        - |-
+          La diagonal es $\operatorname{diag}(1,2,3)$.
+  - pasos:
+    - |-
+      <b>Polinomio:</b> $A-\lambda I$ es triangular superior, así que $p(\lambda)=(1-\lambda)(2-\lambda)(3-\lambda)$.
+    - |-
+      <b>Valores propios:</b> $1,2,3$, reales y distintos, con $\alpha=1$ cada uno ($d=1=\alpha$ por el Teor. 4.5).
+    - |-
+      <b>Diagonalizable</b> (corolario p.163 o Teor. 4.7): $A$ es semejante a $\Lambda=\operatorname{diag}(1,2,3)$. <b>Esta es la respuesta.</b>
+    - |-
+      <p><i>(Para quien quiera comprobarlo.)</i> $L_1=\langle(1,0,0)\rangle$, $L_2=\langle(1,1,0)\rangle$, $L_3=\langle(1,1,1)\rangle$; con</p>
+            $$P=\begin{pmatrix}1&1&1\cr0&1&1\cr0&0&1\end{pmatrix}$$
+            $$P^{-1}=\begin{pmatrix}1&-1&0\cr0&1&-1\cr0&0&1\end{pmatrix}$$
+            <p>se cumple $P^{-1}AP=\Lambda$ (como en el Ej. 4.13 del apartado 3).</p>
+  - receta: |-
+      si $A$ es triangular, sus valores propios son los de la diagonal; si son distintos, $A$ es semejante a la diagonal formada por esos mismos números.
+  - error: |-
+      creer que la diagonal semejante se obtiene «borrando» lo que hay por encima de la diagonal. Aquí sale bien solo porque los tres valores son distintos: en el ejercicio de Feb. 2023 (siguiente grupo), $\begin{pmatrix}9&9\cr0&9\end{pmatrix}$ <b>no</b> es semejante a $\operatorname{diag}(9,9)$.
+- id: ex-feb23b-4
+  clase: examen
+  titulo: |-
+    Feb. 2023 (2.ª sem.), pregunta 4 — ¿diagonal semejante a $\begin{pmatrix}9&9\cr0&9\end{pmatrix}$?
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2023 (2.ª sem.), pregunta 4
+    texto: |-
+      X Feb. 2023 (2.ª) P4
+  cuerpo:
+  - enun: |-
+      Estudiar si existe una matriz diagonal y semejante a $A=\begin{pmatrix}9&9\cr0&9\end{pmatrix}$.
+  - html: |-
+      <p><b>Qué se pide.</b> Oficial: correcta; cita como fallo recurrente confundir «matriz diagonal» con «triangular superior».</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Existe una diagonal semejante a $\begin{pmatrix}9&9\\0&9\end{pmatrix}$?
+      - - |-
+          Cómo lo pienso
+        - |-
+          Un único valor propio doble. Si fuese diagonalizable, la diagonal sería $9I$, y entonces $A=9I$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Calculo $d$ o uso el argumento de $9I$.
+  - pasos:
+    - |-
+      <b>Polinomio:</b> triangular, $|A-\lambda I|=(9-\lambda)^2$. Único valor propio $\lambda=9$, $\alpha=2$.
+    - |-
+      <p><b>Multiplicidad geométrica:</b></p>
+            $$A-9I=\begin{pmatrix}0&9\cr0&0\end{pmatrix},$$
+            <p>rango $1$, $d=2-1=1$; $L_9=\{y=0\}=\langle(1,0)\rangle$.</p>
+    - |-
+      <b>Conclusión:</b> $d=1\neq2=\alpha$: por el Teor. 4.7, <b>no</b> es diagonalizable; no existe ninguna matriz diagonal semejante.
+    - |-
+      <b>Otra forma de verlo (útil con un único valor propio):</b> si existiera, la diagonal tendría que ser $9I$ (las semejantes tienen los mismos valores propios, Teor. 4.4). Pero entonces $A=P(9I)P^{-1}=9PP^{-1}=9I$, y $A\neq9I$. Contradicción.
+  - receta: |-
+      con un valor propio repetido, calcula $d=n-\operatorname{rang}(A-\lambda I)$ y compáralo con $\alpha$. Atajo: si el único valor propio es $\lambda$, $A$ solo es diagonalizable si $A=\lambda I$.
+  - html: |-
+      <p><b>Error típico (propio):</b> decir «es semejante a $\operatorname{diag}(9,9)$» porque coinciden los valores propios: para la semejanza no basta el mismo polinomio característico (U Ej. 4.10, p.155; ver tema 4.2).</p>
+- id: ex-feb19b-pa
+  clase: examen
+  titulo: |-
+    Feb. 2019 (B), problema a) — diagonal semejante y ecuaciones de los subespacios propios (= E 4.18)
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2019 (tipo B), problema a)
+    texto: |-
+      X Feb. 2019 (B) P a)
+  cuerpo:
+  - enun: |-
+      Calcular, si es posible, una matriz diagonal semejante a $\begin{pmatrix}2&2&-2\cr0&3&-1\cr0&1&1\end{pmatrix}$ y las ecuaciones de los subespacios de vectores propios asociados.
+  - html: |-
+      <p><b>Qué se pide.</b> Es E 4.18 (p.135), ya resuelto en el <a href="tema_4_2_valores_vectores_propios.html#ej4-18">tema 4.2</a> (cálculo de $L_2$). Aquí se completa el veredicto de diagonalización.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonal semejante y ecuaciones de los subespacios propios.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Un solo valor propio triple; la clave es el rango de $A-2I$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Polinomio y rango.
+  - pasos:
+    - |-
+      <p><b>Polinomio</b> (por la 1.ª columna, con dos ceros):</p>
+            $$(2-\lambda)\big[(3-\lambda)(1-\lambda)+1\big]=(2-\lambda)(\lambda^2-4\lambda+4)=(2-\lambda)^3.$$
+            <p>Único valor propio $\lambda=2$, $\alpha=3$.</p>
+    - |-
+      <p><b>Subespacio propio:</b></p>
+            $$A-2I=\begin{pmatrix}0&2&-2\cr0&1&-1\cr0&1&-1\end{pmatrix}:$$
+            <p>filas proporcionales a $(0,1,-1)$, rango $1$. Ecuación $x_2-x_3=0$; $L_2=\langle(1,0,0),(0,1,1)\rangle$, $d=3-1=2$.</p>
+    - |-
+      <b>Conclusión:</b> $d=2\neq3=\alpha$: por el Teor. 4.7, <b>$A$ no es diagonalizable</b> y la matriz diagonal pedida <b>no existe</b>. Equivalentemente (Teor. 4.6): solo hay $2$ vectores propios independientes y no se puede formar una base de $\mathbb R^3$. Es el mismo caso que el Ejemplo 4.15 de U.
+    - |-
+      <b>Ecuaciones de los subespacios propios:</b> hay uno solo, $L_2:\ x_2-x_3=0$, de dimensión $2$.
+  - receta: |-
+      valor propio con $\alpha=n$ (único): basta ver si $A-\lambda I$ es la matriz nula; si su rango es $\ge1$, $d\lt n$ y no es diagonalizable.
+  - error: |-
+      dar $\operatorname{diag}(2,2,2)$ como respuesta (obligaría a $A=2I$, como en Feb. 2023).
+- id: ex-sep24-p8a
+  clase: examen
+  titulo: |-
+    Sept. 2024, problema 8 (1.er apartado) — demostrar que no es diagonalizable
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2024, problema 8 (1.er apartado)
+    texto: |-
+      X Sept. 2024 P8 (1.º)
+  cuerpo:
+  - enun: |-
+      Considere $A=\begin{pmatrix}3&0&0\cr0&4&-1\cr0&1&2\end{pmatrix}$. Demuestre que $A$ no es diagonalizable (1 punto). <i>(El 2.º apartado, «calcule la matriz de Jordan asociada a $A$», es del tema 4.4.)</i>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Demostrar que una matriz no es diagonalizable.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Hay que mostrar $d<\alpha$ para algún valor propio.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Polinomio y rango de $A-3I$.
+  - pasos:
+    - |-
+      <p><b>Polinomio</b> (por la 1.ª fila, con dos ceros):</p>
+            $$(3-\lambda)\begin{vmatrix}4-\lambda&-1\cr1&2-\lambda\end{vmatrix}=(3-\lambda)\big[(4-\lambda)(2-\lambda)+1\big]=(3-\lambda)(\lambda^2-6\lambda+9)=(3-\lambda)^3.$$
+    - |-
+      <b>Valor propio:</b> $\lambda=3$, $\alpha=3$.
+    - |-
+      <p><b>Subespacio propio:</b></p>
+            $$A-3I=\begin{pmatrix}0&0&0\cr0&1&-1\cr0&1&-1\end{pmatrix},$$
+            <p>rango $1$; ecuación $y-z=0$; $L_3=\langle(1,0,0),(0,1,1)\rangle$, $d=2$.</p>
+    - |-
+      <b>Conclusión:</b> $d=2\lt3=\alpha$, luego por el Teor. 4.7 $A$ no es diagonalizable. (Con el atajo de Feb. 2023: si lo fuera, sería $A=3I$, y no lo es.) $\blacksquare$
+  - html: |-
+      <p>El error de fondo que señala sí es real: leer las raíces $3,4,2$ como si el sumando $+(3-\lambda)$ no existiera. En el 2.º apartado aparecen $(A+3I)$ y $(A+3I)^2$ donde debe decir $(A-3I)$ y $(A-3I)^2$ (tema 4.4).</p>
+  - receta: |-
+      un determinante con una fila o columna «casi nula» se desarrolla por ella y se <b>saca factor común antes de multiplicar</b>: así el polinomio sale ya factorizado.
+  - error: |-
+      ver $(3-\lambda)(4-\lambda)(2-\lambda)+\cdots$ y leer las raíces como si fuera un producto.
+- id: ex-feb26a-p8b
+  clase: examen
+  titulo: |-
+    Feb. 2026 (1.ª sem.), problema 8 (2.º apartado) — ¿es diagonalizable si $a=b$?
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2026 (1.ª sem.), problema 8 (2.º apartado)
+    texto: |-
+      X Feb. 2026 (1.ª) P8 (2.º)
+  cuerpo:
+  - enun: |-
+      Sean $a,b\in\mathbb R$ y $A=\begin{pmatrix}2a-b&0&2a-2b\cr1&a&2\cr-a+b&0&-a+2b\end{pmatrix}$. Calcule los autovalores de $A$ en función de $a,b$, $a\neq b$ (1,5 puntos; está resuelto en el <a href="tema_4_2_valores_vectores_propios.html#ex-feb26a-p8">tema 4.2</a>). Estudie si $A$ es diagonalizable en el caso $a=b$ (0,5 puntos).
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Estudiar la diagonalizabilidad cuando $a=b$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Sustituyo $b=a$: la matriz se simplifica y el valor propio se triplica.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Rango de $A-aI$.
+  - pasos:
+    - |-
+      <p><b>Sustituir $b=a$:</b> $2a-b=a$, $2a-2b=0$, $-a+b=0$, $-a+2b=a$:</p>
+            $$A=\begin{pmatrix}a&0&0\cr1&a&2\cr0&0&a\end{pmatrix}.$$
+    - |-
+      <p><b>Polinomio</b> (por la 1.ª fila):</p>
+            $$(a-\lambda)\begin{vmatrix}a-\lambda&2\cr0&a-\lambda\end{vmatrix}=(a-\lambda)^3.$$
+            <p>También sale poniendo $b=a$ en $p(\lambda)=(a-\lambda)^2(b-\lambda)$ del 1.er apartado. Único valor propio $\lambda=a$, $\alpha=3$.</p>
+    - |-
+      <p><b>Subespacio propio:</b></p>
+            $$A-aI=\begin{pmatrix}0&0&0\cr1&0&2\cr0&0&0\end{pmatrix}$$
+            <p>tiene rango $1$ <b>para todo $a$</b>. Ecuación $x+2z=0$, $L_a=\langle(0,1,0),(-2,0,1)\rangle$, $d=2$.</p>
+    - |-
+      <b>Conclusión:</b> $d=2\neq3=\alpha$: para $a=b$, $A$ <b>no</b> es diagonalizable (Teor. 4.7). También vale el atajo: $A\neq aI$.
+  - html: |-
+      <p><b>Comentario (no pedido, muy instructivo).</b> Para $a\neq b$ la matriz <b>sí</b> es diagonalizable: valores propios $a$ (doble) y $b$ (simple), con $\operatorname{rang}(A-aI)=1$ para todos $a,b$, luego $d_a=2=\alpha_a$ y $d_b=1=\alpha_b$. La diagonalizabilidad se pierde justo cuando los dos valores propios se juntan.</p>
+  - receta: |-
+      al particularizar un parámetro, <b>vuelve a calcular</b> las multiplicidades: si dos valores propios se juntan, $\alpha$ aumenta y $d$ puede no aumentar.
+  - error: |-
+      conservar la conclusión del caso general; o pensar que como $\operatorname{rang}(A-aI)$ «no cambia» (vale $1$ en los dos casos) la respuesta tampoco cambia: lo que cambia es $\alpha$, que pasa de $2$ a $3$.
+- id: ex-feb24b-p8
+  clase: examen
+  titulo: |-
+    Feb. 2024 (2.ª sem.), problema 8 — $\begin{pmatrix}a&b&0\cr0&-2&0\cr0&0&2\end{pmatrix}$, $b\neq0$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2024 (2.ª sem.), problema 8
+    texto: |-
+      X Feb. 2024 (2.ª) P8
+  cuerpo:
+  - enun: |-
+      Sea $b\neq0$ y $A=\begin{pmatrix}a&b&0\cr0&-2&0\cr0&0&2\end{pmatrix}$. Estudie si $A$ es diagonalizable cuando $a\neq2$ y $a\neq-2$ (0,5 puntos) y cuando $a=2$ y cuando $a=-2$ (1,5 puntos; en cada uno de los dos casos). <i>En los casos diagonalizables no es necesario calcular la matriz diagonal.</i>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizabilidad según el parámetro $a$ con $b\neq0$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Valores $a,-2,2$: dos coinciden en $a=\pm2$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Casos $a\neq\pm2$, $a=2$, $a=-2$.
+  - pasos:
+    - |-
+      <b>Polinomio:</b> $A-\lambda I$ es triangular superior: $p(\lambda)=(a-\lambda)(-2-\lambda)(2-\lambda)$. Valores propios: $a$, $-2$ y $2$.
+    - |-
+      <b>Caso $a\neq\pm2$:</b> tres valores propios reales distintos, $\alpha=d=1$ (Teor. 4.5): <b>diagonalizable</b> para cualquier $b$ (corolario de p.163).
+    - |-
+      <p><b>Caso $a=2$:</b> $\lambda=2$ doble y $\lambda=-2$ simple.</p>
+            $$A-2I=\begin{pmatrix}0&b&0\cr0&-4&0\cr0&0&0\end{pmatrix}:$$
+            <p>filas $(0,b,0)$ y $(0,-4,0)$ proporcionales, rango $1$; ecuación $y=0$, $L_2=\langle(1,0,0),(0,0,1)\rangle$, $d_2=2=\alpha_2$. El simple tiene $d=\alpha=1$: <b>diagonalizable</b> (Teor. 4.7).</p>
+    - |-
+      <p><b>Caso $a=-2$:</b> $\lambda=-2$ doble y $\lambda=2$ simple.</p>
+            $$A+2I=\begin{pmatrix}0&b&0\cr0&0&0\cr0&0&4\end{pmatrix}:$$
+            <p>como $b\neq0$, las filas $(0,b,0)$ y $(0,0,4)$ son independientes, rango $2$; ecuaciones $y=0,\ z=0$, $L_{-2}=\langle(1,0,0)\rangle$, $d=1\lt2=\alpha$: <b>no diagonalizable</b>.</p>
+    - |-
+      <b>Papel de $b\neq0$:</b> solo importa en $a=-2$; con $b=0$ la matriz sería diagonal y diagonalizable siempre. Fallo recurrente: dar un valor concreto a $b$.
+  - html: |-
+      <p><b>Resumen:</b> $A$ es diagonalizable $\iff a\neq-2$. La redacción «cuando $a=2$ y $a=-2$» significa «en cada uno de los dos casos»: no pueden darse a la vez.</p>
+  - receta: |-
+      (1) halla $p(\lambda)$ y sus raíces en función del parámetro; (2) donde <b>no</b> hay raíces repetidas, diagonalizable directamente; (3) para cada valor del parámetro que produce una raíz múltiple, sustituye y calcula $\operatorname{rang}(A-\lambda I)$ <b>solo para el valor propio múltiple</b> (los simples cumplen siempre $d=\alpha=1$).
+  - error: |-
+      estudiar el rango con $b=1$ (o $b=0$) en vez de usar solo $b\neq0$; o calcular $L_\lambda$ también para los valores simples (trabajo inútil).
+- id: ex-feb25a-p8
+  clase: examen
+  titulo: |-
+    Feb. 2025 (1.ª sem.), problema 8 — $\begin{pmatrix}5&0&0\cr0&-1&a\cr3&0&b\end{pmatrix}$ con dos parámetros
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2025 (1.ª sem.), problema 8
+    texto: |-
+      X Feb. 2025 (1.ª) P8
+  cuerpo:
+  - enun: |-
+      Sean $a,b\in\mathbb R$ y $A=\begin{pmatrix}5&0&0\cr0&-1&a\cr3&0&b\end{pmatrix}$. Estudie si $A$ es diagonalizable en función de $a,b$. <i>En los casos diagonalizables no es necesario calcular la matriz diagonal.</i>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizabilidad según $a,b$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Valores $5,-1,b$: los problemas aparecen para $b=5$ o $b=-1$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Rango de $A-5I$ y $A+I$.
+  - pasos:
+    - |-
+      <p><b>Polinomio</b> (por la 1.ª fila, $(5-\lambda,0,0)$):</p>
+            $$(5-\lambda)\begin{vmatrix}-1-\lambda&a\cr0&b-\lambda\end{vmatrix}=(5-\lambda)(-1-\lambda)(b-\lambda).$$
+            <p>El parámetro $a$ <b>no aparece</b>. Valores propios: $5$, $-1$ y $b$.</p>
+    - |-
+      <b>Caso $b\neq5$ y $b\neq-1$:</b> tres valores distintos: <b>diagonalizable</b> para todo $a$.
+    - |-
+      <p><b>Caso $b=5$:</b> $\lambda=5$ doble, $\lambda=-1$ simple.</p>
+            $$A-5I=\begin{pmatrix}0&0&0\cr0&-6&a\cr3&0&0\end{pmatrix}:$$
+            <p>las filas $(0,-6,a)$ y $(3,0,0)$ son independientes para todo $a$ (la primera tiene $-6\neq0$ en la 2.ª columna). Rango $2$, $d_5=1\lt2$: <b>no diagonalizable, para todo $a$</b>.</p>
+    - |-
+      <p><b>Caso $b=-1$:</b> $\lambda=-1$ doble, $\lambda=5$ simple.</p>
+            $$A+I=\begin{pmatrix}6&0&0\cr0&0&a\cr3&0&0\end{pmatrix}$$
+            <p>(la fila 3 es la mitad de la 1). Si $a\neq0$: filas $(6,0,0)$ y $(0,0,a)$ independientes, rango $2$, $d=1\lt2$: <b>no</b>. Si $a=0$: solo queda $(6,0,0)$, rango $1$, $d=2=\alpha$: <b>sí</b>, con $L_{-1}=\langle(0,1,0),(0,0,1)\rangle$ y $L_5=\langle(2,0,1)\rangle$.</p>
+    - |-
+      <b>Resumen:</b> $A$ es diagonalizable $\iff$ ($b\neq5$ y $b\neq-1$) <b>o</b> ($b=-1$ y $a=0$).
+  - receta: |-
+      con dos parámetros, mira cuál aparece en $p(\lambda)$: ese decide <b>cuándo</b> hay raíces repetidas; el otro solo puede influir en el <b>rango</b> de $A-\lambda I$ en esos casos.
+  - error: |-
+      concluir «$a$ no influye» porque no aparece en el polinomio (influye en $d$ cuando $b=-1$); o resumir «diagonalizable si $a=0$», cuando para $b=5$ no lo es nunca.
+- id: ex-feb26b-p8b
+  clase: examen
+  titulo: |-
+    Feb. 2026 (2.ª sem.), problema 8 (2.º apartado) — matriz diagonal y base de vectores propios
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2026 (2.ª sem.), problema 8 (2.º apartado)
+    texto: |-
+      X Feb. 2026 (2.ª) P8 (2.º)
+  cuerpo:
+  - enun: |-
+      Sea $f(x_1,x_2)=(-7x_1+6x_2,-9x_1+8x_2)$ una aplicación lineal de $\mathbb R^2$ en $\mathbb R^2$. Halle la matriz de $f$ respecto de $B=\{(1,-1),(1,1)\}$ (1 punto; resuelto en <a href="tema_3_3_ecuaciones_matriz_asociada.html#ex-feb26-2p8">3.3</a> y <a href="tema_3_5_inversa_cambios_base.html#ex-feb26-2p8-35">3.5</a>). Estudie si $f$ es diagonalizable y, en caso afirmativo, determine una matriz diagonal $D$ y una base respecto a la cual la matriz asociada a $f$ es $D$ (1 punto).
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizar $f$ y dar base y matriz diagonal.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Dos valores propios distintos ⇒ diagonalizable.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Polinomio, vectores propios y base.
+  - pasos:
+    - |-
+      <p><b>Matriz en la canónica:</b></p>
+            $$A=\begin{pmatrix}-7&6\cr-9&8\end{pmatrix}.$$
+            <p>Por la Def. 4.12, $f$ es diagonalizable si lo es $A$.</p>
+    - |-
+      <b>Polinomio:</b> $\operatorname{tr}A=1$, $|A|=-56+54=-2$: $p(\lambda)=\lambda^2-\lambda-2=(\lambda-2)(\lambda+1)$. Valores propios $2$ y $-1$, reales y distintos: <b>$f$ es diagonalizable</b>.
+    - |-
+      <p><b>Vectores propios:</b> $\lambda=2$:</p>
+            $$A-2I=\begin{pmatrix}-9&6\cr-9&6\end{pmatrix},$$
+            <p>$3x=2y$, $v_1=(2,3)$. $\lambda=-1$:</p>
+            $$A+I=\begin{pmatrix}-6&6\cr-9&9\end{pmatrix},$$
+            <p>$x=y$, $v_2=(1,1)$.</p>
+    - |-
+      <p><b>Base y matriz diagonal:</b> $B'=\{(2,3),(1,1)\}$ es base de $\mathbb R^2$ ($\begin{vmatrix}2&1\cr3&1\end{vmatrix}=-1\neq0$) formada por vectores propios. Por el Teor. 4.6, la matriz de $f$ en $B'$ es</p>
+            $$D=\begin{pmatrix}2&0\cr0&-1\end{pmatrix}:$$
+            <p>el valor propio de $v_1$ va en la 1.ª posición y el de $v_2$ en la 2.ª.</p>
+    - |-
+      <p><b>Comprobación con $P$:</b></p>
+            $$P=\begin{pmatrix}2&1\cr3&1\end{pmatrix},$$
+            $$P^{-1}=\begin{pmatrix}-1&1\cr3&-2\end{pmatrix}$$
+            <p>(fórmula $2\times2$, U p.27-28),</p>
+            $$P^{-1}AP=\begin{pmatrix}-2&2\cr-3&2\end{pmatrix}\begin{pmatrix}2&1\cr3&1\end{pmatrix}=\begin{pmatrix}2&0\cr0&-1\end{pmatrix}$$
+            <p>✓. Más rápido: $AP=PD$, es decir, $Av_1=2v_1$ y $Av_2=-v_2$.</p>
+    - |-
+      <p><b>Enlace con el 1.er apartado (control gratis):</b></p>
+            $$A_B=\begin{pmatrix}2&0\cr-15&-1\end{pmatrix}$$
+            <p>es triangular con diagonal $2,-1$: coincide (Teor. 4.4). Pero $B$ <b>no</b> es base de vectores propios ($f(1,-1)=(-13,-17)$ no es múltiplo de $(1,-1)$), por eso $A_B$ no sale diagonal.</p>
+  - html: |-
+      <div class="recipe"><b>Receta (diagonalizar):</b> (1) $p(\lambda)$ y raíces; (2) comprueba $d_i=\alpha_i$; (3) base de cada $L_i$; (4) $P$ = esos vectores <b>en columnas</b> y $D$ = los valores propios <b>en el mismo orden</b>; (5) comprueba con $AP=PD$.</div>
+  - error: |-
+      columnas de $P$ en distinto orden que los valores de $D$ (U Ej. 4.14: la igualdad «no es cierta»), o los vectores propios en <b>filas</b>.
+- id: ex-sep23-p8
+  clase: examen
+  titulo: |-
+    Sept. 2023, problema 8 — diagonal semejante y $A^{546}$
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2023, problema 8
+    texto: |-
+      X Sept. 2023 P8
+  cuerpo:
+  - enun: |-
+      Considere $A=\begin{pmatrix}-1&0\cr2&1\end{pmatrix}$. Estudie si existe una matriz diagonal y semejante a $A$ (1 punto). Calcule de manera razonada $A^{546}$ (1 punto).
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonal semejante y cálculo de $A^{546}$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Valores $-1,1$; $546$ es par, así que $(-1)^{546}=1$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Potencias:</b> $A=P\Lambda P^{-1}\Rightarrow A^k=P\Lambda^kP^{-1}$, con $\Lambda^k$ la diagonal de las potencias.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Diagonalizo y elevo.
+  - pasos:
+    - |-
+      <b>Valores propios:</b> $A$ es triangular inferior, $p(\lambda)=(-1-\lambda)(1-\lambda)=(\lambda+1)(\lambda-1)$: valores $-1$ y $1$, distintos. Por U p.163 existe una diagonal semejante: $D=\operatorname{diag}(-1,1)$.
+    - |-
+      <p><b>Vectores propios:</b> $\lambda=-1$:</p>
+            $$A+I=\begin{pmatrix}0&0\cr2&2\end{pmatrix},$$
+            <p>$x+y=0$, $v_1=(1,-1)$. $\lambda=1$:</p>
+            $$A-I=\begin{pmatrix}-2&0\cr2&0\end{pmatrix},$$
+            <p>$x=0$, $v_2=(0,1)$.</p>
+    - |-
+      <p><b>Matriz de paso:</b></p>
+            $$P=\begin{pmatrix}1&0\cr-1&1\end{pmatrix},$$
+            <p>$|P|=1$,</p>
+            $$P^{-1}=\begin{pmatrix}1&0\cr1&1\end{pmatrix};$$
+            <p>$P^{-1}AP=D$.</p>
+    - |-
+      <p><b>Potencia:</b> $D^{546}=\operatorname{diag}((-1)^{546},1^{546})=I$ porque $546$ es par. Entonces $A^{546}=PD^{546}P^{-1}=PIP^{-1}=I$. <b></p>
+            $$A^{546}=\begin{pmatrix}1&0\cr0&1\end{pmatrix}.$$
+            <p></b></p>
+    - |-
+      <p><b>Comprobación independiente:</b></p>
+            $$A^2=\begin{pmatrix}-1&0\cr2&1\end{pmatrix}\begin{pmatrix}-1&0\cr2&1\end{pmatrix}=I,$$
+            <p>luego $A^{546}=(A^2)^{273}=I$. Como el enunciado dice «de manera razonada» y el primer apartado lleva a la diagonalización, conviene presentar el paso 4; este paso 5 sirve de control.</p>
+  - receta: |-
+      si los valores propios son $\pm1$, $D^k$ es $I$ ($k$ par) o $D$ ($k$ impar), y $A^k=I$ o $A^k=A$ sin hacer cuentas.
+  - error: |-
+      calcular $A^{546}$ elevando cada entrada: daría $\begin{pmatrix}1&0\cr2^{546}&1\end{pmatrix}$, que es falso.
+- id: ex-sep18a-4
+  clase: examen
+  titulo: |-
+    Sept. 2018 (A), ejercicio 4 — $A^{100}$ «utilizando la teoría de diagonalización»
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2018 (tipo A), ejercicio 4
+    texto: |-
+      X Sept. 2018 (A) ej. 4
+  cuerpo:
+  - enun: |-
+      Utilizando la teoría de diagonalización, hallar el valor de $A^{100}$ siendo $A=\begin{pmatrix}0&2\cr-3&5\end{pmatrix}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Calcular $A^{100}$ por diagonalización.
+      - - |-
+          Cómo lo pienso
+        - |-
+          No multiplico 100 veces: $P\Lambda^{100}P^{-1}$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Potencias:</b> $A=P\Lambda P^{-1}\Rightarrow A^k=P\Lambda^kP^{-1}$, con $\Lambda^k$ la diagonal de las potencias.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Valores y vectores propios y producto.
+  - pasos:
+    - |-
+      <b>Polinomio:</b> $\operatorname{tr}A=5$, $|A|=6$: $p(\lambda)=\lambda^2-5\lambda+6=(\lambda-2)(\lambda-3)$. Valores propios $2$ y $3$, distintos: diagonalizable (U p.163).
+    - |-
+      <p><b>Vectores propios:</b> $\lambda=2$:</p>
+            $$A-2I=\begin{pmatrix}-2&2\cr-3&3\end{pmatrix},$$
+            <p>$x=y$, $v_1=(1,1)$. $\lambda=3$:</p>
+            $$A-3I=\begin{pmatrix}-3&2\cr-3&2\end{pmatrix},$$
+            <p>$3x=2y$, $v_2=(2,3)$ (se evitan fracciones).</p>
+    - |-
+      <p><b>$P$ y $P^{-1}$:</b></p>
+            $$P=\begin{pmatrix}1&2\cr1&3\end{pmatrix},$$
+            <p>$|P|=1$,</p>
+            $$P^{-1}=\begin{pmatrix}3&-2\cr-1&1\end{pmatrix}$$
+            <p>(U p.27-28). Comprobación: $P^{-1}AP=\operatorname{diag}(2,3)$.</p>
+    - |-
+      <b>Potencia</b> ($PD^k$ es escalar las columnas de $P$):
+            $$A^{100}=P\begin{pmatrix}2^{100}&0\cr0&3^{100}\end{pmatrix}P^{-1}=\begin{pmatrix}2^{100}&2\cdot3^{100}\cr2^{100}&3^{101}\end{pmatrix}\begin{pmatrix}3&-2\cr-1&1\end{pmatrix}=\begin{pmatrix}3\cdot2^{100}-2\cdot3^{100}&-2^{101}+2\cdot3^{100}\cr3\cdot2^{100}-3^{101}&-2^{101}+3^{101}\end{pmatrix}.$$
+    - |-
+      <p><b>Comprobación</b> con la fórmula general</p>
+            $$A^n=\begin{pmatrix}3\cdot2^n-2\cdot3^n&2\cdot3^n-2^{n+1}\cr3\cdot2^n-3^{n+1}&3^{n+1}-2^{n+1}\end{pmatrix}$$
+            <p>(sympy): con $n=1$ se recupera $A$ y con $n=2$ sale</p>
+            $$\begin{pmatrix}-6&10\cr-15&19\end{pmatrix}=A^2.$$
+  - receta: |-
+      $A^k$ para una $2\times2$ diagonalizable: $P$ con vectores propios <b>enteros</b> (escala para que $|P|=\pm1$ si se puede), $P^{-1}$ por $\frac1{|P|}\begin{pmatrix}d&-b\cr-c&a\end{pmatrix}$, y multiplica en el orden $(P\Lambda^k)P^{-1}$.
+  - error: |-
+      escribir $A^{100}=P^{-1}D^{100}P$ (orden cambiado). Como $D=P^{-1}AP$, es $A=PDP^{-1}$, con la $P$ de columnas-vectores propios a la <b>izquierda</b>.
+- id: ex-feb25b-p7
+  clase: examen
+  titulo: |-
+    Feb. 2025 (2.ª sem.), problema 7 — $P$ que diagonaliza $\begin{pmatrix}-2&1\cr1&-2\end{pmatrix}$ y ¿es $A^{51}$ diagonalizable?
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2025 (2.ª sem.), problema 7
+    texto: |-
+      X Feb. 2025 (2.ª) P7
+  cuerpo:
+  - enun: |-
+      Considere $A=\begin{pmatrix}-2&1\cr1&-2\end{pmatrix}$. Halle, si es posible, una matriz $P$ tal que $P^{-1}AP$ sea una matriz diagonal (1 punto). Determine de manera razonada si la matriz $A^{51}$ es diagonalizable (1 punto).
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Hallar $P$ que diagonaliza y ver si $A^{51}$ es diagonalizable.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Los vectores propios de $A$ son también propios de $A^{51}$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Potencias:</b> $A=P\Lambda P^{-1}\Rightarrow A^k=P\Lambda^kP^{-1}$, con $\Lambda^k$ la diagonal de las potencias.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Diagonalizo $A$ y razono con la misma $P$.
+  - pasos:
+    - |-
+      <p><b>Polinomio:</b></p>
+            $$p(\lambda)=(-2-\lambda)^2-1=(-2-\lambda-1)(-2-\lambda+1)=(\lambda+3)(\lambda+1).$$
+            <p>Valores propios $-1$ y $-3$, distintos: diagonalizable.</p>
+    - |-
+      <p><b>Vectores propios:</b> $\lambda=-1$:</p>
+            $$A+I=\begin{pmatrix}-1&1\cr1&-1\end{pmatrix},$$
+            <p>$x=y$, $v_1=(1,1)$. $\lambda=-3$:</p>
+            $$A+3I=\begin{pmatrix}1&1\cr1&1\end{pmatrix},$$
+            <p>$x+y=0$, $v_2=(1,-1)$.</p>
+    - |-
+      <p><b>$P$:</b></p>
+            $$P=\begin{pmatrix}1&1\cr1&-1\end{pmatrix},$$
+            <p>$|P|=-2\neq0$,</p>
+            $$P^{-1}=\frac12\begin{pmatrix}1&1\cr1&-1\end{pmatrix},$$
+            $$P^{-1}AP=\begin{pmatrix}-1&0\cr0&-3\end{pmatrix}=D$$
+            <p>(verificado).</p>
+    - |-
+      <p><b>$A^{51}$:</b> de $A=PDP^{-1}$, $A^{51}=PD^{51}P^{-1}$, es decir,</p>
+            $$P^{-1}A^{51}P=D^{51}=\begin{pmatrix}(-1)^{51}&0\cr0&(-3)^{51}\end{pmatrix}=\begin{pmatrix}-1&0\cr0&-3^{51}\end{pmatrix},$$
+            <p>que es diagonal. Por la Def. 4.12, <b>$A^{51}$ es diagonalizable</b>, con la <b>misma</b> $P$. (Aquí $(-3)^{51}=-3^{51}$ porque el exponente es impar.)</p>
+    - |-
+      <b>Idea general:</b> si $Av=\lambda v$, entonces $A^kv=\lambda^kv$: los vectores propios de $A$ lo son de $A^k$, así que la base que diagonaliza $A$ diagonaliza todas sus potencias.
+    - |-
+      <p><i>(No pedido.)</i></p>
+            $$A^{51}=\frac12\begin{pmatrix}-1-3^{51}&-1+3^{51}\cr-1+3^{51}&-1-3^{51}\end{pmatrix}$$
+            <p>(verificado).</p>
+  - html: |-
+      <p><i>Frontera:</i> $A$ es simétrica, así que también se podría diagonalizar con $P$ ortogonal (dividiendo las columnas por $\sqrt2$; tema 5.3). Aquí no se pide.</p>
+  - receta: |-
+      «¿es $A^k$ diagonalizable?» $\Rightarrow$ si $A=PDP^{-1}$, $A^k=PD^kP^{-1}$ y $D^k$ es diagonal: sí, con la misma $P$. No hace falta calcular $A^k$.
+  - error: |-
+      calcular el polinomio característico de $A^{51}$ o multiplicar $A$ por sí misma; o escribir $(-3)^{51}=3^{51}$ (el signo se pierde solo si el exponente es par).
+- id: ej-propio-11
+  clase: propio
+  titulo: |-
+    Ejemplo propio 11 (examen) — diagonalizar una $2\times2$ y fórmula de $A^n$
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Diagonaliza $A=\begin{pmatrix}4&-2\cr1&1\end{pmatrix}$ y calcula $A^n$ para todo $n\ge1$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizar una $2\times2$ y hallar $A^n$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Dos valores propios distintos.
+      - - |-
+          Qué uso
+        - |-
+          <b>Matriz de paso:</b> las columnas de $P$ son vectores propios (una base de cada $L_\lambda$) y $\Lambda$ tiene los valores propios <i>en el mismo orden</i>; se comprueba sin invertir con $AP=P\Lambda$. <b>Potencias:</b> $A=P\Lambda P^{-1}\Rightarrow A^k=P\Lambda^kP^{-1}$, con $\Lambda^k$ la diagonal de las potencias.
+      - - |-
+          Por dónde empiezo
+        - |-
+          $P,D$ y $PD^nP^{-1}$.
+  - pasos:
+    - |-
+      $\operatorname{tr}A=5$, $|A|=4+2=6$: $p(\lambda)=\lambda^2-5\lambda+6=(\lambda-2)(\lambda-3)$. Dos valores distintos: diagonalizable.
+    - |-
+      <p>$\lambda=2$:</p>
+            $$A-2I=\begin{pmatrix}2&-2\cr1&-1\end{pmatrix},$$
+            <p>$x=y$, $v_1=(1,1)$. $\lambda=3$:</p>
+            $$A-3I=\begin{pmatrix}1&-2\cr1&-2\end{pmatrix},$$
+            <p>$x=2y$, $v_2=(2,1)$.</p>
+    - |-
+      $$P=\begin{pmatrix}1&2\cr1&1\end{pmatrix},$$
+            <p>$|P|=-1$,</p>
+            $$P^{-1}=\begin{pmatrix}-1&2\cr1&-1\end{pmatrix},$$
+            <p>$D=\operatorname{diag}(2,3)$. Comprobación:</p>
+            $$AP=\begin{pmatrix}2&6\cr2&3\end{pmatrix}=PD.$$
+    - |-
+      $$A^n=PD^nP^{-1}=\begin{pmatrix}2^n&2\cdot3^n\cr2^n&3^n\end{pmatrix}\begin{pmatrix}-1&2\cr1&-1\end{pmatrix}=\begin{pmatrix}2\cdot3^n-2^n&2^{n+1}-2\cdot3^n\cr3^n-2^n&2^{n+1}-3^n\end{pmatrix}.$$
+            <p>Con $n=1$ sale $A$; con $n=3$,</p>
+            $$\begin{pmatrix}46&-38\cr19&-11\end{pmatrix}=A^3.$$
+  - receta: |-
+      $PD^n$ = multiplicar cada columna de $P$ por la potencia de su valor propio; después, multiplicar por $P^{-1}$.
+- id: ej-propio-12
+  clase: propio
+  titulo: |-
+    Ejemplo propio 12 (examen) — un valor propio doble que sí permite diagonalizar
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      ¿Es diagonalizable $A=\begin{pmatrix}1&0&0\cr1&2&0\cr-1&0&2\end{pmatrix}$? Si lo es, da $P$ y $D$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Ver que un valor doble puede permitir diagonalizar.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Todo depende del rango de $A-2I$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Rango y $P$.
+  - pasos:
+    - |-
+      Triangular inferior: $p(\lambda)=(1-\lambda)(2-\lambda)^2$: $1$ ($\alpha=1$) y $2$ ($\alpha=2$).
+    - |-
+      <p>Solo hay que estudiar el doble:</p>
+            $$A-2I=\begin{pmatrix}-1&0&0\cr1&0&0\cr-1&0&0\end{pmatrix}$$
+            <p>tiene rango $1$, $d_2=2=\alpha_2$; ecuación $x=0$, $L_2=\langle(0,1,0),(0,0,1)\rangle$.</p>
+    - |-
+      <p>$\lambda=1$:</p>
+            $$A-I=\begin{pmatrix}0&0&0\cr1&1&0\cr-1&0&1\end{pmatrix},$$
+            <p>$x+y=0$, $z=x$: $L_1=\langle(1,-1,1)\rangle$.</p>
+    - |-
+      <p>$d_i=\alpha_i$ para ambos: diagonalizable.</p>
+            $$P=\begin{pmatrix}1&0&0\cr-1&1&0\cr1&0&1\end{pmatrix},$$
+            <p>$D=\operatorname{diag}(1,2,2)$ (mismo orden), $|P|=1$,</p>
+            $$P^{-1}=\begin{pmatrix}1&0&0\cr1&1&0\cr-1&0&1\end{pmatrix}$$
+            <p>y $P^{-1}AP=D$.</p>
+  - receta: |-
+      valor propio doble $\Rightarrow$ diagonalizable si y solo si $\operatorname{rang}(A-\lambda I)=n-2$.
+- id: ej-propio-13
+  clase: propio
+  titulo: |-
+    Ejemplo propio 13 (examen) — diagonalizable solo para un valor del parámetro
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: propio
+  cuerpo:
+  - enun: |-
+      Estudia según $a\in\mathbb R$ si $A=\begin{pmatrix}2&a&1\cr0&2&0\cr0&0&1\end{pmatrix}$ es diagonalizable y, cuando lo sea, da $P$ y $D$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Diagonalizabilidad según un parámetro.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Polinomio independiente del parámetro; decide el rango.
+      - - |-
+          Qué uso
+        - |-
+          <b>Diagonalizable (Def. 4.12, Teor. 4.6-4.7, U p.159-163):</b> $A$ de orden $n$ es diagonalizable si existe $P$ regular con $P^{-1}AP=\Lambda$ diagonal $\iff$ hay una base de $\mathbb R^n$ formada por vectores propios $\iff$ todos los valores propios son reales y para cada uno $d(\lambda)=\alpha(\lambda)$. Si hay $n$ valores propios distintos, es diagonalizable. <b>Multiplicidades:</b> $\alpha(\lambda)$ = multiplicidad en el polinomio característico; $d(\lambda)=n-\operatorname{rang}(A-\lambda I)$; $1\le d\le\alpha$ (Teor. 4.5).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Rango por casos.
+  - pasos:
+    - |-
+      Triangular superior: $p(\lambda)=(2-\lambda)^2(1-\lambda)$, que no depende de $a$. $\lambda=2$ doble y $\lambda=1$ simple.
+    - |-
+      $$A-2I=\begin{pmatrix}0&a&1\cr0&0&0\cr0&0&-1\end{pmatrix}.$$
+            <p>Si $a\neq0$: filas $(0,a,1)$ y $(0,0,-1)$ independientes, rango $2$, $d_2=1\lt2$: <b>no</b>. Si $a=0$: filas $(0,0,1)$ y $(0,0,-1)$ proporcionales, rango $1$, $d_2=2$: <b>sí</b>.</p>
+    - |-
+      <p>Con $a=0$: $L_2$ es $z=0$, $L_2=\langle(1,0,0),(0,1,0)\rangle$.</p>
+            $$A-I=\begin{pmatrix}1&0&1\cr0&1&0\cr0&0&0\end{pmatrix}$$
+            <p>da $x=-z,\ y=0$: $L_1=\langle(-1,0,1)\rangle$.</p>
+            $$P=\begin{pmatrix}1&0&-1\cr0&1&0\cr0&0&1\end{pmatrix},$$
+            <p>$D=\operatorname{diag}(2,2,1)$ y $P^{-1}AP=D$ (sympy).</p>
+  - html: |-
+      <p><b>Receta y error típico.</b> El parámetro no aparece en $p(\lambda)$ y, aun así, decide la respuesta a través del rango (como en el Ejemplo 4.14 de U y en X Feb. 2025). Error típico: concluir «diagonalizable para todo $a$» porque los valores propios no dependen de $a$.</p>
