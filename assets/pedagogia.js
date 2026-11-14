@@ -31,7 +31,7 @@
       if (cur) {
         hay[cur] = true;
         el.classList.add('vista-' + cur);
-        if (el.matches('details.sol')) cuenta[cur]++;
+        if (el.matches('details.sol, article.ejer')) cuenta[cur]++;
       }
     });
     var defs = [['teoria', '📘 Teoría'], ['tipos', '🧭 Por tipo'], ['ejercicios', '✏️ Ejercicios'], ['examen', '🎯 Examen'], ['todo', 'Todo junto']];

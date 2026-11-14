@@ -275,12 +275,16 @@ def render(e):
     src = ''.join(f' <span class="src" data-l="{f["l"]}" data-ref="{f["ref"]}">{f["texto"]}</span>' for f in e['fuentes'])
     o = []
     if nuevo:
+        # tarjeta única por ejercicio: cabecera (nivel + título/origen + fuente) y enunciado siempre visibles; pista y solución plegadas
         est = '★' * e['nivel'] + '☆' * (3 - e['nivel'])
-        o += [f'<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">{e["enunciado"]}</p></div>',
-              f'<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>{e["pista"]}</p></details>']
         nv = f'<span class="nivel" title="Dificultad: {NOMBRE_NIVEL[e["nivel"]]}">{est}</span>'
-    else: nv = ''
-    o.append(f'<details class="sol" id="{e["id"]}"><summary>{nv}{e["titulo"]}{src}</summary>')
+        o += [f'<article class="ejer" id="{e["id"]}">',
+              f'<header class="ejer-cab">{nv}<span class="tit">{e["titulo"]}</span>{src}</header>',
+              f'<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">{e["enunciado"]}</p></div>',
+              f'<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>{e["pista"]}</p></details>',
+              '<details class="sol"><summary>Ver solución paso a paso</summary>']
+    else:
+        o.append(f'<details class="sol" id="{e["id"]}"><summary>{e["titulo"]}{src}</summary>')
     # el resultado va PRIMERO (el estudiante ve adónde se llega y luego cómo): los bloques `resultado` se colocan antes del plan
     cuerpo = sorted(e['cuerpo'], key=lambda b: 0 if 'resultado' in b else 1)
     for b in cuerpo:
@@ -302,6 +306,7 @@ def render(e):
         elif k == 'html': o.append('  ' + v)
         else: raise ValueError('bloque desconocido: ' + k)
     o.append('</details>')
+    if nuevo: o.append('</article>')
     return '\n'.join(o)
 
 
