@@ -1,0 +1,45 @@
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>Multiplicidad algebraica y geométrica <span class="src" data-l="U" data-ref="U Definición 4.11, Ejemplo 4.11, Teorema 4.5 y Ejemplo 4.12, p. 155-159">U p.155-159</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: dos formas de contar «cuánto» es un valor propio</span>
+  <p>La <b>multiplicidad algebraica</b> $\alpha$ responde a «¿cuántas veces aparece $\lambda$ como raíz del polinomio?» (es una cuestión de álgebra de polinomios). La <b>multiplicidad geométrica</b> $d$ responde a «¿cuántas direcciones independientes tiene $\lambda$?» (es una cuestión de geometría: la dimensión del subespacio propio). Siempre se cumple $d\le\alpha$: puede haber «menos direcciones de las esperadas», nunca más.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 4.11 — multiplicidades</span>
+  <p>Sea $\lambda_i$ un valor propio de $A$.</p>
+  <ul>
+    <li><b>Multiplicidad algebraica</b> $\alpha_i$: número de veces que $\lambda_i$ es raíz de $|A-\lambda I|$ (es decir, el exponente de $(\lambda-\lambda_i)$ en la factorización).</li>
+    <li><b>Multiplicidad geométrica</b> $d_i=\dim L_i=n-\operatorname{rang}(A-\lambda_iI)$.</li>
+  </ul>
+  <p>La suma de todas las $\alpha_i$ es $n$ si el polinomio tiene todas sus raíces reales.</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.11, p. 155">U p.155</span>
+  <span class="src" data-l="L" data-ref="Lay §5.2, multiplicidad (algebraica) de un valor propio, p. 276">L §5.2 p.276, 280</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 4.5</span>
+  <p>Para cada valor propio, $$1\le d_i\le\alpha_i.$$ En particular, un valor propio <b>simple</b> ($\alpha=1$) tiene siempre $d=1$: su subespacio propio es una recta.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 4.5, p. 158">U p.158</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.11 (U) — procedimiento completo con una triangular</span>
+  <p>$f(1,0,0)=(1,0,0)$, $f(0,1,0)=(1,2,0)$, $f(0,0,1)=(1,1,3)$. Las imágenes van en columnas: $A=\begin{pmatrix}1&1&1\cr0&2&1\cr0&0&3\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Polinomio:</b> es triangular, luego $|A-\lambda I|=(1-\lambda)(2-\lambda)(3-\lambda)$: $\lambda=1,2,3$, todos con $\alpha=1$.</li>
+    <li><b>$L_1$:</b> $A-I=\begin{pmatrix}0&1&1\cr0&1&1\cr0&0&2\end{pmatrix}$: $x_3=0$ y $x_2=0$; $L_1=\langle(1,0,0)\rangle$.</li>
+    <li><b>$L_2$:</b> $A-2I=\begin{pmatrix}-1&1&1\cr0&0&1\cr0&0&1\end{pmatrix}$: $x_3=0$ y $-x_1+x_2=0$; $L_2=\langle(1,1,0)\rangle$.</li>
+    <li><b>$L_3$:</b> $A-3I=\begin{pmatrix}-2&1&1\cr0&-1&1\cr0&0&0\end{pmatrix}$: $x_2=x_3$ y $2x_1=x_2+x_3=2x_2$; $L_3=\langle(1,1,1)\rangle$.</li>
+    <li><b>Multiplicidades:</b> $d_i=1=\alpha_i$ (Teor. 4.5). Los tres vectores son libres (valores distintos): forman una base de $\mathbb R^3$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.11, p. 155-158">U p.155-158</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.12 (U) — cuando $d\lt\alpha$</span>
+  <p>(Aquí $L_2$ es el subespacio del valor propio $\lambda=2$.) $A=\begin{pmatrix}0&1&0\cr-4&4&0\cr-2&1&2\end{pmatrix}$. Desarrollando por la 3.ª columna: $|A-\lambda I|=(2-\lambda)\big[(-\lambda)(4-\lambda)+4\big]=(2-\lambda)(\lambda-2)^2=-(\lambda-2)^3$. Único valor propio $\lambda=2$, con $\alpha=3$.</p>
+  <p>$A-2I=\begin{pmatrix}-2&1&0\cr-4&2&0\cr-2&1&0\end{pmatrix}$ tiene rango $1$ (filas proporcionales): una sola ecuación, $-2x_1+x_2=0$, con $3-1=2$ parámetros. $L_2=\langle(1,2,0),(0,0,1)\rangle$, $d=2$. Se cumple $1\le d=2\lt\alpha=3$: <b>no hay tres vectores propios libres</b>, luego no hay base de vectores propios (esta matriz no será diagonalizable, tema 4.3).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.12, p. 158-159">U p.158-159</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p><b>Creer que $d=\alpha$ siempre.</b> Un valor propio doble puede tener una o dos direcciones: $\begin{pmatrix}2&0\cr0&2\end{pmatrix}$ tiene $\lambda=2$ doble con $d=2$, y $\begin{pmatrix}2&1\cr0&2\end{pmatrix}$ tiene el mismo polinomio $(\lambda-2)^2$ pero $d=1$. Lo que distingue ambos casos es $\operatorname{rang}(A-\lambda I)$, no el polinomio. (U Autoevaluación, ítem 6: falso.)</p>
+</div>
+

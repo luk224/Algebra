@@ -1,0 +1,50 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Vector propio, valor propio y subespacio propio <span class="src" data-l="U" data-ref="U §4.2.2, Definiciones 4.6, 4.7 y 4.8, Ejemplos 4.7 y 4.8, p. 151-152">U p.151-152</span></h2>
+
+<div class="box def"><span class="h">Definición 4.6 — vector propio</span>
+  <p>Sea $f:V\to V$ un endomorfismo de $V$ con matriz $A$ en una base fijada. Un vector $x\in V$ es un <b>vector propio</b> (o autovector) de $f$ y de su matriz $A$ si
+$$f(x)=AX=\lambda X\quad\text{para algún }\lambda\in\mathbb R\ \text{ y }\ x\neq0.$$
+(Aquí $X$ es la matriz columna de las coordenadas de $x$. En lo que sigue escribimos también $Ax$ cuando no hay riesgo de confusión.)</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.6, p. 151">U p.151</span>
+  <span class="src" data-l="L" data-ref="Lay §5.1, definición de vector propio y valor propio, p. 267">L §5.1 p.267</span>
+</div>
+
+<div class="box def"><span class="h">Definición 4.7 — valor propio</span>
+  <p>El número $\lambda\in\mathbb R$ de la definición anterior es el <b>valor propio</b> (autovalor) <b>asociado</b> al vector propio $x$. Un vector propio tiene <b>un único</b> valor propio (si $Ax=\lambda x=\mu x$ con $x\neq0$, entonces $\lambda=\mu$), pero un valor propio tiene <b>infinitos</b> vectores propios: todos los múltiplos no nulos de uno de ellos (y más, si $d\gt1$).</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.7, p. 151">U p.151</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.7 (U)</span>
+  <p>Con $A=\begin{pmatrix}3&-2\cr1&0\end{pmatrix}$: $x=(2,1)$ es vector propio y $\lambda=2$ su valor propio, porque $A\begin{pmatrix}2\cr1\end{pmatrix}=2\begin{pmatrix}2\cr1\end{pmatrix}$ y $x\neq0$. Lo mismo vale para $(4,2)$, $(-2,-1)$, $(2t,t)$ con $t\neq0$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.7, p. 151">U p.151</span>
+</div>
+
+<div class="box def"><span class="h">Definición 4.8 — subespacio propio</span>
+  <p>Dado un valor propio $\lambda$ de $A$ (de orden $n$), el <b>subespacio propio</b> (o de vectores propios asociados a $\lambda$) es
+  $$L_\lambda=\{x\in V:\ AX=\lambda X\}=\{x:\ (A-\lambda I)X=0\}=\operatorname{Nuc}(A-\lambda I)=\operatorname{Nuc}(f-\lambda\,\mathrm{Id}).$$
+  Contiene a todos los vectores propios de $\lambda$ <b>y al vector $0$</b>. Se calcula resolviendo el sistema homogéneo $(A-\lambda I)X=0$.</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.8, p. 152 (U omite precisar que hay que añadir el 0)">U p.152</span>
+  <span class="src" data-l="L" data-ref="Lay §5.1, espacio propio = Nul(A-λI), p. 268">L §5.1 p.268</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.8 (U) — el subespacio propio de $\lambda=2$</span>
+  <p>$A-2I=\begin{pmatrix}1&-2\cr1&-2\end{pmatrix}$. El sistema $(A-2I)X=0$ se reduce a la única ecuación $x_1-2x_2=0$ (rango $1$, así que $2-1=1$ parámetro): $L_2=\{(2t,t):t\in\mathbb R\}=\langle(2,1)\rangle$, una recta por el origen.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.8, p. 152">U p.152</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico: el $0$ como vector y el $0$ como valor</span>
+  <p>Son dos cosas distintas. El <b>vector</b> $0$ nunca es vector propio (cumple $A0=\lambda0$ para <i>todo</i> $\lambda$, así que no distingue nada; la definición lo excluye). El <b>número</b> $0$ sí puede ser valor propio: significa $AX=0$ para algún $X\neq0$, es decir, $\operatorname{Nuc}A\neq\{0\}$ (la proyección del apartado 1). Y, por el mismo motivo, «la suma de dos vectores propios del mismo valor propio» puede ser el vector $0$, que <b>no</b> es propio (ver <a href="#ex-feb24a-4">X Feb. 2024</a>).</p>
+</div>
+
+<div class="box thm"><span class="h">Vectores propios de valores propios distintos son libres</span>
+  <p>Si $\lambda_1,\dots,\lambda_k$ son valores propios <b>distintos</b> de $A$ y $x_i$ es un vector propio de $\lambda_i$, entonces $\{x_1,\dots,x_k\}$ es un sistema <b>libre</b>. Equivalentemente: los subespacios propios de valores distintos solo comparten el $0$ ($L_\lambda\cap L_\mu=\{0\}$) y su suma es <b>directa</b> (U p.152, sin demostración).</p>
+  <p><b>Prueba para dos vectores</b> (idea general): supón $\alpha x_1+\beta x_2=0$. Aplica $A$: $\alpha\lambda_1x_1+\beta\lambda_2x_2=0$. Multiplica la primera igualdad por $\lambda_1$ y resta: $\beta(\lambda_2-\lambda_1)x_2=0$. Como $\lambda_2\neq\lambda_1$ y $x_2\neq0$, queda $\beta=0$; y entonces $\alpha x_1=0$ da $\alpha=0$.</p>
+  <span class="src" data-l="U" data-ref="U §4.2.2, p. 152 (sin demostración)">U p.152</span>
+  <span class="src" data-l="L" data-ref="Lay §5.1, Teorema 2, p. 270">L §5.1 p.270</span>
+</div>
+
+<div class="box ex"><span class="h">Consecuencia práctica</span>
+  <p>En el Ejemplo 4.6, $(2,1)$ ($\lambda=2$) y $(1,1)$ ($\lambda=1$) son libres: forman una <b>base</b> de $\mathbb R^2$ formada por vectores propios. Si en $\mathbb R^3$ hay tres valores propios distintos, hay tres vectores propios libres y, por tanto, una base de vectores propios (tema 4.3). Ese es el gran premio del tema.</p>
+  <span class="src" data-l="P" data-ref="Explicación propia a partir de U p.152">propio</span>
+</div>
+

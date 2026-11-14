@@ -1,0 +1,38 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4"><span class="n">4</span>El polinomio característico no depende de la base (Teorema 4.4) <span class="src" data-l="U" data-ref="U Teorema 4.4, Ejemplos 4.9 y 4.10, p. 153-155; Lay §5.2 Teorema 4, p. 277">U p.153-155 · L p.277</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva</span>
+  <p>La matriz de un endomorfismo cambia según la base que elijas (matrices semejantes), pero «las direcciones que no se giran» son propiedad del endomorfismo, no de la base. Por eso los <b>valores propios</b> tienen que ser los mismos en todas las matrices semejantes; y con ellos, el polinomio característico, la traza y el determinante.</p>
+</div>
+
+<div class="box thm"><span class="h">Teorema 4.4</span>
+  <p>El polinomio característico es <b>invariante frente a cambios de base</b>: si $A'=P^{-1}AP$, entonces $|A'-\lambda I|=|A-\lambda I|$.</p>
+  <p><i>Prueba:</i> $A'-\lambda I=P^{-1}AP-\lambda P^{-1}P=P^{-1}(A-\lambda I)P$, luego $|A'-\lambda I|=|P^{-1}||A-\lambda I||P|=|A-\lambda I|$, porque $|P^{-1}||P|=1$.</p>
+  <p><b>Consecuencias:</b> matrices semejantes tienen los mismos valores propios (con las mismas multiplicidades algebraicas), la misma <b>traza</b> y el mismo <b>determinante</b>. Se habla, pues, del polinomio característico de un endomorfismo.</p>
+  <p id="dim-invariante"><b>También se conserva $\dim L_\lambda$</b> <span class="src" data-l="P" data-ref="Justificación propia a partir de la prueba del Teorema 4.4, U p. 153">propio</span>: de $A'-\lambda I=P^{-1}(A-\lambda I)P$ y de que el rango no cambia al multiplicar por matrices regulares, $\operatorname{rang}(A'-\lambda I)=\operatorname{rang}(A-\lambda I)$ y por tanto $d=n-\operatorname{rang}(A-\lambda I)$ es el mismo.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 4.4, p. 153">U p.153</span>
+  <span class="src" data-l="L" data-ref="Lay §5.2, Teorema 4: matrices similares tienen el mismo polinomio característico, p. 277">L §5.2 p.277</span>
+</div>
+
+<div class="box thm"><span class="h">Traza = suma y determinante = producto de los valores propios <small>(deducción propia)</small></span>
+  <p>Si todas las raíces de $|A-\lambda I|$ son reales, $\lambda_1,\dots,\lambda_n$ (repetidas según su multiplicidad algebraica), y como el coeficiente de $\lambda^n$ es $(-1)^n$:
+  $$|A-\lambda I|=(\lambda_1-\lambda)(\lambda_2-\lambda)\cdots(\lambda_n-\lambda).$$
+  Haciendo $\lambda=0$: $|A|=\lambda_1\lambda_2\cdots\lambda_n$. Comparando los coeficientes de $\lambda^{n-1}$ (el coeficiente es $(-1)^{n-1}\operatorname{tr}A$, corrigiendo la fórmula de U p.153, exacta solo para $n$ par): $\operatorname{tr}A=\lambda_1+\cdots+\lambda_n$. (Con raíces complejas también es cierto, pero aquí solo se trabaja con $\lambda\in\mathbb R$.)</p>
+  <p><b>Ejemplo.</b> $A=\begin{pmatrix}1&1&0\cr0&3&3\cr0&4&2\end{pmatrix}$ tiene $\lambda=1$ (vector $(1,0,0)$). Sin calcular el cúbico: $\operatorname{tr}A=6\Rightarrow\lambda_2+\lambda_3=5$; $|A|=1\cdot(6-12)=-6\Rightarrow\lambda_2\lambda_3=-6$. Son las raíces de $t^2-5t-6=0$: $6$ y $-1$.</p>
+  <span class="src" data-l="P" data-ref="Deducción propia a partir de U Def. 4.10 y p. 153; verificado con sympy">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.9 (U) — dos matrices semejantes comparten polinomio</span>
+  <p>$A=\begin{pmatrix}1&-1\cr2&0\end{pmatrix}$ y $B=\begin{pmatrix}-1&4\cr-1&2\end{pmatrix}$ son semejantes: con $P=\begin{pmatrix}1&1\cr1&0\end{pmatrix}$ se cumple $PA=BP$ (ambos productos valen $\begin{pmatrix}3&-1\cr1&-1\end{pmatrix}$), es decir $A=P^{-1}BP$. <b>Cómo se halla $P$</b> (como en el <a href="tema_4_1_relaciones_equivalencia.html">tema 4.1</a>): con $P=\begin{pmatrix}a&b\cr c&d\end{pmatrix}$, $PA=BP$ es el sistema lineal $a+b-2c=0$, $-a+b-4d=0$, $a-c+2d=0$, $b-c-2d=0$, de rango $2$: la solución depende de dos parámetros, $a=c-2d$, $b=c+2d$. Hay que cuidar $|P|=-c^2-cd-2d^2\neq0$ (basta $(c,d)\neq(0,0)$); U toma $c=1$, $d=0$, que da $P=\begin{pmatrix}1&1\cr1&0\end{pmatrix}$. Ambas tienen $\operatorname{tr}=1$, $|\cdot|=2$ y polinomio $\lambda^2-\lambda+2$, que no tiene raíces reales (discriminante $-7$): no tienen valores propios.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.9, p. 153-154">U p.153-154</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.10 (U) — el recíproco es falso</span>
+  <p>$A=\begin{pmatrix}1&0&0\cr1&1&0\cr0&0&1\end{pmatrix}$ e $I_3$ tienen la misma ecuación característica $(1-\lambda)^3=0$ y la misma traza ($3$), pero <b>no son semejantes</b>: la única matriz semejante a $I$ es $P^{-1}IP=I$. «Matrices con la misma ecuación característica y la misma traza pueden no ser semejantes.» Lo que las distingue es la multiplicidad geométrica, que sí se conserva por semejanza (<a href="#dim-invariante">recuadro del Teor. 4.4</a>): $d=3$ para $I$ y $d=2$ para $A$ (apartado 5).</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.10, p. 155">U p.155</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen: invariantes para descartar semejanza</span>
+  <p>Si dos matrices tienen distinto determinante, traza, polinomio característico o $\dim L_\lambda$ (que también es invariante, ver <a href="#dim-invariante">arriba</a>), <b>no son semejantes</b>. Si coinciden, no se puede concluir nada (Ej. 4.10). Ver los ejercicios de <a href="tema_4_1_relaciones_equivalencia.html">4.1</a>; y el determinante de una matriz semejante a una diagonal en <a href="tema_1_3_determinantes.html#ex-feb19b4">1.3</a>.</p>
+</div>
+
