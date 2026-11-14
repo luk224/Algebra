@@ -104,7 +104,7 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
   - Cada animación con consigna: «mueve esto y fíjate en aquello» + pregunta que se responde observando.
   - Las pestañas arrancan en **Todo** (decidido por el usuario); Teoría, Por tipo, Ejercicios y Examen filtran.
 - [ ] **5.2** Series de práctica: añadir los generadores de cada tema a `assets/practica.js` y comprobarlos con `probar_practica.py` (0 errores). Orden por rentabilidad según `prioridades.html`: 1.2, 3.2, 6.2, 5.1, 1.3, 1.4, 4.3, 4.2.
-- [ ] **5.3** Revisión con el `revisor-tema` de cada tema.
+- [x] **5.3** Revisión con el `revisor-tema` de cada tema. *(hecho: 26 de 26; correcciones aplicadas; restos en `CORRECCIONES_PENDIENTES.md`)*
 
 ### F6 — Procesos y agentes
 - [ ] **6.1** Actualizar `CLAUDE.md` (§3, §4, §4b): el HTML de `temas/` es un producto generado; el flujo es datos → `validar` → `construir` → `verificar` → commit.
