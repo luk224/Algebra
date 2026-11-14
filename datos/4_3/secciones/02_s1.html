@@ -1,0 +1,22 @@
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>La idea: unos ejes en los que la matriz «solo estira» <span class="src" data-l="L" data-ref="Lay §5.3, introducción y Ejemplo 1, p. 281; explicación propia">L §5.3 p.281 · P</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: el papel cuadriculado «torcido»</span>
+  <p>Imagina un mapa dibujado sobre goma con la cuadrícula habitual (ejes $e_1,e_2$). La matriz $A$ tira de la goma y la cuadrícula se deforma: se tuerce, se estira más en un sentido que en otro. Casi todas las direcciones <b>cambian</b>. Pero si has encontrado <b>dos direcciones propias</b>, puedes <b>dibujar una cuadrícula nueva</b> con esas dos direcciones como ejes. Con respecto a <i>esa</i> cuadrícula la transformación es sencillísima: cada eje se estira por su valor propio y nada más, sin torcer nada. Calcular con $A$ es difícil; calcular con $\Lambda$ (una diagonal) es trivial: basta multiplicar cada coordenada por un número. Diagonalizar es «cambiar de gafas» para ver la transformación en su forma más simple.</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo numérico en $\mathbb R^2$ — mismo vector, dos modos de calcular</span>
+  <p>$A=\begin{pmatrix}4&1\cr2&3\end{pmatrix}$ tiene valores propios $5$ y $2$ (tema 4.2), con vectores propios $v_1=(1,1)$ ($\lambda_1=5$) y $v_2=(1,-2)$ ($\lambda_2=2$). Tomamos $x=(2,-1)$.</p>
+  <ul>
+    <li><b>Con $A$ (ejes de siempre):</b> $Ax=\begin{pmatrix}4&1\cr2&3\end{pmatrix}\begin{pmatrix}2\cr-1\end{pmatrix}=\begin{pmatrix}7\cr1\end{pmatrix}$. Hay que hacer un producto de matrices, y el resultado no «se parece» a $x$.</li>
+    <li><b>Con ejes propios:</b> primero se escribe $x$ en la base $\{v_1,v_2\}$: $x=1\cdot v_1+1\cdot v_2$ (porque $(1,1)+(1,-2)=(2,-1)$), es decir $x_{B'}=(1,1)$. Aplicar $A$ es <b>multiplicar cada coordenada por su valor propio</b>: $A x=5\cdot1\cdot v_1+2\cdot1\cdot v_2$, luego $(Ax)_{B'}=(5,2)$. Volviendo a la base de siempre: $5(1,1)+2(1,-2)=(7,1)$ ✓.</li>
+  </ul>
+  <p>Eso es exactamente $\Lambda=\begin{pmatrix}5&0\cr0&2\end{pmatrix}$ actuando sobre $x_{B'}=(1,1)$. Y la pareja «matriz de paso $P$ y diagonal $\Lambda$» es la que traduce entre los dos modos (apartado 2). La animación del apartado 4 te deja probarlo con tus propias matrices.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio (ver ejemplo propio 1), verificado con sympy; idea de L §5.3 p. 281">propio</span>
+  <span class="src" data-l="L" data-ref="Lay §5.3, Ejemplo 1: A = PDP⁻¹ hace fácil el cálculo de A^k, p. 281">L §5.3 p.281</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico: confundir diagonalizar con escalonar</span>
+  <p>«Diagonalizar» <b>no</b> es hacer ceros con operaciones de fila (Gauss). Escalonar $A$ cambia sus valores propios (Lay lo advierte en §5.1, p.268; ver el tema 4.2); diagonalizar conserva los valores propios, que son justo la diagonal de $\Lambda=P^{-1}AP$ (no $QA$ con $Q$ cualquiera, sino $P^{-1}AP$ con la <b>misma</b> $P$ a ambos lados: es un <b>cambio de base</b>).</p>
+</div>
+
