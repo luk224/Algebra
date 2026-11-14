@@ -1,0 +1,961 @@
+- id: ej1-30
+  clase: libro
+  titulo: |-
+    Ejercicio 1.30
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.30, p. 30
+    texto: |-
+      E p.30
+  cuerpo:
+  - enun: |-
+      Se pide elegir la opción correcta, si existe: A) Un sistema homogéneo es siempre compatible determinado. B) Existe una solución común a cualquier sistema homogéneo. C) Un sistema homogéneo puede ser incompatible.
+  - pasos:
+    - |-
+      Un sistema es homogéneo si $B=0$: $AX=0$.
+    - |-
+      <b>B es cierta:</b> $X=0$ cumple $A\cdot0=0$ para cualquier $A$, así que es solución de <b>todos</b> los homogéneos.
+    - |-
+      <b>C es falsa:</b> la ampliada es $(A\mid0)$; añadir una columna de ceros nunca crea un pivote nuevo, así que $\operatorname{rang}(A)=\operatorname{rang}(A\mid0)$ siempre: un homogéneo es <b>siempre compatible</b> (§2).
+    - |-
+      <b>A es falsa:</b> compatible <i>determinado</i> exige $\operatorname{rang}(A)=n$. Contraejemplo: $x+y=0$ tiene $\operatorname{rang}(A)=1<2$ e infinitas soluciones $(\lambda,-\lambda)$.
+  - html: |-
+      <p><b>Respuesta: B.</b></p>
+  - receta: |-
+      homogéneo $\Rightarrow$ siempre compatible ($X=0$ es solución); determinado $\iff\operatorname{rang}(A)=n$; si no, indeterminado.
+  - error: |-
+      pensar que «homogéneo» significa «solo la solución nula»: eso solo ocurre si $\operatorname{rang}(A)=n$.
+- id: ej1-31
+  clase: libro
+  titulo: |-
+    Ejercicio 1.31
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.31, p. 30
+    texto: |-
+      E p.30
+  cuerpo:
+  - enun: |-
+      Los valores de $a$ y $b$ que hacen que el sistema $(a-1)x+2y=0,\ (a+b)x-y=0,\ bx-4y=0$ sea compatible e indeterminado cumplen la condición: A) $a+b=1$. B) $a+b=-1$.
+  - pasos:
+    - |-
+      Homogéneo, $m=3$, $n=2$: siempre compatible (Ejercicio 1.30); solo falta ver cuándo es indeterminado, es decir, $\operatorname{rang}(A)<2$ con $A=\begin{pmatrix}a-1&2\\a+b&-1\\b&-4\end{pmatrix}$.
+    - |-
+      El rango no puede ser $0$ (columna 2 no nula), así que hace falta $\operatorname{rang}(A)=1$: los tres menores de orden 2 deben anularse.
+          $$\begin{vmatrix}a-1&2\\a+b&-1\end{vmatrix}=-3a-2b+1=0,\quad\begin{vmatrix}a-1&2\\b&-4\end{vmatrix}=-4a-2b+4=0,\quad\begin{vmatrix}a+b&-1\\b&-4\end{vmatrix}=-4a-3b=0.$$
+    - |-
+      Restando las dos primeras: $a-3=0\Rightarrow a=3$; sustituyendo en la primera: $b=-4$. Se comprueba en la tercera: $-12+12=0$ ✓.
+    - |-
+      $a+b=3-4=-1$. <b>Respuesta: B.</b>
+  - html: |-
+      <div class="box warn" style="margin-top:.6em"><span class="h">Matiz</span><p>B es una condición <b>necesaria</b>, no suficiente: $a=0,b=-1$ también cumple $a+b=-1$ pero el menor $\begin{vmatrix}-1&2\\-1&-1\end{vmatrix}=3\neq0$ y el sistema es determinado. La única pareja que realmente da rango 1 es $a=3,b=-4$.</p></div>
+  - receta: |-
+      homogéneo con $n$ incógnitas: indeterminado $\iff\operatorname{rang}(A)\lt n$. Si $A$ no es cuadrada, anular <b>todos</b> los menores de orden $n$ y resolver ese sistema de parámetros.
+  - error: |-
+      anular un solo menor de orden 2 (eso solo da una condición necesaria, no garantiza rango 1).
+- id: ej1-32
+  clase: libro
+  titulo: |-
+    Ejercicio 1.32
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.32, p. 31
+    texto: |-
+      E p.31
+  cuerpo:
+  - enun: |-
+      El sistema $2x+3y-z=2,\ bx+ay+2z=0,\ 5x+5y+z=0$ es: A) compatible indeterminado si $a=2$ y $b\neq3$. B) compatible determinado si $a\neq2$ y $b=3$. C) incompatible si $a=2$ y $b=5$.
+  - pasos:
+    - |-
+      $A=\begin{pmatrix}2&3&-1\\b&a&2\\5&5&1\end{pmatrix}$, $n=3$. Desarrollando por la primera fila: $|A|=7a-8b+10$.
+    - |-
+      $\operatorname{rang}(A)\ge2$ siempre (el menor $\begin{vmatrix}2&3\\5&5\end{vmatrix}=-5\neq0$ no depende de los parámetros).
+    - |-
+      <b>A)</b> $a=2,b\neq3$: $|A|=8(3-b)\neq0\Rightarrow$ determinado, no indeterminado. <b>Falsa.</b>
+    - |-
+      <b>B)</b> $a\neq2,b=3$: $|A|=7(a-2)\neq0\Rightarrow\operatorname{rang}(A)=3=\operatorname{rang}(A\mid B)=n\Rightarrow$ compatible determinado. <b>Cierta.</b>
+    - |-
+      <b>C)</b> $a=2,b=5$: $|A|=14-40+10=-16\neq0\Rightarrow$ determinado, no incompatible. <b>Falsa.</b>
+  - html: |-
+      <p><b>Respuesta: B.</b> (Se puede comprobar además que el único caso realmente indeterminado es $a=b=10$, que anula $|A|$ y hace coincidir los rangos en 2; para el resto de valores que anulan $|A|$ es incompatible.)</p>
+  - html: |-
+      <!-- Aviso de extracción de texto: el PDF pierde el símbolo ≠ al extraer texto (queda «=»); con esa versión mal leída, las opciones A y B parecerían idénticas («a=2,b=3») y llevarían a una conclusión distinta e incorrecta. El enunciado correcto de arriba se verificó contra la página como imagen. -->
+  - receta: |-
+      sistema cuadrado con parámetros: calcula $|A|$; donde $|A|\neq0$, determinado; en los valores que lo anulan, compara rangos de $A$ y $(A\mid B)$ con menores de la ampliada.
+  - error: |-
+      concluir «incompatible» solo porque $|A|=0$, sin mirar el rango de la ampliada.
+- id: ej1-33
+  clase: libro
+  titulo: |-
+    Ejercicio 1.33
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.33, p. 32
+    texto: |-
+      E p.32
+  cuerpo:
+  - enun: |-
+      Calcúlese el conjunto de soluciones de los sistemas de los Ejercicios 1.31 y 1.32 según sus parámetros.
+  - pasos:
+    - |-
+      <b>1.31, caso $a=3,b=-4$</b> (indeterminado): las tres ecuaciones son múltiplos de $x+y=0$ (Teorema 1.5); con $x=\alpha$: $\{(\alpha,-\alpha):\alpha\in\mathbb R\}$.
+    - |-
+      <b>1.31, resto de casos:</b> $\operatorname{rang}(A)=2=n\Rightarrow$ solo la solución trivial $\{(0,0)\}$.
+    - |-
+      <b>1.32, caso $7a-8b+10\neq0$</b> (determinado, sistema cuadrado con $|A|\neq0$): por Cramer,
+          $$x=\frac{2a-20}{7a-8b+10},\quad y=\frac{20-2b}{7a-8b+10},\quad z=\frac{10b-10a}{7a-8b+10}.$$
+    - |-
+      <b>1.32, caso $a=b=10$</b> (indeterminado): la 2ª ecuación es el doble de la 3ª; el sistema equivale a $2x+3y-z=2,\ 5x+5y+z=0$. Con $z=5\mu$: $x+y=-\mu$ y $7x+8y=2$ dan $y=2+7\mu,\ x=-2-8\mu$:
+          $$\{(-2-8\mu,\,2+7\mu,\,5\mu):\mu\in\mathbb R\}.$$
+    - |-
+      <b>1.32, caso $7a-8b+10=0$ y $a\neq10$</b> (incompatible): conjunto de soluciones $\varnothing$.
+  - receta: |-
+      primero clasifica por rangos; determinado cuadrado → Cramer o Gauss; indeterminado → elimina ecuaciones redundantes, escalona y toma como parámetros las incógnitas sin pivote; incompatible → $\varnothing$.
+  - error: |-
+      aplicar Cramer con $|A|=0$, u olvidar mencionar el caso incompatible ($\varnothing$) al dar la lista completa según los parámetros.
+- id: ej1-34
+  clase: libro
+  titulo: |-
+    Ejercicio 1.34
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.34, p. 33
+    texto: |-
+      E p.33
+  cuerpo:
+  - enun: |-
+      Compruébese si son equivalentes: $S_1:\ 2x+4y-3z=-2,\ x+2y-z=-1,\ 8x+16y-11z=-8$; $S_2:\ 3x+6y-4z=-3,\ 2x+4y-2z=-2,\ 5x+10y-7z=-5$; $S_3:\ 2x+4y-3z=-2,\ x+2y-z=-1$; $S_4:\ x-y=2,\ 2x-2y=4$.
+  - pasos:
+    - |-
+      Dos sistemas son equivalentes si tienen las mismas soluciones (Definición 1.7); basta llevar una ampliada a la otra por operaciones elementales (Teorema 1.5).
+    - |-
+      $S_1\equiv S_2$: partiendo de $(A_1\mid B_1)$, con $F_1\to F_1+F_2$, luego $F_2\to2F_2$, luego $F_3\to F_3-F_1$, se llega exactamente a $(A_2\mid B_2)$.
+    - |-
+      $S_1\equiv S_3$: la tercera ecuación de $S_1$ es combinación de las otras dos, $E_3=3E_1+2E_2$ (se comprueba restando). Con $F_3\to F_3-3F_1$ y $F_3\to F_3-2F_2$ queda la ecuación $0=0$, que se puede suprimir sin cambiar las soluciones: queda exactamente $S_3$.
+    - |-
+      Resolviendo $S_3$ ($E_1-2E_2$ da $z=0$, y $x+2y=-1$): soluciones de $S_1,S_2,S_3$: $\{(-1-2\lambda,\lambda,0):\lambda\in\mathbb R\}$.
+    - |-
+      $S_4$ tiene solo dos incógnitas $(x,y)$: sus soluciones no viven en el mismo espacio que las de $S_1,S_2,S_3$ (ternas $(x,y,z)$); no es equivalente a ninguno.
+  - receta: |-
+      para comprobar equivalencia entre sistemas con las mismas incógnitas, escalona (o reduce) ambas ampliadas y compara, o resuelve ambos y compara los conjuntos de soluciones.
+  - error: |-
+      creer que sistemas con distinto número de ecuaciones no pueden ser equivalentes (las ecuaciones redundantes no cambian el conjunto de soluciones).
+- id: ej1-35
+  clase: libro
+  titulo: |-
+    Ejercicio 1.35
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.35, p. 34
+    texto: |-
+      E p.34
+  cuerpo:
+  - enun: |-
+      Las ecuaciones $x=2\alpha,\ y=\beta-1,\ z=\alpha-\beta$ ($\alpha,\beta\in\mathbb R$) son paramétricas de un sistema. Calcúlense unas ecuaciones cartesianas.
+  - pasos:
+    - |-
+      Hay 3 incógnitas y 2 parámetros independientes (la matriz de sus coeficientes $\begin{pmatrix}2&0\\0&1\\1&-1\end{pmatrix}$ tiene rango 2), así que hace falta $3-2=1$ ecuación cartesiana.
+    - |-
+      <b>Vía directa:</b> de la 1ª, $\alpha=x/2$; de la 2ª, $\beta=y+1$; sustituyendo en la 3ª: $z=\frac x2-y-1$, es decir, $2z-x+2y=-2$.
+    - |-
+      <b>Vía rangos (equivalente):</b> $(x,y,z)$ pertenece al conjunto si el sistema en $\alpha,\beta$ dado por $2\alpha=x,\ \beta=y+1,\ \alpha-\beta=z$ es compatible, es decir, si $\operatorname{rang}\begin{pmatrix}2&0&x\\0&1&y+1\\1&-1&z\end{pmatrix}=2$, lo que equivale a $\det=0$: $2z-x+2(y+1)=0$, la misma ecuación.
+  - html: |-
+      <p>$$\boxed{2z-x+2y=-2}$$</p>
+  - receta: |-
+      paramétricas → cartesianas: nº de ecuaciones $=n-$(nº de parámetros independientes); eliminar parámetros por sustitución, o imponer que el sistema en los parámetros sea compatible.
+  - error: |-
+      olvidar el término independiente (el conjunto no pasa por el origen: con $\alpha=\beta=0$ se obtiene $(0,-1,0)$, no $(0,0,0)$).
+- id: ej1-36
+  clase: libro
+  titulo: |-
+    Ejercicio 1.36
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.36, p. 35
+    texto: |-
+      E p.35
+  cuerpo:
+  - enun: |-
+      Calcúlense las ecuaciones paramétricas del sistema $x-y+2z=2,\ y-3z=1,\ 2x-3y+7z=3$.
+  - pasos:
+    - |-
+      $(A\mid B)=\left(\begin{array}{ccc|c}1&-1&2&2\\0&1&-3&1\\2&-3&7&3\end{array}\right)$. $F_3\to F_3-2F_1$: $(0,-1,3,-1)$; $F_3\to F_3+F_2$: $(0,0,0,0)$.
+    - |-
+      $\operatorname{rang}(A)=\operatorname{rang}(A\mid B)=2<3$: compatible indeterminado, $1$ parámetro.
+    - |-
+      Columnas con pivote: $x,y$; sin pivote: $z$, que se toma como parámetro, $z=\lambda$.
+    - |-
+      Retrosustitución: $y=1+3\lambda$; $x=2+y-2z=3+\lambda$.
+  - html: |-
+      <p>$$\begin{cases}x=3+\lambda\\y=1+3\lambda\\z=\lambda\end{cases}\quad\lambda\in\mathbb R$$</p>
+  - receta: |-
+      cartesianas → paramétricas: escalona la ampliada, comprueba compatibilidad, toma como parámetros las incógnitas de columnas <b>sin pivote</b> y despeja el resto de abajo arriba.
+  - error: |-
+      escribir paramétricas sin comprobar antes que $\operatorname{rang}(A)=\operatorname{rang}(A\mid B)$, o usar $n-m$ en vez de $n-\operatorname{rang}(A)$ para contar los parámetros.
+- id: ej1-37
+  clase: libro
+  titulo: |-
+    Ejercicio 1.37
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.37, p. 36
+    texto: |-
+      E p.36
+  cuerpo:
+  - enun: |-
+      Resuélvase por el método de Gauss el sistema $2x-y+z=8,\ -x+y-3z=2,\ 2x-3y+5z=3$.
+  - pasos:
+    - |-
+      $(A\mid B)=\left(\begin{array}{ccc|c}2&-1&1&8\\-1&1&-3&2\\2&-3&5&3\end{array}\right)$. Normalizar $F_1\to\frac12F_1$: $(1,-\frac12,\frac12,4)$.
+    - |-
+      $F_2\to F_2+F_1$: $(0,\frac12,-\frac52,6)$; $F_3\to F_3-2F_1$: $(0,-2,4,-5)$.
+    - |-
+      Normalizar $F_2\to2F_2$: $(0,1,-5,12)$; anular debajo: $F_3\to F_3+2F_2$: $(0,0,-6,19)$.
+    - |-
+      Normalizar $F_3\to-\frac16F_3$: $(0,0,1,-\frac{19}{6})$:
+          $$\left(\begin{array}{ccc|c}1&-\frac12&\frac12&4\\0&1&-5&12\\0&0&1&-\frac{19}{6}\end{array}\right).$$
+    - |-
+      Tres pivotes: compatible determinado. Retrosustitución: $z=-\frac{19}{6}$; $y=12+5z=-\frac{23}{6}$; $x=4+\frac12y-\frac12z=\frac{11}{3}$.
+  - html: |-
+      <p>$$\boxed{x=\tfrac{11}{3},\ y=-\tfrac{23}{6},\ z=-\tfrac{19}{6}}$$</p>
+  - receta: |-
+      Gauss por columnas: (i) pivote no nulo, intercambiando filas si hace falta; (ii) normalizarlo; (iii) anular lo de debajo; al final, retrosustitución.
+  - error: |-
+      errores de signo con fracciones. Truco: se puede posponer la normalización y usar reemplazos con enteros (aquí, $F_2\to2F_2+F_1$ y $F_3\to F_3-F_1$ evitan fracciones hasta el final).
+- id: ej1-38
+  clase: libro
+  titulo: |-
+    Ejercicio 1.38
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.38, p. 37-38
+    texto: |-
+      E p.37-38
+  cuerpo:
+  - enun: |-
+      En la descomposición $LU$ de $A=\begin{pmatrix}1&2&-1\\-1&2&-3\\3&-1&-2\end{pmatrix}$, la matriz $L$ es: A) $\begin{pmatrix}1&0&0\\-1&1&0\\3&-\frac74&1\end{pmatrix}$. B) $\begin{pmatrix}-1&0&0\\-1&1&0\\3&-7&1\end{pmatrix}$. C) $\begin{pmatrix}0&1&0\\1&1&0\\0&0&1\end{pmatrix}$.
+  - pasos:
+    - |-
+      $L$ debe ser triangular inferior <b>con unos en la diagonal</b>: B tiene $-1$ en $(1,1)$, y C tiene un $0$ en la diagonal y un $1$ por encima: ambas descartadas por definición.
+    - |-
+      PASO 1, hallar $U$ (solo reemplazos, sin normalizar): $F_2\to F_2+F_1$ da $(0,4,-4)$; $F_3\to F_3-3F_1$ da $(0,-7,1)$; $F_3\to F_3+\frac74F_2$ da $(0,0,-6)$:
+          $$U=\begin{pmatrix}1&2&-1\\0&4&-4\\0&0&-6\end{pmatrix}.$$
+          Sin intercambios de fila: la factorización existe (y es única, porque $\det A=-24\neq0$).
+    - |-
+      PASO 2, hallar $L$: en cada posición, el multiplicador usado con el signo cambiado: $F_2\to F_2+F_1$ (multiplicador $+1$) $\Rightarrow l_{21}=-1$; $F_3\to F_3-3F_1$ (multiplicador $-3$) $\Rightarrow l_{31}=3$; $F_3\to F_3+\frac74F_2$ (multiplicador $+\frac74$) $\Rightarrow l_{32}=-\frac74$:
+          $$L=\begin{pmatrix}1&0&0\\-1&1&0\\3&-\frac74&1\end{pmatrix}.$$
+  - html: |-
+      <p><b>Respuesta: A.</b> (Comprobación: la fila 3 de $LU$ da $(3,-1,-2)$, la fila 3 de $A$ ✓.)</p>
+  - receta: |-
+      $LU$ sin intercambios: triangulariza $A$ con reemplazos $F_i\to F_i+\lambda F_j$ ($j\lt i$, sin normalizar) para obtener $U$; en $L$ (unos en la diagonal) coloca $-\lambda$ en la posición $(i,j)$ correspondiente.
+  - error: |-
+      poner en $L$ el multiplicador con su mismo signo, o normalizar los pivotes (entonces $U$ ya no coincide con la de esta factorización).
+- id: ej1-39
+  clase: libro
+  titulo: |-
+    Ejercicio 1.39
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.39, p. 39
+    texto: |-
+      E p.39
+  cuerpo:
+  - enun: |-
+      El sistema $x+by+z=1,\ y+az=b,\ x+(b-1)y+2z=1$ es compatible indeterminado cuando $a$ y $b$ valen: A) $a=-1,\ b\neq0$. B) $a\neq-1,\ b\neq0$. C) $a=b=-1$. D) Otros.
+  - pasos:
+    - |-
+      $A=\begin{pmatrix}1&b&1\\0&1&a\\1&b-1&2\end{pmatrix}$; $\operatorname{rang}(A)\ge2$ siempre (el menor $\begin{vmatrix}1&b\\0&1\end{vmatrix}=1\neq0$).
+    - |-
+      $|A|$: $F_3\to F_3-F_1$ da $\begin{vmatrix}1&b&1\\0&1&a\\0&-1&1\end{vmatrix}=a+1$. Indeterminado exige $\operatorname{rang}(A)<3$, es decir $a=-1$ (esto ya descarta B).
+    - |-
+      Con $a=-1$, los otros tres menores de orden 3 de la ampliada que usan la columna $B$ valen (columnas 2,3,4): $-b(b+1)$; (columnas 1,3,4): $-b$; (columnas 1,2,4): $b$. Los tres se anulan a la vez si y solo si $b=0$. Así, con $a=-1$: $b=0\Rightarrow\operatorname{rang}(A\mid B)=2=\operatorname{rang}(A)\Rightarrow$ indeterminado; $b\neq0\Rightarrow\operatorname{rang}(A\mid B)=3\neq2\Rightarrow$ incompatible.
+    - |-
+      La condición real es exactamente $a=-1$ <b>y</b> $b=0$, que no coincide con ninguna de A ($b\neq0$, incompatible), B (determinado) ni C ($a=b=-1$, que también da $b\neq0$, incompatible).
+  - html: |-
+      <p><b>Respuesta: D.</b></p>
+  - html: |-
+      <!-- Aviso de extracción de texto: el PDF pierde el símbolo ≠, así que A y B quedarían idénticas en el texto extraído. El enunciado correcto, verificado en la página como imagen, distingue A (b≠0) de B (a≠-1, b≠0); la respuesta correcta es D porque la condición exacta (a=-1, b=0) no aparece entre A-C. -->
+  - receta: |-
+      igual que en 1.32: usa $|A|$ para localizar dónde baja el rango; en esos valores, menores de la ampliada para decidir entre compatible e incompatible.
+  - error: |-
+      marcar A o C basándose solo en $|A|=0$, sin comprobar el rango de la ampliada.
+- id: ej1-40
+  clase: libro
+  titulo: |-
+    Ejercicio 1.40
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.40, p. 40
+    texto: |-
+      E p.40
+  cuerpo:
+  - enun: |-
+      Clasifíquese el sistema del Ejercicio 1.39 según $a,b$ mediante eliminación gaussiana.
+  - pasos:
+    - |-
+      Escalonar solo con reemplazos (sin dividir por expresiones con parámetros): $(A\mid B)\xrightarrow{F_3\to F_3-F_1}\left(\begin{array}{ccc|c}1&b&1&1\\0&1&a&b\\0&-1&1&0\end{array}\right)\xrightarrow{F_3\to F_3+F_2}\left(\begin{array}{ccc|c}1&b&1&1\\0&1&a&b\\0&0&1+a&b\end{array}\right)$.
+    - |-
+      Sistema equivalente: $x+by+z=1,\ y+az=b,\ (1+a)z=b$. La discusión gira en torno al último pivote, $1+a$.
+    - |-
+      <b>$a\neq-1$:</b> tres pivotes, compatible determinado: $z=\frac b{1+a}$; $y=\frac b{1+a}$; $x=\frac{1+a-b^2-b}{1+a}$.
+    - |-
+      <b>$a=-1$, $b\neq0$:</b> última fila $(0,0,0\mid b)$ con $b\neq0$: incompatible.
+    - |-
+      <b>$a=-1$, $b=0$:</b> última fila nula: compatible indeterminado, $x+z=1,\ y-z=0$; con $z=\alpha$: $x=1-\alpha,\ y=\alpha,\ z=\alpha$.
+  - html: |-
+      <table><tr><th>Valores</th><th>$\operatorname{rang}A$</th><th>$\operatorname{rang}(A\mid B)$</th><th>Tipo</th></tr>
+        <tr><td>$a\neq-1$</td><td>3</td><td>3</td><td>Compatible determinado</td></tr>
+        <tr><td>$a=-1,\ b=0$</td><td>2</td><td>2</td><td>Compatible indeterminado</td></tr>
+        <tr><td>$a=-1,\ b\neq0$</td><td>2</td><td>3</td><td>Incompatible</td></tr></table>
+  - receta: |-
+      con parámetros, escalona preferentemente con operaciones que no dividan por expresiones con parámetros; al final, discute los pivotes que dependen de ellos y, si se anulan, mira el término independiente de esa fila.
+  - error: |-
+      dividir por $1+a$ antes de discutir el caso $a=-1$.
+- id: ej1-41
+  clase: libro
+  titulo: |-
+    Ejercicio 1.41
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.41, p. 41
+    texto: |-
+      E p.41
+  cuerpo:
+  - enun: |-
+      Si $AX=B$, elíjase la opción correcta: A) con 5 incógnitas, 4 ecuaciones y $\operatorname{rang}A=4$, el sistema es compatible y su solución se puede hallar por Gauss-Jordan. B) si $A$ es regular, el sistema es compatible determinado. C) si la ampliada tiene 4 columnas, $B=(0,0,0)^t$ y $\operatorname{rang}A=2$, el sistema solo tiene la solución nula.
+  - pasos:
+    - |-
+      <b>B es cierta:</b> «regular» significa $A$ cuadrada $n\times n$ con $\operatorname{rang}(A)=n$; entonces $\operatorname{rang}(A\mid B)$ está entre $n$ y $n$ (la ampliada tiene $n$ filas), así $\operatorname{rang}(A)=\operatorname{rang}(A\mid B)=n$: compatible determinado, $X=A^{-1}B$.
+    - |-
+      <b>C es falsa:</b> ampliada con 4 columnas $\Rightarrow n=3$ incógnitas; $B=(0,0,0)^t\Rightarrow$ homogéneo, siempre compatible; $\operatorname{rang}(A)=2<3\Rightarrow$ indeterminado, con infinitas soluciones (no solo la nula).
+    - |-
+      <b>A, análisis:</b> $A$ es $4\times5$ con $\operatorname{rang}A=4$; la ampliada tiene 4 filas, así $\operatorname{rang}(A\mid B)\le4$ y $\ge\operatorname{rang}(A)=4$: es $4$, luego compatible; pero $4<5=n$, así que es <b>indeterminado</b>, no determinado. El enunciado literal de A solo dice «compatible y se puede hallar por Gauss-Jordan», lo que es cierto (Gauss-Jordan también da la solución general de un indeterminado); si se lee «su solución» como «su única solución», sería falsa.
+  - html: |-
+      <p><b>Respuesta (según E): B</b>; A es falsa <i>si</i> «su solución» se entiende como «su única solución» — leída literalmente, A es cierta (B sigue siendo la única respuesta cierta sin ambigüedad).</p>
+  - receta: |-
+      $n=$ columnas de $A=$ columnas de la ampliada $-1$; si $\operatorname{rang}A=m$ (máximo por filas), compatible; si además $m\lt n$, indeterminado. Regular $\Rightarrow$ cuadrada de rango máximo $\Rightarrow$ determinado.
+  - error: |-
+      confundir el número de columnas de la ampliada con el de incógnitas (hay una menos).
+- id: ej1-42
+  clase: libro
+  titulo: |-
+    Ejercicio 1.42
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.42, p. 42
+    texto: |-
+      E p.42
+  cuerpo:
+  - enun: |-
+      Usando que el producto de triangulares superiores (resp. inferiores) es triangular superior (resp. inferior), y que si además son regulares sus inversas también lo son, demuéstrese que si $A$ es regular y tiene factorización $LU$, esta es única.
+  - pasos:
+    - |-
+      Supongamos $A=L_1U_1=L_2U_2$. Todas son regulares: $\det L_i=1\neq0$ (triangular con unos en la diagonal), y de $\det A=\det L_i\det U_i\neq0$ se sigue $\det U_i\neq0$.
+    - |-
+      De $L_1U_1=L_2U_2$: multiplicando por $L_2^{-1}$ a la izquierda y $U_1^{-1}$ a la derecha, $T:=L_2^{-1}L_1=U_2U_1^{-1}$.
+    - |-
+      $T$ es triangular inferior (producto de $L_2^{-1}$ y $L_1$, ambas triangulares inferiores) <b>y</b> triangular superior (producto de $U_2$ y $U_1^{-1}$): por tanto $T$ es <b>diagonal</b>.
+    - |-
+      La diagonal de $T$ es de unos: si $M,N$ son triangulares inferiores, $(MN)_{ii}=m_{ii}n_{ii}$ (los demás términos de la suma se anulan por la estructura triangular); aplicado a $L_2L_2^{-1}=I$ con $(L_2)_{ii}=1$, resulta $(L_2^{-1})_{ii}=1$, y entonces $T_{ii}=(L_2^{-1})_{ii}(L_1)_{ii}=1$.
+    - |-
+      $T=I\Rightarrow L_2^{-1}L_1=I\Rightarrow L_1=L_2$, y $U_2U_1^{-1}=I\Rightarrow U_2=U_1$.
+  - receta: |-
+      unicidad de factorizaciones: igualar las dos, pasar los factores de un tipo a un lado y los del otro al otro lado, y observar que el resultado pertenece a dos clases (triangular superior e inferior) cuya intersección con diagonal fija es solo $\{I\}$.
+  - error: |-
+      usar $U_1^{-1}$ sin haber probado antes que $U_1$ es regular.
+- id: ej1-43
+  clase: libro
+  titulo: |-
+    Ejercicio 1.43
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.43, p. 43
+    texto: |-
+      E p.43
+  cuerpo:
+  - enun: |-
+      La factorización $LU$ de una matriz $A$ cuadrada verifica: A) siempre existe. B) permite resolver sistemas mediante sistemas triangulares. C) permite calcular $\det A$ vía $\det U$. D) ninguna de las anteriores.
+  - pasos:
+    - |-
+      <b>A es falsa:</b> $LU$ (sin permutar) exige poder triangularizar $A$ solo con reemplazos. Contraejemplo: $A=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ es regular ($\det A=-1$) pero no admite $LU$: si $A=LU$, la posición $(1,1)$ obliga a $u_{11}=0$ y la $(2,1)$ a $l\,u_{11}=1$, es decir $0=1$.
+    - |-
+      <b>B es cierta:</b> $AX=B\iff LUX=B$; resolviendo $LY=B$ (sustitución progresiva) y luego $UX=Y$ (retrosustitución), ambos triangulares.
+    - |-
+      <b>C es cierta:</b> $\det A=\det L\det U=1\cdot\det U$, y $\det U$ es el producto de su diagonal.
+  - html: |-
+      <p><b>Respuesta: B y C</b> (varias ciertas). D es falsa.</p>
+  - receta: |-
+      recuerda los usos de $LU$: resolver $AX=B$ con dos sistemas triangulares, $\det A=\det U$, $A^{-1}=U^{-1}L^{-1}$; y que puede no existir sin permutar filas.
+  - error: |-
+      pensar que toda matriz regular tiene factorización $LU$ (el contraejemplo del paso 1 es regular y no la tiene).
+- id: ej1-44
+  clase: libro
+  titulo: |-
+    Ejercicio 1.44
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 1.44, p. 44
+    texto: |-
+      E p.44
+  cuerpo:
+  - enun: |-
+      Calcúlese la factorización $LU$ de $A=\begin{pmatrix}2&-2&4\\1&-3&1\\3&7&5\end{pmatrix}$ para resolver $AX=(0,-5,7)^t$.
+  - pasos:
+    - |-
+      PASO 1, $U$ (reemplazos sin normalizar): $F_2\to F_2-\frac12F_1$: $(0,-2,-1)$; $F_3\to F_3-\frac32F_1$: $(0,10,-1)$; $F_3\to F_3+5F_2$: $(0,0,-6)$:
+          $$U=\begin{pmatrix}2&-2&4\\0&-2&-1\\0&0&-6\end{pmatrix}.$$
+          Sin intercambios: $\det A=\det U=2(-2)(-6)=24\neq0$, la factorización existe y es única.
+    - |-
+      PASO 2, $L$ (multiplicadores con signo cambiado): $l_{21}=\frac12,\ l_{31}=\frac32,\ l_{32}=-5$:
+          $$L=\begin{pmatrix}1&0&0\\\frac12&1&0\\\frac32&-5&1\end{pmatrix}.$$
+    - |-
+      Resolver $LY=B$ (progresiva): $y_1=0$; $\frac12y_1+y_2=-5\Rightarrow y_2=-5$; $\frac32y_1-5y_2+y_3=7\Rightarrow y_3=7-25=-18$: $Y=(0,-5,-18)^t$.
+    - |-
+      Resolver $UX=Y$ (retrosustitución): $-6z=-18\Rightarrow z=3$; $-2y-z=-5\Rightarrow y=1$; $2x-2y+4z=0\Rightarrow x=-5$.
+  - html: |-
+      <p>$$\boxed{X=(-5,\,1,\,3)^t}$$ Comprobación: $2(-5)-2(1)+4(3)=0$ ✓; $-5-3+3=-5$ ✓; $-15+7+15=7$ ✓.</p>
+  - receta: |-
+      $AX=B$ con $LU$ ya conocidas: (1) $U$ por reemplazos; (2) $L$ con los multiplicadores cambiados de signo; (3) $LY=B$ de arriba abajo; (4) $UX=Y$ de abajo arriba.
+  - error: |-
+      resolver $UY=B$ y $LX=Y$ (el orden contrario): como $A=LU$, primero se «deshace» $L$.
+- id: sol-1_4-16
+  clase: propio
+  titulo: |-
+    Ejemplo propio 1 — sistema $2\times2$ con parámetro que cambia de clasificación
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      Clasifica y resuelve según $k\in\mathbb R$: $x+ky=1,\ kx+y=1$.
+  - pasos:
+    - |-
+      $A=\begin{pmatrix}1&k\\k&1\end{pmatrix}$, $|A|=1-k^2=(1-k)(1+k)$.
+    - |-
+      <b>$k\neq\pm1$:</b> $|A|\neq0$: compatible determinado. Por Cramer, $x=y=\dfrac1{1+k}$.
+    - |-
+      <b>$k=1$:</b> ambas ecuaciones son $x+y=1$: rango 1, compatible indeterminado; $(x,y)=(1-\lambda,\lambda)$: rectas coincidentes (§2).
+    - |-
+      <b>$k=-1$:</b> $x-y=1,\ -x+y=1$; sumando, $0=2$: incompatible. Rectas paralelas (§2).
+  - receta: |-
+      con parámetros, calcula primero $|A|$ factorizado; en cada raíz, compara rangos (no supongas que todas las raíces se comportan igual).
+  - error: |-
+      simplificar $\frac{1-k}{1-k^2}=\frac1{1+k}$ y pensar que solo $k=-1$ es «especial»: en $k=1$ la fórmula de Cramer directamente no es aplicable ($|A|=0$) y el sistema es indeterminado, no determinado con ese cociente.
+- id: sol-1_4-17
+  clase: propio
+  titulo: |-
+    Ejemplo propio 2 — factorización $LU$ permutada y resolución completa
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      Sea $A=\begin{pmatrix}0&1&2\\1&1&1\\2&1&3\end{pmatrix}$, $B=(3,2,7)^t$. (a) Prueba que $A$ no admite $LU$ sin permutar. (b) Halla $P,L,U$ con $PA=LU$ y resuelve $AX=B$.
+  - pasos:
+    - |-
+      <b>(a)</b> Si $A=LU$, la posición $(1,1)$ da $u_{11}=a_{11}=0$ y la $(2,1)$ da $l_{21}u_{11}=a_{21}=1$: $0=1$, imposible. $A$ es regular ($\det A=-3$) pero necesita permutar.
+    - |-
+      <b>(b)</b> $F_1\leftrightarrow F_2$: $P=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}$, $PA=\begin{pmatrix}1&1&1\\0&1&2\\2&1&3\end{pmatrix}$. $F_3\to F_3-2F_1$: $(0,-1,1)$; $F_3\to F_3+F_2$: $(0,0,3)$: $U=\begin{pmatrix}1&1&1\\0&1&2\\0&0&3\end{pmatrix}$, $L=\begin{pmatrix}1&0&0\\0&1&0\\2&-1&1\end{pmatrix}$.
+    - |-
+      $PB=(2,3,7)^t$ (se permutan sus dos primeras componentes, igual que las filas de $A$). $LY=PB$: $y_1=2,\ y_2=3,\ 2y_1-y_2+y_3=7\Rightarrow y_3=6$.
+    - |-
+      $UX=Y$: $3z=6\Rightarrow z=2$; $y+2z=3\Rightarrow y=-1$; $x+y+z=2\Rightarrow x=1$.
+  - html: |-
+      <p>$$\boxed{X=(1,-1,2)^t}$$ Comprobación en $A$: $0-1+4=3$ ✓, $1-1+2=2$ ✓, $2-1+6=7$ ✓.</p>
+  - receta: |-
+      si $A$ no admite $LU$ directa, permuta filas para obtener $PA=LU$; al resolver, no olvides aplicar la misma $P$ a $B$: $LY=PB$, luego $UX=Y$.
+  - error: |-
+      resolver $LY=B$ en lugar de $LY=PB$.
+- id: sol-1_4-18
+  clase: propio
+  titulo: |-
+    Ejemplo propio 3 — de paramétricas con 3 parámetros a cartesianas
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      $x_1=\alpha,\ x_2=\beta,\ x_3=\alpha+\beta,\ x_4=2\alpha-\beta$ ($\alpha,\beta\in\mathbb R$). Halla las ecuaciones cartesianas.
+  - pasos:
+    - |-
+      4 incógnitas, 2 parámetros independientes (la matriz de coeficientes $\begin{pmatrix}1&0\\0&1\\1&1\\2&-1\end{pmatrix}$ tiene rango 2): hacen falta $4-2=2$ ecuaciones cartesianas.
+    - |-
+      Eliminando: $\alpha=x_1,\ \beta=x_2$; sustituyendo en las otras dos: $x_3=x_1+x_2$ y $x_4=2x_1-x_2$.
+  - html: |-
+      <p>$$\begin{cases}x_3-x_1-x_2=0\\x_4-2x_1+x_2=0\end{cases}$$</p>
+  - receta: |-
+      con parámetros «limpios» (uno igual a cada parámetro directamente), la eliminación por sustitución es más rápida que plantear rangos; cuenta primero cuántas ecuaciones cartesianas esperas ($n-$parámetros independientes) para saber cuándo parar.
+- id: ex-sep23p1
+  clase: examen
+  titulo: |-
+    Sept. 2023, pregunta 1 — clasificar $AX=B$ con $A\in\mathcal M_{5\times6}$ y $\operatorname{rang}A=5$
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2023, pregunta 1
+    texto: |-
+      X Sept. 2023
+  cuerpo:
+  - enun: |-
+      Considere el sistema matricial $AX=B$ siendo $A\in\mathcal M_{5\times6}$ la matriz de coeficientes, $X\in\mathcal M_{6\times1}$ la de incógnitas y $B\in\mathcal M_{5\times1}$ la de términos independientes. Clasifique el sistema sabiendo que $\operatorname{rang}(A)=5$.
+  - pasos:
+    - |-
+      <b>Datos.</b> $m=5$ ecuaciones y $n=6$ incógnitas; la ampliada $(A\mid B)$ es de orden $5\times7$ (U p.29).
+    - |-
+      <b>Cota inferior.</b> $A$ es submatriz de $(A\mid B)$ (sus 6 primeras columnas), luego todo menor no nulo de $A$ lo es de $(A\mid B)$: $\operatorname{rang}(A\mid B)\ge\operatorname{rang}A=5$ (U p.27).
+    - |-
+      <b>Cota superior.</b> El rango no supera el número de filas y $(A\mid B)$ tiene 5: $\operatorname{rang}(A\mid B)\le5$.
+    - |-
+      <b>Compatibilidad.</b> $\operatorname{rang}A=\operatorname{rang}(A\mid B)=5$: por Rouché-Frobenius (U p.30) es <b>compatible</b>, para cualquier $B$.
+    - |-
+      <b>Determinado o no.</b> El rango común, $5$, es menor que $n=6$: <b>compatible indeterminado</b> con $n-5=1$ parámetro.
+  - resultado: |-
+      compatible indeterminado con un parámetro.
+  - receta: |-
+      si $\operatorname{rang}A=m$ (n.º de ecuaciones), el sistema es compatible para todo $B$ (la ampliada tiene $m$ filas y no puede subir de rango). Después se compara ese rango con $n$: igual, determinado; menor, indeterminado con $n-m$ parámetros.
+  - error: |-
+      afirmar «$\operatorname{rang}(A\mid B)=5$» sin dar las dos desigualdades (≥ porque contiene a $A$; ≤ porque solo tiene 5 filas).
+- id: ex-feb26p1
+  clase: examen
+  titulo: |-
+    Feb. 2026 (2.ª sem.), pregunta 1 — 6 ecuaciones, 7 incógnitas, $\operatorname{rang}A=6$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2026 (2.ª sem.), pregunta 1
+    texto: |-
+      X Feb. 2026 (2.ª)
+  cuerpo:
+  - enun: |-
+      Clasifique el sistema $AX=B$, si es posible, de manera razonada, sabiendo que tiene 6 ecuaciones, 7 incógnitas y $\operatorname{rang}(A)=6$.
+  - pasos:
+    - |-
+      $A\in\mathcal M_{6\times7}$ y $(A\mid B)\in\mathcal M_{6\times8}$.
+    - |-
+      $\operatorname{rang}(A\mid B)\ge\operatorname{rang}A=6$ (contiene a $A$) y $\operatorname{rang}(A\mid B)\le6$ (tiene 6 filas).
+    - |-
+      Luego $\operatorname{rang}A=\operatorname{rang}(A\mid B)=6\lt7=n$: por Rouché-Frobenius (U p.30), <b>compatible indeterminado</b> con $7-6=1$ parámetro.
+  - html: |-
+      <p><b>Sí es posible clasificarlo</b> sin conocer $B$, justo porque $\operatorname{rang}A$ ya es «máximo por filas».</p>
+  - receta: |-
+      la misma del ejemplo anterior: $\operatorname{rang}A=m\Rightarrow$ siempre compatible; luego comparar con $n$.
+  - error: |-
+      responder «no se puede clasificar porque no se conoce $B$». $B$ solo importaría si $\operatorname{rang}A\lt m$.
+- id: ex-feb24p1
+  clase: examen
+  titulo: |-
+    Feb. 2024 (1.ª sem.), pregunta 1 — V/F: $\operatorname{rang}A=4$ y existe solución $\Rightarrow$ compatible determinado
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2024 (1.ª sem.), pregunta 1
+    texto: |-
+      X Feb. 2024 (1.ª)
+  cuerpo:
+  - enun: |-
+      Sea $AX=B$ con $A\in\mathcal M_{7\times4}$, $X\in\mathcal M_{4\times1}$, $B\in\mathcal M_{7\times1}$. Justifique si es verdadera o falsa: «Si $\operatorname{rang}(A)=4$ y existe $X$ solución de $AX=B$, entonces el sistema es compatible determinado».
+  - pasos:
+    - |-
+      <b>Datos:</b> $m=7$ ecuaciones, $n=4$ incógnitas, $\operatorname{rang}A=4$. Aquí $\operatorname{rang}A$ <b>no</b> garantiza compatibilidad: $(A\mid B)$ es $7\times5$ y podría tener rango 5. Por eso se añade la hipótesis «existe solución».
+    - |-
+      <b>Existe solución $\Rightarrow$ compatible</b> (definición, U p.30) $\Rightarrow\operatorname{rang}(A\mid B)=\operatorname{rang}A=4$.
+    - |-
+      <b>Determinado:</b> el rango común es $4=n$: <b>compatible determinado</b>. <b>Respuesta: VERDADERO.</b>
+    - |-
+      <b>Comprobación sin Rouché.</b> Si $X_0,X_1$ son soluciones, $A(X_0-X_1)=0$; como $\operatorname{rang}A=n$, el homogéneo solo tiene la solución nula (U p.30), luego $X_0=X_1$.
+  - html: |-
+      <p><b>Ejemplo que muestra por qué hace falta la hipótesis:</b> $A=\begin{pmatrix}I_4\\0_{3\times4}\end{pmatrix}$. Con $B=(1,2,3,4,0,0,0)^t$ hay una única solución; con $B=(1,2,3,4,1,0,0)^t$, $\operatorname{rang}(A\mid B)=5$ y es incompatible.</p>
+  - receta: |-
+      «determinado» depende solo de $\operatorname{rang}A$ frente a $n$; «compatible» depende de $\operatorname{rang}(A\mid B)$. Con solución y $\operatorname{rang}A=n$, la solución es única.
+  - error: |-
+      creer que $\operatorname{rang}A=n$ basta para tener solución cuando $m\gt n$: puede ser incompatible.
+- id: ex-feb22pb
+  clase: examen
+  titulo: |-
+    Feb. 2022 (tipo A), problema, apartado b) — $A$ ortogonal $m\times n$ $\Rightarrow$ $AX=B$ es compatible determinado o incompatible
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2022 (tipo A), problema, apartado b)
+    texto: |-
+      X Feb. 2022 (A)
+  cuerpo:
+  - enun: |-
+      Compruebe que si $A$ es una matriz ortogonal de orden $m\times n$, cualquier sistema $AX=B$ es compatible determinado o bien incompatible.
+  - html: |-
+      <p><b>Aclaración.</b> Una matriz $A\in\mathcal M_{m\times n}$ es ortogonal si sus columnas forman un sistema ortonormal de $\mathbb R^m$ (Def. 5.13, U p.214), equivalente a $A^tA=I_n$ (Teorema 5.5, p.215); no tiene por qué ser cuadrada.</p>
+  - pasos:
+    - |-
+      <b>Rango de $A$.</b> Un sistema ortonormal es linealmente independiente, luego las $n$ columnas de $A$ lo son y $\operatorname{rang}A=n$. (Con matrices: si $AX=0$, multiplicando por $A^t$ queda $A^tAX=X=0$; el homogéneo solo tiene la solución nula.)
+    - |-
+      <b>Rouché-Frobenius</b> (U p.30) con $n$ incógnitas. Como $\operatorname{rang}(A\mid B)\ge n$: si $\operatorname{rang}(A\mid B)=n=\operatorname{rang}A$, el sistema es <b>compatible determinado</b>; si $\operatorname{rang}(A\mid B)\neq\operatorname{rang}A$ (solo puede ser $n+1$, y únicamente si $m\gt n$), es <b>incompatible</b>.
+    - |-
+      <b>No hay tercera opción:</b> «compatible indeterminado» exigiría $\operatorname{rang}A\lt n$, imposible. ∎
+  - html: |-
+      <p><b>Bonus.</b> Si existe solución $X_0$, multiplicando $AX_0=B$ por $A^t$ se obtiene $X_0=A^tB$: es única y vale $A^tB$.</p>
+  - html: |-
+      <p><b>Ejemplo:</b> $A=\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$ ($A^tA=I_2$). Con $B=(1,2,0)^t$: $\operatorname{rang}A=\operatorname{rang}(A\mid B)=2$, $X=A^tB=(1,2)^t$. Con $B=(1,2,3)^t$: $\operatorname{rang}(A\mid B)=3$, incompatible.</p>
+  - receta: |-
+      para probar que un sistema «nunca es indeterminado» basta probar $\operatorname{rang}A=n$ (columnas independientes, o $AX=0\Rightarrow X=0$); el resto lo da Rouché-Frobenius.
+  - error: |-
+      suponer $A$ cuadrada (entonces siempre sería determinado); con $m\gt n$ puede ser incompatible.
+- id: ex-sep22e1
+  clase: examen
+  titulo: |-
+    Sept. 2022, ejercicio 1 — V/F: escalonada reducida única y sistemas equivalentes
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2022, ejercicio 1
+    texto: |-
+      X Sept. 2022
+  cuerpo:
+  - enun: |-
+      Razonar si son ciertas: A) La matriz escalonada reducida de una matriz $A$ no es única; B) Se puede obtener un sistema equivalente a uno dado mediante transformaciones elementales en las ecuaciones que definen el sistema inicial.
+  - html: |-
+      <p><b>A) FALSA</b> (desarrollada en el <a href="tema_1_2_algebra_matricial.html#ex-sep22e1">tema 1.2</a>). Una escalonada equivalente a $A$ no es única (se pueden multiplicar filas por escalares), pero la <b>escalonada reducida sí lo es</b> (U p.21).</p>
+  - html: |-
+      <p><b>B) VERDADERA</b> (es el apartado de 1.4):</p>
+  - pasos:
+    - |-
+      <b>Definición 1.7</b> (U p.31): dos sistemas son equivalentes si tienen <b>las mismas soluciones</b>.
+    - |-
+      <b>Transformaciones elementales</b> con ecuaciones (U p.31-32): $E_i\leftrightarrow E_j$; $E_i\to\alpha E_i$ con $\alpha\neq0$; $E_i\to E_i+\alpha E_j$ ($j\neq i$). Cada una es una operación elemental por filas de $(A\mid B)$, es decir, multiplicar por una matriz elemental $E$ a la izquierda.
+    - |-
+      <b>Teorema 1.5</b> (U p.32): si $(A'\mid B')=E_p\cdots E_1(A\mid B)$, entonces $AX=B$ y $A'X=B'$ son equivalentes. Porque las $E_i$ son regulares: $A'X_0=B'\iff E_p\cdots E_1AX_0=E_p\cdots E_1B\iff AX_0=B$.
+    - |-
+      Es el fundamento del método de Gauss (U p.38).
+  - receta: |-
+      en V/F de teoría cita la definición (equivalente = mismas soluciones) y el teorema (1.5), y explica el porqué en una línea (las matrices elementales son invertibles).
+  - error: |-
+      olvidar la condición $\alpha\neq0$: multiplicar una ecuación por $0$ la elimina y cambia el conjunto de soluciones.
+- id: ex-sep18e1
+  clase: examen
+  titulo: |-
+    Sept. 2018 (tipo A), ejercicio 1 — escribir dos sistemas equivalentes con ampliada $3\times4$
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2018 (tipo A), ejercicio 1
+    texto: |-
+      X Sept. 2018
+  cuerpo:
+  - enun: |-
+      Escribir dos sistemas de ecuaciones lineales equivalentes entre sí tales que las matrices ampliadas asociadas sean de dimensión $3\times4$, justificando la equivalencia.
+  - pasos:
+    - |-
+      <b>Sistema de partida</b> y su ampliada ($3\times4$: 3 ecuaciones, 3 incógnitas y la columna de términos independientes, U p.29):
+            $$S:\ \begin{cases}2x_1+x_2-x_3=1\\2x_1-x_2+x_3=2\\x_1-3x_2=3\end{cases}\qquad(A\mid B)=\left(\begin{array}{ccc|c}2&1&-1&1\\2&-1&1&2\\1&-3&0&3\end{array}\right).$$
+    - |-
+      <b>Por qué basta con operaciones elementales.</b> Por el Teorema 1.5 (U p.32), toda matriz obtenida de $(A\mid B)$ por operaciones elementales por filas es la ampliada de un sistema equivalente (Def. 1.7, p.31).
+    - |-
+      <b>Anular la columna 1 bajo el pivote $2$.</b>
+            <ul>
+              <li>$F_2\to F_2-F_1$: $(2-2,\,-1-1,\,1+1\mid2-1)=(0,-2,2\mid1)$.</li>
+              <li>$F_3\to2F_3-F_1$ (composición de $F_3\to2F_3$, tipo 2 con $\alpha=2\neq0$, y $F_3\to F_3-F_1$, tipo 3; se usa para evitar fracciones): $(2-2,\,-6-1,\,0+1\mid6-1)=(0,-7,1\mid5)$.</li>
+            </ul>
+            $$\left(\begin{array}{ccc|c}2&1&-1&1\\0&-2&2&1\\0&-7&1&5\end{array}\right).$$
+    - |-
+      <b>Anular el $-7$ bajo el pivote $-2$:</b> $F_3\to2F_3-7F_2$: $(0,\,-14+14,\,2-14\mid10-7)=(0,0,-12\mid3)$.
+            $$S':\ \begin{cases}2x_1+x_2-x_3=1\\-2x_2+2x_3=1\\-12x_3=3\end{cases}\qquad(A'\mid B')=\left(\begin{array}{ccc|c}2&1&-1&1\\0&-2&2&1\\0&0&-12&3\end{array}\right).$$
+    - |-
+      <b>Comprobación</b> (recomendable): de $S'$, $x_3=-\tfrac14$; $-2x_2-\tfrac12=1\Rightarrow x_2=-\tfrac34$; $2x_1-\tfrac34+\tfrac14=1\Rightarrow x_1=\tfrac34$. En $S$: $\tfrac32-\tfrac34+\tfrac14=1$ ✓, $\tfrac32+\tfrac34-\tfrac14=2$ ✓, $\tfrac34+\tfrac94=3$ ✓.
+    - |-
+      <b>Conclusión:</b> $S$ y $S'$ son equivalentes (Teorema 1.5) y ambas ampliadas son $3\times4$.
+  - html: |-
+      <p><b>Respuesta mínima válida:</b> intercambiar dos ecuaciones ($E_1\leftrightarrow E_2$) ya da un sistema equivalente; basta citar el Teorema 1.5.</p>
+  - receta: |-
+      para fabricar un sistema equivalente, aplica a la ampliada operaciones elementales anotando cada una («$F_3\to2F_3-F_1$») y cita el Teorema 1.5. Comprueba al final que la solución satisface el sistema original.
+  - error: |-
+      equivocarse en una operación y no comprobarlo: sustituir la solución en el sistema original lo detecta en segundos.
+- id: ex-feb22e1
+  clase: examen
+  titulo: |-
+    Feb. 2022 (tipo A), ejercicio 1 — unas paramétricas de «un sistema» y sus cartesianas
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2022 (tipo A), ejercicio 1
+    texto: |-
+      X Feb. 2022 (A)
+  cuerpo:
+  - enun: |-
+      Escriba unas ecuaciones paramétricas de un sistema y halle las ecuaciones cartesianas de dicho sistema. Considere 3 incógnitas.
+  - html: |-
+      <p>Aquí, un ejemplo más completo, con dos parámetros y término independiente (U §1.4.2, Ej. 1.28, p.34-36).</p>
+  - pasos:
+    - |-
+      <b>Elegimos paramétricas</b> (3 incógnitas, 2 parámetros): $x=1+\alpha+\beta,\ y=\alpha,\ z=2-\beta$, con $\alpha,\beta\in\mathbb R$.
+    - |-
+      <b>Qué es «hallar las cartesianas».</b> Es eliminar los parámetros: un punto $(x,y,z)$ es de esa forma si y solo si el sistema en las incógnitas $\alpha,\beta$
+            $$\alpha+\beta=x-1,\qquad\alpha=y,\qquad-\beta=z-2$$
+            es <b>compatible</b>.
+    - |-
+      <b>Igualdad de rangos (Rouché-Frobenius).</b> La matriz de coeficientes en $(\alpha,\beta)$ tiene rango 2 (el menor de las filas 2-3 es $\begin{vmatrix}1&0\\0&-1\end{vmatrix}=-1\neq0$). La ampliada
+            $$\left(\begin{array}{cc|c}1&1&x-1\\1&0&y\\0&-1&z-2\end{array}\right)$$
+            debe tener también rango 2; como es $3\times3$, equivale a que su determinante sea $0$ (U p.27):
+            $$\begin{vmatrix}1&1&x-1\\1&0&y\\0&-1&z-2\end{vmatrix}=y-(z-2)-(x-1)=-x+y-z+3=0.$$
+    - |-
+      <b>Cartesiana:</b> $x-y+z=3$ (una ecuación: $3$ incógnitas $-\ 2$ parámetros $=1$).
+    - |-
+      <b>Atajo</b> (U p.36): como $\alpha=y$, se despeja $\beta=2-z$ y se sustituye: $x=1+y+(2-z)$, es decir, $x-y+z=3$.
+    - |-
+      <b>Comprobación:</b> $(1+\alpha+\beta)-\alpha+(2-\beta)=3$ ✓ para todo $\alpha,\beta$.
+  - receta: |-
+      paramétricas $\to$ cartesianas: escribe el sistema en los parámetros con las $x_i$ como términos independientes y exige $\operatorname{rang}(\text{coef.})=\operatorname{rang}(\text{ampliada})$ (escalonando o con un determinante). N.º de cartesianas $=$ n.º de incógnitas $-$ n.º de parámetros independientes.
+  - error: |-
+      dar ecuaciones que cumplen solo algunos puntos (comprobar solo con $\alpha=\beta=0$) o dar demasiadas ecuaciones (describen un conjunto más pequeño).
+- id: ex-sep25p7
+  clase: examen
+  titulo: |-
+    Sept. 2025, problema 7 (1.er apartado) — sistema con incógnitas matriciales: calcular $X+Y$
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2025, problema 7
+    texto: |-
+      X Sept. 2025
+  cuerpo:
+  - enun: |-
+      Las matrices $X,Y\in\mathcal M_{2\times2}$ satisfacen $\begin{cases}2X+3Y=A\\X-Y=B\end{cases}$ con $A=\begin{pmatrix}5&1\\0&4\end{pmatrix}$, $B=\begin{pmatrix}1&-1\\2&0\end{pmatrix}$. Calcule $X+Y$. (Los otros dos apartados —base de $\mathcal M_{2\times2}$ y dimensión— son del tema 2.3.)
+  - html: |-
+      <p><i>Desarrollado en el <a href="tema_1_2_algebra_matricial.html#ex-sep25">tema 1.2</a>.</i> Resumen: es un sistema $2\times2$ cuyas incógnitas son matrices; se resuelve por reducción/sustitución como uno numérico, sin multiplicar matrices. De $X=Y+B$: $5Y=A-2B=\begin{pmatrix}3&3\\-4&4\end{pmatrix}$, $Y=\tfrac15\begin{pmatrix}3&3\\-4&4\end{pmatrix}$, $X=Y+B$, y
+        $$X+Y=\frac{2A+B}{5}=\frac15\begin{pmatrix}11&1\\2&8\end{pmatrix}$$
+        (atajo: $\tfrac25(2X+3Y)+\tfrac15(X-Y)=X+Y$).</p>
+  - receta: |-
+      sistemas con incógnitas matriciales: reducción o sustitución como con números; solo se divide por escalares; comprueba sustituyendo.
+- id: ex-feb20a
+  clase: examen
+  titulo: |-
+    Ene. 2020 (tipo A), ejercicio 1 — soluciones de un sistema homogéneo según $m$
+  fuentes:
+  - l: X
+    ref: |-
+      Ene. 2020 (tipo A), ejercicio 1
+    texto: |-
+      X Ene. 2020 (A)
+  cuerpo:
+  - enun: |-
+      Calcular las soluciones del sistema $\begin{cases}mx+y+z=0\\x+my+z=0\\x+y+mz=0\end{cases}$ para los distintos valores de $m\in\mathbb R$.
+  - pasos:
+    - |-
+      <b>Es homogéneo</b>, luego siempre compatible: $(0,0,0)$ es solución (U p.30). La cuestión es cuándo hay <b>más</b>.
+    - |-
+      <b>Criterio:</b> solo la solución nula $\iff\operatorname{rang}A=3\iff\det A\neq0$ (U p.22 y p.30).
+    - |-
+      <b>Determinante</b> (las filas suman $m+2$): $C_1\to C_1+C_2+C_3$ no cambia $\det A$ (U §1.3), y luego $F_2\to F_2-F_1$, $F_3\to F_3-F_1$:
+            $$\det A=(m+2)\begin{vmatrix}1&1&1\\1&m&1\\1&1&m\end{vmatrix}=(m+2)\begin{vmatrix}1&1&1\\0&m-1&0\\0&0&m-1\end{vmatrix}=(m+2)(m-1)^2.$$
+    - |-
+      <b>Caso $m\neq1$ y $m\neq-2$:</b> $\det A\neq0$, $\operatorname{rang}A=3=n$: compatible determinado, <b>única solución $x=y=z=0$</b>.
+    - |-
+      <b>Caso $m=1$:</b> las tres ecuaciones son $x+y+z=0$; $\operatorname{rang}A=1$, $3-1=2$ parámetros (las incógnitas que no son pivote, U p.34):
+            $$x=\alpha,\quad y=\beta,\quad z=-\alpha-\beta,\qquad\alpha,\beta\in\mathbb R.$$
+    - |-
+      <b>Caso $m=-2$:</b> se escalona (se intercambia para tener pivote 1):
+            $$\begin{pmatrix}-2&1&1\\1&-2&1\\1&1&-2\end{pmatrix}\xrightarrow{F_1\leftrightarrow F_2}\begin{pmatrix}1&-2&1\\-2&1&1\\1&1&-2\end{pmatrix}\xrightarrow[F_3\to F_3-F_1]{F_2\to F_2+2F_1}\begin{pmatrix}1&-2&1\\0&-3&3\\0&3&-3\end{pmatrix}\xrightarrow{F_3\to F_3+F_2}\begin{pmatrix}1&-2&1\\0&-3&3\\0&0&0\end{pmatrix}.$$
+            $\operatorname{rang}A=2$, un parámetro. De $-3y+3z=0$: $y=z$; con $z=\alpha$, $x=2y-z=\alpha$: $x=y=z=\alpha$.
+    - |-
+      <b>Comprobación:</b> con $m=-2$: $-2\alpha+\alpha+\alpha=0$ ✓ (las tres ecuaciones). Con $m=1$: $\alpha+\beta-\alpha-\beta=0$ ✓.
+  - receta: |-
+      homogéneo cuadrado con parámetro: (1) siempre compatible; (2) $\det A=0$ da los valores críticos; (3) fuera de ellos, solo la solución nula; (4) en cada valor crítico, escalona y escribe la solución con $n-\operatorname{rang}A$ parámetros.
+  - error: |-
+      quedarse en «compatible indeterminado» sin dar las soluciones, o dividir por $m-1$ al escalonar sin separar el caso $m=1$.
+- id: ex-feb23p8
+  clase: examen
+  titulo: |-
+    Feb. 2023 (2.ª sem.), problema 8 — discutir y resolver con parámetro $a$ (problema, 2 puntos)
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2023 (2.ª sem.), problema 8
+    texto: |-
+      X Feb. 2023 (2.ª)
+  cuerpo:
+  - enun: |-
+      Sea $a\in\mathbb R$ y el sistema $\begin{cases}(1+a)x+y+z=1\\x+(1+a)y+z=a\\x+y+(1+a)z=a^2\end{cases}$. (i) Discútalo en función de $a$. (ii) Resuélvalo en los casos en que sea compatible.
+  - html: |-
+      <p><b>(i) Discusión</b></p>
+  - pasos:
+    - |-
+      <b>Ampliada</b> reordenada con $F_1\leftrightarrow F_3$, para que el primer pivote sea el número $1$ y no $1+a$ (que se anula si $a=-1$ y obligaría a separar casos). El intercambio da un sistema equivalente (Teorema 1.5):
+            $$\left(\begin{array}{ccc|c}1&1&1+a&a^2\\1&1+a&1&a\\1+a&1&1&1\end{array}\right).$$
+    - |-
+      <b>Anular la columna 1:</b> $F_2\to F_2-F_1$ y $F_3\to F_3-(1+a)F_1$. Fila 2: $(0,\,a,\,-a\mid a-a^2)$. Fila 3: $(0,\,-a,\,-a^2-2a\mid1-a^2-a^3)$.
+            $$\left(\begin{array}{ccc|c}1&1&1+a&a^2\\0&a&-a&-a^2+a\\0&-a&-a^2-2a&-a^3-a^2+1\end{array}\right).$$
+    - |-
+      <b>Anular la columna 2:</b> $F_3\to F_3+F_2$ (no divide por nada: vale para todo $a$):
+            $$\left(\begin{array}{ccc|c}1&1&1+a&a^2\\0&a&-a&-a^2+a\\0&0&-a(a+3)&-a^3-2a^2+a+1\end{array}\right).$$
+    - |-
+      <b>Comprobación con el determinante:</b> $\det A=a^2(a+3)$ (sumando las tres columnas en la primera sale el factor $a+3$, como en el ejemplo anterior); se anula solo en $a=0$ y $a=-3$.
+    - |-
+      <b>$a\neq0,\,-3$:</b> los pivotes $1,\ a,\ -a(a+3)$ son no nulos: $\operatorname{rang}A=\operatorname{rang}(A\mid B)=3=n$, <b>compatible determinado</b>.
+    - |-
+      <b>$a=0$:</b> la matriz queda $\left(\begin{array}{ccc|c}1&1&1&0\\0&0&0&0\\0&0&0&1\end{array}\right)$: $\operatorname{rang}A=1\neq2=\operatorname{rang}(A\mid B)$, <b>incompatible</b> (el sistema es $x+y+z=1$ y $x+y+z=0$ a la vez).
+    - |-
+      <b>$a=-3$:</b> fila 2 $=(0,-3,3\mid-12)$, fila 3 $=(0,0,0\mid27-18-3+1)=(0,0,0\mid7)$: $\operatorname{rang}A=2\neq3=\operatorname{rang}(A\mid B)$, <b>incompatible</b> ($0=7$).
+  - html: |-
+      <p><b>(ii) Resolución para $a\neq0,-3$</b> (sustitución hacia atrás, U p.39 PASO 6), <b>en función de $a$</b>:</p>
+  - html: |-
+      <ol class="steps" start="8">
+          <li>Fila 3: $-a(a+3)z=-a^3-2a^2+a+1\Rightarrow z=\dfrac{a^3+2a^2-a-1}{a(a+3)}$.</li>
+          <li>Fila 2 (se divide por $a\neq0$): $y-z=1-a\Rightarrow y=z+1-a=\dfrac{a^3+2a^2-a-1+(1-a)(a^2+3a)}{a(a+3)}=\dfrac{2a-1}{a(a+3)}$, pues $(1-a)(a^2+3a)=-a^3-2a^2+3a$.</li>
+          <li>Fila 1: $x=a^2-y-(1+a)z=\dfrac{a^3(a+3)-(2a-1)-(1+a)(a^3+2a^2-a-1)}{a(a+3)}=\dfrac{2-a^2}{a(a+3)}$, pues $(1+a)(a^3+2a^2-a-1)=a^4+3a^3+a^2-2a-1$.</li>
+        </ol>
+  - html: |-
+      $$\boxed{x=\frac{2-a^2}{a(a+3)},\qquad y=\frac{2a-1}{a(a+3)},\qquad z=\frac{a^3+2a^2-a-1}{a(a+3)}}\qquad(a\neq0,-3).$$
+  - html: |-
+      <p><b>Comprobación</b> con $a=1$: $(\tfrac14,\tfrac14,\tfrac14)$ cumple $2\cdot\tfrac14+\tfrac14+\tfrac14=1$ ✓, $\tfrac14+\tfrac12+\tfrac14=1=a$ ✓, $\tfrac14+\tfrac14+\tfrac12=1=a^2$ ✓. Con $a=2$ sale $(-\tfrac15,\tfrac3{10},\tfrac{13}{10})$. (Alternativa: regla de Cramer con $|A|=a^2(a+3)$, U p.33; mismo resultado con más cálculo.)</p>
+  - html: |-
+      <p><b>Resumen:</b> $a\neq0,-3$: compatible determinado; $a=0$ o $a=-3$: incompatible. Nunca es compatible indeterminado.</p>
+  - html: |-
+      <p><b>Fallo recurrente:</b> en los casos compatibles determinados, resolver el sistema solo para un valor concreto de $a$; la solución debe darse <b>en función de $a$</b>.</p>
+  - receta: |-
+      (1) escalona $(A\mid B)$ sin dividir por expresiones con el parámetro (pivotes numéricos, reordenando si hace falta); (2) los valores que anulan pivotes son los casos críticos (confírmalos con $\det A$ si es cuadrado); (3) caso general por Rouché-Frobenius; (4) sustituye cada valor crítico en la escalonada y compara rangos; (5) resuelve en función del parámetro y comprueba con un valor concreto.
+  - error: |-
+      dividir una fila por $a$ o por $1+a$ sin haber excluido antes $a=0$ o $a=-1$; olvidar estudiar aparte los valores críticos.
+- id: ex-sep17e1
+  clase: examen
+  titulo: |-
+    Sept. 2017 (tipo A), ejercicio 1 — test sobre la factorización $LU$
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2017 (tipo A), ejercicio 1
+    texto: |-
+      X Sept. 2017
+  cuerpo:
+  - enun: |-
+      La factorización $LU$ de una matriz $A$ cuadrada de orden $n$: A) siempre es única; B) NO se puede utilizar para resolver $AX=B$; C) permite calcular el determinante de $A$ ya que coincide con el determinante de $U$; D) ninguna de las anteriores es cierta.
+  - pasos:
+    - |-
+      <b>Recordatorio</b> (U p.45-46): $A=LU$ con $L$ triangular inferior con <b>unos en la diagonal</b> y $U$ triangular superior obtenida por Gauss solo con reemplazos $F_i\to F_i+\lambda F_j$, sin normalizar pivotes. U garantiza la unicidad cuando $A$ es <b>regular</b> (p.46); si es singular puede no serlo.
+    - |-
+      <b>A) Falsa.</b> Sin regularidad puede no ser única: $A=\begin{pmatrix}0&0\\0&1\end{pmatrix}=\begin{pmatrix}1&0\\ \ell&1\end{pmatrix}\begin{pmatrix}0&0\\0&1\end{pmatrix}$ para <b>todo</b> $\ell\in\mathbb R$. (Además puede no existir sin permutar filas: $\begin{pmatrix}0&1\\1&0\end{pmatrix}$ necesita $PA=LU$, U p.50.)
+    - |-
+      <b>B) Falsa.</b> Es su uso principal: $AX=B\iff L(UX)=B$; se resuelve $LY=B$ (hacia delante) y luego $UX=Y$ (hacia atrás) (U p.49).
+    - |-
+      <b>C) Verdadera.</b> $\det(LU)=\det L\det U$ (U p.26), y el determinante de una triangular es el producto de su diagonal, así que $\det L=1$ y $\det A=\det U$ (U p.51).
+    - |-
+      <b>Respuesta: C.</b>
+  - receta: |-
+      en tests de $LU$, tres frases: única si $A$ es regular; sirve para resolver $AX=B$ con dos sistemas triangulares; $\det A=\det U$ porque $\det L=1$.
+  - error: |-
+      confundir «$L$ con unos en la diagonal» con «$U$ con unos en la diagonal»: los pivotes de $U$ no se normalizan.
+- id: ex-feb20b
+  clase: examen
+  titulo: |-
+    Feb. 2020 (1.ª sem., tipo B), ejercicio 1 — calcular la factorización $LU$ de una matriz $3\times3$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2020 (1.ª sem., tipo B), ejercicio 1
+    texto: |-
+      X Feb. 2020 (1.ª, B)
+  cuerpo:
+  - enun: |-
+      Calcular la factorización $LU$ de $A=\begin{pmatrix}1&0&2\\4&3&5\\2&0&1\end{pmatrix}$.
+  - pasos:
+    - |-
+      <b>¿Es única?</b> $\det A=-9\neq0$: $A$ es regular y, triangularizando solo con reemplazos, la factorización es única (U p.46).
+    - |-
+      <b>PASO 1 (obtener $U$).</b> Pivote $a_{11}=1$; multiplicador $=$ elemento / pivote:
+            <ul>
+              <li>$F_2\to F_2-4F_1$: $(4-4,\ 3-0,\ 5-8)=(0,3,-3)$;</li>
+              <li>$F_3\to F_3-2F_1$: $(2-2,\ 0-0,\ 1-4)=(0,0,-3)$.</li>
+            </ul>
+            $$A\longrightarrow U=\begin{pmatrix}1&0&2\\0&3&-3\\0&0&-3\end{pmatrix}.$$
+            El elemento bajo el segundo pivote ya es $0$ (multiplicador $0$). No se ha permutado ni normalizado: es válido.
+    - |-
+      <b>PASO 2 (obtener $L$).</b> $L=E^{-1}=E_1^{-1}E_2^{-1}$ (U p.46): las inversas de $F_2\to F_2-4F_1$ y $F_3\to F_3-2F_1$ son $F_2\to F_2+4F_1$ y $F_3\to F_3+2F_1$:
+            $$L=\begin{pmatrix}1&0&0\\4&1&0\\0&0&1\end{pmatrix}\begin{pmatrix}1&0&0\\0&1&0\\2&0&1\end{pmatrix}=\begin{pmatrix}1&0&0\\4&1&0\\2&0&1\end{pmatrix}.$$
+            Regla práctica: en la posición $(i,j)$ de $L$ va el multiplicador $\lambda$ de $F_i\to F_i-\lambda F_j$ ($\ell_{21}=4$, $\ell_{31}=2$, $\ell_{32}=0$).
+    - |-
+      <b>Comprobación:</b> $LU=\begin{pmatrix}1&0&2\\4&3&8-3\\2&0&4-3\end{pmatrix}=\begin{pmatrix}1&0&2\\4&3&5\\2&0&1\end{pmatrix}=A$ ✓.
+    - |-
+      <b>Usos:</b> $\det A=\det U=1\cdot3\cdot(-3)=-9$ ✓. Para $AX=(3,12,3)^t$: $LY=B$ da $y_1=3$, $y_2=12-12=0$, $y_3=3-6=-3$; $UX=Y$ da $x_3=1$, $3x_2-3=0\Rightarrow x_2=1$, $x_1+2=3\Rightarrow x_1=1$: $X=(1,1,1)^t$ ✓.
+  - receta: |-
+      $LU$: Gauss <b>sin</b> normalizar y <b>solo</b> con $F_i\to F_i-\lambda F_j$ ($i\gt j$) hasta $U$; $L$ = identidad con los multiplicadores $\lambda$ en su sitio; comprueba $LU=A$.
+  - error: |-
+      poner en $L$ los multiplicadores con el signo cambiado ($-4$, $-2$): eso sería $E$, no $L=E^{-1}$.
+- id: ex-feb18c
+  clase: examen
+  titulo: |-
+    Feb. 2018 (tipo A), problema, apartado c) — explicar la factorización $LU$ y enunciar una aplicación
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2018 (tipo A), problema, apartado c)
+    texto: |-
+      X Feb. 2018 (A)
+  cuerpo:
+  - enun: |-
+      Explicar la factorización $LU$ para matrices regulares (0,5 ptos.) y enunciar una aplicación (0,5 ptos.).
+  - pasos:
+    - |-
+      <b>Qué es</b> (U p.45-46). Si $A\in\mathcal M_n$ es regular y se puede llevar a triangular superior por Gauss <b>sin normalizar pivotes y solo con reemplazos</b> $F_i\to F_i+\lambda F_j$, entonces $A=LU$ de modo <b>único</b>, con $U$ la triangular superior obtenida y $L$ triangular inferior con unos en la diagonal que guarda las operaciones.
+    - |-
+      <b>Por qué funciona.</b> Si $E_1,\dots,E_p$ son las matrices elementales usadas, $U=E_p\cdots E_1A=EA$ y $L=E^{-1}=E_1^{-1}\cdots E_p^{-1}$ (U p.46). Cada $E_k^{-1}$ es triangular inferior con unos en la diagonal, y el producto también.
+    - |-
+      <b>Ejemplo</b> (propio). $A=\begin{pmatrix}1&1&1\\2&1&-1\\1&-1&1\end{pmatrix}$ ($\det A=-6\neq0$): $F_2\to F_2-2F_1$ da $(0,-1,-3)$; $F_3\to F_3-F_1$ da $(0,-2,0)$; $F_3\to F_3-2F_2$ da $(0,0,6)$.
+            $$U=\begin{pmatrix}1&1&1\\0&-1&-3\\0&0&6\end{pmatrix},\qquad L=\begin{pmatrix}1&0&0\\2&1&0\\1&2&1\end{pmatrix},\qquad LU=A.$$
+    - |-
+      <b>Aplicación: resolver $AX=B$</b> (U p.49). Como $L(UX)=B$: se resuelve $LY=B$ (hacia delante) y $UX=Y$ (hacia atrás). Con $B=(6,1,2)^t$: $y_1=6$; $12+y_2=1\Rightarrow y_2=-11$; $6-22+y_3=2\Rightarrow y_3=18$. Luego $6z=18\Rightarrow z=3$; $-y-9=-11\Rightarrow y=2$; $x+2+3=6\Rightarrow x=1$. Solución $(1,2,3)$ ✓. Ventaja: con muchos $B$ distintos y la misma $A$, la factorización se hace una sola vez (U p.51).
+    - |-
+      <b>Otras aplicaciones</b> (U p.51): $\det A=\det U$ (aquí $1\cdot(-1)\cdot6=-6$ ✓) y $A^{-1}=U^{-1}L^{-1}$.
+  - receta: |-
+      pregunta de teoría de $LU$: definición (forma de $L$ y $U$ + hipótesis: regular y sin permutaciones), construcción ($U$ por Gauss con reemplazos, $L=E^{-1}$), unicidad y una aplicación con los dos sistemas triangulares. Un ejemplo $3\times3$ breve vale mucho.
+  - error: |-
+      escribir solo «$A=LU$» sin decir qué son $L$ y $U$ ni bajo qué hipótesis.
+- id: ex-feb19pb
+  clase: examen
+  titulo: |-
+    Feb. 2019 (tipo A), problema, apartado b) — enunciar un método numérico y mostrar sus pasos
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2019 (tipo A), problema, apartado b)
+    texto: |-
+      X Feb. 2019 (A)
+  cuerpo:
+  - enun: |-
+      Enunciar algún método numérico para resolver un sistema de ecuaciones lineales y mostrar sus pasos, es decir, cómo se aplica.. Modelo con el <b>método de Gauss</b> (U §1.4.3, p.38-39); también valdría $LU$.
+  - pasos:
+    - |-
+      <b>Idea.</b> Transformar $(A\mid B)$, con operaciones elementales por filas, en una matriz escalonada; el sistema obtenido es equivalente (Teorema 1.5, U p.32) y se resuelve por sustitución hacia atrás.
+    - |-
+      <b>Pasos</b> (U p.39). PASO 1: localizar el pivote de la primera fila (si $a_{11}=0$, intercambiar con una fila con elemento no nulo en esa columna). PASO 2: normalizar el pivote si se desea y anular todo lo que hay debajo. PASOS 3-5: repetir con la fila siguiente hasta obtener una escalonada. PASO 6: sustitución hacia atrás. Comparando rangos en la escalonada se <b>clasifica</b> el sistema (Rouché-Frobenius).
+    - |-
+      <b>Ejemplo</b> (propio): $x+2y+z=4$, $2x+5y+3z=10$, $x+3y+4z=8$.
+            $$\left(\begin{array}{ccc|c}1&2&1&4\\2&5&3&10\\1&3&4&8\end{array}\right)\xrightarrow[F_3\to F_3-F_1]{F_2\to F_2-2F_1}\left(\begin{array}{ccc|c}1&2&1&4\\0&1&1&2\\0&1&3&4\end{array}\right)\xrightarrow{F_3\to F_3-F_2}\left(\begin{array}{ccc|c}1&2&1&4\\0&1&1&2\\0&0&2&2\end{array}\right).$$
+            Por qué: el pivote $1$ de la fila 1 anula el $2$ y el $1$ de la columna 1; el pivote $1$ de la fila 2 anula el $1$ de la fila 3.
+    - |-
+      <b>Clasificación:</b> $\operatorname{rang}A=\operatorname{rang}(A\mid B)=3=n$: compatible determinado.
+    - |-
+      <b>Sustitución hacia atrás:</b> $2z=2\Rightarrow z=1$; $y+z=2\Rightarrow y=1$; $x+2y+z=4\Rightarrow x=1$. Comprobación: $1+2+1=4$, $2+5+3=10$, $1+3+4=8$ ✓.
+    - |-
+      <b>Comentarios numéricos</b> (U p.41-42): Gauss cuesta del orden de $n^3/3$ operaciones; problemas: redondeo con pivotes pequeños (pivoteo parcial/total) y sistemas mal condicionados (Def. 1.8, Ej. 1.31). Gauss-Jordan (U p.43-44) sigue hasta la escalonada reducida y evita la sustitución, pero cuesta más ($\sim n^3/2$).
+  - receta: |-
+      «enuncie un método»: nombre + idea (sistema equivalente más sencillo) + pasos numerados + un ejemplo $3\times3$ con cada operación anotada (con la fila sobre la que se actúa: $F_2\to F_2-2F_1$) + clasificación por rangos + comprobación.
+  - error: |-
+      usar una fila ya «usada» para hacer ceros bajo un pivote posterior: deshace los ceros conseguidos (U p.40, al margen).
