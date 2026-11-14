@@ -1,0 +1,85 @@
+<!-- ============================ 6 ============================ -->
+<h2 id="s6"><span class="n">6</span>Técnicas iterativas: el método de potencias <span class="src" data-l="U" data-ref="U §4.4.3, Técnicas iterativas para estimar valores y vectores propios, p. 180-190; Lay §5.8, Estimaciones iterativas para valores propios, p. 319-323">U p.180-190 · L p.319-323</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: el valor propio mayor «gana» a base de repetir</span>
+  <p>Hallar los valores propios exactos de una matriz grande es difícil (no hay fórmula general para el grado $\ge5$). Si solo interesa el <b>mayor en valor absoluto</b>, basta con una receta muy simple: coger un vector, multiplicarlo por $A$ una y otra vez. Como cada multiplicación estira cada eje propio por su valor propio, el eje con el valor propio más grande crece más rápido que los demás y acaba <b>dominando</b> la dirección del vector: es como una población en la que una especie se reproduce más deprisa que las otras. Se normaliza en cada paso (dividiendo por la coordenada mayor) para que los números no se disparen, y esa coordenada va dando el valor propio.</p>
+</div>
+
+<div class="box def"><span class="h">Definición 4.14 — valor propio estrictamente dominante</span>
+  <p>Si $A$ es de orden $n$ con valores propios $\lambda_1,\dots,\lambda_n$, $\lambda_1$ es <b>estrictamente dominante</b> si $|\lambda_1|\gt|\lambda_2|\ge\cdots\ge|\lambda_n|$: tiene mayor valor absoluto que cualquier otro.</p>
+  <span class="src" data-l="U" data-ref="U Definición 4.14, p. 181">U p.181</span>
+  <span class="src" data-l="L" data-ref="Lay §5.8, el método de potencias, p. 319: valor propio estrictamente dominante">L §5.8 p.319</span>
+</div>
+
+<div class="box thm"><span class="h">Por qué funciona (idea de U p.181-182)</span>
+  <p>Si $A$ es diagonalizable con base de vectores propios $v_1,\dots,v_n$ y $x_0=c_1v_1+\cdots+c_nv_n$ (aquí $c_i$ son coeficientes, no multiplicidades), entonces $A^kx_0=c_1\lambda_1^kv_1+\cdots+c_n\lambda_n^kv_n$. Dividiendo por $\lambda_1^k$:
+  $$\frac1{\lambda_1^k}A^kx_0=c_1v_1+c_2\Big(\frac{\lambda_2}{\lambda_1}\Big)^kv_2+\cdots+c_n\Big(\frac{\lambda_n}{\lambda_1}\Big)^kv_n\ \longrightarrow\ c_1v_1,$$
+  porque $|\lambda_i/\lambda_1|\lt1$. Si $c_1\neq0$, la dirección de $A^kx_0$ tiende a la de $v_1$. La <b>rapidez</b> depende de $|\lambda_2/\lambda_1|$: si es casi $1$, converge muy despacio. (Para explicar la idea se supone diagonalizable; no es necesario para aplicar el método.)</p>
+  <span class="src" data-l="U" data-ref="U §4.4.3, ecuación (4.2), p. 181-182 y comentario de convergencia p. 185">U p.181-185</span>
+  <span class="src" data-l="L" data-ref="Lay §5.8, ecuaciones (2) y (3) y comentario sobre la rapidez |λ2/λ1|, p. 319-322">L §5.8 p.319-322</span>
+</div>
+
+<div class="box tip"><span class="h">Algoritmo del método de potencias (U p.185; Lay p.321)</span>
+  <ol class="steps">
+    <li>Elegir un vector inicial $x_0\neq0$.</li>
+    <li>Para $k=0,1,2,\dots$: calcular $Ax_k$; sea $\mu_k$ la <b>coordenada de $Ax_k$ de mayor valor absoluto (con su signo)</b>; calcular $x_{k+1}=\dfrac1{\mu_k}Ax_k$ (así $x_{k+1}$ tiene una coordenada igual a $1$).</li>
+    <li>Si $x_0$ es adecuado: $\mu_k\to\lambda_1$ (el valor propio estrictamente dominante) y $x_k\to v_1$ (un vector propio suyo). Si no converge, probar otro $x_0$.</li>
+  </ol>
+  <p>Solo estima el valor propio <b>dominante</b>. Para el de menor módulo se aplica el método a $A^{-1}$ (Ej. 4.30); la variante general (desplazamientos $(A-\alpha I)^{-1}$) es el «método de potencias inverso» (U p.190; L p.322-323). <b>No sale en ningún examen escaneado.</b></p>
+  <span class="src" data-l="U" data-ref="U Método de potencias, pasos 1 a 3, p. 185; método de potencias inverso, p. 190">U p.185, 190</span>
+  <span class="src" data-l="L" data-ref="Lay §5.8, método de potencias y método de potencias inverso, p. 321-323">L §5.8 p.321-323</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 4.24 y 4.25 (U) — $A=\begin{pmatrix}6&5\cr1&2\end{pmatrix}$, $x_0=(0,1)$: mirar la dirección y luego escalar</span>
+  <p>Valores propios $7$ y $1$, con vectores $(5,1)$ y $(1,-1)$: el dominante es $7$. <b>Sin escalar</b> (Ej. 4.24) se ve cómo gira la dirección ($x_k=A^kx_0$); <b>con escalado</b> (Ej. 4.25) se lee el valor propio:</p>
+  <table>
+    <tr><th>$k$</th><th>$x_k=A^kx_0$ (4.24)</th><th>pendiente $y/x$</th><th>$Ax_k$ (con escalado, 4.25)</th><th>$\mu_k$</th><th>$x_{k+1}$</th></tr>
+    <tr><td>$0$</td><td>$(0,1)$</td><td>—</td><td>$(5,\,2)$</td><td>$5$</td><td>$(1,\,0.4)$</td></tr>
+    <tr><td>$1$</td><td>$(5,2)$</td><td>$0.4$</td><td>$(8,\,1.8)$</td><td>$8$</td><td>$(1,\,0.225)$</td></tr>
+    <tr><td>$2$</td><td>$(40,9)$</td><td>$0.225$</td><td>$(7.125,\,1.45)$</td><td>$7.125$</td><td>$(1,\,0.2035)$</td></tr>
+    <tr><td>$3$</td><td>$(285,58)$</td><td>$0.2035$</td><td>$(7.0175,\,1.4070)$</td><td>$7.0175$</td><td>$(1,\,0.2005)$</td></tr>
+    <tr><td>$4$</td><td>$(2000,401)$</td><td>$0.2005$</td><td>$(7.0025,\,1.4010)$</td><td>$7.0025$</td><td>$(1,\,0.20007)$</td></tr>
+  </table>
+  <p>La pendiente tiende a $1/5=0.2$ (la de $(5,1)$) y $\mu_k\to7$. Convergencia rápida porque $|\lambda_2/\lambda_1|=1/7$. Comprobación: $A(1,0.2)=(7,1.4)=7(1,0.2)$.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplos 4.24 (p. 182-183) y 4.25 (p. 184-185)">U p.182-185</span>
+  <span class="src" data-l="L" data-ref="Lay §5.8, Ejemplo 2 (misma matriz y x0 = (0,1)), p. 321-322">L §5.8 Ej.2 p.321</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 4.26 a 4.30 (U) — qué puede pasar según $x_0$ y $A$</span>
+  <ul>
+    <li><b>Ej. 4.26 (p.186):</b> misma $A$ con $x_0=(2,-2)$, que es <b>vector propio del valor $1$</b> (no dominante, no tiene componente en $v_1$). La tabla: $Ax_0=(2,-2)$, $\mu_0=2$, $x_1=(1,-1)$; después $Ax_k=(1,-1)$, $\mu_k=1$ <b>para siempre</b>. El método converge a un vector propio y a $1$, no a $7$: <b>mal $x_0$</b>.</li>
+    <li><b>Ej. 4.27 (p.187):</b> con $x_0=(1,-5)$ (sí tiene componente en $v_1$) vuelve a converger: $\mu_k=-19$, $8.3684$, $7.1635$, $7.0228$, $7.0033$ y $\to7$ y $x_k\to(1,0.2)$. Fíjate que $\mu_0=-19$ es negativo y aun así el método converge: lo importante es la componente en $v_1$.</li>
+  </ul>
+  <p><b>Ej. 4.28 (pp.187-188)</b> — $A=\begin{pmatrix}4&-1&1\cr-1&3&-2\cr1&-2&3\end{pmatrix}$, $x_0=(1,0,0)$ (valores propios $1,3,6$; el dominante es $6$, con $(1,-1,1)$):</p>
+  <table>
+    <tr><th>$k$</th><th>$Ax_k$</th><th>$\mu_k$</th><th>$x_{k+1}$</th></tr>
+    <tr><td>$0$</td><td>$(4,-1,1)$</td><td>$4$</td><td>$(1,-0.25,0.25)$</td></tr>
+    <tr><td>$1$</td><td>$(4.5,-2.25,2.25)$</td><td>$4.5$</td><td>$(1,-0.5,0.5)$</td></tr>
+    <tr><td>$2$</td><td>$(5,-3.5,3.5)$</td><td>$5$</td><td>$(1,-0.7,0.7)$</td></tr>
+    <tr><td>$3$</td><td>$(5.4,-4.5,4.5)$</td><td>$5.4$</td><td>$(1,-0.8333,0.8333)$</td></tr>
+    <tr><td>$4$</td><td>$(5.667,-5.167,5.167)$</td><td>$5.667$</td><td>$(1,-0.9118,0.9118)$</td></tr>
+    <tr><td>$5$</td><td>$(5.824,-5.559,5.559)$</td><td>$5.824$</td><td>$(1,-0.9545,0.9545)$ (*)</td></tr>
+    <tr><td>$6$</td><td>$(5.909,-5.773,5.773)$</td><td>$5.909$</td><td>$(1,-0.9769,0.9769)$</td></tr>
+  </table>
+  <p>(*) El valor exacto es $0.95455\ldots$ en ambas coordenadas. Tras 7 iteraciones $\lambda\approx5.909$ y $v\approx(1,-0.9769,0.9769)$; la tabla sugiere $6$ y $(1,-1,1)$, que se confirma: $A(1,-1,1)^t=(6,-6,6)^t=6(1,-1,1)^t$. Aquí $|\lambda_2/\lambda_1|=3/6$: el error se reduce a la mitad en cada paso.</p>
+  <ul>
+    <li><b>Ej. 4.29 (p.188):</b> $A=\begin{pmatrix}1&2\cr4&3\end{pmatrix}$, valores propios $-1$ y $5$ (el dominante es $5$, con vector propio $(1,2)$), $x_0=(-1,1)$, que es <b>vector propio de $-1$</b>: $Ax_0=(1,-1)$, y en $Ax_0$ las dos coordenadas tienen el mismo valor absoluto (<b>empate</b>); con $\mu_k=1$ los $x_k$ oscilan entre $(1,-1)$ y $(-1,1)$ y no convergen a ningún vector. Conclusión de U: $x_0$ no es adecuado, hay que elegir otro (p. ej. $(0,1)$).</li>
+    <li><b>Ej. 4.30 (p.189):</b> $A=\begin{pmatrix}4&3\cr1&2\end{pmatrix}$ (valores propios $1$ y $5$): el método con $A$ estima el $5$. Para estimar el $1$ se aplica a $A^{-1}=\begin{pmatrix}2/5&-3/5\cr-1/5&4/5\end{pmatrix}$ (existe porque $|A|=5\neq0$), cuyos valores propios son $1$ y $1/5$ (si $Ax=\lambda x$, $A^{-1}x=\lambda^{-1}x$; los vectores propios son los mismos). Con $x_0=(0,1)$: $A^{-1}x_0=(-0.6,0.8)$, $\mu_0=0.8$, $x_1=(-0.75,1)$; luego $\mu_k=0.95,\ 0.9895,\ 0.9979,\ 0.9996\to1$ y $x_k\to(-1,1)$. Comprobación: $A(-1,1)=(-1,1)$.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U Ejemplos 4.26 p. 186, 4.27 p. 187, 4.28 p. 187-188, 4.29 p. 188, 4.30 p. 189">U p.186-189</span>
+</div>
+
+<div class="box warn"><span class="h">Cuándo falla, y por qué (resumen)</span>
+  <ul>
+    <li><b>No hay valor propio estrictamente dominante</b> ($|\lambda_1|=|\lambda_2|$, o valores complejos conjugados): $\mu_k$ no converge.</li>
+    <li><b>$x_0$ sin componente en $v_1$</b> (Ej. 4.26, 4.29): converge a otro vector propio o oscila. El redondeo a veces «arregla» el problema, pero no cuentes con ello.</li>
+    <li><b>Empates en $\mu_k$</b> (dos coordenadas con el mismo valor absoluto): el signo escogido puede cambiar el resultado (Ej. 4.29).</li>
+    <li><b>Lentitud:</b> si $|\lambda_2/\lambda_1|$ es casi $1$, hacen falta muchas iteraciones.</li>
+    <li><b>Signo:</b> $\mu_k$ es la coordenada <b>con su signo</b>, no su valor absoluto (E 4.41): si no, $x_k$ alterna de signo y $\mu_k$ converge al valor <b>opuesto</b>.</li>
+    <li>El método estima valores propios <b>sin necesidad de que $A$ sea diagonalizable</b>.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U p. 185-189: situaciones del método de potencias">U p.185-189</span>
+  <span class="src" data-l="L" data-ref="Lay §5.8, convergencia lenta y vector inicial sin componente en v1, p. 322">L §5.8 p.322</span>
+</div>
+
+<!-- ============================ 7 ============================ -->

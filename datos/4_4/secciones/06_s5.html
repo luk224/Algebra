@@ -1,0 +1,81 @@
+<!-- ============================ 5 ============================ -->
+<h2 id="s5"><span class="n">5</span>La matriz de paso: cadenas de vectores <span class="src" data-l="U" data-ref="U §4.4.2, Definición 4.13 y guion para la matriz de paso p. 173; Ejemplos 4.18 p. 173-175 y 4.19 p. 176-177; E Ej. 4.38 p. 155 y 4.40 p. 158-159">U p.173-177 · E 4.38, 4.40</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: elegir la «cabeza» y bajar</span>
+  <p>Para cada bloque de tamaño $s$ hay que encontrar $s$ vectores tales que $A$ los vaya «empujando» hacia el vector propio. Se empieza por el <b>más alto</b> (la <b>cabeza</b> $v$), que debe estar «a $s$ pisos» del suelo, y se baja con $N$: $v$, $Nv$, $N^2v$, …, hasta el vector propio. Si eliges mal la cabeza (demasiado abajo) la cadena se queda corta y no llena el bloque.</p>
+</div>
+
+<div class="box thm"><span class="h">Por qué esta cadena da exactamente un bloque de Jordan</span>
+  <p>Sea $N=A-\lambda I$ y sea $v$ con $N^3v=0$, $N^2v\neq0$ (bloque de tamaño $3$). Con las columnas $p_1=N^2v$, $p_2=Nv$, $p_3=v$:
+  $$Ap_1=\lambda p_1,\qquad Ap_2=p_1+\lambda p_2,\qquad Ap_3=p_2+\lambda p_3 ,$$
+  porque $Ap_2=(N+\lambda I)Nv=N^2v+\lambda Nv$ y $Ap_3=Nv+\lambda v$. Las coordenadas de esos tres vectores en la base $\{p_1,p_2,p_3\}$ son justo las columnas $(\lambda,0,0)$, $(1,\lambda,0)$ y $(0,1,\lambda)$ de $J_3(\lambda)$. Por eso el <b>vector propio va primero</b> y la cabeza $v$ <b>al final</b>. En general, para un bloque de tamaño $k$: $P=(N^{k-1}v\mid\cdots\mid Nv\mid v)$.</p>
+  <span class="src" data-l="P" data-ref="Desarrollo propio del convenio de columnas, deducido de U Ej. 4.18-4.19 y E 4.40">propio</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.40, p. 158-159: los vectores de cada bloque se calculan de derecha a izquierda">E p.158-159</span>
+</div>
+
+<div class="box tip"><span class="h">Guion de U para la matriz de paso (p.173), en cuatro pasos</span>
+  <ol class="steps">
+    <li><b>Tamaños de los bloques</b> (apartado 4): $d$ y, si hace falta, los rangos de $N^k$, con $N=A-\lambda I$ para cada valor propio <b>por separado</b>.</li>
+    <li><b>Cadena de núcleos:</b> $\operatorname{Nuc}N\subset\operatorname{Nuc}N^2\subset\cdots$ hasta que la dimensión sea $\alpha$.</li>
+    <li><b>Para cada bloque de tamaño $k$</b> (empezando por el mayor): elegir $v\in\operatorname{Nuc}N^k$ que sea <b>independiente</b> de $\operatorname{Nuc}N^{k-1}$ <b>junto con</b> las cabezas ya elegidas y los vectores de nivel $k$ de las cadenas más largas (no basta $v\notin\operatorname{Nuc}N^{k-1}$: con bloques $(2,2)$, tomar $h_2=h_1+u$ con $u$ propio da $P$ singular); calcular $Nv,\dots,N^{k-1}v$ (de derecha a izquierda). Los bloques de tamaño $1$ se rellenan con vectores propios independientes de los anteriores.</li>
+    <li><b>Colocar las columnas</b> bloque a bloque, en el mismo orden que en $J$, cada bloque como $(N^{k-1}v\mid\cdots\mid Nv\mid v)$. Comprobar $\det P\neq0$ y $AP=PJ$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U guion para construir la matriz de paso, p. 173">U p.173</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.18 (U) — valor simple y valor doble con $d=1$</span>
+  <p>$A=\begin{pmatrix}1&0&3\cr-1&2&0\cr0&0&2\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Polinomio</b> (por la 3.ª fila): $|A-\lambda I|=(2-\lambda)\begin{vmatrix}1-\lambda&0\cr-1&2-\lambda\end{vmatrix}=(1-\lambda)(2-\lambda)^2$. $\lambda_1=1$ ($\alpha=1$) y $\lambda_2=2$ ($\alpha=2$).</li>
+    <li><b>$\lambda_1=1$:</b> $A-I=\begin{pmatrix}0&0&3\cr-1&1&0\cr0&0&1\end{pmatrix}\Rightarrow x_3=0,\ x_1=x_2$: vector propio $(1,1,0)$.</li>
+    <li><b>$\lambda_2=2$:</b> $N=A-2I=\begin{pmatrix}-1&0&3\cr-1&0&0\cr0&0&0\end{pmatrix}$, rango $2$, $d=1\lt2$: <b>un bloque $2\times2$</b>. $\operatorname{Nuc}N$: $x_1=0,\ x_3=0$, es $\langle(0,1,0)\rangle$ (dim $1$).</li>
+    <li><b>Cadena de núcleos:</b> $N^2=\begin{pmatrix}1&0&-3\cr1&0&-3\cr0&0&0\end{pmatrix}$, $\operatorname{Nuc}N^2$: $x_1=3x_3$, es $\langle(3,0,1),(0,1,0)\rangle$ (dim $2=\alpha$). Se para.</li>
+    <li><b>Cabeza:</b> $v_2=(3,0,1)\in\operatorname{Nuc}N^2$ y $\notin\operatorname{Nuc}N$. Se baja: $Nv_2=(-3+3,\,-3,\,0)=(0,-3,0)$, vector propio ✓.</li>
+    <li><b>Matriz de paso</b> (propio de $\lambda=1$; luego el bloque: $Nv_2$, $v_2$):
+      $$P=\begin{pmatrix}1&0&3\cr1&-3&0\cr0&0&1\end{pmatrix},\qquad J=\begin{pmatrix}1&0&0\cr0&2&1\cr0&0&2\end{pmatrix}.$$ $\det P=-3$ y $AP=PJ$ (columna 2: $A(0,-3,0)=(0,-6,0)=2(0,-3,0)$; columna 3: $A(3,0,1)=(6,-3,2)=(0,-3,0)+2(3,0,1)$ ✓).</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.18, p. 173-175">U p.173-175</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 4.19 (U) — valor triple con $d=2$: bloques $(2,1)$</span>
+  <p>$A=\begin{pmatrix}-1&3&0\cr0&-1&0\cr0&2&-1\end{pmatrix}$, triangular por bloques con $\lambda=-1$ triple.</p>
+  <ol class="steps">
+    <li>$N=A+I=\begin{pmatrix}0&3&0\cr0&0&0\cr0&2&0\end{pmatrix}$, rango $1\Rightarrow d=3-1=2$: bloques $(2,1)$ (orden 3, rango $1$: $J'$). $\operatorname{Nuc}N$: $x_2=0$, es $\langle(1,0,0),(0,0,1)\rangle$.</li>
+    <li>$N^2=0$, luego $\operatorname{Nuc}N^2=\mathbb R^3$ (dim $3=\alpha$).</li>
+    <li><b>Cabeza</b> del bloque de $2$: $v_1=(0,1,0)\notin\operatorname{Nuc}N$. Se baja: $v_2=Nv_1=(3,0,2)$, vector propio.</li>
+    <li><b>Vector del bloque $1\times1$:</b> un propio independiente de $(3,0,2)$: $(1,0,0)$.</li>
+    <li>Columnas $(Nv_1\mid v_1\mid(1,0,0))$:
+      $$P=\begin{pmatrix}3&0&1\cr0&1&0\cr2&0&0\end{pmatrix},\qquad J=\begin{pmatrix}-1&1&0\cr0&-1&0\cr0&0&-1\end{pmatrix}.$$ $\det P=-2\neq0$ y $AP=PJ$.</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 4.19, p. 176-177">U p.176-177</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos al construir $P$ (con ejemplos)</span>
+  <ul>
+    <li><b>Cabeza en el núcleo equivocado.</b> Si $v\in\operatorname{Nuc}N$ ($Nv=0$), la cadena no baja. Si $v\notin\operatorname{Nuc}N^k$, $N^{k-1}v$ no es propio. Ejemplo: $A=\begin{pmatrix}2&1&1\cr0&2&0\cr0&1&1\end{pmatrix}$ ($\lambda=2$ doble, $\lambda=1$): $v=(0,1,0)$ no está en $\operatorname{Nuc}N^2$ y da una $P$ con $P^{-1}AP$ <b>no</b> de Jordan; $v=(0,1,1)$ sí vale (ejemplo propio de examen 13).</li>
+    <li><b>Orden de las columnas invertido:</b> $(v\mid Nv)$ en lugar de $(Nv\mid v)$ da los unos <b>debajo</b> de la diagonal.</li>
+    <li><b>Dependencia:</b> un vector propio extra proporcional a uno ya usado deja $P$ singular; comprueba $\det P\neq0$.</li>
+    <li><b>Escalar mal:</b> dentro de una cadena hay que escalar todos los vectores juntos ($p_2=Np_3$); no se puede cambiar solo uno (E 4.38).</li>
+    <li><b>Mezclar valores propios:</b> cada $\lambda$ se trabaja con <b>su</b> $A-\lambda I$.</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Errores típicos, ejemplos propios verificados con sympy; E 4.38 y 4.40, X Sept. 2024">propio</span>
+</div>
+
+<div class="box tip"><span class="h">$P$ no es única</span>
+  <p>Se pueden cambiar la cabeza $v$ por cualquier otro vector de $\operatorname{Nuc}N^k\setminus\operatorname{Nuc}N^{k-1}$ (y los de los bloques de tamaño $1$ por otros propios independientes), escalar y reordenar bloques (con su $J$). Todas las respuestas correctas valen en el examen. Para <b>comprobar</b> una $P$ dada: (1) $\det P\neq0$; (2) $AP=PJ$ columna a columna (E 4.38). En E 4.38, con $J=\operatorname{diag}(J_1(2),J_2(-2))$, todas las $P=(a\,u\mid b\,w\mid b\,v+c\,w)$ con $a,b\neq0$ y $c$ real son válidas (tres parámetros libres).</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.38, p. 155">E p.155</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: forma de Jordan y matriz de paso, paso a paso</span>
+  <p>Escribe una matriz $A$ (de $2\times2$ a $4\times4$, enteros) o elige un caso y recorre la receta: polinomio característico y valores propios, <b>rangos de $(A-\lambda I)^k$</b> y tamaños de los bloques, matriz $J$, <b>cadenas</b> de vectores con la cabeza resaltada y la matriz de paso con la comprobación $AP=PJ$ en fracciones exactas. Prueba: «U 4.18» (bloques 1 y 2), «E 4.39» (bloques 3 y 1), «4×4: bloques 2 y 2» (mismo polinomio y $d$ que E 4.39, pero otra $J$), «Giro 90°» y «Raíces complejas» (no hay $J$ real) y «raíces irracionales» (diagonalizable con valores irracionales).</p>
+  <div class="anim-jordan" data-a="1,0,3;-1,2,0;0,0,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js, anim-jordan)">P</span>
+</div>
+
+<div class="box ex"><span class="h">Para qué sirve $J$ (extra): potencias $A^k=PJ^kP^{-1}$</span>
+  <p>Igual que en 4.3 ($A^k=P\Lambda^kP^{-1}$), con $J=\lambda I+N$ y $\lambda I$ conmutando con $N$ se puede usar el binomio de Newton, y como $N^s=0$ solo sobreviven los primeros términos:
+  $$J_2(\lambda)^k=\begin{pmatrix}\lambda^k&k\lambda^{k-1}\cr0&\lambda^k\end{pmatrix},\qquad J_3(\lambda)^k=\begin{pmatrix}\lambda^k&k\lambda^{k-1}&\binom k2\lambda^{k-2}\cr0&\lambda^k&k\lambda^{k-1}\cr0&0&\lambda^k\end{pmatrix}.$$
+  Comprobación: $J_2(2)^3=\begin{pmatrix}8&12\cr0&8\end{pmatrix}$. Aplicación completa en el <a href="#ej-propio-8">ejemplo propio 8</a>. Ningún examen escaneado lo pide; es una aplicación útil (sistemas de ecuaciones recurrentes y diferenciales).</p>
+  <span class="src" data-l="P" data-ref="Cálculo propio de J^k con el binomio de Newton, verificado con sympy; ver ejemplo propio 8">propio</span>
+</div>
+

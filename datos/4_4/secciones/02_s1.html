@@ -1,0 +1,35 @@
+<!-- ============================ 1 ============================ -->
+<h2 id="s1"><span class="n">1</span>La idea: cuando faltan ejes propios <span class="src" data-l="U" data-ref="U §4.4.1, p. 167; ejemplo y explicación propios, matriz de E Ej. 4.36, p. 153">U p.167 · E 4.36 · P</span></h2>
+
+<div class="box intu"><span class="h">Idea intuitiva: «inclinar la baraja»</span>
+  <p>Una matriz diagonalizable solo <b>estira</b> cada eje propio. Una matriz con un valor propio doble y un solo eje propio hace algo más: sobre un eje estira, pero sobre otro vector estira <b>y además lo empuja hacia el primer eje</b>. Es una <b>cizalla</b>: imagina una baraja de cartas apilada y la empujas por arriba; cada carta se desplaza lateralmente una cantidad proporcional a su altura. La carta de abajo (el eje propio) no se mueve; las de arriba se desplazan hacia ella. Ese «empuje» es exactamente el «1» de la matriz de Jordan.</p>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo en $\mathbb R^2$ — completar la base y ver aparecer el «1» (matriz de E 4.36)</span>
+  <p>$A=\begin{pmatrix}3&1\cr-1&1\end{pmatrix}$. ¿Se puede diagonalizar? Si no, ¿cuánto se parece a una diagonal?</p>
+  <ol class="steps">
+    <li><b>Valores propios.</b> $|A-\lambda I|=(3-\lambda)(1-\lambda)+1=\lambda^2-4\lambda+4=(\lambda-2)^2$: $\lambda=2$ con $\alpha=2$.</li>
+    <li><b>Ejes propios.</b> $A-2I=\begin{pmatrix}1&1\cr-1&-1\end{pmatrix}$ tiene rango $1$, luego $d=2-1=1$: un solo eje, $L=\langle p_1\rangle$ con $p_1=(1,-1)$. Como $d=1\lt2=\alpha$, <b>no es diagonalizable</b> (Teorema 4.7). Falta un eje.</li>
+    <li><b>Completar la base</b> con un vector cualquiera fuera del eje, por ejemplo $v=(1,0)$, y mirar qué hace $A$ con cada vector de la base $B'=\{p_1,v\}$:
+      $$Ap_1=(2,-2)=2\,p_1,\qquad Av=(3,-1)=1\cdot(1,-1)+2\cdot(1,0)=1\cdot p_1+2\cdot v .$$
+      Con $v$ no hay solo estiramiento: $Av$ es «$2v$ más un empujón $p_1$».</li>
+    <li><b>Matriz de $A$ en la base $B'$</b> (columnas = coordenadas de $Ap_1$ y de $Av$ en $B'$):
+      $$J=\begin{pmatrix}2&1\cr0&2\end{pmatrix}.$$ Es lo más cerca de una diagonal que se puede estar. El «1» es el empujón.</li>
+    <li><b>Con $P$.</b> $P=(p_1\mid v)=\begin{pmatrix}1&1\cr-1&0\end{pmatrix}$ ($\det P=1\neq0$). Comprobación sin invertir: $AP=\begin{pmatrix}2&3\cr-2&-1\end{pmatrix}$ y $PJ=\begin{pmatrix}1\cdot2&1\cdot1+1\cdot2\cr-1\cdot2&-1\cdot1+0\end{pmatrix}=\begin{pmatrix}2&3\cr-2&-1\end{pmatrix}$ ✓, luego $J=P^{-1}AP$.</li>
+  </ol>
+  <p>Aquí vale <i>cualquier</i> $v$ fuera de $L$ porque $(A-2I)^2=0$. En tamaños mayores habrá que elegir $v$ con cuidado (apartado 5).</p>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 4.36, p. 153: matriz A y J">E p.153</span>
+  <span class="src" data-l="U" data-ref="U §4.4.1, p. 167: si no es diagonalizable se busca una matriz casi diagonal, la de Jordan, J = P⁻¹AP">U p.167</span>
+  <span class="src" data-l="P" data-ref="Desarrollo propio con la matriz de E Ej. 4.36, verificado con sympy">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico: «no es diagonalizable, luego no tiene forma de Jordan»</span>
+  <p>Justo al revés: la forma de Jordan existe precisamente para las matrices que <b>no</b> se diagonalizan (siempre que sus raíces características sean reales). Y si $A$ <b>sí</b> es diagonalizable, su forma de Jordan es la matriz diagonal $\Lambda$ (todos los bloques $1\times1$, ningún «1»). Preguntar «halla la matriz de Jordan» en un examen puede tener como respuesta una diagonal (X Ene. 2020 y Ene. 2022, ejercicio 4).</p>
+</div>
+
+<div class="box ex"><span class="h">Animación 3D: lo que falta, visto en ℝ³</span>
+  <p>La esfera unidad (gris) se transforma en su imagen (azul) por $A$. Las rectas y planos de colores son los subespacios propios. Prueba los casos: con «<b>Doble con $d=2$</b>» (diagonalizable) las rectas y el plano bastan para una base; con «<b>Doble con $d=1$</b>» o «<b>Triple, $d=1$</b>» <b>faltan ejes</b> y aparecen vectores «generalizados» (los que no son propios) de las cadenas (los comprenderás en el apartado 5). Con «<b>Complejos</b>» no hay ejes propios en un plano (giro): ni siquiera existe $J$ real. El deslizador $t$ deforma la esfera poco a poco. Si tu navegador no admite 3D, queda el texto con el veredicto.</p>
+  <div class="d3-propios" data-a="1,0,3;-1,2,0;0,0,2"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/tres-d.js, d3-propios; matriz del preset de U Ej. 4.18)">P</span>
+</div>
+

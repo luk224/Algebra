@@ -1,0 +1,51 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Teorema de Jordan: bloques y nilpotencia <span class="src" data-l="U" data-ref="U §4.4.2, Teorema 4.8, p. 168; propiedades y J_i = λ_i I + N, p. 169; construcción p. 169-170; E p. 150">U p.168-170 · E p.150</span></h2>
+
+<div class="box def"><span class="h">Bloque de Jordan y matriz de Jordan</span>
+  <p>Un <b>bloque de Jordan</b> de tamaño $s$ y valor propio $\lambda$ es la matriz $s\times s$
+  $$J_s(\lambda)=\begin{pmatrix}\lambda&1&&\cr&\lambda&\ddots&\cr&&\ddots&1\cr&&&\lambda\end{pmatrix}$$
+  (triangular superior, $\lambda$ en toda la diagonal, $1$ en la línea inmediatamente superior y $0$ en el resto). Una <b>matriz de Jordan</b> es una matriz diagonal por bloques $J=\operatorname{diag}(J_1,\dots,J_s)$ formada por bloques de Jordan. Notación: $A\oplus B$ es la matriz diagonal por bloques $\operatorname{diag}(A,B)$ y $X\setminus Y$ son los elementos de $X$ que no están en $Y$. Ejemplo con $J_3(2)$ y $J_1(5)$:
+  $$J=\begin{pmatrix}2&1&0&0\cr0&2&1&0\cr0&0&2&0\cr0&0&0&5\end{pmatrix}.$$</p>
+  <span class="src" data-l="U" data-ref="U §4.4.2, p. 168 (bloques J_i) y p. 170 (la línea superior)">U p.168-170</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, teoría de §4.4, p. 150: matriz diagonal por bloques, unos en la línea superior consecutiva a la diagonal principal">E p.150</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 4.8 (Jordan)</span>
+  <p>Sea $A$ de orden $n$ con <b>todas sus raíces características reales</b> (hipótesis habitual) y sea $s$ el número <b>máximo</b> de vectores propios linealmente independientes de $A$. Entonces $A$ es semejante a una matriz diagonal por bloques
+  $$J=\operatorname{diag}(J_1,\dots,J_s),$$
+  donde cada $J_i$ es triangular superior con un único valor propio $\lambda_i$ en la diagonal y unos en la línea superior. $J$ es la <b>forma canónica de Jordan</b> de $A$. Es decir, existe $P$ regular con $J=P^{-1}AP$.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 4.8 (Jordan), p. 168">U p.168</span>
+</div>
+
+<div class="box thm"><span class="h">Propiedades de $J$ (U p.169)</span>
+  <ul>
+    <li>$A$ y $J$ tienen los <b>mismos valores propios</b> (son semejantes: Teorema 4.4).</li>
+    <li>$J$ es <b>única salvo el orden de los bloques</b>: si se cambian los bloques entre sí se obtiene otra matriz semejante a $A$ (corresponde a reordenar columnas de $P$ por grupos).</li>
+    <li>Si todos los valores propios son distintos (o, en general, $d_i=\alpha_i$ para todo $i$), $J=\Lambda$ es diagonal. La forma de Jordan <b>extiende</b> la diagonalización.</li>
+    <li>Cada bloque es $J_i=\lambda_iI+N$ con $N$ <b>nilpotente</b>: $N^m=0$ para algún $m$.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §4.4.2, propiedades y J_i = λ_i I + N con N nihilpotente, p. 169">U p.169</span>
+</div>
+
+<div class="box ex"><span class="h">Por qué $N$ es nilpotente: los unos «suben» una línea con cada potencia</span>
+  <p>Para un bloque $3\times3$, $J_3(\lambda)=\lambda I+N$ con $N=\begin{pmatrix}0&1&0\cr0&0&1\cr0&0&0\end{pmatrix}$. Al multiplicar, los unos se alejan de la diagonal:
+  $$N^2=\begin{pmatrix}0&0&1\cr0&0&0\cr0&0&0\end{pmatrix},\qquad N^3=0.$$
+  En general, un bloque de tamaño $s$ cumple $N^s=0$ y $\operatorname{rang}N^k=\max(s-k,0)$. Este dato es la clave del apartado 4: los rangos de las potencias «cuentan» los bloques. Ejemplo numérico: $4\begin{pmatrix}1&0\cr0&1\end{pmatrix}+\begin{pmatrix}0&1\cr0&0\end{pmatrix}=\begin{pmatrix}4&1\cr0&4\end{pmatrix}$ y $\begin{pmatrix}0&1\cr0&0\end{pmatrix}^2=0$.</p>
+  <span class="src" data-l="U" data-ref="U p. 169: J_i = λ_i I + N con N nilpotente">U p.169</span>
+  <span class="src" data-l="P" data-ref="Cálculo de las potencias de N, explicación propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">La hipótesis: raíces reales</span>
+  <p>Si $|A-\lambda I|$ tiene raíces <b>no reales</b>, no hay forma de Jordan <b>real</b>. Ejemplo: $A=\begin{pmatrix}1&-2\cr1&-1\end{pmatrix}$ tiene $|A-\lambda I|=\lambda^2+1$, sin raíces reales. Si existiera $J$ real triangular con $J=P^{-1}AP$, tendría el mismo polinomio característico (Teorema 4.4) $(\lambda-j_{11})(\lambda-j_{22})$ con $j_{ii}$ reales: contradicción. Sobre $\mathbb C$ sí hay: $\lambda=\pm i$ distintos, luego $J=\operatorname{diag}(i,-i)$. Otro ejemplo: el giro de $90^\circ$. En los exámenes siempre se ha dado el caso de raíces reales; la forma de Jordan (real) solo existe con esa condición.</p>
+  <span class="src" data-l="U" data-ref="U p. 167: si la ecuación característica no tiene solución en R la matriz no se puede diagonalizar">U p.167</span>
+  <span class="src" data-l="P" data-ref="Ejemplo propio 9 (verificado con sympy)">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Tres confusiones de vocabulario</span>
+  <ul>
+    <li><b>Los unos van <i>encima</i> de la diagonal</b> (U, E, este tema). Con la base en orden contrario saldrían debajo: es la traspuesta, <b>no</b> la $J$ de U.</li>
+    
+    <li><b>Nº de bloques $\neq$ nº de valores propios distintos</b>: se cuenta con vectores propios independientes, $\sum d_i$ (E 4.33, 4.37).</li>
+  </ul>
+</div>
+
