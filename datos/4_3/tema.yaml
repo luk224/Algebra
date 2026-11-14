@@ -36,3 +36,260 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Diagonalizar es encontrar una base de $\mathbb R^n$ formada por vectores propios; esto es lo que hay que saber para decidir y calcular.
+  items:
+  - |-
+    <b>$A$ es diagonalizable</b> si existe $P$ regular con $\Lambda=P^{-1}AP$ diagonal. Equivale a $AP=P\Lambda$: las columnas de $P$ son vectores propios y la diagonal de $\Lambda$ contiene sus valores propios <b>en el mismo orden</b>.
+  - |-
+    <b>Criterio de examen (Teor. 4.7):</b> con todas las raíces de $|A-\lambda I|$ reales, $A$ es diagonalizable $\iff d_i=\alpha_i$ para todo $i$, donde $d_i=n-\operatorname{rang}(A-\lambda_iI)$. Basta estudiar los valores repetidos: los simples cumplen $d=\alpha=1$.
+  - |-
+    <b>Atajo:</b> $n$ valores propios reales distintos $\Rightarrow$ diagonalizable (suficiente, no necesario: $3I_2$). Con un solo valor propio $\lambda$, solo es diagonalizable si $A=\lambda I$.
+  - |-
+    <b>Con parámetros:</b> busca los valores del parámetro que hacen coincidir valores propios y estudia el rango de $A-\lambda I$ solo ahí. Ni «triangular», ni «repetido», ni «singular» deciden por sí solos.
+  - |-
+    <b>Potencias:</b> si $A=P\Lambda P^{-1}$, entonces $A^k=P\Lambda^kP^{-1}$ con $\Lambda^k=\operatorname{diag}(\lambda_i^k)$. No se elevan las entradas de $A$, solo las de la diagonal $\Lambda$.
+tipos:
+- id: diag
+  nombre: |-
+    ¿Es diagonalizable?
+  receta: |-
+    Calcula $\alpha_i$ y, para cada valor propio repetido, $d_i=n-\operatorname{rang}(A-\lambda_iI)$; diagonalizable $\iff d_i=\alpha_i$ en todos.
+  senal: |-
+    «¿es diagonalizable?», «¿existe una matriz diagonal semejante a $A$?», «¿admite una representación diagonal?», «justifique si…».
+  pasos:
+  - |-
+    <b>Polinomio característico</b> $|A-\lambda I|$ y factorización. Si hay una raíz no real, no es diagonalizable en $\mathbb R$.
+  - |-
+    Si las $n$ raíces son <b>distintas</b>, es diagonalizable y has terminado.
+  - |-
+    Si hay raíces repetidas, <b>para cada una</b> calcula $d_i=n-\operatorname{rang}(A-\lambda_iI)$ (los valores simples no hace falta tocarlos).
+  - |-
+    <b>Concluye razonando:</b> «$d_i=\alpha_i$ para todo $i$, luego diagonalizable» o «$d_j<\alpha_j$, faltan ejes propios, luego no lo es».
+  ejemplo: |-
+    $A=\begin{pmatrix}2&1\\0&2\end{pmatrix}$: $|A-\lambda I|=(2-\lambda)^2$, $\alpha=2$. $A-2I=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ tiene rango 1, luego $d=2-1=1<2=\alpha$. <b>No es diagonalizable.</b>
+  fallos: |-
+    decidir con $\operatorname{rang}A$ en lugar de $\operatorname{rang}(A-\lambda I)$ · creer que «valor repetido» implica «no diagonalizable» · creer que «triangular» implica «diagonalizable» · olvidar comprobar que todas las raíces son reales.
+- id: param
+  nombre: |-
+    Discutir según un parámetro
+  receta: |-
+    Factoriza el polinomio, detecta para qué valores del parámetro coinciden los valores propios y estudia $d$ frente a $\alpha$ solo en esos casos.
+  senal: |-
+    «estudie si $A$ es diagonalizable en función de $a$», «para qué valores de $a,b$…», «cuando $a=2$ y cuando $a=-2$».
+  pasos:
+  - |-
+    <b>Valores propios en función del parámetro</b> (en matrices triangulares o con filas casi diagonales salen a simple vista).
+  - |-
+    <b>Casos críticos:</b> valores del parámetro que hacen coincidir dos valores propios o cambian su multiplicidad. Fuera de ellos todos son distintos y es diagonalizable.
+  - |-
+    <b>En cada caso crítico</b> sustituye el parámetro y calcula $\operatorname{rang}(A-\lambda I)$ del valor repetido; compara $d$ con $\alpha$.
+  - |-
+    <b>Si el rango depende del parámetro</b>, separa ramas (por ejemplo $a=0$ y $a\neq0$) y resume la discusión en una lista final.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&a&0\\0&1&0\\0&0&2\end{pmatrix}$: $\lambda=1$ ($\alpha=2$) y $\lambda=2$ ($\alpha=1$) para todo $a$. $A-I$ tiene rango $1$ si $a=0$ ($d=2$) y rango $2$ si $a\neq0$ ($d=1$). <b>Diagonalizable $\iff a=0$.</b>
+  fallos: |-
+    estudiar solo un valor del parámetro y olvidar los demás · dividir por el parámetro sin comprobar que no es $0$ · estudiar los subespacios de los valores simples (trabajo inútil) · no dar la conclusión final para todos los valores.
+- id: paso
+  nombre: |-
+    Hallar $P$ y $\Lambda$
+  receta: |-
+    Vectores propios de cada $\lambda_i$ en columnas de $P$ y los $\lambda_i$ en la diagonal de $\Lambda$ en el mismo orden; comprueba $AP=P\Lambda$.
+  senal: |-
+    «calcule una matriz diagonal y una matriz de paso», «halle $P$ tal que $P^{-1}AP$ sea diagonal», «una base respecto de la cual la matriz es diagonal».
+  pasos:
+  - |-
+    <b>Valores propios</b> y comprobación de que $d_i=\alpha_i$ (si no, no se puede).
+  - |-
+    <b>Base de cada $L_i$:</b> resuelve $(A-\lambda_iI)X=0$.
+  - |-
+    <b>Construye $P$</b> con esos vectores como columnas y <b>$\Lambda$</b> con los $\lambda_i$ en el mismo orden (cada uno repetido tantas veces como vectores aporte).
+  - |-
+    <b>Comprueba</b> $AP=P\Lambda$ sin invertir $P$. Recuerda que $P$ y $\Lambda$ no son únicas: vale cualquier orden coherente.
+  ejemplo: |-
+    $A=\begin{pmatrix}3&1\\0&2\end{pmatrix}$: $\lambda_1=3$, $v_1=(1,0)$; $\lambda_2=2$, $v_2=(1,-1)$. $P=\begin{pmatrix}1&1\\0&-1\end{pmatrix}$, $\Lambda=\begin{pmatrix}3&0\\0&2\end{pmatrix}$. Comprobación: $AP=\begin{pmatrix}3&2\\0&-2\end{pmatrix}=P\Lambda$ ✓.
+  fallos: |-
+    poner los vectores propios en filas de $P$ · orden distinto en $P$ y en $\Lambda$ · escribir $A=P^{-1}\Lambda P$ en lugar de $A=P\Lambda P^{-1}$ · repetir un valor propio en $\Lambda$ más veces que vectores propios independientes.
+- id: potencia
+  nombre: |-
+    Calcular $A^k$
+  receta: |-
+    Diagonaliza $A=P\Lambda P^{-1}$ y calcula $A^k=P\Lambda^kP^{-1}$ elevando solo las entradas de la diagonal.
+  senal: |-
+    «calcule $A^{100}$», «halle $A^n$ utilizando la teoría de diagonalización», «¿es diagonalizable $A^{51}$?».
+  pasos:
+  - |-
+    <b>Diagonaliza:</b> halla $P$ y $\Lambda$ (si $A$ no es diagonalizable, este método no vale).
+  - |-
+    <b>Calcula $P^{-1}$</b> (por Gauss-Jordan o con la fórmula $2\times2$).
+  - |-
+    <b>Eleva la diagonal:</b> $\Lambda^k=\operatorname{diag}(\lambda_1^k,\dots,\lambda_n^k)$.
+  - |-
+    <b>Multiplica</b> $P\Lambda^kP^{-1}$ y comprueba con $k=1$ (debe salir $A$).
+  ejemplo: |-
+    $A=\begin{pmatrix}1&0\\1&2\end{pmatrix}$: $P=\begin{pmatrix}1&0\\-1&1\end{pmatrix}$, $\Lambda=\operatorname{diag}(1,2)$. $A^k=P\begin{pmatrix}1&0\\0&2^k\end{pmatrix}P^{-1}=\begin{pmatrix}1&0\\2^k-1&2^k\end{pmatrix}$. Con $k=3$: $\begin{pmatrix}1&0\\7&8\end{pmatrix}$.
+  fallos: |-
+    elevar cada entrada de $A$ en lugar de las de $\Lambda$ · colocar mal $P$ y $P^{-1}$ · perder el signo al elevar un valor propio negativo a un exponente impar · no comprobar el caso $k=1$.
+- id: teoria
+  nombre: |-
+    Teoría: verdadero/falso y reconstruir $A$
+  receta: |-
+    Busca un contraejemplo $2\times2$ o aplica el Teorema 4.7; para recuperar $A$ usa $A=P\Lambda P^{-1}$ con los vectores y valores propios dados.
+  senal: |-
+    «justifique si es cierto que…», «podemos deducir que…», «calcule la matriz $A$ a partir de sus valores y vectores propios», salida de Maxima dada.
+  pasos:
+  - |-
+    <b>Traduce la afirmación</b> a una condición sobre $\alpha_i$, $d_i$ o la base de vectores propios.
+  - |-
+    <b>Ensaya un ejemplo sencillo</b> ($3I_2$, un bloque $\begin{pmatrix}1&1\\0&1\end{pmatrix}$, una singular diagonal…) para refutar o intuir.
+  - |-
+    <b>Si es general</b>, justifica con el Teor. 4.7 (o con $d_i\le\alpha_i$).
+  - |-
+    <b>Para reconstruir $A$:</b> forma $P$ y $\Lambda$ con los datos, calcula $P^{-1}$ y multiplica $P\Lambda P^{-1}$.
+  ejemplo: |-
+    $\lambda=1$ con $(1,1)$ y $\lambda=3$ con $(1,-1)$: $P=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$, $\Lambda=\operatorname{diag}(1,3)$, $A=P\Lambda P^{-1}=\begin{pmatrix}2&-1\\-1&2\end{pmatrix}$. Comprobación: $A(1,1)=(1,1)$, $A(1,-1)=(3,-3)$ ✓.
+  fallos: |-
+    afirmar «diagonalizable $\iff$ valores distintos» (solo vale $\Leftarrow$) · afirmar «singular $\Rightarrow$ no diagonalizable» · ordenar mal $\Lambda$ y $P$ al reconstruir · dar una afirmación sin contraejemplo ni teorema.
+quiz:
+- p: |-
+    ¿Es diagonalizable $A=\begin{pmatrix}3&1\\0&3\end{pmatrix}$?
+  opciones:
+  - t: |-
+      Sí, porque es triangular y sus valores propios son reales.
+    ok: false
+    why: |-
+      Ser triangular solo da los valores propios; no dice nada de $d$.
+  - t: |-
+      No: $\lambda=3$ tiene $\alpha=2$ pero $d=1$.
+    ok: true
+  - t: |-
+      Sí, porque ya es casi diagonal.
+    ok: false
+    why: |-
+      «Casi diagonal» no sirve: $A-3I$ tiene rango 1, así que $L_3$ es una recta y solo hay un eje propio.
+  - t: |-
+      No, porque tiene un valor propio repetido.
+    ok: false
+    why: |-
+      Llegas a la conclusión correcta por un motivo falso: $3I_2$ también repite el valor propio y es diagonalizable. Lo que decide es $d$ frente a $\alpha$.
+  fb: |-
+    $A-3I=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ tiene rango 1, luego $d=2-1=1<2=\alpha$: falta un eje propio.
+- p: |-
+    $A$ es $3\times3$ con $|A-\lambda I|=-(\lambda-1)^2(\lambda-2)$ y $\operatorname{rang}(A-I)=1$. ¿Es diagonalizable?
+  opciones:
+  - t: |-
+      Sí: $d_1=3-1=2=\alpha_1$, y $\lambda=2$ es simple.
+    ok: true
+  - t: |-
+      No, porque $\lambda=1$ está repetido.
+    ok: false
+    why: |-
+      Repetir un valor propio no basta para descartarlo: hay que comparar $d$ con $\alpha$.
+  - t: |-
+      No, porque $d_1=1$.
+    ok: false
+    why: |-
+      Has confundido el rango de $A-I$ con $d$: $d=n-\operatorname{rang}=3-1=2$.
+  - t: |-
+      No se puede saber sin calcular los vectores propios de $\lambda=2$.
+    ok: false
+    why: |-
+      Un valor propio simple siempre cumple $d=\alpha=1$; no hace falta estudiarlo.
+  fb: |-
+    Un ejemplo es $\begin{pmatrix}1&0&1\\0&1&1\\0&0&2\end{pmatrix}$, que cumple las condiciones y es diagonalizable.
+- p: |-
+    $A=\begin{pmatrix}a&1\\0&2\end{pmatrix}$. ¿Para qué valores de $a$ es diagonalizable?
+  opciones:
+  - t: |-
+      Para $a\neq2$.
+    ok: true
+  - t: |-
+      Solo para $a=2$.
+    ok: false
+    why: |-
+      Con $a=2$ el valor propio $2$ es doble y $A-2I$ tiene rango 1: $d=1<2$, no es diagonalizable.
+  - t: |-
+      Para todo $a$.
+    ok: false
+    why: |-
+      Falla en $a=2$, donde coinciden los valores propios y falta un eje propio.
+  - t: |-
+      Para ningún $a$, porque la matriz es triangular.
+    ok: false
+    why: |-
+      Si $a\neq2$ hay dos valores propios distintos, y eso basta.
+  fb: |-
+    Los valores propios son $a$ y $2$. Si $a\neq2$ son distintos y hay diagonalización. Si $a=2$, $A-2I=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ tiene rango 1 y $d=1<2$.
+- p: |-
+    ¿Cuál de estas afirmaciones es correcta?
+  opciones:
+  - t: |-
+      Si $A$ tiene $n$ valores propios reales distintos, es diagonalizable.
+    ok: true
+  - t: |-
+      Si $A$ es diagonalizable, sus $n$ valores propios son distintos.
+    ok: false
+    why: |-
+      Es el recíproco, que es falso: $5I_2$ es diagonalizable (ya es diagonal) y tiene un valor propio doble.
+  - t: |-
+      Si $|A|=0$, $A$ no es diagonalizable.
+    ok: false
+    why: |-
+      $\operatorname{diag}(0,1,2)$ es singular y diagonal. «Singular» y «diagonalizable» son independientes.
+  - t: |-
+      Si $A$ es triangular, es diagonalizable.
+    ok: false
+    why: |-
+      $\begin{pmatrix}1&1\\0&1\end{pmatrix}$ es triangular y no es diagonalizable.
+  fb: |-
+    Con $n$ valores propios distintos, cada uno es simple ($d=\alpha=1$) y los vectores propios correspondientes son libres: forman una base. Las demás se refutan con un contraejemplo.
+- p: |-
+    Si $A=P\Lambda P^{-1}$ con $\Lambda=\operatorname{diag}(2,-1)$, ¿cuánto vale $\Lambda^3$ y cómo se obtiene $A^3$?
+  opciones:
+  - t: |-
+      $\Lambda^3=\operatorname{diag}(8,-1)$ y $A^3=P\Lambda^3P^{-1}$.
+    ok: true
+  - t: |-
+      $\Lambda^3=\operatorname{diag}(6,-3)$ y $A^3=P\Lambda^3P^{-1}$.
+    ok: false
+    why: |-
+      Has multiplicado por 3 en lugar de elevar al cubo.
+  - t: |-
+      $\Lambda^3=\operatorname{diag}(8,-1)$ y $A^3=P^{-1}\Lambda^3P$.
+    ok: false
+    why: |-
+      El orden es $P\Lambda^kP^{-1}$; con $P^{-1}\Lambda^kP$ cambias de base al revés.
+  - t: |-
+      $\Lambda^3=\operatorname{diag}(8,1)$ y $A^3=P\Lambda^3P^{-1}$.
+    ok: false
+    why: |-
+      $(-1)^3=-1$: el exponente impar conserva el signo.
+  fb: |-
+    $A^3=P\Lambda\,\Lambda\,\Lambda P^{-1}$ porque los $P^{-1}P$ intermedios valen $I$, y $\Lambda^3=\operatorname{diag}(2^3,(-1)^3)=\operatorname{diag}(8,-1)$.
+- p: |-
+    Para $A=\begin{pmatrix}1&0\\1&2\end{pmatrix}$, ¿cuál es $A^3$?
+  opciones:
+  - t: |-
+      $\begin{pmatrix}1&0\\7&8\end{pmatrix}$
+    ok: true
+  - t: |-
+      $\begin{pmatrix}1&0\\1&8\end{pmatrix}$
+    ok: false
+    why: |-
+      Has elevado cada entrada de $A$ al cubo; eso solo vale para matrices diagonales.
+  - t: |-
+      $\begin{pmatrix}3&0\\3&6\end{pmatrix}$
+    ok: false
+    why: |-
+      Has calculado $3A$ en vez de $A^3$.
+  - t: |-
+      $\begin{pmatrix}1&0\\3&8\end{pmatrix}$
+    ok: false
+    why: |-
+      La entrada inferior izquierda de $A^3$ es $2^3-1=7$ (de $A^k=\begin{pmatrix}1&0\\2^k-1&2^k\end{pmatrix}$), no $3$.
+  fb: |-
+    $A$ es diagonalizable con $P=\begin{pmatrix}1&0\\-1&1\end{pmatrix}$ y $\Lambda=\operatorname{diag}(1,2)$; $A^k=\begin{pmatrix}1&0\\2^k-1&2^k\end{pmatrix}$ y para $k=3$ sale $\begin{pmatrix}1&0\\7&8\end{pmatrix}$ (también multiplicando $A\cdot A\cdot A$).
+capa: true
+que_cae_nota: |-
+  Cada ejercicio se ha clasificado por su pregunta principal; muchos mezclan tipos (por ejemplo, decidir si es diagonalizable y luego calcular $P$ o $A^k$).
