@@ -36,3 +36,234 @@ leyenda:
 - L
 - X
 - P
+esencial:
+  intro: |-
+    Una forma cuadrática es una forma bilineal simétrica con el mismo vector en las dos entradas. Esto es lo que debes llevarte del tema.
+  items:
+  - |-
+    <b>$Q(x)=f(x,x)=X^tAX$</b> con $A$ <b>simétrica</b>; $Q(x)$ es un <b>escalar</b> y en coordenadas es un polinomio homogéneo de grado 2 (todos los sumandos de grado exactamente 2).
+  - |-
+    <b>Del polinomio a la matriz:</b> el coeficiente de $x_i^2$ va a $a_{ii}$ y el de $x_ix_j$ se <b>parte por la mitad</b> en $a_{ij}$ y $a_{ji}$. Comprueba siempre con $X^tAX$.
+  - |-
+    <b>$Q$ no es lineal:</b> $Q(\lambda x)=\lambda^2Q(x)$ y $Q(x+y)=Q(x)+Q(y)+2f(x,y)$. De aquí sale la polarización $f(x,y)=\tfrac12[Q(x+y)-Q(x)-Q(y)]$.
+  - |-
+    <b>Cambio de base:</b> $A'=P^tAP$ (congruencia, no $P^{-1}AP$), con los vectores de $B'$ en <b>columnas</b> de $P$. El rango de $Q$ es el de su matriz y no cambia con la base.
+tipos:
+- id: poli
+  nombre: |-
+    Del polinomio a la matriz (y evaluar)
+  receta: |-
+    Cuadrados a la diagonal; cada coeficiente cruzado, partido por la mitad en $(i,j)$ y $(j,i)$.
+  senal: |-
+    Te dan un polinomio y piden «la matriz asociada», o te dan la matriz (o una $M$ cualquiera, o valores $Q(e_i)$, $Q(e_i+e_j)$) y piden el polinomio o un valor $Q(x)$.
+  pasos:
+  - |-
+    Pon el coeficiente de cada $x_i^2$ en la posición $(i,i)$.
+  - |-
+    Para cada $x_ix_j$ con $i\ne j$ divide su coeficiente entre 2 y colócalo en $(i,j)$ y $(j,i)$; lo que no aparece es 0.
+  - |-
+    Si te dan una $M$ no simétrica, la matriz de $Q$ es $\tfrac12(M+M^t)$; si te dan $Q(e_i)$ y $Q(e_i+e_j)$, usa $a_{ii}=Q(e_i)$ y $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.
+  - |-
+    Comprueba calculando $X^tAX$ o evaluando en un vector concreto.
+  ejemplo: |-
+    $Q=x_1^2+6x_1x_2-4x_2^2$ da $A=\begin{pmatrix}1&3\\3&-4\end{pmatrix}$. Comprobación en $(1,1)$: $1+6-4=3$ y la suma de las entradas de $A$ es $1+3+3-4=3$.
+  fallos: |-
+    Poner el coeficiente cruzado entero en $a_{12}$ y $a_{21}$ (da el doble) · olvidar las fracciones cuando el coeficiente es impar · confundir $X^tAX$ (escalar) con $AX$ (vector).
+- id: esq
+  nombre: |-
+    ¿Es forma cuadrática? ¿Simétrica o antisimétrica?
+  receta: |-
+    Revisa el grado de cada monomio; para la simetría compara $a_{ij}$ con $a_{ji}$.
+  senal: |-
+    «¿Define una forma cuadrática?», «¿cuál NO es forma cuadrática?», «escribe una forma cuadrática…», o preguntas teóricas sobre bilineales simétricas o antisimétricas.
+  pasos:
+  - |-
+    Mira cada sumando: ¿es de grado exactamente 2? Un término de grado 0, 1 o $\ge3$, o una función no polinómica, lo impide.
+  - |-
+    Si todos son de grado 2 (cuadrados o cruzados), sí es forma cuadrática: la matriz simétrica se obtiene partiendo los cruzados.
+  - |-
+    Para una bilineal, mira si el coeficiente de $x_iy_j$ coincide con el de $x_jy_i$ (simétrica) o es su opuesto (antisimétrica; entonces $a_{ii}=0$).
+  - |-
+    Justifica citando el monomio que falla o la propiedad usada.
+  ejemplo: |-
+    $x_1^2+x_2x_3-x_1x_2$ sí es forma cuadrática; $x_2^2+x_1$ no, porque $x_1$ es de grado 1.
+  fallos: |-
+    Rechazar un polinomio por tener productos cruzados · aceptarlo por tener un cuadrado aunque haya un término de grado 1 · olvidar que una antisimétrica no genera forma cuadrática.
+- id: prop
+  nombre: |-
+    Propiedades de $Q$ (escalar, suma, polarización)
+  receta: |-
+    Aplica $Q(\lambda x)=\lambda^2Q(x)$, $Q(x+y)=Q(x)+Q(y)+2f(x,y)$ y despeja $f$.
+  senal: |-
+    Dan $Q$ en un vector y piden $Q$ en un múltiplo; o dan $Q(e_i)$ y $Q(e_i+e_j)$; o piden decidir qué fórmulas son ciertas para $Q$ generada por una $f$ simétrica.
+  pasos:
+  - |-
+    Si el vector pedido es $\lambda x$, aplica $Q(\lambda x)=\lambda^2Q(x)$ (justifícalo con $f(\lambda x,\lambda x)=\lambda^2f(x,x)$).
+  - |-
+    Si aparece una suma $x+y$, desarróllala con la bilinealidad: $f(x+y,x+y)$ da cuatro términos y $f(y,x)=f(x,y)$.
+  - |-
+    Para recuperar $f$ o los $a_{ij}$ usa la polarización $f(x,y)=\tfrac12[Q(x+y)-Q(x)-Q(y)]$.
+  ejemplo: |-
+    Si $Q(1,2)=5$, entonces $Q(3,6)=Q(3\cdot(1,2))=9\cdot5=45$ (no $15$).
+  fallos: |-
+    Creer que $Q$ es lineal ($Q(2x)=2Q(x)$) · olvidar el término $2f(x,y)$ en $Q(x+y)$ · escribir $f(x)$ en lugar de $f(x,x)$.
+- id: rango
+  nombre: |-
+    Rango de $Q$ (con parámetro)
+  receta: |-
+    Matriz simétrica, determinante y, donde se anule, un menor no nulo del mayor orden posible.
+  senal: |-
+    «Halle el rango de $Q$» o «estudie el rango en función de $a$».
+  pasos:
+  - |-
+    Escribe la matriz simétrica $A$ de $Q$ (partiendo los cruzados).
+  - |-
+    Calcula $\det A$. Para los valores de $a$ con $\det A\neq0$ el rango es el orden de la matriz.
+  - |-
+    Para cada valor que anula $\det A$, sustituye y halla el rango exhibiendo un menor no nulo (o por Gauss).
+  - |-
+    Resume por casos, sin olvidar valores especiales como $a=0$.
+  ejemplo: |-
+    $Q=x_1^2+2ax_1x_2+x_2^2$: $A=\begin{pmatrix}1&a\\a&1\end{pmatrix}$, $\det A=1-a^2$. Rango 2 si $a\neq\pm1$ y rango 1 si $a=\pm1$ (la matriz no es nula).
+  fallos: |-
+    Concluir «rango $n-1$» solo porque $\det A=0$ · olvidar una raíz (por ejemplo la negativa de $a^2=36$) · no estudiar los valores especiales del parámetro.
+- id: cambio
+  nombre: |-
+    Cambio de base en una forma cuadrática
+  receta: |-
+    Forma $P$ con los vectores de la base nueva por columnas y calcula $A'=P^tAP$.
+  senal: |-
+    Dan $Q$ (o su matriz) en una base $B$ y la relación con otra base $B'$; piden la expresión de $Q$ en $B'$.
+  pasos:
+  - |-
+    Escribe $P$: sus columnas son los vectores de $B'$ en coordenadas de $B$ (así $X=PX'$).
+  - |-
+    Calcula $A'=P^tAP$ (no $P^{-1}AP$). Sale otra matriz simétrica.
+  - |-
+    La expresión analítica es $Q=X'^tA'X'$ desarrollada; comprueba con un vector.
+  ejemplo: |-
+    $A=\begin{pmatrix}1&1\\1&2\end{pmatrix}$, $B'=\{(1,0),(-1,1)\}$: $P=\begin{pmatrix}1&-1\\0&1\end{pmatrix}$ y $P^tAP=\begin{pmatrix}1&0\\0&1\end{pmatrix}$, es decir, $Q=y_1^2+y_2^2$.
+  fallos: |-
+    Usar $P^{-1}AP$ (semejanza) · poner los vectores de $B'$ en filas de $P$ · esperar $\det A'=\det A$ (en realidad es $\det A\,(\det P)^2$).
+quiz:
+- p: |-
+    ¿Qué entrada $a_{12}$ tiene la matriz simétrica de $Q=x_1^2-4x_1x_2+x_2^2$?
+  opciones:
+  - t: |-
+      $-4$
+    ok: false
+    why: |-
+      Has puesto el coeficiente entero: así $X^tAX$ daría $-8x_1x_2$. El cruzado se reparte entre $a_{12}$ y $a_{21}$.
+  - t: |-
+      $-2$
+    ok: true
+  - t: |-
+      $2$
+    ok: false
+    why: |-
+      Has dividido bien entre 2 pero perdido el signo.
+  - t: |-
+      $-1$
+    ok: false
+    why: |-
+      Has dividido entre 4; solo hay que partir entre 2.
+  fb: |-
+    $a_{12}=a_{21}=-4/2=-2$, y $A=\begin{pmatrix}1&-2\\-2&1\end{pmatrix}$ da $x_1^2-4x_1x_2+x_2^2$.
+- p: |-
+    Si $Q$ es forma cuadrática y $Q(1,2)=5$, ¿cuánto vale $Q(3,6)$?
+  opciones:
+  - t: |-
+      $15$
+    ok: false
+    why: |-
+      Has tratado $Q$ como lineal. Al multiplicar el vector por 3, $Q$ se multiplica por $3^2$.
+  - t: |-
+      $25$
+    ok: false
+    why: |-
+      Has elevado al cuadrado el valor $5$ en vez del factor $3$.
+  - t: |-
+      $45$
+    ok: true
+  fb: |-
+    $(3,6)=3\cdot(1,2)$ y $Q(3x)=9Q(x)=45$.
+- p: |-
+    ¿Cuál de estas aplicaciones de $\mathbb R^3$ es una forma cuadrática?
+  opciones:
+  - t: |-
+      $x_1x_2+x_3^2$
+    ok: true
+  - t: |-
+      $x_1^2+x_2$
+    ok: false
+    why: |-
+      $x_2$ es de grado 1: no es homogénea de grado 2.
+  - t: |-
+      $x_1^2+x_2^2+1$
+    ok: false
+    why: |-
+      El término $1$ es de grado 0.
+  - t: |-
+      $x_1x_2x_3$
+    ok: false
+    why: |-
+      Es de grado 3. Un producto cruzado solo vale si multiplica dos variables.
+  fb: |-
+    Todos los sumandos de $x_1x_2+x_3^2$ son de grado 2. Los demás tienen algún término de grado 0, 1 o 3.
+- p: |-
+    El rango de $Q=x_1^2+2x_1x_2+x_2^2$ es…
+  opciones:
+  - t: |-
+      $1$
+    ok: true
+  - t: |-
+      $2$
+    ok: false
+    why: |-
+      Hay dos variables, pero el rango es el de la matriz $\begin{pmatrix}1&1\\1&1\end{pmatrix}$, cuyo determinante es 0.
+  - t: |-
+      $0$
+    ok: false
+    why: |-
+      La matriz no es nula ($Q\neq0$), luego el rango es al menos 1.
+  fb: |-
+    $\det\begin{pmatrix}1&1\\1&1\end{pmatrix}=0$ y la matriz no es nula, así que el rango es 1 (de hecho $Q=(x_1+x_2)^2$).
+- p: |-
+    $Q(x)=X^tMX$ con $M=\begin{pmatrix}0&2\\0&0\end{pmatrix}$. ¿Cuál es la matriz de $Q$?
+  opciones:
+  - t: |-
+      $M$
+    ok: false
+    why: |-
+      $M$ no es simétrica; la matriz de $Q$ debe serlo.
+  - t: |-
+      $\begin{pmatrix}0&1\\1&0\end{pmatrix}$
+    ok: true
+  - t: |-
+      $\begin{pmatrix}0&2\\2&0\end{pmatrix}$
+    ok: false
+    why: |-
+      Daría $Q=4x_1x_2$; hay que partir el $2$ entre las dos posiciones.
+  fb: |-
+    $Q=2x_1x_2$, y la matriz simétrica es $\tfrac12(M+M^t)=\begin{pmatrix}0&1\\1&0\end{pmatrix}$.
+- p: |-
+    $A=\begin{pmatrix}1&1\\1&2\end{pmatrix}$ ($\det A=1$) y $P=\begin{pmatrix}1&-1\\0&2\end{pmatrix}$ ($\det P=2$). ¿Cuánto vale $\det(P^tAP)$?
+  opciones:
+  - t: |-
+      $1$
+    ok: false
+    why: |-
+      Eso sería si el determinante se conservara; en una congruencia no se conserva.
+  - t: |-
+      $2$
+    ok: false
+    why: |-
+      Solo has multiplicado por $\det P$ una vez; $P$ aparece dos veces ($P^t$ y $P$).
+  - t: |-
+      $4$
+    ok: true
+  fb: |-
+    $\det(P^tAP)=\det A\cdot(\det P)^2=1\cdot4=4$. Solo se conservan el rango, la simetría y el signo del determinante.
+capa: true
+que_cae_nota: |-
+  En el examen casi siempre se pide: la matriz de $Q$ a partir de su polinomio, usar $Q(\lambda x)=\lambda^2Q(x)$, o el rango con un parámetro.

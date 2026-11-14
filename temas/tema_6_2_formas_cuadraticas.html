@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/6_2/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,10 +8,12 @@
 <title>Álgebra · 6.2 Formas cuadráticas</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
 <script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -37,10 +39,43 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Una forma cuadrática es una forma bilineal simétrica con el mismo vector en las dos entradas. Esto es lo que debes llevarte del tema.</p>
+  <ol>
+    <li><b>$Q(x)=f(x,x)=X^tAX$</b> con $A$ <b>simétrica</b>; $Q(x)$ es un <b>escalar</b> y en coordenadas es un polinomio homogéneo de grado 2 (todos los sumandos de grado exactamente 2).</li>
+    <li><b>Del polinomio a la matriz:</b> el coeficiente de $x_i^2$ va a $a_{ii}$ y el de $x_ix_j$ se <b>parte por la mitad</b> en $a_{ij}$ y $a_{ji}$. Comprueba siempre con $X^tAX$.</li>
+    <li><b>$Q$ no es lineal:</b> $Q(\lambda x)=\lambda^2Q(x)$ y $Q(x+y)=Q(x)+Q(y)+2f(x,y)$. De aquí sale la polarización $f(x,y)=\tfrac12[Q(x+y)-Q(x)-Q(y)]$.</li>
+    <li><b>Cambio de base:</b> $A'=P^tAP$ (congruencia, no $P^{-1}AP$), con los vectores de $B'$ en <b>columnas</b> de $P$. El rango de $Q$ es el de su matriz y no cambia con la base.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>15 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 8 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 5 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>Del polinomio a la matriz (y evaluar) <small>(4 de 15)</small></td><td>Cuadrados a la diagonal; cada coeficiente cruzado, partido por la mitad en $(i,j)$ y $(j,i)$.</td>
+      <td><a href="#ej6-13">6.13</a> · <a href="#ej6-14">6.14</a> · <a href="#ej6-16">6.16</a></td>
+      <td><a href="#ex-ene20a-6">Ene. 20 A ej. 6</a> · <a href="#ex-sep23-6">Sept. 23 preg. 6</a> · <a href="#ex-feb25b-8">Feb. 25 (2.ª) p. 8, 1.er apartado</a> · <a href="#ex-sep25-8">Sept. 25 p. 8, 1.er apartado</a></td></tr>
+    <tr><td>¿Es forma cuadrática? ¿Simétrica o antisimétrica? <small>(4 de 15)</small></td><td>Revisa el grado de cada monomio; para la simetría compara $a_{ij}$ con $a_{ji}$.</td>
+      <td><a href="#ej6-9">6.9</a> · <a href="#ej6-12">6.12</a> · <a href="#ej6-13">6.13</a></td>
+      <td><a href="#ex-feb17a2-6">Feb. 17 A2 (2.ª) ej. 6</a> · <a href="#ex-feb18a-6">Feb. 18 A ej. 6</a> · <a href="#ex-sep22-6">Sept. 22 ej. 6</a> · <a href="#ex-feb24b-6">Feb. 24 (2.ª) preg. 6</a></td></tr>
+    <tr><td>Propiedades de $Q$ (escalar, suma, polarización) <small>(3 de 15)</small></td><td>Aplica $Q(\lambda x)=\lambda^2Q(x)$, $Q(x+y)=Q(x)+Q(y)+2f(x,y)$ y despeja $f$.</td>
+      <td><a href="#ej6-10">6.10</a> · <a href="#ej6-11">6.11</a> · <a href="#ej6-14">6.14</a></td>
+      <td><a href="#ex-feb18b-6">Feb. 18 B ej. 6</a> · <a href="#ex-feb23a-6">Feb. 23 (1.ª) preg. 6</a> · <a href="#ex-feb25a-6">Feb. 25 (1.ª) preg. 6</a></td></tr>
+    <tr><td>Rango de $Q$ (con parámetro) <small>(4 de 15)</small></td><td>Matriz simétrica, determinante y, donde se anule, un menor no nulo del mayor orden posible.</td>
+      <td><a href="#ej6-16">6.16</a></td>
+      <td><a href="#ex-sep19a-6">Sept. 19 A ej. 6</a> · <a href="#ex-feb23b-6">Feb. 23 (2.ª) preg. 6</a> · <a href="#ex-sep24-6">Sept. 24 preg. 6</a> · <a href="#ex-feb25a-5">Feb. 25 (1.ª) preg. 5</a></td></tr>
+    <tr><td>Cambio de base en una forma cuadrática <small>(0 de 15)</small></td><td>Forma $P$ con los vectores de la base nueva por columnas y calcula $A'=P^tAP$.</td>
+      <td><a href="#ej6-15">6.15</a></td>
+      <td>—</td></tr>
+  </table>
+  <p><small>En el examen casi siempre se pide: la matriz de $Q$ a partir de su polinomio, usar $Q(\lambda x)=\lambda^2Q(x)$, o el rango con un parámetro.</small></p>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §6.2.1 Introducción, orientaciones y objetivos, p. 251">U p.251</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §6.2.1 Introducción, orientaciones y objetivos, p. 251">U p.251</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>En el tema 6.1 una forma bilineal tomaba <b>dos</b> vectores y daba un número. Si pones <b>el mismo vector</b> en las dos entradas, $x\mapsto f(x,x)$, ya no hay dos vectores: hay una función de <b>un</b> vector que da un número, y en coordenadas es un polinomio como $x_1^2+4x_1x_2+3x_2^2$ (todos los términos de grado 2: «cuadráticos»). Eso es una forma cuadrática. Para que la matriz que la describe sea <b>única</b> hay que exigir que sea <b>simétrica</b>: primero se estudian las bilineales simétricas y antisimétricas, después las cuadráticas.</p>
@@ -85,7 +120,7 @@
 </div>
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>Formas bilineales simétricas y antisimétricas <span class="src" data-l="U" data-ref="U §6.2.1, Definiciones 6.5-6.6, Ejemplos 6.9-6.14, p. 252-255">U p.252-255</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>Formas bilineales simétricas y antisimétricas <span class="src" data-l="U" data-ref="U §6.2.1, Definiciones 6.5-6.6, Ejemplos 6.9-6.14, p. 252-255">U p.252-255</span></h2>
 
 <div class="box intu"><span class="h">Idea: ¿importa el orden de los dos vectores?</span>
   <p>Con una forma bilineal $f(x,y)$ siempre te puedes preguntar si $f(y,x)$ da lo mismo. En el <b>producto escalar</b> sí: $x\cdot y=y\cdot x$ (<b>simétrica</b>). En el <b>área con signo</b> del paralelogramo, $\det(x,y)=x_1y_2-x_2y_1$, al intercambiar los vectores se invierte el sentido y cambia el signo: $\det(y,x)=-\det(x,y)$ (<b>antisimétrica</b>). Y la mayoría de las formas no son ni una cosa ni la otra. Lo bueno es que se reconoce con la tabla de coeficientes: miras si $a_{ij}=a_{ji}$.</p>
@@ -135,7 +170,7 @@
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>Forma cuadrática: $Q(x)=f(x,x)=X^tAX$ <span class="src" data-l="U" data-ref="U §6.2.2, Definiciones 6.7-6.8, Ejemplo 6.15, p. 256; Ejemplos 6.17-6.18, p. 257-258">U p.256-258</span> <span class="src" data-l="L" data-ref="Lay §7.2, Formas cuadráticas, definición y Ejemplo 1, p. 401">L p.401</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>Forma cuadrática: $Q(x)=f(x,x)=X^tAX$ <span class="src" data-l="U" data-ref="U §6.2.2, Definiciones 6.7-6.8, Ejemplo 6.15, p. 256; Ejemplos 6.17-6.18, p. 257-258">U p.256-258</span> <span class="src" data-l="L" data-ref="Lay §7.2, Formas cuadráticas, definición y Ejemplo 1, p. 401">L p.401</span></h2>
 
 <div class="box intu"><span class="h">Idea: el mismo vector en las dos ranuras</span>
   <p>Cuando en $f(x,y)=\sum a_{ij}x_iy_j$ haces $y=x$ cada monomio $x_iy_j$ se convierte en $x_ix_j$ y queda un <b>polinomio homogéneo de grado 2</b>: la suma de los cuadrados $a_{ii}x_i^2$ y de los productos cruzados $x_ix_j$. Ejemplos de la vida real que son formas cuadráticas: $\|x\|^2=x_1^2+x_2^2$ (la longitud al cuadrado), la <b>energía cinética</b> $\tfrac12mv^2$, el <b>área</b> de un cuadrado de lado $x$. Si duplicas el vector, el valor se multiplica por <b>4</b>, no por 2: «cuadrática».</p>
@@ -183,7 +218,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>Del polinomio a la matriz simétrica (y al revés) <span class="src" data-l="U" data-ref="U §6.2.2, «Para obtener la matriz A (simétrica)… se desdoblan los términos rectangulares», Ejemplo 6.16, p. 257">U p.257</span> <span class="src" data-l="L" data-ref="Lay §7.2, Ejemplo 2, p. 401">L p.401</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>Del polinomio a la matriz simétrica (y al revés) <span class="src" data-l="U" data-ref="U §6.2.2, «Para obtener la matriz A (simétrica)… se desdoblan los términos rectangulares», Ejemplo 6.16, p. 257">U p.257</span> <span class="src" data-l="L" data-ref="Lay §7.2, Ejemplo 2, p. 401">L p.401</span></h2>
 
 <div class="box intu"><span class="h">Idea: el término cruzado se parte por la mitad</span>
   <p><i>Vocabulario:</i> los productos cruzados $x_ix_j$ ($i\neq j$), por oposición a los cuadrados $x_i^2$.</p>
@@ -233,7 +268,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Propiedades de $Q$: homogeneidad, suma y polarización <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.10 p. 210, Ej. 6.11 p. 211, Ej. 6.14 p. 213">E p.210-213</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Propiedades de $Q$: homogeneidad, suma y polarización <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.10 p. 210, Ej. 6.11 p. 211, Ej. 6.14 p. 213">E p.210-213</span></h2>
 
 <div class="box intu"><span class="h">Idea: $Q$ no es lineal</span>
   <p>Una función lineal cumple $g(2x)=2g(x)$ y $g(x+y)=g(x)+g(y)$. La forma cuadrática <b>no</b>: es como $(a+b)^2\neq a^2+b^2$. Escalar el vector multiplica $Q$ por el <b>cuadrado</b> del escalar, y sumar vectores añade un <b>término cruzado</b> $2f(x,y)$.</p>
@@ -257,7 +292,7 @@
 </div>
 
 <!-- ============================ 5 ============================ -->
-<h2 id="s5"><span class="n">5</span>Cambio de base y rango de $Q$ <span class="src" data-l="U" data-ref="U Def. 6.8 y observación sobre la dependencia de la base, p. 256-257; Definición 6.9 (rango), p. 258; Teorema 6.1, p. 249">U p.256-258</span> <span class="src" data-l="L" data-ref="Lay §7.2, «Cambio de variable en una forma cuadrática», x = Py, nueva matriz PᵀAP, p. 402">L p.402</span></h2>
+<h2 id="s5" data-vista="teoria"><span class="n">5</span>Cambio de base y rango de $Q$ <span class="src" data-l="U" data-ref="U Def. 6.8 y observación sobre la dependencia de la base, p. 256-257; Definición 6.9 (rango), p. 258; Teorema 6.1, p. 249">U p.256-258</span> <span class="src" data-l="L" data-ref="Lay §7.2, «Cambio de variable en una forma cuadrática», x = Py, nueva matriz PᵀAP, p. 402">L p.402</span></h2>
 
 <div class="box intu"><span class="h">Idea: la misma función, otra libreta</span>
   <p>El número $Q(x)$ es una propiedad del vector $x$, no de la base. Lo que cambia con la base es la <b>escritura</b> (el polinomio y la matriz). Es lo mismo que en 6.1: si $X=PX'$ (coordenadas viejas en función de las nuevas) entonces
@@ -287,15 +322,88 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 </div>
 
 <!-- ============================ 6 ============================ -->
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 6.2»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-poli">
+  <h3>Tipo 1 — Del polinomio a la matriz (y evaluar)</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> Te dan un polinomio y piden «la matriz asociada», o te dan la matriz (o una $M$ cualquiera, o valores $Q(e_i)$, $Q(e_i+e_j)$) y piden el polinomio o un valor $Q(x)$.</p>
+  <ol class="pasos">
+    <li>Pon el coeficiente de cada $x_i^2$ en la posición $(i,i)$.</li>
+    <li>Para cada $x_ix_j$ con $i\ne j$ divide su coeficiente entre 2 y colócalo en $(i,j)$ y $(j,i)$; lo que no aparece es 0.</li>
+    <li>Si te dan una $M$ no simétrica, la matriz de $Q$ es $\tfrac12(M+M^t)$; si te dan $Q(e_i)$ y $Q(e_i+e_j)$, usa $a_{ii}=Q(e_i)$ y $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</li>
+    <li>Comprueba calculando $X^tAX$ o evaluando en un vector concreto.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $Q=x_1^2+6x_1x_2-4x_2^2$ da $A=\begin{pmatrix}1&3\\3&-4\end{pmatrix}$. Comprobación en $(1,1)$: $1+6-4=3$ y la suma de las entradas de $A$ es $1+3+3-4=3$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Poner el coeficiente cruzado entero en $a_{12}$ y $a_{21}$ (da el doble) · olvidar las fracciones cuando el coeficiente es impar · confundir $X^tAX$ (escalar) con $AX$ (vector).</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-13">6.13</a> · <a href="#ej6-14">6.14</a> · <a href="#ej6-16">6.16</a> · <a href="#ej-propio-1">Propio P1</a> · <a href="#ej-propio-2">Propio P2</a> · <a href="#ej-propio-3">Propio P3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep19a-6">Sept. 19 A ej. 6</a> · <a href="#ex-ene20a-6">Ene. 20 A ej. 6</a> · <a href="#ex-sep23-6">Sept. 23 preg. 6</a> · <a href="#ex-feb25b-8">Feb. 25 (2.ª) p. 8, 1.er apartado</a> · <a href="#ex-sep25-8">Sept. 25 p. 8, 1.er apartado</a></p>
+</section>
+
+<section class="ficha" id="tipo-esq">
+  <h3>Tipo 2 — ¿Es forma cuadrática? ¿Simétrica o antisimétrica?</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «¿Define una forma cuadrática?», «¿cuál NO es forma cuadrática?», «escribe una forma cuadrática…», o preguntas teóricas sobre bilineales simétricas o antisimétricas.</p>
+  <ol class="pasos">
+    <li>Mira cada sumando: ¿es de grado exactamente 2? Un término de grado 0, 1 o $\ge3$, o una función no polinómica, lo impide.</li>
+    <li>Si todos son de grado 2 (cuadrados o cruzados), sí es forma cuadrática: la matriz simétrica se obtiene partiendo los cruzados.</li>
+    <li>Para una bilineal, mira si el coeficiente de $x_iy_j$ coincide con el de $x_jy_i$ (simétrica) o es su opuesto (antisimétrica; entonces $a_{ii}=0$).</li>
+    <li>Justifica citando el monomio que falla o la propiedad usada.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $x_1^2+x_2x_3-x_1x_2$ sí es forma cuadrática; $x_2^2+x_1$ no, porque $x_1$ es de grado 1.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Rechazar un polinomio por tener productos cruzados · aceptarlo por tener un cuadrado aunque haya un término de grado 1 · olvidar que una antisimétrica no genera forma cuadrática.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-9">6.9</a> · <a href="#ej6-12">6.12</a> · <a href="#ej6-13">6.13</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb17a2-6">Feb. 17 A2 (2.ª) ej. 6</a> · <a href="#ex-feb18a-6">Feb. 18 A ej. 6</a> · <a href="#ex-sep22-6">Sept. 22 ej. 6</a> · <a href="#ex-feb24b-6">Feb. 24 (2.ª) preg. 6</a></p>
+</section>
+
+<section class="ficha" id="tipo-prop">
+  <h3>Tipo 3 — Propiedades de $Q$ (escalar, suma, polarización)</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> Dan $Q$ en un vector y piden $Q$ en un múltiplo; o dan $Q(e_i)$ y $Q(e_i+e_j)$; o piden decidir qué fórmulas son ciertas para $Q$ generada por una $f$ simétrica.</p>
+  <ol class="pasos">
+    <li>Si el vector pedido es $\lambda x$, aplica $Q(\lambda x)=\lambda^2Q(x)$ (justifícalo con $f(\lambda x,\lambda x)=\lambda^2f(x,x)$).</li>
+    <li>Si aparece una suma $x+y$, desarróllala con la bilinealidad: $f(x+y,x+y)$ da cuatro términos y $f(y,x)=f(x,y)$.</li>
+    <li>Para recuperar $f$ o los $a_{ij}$ usa la polarización $f(x,y)=\tfrac12[Q(x+y)-Q(x)-Q(y)]$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> Si $Q(1,2)=5$, entonces $Q(3,6)=Q(3\cdot(1,2))=9\cdot5=45$ (no $15$).</div>
+  <p class="fallos"><b>Dónde se falla:</b> Creer que $Q$ es lineal ($Q(2x)=2Q(x)$) · olvidar el término $2f(x,y)$ en $Q(x+y)$ · escribir $f(x)$ en lugar de $f(x,x)$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-10">6.10</a> · <a href="#ej6-11">6.11</a> · <a href="#ej6-14">6.14</a> · <a href="#ej-propio-3">Propio P3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18b-6">Feb. 18 B ej. 6</a> · <a href="#ex-feb23a-6">Feb. 23 (1.ª) preg. 6</a> · <a href="#ex-feb25a-6">Feb. 25 (1.ª) preg. 6</a></p>
+</section>
+
+<section class="ficha" id="tipo-rango">
+  <h3>Tipo 4 — Rango de $Q$ (con parámetro)</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «Halle el rango de $Q$» o «estudie el rango en función de $a$».</p>
+  <ol class="pasos">
+    <li>Escribe la matriz simétrica $A$ de $Q$ (partiendo los cruzados).</li>
+    <li>Calcula $\det A$. Para los valores de $a$ con $\det A\neq0$ el rango es el orden de la matriz.</li>
+    <li>Para cada valor que anula $\det A$, sustituye y halla el rango exhibiendo un menor no nulo (o por Gauss).</li>
+    <li>Resume por casos, sin olvidar valores especiales como $a=0$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $Q=x_1^2+2ax_1x_2+x_2^2$: $A=\begin{pmatrix}1&a\\a&1\end{pmatrix}$, $\det A=1-a^2$. Rango 2 si $a\neq\pm1$ y rango 1 si $a=\pm1$ (la matriz no es nula).</div>
+  <p class="fallos"><b>Dónde se falla:</b> Concluir «rango $n-1$» solo porque $\det A=0$ · olvidar una raíz (por ejemplo la negativa de $a^2=36$) · no estudiar los valores especiales del parámetro.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-16">6.16</a> · <a href="#ej-propio-1">Propio P1</a> · <a href="#ej-propio-4">Propio P4</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep19a-6">Sept. 19 A ej. 6</a> · <a href="#ex-feb23b-6">Feb. 23 (2.ª) preg. 6</a> · <a href="#ex-sep24-6">Sept. 24 preg. 6</a> · <a href="#ex-feb25a-5">Feb. 25 (1.ª) preg. 5</a></p>
+</section>
+
+<section class="ficha" id="tipo-cambio">
+  <h3>Tipo 5 — Cambio de base en una forma cuadrática</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> Dan $Q$ (o su matriz) en una base $B$ y la relación con otra base $B'$; piden la expresión de $Q$ en $B'$.</p>
+  <ol class="pasos">
+    <li>Escribe $P$: sus columnas son los vectores de $B'$ en coordenadas de $B$ (así $X=PX'$).</li>
+    <li>Calcula $A'=P^tAP$ (no $P^{-1}AP$). Sale otra matriz simétrica.</li>
+    <li>La expresión analítica es $Q=X'^tA'X'$ desarrollada; comprueba con un vector.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}1&1\\1&2\end{pmatrix}$, $B'=\{(1,0),(-1,1)\}$: $P=\begin{pmatrix}1&-1\\0&1\end{pmatrix}$ y $P^tAP=\begin{pmatrix}1&0\\0&1\end{pmatrix}$, es decir, $Q=y_1^2+y_2^2$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> Usar $P^{-1}AP$ (semejanza) · poner los vectores de $B'$ en filas de $P$ · esperar $\det A'=\det A$ (en realidad es $\det A\,(\det P)^2$).</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej6-15">6.15</a> · <a href="#ej-propio-5">Propio P5</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
 <!-- ============================ 7 ============================ -->
-<h2 id="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §6.2, Ej. 6.9-6.16, p. 210-214">E p.210-214</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">7</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra para Ingenieros, §6.2, Ej. 6.9-6.16, p. 210-214">E p.210-214</span></h2>
 
 <p>La sección 6.2 de E empieza en la p.209 y tiene los ejercicios <b>6.9 a 6.16</b>. Los E 6.4 y 6.7 (que usan simetría y $Q(x)=f(x,x)$) están resueltos en el <a href="tema_6_1_formas_bilineales.html#ejercicios">tema 6.1</a> por su posición en el libro. Aquí se agrupan por método.</p>
 
 <h3 id="bloqueI">Bloque I — ¿Es forma cuadrática? (E 6.9, 6.12)</h3>
 
-<details class="sol" id="ej6-9"><summary>Ejercicio 6.9 — la imagen de $x$ por $Q$: ¿vector o escalar? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.9, p. 210">E p.210</span></summary>
-  <p class="enun">Si $Q(x)=X^tAX$ es la expresión analítica de una forma cuadrática, la imagen del vector $x\in\mathbb R^n$ es: A) Un vector de $\mathbb R^n$. B) Un escalar.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $Q(x)=X^tAX$ es la expresión analítica de una forma cuadrática, la imagen del vector $x\in\mathbb R^n$ es: A) Un vector de $\mathbb R^n$. B) Un escalar.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Fíjate en cómo está escrito $X^tAX$: una fila por una matriz por una columna. ¿Qué tamaño tiene el resultado?</p></details>
+<details class="sol" id="ej6-9"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 6.9 — la imagen de $x$ por $Q$: ¿vector o escalar? <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.9, p. 210">E p.210</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Decidir si $Q(x)$ es un vector o un escalar.</dd>
     <dt>Qué se usa</dt><dd><b>Forma cuadrática (Def. 6.4, U p.251):</b> $Q(x)=f(x,x)=X^tAX$ con $f$ bilineal simétrica y $A$ <b>simétrica</b>. Es un polinomio <i>homogéneo de grado 2</i>: sin términos de grado 1, grado 3 ni constantes. Su valor es un escalar.</dd>
@@ -309,8 +417,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <p><b>Error típico:</b> confundir $Q(x)=X^tAX$ (escalar) con $AX$ (vector).</p>
 </details>
 
-<details class="sol" id="ej6-12"><summary>Ejercicio 6.12 — decidir si son formas cuadráticas $x_1^2-x_1x_2x_3$, $x_2^2+x_1$, $x_1^2+x_2^2+x_3^2-x_1x_2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.12, p. 211">E p.211</span></summary>
-  <p class="enun">Decídase si las siguientes aplicaciones son formas cuadráticas: A) $Q(x_1,x_2,x_3)=x_1^2-x_1x_2x_3$. B) $Q(x_1,x_2,x_3)=x_2^2+x_1$. C) $Q(x_1,x_2,x_3)=x_1^2+x_2^2+x_3^2-x_1x_2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Decídase si las siguientes aplicaciones son formas cuadráticas: A) $Q(x_1,x_2,x_3)=x_1^2-x_1x_2x_3$. B) $Q(x_1,x_2,x_3)=x_2^2+x_1$. C) $Q(x_1,x_2,x_3)=x_1^2+x_2^2+x_3^2-x_1x_2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Mira el grado de cada monomio, uno a uno. Una forma cuadrática solo admite sumandos de grado exactamente 2 (cuadrados o productos de dos variables).</p></details>
+<details class="sol" id="ej6-12"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 6.12 — decidir si son formas cuadráticas $x_1^2-x_1x_2x_3$, $x_2^2+x_1$, $x_1^2+x_2^2+x_3^2-x_1x_2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.12, p. 211">E p.211</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir cuáles de tres expresiones son formas cuadráticas.</dd>
     <dt>Cómo lo pienso</dt><dd>Una forma cuadrática es un polinomio <b>homogéneo de grado 2</b>. Busco términos de otro grado: un término cúbico o uno lineal la descarta.</dd>
@@ -331,8 +440,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="bloqueII">Bloque II — Homogeneidad y desarrollo de $Q(x+y)$ (E 6.10, 6.11)</h3>
 
-<details class="sol" id="ej6-10"><summary>Ejercicio 6.10 — $Q(2x)$, $f(x_1,x_2,x_3)$ y $Q(x)+Q(x)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.10, p. 210">E p.210</span></summary>
-  <p class="enun">Sea $Q$ una forma cuadrática definida en $\mathbb R^3$ asociada a la forma bilineal simétrica $f:\mathbb R^3\times\mathbb R^3\to\mathbb R$ y $x=(x_1,x_2,x_3)\in\mathbb R^3$. Entonces: A) $Q(x_1,x_2,x_3)=f(x_1,x_2,x_3)$. B) $Q(2x)=2f(x,x)$. C) $Q(x)+Q(x)=Q(2x)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q$ una forma cuadrática definida en $\mathbb R^3$ asociada a la forma bilineal simétrica $f:\mathbb R^3\times\mathbb R^3\to\mathbb R$ y $x=(x_1,x_2,x_3)\in\mathbb R^3$. Entonces: A) $Q(x_1,x_2,x_3)=f(x_1,x_2,x_3)$. B) $Q(2x)=2f(x,x)$. C) $Q(x)+Q(x)=Q(2x)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Recuerda que $Q(x)=f(x,x)$: el vector entra dos veces. Aplica la bilinealidad para sacar el escalar de cada ranura y compara con cada afirmación.</p></details>
+<details class="sol" id="ej6-10"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.10 — $Q(2x)$, $f(x_1,x_2,x_3)$ y $Q(x)+Q(x)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.10, p. 210">E p.210</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Contrastar tres igualdades entre $Q$ y la bilineal asociada.</dd>
     <dt>Cómo lo pienso</dt><dd>$Q(x)=f(x,x)$ es un número, no un vector; y $Q(2x)=4Q(x)$ por ser homogénea de grado 2.</dd>
@@ -348,8 +458,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <p><b>Error típico:</b> tratar $Q$ como lineal: $Q(2x)=2Q(x)$.</p>
 </details>
 
-<details class="sol" id="ej6-11"><summary>Ejercicio 6.11 — $Q(x+y)=Q(x)+Q(y)+2f(x,y)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.11, p. 211">E p.211</span></summary>
-  <p class="enun">Si $Q$ es la forma cuadrática generada por la aplicación bilineal simétrica $f$, se cumple: A) La forma cuadrática asociada a la forma bilineal $g$ definida por $g(x,y)=f(y,x)$ no es $Q$. B) $Q(x+y)=Q(x)+Q(y)+2f(x,y)$. C) $Q(x+y)=f(x,x)+f(y,y)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $Q$ es la forma cuadrática generada por la aplicación bilineal simétrica $f$, se cumple: A) La forma cuadrática asociada a la forma bilineal $g$ definida por $g(x,y)=f(y,x)$ no es $Q$. B) $Q(x+y)=Q(x)+Q(y)+2f(x,y)$. C) $Q(x+y)=f(x,x)+f(y,y)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Desarrolla $f(x+y,x+y)$ usando la linealidad en cada variable y reconoce los cuatro términos; ¿qué pasa con $f(y,x)$ si $f$ es simétrica?</p></details>
+<details class="sol" id="ej6-11"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.11 — $Q(x+y)=Q(x)+Q(y)+2f(x,y)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.11, p. 211">E p.211</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Contrastar fórmulas de $Q(x+y)$.</dd>
     <dt>Cómo lo pienso</dt><dd>Desarrollo $f(x+y,x+y)$ por bilinealidad: aparece un término cruzado que no puede ignorarse.</dd>
@@ -370,8 +481,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="bloqueIII">Bloque III — Del polinomio a la matriz (E 6.13)</h3>
 
-<details class="sol" id="ej6-13"><summary>Ejercicio 6.13 — matriz y expresión de $Q$ a partir de la bilineal; unicidad de la matriz <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.13, p. 212">E p.212</span></summary>
-  <p class="enun">Si $f((x_1,x_2,x_3),(y_1,y_2,y_3))=x_1y_1-x_1y_2-x_2y_1+3x_1y_3+3x_3y_1+x_3y_3$ es la forma bilineal asociada a la forma cuadrática $Q$, se verifica: A) La matriz de $Q$ es única. B) La matriz de $Q$ es simétrica. C) La expresión de $Q$ es un polinomio homogéneo de grado tres.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $f((x_1,x_2,x_3),(y_1,y_2,y_3))=x_1y_1-x_1y_2-x_2y_1+3x_1y_3+3x_3y_1+x_3y_3$ es la forma bilineal asociada a la forma cuadrática $Q$, se verifica: A) La matriz de $Q$ es única. B) La matriz de $Q$ es simétrica. C) La expresión de $Q$ es un polinomio homogéneo de grado tres.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Lee los coeficientes de $x_iy_j$ para escribir la matriz de $f$ y comprueba si es simétrica. Piensa también cuántas matrices distintas pueden dar el mismo polinomio $Q$ y cuál es el grado de $Q$.</p></details>
+<details class="sol" id="ej6-13"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.13 — matriz y expresión de $Q$ a partir de la bilineal; unicidad de la matriz <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.13, p. 212">E p.212</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz y expresión de $Q$ a partir de la bilineal asociada; ¿es única su matriz?</dd>
     <dt>Cómo lo pienso</dt><dd>La forma cuadrática solo ve la parte simétrica: dos matrices distintas pueden dar la misma $Q$. Pero exigiendo que sea simétrica, es única.</dd>
@@ -394,8 +506,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="bloqueIV">Bloque IV — Matriz de $Q$ a partir de sus valores (E 6.14)</h3>
 
-<details class="sol" id="ej6-14"><summary>Ejercicio 6.14 — matriz de $Q$ conocidos $Q(e_i)$ y $Q(e_i+e_j)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.14, p. 213">E p.213</span></summary>
-  <p class="enun">Si $\{e_1,e_2,e_3\}$ es la base canónica de $\mathbb R^3$ y $Q:\mathbb R^3\to\mathbb R$ es una forma cuadrática tal que $Q(e_1)=0$, $Q(e_2)=-2$, $Q(e_3)=3$, $Q(e_1+e_2)=-4$, $Q(e_1+e_3)=6$, $Q(e_2+e_3)=5$, calcúlese la matriz de $Q$ en la base canónica.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $\{e_1,e_2,e_3\}$ es la base canónica de $\mathbb R^3$ y $Q:\mathbb R^3\to\mathbb R$ es una forma cuadrática tal que $Q(e_1)=0$, $Q(e_2)=-2$, $Q(e_3)=3$, $Q(e_1+e_2)=-4$, $Q(e_1+e_3)=6$, $Q(e_2+e_3)=5$, calcúlese la matriz de $Q$ en la base canónica.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$Q(e_i)$ te da directamente los $a_{ii}$. Para los términos fuera de la diagonal usa $Q(e_i+e_j)=a_{ii}+2a_{ij}+a_{jj}$ y despeja $a_{ij}$.</p></details>
+<details class="sol" id="ej6-14"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.14 — matriz de $Q$ conocidos $Q(e_i)$ y $Q(e_i+e_j)$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.14, p. 213">E p.213</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Hallar la matriz de $Q$ conocidos $Q(e_i)$ y $Q(e_i+e_j)$.</dd>
     <dt>Cómo lo pienso</dt><dd>La diagonal es $Q(e_i)$. Para fuera de la diagonal, de $Q(e_i+e_j)=Q(e_i)+Q(e_j)+2a_{ij}$ despejo $a_{ij}$.</dd>
@@ -421,8 +534,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="bloqueV">Bloque V — Cambio de base de una forma cuadrática (E 6.15)</h3>
 
-<details class="sol" id="ej6-15"><summary>Ejercicio 6.15 — expresión de $Q$ en la base $B'$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.15, p. 214">E p.214</span></summary>
-  <p class="enun">Si $B=\{e_1,e_2\}$ y $B'=\{e_1',e_2'\}$ son bases de $\mathbb R^2$ tales que $e_1'=e_1$ y $e_2'=e_1-e_2$, y la matriz de una forma cuadrática $Q$ de $\mathbb R^2$ es $\begin{pmatrix}1&1\\1&1\end{pmatrix}$ en la base $B$, escríbanse las expresiones analítica y matricial de $Q$ en $B'$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $B=\{e_1,e_2\}$ y $B'=\{e_1',e_2'\}$ son bases de $\mathbb R^2$ tales que $e_1'=e_1$ y $e_2'=e_1-e_2$, y la matriz de una forma cuadrática $Q$ de $\mathbb R^2$ es $\begin{pmatrix}1&1\\1&1\end{pmatrix}$ en la base $B$, escríbanse las expresiones analítica y matricial de $Q$ en $B'$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz $P$ cuyas columnas son los vectores de $B'$ en coordenadas de $B$. ¿Cómo se transforma una matriz de forma cuadrática: con $P^{-1}AP$ o con otra combinación?</p></details>
+<details class="sol" id="ej6-15"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.15 — expresión de $Q$ en la base $B'$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.15, p. 214">E p.214</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Expresión de $Q$ en la base $B'$.</dd>
     <dt>Qué se usa</dt><dd><b>Cambio de base:</b> con $P$ de columnas los vectores de $B'$ en $B$, $A'=P^tAP$ (y $Q(x)=X'^tA'X'$).</dd>
@@ -447,8 +561,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="bloqueVI">Bloque VI — Rango de $Q$ (E 6.16)</h3>
 
-<details class="sol" id="ej6-16"><summary>Ejercicio 6.16 — rango de $Q=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$ según $a$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.16, p. 214">E p.214</span></summary>
-  <p class="enun">Sea la forma cuadrática $Q$ de $\mathbb R^3$ definida por $Q(x_1,x_2,x_3)=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$, con $a\neq0$. Estúdiese su rango en función de $a$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea la forma cuadrática $Q$ de $\mathbb R^3$ definida por $Q(x_1,x_2,x_3)=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$, con $a\neq0$. Estúdiese su rango en función de $a$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz simétrica de $Q$ y calcula su determinante. Donde no se anule el rango es máximo; los valores que lo anulan hay que estudiarlos uno a uno con un menor no nulo.</p></details>
+<details class="sol" id="ej6-16"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejercicio 6.16 — rango de $Q=ax_1^2+2ax_1x_2+ax_2^2+(a-1)x_3^2$ según $a$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 6.16, p. 214">E p.214</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Rango de $Q$ según el parámetro $a$.</dd>
     <dt>Cómo lo pienso</dt><dd>El rango es el de la matriz. Los parámetros que lo bajan son los que anulan menores.</dd>
@@ -475,8 +590,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="propios">Ejemplos propios, de fácil a difícil</h3>
 
-<details class="sol" id="ej-propio-1"><summary>Propio P1 — matriz, evaluación y rango de $x_1^2-4x_1x_2+6x_2x_3-3x_3^2$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de U Ej. 6.16 p. 257 y Def. 6.9 p. 258">propio</span></summary>
-  <p class="enun">Para $Q(x_1,x_2,x_3)=x_1^2-4x_1x_2+6x_2x_3-3x_3^2$ halla su matriz, calcula $Q(1,2,0)$ y su rango.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Para $Q(x_1,x_2,x_3)=x_1^2-4x_1x_2+6x_2x_3-3x_3^2$ halla su matriz, calcula $Q(1,2,0)$ y su rango.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Reparte cada coeficiente cruzado a partes iguales entre las posiciones $(i,j)$ y $(j,i)$. Después evalúa con $X^tAX$ y calcula el rango con Gauss o menores.</p></details>
+<details class="sol" id="ej-propio-1"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Propio P1 — matriz, evaluación y rango de $x_1^2-4x_1x_2+6x_2x_3-3x_3^2$ <span class="src" data-l="P" data-ref="Ejemplo propio; método de U Ej. 6.16 p. 257 y Def. 6.9 p. 258">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz, valor y rango de una forma cuadrática.</dd>
     <dt>Cómo lo pienso</dt><dd>Matriz simétrica con mitades en los cruzados. Evalúo en $(1,2,0)$ para comprobar.</dd>
@@ -494,8 +610,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> desdoblar → comprobar con $X^tAX$ → $|A|$ para el rango.</div>
 </details>
 
-<details class="sol" id="ej-propio-2"><summary>Propio P2 — matriz no simétrica: parte simétrica y antisimétrica <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 6.5-6.7 p. 252-256 y E 6.13 p. 212">propio</span></summary>
-  <p class="enun">Sea $f(x,y)=x^tMy$ con $M=\begin{pmatrix}1&4\\0&3\end{pmatrix}$ y $Q(x)=f(x,x)$. Halla la matriz de $Q$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $f(x,y)=x^tMy$ con $M=\begin{pmatrix}1&4\\0&3\end{pmatrix}$ y $Q(x)=f(x,x)$. Halla la matriz de $Q$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$M$ no es simétrica, pero $X^tMX$ solo ve su parte simétrica. ¿Qué combinación de $M$ y $M^t$ te da la matriz simétrica de $Q$?</p></details>
+<details class="sol" id="ej-propio-2"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio P2 — matriz no simétrica: parte simétrica y antisimétrica <span class="src" data-l="P" data-ref="Ejemplo propio; U Def. 6.5-6.7 p. 252-256 y E 6.13 p. 212">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Matriz de $Q$ si la matriz dada no es simétrica.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -513,8 +630,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> matriz de $Q$ = parte simétrica $\tfrac12(M+M^t)$; la antisimétrica no aporta nada.</div>
 </details>
 
-<details class="sol" id="ej-propio-3"><summary>Propio P3 — matriz de $Q$ en $\mathbb R^2$ a partir de tres valores <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.14 p. 213 (polarización)">propio</span></summary>
-  <p class="enun">$Q$ es forma cuadrática de $\mathbb R^2$ con $Q(e_1)=2$, $Q(e_2)=-1$, $Q(e_1+e_2)=3$. Halla su matriz y $Q(3,-1)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$Q$ es forma cuadrática de $\mathbb R^2$ con $Q(e_1)=2$, $Q(e_2)=-1$, $Q(e_1+e_2)=3$. Halla su matriz y $Q(3,-1)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>$Q(e_1)$ y $Q(e_2)$ son los elementos de la diagonal. Para el cruzado usa $Q(e_1+e_2)$ desarrollado como $a_{11}+2a_{12}+a_{22}$.</p></details>
+<details class="sol" id="ej-propio-3"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio P3 — matriz de $Q$ en $\mathbb R^2$ a partir de tres valores <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.14 p. 213 (polarización)">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Matriz de $Q$ a partir de tres valores.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -529,8 +647,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> misma que E 6.14, en $\mathbb R^2$ sólo hay un cruzado.</div>
 </details>
 
-<details class="sol" id="ej-propio-4"><summary>Propio P4 — rango con parámetro y varios casos especiales <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.16 p. 214 y Def. 6.9 p. 258">propio</span></summary>
-  <p class="enun">Estudia el rango de $Q=x_1^2+2ax_1x_2+x_2^2+a\,x_3^2$ según $a$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Estudia el rango de $Q=x_1^2+2ax_1x_2+x_2^2+a\,x_3^2$ según $a$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Matriz simétrica y determinante. Cuando se anula para varios valores de $a$, sustituye cada uno por separado y busca el mayor menor no nulo; ojo con el caso especial $a=0$.</p></details>
+<details class="sol" id="ej-propio-4"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Propio P4 — rango con parámetro y varios casos especiales <span class="src" data-l="P" data-ref="Ejemplo propio; método de E 6.16 p. 214 y Def. 6.9 p. 258">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Rango con parámetro y varios casos especiales.</dd>
     <dt>Cómo lo pienso</dt><dd>Hay un bloque $2\times2$ y un escalar: el rango es la suma de los rangos de los bloques.</dd>
@@ -552,8 +671,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> $|A|$; en cada raíz, sustituir y exhibir un menor no nulo.</div>
 </details>
 
-<details class="sol" id="ej-propio-5"><summary>Propio P5 — un cambio de base que elimina el término cruzado <span class="src" data-l="P" data-ref="Ejemplo propio; U Teorema 6.1 p. 249-250 y Def. 6.8 p. 256">propio</span></summary>
-  <p class="enun">$Q(x_1,x_2)=x_1^2+2x_1x_2+2x_2^2$ en la canónica; $B'=\{(1,0),(-1,1)\}$. Halla $Q$ en $B'$ y comprueba con $x=(2,1)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">$Q(x_1,x_2)=x_1^2+2x_1x_2+2x_2^2$ en la canónica; $B'=\{(1,0),(-1,1)\}$. Halla $Q$ en $B'$ y comprueba con $x=(2,1)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Forma la matriz de paso con los vectores de $B'$ por columnas y calcula $P^tAP$. Comprueba con las coordenadas de $x$ en $B'$ que $Q$ da el mismo número.</p></details>
+<details class="sol" id="ej-propio-5"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio P5 — un cambio de base que elimina el término cruzado <span class="src" data-l="P" data-ref="Ejemplo propio; U Teorema 6.1 p. 249-250 y Def. 6.8 p. 256">propio</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Un cambio de base que elimina el término cruzado.</dd>
     <dt>Cómo lo pienso</dt><dd>Quiero una base donde $Q$ sea suma de cuadrados. Completar cuadrados sugiere la base.</dd>
@@ -575,14 +695,15 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 </details>
 
 <!-- ============================ 8 ============================ -->
-<h2 id="examenes"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">8</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>De los 24 exámenes escaneados (feb. 2017 – feb. 2026 y sept. 2017–2025), <b>13 ejercicios de cuestiones y 2 apartados de problema</b> (Sept. 2025 y Feb. 2025, 2.ª sem.) tienen como contenido principal este tema; casi siempre es la pregunta 6. Se agrupan por método. Los de frontera con <a href="tema_6_3_clasificacion_formas_cuadraticas.html#examenes">6.3</a>, 6.4 y 5.3 están al final en «Para practicar»; los ya tratados en 6.1 (Sept. 2018, Feb. 2022, Feb. 2025 (2.ª), Feb. 2026 (1.ª), Sept. 2023 P5) no se repiten.</p>
 
 <h3 id="metodoA">Método A — ¿Es forma cuadrática? (monomios de grado 2)</h3>
 
-<details class="sol" id="ex-feb17a2-6"><summary>Feb. 2017 (tipo A2, 2.ª semana), ejercicio 6 — ¿cuál NO es forma cuadrática? <span class="src" data-l="X" data-ref="Feb. 2017 (tipo A2, 2.ª semana), ejercicio 6">X Feb. 2017 (A2) ej. 6</span></summary>
-  <p class="enun">NO es una forma cuadrática, la aplicación: A) $Q(x_1,x_2,x_3)=x_1^2-x_1x_2$; B) $Q(x_1,x_2,x_3)=x_1^2-x_2^2+x_3^2-x_1x_2$; C) $Q(x_1,x_2,x_3)=x_2^2-x_1$; D) Ninguna de las anteriores.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">NO es una forma cuadrática, la aplicación: A) $Q(x_1,x_2,x_3)=x_1^2-x_1x_2$; B) $Q(x_1,x_2,x_3)=x_1^2-x_2^2+x_3^2-x_1x_2$; C) $Q(x_1,x_2,x_3)=x_2^2-x_1$; D) Ninguna de las anteriores.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Revisa cada opción buscando algún sumando que no sea de grado 2. Ojo: faltar un cuadrado o una variable no impide ser forma cuadrática.</p></details>
+<details class="sol" id="ex-feb17a2-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2017 (tipo A2, 2.ª semana), ejercicio 6 — ¿cuál NO es forma cuadrática? <span class="src" data-l="X" data-ref="Feb. 2017 (tipo A2, 2.ª semana), ejercicio 6">X Feb. 2017 (A2) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Detectar la aplicación que no es forma cuadrática.</dd>
     <dt>Qué se usa</dt><dd><b>Forma cuadrática (Def. 6.4, U p.251):</b> $Q(x)=f(x,x)=X^tAX$ con $f$ bilineal simétrica y $A$ <b>simétrica</b>. Es un polinomio <i>homogéneo de grado 2</i>: sin términos de grado 1, grado 3 ni constantes. Su valor es un escalar.</dd>
@@ -597,8 +718,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> busca un monomio de grado distinto de 2.</div>
 </details>
 
-<details class="sol" id="ex-feb24b-6"><summary>Feb. 2024 (2.ª semana), pregunta 6 — $Q=2xy-5xz+xyz-x^2$ <span class="src" data-l="X" data-ref="Feb. 2024 (2.ª semana), pregunta 6">X Feb. 2024 (2.ª) P6</span></summary>
-  <p class="enun">Determine de manera razonada si la siguiente aplicación $Q:\mathbb R^3\to\mathbb R$ define o no una forma cuadrática: $Q(x,y,z)=2xy-5xz+xyz-x^2$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Determine de manera razonada si la siguiente aplicación $Q:\mathbb R^3\to\mathbb R$ define o no una forma cuadrática: $Q(x,y,z)=2xy-5xz+xyz-x^2$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Cuenta el grado de cada monomio; si aparece alguno distinto de 2, la respuesta ya está decidida (y hay que decir cuál es).</p></details>
+<details class="sol" id="ex-feb24b-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2024 (2.ª semana), pregunta 6 — $Q=2xy-5xz+xyz-x^2$ <span class="src" data-l="X" data-ref="Feb. 2024 (2.ª semana), pregunta 6">X Feb. 2024 (2.ª) P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Decidir si una expresión define una forma cuadrática.</dd>
     <dt>Qué se usa</dt><dd><b>Forma cuadrática (Def. 6.4, U p.251):</b> $Q(x)=f(x,x)=X^tAX$ con $f$ bilineal simétrica y $A$ <b>simétrica</b>. Es un polinomio <i>homogéneo de grado 2</i>: sin términos de grado 1, grado 3 ni constantes. Su valor es un escalar.</dd>
@@ -613,8 +735,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> grado de cada monomio; si piden «razonar», añade el contraejemplo $Q(\lambda v)\neq\lambda^2Q(v)$.</div>
 </details>
 
-<details class="sol" id="ex-sep22-6"><summary>Sept. 2022, ejercicio 6 — una forma cuadrática de $\mathbb R^2$ que no esté en forma canónica <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 6">X Sept. 2022 ej. 6</span></summary>
-  <p class="enun">Escribir una forma cuadrática de $\mathbb R^2$ que no esté expresada en la forma canónica.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Escribir una forma cuadrática de $\mathbb R^2$ que no esté expresada en la forma canónica.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>«Forma canónica» significa sin términos cruzados. Escribe un polinomio homogéneo de grado 2 que sí tenga un producto $x_1x_2$.</p></details>
+<details class="sol" id="ex-sep22-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Sept. 2022, ejercicio 6 — una forma cuadrática de $\mathbb R^2$ que no esté en forma canónica <span class="src" data-l="X" data-ref="Sept. 2022, ejercicio 6">X Sept. 2022 ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Dar una forma cuadrática no canónica.</dd>
     <dt>Qué se usa</dt><dd><b>Forma cuadrática (Def. 6.4, U p.251):</b> $Q(x)=f(x,x)=X^tAX$ con $f$ bilineal simétrica y $A$ <b>simétrica</b>. Es un polinomio <i>homogéneo de grado 2</i>: sin términos de grado 1, grado 3 ni constantes. Su valor es un escalar.</dd>
@@ -635,8 +758,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="metodoB">Método B — $Q(\lambda v)=\lambda^2Q(v)$</h3>
 
-<details class="sol" id="ex-feb18b-6"><summary>Feb. 2018 (tipo B), ejercicio 6 — $Q(1,2,3)=5\Rightarrow Q(3,6,9)$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicio 6">X Feb. 2018 (B) ej. 6</span></summary>
-  <p class="enun">Si $Q$ es una forma cuadrática de $\mathbb R^3$ tal que $Q(1,2,3)=5$, calcule el valor de $Q(3,6,9)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $Q$ es una forma cuadrática de $\mathbb R^3$ tal que $Q(1,2,3)=5$, calcule el valor de $Q(3,6,9)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Observa cómo se relaciona $(3,6,9)$ con $(1,2,3)$ y aplica la propiedad de $Q$ ante múltiplos de un vector. Recuerda que $Q$ no es lineal.</p></details>
+<details class="sol" id="ex-feb18b-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2018 (tipo B), ejercicio 6 — $Q(1,2,3)=5\Rightarrow Q(3,6,9)$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo B), ejercicio 6">X Feb. 2018 (B) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Calcular $Q(3x)$ conocido $Q(x)$.</dd>
     <dt>Cómo lo pienso</dt><dd>$Q$ es homogénea de grado 2: multiplicar el vector por $\lambda$ multiplica $Q$ por $\lambda^2$.</dd>
@@ -652,8 +776,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> si el vector pedido es $\lambda v$, el resultado es $\lambda^2Q(v)$; <b>justifícalo</b> con $Q(x)=f(x,x)$ y la bilinealidad.</div>
 </details>
 
-<details class="sol" id="ex-feb23a-6"><summary>Feb. 2023 (1.ª semana), pregunta 6 — $Q(-2,5,3,1)=10\Rightarrow Q(-10,25,15,5)$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª semana), pregunta 6">X Feb. 2023 (1.ª) P6</span></summary>
-  <p class="enun">Si $Q$ es una forma cuadrática de $\mathbb R^4$ tal que $Q(-2,5,3,1)=10$, calcule el valor de $Q(-10,25,15,5)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $Q$ es una forma cuadrática de $\mathbb R^4$ tal que $Q(-2,5,3,1)=10$, calcule el valor de $Q(-10,25,15,5)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Compara el segundo vector con el primero: ¿es un múltiplo? Entonces usa cómo escala $Q$ cuando multiplicas el vector por $\lambda$.</p></details>
+<details class="sol" id="ex-feb23a-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2023 (1.ª semana), pregunta 6 — $Q(-2,5,3,1)=10\Rightarrow Q(-10,25,15,5)$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª semana), pregunta 6">X Feb. 2023 (1.ª) P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Calcular $Q(5x)$ conocido $Q(x)$.</dd>
     <dt>Qué se usa</dt><dd><b>Propiedades:</b> $Q(\lambda x)=\lambda^2Q(x)$; $Q(x+y)=Q(x)+Q(y)+2f(x,y)$. <b>Rango</b> de $Q$ = rango de $A$.</dd>
@@ -667,8 +792,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> la misma; el factor es $\lambda^2$ aunque estemos en $\mathbb R^4$.</div>
 </details>
 
-<details class="sol" id="ex-feb25a-6"><summary>Feb. 2025 (1.ª semana), pregunta 6 — $Q(2,4,6)=-5\Rightarrow Q(6,12,18)$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª semana), pregunta 6">X Feb. 2025 (1.ª) P6</span></summary>
-  <p class="enun">Sea $Q:\mathbb R^3\to\mathbb R$ una forma cuadrática tal que $Q(2,4,6)=-5$. Calcule $Q(6,12,18)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q:\mathbb R^3\to\mathbb R$ una forma cuadrática tal que $Q(2,4,6)=-5$. Calcule $Q(6,12,18)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>¿Por qué número hay que multiplicar $(2,4,6)$ para llegar a $(6,12,18)$? Aplica la propiedad de homogeneidad de $Q$ y justifícala con la bilinealidad.</p></details>
+<details class="sol" id="ex-feb25a-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2025 (1.ª semana), pregunta 6 — $Q(2,4,6)=-5\Rightarrow Q(6,12,18)$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª semana), pregunta 6">X Feb. 2025 (1.ª) P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Calcular $Q(3x)$ conocido $Q(x)$.</dd>
     <dt>Qué se usa</dt><dd><b>Propiedades:</b> $Q(\lambda x)=\lambda^2Q(x)$; $Q(x+y)=Q(x)+Q(y)+2f(x,y)$. <b>Rango</b> de $Q$ = rango de $A$.</dd>
@@ -684,8 +810,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="metodoC">Método C — Del polinomio a la matriz y evaluación</h3>
 
-<details class="sol" id="ex-sep23-6"><summary>Sept. 2023, pregunta 6 — matriz de $Q=x^2+y^2-z^2+5xy-3xz$ <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 6">X Sept. 2023 P6</span></summary>
-  <p class="enun">Halle la matriz asociada a la forma cuadrática $Q:\mathbb R^3\to\mathbb R$ donde $Q(x,y,z)=x^2+y^2-z^2+5xy-3xz$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Halle la matriz asociada a la forma cuadrática $Q:\mathbb R^3\to\mathbb R$ donde $Q(x,y,z)=x^2+y^2-z^2+5xy-3xz$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Cuadrados a la diagonal y cada término cruzado dividido entre 2 en las dos posiciones simétricas. Los que no aparecen valen 0.</p></details>
+<details class="sol" id="ex-sep23-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Sept. 2023, pregunta 6 — matriz de $Q=x^2+y^2-z^2+5xy-3xz$ <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 6">X Sept. 2023 P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Matriz de una forma cuadrática en $\mathbb R^3$.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -702,8 +829,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> cuadrados a la diagonal; cruzados, mitad en cada posición.</div>
 </details>
 
-<details class="sol" id="ex-sep25-8"><summary>Sept. 2025, problema 8, 1.er apartado — matriz de $Q=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ <span class="src" data-l="X" data-ref="Sept. 2025, problema 8, 1.er apartado (0,5 puntos)">X Sept. 2025 P8 (a)</span></summary>
-  <p class="enun">Sea $Q(x_1,x_2,x_3)=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ una forma cuadrática. Halle la matriz $A$ asociada a $Q$. <i>(El 2.º apartado, autovalor del autovector $(2,1,1)$, está en el <a href="tema_4_2_valores_vectores_propios.html#examenes">tema 4.2</a>, y el 3.º, signatura, en el <a href="tema_6_3_clasificacion_formas_cuadraticas.html#ex-sep25-8">6.3</a>.)</i></p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q(x_1,x_2,x_3)=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ una forma cuadrática. Halle la matriz $A$ asociada a $Q$. <i>(El 2.º apartado, autovalor del autovector $(2,1,1)$, está en el <a href="tema_4_2_valores_vectores_propios.html#examenes">tema 4.2</a>, y el 3.º, signatura, en el <a href="tema_6_3_clasificacion_formas_cuadraticas.html#ex-sep25-8">6.3</a>.)</i></p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Pasa los coeficientes de $x_i^2$ a la diagonal y reparte a medias cada coeficiente cruzado. Comprueba con $X^tAX$.</p></details>
+<details class="sol" id="ex-sep25-8"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Sept. 2025, problema 8, 1.er apartado — matriz de $Q=6x_1^2+4x_1x_2+4x_1x_3+8x_2x_3$ <span class="src" data-l="X" data-ref="Sept. 2025, problema 8, 1.er apartado (0,5 puntos)">X Sept. 2025 P8 (a)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Matriz asociada a una forma cuadrática en $\mathbb R^3$.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -718,8 +846,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> la de siempre; una diagonal con ceros es normal.</div>
 </details>
 
-<details class="sol" id="ex-feb25b-8"><summary>Feb. 2025 (2.ª semana), problema 8, 1.er apartado — matriz de $Q=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2ax_1x_3$ <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª semana), problema 8, 1.er apartado (0,5 puntos)">X Feb. 2025 (2.ª) P8 (a)</span></summary>
-  <p class="enun">Sea $a\in\mathbb R$ y consideremos la forma cuadrática $Q(x_1,x_2,x_3)=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2ax_1x_3$. Halle la matriz asociada a $Q$. <i>(El 2.º apartado, Sylvester, está en el <a href="tema_6_3_clasificacion_formas_cuadraticas.html#ex-feb25b-8b">tema 6.3</a>.)</i></p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $a\in\mathbb R$ y consideremos la forma cuadrática $Q(x_1,x_2,x_3)=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2ax_1x_3$. Halle la matriz asociada a $Q$. <i>(El 2.º apartado, Sylvester, está en el <a href="tema_6_3_clasificacion_formas_cuadraticas.html#ex-feb25b-8b">tema 6.3</a>.)</i></p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Igual que cualquier polinomio a matriz, pero con un parámetro: el coeficiente $2ax_1x_3$ se reparte a medias entre $a_{13}$ y $a_{31}$.</p></details>
+<details class="sol" id="ex-feb25b-8"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2025 (2.ª semana), problema 8, 1.er apartado — matriz de $Q=2x_1^2+3x_2^2+4x_3^2-2x_1x_2+2ax_1x_3$ <span class="src" data-l="X" data-ref="Feb. 2025 (2.ª semana), problema 8, 1.er apartado (0,5 puntos)">X Feb. 2025 (2.ª) P8 (a)</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz con parámetro.</dd>
     <dt>Cómo lo pienso</dt><dd>El parámetro aparece en un cruzado: irá la mitad en dos posiciones simétricas.</dd>
@@ -735,8 +864,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> el parámetro se trata como un número más al desdoblar ($2a\to a$).</div>
 </details>
 
-<details class="sol" id="ex-ene20a-6"><summary>Ene. 2020 (tipo A), ejercicio 6 — $Q(1,1,1)$ dada la matriz de $f$ <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A; fichero Algebra_Febrero20A, cabecera «Enero 2020»), ejercicio 6">X Ene. 2020 (A) ej. 6</span></summary>
-  <p class="enun">Si $Q$ es una forma cuadrática de $\mathbb R^3$ generada por la forma bilineal $f$, calcular $Q(1,1,1)$ sabiendo que la matriz asociada a $f$ es $\begin{pmatrix}1&3&0\\3&1&2\\0&2&1\end{pmatrix}$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $Q$ es una forma cuadrática de $\mathbb R^3$ generada por la forma bilineal $f$, calcular $Q(1,1,1)$ sabiendo que la matriz asociada a $f$ es $\begin{pmatrix}1&3&0\\3&1&2\\0&2&1\end{pmatrix}$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La matriz de $f$ ya es la de $Q$ (es simétrica). Evalúa $X^tAX$ con $X=(1,1,1)^t$; también te vale sumar todas las entradas.</p></details>
+<details class="sol" id="ex-ene20a-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ene. 2020 (tipo A), ejercicio 6 — $Q(1,1,1)$ dada la matriz de $f$ <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A; fichero Algebra_Febrero20A, cabecera «Enero 2020»), ejercicio 6">X Ene. 2020 (A) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Calcular $Q(1,1,1)$ dada la matriz de $f$.</dd>
     <dt>Qué se usa</dt><dd><b>Forma cuadrática (Def. 6.4, U p.251):</b> $Q(x)=f(x,x)=X^tAX$ con $f$ bilineal simétrica y $A$ <b>simétrica</b>. Es un polinomio <i>homogéneo de grado 2</i>: sin términos de grado 1, grado 3 ni constantes. Su valor es un escalar.</dd>
@@ -754,8 +884,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="metodoD">Método D — Antisimetría</h3>
 
-<details class="sol" id="ex-feb18a-6"><summary>Feb. 2018 (tipo A), ejercicio 6 — matriz de una bilineal antisimétrica: relación entre $A$ y $-A$ y valor de $a_{ii}$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), ejercicio 6">X Feb. 2018 (A) ej. 6</span></summary>
-  <p class="enun">Si $A$ es la matriz asociada a una forma bilineal antisimétrica, explique qué relación existe entre $A$ y $-A$ y, en particular, cuánto valen los $a_{ii}$ para todo $i$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $A$ es la matriz asociada a una forma bilineal antisimétrica, explique qué relación existe entre $A$ y $-A$ y, en particular, cuánto valen los $a_{ii}$ para todo $i$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Parte de la condición $f(x,y)=-f(y,x)$ y tradúcela a $a_{ij}$ eligiendo los vectores de la base. ¿Qué pasa cuando $i=j$?</p></details>
+<details class="sol" id="ex-feb18a-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2018 (tipo A), ejercicio 6 — matriz de una bilineal antisimétrica: relación entre $A$ y $-A$ y valor de $a_{ii}$ <span class="src" data-l="X" data-ref="Feb. 2018 (tipo A), ejercicio 6">X Feb. 2018 (A) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Relación entre $A$ y $-A$ si la bilineal es antisimétrica.</dd>
     <dt>Cómo lo pienso</dt><dd>Antisimétrica: $f(x,y)=-f(y,x)$, luego $A^t=-A$. La diagonal debe ser nula.</dd>
@@ -774,8 +905,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 
 <h3 id="metodoE">Método E — Rango de $Q$ (con y sin parámetro)</h3>
 
-<details class="sol" id="ex-sep19a-6"><summary>Sept. 2019 (tipo A), ejercicio 6 — rango de $Q=x_1^2+x_1x_2+2x_2x_3$ <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), ejercicio 6">X Sept. 2019 (A) ej. 6</span></summary>
-  <p class="enun">Hallar el rango de la forma cuadrática $Q(x_1,x_2,x_3)=x_1^2+x_1x_2+2x_2x_3$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hallar el rango de la forma cuadrática $Q(x_1,x_2,x_3)=x_1^2+x_1x_2+2x_2x_3$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe la matriz simétrica del polinomio y calcula su rango (determinante o Gauss). Recuerda repartir los cruzados a medias.</p></details>
+<details class="sol" id="ex-sep19a-6"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Sept. 2019 (tipo A), ejercicio 6 — rango de $Q=x_1^2+x_1x_2+2x_2x_3$ <span class="src" data-l="X" data-ref="Sept. 2019 (tipo A), ejercicio 6">X Sept. 2019 (A) ej. 6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Rango de una forma cuadrática en $\mathbb R^3$.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -791,8 +923,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> matriz simétrica → $|A|\neq0$ ⇒ rango máximo.</div>
 </details>
 
-<details class="sol" id="ex-feb23b-6"><summary>Feb. 2023 (2.ª semana), pregunta 6 — rango 1 en $3x_1^2+ax_1x_2+3x_2^2$ <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª semana), pregunta 6">X Feb. 2023 (2.ª) P6</span></summary>
-  <p class="enun">Dada la forma cuadrática $Q(x_1,x_2)=3x_1^2+ax_1x_2+3x_2^2$, halle los valores de $a\in\mathbb R$ para que el rango de $Q$ sea 1.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Dada la forma cuadrática $Q(x_1,x_2)=3x_1^2+ax_1x_2+3x_2^2$, halle los valores de $a\in\mathbb R$ para que el rango de $Q$ sea 1.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Matriz $\begin{pmatrix}3&a/2\\a/2&3\end{pmatrix}$. El rango es 1 cuando el determinante es 0 pero la matriz no es nula: resuelve $|A|=0$ y comprueba cada solución.</p></details>
+<details class="sol" id="ex-feb23b-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2023 (2.ª semana), pregunta 6 — rango 1 en $3x_1^2+ax_1x_2+3x_2^2$ <span class="src" data-l="X" data-ref="Feb. 2023 (2.ª semana), pregunta 6">X Feb. 2023 (2.ª) P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $a$ para rango 1.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -813,8 +946,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> en $2\times2$ con un elemento no nulo, rango 1 ⇔ $|A|=0$.</div>
 </details>
 
-<details class="sol" id="ex-sep24-6"><summary>Sept. 2024, pregunta 6 — rango de $ax_1^2+10x_1x_2+ax_2^2$ <span class="src" data-l="X" data-ref="Sept. 2024, pregunta 6">X Sept. 2024 P6</span></summary>
-  <p class="enun">Sea $Q(x_1,x_2)=ax_1^2+10x_1x_2+ax_2^2$ una forma cuadrática con $a\neq0$. Calcule el rango de $Q$ en función del parámetro $a$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q(x_1,x_2)=ax_1^2+10x_1x_2+ax_2^2$ una forma cuadrática con $a\neq0$. Calcule el rango de $Q$ en función del parámetro $a$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Matriz simétrica de $Q$ y su determinante. Mira qué valores de $a$ lo anulan y, en cada uno, si la matriz sigue teniendo algún elemento no nulo.</p></details>
+<details class="sol" id="ex-sep24-6"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2024, pregunta 6 — rango de $ax_1^2+10x_1x_2+ax_2^2$ <span class="src" data-l="X" data-ref="Sept. 2024, pregunta 6">X Sept. 2024 P6</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Rango según el parámetro $a$.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -829,8 +963,9 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <div class="recipe"><b>Receta:</b> $|A|=0$ marca los casos; el elemento no nulo garantiza rango 1 en ellos.</div>
 </details>
 
-<details class="sol" id="ex-feb25a-5"><summary>Feb. 2025 (1.ª semana), pregunta 5 — rango de $ax_1^2+(a-1)x_2^2+ax_3^2+2ax_2x_3$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª semana), pregunta 5">X Feb. 2025 (1.ª) P5</span></summary>
-  <p class="enun">Sea $Q$ la forma cuadrática de $\mathbb R^3$ definida por $Q(x_1,x_2,x_3)=ax_1^2+(a-1)x_2^2+ax_3^2+2ax_2x_3$, con $a\in\mathbb R$. Estudie el rango de $Q$ en función de $a$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $Q$ la forma cuadrática de $\mathbb R^3$ definida por $Q(x_1,x_2,x_3)=ax_1^2+(a-1)x_2^2+ax_3^2+2ax_2x_3$, con $a\in\mathbb R$. Estudie el rango de $Q$ en función de $a$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Matriz simétrica $3\times3$: el $x_1$ está separado de las otras dos variables. Calcula el determinante y estudia por separado los valores de $a$ que lo anulan (incluye $a=0$ y $a=1$).</p></details>
+<details class="sol" id="ex-feb25a-5"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Feb. 2025 (1.ª semana), pregunta 5 — rango de $ax_1^2+(a-1)x_2^2+ax_3^2+2ax_2x_3$ <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª semana), pregunta 5">X Feb. 2025 (1.ª) P5</span></summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Rango según $a$ en $\mathbb R^3$.</dd>
     <dt>Qué se usa</dt><dd><b>Matriz de $Q$:</b> la diagonal son los coeficientes de $x_i^2$ y fuera de ella va <b>la mitad</b> del coeficiente de $x_ix_j$. Si $M$ no es simétrica, la matriz de $Q(x)=x^tMx$ es $\tfrac12(M+M^t)$. Recuperar $A$: $a_{ii}=Q(e_i)$, $a_{ij}=\tfrac12[Q(e_i+e_j)-Q(e_i)-Q(e_j)]$.</dd>
@@ -863,7 +998,7 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
 <p>Los de la bilineal y el cambio de base de exámenes (Sept. 2018, Feb. 2022 (A1) ej. 5, Feb. 2025 (2.ª) P6, Feb. 2026 (1.ª) P6, Sept. 2023 P5) están desarrollados en el <a href="tema_6_1_formas_bilineales.html#examenes">tema 6.1</a>.</p>
 
 <!-- ============================ 9 ============================ -->
-<h2 id="chuleta"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">9</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
   <table>
@@ -914,6 +1049,27 @@ Así que la matriz de $Q$ en $B'$ es $A'=P^tAP$, donde las <b>columnas de $P$ so
   <span class="src" data-l="P" data-ref="Errores recopilados de E §6.2, U §6.2 y de las soluciones oficiales de los exámenes">propio</span>
 </div>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>¿Qué entrada $a_{12}$ tiene la matriz simétrica de $Q=x_1^2-4x_1x_2+x_2^2$?</p>
+    <ul class="opts"><li>$-4$<span class="why">Has puesto el coeficiente entero: así $X^tAX$ daría $-8x_1x_2$. El cruzado se reparte entre $a_{12}$ y $a_{21}$.</span></li><li data-ok>$-2$</li><li>$2$<span class="why">Has dividido bien entre 2 pero perdido el signo.</span></li><li>$-1$<span class="why">Has dividido entre 4; solo hay que partir entre 2.</span></li></ul>
+    <p class="fb">$a_{12}=a_{21}=-4/2=-2$, y $A=\begin{pmatrix}1&-2\\-2&1\end{pmatrix}$ da $x_1^2-4x_1x_2+x_2^2$.</p></div>
+  <div class="qp"><p>Si $Q$ es forma cuadrática y $Q(1,2)=5$, ¿cuánto vale $Q(3,6)$?</p>
+    <ul class="opts"><li>$15$<span class="why">Has tratado $Q$ como lineal. Al multiplicar el vector por 3, $Q$ se multiplica por $3^2$.</span></li><li>$25$<span class="why">Has elevado al cuadrado el valor $5$ en vez del factor $3$.</span></li><li data-ok>$45$</li></ul>
+    <p class="fb">$(3,6)=3\cdot(1,2)$ y $Q(3x)=9Q(x)=45$.</p></div>
+  <div class="qp"><p>¿Cuál de estas aplicaciones de $\mathbb R^3$ es una forma cuadrática?</p>
+    <ul class="opts"><li data-ok>$x_1x_2+x_3^2$</li><li>$x_1^2+x_2$<span class="why">$x_2$ es de grado 1: no es homogénea de grado 2.</span></li><li>$x_1^2+x_2^2+1$<span class="why">El término $1$ es de grado 0.</span></li><li>$x_1x_2x_3$<span class="why">Es de grado 3. Un producto cruzado solo vale si multiplica dos variables.</span></li></ul>
+    <p class="fb">Todos los sumandos de $x_1x_2+x_3^2$ son de grado 2. Los demás tienen algún término de grado 0, 1 o 3.</p></div>
+  <div class="qp"><p>El rango de $Q=x_1^2+2x_1x_2+x_2^2$ es…</p>
+    <ul class="opts"><li data-ok>$1$</li><li>$2$<span class="why">Hay dos variables, pero el rango es el de la matriz $\begin{pmatrix}1&1\\1&1\end{pmatrix}$, cuyo determinante es 0.</span></li><li>$0$<span class="why">La matriz no es nula ($Q\neq0$), luego el rango es al menos 1.</span></li></ul>
+    <p class="fb">$\det\begin{pmatrix}1&1\\1&1\end{pmatrix}=0$ y la matriz no es nula, así que el rango es 1 (de hecho $Q=(x_1+x_2)^2$).</p></div>
+  <div class="qp"><p>$Q(x)=X^tMX$ con $M=\begin{pmatrix}0&2\\0&0\end{pmatrix}$. ¿Cuál es la matriz de $Q$?</p>
+    <ul class="opts"><li>$M$<span class="why">$M$ no es simétrica; la matriz de $Q$ debe serlo.</span></li><li data-ok>$\begin{pmatrix}0&1\\1&0\end{pmatrix}$</li><li>$\begin{pmatrix}0&2\\2&0\end{pmatrix}$<span class="why">Daría $Q=4x_1x_2$; hay que partir el $2$ entre las dos posiciones.</span></li></ul>
+    <p class="fb">$Q=2x_1x_2$, y la matriz simétrica es $\tfrac12(M+M^t)=\begin{pmatrix}0&1\\1&0\end{pmatrix}$.</p></div>
+  <div class="qp"><p>$A=\begin{pmatrix}1&1\\1&2\end{pmatrix}$ ($\det A=1$) y $P=\begin{pmatrix}1&-1\\0&2\end{pmatrix}$ ($\det P=2$). ¿Cuánto vale $\det(P^tAP)$?</p>
+    <ul class="opts"><li>$1$<span class="why">Eso sería si el determinante se conservara; en una congruencia no se conserva.</span></li><li>$2$<span class="why">Solo has multiplicado por $\det P$ una vez; $P$ aparece dos veces ($P^t$ y $P$).</span></li><li data-ok>$4$</li></ul>
+    <p class="fb">$\det(P^tAP)=\det A\cdot(\det P)^2=1\cdot4=4$. Solo se conservan el rango, la simetría y el signo del determinante.</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>
