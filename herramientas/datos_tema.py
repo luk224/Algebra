@@ -1,32 +1,35 @@
-"""Temas como datos + plantilla (piloto: tema 2.3).
+"""Temas como datos + plantilla.
 
     python herramientas/datos_tema.py extraer 2.3     HTML actual  ->  datos/2_3/{tema.yaml, pagina.html, ejercicios.yaml}
     python herramientas/datos_tema.py construir 2.3   datos        ->  HTML del tema (temas/…)
     python herramientas/datos_tema.py verificar 2.3   construye en memoria y compara con el HTML actual (ida y vuelta):
                                                       1) mismas etiquetas, atributos y texto  2) mismo texto visible en Chrome (si hay Playwright)
     python herramientas/datos_tema.py validar 2.3     reglas de contenido (ids únicos, campos obligatorios, ejercicios de examen)
+    python herramientas/datos_tema.py probar 2.2|todos   extrae y reconstruye EN MEMORIA (sin escribir nada) y compara etiquetas y texto
 
 Cada tema se guarda en `datos/X_Y/`:
   tema.yaml        código y nombre del fichero HTML de salida
   pagina.html      el HTML del tema con cada ejercicio sustituido por un marcador {{ejercicio:ID}}
                    (la teoría sigue siendo HTML con LaTeX, como siempre)
-  ejercicios.yaml  un registro por ejercicio: enunciado, pista, nivel, plan, pasos, receta… (ver ESQUEMA abajo)
-El HTML de `temas/` es ahora un producto generado: se edita el dato o la plantilla y se reconstruye.
+  ejercicios.yaml  un registro por ejercicio (ver ESQUEMA abajo)
+El HTML de `temas/` de un tema migrado es un producto generado: se edita el dato o la plantilla y se reconstruye.
 
 ESQUEMA de un ejercicio (ejercicios.yaml es una lista de estos registros):
-  id        identificador único (ancla de enlace): ej2-23, ep1, ex-feb26…
-  clase     libro | propio | examen
-  nivel     1, 2 ó 3 (★☆☆ básico, ★★☆ nivel examen, ★★★ difícil)
+  id        identificador único (ancla de enlace): ej2-23, ep1, ex-feb26… Si el HTML original no tenía id se genera `sol-X_Y-N`.
+  clase     libro | propio | examen (se deduce de las fuentes: X = examen, E = libro, el resto = propio)
   titulo    HTML del título (sin estrellas ni fuentes)
   fuentes   lista de {l: U|E|L|A|X|P, ref: texto del tooltip, texto: etiqueta visible}
-  enunciado HTML del enunciado (sin spoilers)
-  pista     HTML de la pista
   cuerpo    lista ordenada de bloques; cada bloque es UNA de estas claves:
+              enun:     HTML del enunciado (formato antiguo: el enunciado va dentro de la solución)
               plan:     {titulo, filas: [[«Qué me piden», «…»], …]}
               pasos:    [HTML de cada paso]
               receta:   HTML tras «Receta:»
               resultado / error / teoria:  HTML tras la etiqueta «Resultado:» / «Error típico:» / «Teoría:»
-              html:     HTML libre (cualquier otro párrafo)
+              html:     HTML libre (cualquier otro bloque, comentario o texto suelto)
+  FORMATO NUEVO (capa pedagógica; solo si existen estos campos, que van juntos):
+  nivel      1, 2 ó 3 (★☆☆ básico, ★★☆ nivel examen, ★★★ difícil)
+  enunciado  HTML del enunciado, visible fuera de la solución (sin spoilers; no lleva bloque `enun` en el cuerpo)
+  pista      HTML de la pista
 """
 import re, sys, pathlib, html as _html
 from html.parser import HTMLParser
@@ -35,88 +38,120 @@ import yaml
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 NOMBRE_NIVEL = {1: 'básico', 2: 'nivel examen', 3: 'difícil'}
 ETIQUETAS = {'resultado': 'Resultado', 'error': 'Error típico', 'teoria': 'Teoría'}
-TAG = re.compile(r'<(/?)([a-zA-Z][a-zA-Z0-9]*)([^>]*?)(/?)>')
+TOKEN = re.compile(r'<!--.*?-->|<(/?)([a-zA-Z][a-zA-Z0-9]*)((?:[^>"\']|"[^"]*"|\'[^\']*\')*?)(/?)>', re.S)
 VOID = {'br', 'img', 'hr', 'input', 'meta', 'link'}
 
 
 def carpeta(codigo): return RAIZ / 'datos' / codigo.replace('.', '_')
+def archivo_tema(codigo): return next(p for p in sorted((RAIZ / 'temas').glob(f'tema_{codigo.replace(".", "_")}_*.html')))
+def todos_los_temas(): return sorted(re.match(r'tema_(\d)_(\d)_', p.name).expand(r'\1.\2') for p in (RAIZ / 'temas').glob('tema_*.html'))
 
 
 def top_level(body):
-    """Divide un fragmento HTML en sus elementos de primer nivel: [(etiqueta, atributos, html_exterior, html_interior)]."""
-    out, depth, start, pos, cur = [], 0, None, 0, None
-    for m in TAG.finditer(body):
+    """Divide un fragmento HTML en sus partes de primer nivel:
+    ('el', etiqueta, atributos, html_exterior, html_interior) para elementos y ('raw', texto) para comentarios, texto suelto y vacíos."""
+    out, depth, start, pos, cur, ini = [], 0, None, 0, None, 0
+    def raw(t):
+        if t.strip(): out.append(('raw', t.strip()))
+    for m in TOKEN.finditer(body):
+        tok = m.group(0)
+        if tok.startswith('<!--'):
+            if depth == 0: raw(body[pos:m.start()]); raw(tok); pos = m.end()
+            continue
         cl, name, attrs, selfc = m.groups()
         if name.lower() in VOID or selfc:
-            if depth == 0: raise ValueError('elemento vacío a nivel superior: ' + m.group(0))
+            if depth == 0: raw(body[pos:m.start()]); raw(tok); pos = m.end()
             continue
         if not cl:
-            if depth == 0:
-                if body[pos:m.start()].strip(): raise ValueError('texto suelto a nivel superior: ' + body[pos:m.start()].strip()[:60])
-                start, cur, ini = m.start(), (name, attrs), m.end()
+            if depth == 0: raw(body[pos:m.start()]); start, cur, ini = m.start(), (name, attrs), m.end()
             depth += 1
         else:
             depth -= 1
-            if depth == 0:
-                out.append((cur[0], cur[1], body[start:m.end()], body[ini:m.start()])); pos = m.end()
-    if body[pos:].strip(): raise ValueError('texto suelto al final: ' + body[pos:].strip()[:60])
+            if depth < 0: raise ValueError('cierre sin apertura: ' + tok)
+            if depth == 0: out.append(('el', cur[0], cur[1], body[start:m.end()], body[ini:m.start()])); pos = m.end()
+    if depth: raise ValueError('elemento sin cerrar')
+    raw(body[pos:])
     return out
 
 
+def bloques_sol(s):
+    """Posiciones (inicio, fin, atributos) de los `details.sol` más externos, contando la anidación real."""
+    out, i = [], 0
+    while True:
+        m = re.compile(r'<details class="sol"([^>]*)>').search(s, i)
+        if not m: return out
+        depth, end = 0, None
+        for t in re.finditer(r'<(/?)details\b', s[m.start():]):
+            depth += -1 if t.group(1) else 1
+            if depth == 0: end = s.index('>', m.start() + t.end()) + 1; break
+        if end is None: raise ValueError('details.sol sin cerrar')
+        out.append((m.start(), end, m.group(1))); i = end
+
+
+PRE_NUEVO = re.compile(r'<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">(.*?)</p></div>\s*'
+                       r'<details class="pista"><summary>Pista \(inténtalo antes de abrir la solución\)</summary><p>(.*?)</p></details>\s*\Z', re.S)
+
+
 # ------------------------------------------------------------------ extraer
-def parse_bloque(txt):
-    m = re.fullmatch(r'<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">(.*?)</p></div>\s*'
-                     r'<details class="pista"><summary>Pista \(inténtalo antes de abrir la solución\)</summary><p>(.*?)</p></details>\s*'
-                     r'<details class="sol" id="([^"]+)">(<summary>.*?</summary>)(.*)\n</details>', txt, re.S)
-    if not m: raise ValueError('bloque de ejercicio con formato inesperado: ' + txt[:120])
-    enun, pista, id_, summ, cuerpo = m.groups()
-    sm = re.fullmatch(r'<summary><span class="nivel" title="[^"]*">([★☆]+)</span>(.*?)((?:\s*<span class="src"[^>]*>[^<]*</span>)*)\s*</summary>', summ, re.S)
-    if not sm: raise ValueError('summary inesperado en ' + id_)
-    nivel = sm.group(1).count('★')
-    fuentes = [dict(l=a, ref=_html.unescape(b) if False else b, texto=c) for a, b, c in
-               re.findall(r'<span class="src" data-l="([^"]*)" data-ref="([^"]*)">([^<]*)</span>', sm.group(3))]
+def parse_cuerpo(cuerpo, id_):
     items = []
-    for tag, attrs, ext, inner in top_level(cuerpo):
-        if tag == 'div' and 'class="plan"' in attrs:
-            h = re.fullmatch(r'<span class="h">(.*?)</span><dl>(.*)</dl>', inner.strip(), re.S)
-            filas = [[a.strip(), b.strip()] for a, b in re.findall(r'<dt>(.*?)</dt>\s*<dd>(.*?)</dd>', h.group(2), re.S)]
-            items.append({'plan': {'titulo': h.group(1), 'filas': filas}})
-        elif tag == 'ol' and attrs.strip() == 'class="steps"':
+    for part in top_level(cuerpo):
+        if part[0] == 'raw': items.append({'html': part[1]}); continue
+        _, tag, attrs, ext, inner = part
+        a = attrs.strip()
+        if tag == 'div' and a == 'class="plan"':
+            h = re.fullmatch(r'\s*<span class="h">(.*?)</span>\s*<dl>(.*)</dl>\s*', inner, re.S)
+            filas = [[x.strip(), y.strip()] for x, y in re.findall(r'<dt>(.*?)</dt>\s*<dd>(.*?)</dd>', h.group(2), re.S)] if h else None
+            if h and filas and re.sub(r'\s', '', re.sub(r'<dt>.*?</dt>\s*<dd>.*?</dd>', '', h.group(2), flags=re.S)) == '':
+                items.append({'plan': {'titulo': h.group(1), 'filas': filas}}); continue
+        elif tag == 'ol' and a == 'class="steps"':
             li = top_level(inner)
-            if any(t != 'li' or a.strip() for t, a, _, _ in li): raise ValueError('li con atributos en ' + id_)
-            items.append({'pasos': [i.strip() for _, _, _, i in li]})
-        elif tag == 'div' and 'class="recipe"' in attrs:
+            if li and all(p[0] == 'el' and p[1] == 'li' and not p[2].strip() for p in li):
+                items.append({'pasos': [p[4].strip() for p in li]}); continue
+        elif tag == 'div' and a == 'class="recipe"':
             r = re.fullmatch(r'\s*<b>Receta:</b>\s*(.*)', inner, re.S)
-            if not r: raise ValueError('receta inesperada en ' + id_)
-            items.append({'receta': r.group(1).strip()})
-        elif tag == 'p' and not attrs.strip():
+            if r: items.append({'receta': r.group(1).strip()}); continue
+        elif tag == 'p' and a == 'class="enun"':
+            items.append({'enun': inner.strip()}); continue
+        elif tag == 'p' and not a:
             lab = re.fullmatch(r'\s*<b>(Resultado|Error típico|Teoría):</b>\s*(.*)', inner, re.S)
-            if lab:
-                clave = {v: k for k, v in ETIQUETAS.items()}[lab.group(1)]
-                items.append({clave: lab.group(2).strip()})
-            else: items.append({'html': ext.strip()})
-        else:
-            items.append({'html': ext.strip()})
-    clase = 'examen' if id_.startswith('ex-') else ('propio' if id_.startswith('ep') else 'libro')
-    return dict(id=id_, clase=clase, nivel=nivel, titulo=sm.group(2).strip(), fuentes=fuentes,
-                enunciado=enun.strip(), pista=pista.strip(), cuerpo=items)
+            if lab: items.append({{v: k for k, v in ETIQUETAS.items()}[lab.group(1)]: lab.group(2).strip()}); continue
+        items.append({'html': ext.strip()})
+    return items
 
 
-def extraer(codigo):
-    cfg = {'2.3': 'temas/tema_2_3_bases_dimension_coordenadas.html'}
-    archivo = cfg.get(codigo) or next(str(p.relative_to(RAIZ)) for p in (RAIZ / 'temas').glob(f'tema_{codigo.replace(".", "_")}_*.html'))
-    s = (RAIZ / archivo).read_text(encoding='utf8')
-    bloques = list(re.finditer(r'<div class="ejer-enun">.*?\n</details>', s, re.S))
-    ejs, esqueleto, ult = [], [], 0
-    for m in bloques:
-        e = parse_bloque(m.group(0)); ejs.append(e)
-        esqueleto.append(s[ult:m.start()] + '{{ejercicio:%s}}' % e['id']); ult = m.end()
-    esqueleto.append(s[ult:])
-    d = carpeta(codigo); d.mkdir(parents=True, exist_ok=True)
-    (d / 'pagina.html').write_text(''.join(esqueleto), encoding='utf8')
-    (d / 'tema.yaml').write_text(volcar({'codigo': codigo, 'archivo': archivo}), encoding='utf8')
-    (d / 'ejercicios.yaml').write_text(volcar(ejs), encoding='utf8')
-    print(f'{codigo}: {len(ejs)} ejercicios -> {d.relative_to(RAIZ)}/')
+def parse_sol(s, st, en, attrs, pre, codigo, n):
+    t = s[st:en]
+    idm = re.search(r'id="([^"]+)"', attrs)
+    id_ = idm.group(1) if idm else f'sol-{codigo.replace(".", "_")}-{n}'
+    sm = re.match(r'<details class="sol"[^>]*>\s*<summary>(.*?)</summary>(.*)</details>\Z', t, re.S)
+    if not sm: raise ValueError('summary inesperado en ' + id_)
+    summ, cuerpo = sm.groups()
+    nv = re.match(r'<span class="nivel" title="[^"]*">([★☆]+)</span>', summ)
+    nivel = nv.group(1).count('★') if nv else None
+    if nv: summ = summ[nv.end():]
+    fm = re.fullmatch(r'(.*?)((?:\s*<span class="src"[^>]*>[^<]*</span>)*)\s*', summ, re.S)
+    srcs = re.findall(r'<span class="src" data-l="([^"]*)" data-ref="([^"]*)">([^<]*)</span>', fm.group(2))
+    fuentes = [dict(l=a, ref=b, texto=c) for a, b, c in srcs]
+    clase = 'examen' if any(f['l'] == 'X' for f in fuentes) or id_.startswith('ex-') else ('libro' if any(f['l'] == 'E' for f in fuentes) else 'propio')
+    e = dict(id=id_, clase=clase)
+    if nivel: e['nivel'] = nivel
+    e.update(titulo=fm.group(1).strip(), fuentes=fuentes)
+    if pre: e.update(enunciado=pre.group(1).strip(), pista=pre.group(2).strip())
+    e['cuerpo'] = parse_cuerpo(cuerpo, id_)
+    return e
+
+
+def extraer_en_memoria(codigo):
+    s = archivo_tema(codigo).read_text(encoding='utf8')
+    ejs, esq, ult = [], [], 0
+    for n, (st, en, attrs) in enumerate(bloques_sol(s), 1):
+        pre = PRE_NUEVO.search(s[ult:st]) if ult <= st else None
+        ini = ult + pre.start() if pre else st
+        e = parse_sol(s, st, en, attrs, pre, codigo, n)
+        ejs.append(e); esq.append(s[ult:ini] + '{{ejercicio:%s}}' % e['id']); ult = en
+    esq.append(s[ult:])
+    return dict(codigo=codigo, archivo=str(archivo_tema(codigo).relative_to(RAIZ))), ''.join(esq), ejs
 
 
 def volcar(obj):
@@ -130,21 +165,35 @@ def volcar(obj):
     return yaml.dump(obj, Dumper=D, allow_unicode=True, sort_keys=False, width=10**6)
 
 
+def extraer(codigo):
+    cfg, pag, ejs = extraer_en_memoria(codigo)
+    d = carpeta(codigo); d.mkdir(parents=True, exist_ok=True)
+    (d / 'pagina.html').write_text(pag, encoding='utf8')
+    (d / 'tema.yaml').write_text(volcar(cfg), encoding='utf8')
+    (d / 'ejercicios.yaml').write_text(volcar(ejs), encoding='utf8')
+    print(f'{codigo}: {len(ejs)} ejercicios -> {d.relative_to(RAIZ)}/')
+
+
 # ------------------------------------------------------------------ construir
 def render(e):
-    est = '★' * e['nivel'] + '☆' * (3 - e['nivel'])
+    nuevo = bool(e.get('pista'))
     src = ''.join(f' <span class="src" data-l="{f["l"]}" data-ref="{f["ref"]}">{f["texto"]}</span>' for f in e['fuentes'])
-    o = [f'<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">{e["enunciado"]}</p></div>',
-         f'<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>{e["pista"]}</p></details>',
-         f'<details class="sol" id="{e["id"]}"><summary><span class="nivel" title="Dificultad: {NOMBRE_NIVEL[e["nivel"]]}">{est}</span>{e["titulo"]}{src}</summary>']
+    o = []
+    if nuevo:
+        est = '★' * e['nivel'] + '☆' * (3 - e['nivel'])
+        o += [f'<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">{e["enunciado"]}</p></div>',
+              f'<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>{e["pista"]}</p></details>']
+        nv = f'<span class="nivel" title="Dificultad: {NOMBRE_NIVEL[e["nivel"]]}">{est}</span>'
+    else: nv = ''
+    o.append(f'<details class="sol" id="{e["id"]}"><summary>{nv}{e["titulo"]}{src}</summary>')
     for b in e['cuerpo']:
         (k, v), = b.items()
         if k == 'plan':
             filas = ''.join(f'\n    <dt>{a}</dt><dd>{c}</dd>' for a, c in v['filas'])
             o.append(f'  <div class="plan"><span class="h">{v["titulo"]}</span><dl>{filas}\n  </dl></div>')
-        elif k == 'pasos':
-            o.append('  <ol class="steps">\n' + '\n'.join(f'    <li>{p}</li>' for p in v) + '\n  </ol>')
+        elif k == 'pasos': o.append('  <ol class="steps">\n' + '\n'.join(f'    <li>{p}</li>' for p in v) + '\n  </ol>')
         elif k == 'receta': o.append(f'  <div class="recipe"><b>Receta:</b> {v}</div>')
+        elif k == 'enun': o.append(f'  <p class="enun">{v}</p>')
         elif k in ETIQUETAS: o.append(f'  <p><b>{ETIQUETAS[k]}:</b> {v}</p>')
         elif k == 'html': o.append('  ' + v)
         else: raise ValueError('bloque desconocido: ' + k)
@@ -161,8 +210,7 @@ def cargar(codigo):
     return cfg, (d / 'pagina.html').read_text(encoding='utf8'), ejs
 
 
-def construir_texto(codigo):
-    cfg, pag, ejs = cargar(codigo)
+def construir_desde(cfg, pag, ejs):
     por = {e['id']: e for e in ejs}
     usados = set()
     def sub(m):
@@ -170,27 +218,58 @@ def construir_texto(codigo):
     out = re.sub(r'\{\{ejercicio:([^}]+)\}\}', sub, pag)
     sobran = set(por) - usados
     if sobran: raise ValueError('ejercicios en el YAML que la plantilla no usa: ' + ', '.join(sorted(sobran)))
-    return cfg, out
+    return out
 
 
-# ------------------------------------------------------------------ verificar (ida y vuelta)
+def construir_texto(codigo):
+    cfg, pag, ejs = cargar(codigo)
+    return cfg, construir_desde(cfg, pag, ejs)
+
+
+# ------------------------------------------------------------------ comparar
 class Norm(HTMLParser):
     def __init__(self): super().__init__(convert_charrefs=True); self.t = []
-    def handle_starttag(self, tag, attrs): self.t.append(('<' + tag, tuple(sorted((k, v or '') for k, v in attrs))))
+    def handle_starttag(self, tag, attrs):
+        a = [(k, v or '') for k, v in attrs]
+        if tag == 'details':   # los ids generados (`sol-…`) no existían en el original
+            a = [(k, v) for k, v in a if not (k == 'id' and v.startswith('sol-'))]
+        self.t.append(('<' + tag, tuple(sorted(a))))
     def handle_startendtag(self, tag, attrs): self.handle_starttag(tag, attrs)
     def handle_endtag(self, tag): self.t.append(('</' + tag, ()))
     def handle_comment(self, d): self.t.append(('#', d.strip()))
-    def handle_data(self, d):
-        d = re.sub(r'\s+', ' ', d)
-        if d.strip(): self.t.append(('txt', d.strip() if False else d))
+    def handle_data(self, d): self.t.append(('txt', re.sub(r'\s+', ' ', d).strip()))
 
 
 def normalizar(s):
     n = Norm(); n.feed(s); n.close()
-    out = []
-    for k, v in n.t:   # el espacio al borde de un nodo de texto solo importa pegado a otro texto o a etiquetas en línea; se recorta
-        out.append((k, v.strip() if k == 'txt' else v))
-    return [x for x in out if not (x[0] == 'txt' and x[1] == '')]
+    return [x for x in n.t if not (x[0] == 'txt' and x[1] == '')]
+
+
+def primera_diferencia(a, b):
+    for i, (x, y) in enumerate(zip(a, b)):
+        if x != y: return f'nodo {i}\n  actual : {a[max(0,i-2):i+3]}\n  nuevo  : {b[max(0,i-2):i+3]}'
+    return f'distinta longitud {len(a)} vs {len(b)}'
+
+
+def probar(codigo):
+    """Extrae y reconstruye en memoria (no escribe nada) y compara con el HTML actual."""
+    try:
+        cfg, pag, ejs = extraer_en_memoria(codigo)
+        nuevo = construir_desde(cfg, pag, ejs)
+    except Exception as e:
+        print(f'{codigo}: ERROR al extraer/construir: {e}'); return False
+    actual = archivo_tema(codigo).read_text(encoding='utf8')
+    a, b = normalizar(actual), normalizar(nuevo)
+    if a == b:
+        print(f'{codigo}: OK  ({len(ejs)} ejercicios, {len(a)} nodos idénticos)'); return True
+    print(f'{codigo}: DIFERENCIA en {primera_diferencia(a, b)}'); return False
+
+
+def probar_todos(_=None):
+    res = {c: probar(c) for c in todos_los_temas()}
+    mal = [c for c, v in res.items() if not v]
+    print(f'\n{len(res) - len(mal)} de {len(res)} temas pasan sin intervención. Fallan: {", ".join(mal) or "ninguno"}')
+    return not mal
 
 
 def texto_visible(rutas):
@@ -213,21 +292,16 @@ def verificar(codigo):
     actual = actual_p.read_text(encoding='utf8')
     a, b = normalizar(actual), normalizar(nuevo)
     ok = a == b
-    if ok:
-        print(f'{codigo}: 1) etiquetas, atributos y texto idénticos ({len(a)} nodos)')
-    else:
-        for i, (x, y) in enumerate(zip(a, b)):
-            if x != y:
-                print(f'{codigo}: DIFERENCIA en el nodo {i}\n  actual : {a[max(0,i-2):i+3]}\n  nuevo  : {b[max(0,i-2):i+3]}'); break
-        else: print(f'{codigo}: distinta longitud {len(a)} vs {len(b)}')
+    if ok: print(f'{codigo}: 1) etiquetas, atributos y texto idénticos ({len(a)} nodos)')
+    else: print(f'{codigo}: 1) DIFERENCIA en {primera_diferencia(a, b)}')
     try:
         tmp = actual_p.with_name('_verificar_tmp.html'); tmp.write_text(nuevo, encoding='utf8')
         try: ta, tb = texto_visible([actual_p, tmp])
         finally: tmp.unlink()
         if ta == tb: print(f'{codigo}: 2) texto visible en Chrome idéntico ({len(ta)} caracteres)')
         else:
-            i = next(k for k, (x, y) in enumerate(zip(ta, tb)) if x != y) if any(x != y for x, y in zip(ta, tb)) else min(len(ta), len(tb))
-            print(f'{codigo}: 2) DIFERENCIA de texto visible en {i}: «{ta[i-40:i+40]}» vs «{tb[i-40:i+40]}»'); ok = False
+            i = next((k for k, (x, y) in enumerate(zip(ta, tb)) if x != y), min(len(ta), len(tb)))
+            print(f'{codigo}: 2) DIFERENCIA de texto visible en {i}: «{ta[max(0,i-40):i+40]}» vs «{tb[max(0,i-40):i+40]}»'); ok = False
     except ImportError:
         print(f'{codigo}: 2) (sin Playwright: omitido)')
     print(f'{codigo}: IDA Y VUELTA ' + ('OK' if ok else 'FALLA'))
@@ -242,29 +316,38 @@ def construir(codigo):
 # ------------------------------------------------------------------ validar
 def validar(codigo):
     cfg, pag, ejs = cargar(codigo)
-    err = []
+    err, avisos = [], []
     ids = [e['id'] for e in ejs]
     if len(ids) != len(set(ids)): err.append('ids repetidos: ' + ', '.join(i for i in set(ids) if ids.count(i) > 1))
     marc = re.findall(r'\{\{ejercicio:([^}]+)\}\}', pag)
     if sorted(marc) != sorted(ids): err.append('marcadores de la plantilla y registros no coinciden')
     for e in ejs:
         w = e['id']
-        for c in ('id', 'clase', 'nivel', 'titulo', 'fuentes', 'enunciado', 'pista', 'cuerpo'):
+        for c in ('id', 'clase', 'titulo', 'cuerpo'):
             if not e.get(c): err.append(f'{w}: falta «{c}»')
-        if e.get('nivel') not in (1, 2, 3): err.append(f'{w}: nivel fuera de 1-3')
+        nuevo = bool(e.get('pista'))
+        if nuevo:
+            for c in ('nivel', 'enunciado'):
+                if not e.get(c): err.append(f'{w}: formato nuevo sin «{c}»')
+            if e.get('nivel') not in (1, 2, 3): err.append(f'{w}: nivel fuera de 1-3')
+        elif e.get('nivel') or e.get('enunciado'): err.append(f'{w}: «nivel»/«enunciado» sin «pista» (van juntos)')
         tipos = [next(iter(b)) for b in e.get('cuerpo', [])]
-        for t in ('plan', 'pasos') if e.get('clase') != 'examen' or w != 'ex-feb18a' else ('plan',):
-            if t not in tipos: err.append(f'{w}: falta el bloque «{t}»')
+        if nuevo and 'enun' in tipos: err.append(f'{w}: formato nuevo con bloque «enun» en el cuerpo')
+        if not nuevo and 'enun' not in tipos: avisos.append(f'{w}: sin enunciado')
+        if 'pasos' not in tipos: avisos.append(f'{w}: sin bloque «pasos»')
         if e.get('clase') == 'examen' and not any(f['l'] == 'X' for f in e.get('fuentes', [])): err.append(f'{w}: un ejercicio de examen necesita fuente X')
-        if re.search(r'errata|solucionario|la oficial', ' '.join(str(v) for v in e.values()), re.I): err.append(f'{w}: menciona erratas o la solución oficial (regla 8 bis)')
+        if not e.get('fuentes'): avisos.append(f'{w}: sin fuentes')
+        if re.search(r'errata|solucionario|la oficial', ' '.join(str(v) for v in e.values()), re.I): avisos.append(f'{w}: menciona erratas o la solución oficial (regla 8 bis)')
     n = {c: sum(1 for e in ejs if e['clase'] == c) for c in ('libro', 'propio', 'examen')}
-    print(f'{codigo}: {len(ejs)} ejercicios {n}; errores: {len(err)}')
-    for x in err: print('  -', x)
+    print(f'{codigo}: {len(ejs)} ejercicios {n}; errores: {len(err)}; avisos: {len(avisos)}')
+    for x in err: print('  - ERROR', x)
+    for x in avisos[:15]: print('  - aviso', x)
     return not err
 
 
+ORDENES = {'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar, 'probar': lambda c: probar_todos() if c == 'todos' else probar(c)}
+
 if __name__ == '__main__':
-    if len(sys.argv) != 3 or sys.argv[1] not in ('extraer', 'construir', 'verificar', 'validar'):
-        sys.exit(__doc__)
-    ok = {'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar}[sys.argv[1]](sys.argv[2])
+    if len(sys.argv) != 3 or sys.argv[1] not in ORDENES: sys.exit(__doc__)
+    ok = ORDENES[sys.argv[1]](sys.argv[2])
     sys.exit(0 if ok in (None, True) else 1)

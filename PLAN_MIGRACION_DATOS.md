@@ -53,11 +53,11 @@ Leyenda: `—` sin tocar · `E` ejercicios en datos (fase F2) · `C` carcasa y t
 Cada paso termina con commit. Orden estricto en F1-F4; F5 puede ir en paralelo a F3 por temas ya migrados; F7 y F8 son propuestas que el usuario debe aprobar antes de empezar.
 
 ### F1 — Generalizar el extractor al formato antiguo
-- [ ] **1.1** Hacer opcionales `nivel` y `pista` en el esquema. El renderizador usa el formato antiguo (enunciado **dentro** de la solución, sin estrellas) cuando faltan, y el nuevo cuando existen. Hecho cuando: `verificar` pasa en un tema antiguo de prueba (propuesta: 2.2).
-- [ ] **1.2** Admitir en el cuerpo bloques `html` con comentarios y fórmulas `$$` sueltas, y `details` anidados (contar la profundidad real, no buscar `\n</details>`).
-- [ ] **1.3** Generar `id` estables para las 25 soluciones sin id (`e<tema>-<n>`), sin cambiar los enlaces existentes (comprobar con `grep` que nadie enlaza a un id inexistente).
-- [ ] **1.4** Recordatorio: `datos/` **se sube a git** (es la fuente); no añadirlo al `.gitignore`.
-- [ ] **1.5** Probar `extraer`+`verificar` sobre los 25 temas restantes **sin construir**, solo para ver cuáles pasan sin intervención. Anotar en la tabla los que fallan y por qué. Hecho cuando: lista de fallos documentada aquí.
+- [x] **1.1** Hacer opcionales `nivel` y `pista` en el esquema. El renderizador usa el formato antiguo (enunciado **dentro** de la solución, sin estrellas) cuando faltan, y el nuevo cuando existen. Hecho cuando: `verificar` pasa en un tema antiguo de prueba (propuesta: 2.2). *(hecho: `nivel`/`pista`/`enunciado` opcionales; formato antiguo = bloque `enun` dentro del cuerpo)*
+- [x] **1.2** Admitir en el cuerpo bloques `html` con comentarios y fórmulas `$$` sueltas, y `details` anidados (contar la profundidad real, no buscar `\n</details>`). *(hecho: `top_level` admite comentarios y texto suelto; `bloques_sol` cuenta la anidación real de `details`)*
+- [x] **1.3** Generar `id` estables para las 25 soluciones sin id (`e<tema>-<n>`), sin cambiar los enlaces existentes (comprobar con `grep` que nadie enlaza a un id inexistente). *(hecho: ids `sol-X_Y-N` para las 25 soluciones sin id; el comparador ignora el atributo `id` que empieza por `sol-`)*
+- [x] **1.4** Recordatorio: `datos/` **se sube a git** (es la fuente); no añadirlo al `.gitignore`.
+- [x] **1.5** Probar `extraer`+`verificar` sobre los 25 temas restantes **sin construir**, solo para ver cuáles pasan sin intervención. Anotar en la tabla los que fallan y por qué. Hecho cuando: lista de fallos documentada aquí. *(hecho: `datos_tema.py probar todos` → **26 de 26 temas pasan sin intervención**; 636 ejercicios, 235 de examen, 243 de libro, 158 propios)*
 
 ### F2 — Migrar los ejercicios, tema a tema
 Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verificar X.Y` (OK) → `construir X.Y` → abrir el HTML en Chrome (sin errores) → marcar `E` en la tabla → commit «Tema X.Y: ejercicios en datos».
