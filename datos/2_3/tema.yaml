@@ -1,15 +1,13 @@
 codigo: '2.3'
 archivo: |-
   temas/tema_2_3_bases_dimension_coordenadas.html
-html_class: |-
-  class="pilot"
+html_class: ""
 titulo: |-
   2.3 Bases. Dimensión. Coordenadas
 css:
 - |-
   katex/katex.min.css
 - resumen.css
-- pedagogia.css
 js:
 - |-
   katex/katex.min.js
@@ -17,8 +15,6 @@ js:
   katex/auto-render.min.js
 - resumen.js
 - animaciones.js
-- pedagogia.js
-- practica.js
 kicker: |-
   Módulo 2 · Espacios vectoriales · Tema 2.3
 h1: |-
@@ -44,18 +40,268 @@ tipos:
     ¿Es base?
   receta: |-
     Cuenta vectores y compáralos con $\operatorname{Dim}V$; si coincide, $\det\neq0$ de la matriz de coordenadas.
+  titulo_ficha: |-
+    ¿Es base?
+  senal: |-
+    «¿es base?», «¿forman una base?», «demuestre que $B$ es base», «¿es libre / sistema generador?».
+  pasos:
+  - |-
+    <b>Halla $n=\operatorname{Dim}V$</b>: $\mathbb R^n\to n$; $\wp_n\to n+1$; $\mathcal M_{m\times n}\to mn$ (o el dato del enunciado).
+  - |-
+    <b>Cuenta los vectores $k$.</b> Si $k\neq n$, <b>no es base</b> y has terminado: con $k<n$ no generan, con $k>n$ son ligados.
+  - |-
+    Si $k=n$: escribe las <b>coordenadas</b> de cada vector respecto de una base conocida (la canónica) <b>como columnas</b> y calcula el determinante (o el rango).
+  - |-
+    <b>Conclusión razonada:</b> «Como $\operatorname{Dim}V=n$ y hay $n$ vectores, por el Teor. 2.6 basta ver que son libres: $\det\neq0$, luego son base» (o $\det=0$: ligados, no son base).
+  ejemplo: |-
+    $\{(1,0,1),(0,1,1),(1,1,2)\}$ en $\mathbb R^3$: $k=3=n$. $\det\begin{pmatrix}1&0&1\\0&1&1\\1&1&2\end{pmatrix}=0$ (la tercera es la suma de las dos primeras). <b>No es base.</b>
+  fallos: |-
+    decir «es base» porque tiene $n$ vectores sin mirar el determinante · aplicar el Teor. 2.6 sin tener exactamente $n$ vectores · olvidar que $\operatorname{Dim}\wp_n=n+1$.
+  series:
+  - tipo: cuenta
+    titulo: |-
+      Contar: ¿pueden ser base?
+    n: 5
+  - tipo: base3
+    titulo: |-
+      Tres vectores de ℝ³: ¿base?
+    n: 5
+  - tipo: dimension
+    titulo: |-
+      Dimensiones que hay que saberse
+    n: 5
 - id: coord
   nombre: |-
     Coordenadas respecto de una base
   receta: |-
     Plantea $x_1e_1+\dots+x_ne_n=v$ y resuelve el sistema (vectores de la base en columnas).
+  titulo_ficha: |-
+    Coordenadas respecto de una base
+  senal: |-
+    «calcula las coordenadas de $v$ respecto de $B$», «expresa $v$ en la base…».
+  pasos:
+  - |-
+    <b>Fija el orden de $B=\{e_1,\dots,e_n\}$</b> (las coordenadas dependen del orden) y comprueba que es base, o que el enunciado lo asegura.
+  - |-
+    <b>Plantea</b> $x_1e_1+\dots+x_ne_n=v$. Eso es un sistema lineal con los vectores de $B$ por <b>columnas</b> y $v$ como columna de términos independientes: $(e_1\ \cdots\ e_n\mid v)$.
+  - |-
+    <b>Resuelve</b> por Gauss. En $\wp_n$ o $\mathcal M_{m\times n}$ se iguala coeficiente a coeficiente (o entrada a entrada).
+  - |-
+    <b>Comprueba sustituyendo:</b> $x_1e_1+\dots+x_ne_n$ tiene que dar $v$.
+  ejemplo: |-
+    $v=(4,5)$, $B=\{(1,2),(1,-1)\}$: $x_1+x_2=4,\ 2x_1-x_2=5\Rightarrow x_1=3,\ x_2=1$. Comprobación: $3(1,2)+1(1,-1)=(4,5)$ ✓. Luego $v=(3,1)_B$.
+  fallos: |-
+    dar las componentes de $v$ en la base canónica · cambiar el orden de las coordenadas · poner los vectores de $B$ por <b>filas</b> en el sistema.
+  series:
+  - tipo: coord2
+    titulo: |-
+      Coordenadas en ℝ²
+    n: 5
+  - tipo: coordpol
+    titulo: |-
+      Coordenadas de un polinomio en ℘₂
+    n: 5
 - id: dim
   nombre: |-
     Dimensión (y base) de un subespacio
   receta: |-
     Matriz con los generadores, escalona: $\operatorname{Dim}=$ filas no nulas.
+  titulo_ficha: |-
+    Dimensión (y base) de un subespacio
+  senal: |-
+    «dimensión del subespacio generado por…», «halla una base de $\langle S\rangle$», o un subespacio dado por ecuaciones.
+  pasos:
+  - |-
+    <b>Generado por vectores:</b> forma la matriz con los vectores por <b>filas</b> (en coordenadas) y <b>escalona</b>.
+  - |-
+    <b>$\operatorname{Dim}$ = rango</b> = número de filas no nulas (Teor. 2.5). Una <b>base</b> son esas filas no nulas.
+  - |-
+    <b>Dado por ecuaciones:</b> resuelve el sistema homogéneo. Cada <b>parámetro libre</b> da un vector de la base y $\operatorname{Dim}=n-\operatorname{rang}(\text{coeficientes})$.
+  - |-
+    Si piden una base <b>formada por vectores de $S$</b>, usa el método del tipo 4 (columnas con pivote).
+  ejemplo: |-
+    $\langle(1,2,3),(2,4,6),(0,1,1)\rangle$: la 2.ª fila menos el doble de la 1.ª es $0$. Quedan $(1,2,3)$ y $(0,1,1)$: $\operatorname{Dim}=2$, base $\{(1,2,3),(0,1,1)\}$.
+  fallos: |-
+    contar los vectores en lugar de calcular el rango · dar la dimensión del espacio total · olvidar que cada ecuación <i>independiente</i> quita una dimensión.
+  series:
+  - tipo: rango
+    titulo: |-
+      Dimensión de un subespacio generado
+    n: 5
 - id: completar
   nombre: |-
     Extraer una base de un generador
   receta: |-
     Quita los vectores que dependen de los demás (o elige $n$ con $\det\neq0$).
+  titulo_ficha: |-
+    Completar o extraer una base
+  senal: |-
+    «complete hasta una base», «extraiga una base de…», «¿es posible extraer…?».
+  pasos:
+  - |-
+    <b>Completar</b> (parto de vectores <i>libres</i>): matriz con ellos por filas y escalona; mira qué <b>columnas no tienen pivote</b>.
+  - |-
+    Añade los vectores canónicos $e_j$ de esas columnas. Comprueba que la matriz $n\times n$ resultante tiene $\det\neq0$.
+  - |-
+    <b>Extraer</b> (parto de un sistema <i>generador</i> $S$): pon los vectores de $S$ por <b>columnas</b> y escalona. Los vectores de $S$ en las columnas <b>con pivote</b> forman una base de $\langle S\rangle$.
+  - |-
+    Si $\langle S\rangle=V$, esa base lo es de $V$ (en $\mathbb R^3$: la terna con $\det\neq0$).
+  ejemplo: |-
+    Completar $\{(1,2,0),(0,1,1)\}$ en $\mathbb R^3$: tras escalonar los pivotes están en las columnas 1 y 2, la 3 no tiene. Se añade $e_3=(0,0,1)$ y $\det\begin{pmatrix}1&2&0\\0&1&1\\0&0&1\end{pmatrix}=1\neq0$ ✓.
+  fallos: |-
+    añadir un vector que ya está en el subespacio generado · concluir «no se puede» tras ver un solo determinante nulo · en «extraer», dar filas del escalonado, que no son vectores de $S$.
+  series:
+  - tipo: completar
+    titulo: |-
+      Completar a una base de ℝ³
+    n: 5
+esencial:
+  intro: |-
+    Si solo tienes un rato, esto es lo que tienes que llevarte. El resto de la página lo desarrolla con ejemplos.
+  items:
+  - |-
+    <b>Base = «generadores sin sobrantes».</b> Un conjunto de vectores es base de $V$ si <b>genera</b> $V$ y es <b>libre</b> (ninguno se obtiene de los demás). Con una base, cada vector se escribe de <b>una única manera</b>: esos números son sus <b>coordenadas</b>.
+  - |-
+    <b>Dimensión = nº de vectores de una base</b> (siempre el mismo, sea cual sea la base). Se usa: $\operatorname{Dim}\mathbb R^n=n$, $\operatorname{Dim}\wp_n=n+1$, $\operatorname{Dim}\mathcal M_{m\times n}=mn$.
+  - |-
+    <b>Atajo de examen:</b> si $\operatorname{Dim}V=n$ y tienes <b>exactamente $n$</b> vectores, son base $\iff$ la matriz de sus coordenadas tiene $\det\neq0$ (rango $n$). Con más de $n$ son ligados; con menos de $n$ no generan.
+  - |-
+    <b>Dimensión de $\langle S\rangle$ = rango</b> de la matriz con los vectores de $S$ (en coordenadas). Una base de $\langle S\rangle$ son sus filas no nulas tras escalonar.
+que_cae_nota: |-
+  Cada ejercicio se ha clasificado por su pregunta principal; varios mezclan tipos (por ejemplo Sept. 25 y Feb. 23 piden además una dimensión o una base).
+quiz:
+- p: |-
+    ¿Cuál de estos conjuntos es base de $\mathbb R^2$?
+  opciones:
+  - t: |-
+      $\{(1,0),(2,0)\}$
+    ok: false
+    why: |-
+      Los dos vectores son proporcionales: ligados, solo generan una recta.
+  - t: |-
+      $\{(1,0),(0,1),(1,1)\}$
+    ok: false
+    why: |-
+      Genera $\mathbb R^2$, pero son 3 vectores en dimensión 2: sobra uno (es ligado).
+  - t: |-
+      $\{(1,1),(1,-1)\}$
+    ok: true
+  - t: |-
+      $\{(1,0,0),(0,1,0)\}$
+    ok: false
+    why: |-
+      Son vectores de $\mathbb R^3$ (3 componentes); una base de $\mathbb R^2$ debe estar formada por vectores de $\mathbb R^2$.
+  fb: |-
+    $\{(1,1),(1,-1)\}$: dos vectores de $\mathbb R^2$ con $\det=-2\neq0$. El primero es ligado; el segundo genera pero sobra un vector (3 en dimensión 2); el último son vectores de $\mathbb R^3$, no de $\mathbb R^2$.
+- p: |-
+    ¿Cuál es la dimensión de $\wp_3$ (polinomios de grado $\le3$)?
+  opciones:
+  - t: '3'
+    ok: false
+    why: |-
+      Has contado el grado, no los coeficientes: falta el término independiente ($1,x,x^2,x^3$ son 4).
+  - t: '4'
+    ok: true
+  - t: '5'
+    ok: false
+    why: |-
+      Te pasas: un polinomio de grado $\le3$ tiene 4 coeficientes (de $x^3$ a $x^0$).
+  - t: Infinita
+    ok: false
+    why: |-
+      Con el grado acotado el espacio es finito. Solo el espacio de <i>todos</i> los polinomios tiene dimensión infinita.
+  fb: |-
+    Una base es $\{1,x,x^2,x^3\}$: 4 vectores. En general $\operatorname{Dim}\wp_n=n+1$ (hay que contar el término independiente).
+- p: |-
+    Tres vectores de $\mathbb R^3$ forman una matriz de determinante $0$. ¿Qué concluyes?
+  opciones:
+  - t: |-
+      Son base de $\mathbb R^3$
+    ok: false
+    why: |-
+      $\det=0$ significa justo que <b>no</b> son base.
+  - t: |-
+      Son ligados y no generan $\mathbb R^3$
+    ok: true
+  - t: |-
+      Generan $\mathbb R^3$ pero son ligados
+    ok: false
+    why: |-
+      Con exactamente $n$ vectores, «generar» y «ser libres» van juntos: si son ligados, no generan.
+  - t: |-
+      No se puede saber
+    ok: false
+    why: |-
+      Sí se puede: con 3 vectores en $\mathbb R^3$ el determinante decide.
+  fb: |-
+    $\det=0\iff\operatorname{rang}<3$: son ligados <b>y</b> no generan $\mathbb R^3$. Con exactamente $n$ vectores (Teor. 2.6), «libre» y «generador» van siempre juntos.
+- p: |-
+    Un subespacio de $\mathbb R^4$ tiene dimensión 2. Una base suya está formada por…
+  opciones:
+  - t: |-
+      2 vectores de 2 componentes
+    ok: false
+    why: |-
+      Los vectores de una base del subespacio siguen siendo vectores de $\mathbb R^4$: tienen 4 componentes.
+  - t: |-
+      2 vectores de 4 componentes
+    ok: true
+  - t: |-
+      4 vectores de 2 componentes
+    ok: false
+    why: |-
+      La dimensión es 2, así que bastan 2 vectores (y de $\mathbb R^4$).
+  - t: |-
+      4 vectores de 4 componentes
+    ok: false
+    why: |-
+      Cuatro vectores serían base de todo $\mathbb R^4$; el subespacio tiene dimensión 2, luego 2 vectores.
+  fb: |-
+    Son vectores <b>de $\mathbb R^4$</b> (4 componentes), pero solo hacen falta 2. Respecto de esa base, cada vector del subespacio tiene 2 coordenadas.
+- p: |-
+    Las coordenadas de $v=(3,1)$ respecto de $B=\{(1,1),(1,-1)\}$ son…
+  opciones:
+  - t: |-
+      $(3,1)$
+    ok: false
+    why: |-
+      Esas son las componentes en la base canónica, no en $B$.
+  - t: |-
+      $(2,1)$
+    ok: true
+  - t: |-
+      $(1,2)$
+    ok: false
+    why: |-
+      Has cambiado el orden: la primera coordenada acompaña a $(1,1)$.
+  - t: |-
+      $(2,-1)$
+    ok: false
+    why: |-
+      Revisa el signo: $2(1,1)-(1,-1)=(1,3)$, no $(3,1)$.
+  fb: |-
+    $a(1,1)+b(1,-1)=(3,1)\Rightarrow a+b=3,\ a-b=1\Rightarrow a=2,\ b=1$. $(3,1)$ son las coordenadas en la base canónica, no en $B$.
+- p: |-
+    En un espacio de dimensión 4 tienes 3 vectores libres. ¿Son base?
+  opciones:
+  - t: |-
+      Sí, porque son libres
+    ok: false
+    why: |-
+      Ser libres no basta: una base de un espacio de dimensión 4 tiene 4 vectores; 3 no generan.
+  - t: |-
+      No: no generan; hay que añadir un vector (base incompleta)
+    ok: true
+  - t: |-
+      Sí, si además generan algún subespacio
+    ok: false
+    why: |-
+      Cualquier sistema genera <i>algún</i> subespacio; lo que hay que ver es si genera todo $V$, y 3 vectores no bastan en dimensión 4.
+  - t: |-
+      No, porque son ligados
+    ok: false
+    why: |-
+      El enunciado dice que son libres, no ligados.
+  fb: |-
+    Una base de un espacio de dimensión 4 tiene exactamente 4 vectores. Tres libres se completan con uno más (Teor. 2.7).
+capa: true

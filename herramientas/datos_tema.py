@@ -6,6 +6,7 @@
                                                       1) mismas etiquetas, atributos y texto  2) mismo texto visible en Chrome (si hay Playwright)
     python herramientas/datos_tema.py validar 2.3     reglas de contenido (ids únicos, campos obligatorios, ejercicios de examen)
     python herramientas/datos_tema.py migrar 2.2      extraer + validar + verificar + construir, comprobando que no se pierde ningún ejercicio
+    python herramientas/datos_tema.py estado todos    comprueba que el HTML de cada tema coincide con lo que se construye desde sus datos
     python herramientas/datos_tema.py probar 2.2|todos   extrae y reconstruye EN MEMORIA (sin escribir nada) y compara etiquetas y texto
 
 Cada tema se guarda en `datos/X_Y/`:
@@ -39,6 +40,8 @@ tema.yaml puede llevar `tipos: [{id, nombre, receta}]`; las secciones usan los m
 import re, sys, pathlib, html as _html
 from html.parser import HTMLParser
 import yaml
+sys_path_fix = sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import capa
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 NOMBRE_NIVEL = {1: 'básico', 2: 'nivel examen', 3: 'difícil'}
@@ -310,11 +313,23 @@ def clave_cronologica(e):
 
 
 def etiqueta(e):
+    """Texto del enlace a un ejercicio: el campo `etiqueta` si existe; si no, se deduce del título (libro, propios) o de la referencia X (examen)."""
     if e.get('etiqueta'): return e['etiqueta']
-    m = re.match(r'(Ejercicio \S+|Ejemplo propio \d+)', e['titulo'])
-    if e['clase'] == 'libro' and m: return m.group(1).replace('Ejercicio ', '')
-    if m: return m.group(1)
-    raise ValueError(f'{e["id"]}: falta «etiqueta» para generar su enlace')
+    t = re.sub(r'<[^>]+>', '', e['titulo'])
+    m = re.match(r'(Ejercicio \S+|Ejemplo propio \d+)', t)
+    if e['clase'] != 'examen':
+        if m: return m.group(1).replace('Ejercicio ', '') if e['clase'] == 'libro' else m.group(1)
+        return re.split(r'\s+[—–-]\s+', t)[0][:32]
+    x = next((f['ref'] for f in e['fuentes'] if f['l'] == 'X'), t)
+    r = re.match(r'(Ene|Feb|Sept)\.?\s*(\d{4})\s*(?:\(([^)]*)\))?,?\s*(.*)', x)
+    if not r: return x[:32]
+    mes, anio, par, resto = r.groups()
+    tipo = re.search(r'tipo ([A-Z]\d?)', par or '')
+    sem = re.search(r'(\d)\.ª sem', par or '')
+    out = f'{mes}. {anio[2:]}' + (f' {tipo.group(1)}' if tipo else '') + (f' ({sem.group(1)}.ª)' if sem else '')
+    resto = re.sub(r'\s*\(.*?\)\s*$', '', resto)
+    resto = re.sub(r'^(problema|ejercicio|pregunta)\s*(\d+)', lambda q: {'problema': 'p.', 'ejercicio': 'ej.', 'pregunta': 'preg.'}[q.group(1)] + ' ' + q.group(2), resto)
+    return (out + ' ' + resto).strip()
 
 
 def enlaces(lista): return ' · '.join(f'<a href="#{e["id"]}">{etiqueta(e)}</a>' for e in lista) or '—'
@@ -345,7 +360,9 @@ def construir_desde(cfg, pag, ejs):
     def sub(m):
         usados.add(m.group(1)); return render(por[m.group(1)])
     cuerpo = re.sub(r'\{\{ejercicio:([^}]+)\}\}', sub, pag)
-    cuerpo = cuerpo.replace('{{que_cae}}', tabla_que_cae(cfg, ejs) if '{{que_cae}}' in cuerpo else '')
+    tabla = tabla_que_cae(cfg, ejs) if cfg.get('tipos') else ''
+    if cfg.get('capa'): cfg, cuerpo = capa.aplicar(cfg, cuerpo, ejs, tabla)
+    cuerpo = cuerpo.replace('{{que_cae}}', tabla)
     cuerpo = re.sub(r'\{\{vinculos:([^}]+)\}\}', lambda m: vinculos(m.group(1), ejs), cuerpo)
     sobran = set(por) - usados
     if sobran: raise ValueError('ejercicios en el YAML que las secciones no usan: ' + ', '.join(sorted(sobran)))
@@ -395,6 +412,17 @@ def probar(codigo):
     if a == b:
         print(f'{codigo}: OK  ({len(ejs)} ejercicios, {len(a)} nodos idénticos)'); return True
     print(f'{codigo}: DIFERENCIA en {primera_diferencia(a, b)}'); return False
+
+
+def estado(_=None):
+    """¿El HTML de cada tema es exactamente lo que se construye desde sus datos? (detecta ediciones a mano del HTML o datos sin reconstruir)"""
+    mal = []
+    for c in todos_los_temas():
+        if not carpeta(c).exists(): print(f'{c}: sin datos (aún editado a mano)'); continue
+        cfg, nuevo = construir_texto(c)
+        if normalizar((RAIZ / cfg['archivo']).read_text(encoding='utf8')) != normalizar(nuevo): mal.append(c); print(f'{c}: el HTML NO coincide con lo que se construye desde datos/ (¿falta `construir`?)')
+    print(f'estado: {len(todos_los_temas()) - len(mal)} de {len(todos_los_temas())} temas sincronizados' + (f'; DESINCRONIZADOS: {", ".join(mal)}' if mal else ''))
+    return not mal
 
 
 def probar_todos(_=None):
@@ -493,7 +521,7 @@ def migrar(codigo):
     return True
 
 
-ORDENES = {'plantilla': crear_plantilla, 'migrar': migrar, 'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar, 'probar': lambda c: probar_todos() if c == 'todos' else probar(c)}
+ORDENES = {'estado': estado, 'plantilla': crear_plantilla, 'migrar': migrar, 'extraer': extraer, 'construir': construir, 'verificar': verificar, 'validar': validar, 'probar': lambda c: probar_todos() if c == 'todos' else probar(c)}
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or sys.argv[1] not in ORDENES: sys.exit(__doc__)

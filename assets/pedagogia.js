@@ -25,10 +25,11 @@
     }
 
     /* ---- Vistas: cada elemento de main hereda la vista de su h2 ---- */
-    var cur = null, cuenta = { teoria: 0, tipos: 0, ejercicios: 0, examen: 0 };
+    var cur = null, cuenta = { teoria: 0, tipos: 0, ejercicios: 0, examen: 0 }, hay = { todo: true };
     [].forEach.call(main.children, function (el) {
       if (el.tagName === 'H2') cur = el.dataset.vista || null;
       if (cur) {
+        hay[cur] = true;
         el.classList.add('vista-' + cur);
         if (el.matches('details.sol')) cuenta[cur]++;
       }
@@ -36,6 +37,7 @@
     var defs = [['teoria', '📘 Teoría'], ['tipos', '🧭 Por tipo'], ['ejercicios', '✏️ Ejercicios'], ['examen', '🎯 Examen'], ['todo', 'Todo junto']];
     var bar = d.createElement('div'); bar.className = 'vistas'; bar.setAttribute('role', 'tablist'); bar.setAttribute('aria-label', 'Vista del tema');
     defs.forEach(function (x) {
+      if (!hay[x[0]]) return;   // no se muestra una pestaña sin contenido
       var b = d.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.v = x[0];
       b.innerHTML = x[1] + (cuenta[x[0]] ? '<span class="cnt">(' + cuenta[x[0]] + ')</span>' : '');
       b.addEventListener('click', function () { setV(x[0]); window.scrollTo({ top: Math.max(0, bar.getBoundingClientRect().top + scrollY - (tb ? tb.offsetHeight : 45) - 4) }); });

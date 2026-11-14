@@ -1,0 +1,103 @@
+"""Capa pedagógica generada desde `datos/X_Y/tema.yaml`: «Lo esencial», «Qué cae», fichas por tipo con prácticas y autoevaluación.
+
+Se activa con `capa: true` en tema.yaml. Entonces `datos_tema.construir_desde`:
+  - añade a la carcasa `pedagogia.css/js` (y `practica.js` si hay series), `class="pilot"` y `data-vista` en cada <h2>;
+  - inserta al principio del cuerpo las cajas «Lo esencial en 5 minutos» y «Qué cae en el examen» (si hay `esencial` / `tipos`);
+  - inserta la sección «Por tipo de problema» antes de la de ejercicios;
+  - añade la autoevaluación (`quiz`) al final del cuerpo.
+
+Esquema en tema.yaml (todo HTML con LaTeX, en bloques literales):
+  capa: true
+  esencial:  {intro: HTML, items: [HTML, …]}
+  que_cae_nota: HTML                 (opcional; párrafo pequeño bajo la tabla)
+  tipos:                              (cada tipo = una fila de la tabla y una ficha)
+    - id, nombre, receta              (fila de la tabla «Qué cae»)
+      titulo_ficha                    (opcional; por defecto = nombre)
+      senal: HTML                     «Cómo lo reconoces»
+      pasos: [HTML, …]
+      ejemplo: HTML                   «Ejemplo relámpago»
+      fallos: HTML                    «Dónde se falla»
+      series: [{tipo, titulo, n}]     (opcional) series de práctica de assets/practica.js
+  quiz:      [{p: HTML, opciones: [{t: HTML, ok: true|false, why: HTML}], fb: HTML}]
+"""
+import re
+
+VISTA = {'ejercicios': 'ejercicios', 'examenes': 'examen', 'tipos': 'tipos'}   # el resto de <h2> es teoría
+
+
+def activar(cfg):
+    """Devuelve una copia de cfg con la carcasa de la capa (clase, css y js)."""
+    c = dict(cfg)
+    c['html_class'] = 'class="pilot"'
+    c['css'] = list(cfg['css']) + [x for x in ('pedagogia.css',) if x not in cfg['css']]
+    js = list(cfg['js'])
+    for x in ('pedagogia.js',) + (('practica.js',) if any(t.get('series') for t in cfg.get('tipos', [])) else ()):
+        if x not in js: js.append(x)
+    c['js'] = js
+    return c
+
+
+def con_vistas(cuerpo):
+    def f(m):
+        if 'data-vista' in m.group(0): return m.group(0)
+        v = VISTA.get(m.group(1), 'teoria')
+        return f'<h2 id="{m.group(1)}" data-vista="{v}"{m.group(2)}>'
+    return re.sub(r'<h2 id="([^"]+)"([^>]*)>', f, cuerpo)
+
+
+def esencial(cfg):
+    e = cfg.get('esencial')
+    if not e: return ''
+    li = '\n'.join(f'    <li>{x}</li>' for x in e['items'])
+    return f'<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>\n  <p>{e["intro"]}</p>\n  <ol>\n{li}\n  </ol>\n</div>\n\n'
+
+
+def que_cae(cfg, ejs, tabla):
+    if not cfg.get('tipos'): return ''
+    ex = [e for e in ejs if e['clase'] == 'examen']
+    lib = [e for e in ejs if e['clase'] == 'libro']
+    n = len(cfg['tipos'])
+    txt = (f'En los exámenes de otros años hay <b>{len(ex)} ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y '
+           f'{len(lib)} en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en {n} tipos; '
+           'cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:')
+    nota = f'\n  <p><small>{cfg["que_cae_nota"]}</small></p>' if cfg.get('que_cae_nota') else ''
+    return f'<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>\n  <p>{txt}</p>\n  {tabla}{nota}\n</div>\n\n'
+
+
+def tipos(cfg):
+    if not cfg.get('tipos'): return ''
+    o = ['<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>\n',
+         '<p>En el examen no te preguntan «el apartado ' + cfg['codigo'] + '»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. '
+         'Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico)'
+         + (', una <b>serie de práctica</b> con ejercicios que cambian cada vez y se corrigen al instante' if any(t.get('series') for t in cfg['tipos']) else '')
+         + ' y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>\n']
+    for i, t in enumerate(cfg['tipos'], 1):
+        pasos = '\n'.join(f'    <li>{p}</li>' for p in t['pasos'])
+        ser = ''.join(f'  <div class="drill" data-tipo="{s["tipo"]}" data-titulo="{s["titulo"]}" data-n="{s.get("n", 5)}"></div>\n' for s in t.get('series', []))
+        o.append(f'<section class="ficha" id="tipo-{t["id"]}">\n  <h3>Tipo {i} — {t.get("titulo_ficha", t["nombre"])}</h3>\n'
+                 f'  <p class="senal"><b>Cómo lo reconoces:</b> {t["senal"]}</p>\n  <ol class="pasos">\n{pasos}\n  </ol>\n'
+                 f'  <div class="rel"><b>Ejemplo relámpago.</b> {t["ejemplo"]}</div>\n  <p class="fallos"><b>Dónde se falla:</b> {t["fallos"]}</p>\n{ser}'
+                 f'  {{{{vinculos:{t["id"]}}}}}\n</section>\n')
+    return '\n'.join(o) + '\n'
+
+
+def quiz(cfg):
+    q = cfg.get('quiz')
+    if not q: return ''
+    o = ['<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>']
+    for x in q:
+        li = ''.join(f'<li data-ok>{op["t"]}</li>' if op.get('ok') else f'<li>{op["t"]}<span class="why">{op["why"]}</span></li>' for op in x['opciones'])
+        o.append(f'  <div class="qp"><p>{x["p"]}</p>\n    <ul class="opts">{li}</ul>\n    <p class="fb">{x["fb"]}</p></div>')
+    o.append('  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>\n</div>\n')
+    return '\n'.join(o)
+
+
+def aplicar(cfg, cuerpo, ejs, tabla):
+    """Devuelve (cfg con carcasa de la capa, cuerpo con las piezas insertadas)."""
+    cuerpo = con_vistas(cuerpo)
+    pre = esencial(cfg) + que_cae(cfg, ejs, tabla)
+    t = tipos(cfg)
+    if t:
+        m = re.search(r'(?:<!--[^\n]*-->[ \t]*\n(?:[ \t]*\n)*)?<h2 id="ejercicios"', cuerpo)
+        cuerpo = cuerpo[:m.start()] + t + cuerpo[m.start():]
+    return activar(cfg), pre + cuerpo + quiz(cfg)
