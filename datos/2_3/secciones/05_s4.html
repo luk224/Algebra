@@ -1,0 +1,83 @@
+<!-- ============================ 4 ============================ -->
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Cómo calcular con bases: rango, criterios y base incompleta <span class="src" data-l="U" data-ref="U §2.3.3 Teoremas 2.5, 2.6 y 2.7 y Ejemplo 2.30, p. 88-89">U p.88-89</span></h2>
+
+<div class="box thm"><span class="h">Teorema 2.5 — rango = dimensión</span>
+  <p>El rango de $S=\{u_1,\dots,u_p\}$ es la dimensión del subespacio que genera:
+  $$\operatorname{rang}(S)=\operatorname{Dim}\langle S\rangle.$$
+  <b>Relación con matrices.</b> El rango de un sistema de vectores coincide con el <b>rango de la matriz</b> cuyas filas (o columnas) son las <b>coordenadas</b> de los vectores de $S$ (respecto de una base cualquiera). Así, el número de vectores independientes de $S$ y la dimensión de $\langle S\rangle$ se calculan <b>escalonando una matriz</b>.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.5 y relación entre el rango de un sistema y el de una matriz, p. 88">U p.88</span>
+  <span class="src" data-l="L" data-ref="Lay §4.3, Ejemplos 8-9 (base de Col A por columnas pivote) y p.211: las columnas de A y B comparten relaciones de dependencia, p. 211-212">L p.211-212</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.6 — «basta con la mitad del trabajo»</span>
+  <p>Sea $\operatorname{Dim}V=n$. Entonces:</p>
+  <ul>
+    <li>todo conjunto <b>libre</b> de $n$ vectores de $V$ es base de $V$ (no hace falta probar que genera);</li>
+    <li>todo conjunto <b>generador</b> de $V$ con $n$ vectores es base de $V$ (no hace falta probar que es libre).</li>
+  </ul>
+  <p><b>Criterio con rangos:</b> un sistema de $n$ vectores de un espacio de dimensión $n$ es base $\iff$ su <b>rango es $n$</b>. Con coordenadas, es una matriz cuadrada $n\times n$ y equivale a $\det\neq0$ (U p.27).</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.6 y criterio «n vectores son base si y solo si su rango es n», p. 88">U p.88</span>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Teorema 12 (teorema de la base), p. 227">L p.227</span>
+</div>
+
+<div class="box thm"><span class="h">Teorema 2.7 (de la base incompleta)</span>
+  <p>Si $\operatorname{Dim}V=n$, todo sistema <b>libre</b> $\{v_1,\dots,v_p\}$ de $V$ con $p\lt n$ se puede <b>completar</b> con $n-p$ vectores de $V$ hasta formar una base.</p>
+  <span class="src" data-l="U" data-ref="U Teorema 2.7 (de la base incompleta), p. 89">U p.89</span>
+  <span class="src" data-l="L" data-ref="Lay §4.5, Teorema 11 (todo conjunto libre de H se expande a una base), p. 227">L p.227</span>
+</div>
+
+<div class="box ex"><span class="h">Ej. U 2.30 — completar a una base de $\wp_3$</span>
+  <p>En $\wp_3$ (polinomios de grado $\le3$), $S=\{x^2,\,x^2+x,\,x+1\}$ es libre pero <b>no</b> es base: tiene 3 elementos y $\operatorname{Dim}\wp_3=4$ (la base canónica $\{x^3,x^2,x,1\}$ tiene 4). No genera porque ninguna combinación de $S$ da grado 3. Hay que añadir $4-3=1$ vector: por ejemplo $x^3$ ($\{x^3,x^2,x^2+x,x+1\}$ es libre y genera $\wp_3$), pero también valen $x^3-x^2$, $x^3-x^2+x$, … <b>No vale cualquiera</b>: hay que añadir un vector <b>fuera de $\langle S\rangle$</b>. Aquí $\langle S\rangle=\wp_2$ (esos tres polinomios son la base del Ej. U 2.26), así que cualquier polinomio de grado $\le2$ ya está en $\langle S\rangle$ y no sirve (por ejemplo $x^2+1=2x^2-(x^2+x)+(x+1)$); hay que añadir uno de grado 3.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 2.30, p. 89">U p.89</span>
+</div>
+
+<div class="box ex"><span class="h">Cómo se hace «a mano» la base incompleta (método sistemático)</span>
+  <p>Para completar un sistema libre $\{v_1,\dots,v_p\}\subset\mathbb R^n$: escalona la matriz con los $v_i$ <b>en filas</b>; añade los vectores canónicos $e_j$ correspondientes a las <b>columnas sin pivote</b>. Las filas no nulas de la escalonada, junto con esos $e_j$, forman (reordenando las filas) una matriz <b>escalonada con $n$ pivotes</b>, uno por columna; como las operaciones de fila no cambian el rango, la matriz $n\times n$ formada por los $v_i$ y los $e_j$ tiene rango $n$ (determinante $\neq0$), así que los $n$ vectores son libres y, por el Teor. 2.6, base. Lo verás aplicado en los Ejemplos propios 2 y 3 y en el Examen 4.</p>
+  <span class="src" data-l="P" data-ref="Método práctico para el Teorema 2.7 (U p.89); explicación propia, verificada con sympy">P</span>
+</div>
+
+<div class="box ex"><span class="h">Animación: completar a una base paso a paso (ℝ⁴)</span>
+  <p>Vectores de partida $u_1=(1,2,0,1)$ y $u_2=(2,4,1,1)$ (libres, en $\mathbb R^4$: faltan $4-2=2$). Pulsa «Siguiente» (o «Reproducir»): se escalona, se ven las columnas <b>sin pivote</b>, se añaden los $e_j$ de esas columnas y se comprueba que el resultado es base. Puedes cambiar los vectores en «✎ Cambiar los vectores».</p>
+  <div class="anim-baseinc" data-v="1,2,0,1;2,4,1,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js); método práctico para el Teorema 2.7, U p.89">P</span>
+</div>
+
+<div class="recipe"><b>Receta «dimensión y base del subespacio generado por $S$» (la más usada):</b>
+  <ol>
+    <li>Escribe las coordenadas de los vectores de $S$ como <b>filas</b> de una matriz (en $\wp_n$: los coeficientes; en $\mathcal M_{m\times n}$: las entradas por filas).</li>
+    <li>Escalona por Gauss (sin permutar filas, para saber qué vector es cuál). Las operaciones de fila no cambian $\langle S\rangle$ ni el rango.</li>
+    <li><b>$\operatorname{Dim}\langle S\rangle=$ nº de filas no nulas</b> (Teor. 2.5). Una base: las filas no nulas de la escalonada, o los vectores <b>originales</b> cuya fila no se ha anulado, <b>pero esta segunda regla solo vale si se escalona sin permutar filas y restando a cada fila múltiplos de las filas anteriores</b> (con otras operaciones la fila que sobrevive ya no es el vector original).</li>
+    <li>Si los vectores están en <b>columnas</b>, las columnas pivote de la escalonada señalan <b>qué vectores originales</b> forman base de $\langle S\rangle$ (L p.211); cuidado: las columnas de la escalonada ya no son los vectores originales.</li>
+  </ol>
+</div>
+
+<div class="box ex"><span class="h">Animación: dimensión y base de $\langle S\rangle$ paso a paso</span>
+  <p>Con $S=\{u_1,u_2,u_3,u_4\}\subset\mathbb R^4$ del recuadro «Dos formas…» (más abajo). Pulsa «Siguiente»: se escalona, aparecen filas nulas y se leen la dimensión y una base. Cambia los vectores en «✎».</p>
+  <div class="anim-subesp" data-v="1,2,0,1;2,4,1,1;0,0,1,-1;1,2,1,0"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js); Teor. 2.5, U p.88">P</span>
+</div>
+
+<div class="recipe"><b>Receta «¿es $S$ base de $V$?»:</b>
+  <ol>
+    <li>Calcula $n=\operatorname{Dim}V$. Si $S$ no tiene exactamente $n$ vectores: <b>no es base</b> (más de $n$: ligado; menos de $n$: no genera). Termina.</li>
+    <li>Si tiene $n$: forma la matriz $n\times n$ de sus coordenadas. $\det\neq0$ (o rango $n$) $\iff$ <b>base</b> (Teor. 2.6; basta una sola de las dos propiedades).</li>
+    <li>Con un parámetro: base $\iff\det\neq0$; en los valores que lo anulan calcula el rango aparte para saber la dimensión de $\langle S\rangle$.</li>
+    <li>Si tienes <b>más</b> vectores que $n$ y quieres <b>extraer</b> una base: busca $n$ de ellos con determinante $\neq0$ (o quita, de uno en uno, los que son combinación de los demás, Teor. 2.1).</li>
+  </ol>
+</div>
+
+<div class="box ex"><span class="h">Animación: ¿es $S$ base de $\mathbb R^3$?</span>
+  <p>Primero se compara el número de vectores con la dimensión; si coincide, se calcula el determinante escalonando (con cuidado con el signo al permutar filas). Prueba a repetir un vector en «✎».</p>
+  <div class="anim-esbase" data-v="1,2,0;0,1,1;1,0,1"></div>
+  <span class="src" data-l="P" data-ref="Animación propia (componente assets/animaciones.js); Teor. 2.6, U p.88">P</span>
+</div>
+
+<div class="box tip"><span class="h">Dos formas de obtener una base de $\langle S\rangle$ (¡dan bases distintas, las dos valen!)</span>
+  <p>$S=\{u_1=(1,2,0,1),\,u_2=(2,4,1,1),\,u_3=(0,0,1,-1),\,u_4=(1,2,1,0)\}$ (es el sistema del Ejemplo propio 2). Por <b>filas</b> se obtiene $\operatorname{rang}=2$: las filas no nulas de la escalonada son $u_1$ y $(0,0,1,-1)$, y esta segunda fila resulta ser justamente $u_3$ (porque $u_3=u_2-2u_1$), así que una base es $\{u_1,u_3\}$; poniendo los vectores en <b>columnas</b> y escalonando, los pivotes caen en las columnas 1 y 2, y la base es $\{u_1,u_2\}$ (con $u_3=-2u_1+u_2$ y $u_4=-u_1+u_2$: comprobable). El subespacio es el mismo y su dimensión también (2): hay infinitas bases.</p>
+  <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; método de columnas pivote en L p.211">P</span>
+</div>
+
+<div class="box warn"><span class="h">Error típico</span>
+  <p>(1) Concluir «es base» solo porque el número de vectores coincide con la dimensión (necesario, no suficiente). (2) Comprobar solo una propiedad (libre o generador) cuando el número de vectores <b>no es exactamente $\operatorname{Dim}V$</b>: el atajo del Teor. 2.6 exige exactamente $\operatorname{Dim}V$ vectores. (3) Calcular el determinante de cada matriz $S_i$ cuando los vectores son matrices: lo que importa es el determinante de la matriz de <b>coordenadas</b> de todos ellos. (4) Completar una base con un vector que ya estaba en el subespacio generado.</p>
+</div>
+

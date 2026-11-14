@@ -1,0 +1,68 @@
+<!-- ============================ P: por tipo de problema ============================ -->
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 2.3»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Aquí hay cuatro tipos. Cada uno tiene su <b>ficha</b> (cuándo se usa, pasos, error típico), una <b>serie de práctica</b> con ejercicios que cambian cada vez y se corrigen al instante (con la explicación de <i>por qué</i> te has equivocado) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-base">
+  <h3>Tipo 1 — ¿Es base?</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «¿es base?», «¿forman una base?», «demuestre que $B$ es base», «¿es libre / sistema generador?».</p>
+  <ol class="pasos">
+    <li><b>Halla $n=\operatorname{Dim}V$</b>: $\mathbb R^n\to n$; $\wp_n\to n+1$; $\mathcal M_{m\times n}\to mn$ (o el dato del enunciado).</li>
+    <li><b>Cuenta los vectores $k$.</b> Si $k\neq n$, <b>no es base</b> y has terminado: con $k<n$ no generan, con $k>n$ son ligados.</li>
+    <li>Si $k=n$: escribe las <b>coordenadas</b> de cada vector respecto de una base conocida (la canónica) <b>como columnas</b> y calcula el determinante (o el rango).</li>
+    <li><b>Conclusión razonada:</b> «Como $\operatorname{Dim}V=n$ y hay $n$ vectores, por el Teor. 2.6 basta ver que son libres: $\det\neq0$, luego son base» (o $\det=0$: ligados, no son base).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $\{(1,0,1),(0,1,1),(1,1,2)\}$ en $\mathbb R^3$: $k=3=n$. $\det\begin{pmatrix}1&0&1\\0&1&1\\1&1&2\end{pmatrix}=0$ (la tercera es la suma de las dos primeras). <b>No es base.</b></div>
+  <p class="fallos"><b>Dónde se falla:</b> decir «es base» porque tiene $n$ vectores sin mirar el determinante · aplicar el Teor. 2.6 sin tener exactamente $n$ vectores · olvidar que $\operatorname{Dim}\wp_n=n+1$.</p>
+  <div class="drill" data-tipo="cuenta" data-titulo="Contar: ¿pueden ser base?" data-n="5"></div>
+  <div class="drill" data-tipo="base3" data-titulo="Tres vectores de ℝ³: ¿base?" data-n="5"></div>
+  <div class="drill" data-tipo="dimension" data-titulo="Dimensiones que hay que saberse" data-n="5"></div>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-23">2.23</a> · <a href="#ej2-24">2.24</a> · <a href="#ej2-25">2.25</a> · <a href="#ej2-29">2.29</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb18a">Feb. 18 A</a> · <a href="#ex-feb18b">Feb. 18 B</a> · <a href="#ex-sep18">Sept. 18</a> · <a href="#ex-feb26">Feb. 26</a> · <a href="#ex-sep25">Sept. 25</a></p>
+</section>
+
+<section class="ficha" id="tipo-coord">
+  <h3>Tipo 2 — Coordenadas respecto de una base</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «calcula las coordenadas de $v$ respecto de $B$», «expresa $v$ en la base…».</p>
+  <ol class="pasos">
+    <li><b>Fija el orden de $B=\{e_1,\dots,e_n\}$</b> (las coordenadas dependen del orden) y comprueba que es base, o que el enunciado lo asegura.</li>
+    <li><b>Plantea</b> $x_1e_1+\dots+x_ne_n=v$. Eso es un sistema lineal con los vectores de $B$ por <b>columnas</b> y $v$ como columna de términos independientes: $(e_1\ \cdots\ e_n\mid v)$.</li>
+    <li><b>Resuelve</b> por Gauss. En $\wp_n$ o $\mathcal M_{m\times n}$ se iguala coeficiente a coeficiente (o entrada a entrada).</li>
+    <li><b>Comprueba sustituyendo:</b> $x_1e_1+\dots+x_ne_n$ tiene que dar $v$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $v=(4,5)$, $B=\{(1,2),(1,-1)\}$: $x_1+x_2=4,\ 2x_1-x_2=5\Rightarrow x_1=3,\ x_2=1$. Comprobación: $3(1,2)+1(1,-1)=(4,5)$ ✓. Luego $v=(3,1)_B$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> dar las componentes de $v$ en la base canónica · cambiar el orden de las coordenadas · poner los vectores de $B$ por <b>filas</b> en el sistema.</p>
+  <div class="drill" data-tipo="coord2" data-titulo="Coordenadas en ℝ²" data-n="5"></div>
+  <div class="drill" data-tipo="coordpol" data-titulo="Coordenadas de un polinomio en ℘₂" data-n="5"></div>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-26">2.26</a> · <a href="#ej2-27">2.27</a> · <a href="#ej2-30">2.30</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep24">Sept. 24</a> · <a href="#ex-feb24p8">Feb. 24 p. 8</a></p>
+</section>
+
+<section class="ficha" id="tipo-dim">
+  <h3>Tipo 3 — Dimensión (y base) de un subespacio</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «dimensión del subespacio generado por…», «halla una base de $\langle S\rangle$», o un subespacio dado por ecuaciones.</p>
+  <ol class="pasos">
+    <li><b>Generado por vectores:</b> forma la matriz con los vectores por <b>filas</b> (en coordenadas) y <b>escalona</b>.</li>
+    <li><b>$\operatorname{Dim}$ = rango</b> = número de filas no nulas (Teor. 2.5). Una <b>base</b> son esas filas no nulas.</li>
+    <li><b>Dado por ecuaciones:</b> resuelve el sistema homogéneo. Cada <b>parámetro libre</b> da un vector de la base y $\operatorname{Dim}=n-\operatorname{rang}(\text{coeficientes})$.</li>
+    <li>Si piden una base <b>formada por vectores de $S$</b>, usa el método del tipo 4 (columnas con pivote).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $\langle(1,2,3),(2,4,6),(0,1,1)\rangle$: la 2.ª fila menos el doble de la 1.ª es $0$. Quedan $(1,2,3)$ y $(0,1,1)$: $\operatorname{Dim}=2$, base $\{(1,2,3),(0,1,1)\}$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> contar los vectores en lugar de calcular el rango · dar la dimensión del espacio total · olvidar que cada ecuación <i>independiente</i> quita una dimensión.</p>
+  <div class="drill" data-tipo="rango" data-titulo="Dimensión de un subespacio generado" data-n="5"></div>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej2-28">2.28</a> · <a href="#ep1">Ejemplo propio 1</a> · <a href="#ep2">Ejemplo propio 2</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb24p7">Feb. 24 p. 7</a> · <a href="#ex-feb23b">Feb. 23 (2.ª sem.)</a></p>
+</section>
+
+<section class="ficha" id="tipo-completar">
+  <h3>Tipo 4 — Completar o extraer una base</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «complete hasta una base», «extraiga una base de…», «¿es posible extraer…?».</p>
+  <ol class="pasos">
+    <li><b>Completar</b> (parto de vectores <i>libres</i>): matriz con ellos por filas y escalona; mira qué <b>columnas no tienen pivote</b>.</li>
+    <li>Añade los vectores canónicos $e_j$ de esas columnas. Comprueba que la matriz $n\times n$ resultante tiene $\det\neq0$.</li>
+    <li><b>Extraer</b> (parto de un sistema <i>generador</i> $S$): pon los vectores de $S$ por <b>columnas</b> y escalona. Los vectores de $S$ en las columnas <b>con pivote</b> forman una base de $\langle S\rangle$.</li>
+    <li>Si $\langle S\rangle=V$, esa base lo es de $V$ (en $\mathbb R^3$: la terna con $\det\neq0$).</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> Completar $\{(1,2,0),(0,1,1)\}$ en $\mathbb R^3$: tras escalonar los pivotes están en las columnas 1 y 2, la 3 no tiene. Se añade $e_3=(0,0,1)$ y $\det\begin{pmatrix}1&2&0\\0&1&1\\0&0&1\end{pmatrix}=1\neq0$ ✓.</div>
+  <p class="fallos"><b>Dónde se falla:</b> añadir un vector que ya está en el subespacio generado · concluir «no se puede» tras ver un solo determinante nulo · en «extraer», dar filas del escalonado, que no son vectores de $S$.</p>
+  <div class="drill" data-tipo="completar" data-titulo="Completar a una base de ℝ³" data-n="5"></div>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ep2">Ejemplo propio 2</a> · <a href="#ep3">Ejemplo propio 3</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-feb20">Feb. 20 B</a> · <a href="#ex-feb23b">Feb. 23 (2.ª sem.)</a></p>
+</section>
+
