@@ -48,7 +48,7 @@ Leyenda: `—` sin tocar · `E` ejercicios en datos (fase F2) · `C` carcasa y t
 - Con el extractor actual, los temas donde más soluciones no se pueden leer son 1.2 (7 de 35), 1.3 (2 de 23), 1.4 (3 de 32), 1.5 (1 de 6) y 2.1 (1 de 17); en los demás pasan todas.
 
 ## Pasos
-Cada paso termina con commit. Orden estricto.
+Cada paso termina con commit. Orden estricto en F1-F4; F5 puede ir en paralelo a F3 por temas ya migrados; F7 y F8 son propuestas que el usuario debe aprobar antes de empezar. La **prueba con estudiantes (8.5)** conviene hacerla antes de extender la capa pedagógica (F5) a todos los temas.
 
 ### F1 — Generalizar el extractor al formato antiguo
 - [ ] **1.1** Hacer opcionales `nivel` y `pista` en el esquema. El renderizador usa el formato antiguo (enunciado **dentro** de la solución, sin estrellas) cuando faltan, y el nuevo cuando existen. Hecho cuando: `verificar` pasa en un tema antiguo de prueba (propuesta: 2.2).
@@ -71,16 +71,24 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
 ### F3 — Carcasa y teoría
 - [ ] **3.1** `tema.yaml` ampliado con: título, módulo, kicker, resumen del hero, horas, libro y páginas, prerrequisitos, mapa del tema, enlaces a la teoría de otros temas.
 - [ ] **3.2** `plantilla_tema.html` con cabecera, topbar, pestañas, índice lateral, chuleta, lista de comprobación, errores frecuentes y panel de fuentes, rellenada desde `tema.yaml`. Verificar con la misma ida y vuelta.
+- [ ] **3.2b** La carcasa debe incluir lo que hoy solo tiene el 2.3: `<html class="pilot">`, `assets/pedagogia.css/js` y `practica.js`, `data-vista` en cada `h2` (teoría / tipos / ejercicios / examen), pestañas, botón «Mostrar fuentes» (ocultas por defecto) y el aviso «archivo generado» en la cabecera.
 - [ ] **3.3** Partir `pagina.html` en un fragmento por sección (`datos/X_Y/s1.html`, `s2.html`…), para que un agente abra solo la sección que toca.
 - [ ] **3.4** Migrar tema a tema (mismo orden que F2) con la receta: extraer → verificar → construir → commit.
 
 ### F4 — Datos globales
 - [ ] **4.1** `datos/examenes.yaml`: un registro por ejercicio de examen con convocatoria, pregunta, **tema donde se desarrolla**, **tipo de problema** y puntos si se conocen. Rellenarlo desde los dossiers (`fuentes_txt/examenes_dossier_*.md`) y los `id="ex-…"`.
+- [ ] **4.1b** Añadir al esquema de ejercicio el campo `problema` (tipo de problema: `base`, `coord`, `dim`, `completar`…) para generar automáticamente las listas de enlaces de las fichas «Por tipo» y la tabla «Qué cae». En el 2.3 hoy esos enlaces están escritos a mano en `pagina.html`.
 - [ ] **4.2** Validador global: cada ejercicio del registro aparece **exactamente una vez** en algún tema; ningún ejercicio de examen desaparece (regla 14).
 - [ ] **4.3** Generar desde datos: tabla «Qué cae en el examen», enlaces de las fichas «Por tipo», `prioridades.html` y `index.html`.
 
 ### F5 — Capa pedagógica en el resto de temas (ya con datos)
 - [ ] **5.1** Por tema: `nivel` y `pista` de cada ejercicio, fichas de método por tipo de problema, «Lo esencial en 5 minutos» y autoevaluación con el porqué de cada opción errónea. Se escribe en datos; el piloto 2.3 es el modelo.
+- [ ] **5.1b** Mejoras de contenido del piloto aún no aplicadas ni siquiera al 2.3 (decidir primero en el 2.3, luego extender):
+  - Teoría en tarjetas cortas (idea, definición, ejemplo mínimo, error típico) y el resto en «Ampliación» plegada (`details.ampl`). En el 2.3 solo se plegaron 2 bloques.
+  - Pregunta motivadora de 2 líneas **antes** de cada definición.
+  - Soluciones de práctica con «resultado + por qué» primero y el desarrollo largo tras «Ver desarrollo» (las de examen mantienen el desarrollo completo).
+  - Cada animación con consigna: «mueve esto y fíjate en aquello» + pregunta que se responde observando.
+  - Decidir si las pestañas arrancan en Teoría (actual) o en Todo.
 - [ ] **5.2** Series de práctica: añadir los generadores de cada tema a `assets/practica.js` y comprobarlos con `probar_practica.py` (0 errores). Orden por rentabilidad según `prioridades.html`: 1.2, 3.2, 6.2, 5.1, 1.3, 1.4, 4.3, 4.2.
 - [ ] **5.3** Revisión con el `revisor-tema` de cada tema y prueba con un estudiante real.
 
@@ -88,6 +96,23 @@ Receta por tema (un commit cada uno): `extraer X.Y` → `validar X.Y` → `verif
 - [ ] **6.1** Actualizar `CLAUDE.md` (§3, §4, §4b): el HTML de `temas/` es un producto generado; el flujo es datos → `validar` → `construir` → `verificar` → commit.
 - [ ] **6.2** Actualizar `.claude/agents/redactor-tema.md`, `revisor-tema.md`, `resolutor-ejercicios.md` y el skill `resumen-algebra`: los agentes escriben/revisan `datos/X_Y/`, no el HTML.
 - [ ] **6.3** Un script `construir_todo.py` que valida y construye todos los temas e imprime un resumen; usarlo antes de cada commit.
+
+### F7 — Producto de estudio completo (propuesto, **pendiente de aprobación**)
+- [ ] **7.1** Repaso espaciado: preguntas de temas anteriores a los 2 y 7 días y cuestionarios que mezclan temas; tarjetas de repaso (definiciones, «¿cuándo es diagonalizable?»).
+- [ ] **7.2** Simulacros de examen cronometrados (6 cortas + 2 problemas) con los ejercicios de `datos/examenes.yaml` y rúbrica de puntuación parcial (qué da puntos aunque el resultado final falle).
+- [ ] **7.3** Ruta semanal ligada al cronograma (PEC1 27-30 nov 2026, PEC2 15-18 ene 2027), progreso visible por tema y panel «lo que te falta».
+- [ ] **7.4** Chuleta global por módulo (descargable), glosario y tabla de notación con búsqueda, mapa conceptual por tema y global (dependencias entre temas).
+- [ ] **7.5** Aprendizaje en espiral: cada concepto aparece en versión intuitiva, formal y de examen; enlaces «si te atascas, vuelve a…».
+- [ ] **7.6** Tutor: botón «no entiendo este paso» con el contexto del ejercicio (requiere decidir cómo se despliega; hoy no hay servidor).
+
+### F8 — Calidad, legal y pruebas (propuesto, **pendiente de aprobación**)
+- [ ] **8.1** **Aviso legal:** el repositorio es público y publica recortes de figuras de los libros y contenido de exámenes de la UNED. Decidir con el usuario: rehacer las figuras como SVG propios, mantener el sitio privado o con enlace, o dejarlo como está. Es la decisión que más puede romper el proyecto.
+- [ ] **8.2** Tests automáticos antes de cada commit: sin errores de consola, enlaces internos válidos (`#id` y entre temas), buen aspecto a 390 px y en modo oscuro, nº de ejercicios de examen no baja, interactivos y 3D con fallback sin WebGL.
+- [ ] **8.3** Impresión/PDF con la capa nueva (pestañas, pistas y series ocultas; fichas visibles; todo abierto): `exportar_pdf.py` sobre el 2.3 y revisar el resultado.
+- [ ] **8.4** Accesibilidad y rendimiento (`scrutinio`): foco, contraste, navegación con teclado de pestañas y cuestionarios, tamaño de página.
+- [ ] **8.5** Prueba con 2 o 3 estudiantes que no sepan Álgebra (20 minutos con un tema): anotar dónde se atascan, qué pistas usan y qué preguntas fallan; corregir antes de extender a los 22 temas restantes.
+- [ ] **8.6** Revisión por otra persona de las pistas y soluciones nuevas (las pistas del 2.3 las escribió una sola persona).
+- [ ] **8.7** Revisar la columna «Necesitas antes» de `prioridades.html` (dependencias orientativas, criterio del autor) y las horas estimadas de cada tema.
 
 ## Riesgos y cómo se evitan
 | Riesgo | Medida |
