@@ -1,0 +1,33 @@
+<!-- ============================ 2 ============================ -->
+<h2 id="s2"><span class="n">2</span>Matrices cuadradas: la inversa es la traspuesta <span class="src" data-l="U" data-ref="U §5.2.1, Teorema 5.6 y Ejemplos 5.26-5.27, p. 216-217">U p.216-217</span> <span class="src" data-l="L" data-ref="Lay §6.2, definición de matriz ortogonal y Ejemplo 7, p. 344">L p.344</span></h2>
+
+<div class="box thm"><span class="h">Teorema 5.6 — $A^{-1}=A^t$</span>
+  <p>Si $A$ es <b>cuadrada</b> de orden $n$: $\quad A\ \text{ortogonal}\iff A^{-1}=A^t\quad(\iff A^tA=I_n)$. Equivalentemente: una matriz cuadrada de orden $n$ es ortogonal si y solo si sus columnas forman una <b>base ortonormal de $\mathbb R^n$</b>.</p>
+  <p><b>Por qué:</b> en una matriz cuadrada, $A^tA=I$ ya dice que $A^t$ es la inversa (la inversa por un lado lo es por los dos, tema 1.2). Y $n$ vectores ortonormales de $\mathbb R^n$ son libres (Teor. 5.2), luego base.</p>
+  <span class="src" data-l="U" data-ref="U §5.2.1, Teorema 5.6 y recuadro posterior, p. 216">U p.216</span>
+  <span class="src" data-l="L" data-ref="Lay §6.2, p. 344: matriz ortogonal ⇒ U⁻¹ = Uᵀ">L p.344</span>
+</div>
+
+<div class="box thm"><span class="h">Consecuencia (propiedad que se usa): las <b>filas</b> también son ortonormales</span>
+  <p>Si $A$ es cuadrada y ortogonal, $A^{-1}=A^t$ implica también $AA^t=I$, y el elemento $(i,j)$ de $AA^t$ es (fila $i$)·(fila $j$). Así, <b>las filas son otra base ortonormal</b> y $A^t$ <b>también es ortogonal</b>. Sirve para completar matrices (X Sept. 2023) y para comprobar con filas o con columnas, lo que sea más cómodo. <b>Solo en cuadradas:</b> en la $3\times2$ de arriba las filas no son ni unitarias.</p>
+  <span class="src" data-l="P" data-ref="Deducción propia de U Teor. 5.6 p. 216; cf. E Ej. 5.18 D p. 176 y Lay §6.2 p. 344 (ejercicios 27-28)">propio · E 5.18 D</span>
+  <span class="src" data-l="L" data-ref="Lay §6.2, p. 344: «dicha matriz también debe tener filas ortonormales»">L p.344</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplos 5.26 y 5.27 de U: comprobar, invertir y dar coordenadas sin resolver ningún sistema</span>
+  <p>$A=\begin{pmatrix}\frac13&\frac23&\frac23\cr\frac23&-\frac23&\frac13\cr\frac23&\frac13&-\frac23\end{pmatrix}=\frac13\begin{pmatrix}1&2&2\cr2&-2&1\cr2&1&-2\end{pmatrix}$.</p>
+  <ol class="steps">
+    <li><b>Ortogonal.</b> Columnas $\tfrac13(1,2,2),\tfrac13(2,-2,1),\tfrac13(2,1,-2)$: normas $\tfrac{\sqrt9}3=1$; productos (sin el $\tfrac19$): $2-4+2=0$, $2+2-4=0$, $4-2-2=0$. Además $A$ es simétrica y $A\cdot A=I$.</li>
+    <li><b>Inversa gratis:</b> $A^{-1}=A^t=A$ (por ser simétrica).</li>
+    <li><b>Coordenadas de $x=(2,2,-4)$ en la base $\operatorname{Col}A$</b> (Teor. 5.3: en base ortonormal, $c_i=x\cdot u_i$): $c_1=\tfrac{2+4-8}3=-\tfrac23$, $c_2=\tfrac{4-4-4}3=-\tfrac43$, $c_3=\tfrac{4+2+8}3=\tfrac{14}3$. En una línea: $X_{\operatorname{Col}A}=A^tX$. Comprobación: $-\tfrac23u_1-\tfrac43u_2+\tfrac{14}3u_3=(2,2,-4)$.</li>
+    <li><b>Dato extra (propio):</b> $\det A=1$ y tiene valor propio $1$ con vector propio $(2,1,1)$: es un <b>giro de $180^\circ$</b> alrededor de la recta $\langle(2,1,1)\rangle$. Cuentas: $\operatorname{tr}A=\frac{1-2-2}3=-1=1+2\cos\theta\Rightarrow\cos\theta=-1$, $\theta=180^\circ$; y $(A-I)X=0$, con $3(A-I)=\begin{pmatrix}-2&2&2\cr2&-5&1\cr2&1&-5\end{pmatrix}$, da $x=y+z$ e $y=z$, luego $\langle(2,1,1)\rangle$. Un giro de $180^\circ$ es la <b>simetría respecto de la recta-eje</b> (simetría axial), no respecto de un plano (esa tendría $\det=-1$ y $\operatorname{tr}=1$). Pruébalo en la animación 3D, botón «U Ej. 5.26».</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplos 5.26 y 5.27, p. 216-217">U p.216-217</span>
+  <span class="src" data-l="P" data-ref="Dato extra propio: det = 1, tr = −1 ⇒ giro de 180°; comprobado con sympy">propio</span>
+</div>
+
+<div class="box tip"><span class="h">Truco de examen: invertir una ortogonal es trasponer</span>
+  <p>Si te piden $A^{-1}$ y $A$ es ortogonal (o lo demuestras en una línea), la respuesta es $A^t$. Ahorras Gauss-Jordan o adjuntos. Y resolver $AX=B$ es $X=A^tB$ (E 5.19, sección 9).</p>
+  <span class="src" data-l="P" data-ref="Truco propio a partir de U Teor. 5.6 p. 216 y E Ej. 5.19 p. 177">propio</span>
+</div>
+

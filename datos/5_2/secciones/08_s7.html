@@ -1,0 +1,64 @@
+<!-- ============================ 7 ============================ -->
+<h2 id="s7"><span class="n">7</span>Factorización $QR$ <span class="src" data-l="U" data-ref="U §5.2.2, Factorización QR, Ejemplos 5.29-5.30, p. 218-220">U p.218-220</span> <span class="src" data-l="L" data-ref="Lay §6.4, Teorema 12 (factorización QR) y Ejemplo 4, p. 357-358">L §6.4 p.357-358</span></h2>
+
+<div class="box intu"><span class="h">Idea: Gram-Schmidt contado con matrices</span>
+  <p>Gram-Schmidt convierte las columnas $c_1,\dots,c_n$ de $A$ en vectores ortonormales $q_1,\dots,q_n$, cuidando que cada $c_j$ solo use $q_1,\dots,q_j$ (los anteriores y él mismo). Escribe $c_j$ como combinación de los $q$'s: $c_j=r_{1j}q_1+\dots+r_{jj}q_j$. Los $q$'s forman la matriz $Q$ (columnas ortonormales) y los coeficientes $r_{ij}$ forman una matriz $R$ que es <b>triangular superior</b> (porque $c_j$ no usa los $q$ posteriores). Eso es $A=QR$: «una matriz cualquiera = una ortogonal por una triangular».</p>
+</div>
+
+<div class="box thm"><span class="h">Factorización $QR$</span>
+  <p>Si $A\in\mathcal M_{m\times n}$ y $\operatorname{Col}A$ es <b>linealmente independiente</b>, existen $Q\in\mathcal M_{m\times n}$ y $R\in\mathcal M_{n\times n}$ con
+  $$A=QR,\qquad Q^tQ=I_n\ (\text{columnas base ortonormal de }\langle\operatorname{Col}A\rangle),\qquad R\ \text{triangular superior, regular, diagonal}\ \mathbf{positiva},\qquad R=Q^tA .$$</p>
+  <p><b>Propiedades (E 5.22):</b> $r_{ij}=c_j\cdot q_i$ para $i\le j$, $r_{ij}=0$ si $i>j$ y $r_{jj}=\|e_j\|>0$, donde $e_j$ es el vector <b>ortogonalizado</b> (antes de normalizar). $R=Q^tA$ sale de multiplicar $A=QR$ por $Q^t$ a la izquierda. Si $m>n$, $QQ^t\neq I_m$ (es la proyección sobre $\langle\operatorname{Col}A\rangle$).</p>
+  <span class="src" data-l="U" data-ref="U §5.2.2, Factorización QR, p. 218">U p.218</span>
+  <span class="src" data-l="L" data-ref="Lay §6.4, Teorema 12: A = QR; Q m×n con columnas ortonormales (base de Col A); R n×n triangular superior invertible con entradas positivas en la diagonal, p. 357">L p.357</span>
+  <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 5.22, p. 179">E 5.22 p.179</span>
+</div>
+
+<div class="box tip"><span class="h">Receta: calcular la $QR$ a mano</span>
+  <ol>
+    <li><b>Comprueba que las columnas son libres</b> (rango $=n$; si es cuadrada, $\det\neq0$).</li>
+    <li><b>Gram-Schmidt sin normalizar</b> (cuentas con enteros): $e_1=c_1$, $e_k=c_k-\sum_{i\lt k}\frac{c_k\cdot e_i}{e_i\cdot e_i}e_i$, comprobando cada ortogonalidad. Proyecta sobre los $e_i$, <b>no</b> sobre las $c_i$.</li>
+    <li><b>Normaliza</b>: $q_k=e_k/\|e_k\|$. $Q=(q_1\ \cdots\ q_n)$.</li>
+    <li><b>$R=Q^tA$</b>: $r_{ij}=c_j\cdot q_i$ ($i\le j$), ceros debajo; la diagonal debe valer $\|e_j\|$ (control). Todos los de la diagonal positivos.</li>
+    <li><b>Comprueba $QR=A$</b> (al menos una columna).</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Receta propia a partir de U §5.2.2 p. 218-219 y E Ej. 5.22-5.23 p. 179-180">propio</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.29 de U: $QR$ de $A=\begin{pmatrix}1&-2&1\cr-1&3&2\cr1&-1&-4\end{pmatrix}$</span>
+  <ol class="steps">
+    <li><b>Columnas libres.</b> $\det A=-8\neq0$: $c_1=(1,-1,1)$, $c_2=(-2,3,-1)$, $c_3=(1,2,-4)$ son una base de $\mathbb R^3$.</li>
+    <li><b>Gram-Schmidt.</b> $e_1=c_1=(1,-1,1)$, $e_1\cdot e_1=3$. $c_2\cdot e_1=-2-3-1=-6$, luego $e_2=c_2+2e_1=(0,1,1)$ ($e_2\cdot e_1=0$ ✓). Para $e_3$: $c_3\cdot e_1=1-2-4=-5$, $c_3\cdot e_2=2-4=-2$ y $e_2\cdot e_2=2$: $e_3=c_3+\tfrac53e_1+e_2=\left(\tfrac83,\tfrac43,-\tfrac43\right)$.</li>
+    <li><b>Normalizar.</b> $\|e_1\|=\sqrt3$, $\|e_2\|=\sqrt2$, $\|e_3\|^2=\tfrac{64+16+16}{9}=\tfrac{32}3$, luego $\|e_3\|=\tfrac{8}{\sqrt6}$. $Q=\begin{pmatrix}\frac1{\sqrt3}&0&\frac2{\sqrt6}\cr-\frac1{\sqrt3}&\frac1{\sqrt2}&\frac1{\sqrt6}\cr\frac1{\sqrt3}&\frac1{\sqrt2}&-\frac1{\sqrt6}\end{pmatrix}$.</li>
+    <li><b>$R=Q^tA$</b> ($r_{ij}=c_j\cdot q_i$): $r_{11}=\sqrt3$, $r_{12}=\tfrac{-6}{\sqrt3}$, $r_{13}=\tfrac{-5}{\sqrt3}$; $r_{22}=\tfrac2{\sqrt2}$, $r_{23}=\tfrac{-2}{\sqrt2}$; $r_{33}=\tfrac8{\sqrt6}$. La diagonal $\sqrt3,\sqrt2,\tfrac8{\sqrt6}$ coincide con $\|e_j\|$ ✓.
+      $$R=\begin{pmatrix}\sqrt3&-\frac6{\sqrt3}&-\frac5{\sqrt3}\cr0&\frac2{\sqrt2}&-\frac2{\sqrt2}\cr0&0&\frac8{\sqrt6}\end{pmatrix}.$$</li>
+  </ol>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.29, p. 218-219">U p.218-219</span>
+</div>
+
+<div class="box ex"><span class="h">Ejemplo 5.30 de U: $QR$ de una matriz $3\times2$ (es el X Feb. 2020 B, problema a)</span>
+  <p>$A=\begin{pmatrix}\frac1{\sqrt2}&\sqrt2\cr\frac1{\sqrt2}&0\cr0&0\end{pmatrix}$ (U la escribe con $\frac2{\sqrt2}$ en lugar de $\sqrt2$, que es lo mismo). Columnas $c_1=(\frac1{\sqrt2},\frac1{\sqrt2},0)$ ya unitaria: $q_1=c_1$. $c_2\cdot q_1=1$ y $e_2=c_2-q_1=(\frac1{\sqrt2},-\frac1{\sqrt2},0)$, también unitario: $q_2=e_2$. Resultado: $Q=\begin{pmatrix}\frac1{\sqrt2}&\frac1{\sqrt2}\cr\frac1{\sqrt2}&-\frac1{\sqrt2}\cr0&0\end{pmatrix}$, $R=Q^tA=\begin{pmatrix}1&1\cr0&1\end{pmatrix}$. El desarrollo completo está en <a href="#ex-feb20b-pa">X Feb. 2020 B</a>.</p>
+  <span class="src" data-l="U" data-ref="U Ejemplo 5.30, p. 219-220">U p.219-220</span>
+</div>
+
+<div class="box intu"><span class="h">Para qué sirve la $QR$ (y adelanto del tema 5.4)</span>
+  <ul>
+    <li><b>Resolver $AX=B$</b> (si es compatible): $QRX=B\Rightarrow RX=Q^tB$, un sistema <b>triangular</b> que se resuelve por sustitución regresiva sin inversas (E 5.24). Si $A$ es rectangular, hay que comprobar antes que el sistema es compatible.</li>
+    <li><b>Mínimos cuadrados</b> (<a href="tema_5_4_minimos_cuadrados.html#s4">tema 5.4</a>): si $AX=B$ es incompatible, $RX=Q^tB$ da la solución de las ecuaciones normales $A^tAX=A^tB$ (sin formar $A^tA$).</li>
+    <li><b>Valores propios</b> numéricos (algoritmo $QR$): U lo menciona en p.218 como uso computacional.</li>
+  </ul>
+  <span class="src" data-l="U" data-ref="U §5.2.2, p. 218">U p.218</span>
+  <span class="src" data-l="L" data-ref="Lay §6.4, Notas numéricas, p. 358">L p.358</span>
+</div>
+
+<div class="box warn"><span class="h">Errores típicos con la $QR$</span>
+  <ul>
+    <li>$r_{jj}=\|e_j\|$ (norma del vector <b>ortogonalizado</b>), no la norma de la columna original $c_j$.</li>
+    <li>Escribir $R=AQ^t$, $R=QA$ o $R=Q^{-1}A$ (si $Q$ no es cuadrada no tiene inversa): es <b>$R=Q^tA$</b>.</li>
+    <li>Elegir $q_2$ «a ojo» con el signo contrario: sale $r_{22}\lt0$ y U exige diagonal <b>positiva</b>.</li>
+    <li>Restar al calcular $e_3$ la proyección sobre $c_1,c_2$ en vez de sobre $e_1,e_2$.</li>
+    <li>Confundir la $R$ de la $QR$ con la $R=Q^{-1}$ de cambio de base del tema 3.5: letras iguales para cosas distintas.</li>
+  </ul>
+</div>
+
+<!-- ============================ 8 ============================ -->

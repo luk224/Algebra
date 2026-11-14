@@ -1,0 +1,56 @@
+<!-- ============================ 11 ============================ -->
+<h2 id="chuleta"><span class="n">11</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+
+<div class="box thm"><span class="h">Fórmulas clave (con sus hipótesis)</span>
+  <table>
+    <tr><th>Qué</th><th>Fórmula</th><th>Hipótesis / aviso</th></tr>
+    <tr><td>Matriz ortogonal</td><td>$\operatorname{Col}A$ ortonormal $\iff A^tA=I_n$ (Def. 5.13, Teor. 5.5)</td><td>$A\in\mathcal M_{m\times n}$; columnas <b>unitarias y perpendiculares</b>; necesariamente $n\le m$</td></tr>
+    <tr><td>Cuadrada</td><td>$A^{-1}=A^t$ (Teor. 5.6); filas también ortonormales; $A^t$ ortogonal</td><td>Solo en $m=n$; en rectangulares $AA^t\neq I_m$</td></tr>
+    <tr><td>Conserva</td><td>$Ax\cdot Ay=x\cdot y$, $\|Ax\|=\|x\|$, ángulos, distancias</td><td>Producto escalar <b>estándar</b> y base ortonormal</td></tr>
+    <tr><td>Determinante</td><td>$\det A=\pm1$</td><td>Necesario, <b>no suficiente</b></td></tr>
+    <tr><td>Valores propios</td><td>reales: $\pm1$; complejos: módulo $1$</td><td>Puede no haber reales (giros)</td></tr>
+    <tr><td>Producto, inversa</td><td>$AB$, $A^{-1}$, $A^t$ ortogonales</td><td>$A,B$ cuadradas del mismo orden; la <b>suma</b> no</td></tr>
+    <tr><td>Sistema</td><td>$AX=B$ compatible: $X=A^tB$; siempre compatible determinado o incompatible</td><td>Si es rectangular, comprobar $A(A^tB)=B$</td></tr>
+    <tr><td>Ortogonales $2\times2$</td><td>$R_\theta$ ($\det1$, giro $\theta$); $S_\theta$ ($\det-1$, simetría respecto de la recta de ángulo $\theta/2$)</td><td>$\theta$ sale de la 1.ª columna: $(\cos\theta,\sin\theta)$</td></tr>
+    <tr><td>Ortogonales $3\times3$</td><td>$\det1$: giro, eje $=\operatorname{Nuc}(A-I)$, $\cos\theta=\frac{\operatorname{tr}A-1}2$; con $\operatorname{tr}=-1$ es el giro de $180^\circ$ = simetría respecto de la recta-eje. $\det-1$: $\operatorname{tr}=1$ simetría respecto del plano de normal $n$ ($S=I-\frac{2nn^t}{n^tn}$); $\operatorname{tr}=-3$ es $-I$; si no, simetría rotatoria</td><td>Sentido del giro según la orientación del eje; desarrollo propio</td></tr>
+    <tr><td>Cambio entre ortonormales</td><td>$P$ ortogonal, $X'=P^tX$</td><td>Ambas bases ortonormales</td></tr>
+    <tr><td>$QR$</td><td>$A=QR$, $Q^tQ=I_n$, $R=Q^tA$ triangular superior, diagonal $r_{jj}=\|e_j\|\gt0$</td><td>Columnas de $A$ <b>linealmente independientes</b>; $Q$ $m\times n$; $QQ^t\neq I$ si $m\gt n$</td></tr>
+    <tr><td>Sistema con $QR$</td><td>$AX=B\Rightarrow RX=Q^tB$, sustitución regresiva</td><td>Comprobar compatibilidad si $m\gt n$</td></tr>
+  </table>
+  <span class="src" data-l="U" data-ref="U §5.2, Def. 5.13, Teoremas 5.5-5.6 y factorización QR, p. 214-220">U p.214-220</span>
+</div>
+
+<div class="box tip"><span class="h">Lista de comprobación: «sé hacer…»</span>
+  <ul class="checklist">
+    <li>Decidir si una matriz numérica es ortogonal comprobando <b>normas y productos</b> de las columnas (o $A^tA=I$), y explicar por qué una sola columna no unitaria la descarta (E 5.21, 5.25; X Sept. 2017).</li>
+    <li>Hallar parámetros o completar una matriz para que sea ortogonal, usando primero perpendicularidades y luego normas, y dar <b>todas</b> las soluciones (X Sept. 2023, Ene. 2022; U Ej. 5.25).</li>
+    <li>Calcular la inversa de una ortogonal ($A^t$), las coordenadas en la base de sus columnas ($A^tx$) y la solución de $AX=B$ ($A^tB$) (E 5.19; U Ej. 5.27).</li>
+    <li>Demostrar que conserva producto escalar, norma, ángulo y distancia (E 5.16), que $\det=\pm1$, $\operatorname{rang}A=n$, $n\le m$ (E 5.18) y que sus valores propios reales son $\pm1$ (E 5.20).</li>
+    <li>Caracterizar las ortogonales $2\times2$ (giros y simetrías), dar $\theta$ y decir qué recta fija una simetría (E 5.17).</li>
+    <li>Reconocer un giro de $\mathbb R^3$: eje $=\operatorname{Nuc}(A-I)$, ángulo por la traza; y la simetría respecto de un plano $I-\frac{2nn^t}{n^tn}$.</li>
+    <li>Definir transformación ortogonal y dar un ejemplo en $\mathbb R^2$ <b>comprobado</b> (X Feb. 2018, Feb. 2024).</li>
+    <li>Calcular una $QR$ con Gram-Schmidt, $R=Q^tA$, controlando diagonal positiva y $QR=A$ (E 5.23; U Ej. 5.29-5.30; X Feb. 2020), y explicar en qué consiste (X Feb. 2019).</li>
+    <li>Resolver un sistema con la $QR$: $RX=Q^tB$ y sustitución regresiva, comprobando la compatibilidad (E 5.24).</li>
+    <li>Distinguir ortogonal, sistema ortogonal, simétrica, $A^2=I$ y $\det=\pm1$ (cuáles implican cuáles).</li>
+  </ul>
+  <span class="src" data-l="P" data-ref="Lista de comprobación propia">propio</span>
+</div>
+
+<div class="box warn"><span class="h">Errores frecuentes</span>
+  <ol>
+    <li><b>Columnas solo perpendiculares ⇒ «ortogonal»:</b> faltan las normas $=1$.</li>
+    <li><b>Comprobar solo las normas</b> (o solo un producto): hay que revisar <b>todos</b> los pares y las $n$ normas.</li>
+    <li><b>$\det A=\pm1$ ⇒ ortogonal</b> (falso): $\operatorname{diag}(2,\frac12)$.</li>
+    <li><b>$AA^t=I$ en una matriz rectangular ⇒ ortogonal</b> (falso): solo vale $A^tA=I_n$.</li>
+    <li><b>«Toda ortogonal es un giro» / «es simétrica» / «es diagonalizable»:</b> hay simetrías ($\det=-1$); el giro $\begin{pmatrix}0&-1\cr1&0\end{pmatrix}$ no es simétrico y no tiene valores propios reales.</li>
+    <li><b>Valores propios siempre $\pm1$:</b> solo los <b>reales</b>; los complejos tienen módulo $1$.</li>
+    <li><b>Creer que al completar una matriz $2\times2$ la solución es única</b>: siempre hay dos (giro y simetría); si piden «una», basta con una, pero conviene decirlo.</li>
+    <li><b>$\cos\theta=\frac{\operatorname{tr}A}3$</b> en $\mathbb R^3$ (es $\frac{\operatorname{tr}A-1}2$); eje en $\operatorname{Nuc}(A+I)$.</li>
+    <li><b>Simetría $S_\theta$ respecto de la recta de ángulo $\theta$:</b> es $\theta/2$.</li>
+    <li><b>$QR$:</b> $r_{jj}=\|e_j\|$ del vector ortogonalizado; $R=Q^tA$ y no $AQ^t$ ni $Q^{-1}A$; diagonal <b>positiva</b>; proyectar sobre los $e_i$, no sobre las $c_i$.</li>
+    <li><b>Resolver $AX=B$ con $X=A^tB$ o $RX=Q^tB$ sin comprobar la compatibilidad</b> cuando $A$ es rectangular (sale la solución de mínimos cuadrados, no una solución).</li>
+    <li><b>Responder «transformación ortogonal» con Gram-Schmidt</b> (X Feb. 2024: lo hizo el 95 %): es una aplicación lineal que conserva el producto escalar.</li>
+  </ol>
+  <span class="src" data-l="P" data-ref="Errores recopilados de E §5.2 y de las soluciones oficiales de los exámenes">propio</span>
+</div>
+
