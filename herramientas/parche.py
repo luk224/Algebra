@@ -102,3 +102,8 @@ def quiz_opt(t, q, contiene, nueva):
 
 def quiz_campo(t, q, campo, valor):
     f, obj = _cargar(t, 'tema'); obj['quiz'][q][campo] = valor; _guardar(f, obj)
+
+
+def quiz_why_idx(t, q, i, nuevo_why):
+    """Cambia el `why` de la opción número `i` (desde 0) del quiz[q]."""
+    f, obj = _cargar(t, 'tema'); obj['quiz'][q]['opciones'][i]['why'] = nuevo_why; _guardar(f, obj)

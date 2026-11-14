@@ -44,9 +44,9 @@ esencial:
   - |-
     <b>Mínimos cuadrados = proyección.</b> $X_0$ es solución por mínimos cuadrados si minimiza $\|AX-B\|$, y eso ocurre justo cuando $AX_0$ es la <b>proyección ortogonal</b> de $B$ sobre $\operatorname{Col}A$. Siempre existe, aunque $AX=B$ sea incompatible.
   - |-
-    <b>Ecuaciones normales:</b> $A^tAX=A^tB$. Son compatibles siempre; la solución es <b>única</b> si las columnas de $A$ son independientes ($A^tA$ regular) y, si no, hay infinitas (una recta o plano de soluciones) pero con el mismo $AX_0$.
+    <b>Ecuaciones normales:</b> $A^tAX=A^tB$. Son compatibles siempre; la solución es <b>única</b> si las columnas de $A$ son independientes ($A^tA$ regular) y, si no, hay infinitas (el conjunto afín $X_p+\operatorname{Nuc}A$) pero con el mismo $AX_0$.
   - |-
-    <b>Error cuadrático</b> $=\|AX_0-B\|^2$. Vale $0$ solo si el sistema era compatible. El vector $AX_0$ y el error son únicos aunque $X_0$ no lo sea.
+    <b>Error cuadrático</b> $=\|AX_0-B\|$ (la norma, no su cuadrado; Def. 5.14). Vale $0$ solo si el sistema era compatible. El vector $AX_0$ y el error son únicos aunque $X_0$ no lo sea.
   - |-
     <b>Ajuste de datos:</b> recta $y=mx+n$ (filas $(x_i,1)$), parábola (filas $(x_i^2,x_i,1)$), plano (filas $(x_i,y_i,1)$); se plantea $AX=B$ y se resuelven las normales. Con $A=QR$ el atajo es $RX=Q^tB$.
 tipos:
@@ -74,7 +74,7 @@ tipos:
   nombre: |-
     Calcular el error cuadrático
   receta: |-
-    Evalúa el residuo $AX-B$ y calcula su norma al cuadrado.
+    Evalúa el residuo $AX-B$ y calcula su norma (raíz de la suma de cuadrados).
   senal: |-
     «Calcule el error cuadrático al sustituir $X$ por…», «error asociado a la solución».
   pasos:
@@ -83,11 +83,11 @@ tipos:
   - |-
     Resta $B$ para obtener el residuo $AX-B$.
   - |-
-    Suma los cuadrados de sus componentes: es $\|AX-B\|^2$.
+    Suma los cuadrados de sus componentes y saca la raíz: es $\|AX-B\|$.
   ejemplo: |-
-    Con $A$ y $B$ de antes y $X=(1,1)$: $AX=(1,1,2)$, residuo $(0,0,-1)$, error cuadrático $1$. Con $X_0=(\tfrac43,\tfrac43)$ el residuo es $-(\tfrac13,\tfrac13,\tfrac13)$ y el error es $\tfrac13$, menor que $1$.
+    Con $A$ y $B$ de antes y $X=(1,1)$: $AX=(1,1,2)$, residuo $(0,0,-1)$, error cuadrático $1$. Con $X_0=(\tfrac43,\tfrac43)$ el residuo es $(\tfrac13,\tfrac13,-\tfrac13)$ y el error es $\sqrt{\tfrac13}=\tfrac{\sqrt3}{3}\approx0{,}58$, menor que $1$.
   fallos: |-
-    dar la norma sin elevar al cuadrado (o al revés) · restar $B-AX$ y quedarse con un signo sin importancia al sumar mal · creer que el error de la solución por mínimos cuadrados es cero.
+    dar $\|AX-B\|^2$ (sin la raíz) como error cuadrático · equivocar un signo al restar $B$ (p. ej. $9-(-3)=12$) · creer que el error de la solución por mínimos cuadrados es cero.
 - id: ajuste
   nombre: |-
     Ajustar una recta, parábola o plano a datos
@@ -211,7 +211,7 @@ quiz:
       $\tfrac{11}3$
     ok: true
   - t: |-
-      $\tfrac{41}6$
+      $\tfrac{43}6$
     ok: false
     why: |-
       Has intercambiado la pendiente y el término independiente.
@@ -232,12 +232,12 @@ quiz:
   opciones:
   - t: |-
       $\tfrac16$
-    ok: true
-  - t: |-
-      $\tfrac1{\sqrt6}$
     ok: false
     why: |-
-      Es la norma $\|AX_0-B\|$; el error cuadrático es la norma <b>al cuadrado</b>.
+      Es la suma de los cuadrados, $\|AX_0-B\|^2$; el error cuadrático es su raíz (Def. 5.14).
+  - t: |-
+      $\tfrac1{\sqrt6}$
+    ok: true
   - t: |-
       $0$
     ok: false
@@ -249,7 +249,7 @@ quiz:
     why: |-
       Es la mayor componente en valor absoluto, no la suma de cuadrados.
   fb: |-
-    $\tfrac1{36}+\tfrac19+\tfrac1{36}=\tfrac16$.
+    $\sqrt{\tfrac1{36}+\tfrac19+\tfrac1{36}}=\sqrt{\tfrac16}=\tfrac{\sqrt6}6$.
 - p: |-
     $X_1$ y $X_2$ son dos soluciones por mínimos cuadrados de $AX=B$. ¿Cuál es siempre cierta?
   opciones:

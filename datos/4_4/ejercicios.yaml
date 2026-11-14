@@ -14,7 +14,7 @@
   enunciado: |-
     Si $J$ es la matriz de Jordan de una matriz $A$ cualquiera, responder verdadero o falso: A) El número de bloques de $J$ es superior al de vectores propios linealmente independientes. B) Al cambiar de orden los bloques de $J$ se obtiene una matriz que no es semejante a $A$. C) Cada bloque de $J$ es la suma de un múltiplo de la matriz unidad y una matriz nihilpotente.
   pista: |-
-    Recuerda de dónde sale cada bloque: tantos bloques como vectores propios independientes, y cada bloque es $\lambda I$ más una matriz con unos encima de la diagonal. Revisa las tres afirmaciones con eso.
+    Recuerda qué cuenta $d_i=n-\operatorname{rang}(A-\lambda_iI)$ en la forma de Jordan, cómo se relacionan $J$ y $P$ si se reordenan columnas de $P$, y escribe un bloque $J_2(\lambda)$ como suma de una diagonal y otra matriz. Contrasta cada afirmación con eso.
   cuerpo:
   - html: |-
       <p><b>Qué se pide.</b> Traducir cada frase a «$d_i$ = nº de bloques de $\lambda_i$» y a $J_i=\lambda I+N$.</p>
@@ -230,9 +230,9 @@
             $$AP=\begin{pmatrix}2&3\cr-2&-1\end{pmatrix}=PJ$$
             <p>(columna a columna: $A(1,-1)=2(1,-1)$ y $A(1,0)=(3,-1)=(1,-1)+2(1,0)$).</p>
     - |-
-      <b>D)</b> Maxima, fuera de examen. E la da por correcta; U (p.169) escribe <code>jordan(A); dispJordan(%);</code>: los paréntesis vacíos del enunciado no son sintaxis literal.
+      <b>D)</b> Maxima, fuera de examen. Se da por correcta; U (p.169) escribe <code>jordan(A); dispJordan(%);</code>: los paréntesis vacíos del enunciado no son sintaxis literal.
   - html: |-
-      <p><b>Respuesta:</b> A falsa, B falsa, C verdadera, D verdadera (como E).</p>
+      <p><b>Respuesta:</b> A falsa, B falsa, C verdadera, D verdadera.</p>
   - receta: |-
       $2\times2$ con $\lambda$ doble: si $A\neq\lambda I$, entonces $d=1$ y $J=\begin{pmatrix}\lambda&1\cr0&\lambda\end{pmatrix}$. Para $P$: $v$ con $(A-\lambda I)v\neq0$ y $P=\big((A-\lambda I)v\mid v\big)$.
   - error: |-
@@ -357,9 +357,9 @@
             $$(A+2I)^2=\begin{pmatrix}8&8&0\cr8&8&0\cr-8&-8&0\end{pmatrix}:$$
             <p>$\operatorname{Nuc}(A+2I)^2=\{x+y=0\}=\langle w,v\rangle$ y $\operatorname{Nuc}(A+2I)=\langle w\rangle$. Luego $p_3=b\,v+c\,w$ ($b\neq0$), $p_2=(A+2I)p_3=b\,w$ y</p>$$P=\big(a\,u\mid b\,w\mid b\,v+c\,w\big),\qquad a,b\neq0,\ c\in\mathbb R:$$ tres parámetros libres. $P_A$ es $a=b=1,c=0$; $P_B$ es $a=1,b=-1,c=1$. <b>Ojo:</b> $b$ es el mismo en $p_2$ y $p_3$.
     - |-
-      <b>D)</b> Maxima (<code>ModeMatrix(A,l)</code>), fuera de examen; E la da por correcta.
+      <b>D)</b> Maxima (<code>ModeMatrix(A,l)</code>), fuera de examen; Se da por correcta.
   - html: |-
-      <p><b>Respuesta:</b> A, B, C y D correctas (como E).</p>
+      <p><b>Respuesta:</b> A, B, C y D correctas .</p>
   - receta: |-
       «¿es $P$ matriz de paso?» $\Rightarrow$ (1) $\det P\neq0$; (2) $AP=PJ$ (columna $j$ de $AP$ = $Ap_j$ frente a columna $j$ de $PJ$). Para ver que no es única basta multiplicar un vector propio aislado por un escalar $\neq0$.
   - error: |-
@@ -1096,7 +1096,7 @@
   titulo: |-
     Ejemplo propio 11 (medio) — método de potencias con $A^{-1}$: el valor propio de menor módulo
   enunciado: |-
-    $A=\begin{pmatrix}2&1\cr1&2\end{pmatrix}$ ($|A-\lambda I|=(\lambda-1)(\lambda-3)$; vectores $(1,1)$ para $3$ y $(1,-1)$ para $1$). Estima el valor propio menor con $x_0=(1,0)$.
+    Con $A=\begin{pmatrix}2&1\cr1&2\end{pmatrix}$, estima mediante el método de potencias el valor propio de menor módulo de $A$ y un vector propio asociado, partiendo de $x_0=(1,0)$.
   pista: |-
     El valor propio menor de $A$ es el mayor de $A^{-1}$ (inverso). Aplica el método de potencias a $A^{-1}$ y recuerda invertir el resultado.
   cuerpo:
@@ -1534,7 +1534,7 @@
   enunciado: |-
     a) Sin calcular $P$, ¿qué formas de Jordan son posibles para una $3\times3$ con $|A-\lambda I|=-(\lambda-1)^3$? b) Para $A=\begin{pmatrix}0&1&0\cr0&0&1\cr1&-3&3\end{pmatrix}$ halla $J$ y $P$.
   pista: |-
-    En el apartado a) reparte $\alpha=3$ en bloques (tres tamaños posibles de reparto); en b) decide con el rango de $A-I$ y construye la cadena de longitud 3.
+    En a) reparte $\alpha=3$ en bloques de todas las formas posibles y relaciona cada reparto con $\operatorname{rang}(A-I)$; en b) decide con el rango de $A-I$ y construye la cadena de longitud 3.
   cuerpo:
   - plan:
       titulo: |-
