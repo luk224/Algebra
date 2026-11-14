@@ -1,0 +1,1181 @@
+- id: ej2-31
+  clase: libro
+  titulo: |-
+    Ejercicio 2.31 — intersección de dos subespacios de $\mathbb R^3$: ecuaciones y dimensión
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 2.31, p. 71
+    texto: |-
+      E p.71
+  cuerpo:
+  - enun: |-
+      Sabiendo que $L_1=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0\}$ y $L_2=\langle(-1,0,2),(0,1,1)\rangle$, se pide: A) Ecuaciones del subespacio $L_1\cap L_2$. B) Dimensión del subespacio $L_1\cap L_2$.
+  - html: |-
+      <p><i>Idea.</i> Un vector está en $L_1\cap L_2$ si cumple <b>a la vez</b> las condiciones de $L_1$ y de $L_2$. Las condiciones que se pueden «juntar» son las <b>ecuaciones cartesianas</b>: lo primero es pasar $L_2$ (dado por generadores) a cartesianas.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Ecuaciones y dimensión de la intersección de un plano dado por una ecuación y otro dado por generadores.
+      - - |-
+          Cómo lo pienso
+        - |-
+          La intersección son los vectores que cumplen <b>todas</b> las ecuaciones de los dos. Un subespacio dado por generadores no tiene ecuaciones a la vista: tengo que obtenerlas. Dos planos de $\mathbb R^3$ distintos se cortan en una recta (dimensión 1); lo espero, y lo compruebo.
+      - - |-
+          Qué uso
+        - |-
+          <b>Intersección:</b> $L_1\cap L_2$ = vectores que están en ambos; con cartesianas, se juntan <i>todas</i> las ecuaciones de los dos. Para meter un subespacio dado por generadores en el problema hay que pasarlo a <b>cartesianas</b>.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Paso el plano de generadores a cartesianas (determinante igualado a 0), junto las dos ecuaciones y resuelvo.
+  - pasos:
+    - |-
+      <b>$L_1$ ya está en cartesianas:</b> $x_1=0$.
+            <p>Sus vectores son</p>
+            $$(0,x_2,x_3)=x_2(0,1,0)+x_3(0,0,1),$$
+            <p>y $\{(0,1,0),(0,0,1)\}$ es libre: base, $\operatorname{Dim}L_1=2$ (Def. 2.9 y 2.11, U p.82 y p.87). Es un plano.</p>
+    - |-
+      <b>$L_2$ en paramétricas</b> (Def. 2.4, U p.71):
+            $$\begin{pmatrix}x_1\\x_2\\x_3\end{pmatrix}=\alpha\begin{pmatrix}-1\\0\\2\end{pmatrix}+\beta\begin{pmatrix}0\\1\\1\end{pmatrix}\iff\begin{cases}x_1=-\alpha\\x_2=\beta\\x_3=2\alpha+\beta\end{cases}$$
+            <p>Los dos generadores no son proporcionales: libres, $\operatorname{Dim}L_2=2$ (Teor. 2.5, U p.88).</p>
+    - |-
+      <b>$L_2$ en cartesianas (eliminar parámetros).</b>
+            <p>De las dos primeras, $\alpha=-x_1$ y $\beta=x_2$. Sustituyendo en la tercera:</p>
+            $$x_3=-2x_1+x_2.$$
+            <p><i>Comprobación por rangos:</i> $(x_1,x_2,x_3)\in L_2$ si y solo si añadirlo a los generadores no sube el rango:</p>
+            $$\begin{vmatrix}-1&0&2\\0&1&1\\x_1&x_2&x_3\end{vmatrix}=-2x_1+x_2-x_3=0.$$
+            <p>Misma ecuación. Comprobamos los generadores: $-2(-1)+0-2=0$ ✓ y $0+1-1=0$ ✓.</p>
+    - |-
+      <b>A) Ecuaciones de $L_1\cap L_2$</b> (juntar, U p.91, Ej. 2.32):
+            $$L_1\cap L_2:\ \begin{cases}x_1=0\\x_3=-2x_1+x_2\end{cases}\iff\begin{cases}x_1=0\\x_3=x_2\end{cases}$$
+            <p>(sustituyendo $x_1=0$ en la segunda).</p>
+    - |-
+      <b>B) Dimensión.</b> Resolviendo: $x_2=\lambda$ libre, $x_1=0$, $x_3=\lambda$; los vectores son $\lambda(0,1,1)$. Luego
+            $$L_1\cap L_2=\langle(0,1,1)\rangle,$$
+            <p>$\{(0,1,1)\}$ es base (un vector no nulo es libre) y $\operatorname{Dim}(L_1\cap L_2)=1$: una recta. Paramétricas: $x_1=0$, $x_2=\alpha$, $x_3=\alpha$.</p>
+    - |-
+      <b>Comprobación con Grassmann</b> (U p.95):
+            $$L_1+L_2=\langle(0,1,0),(0,0,1),(-1,0,2),(0,1,1)\rangle$$
+            <p>tiene rango 3, luego es $\mathbb R^3$, y $3+1=2+2$ ✓.</p>
+  - resultado: |-
+      $L_1\cap L_2:\ x_1=0,\ x_2=x_3$, de dimensión 1, $=\langle(0,1,1)\rangle$. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      para intersecar, pasa ambos subespacios a <b>ecuaciones cartesianas</b>, júntalas en un sistema y resuélvelo; el número de parámetros libres es la dimensión de la intersección ($=n-\operatorname{rang}$ del sistema).
+  - error: |-
+      intentar intersecar «igualando generadores» (decir que la intersección son los generadores comunes). Aquí $(0,1,1)$ sí es generador de $L_2$, pero en general un vector de la intersección no aparece en ninguna lista de generadores (ver 2.37).
+  - teoria: |-
+      Def. 2.4, U p.71 · Teor. 2.5, U p.88 · intersección, U p.91 · Grassmann, U p.95
+- id: ej2-32
+  clase: libro
+  titulo: |-
+    Ejercicio 2.32 — suma con $H\subset G$: ecuaciones paramétricas y ¿es directa?
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 2.32, p. 72
+    texto: |-
+      E p.72
+  cuerpo:
+  - enun: |-
+      Siendo $H=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0,\ x_2=x_3\}$ y $G=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_1=0\}$, se pide: A) Unas ecuaciones paramétricas de $H+G$. B) Comprobar si $H+G$ es suma directa.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Con $H\subset G$ hallar paramétricas de $H+G$ y decidir si la suma es directa.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Me fijo antes que nada en si hay inclusión: si $H\subset G$, sumar $H$ a $G$ no añade nada, $H+G=G$, y la intersección es todo $H$. Una suma directa exige intersección nula; aquí la intersección es $H$, que no es nula.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma:</b> $L_1+L_2=\{u_1+u_2:\ u_1\in L_1,\ u_2\in L_2\}$; si $L_1=\langle S_1\rangle$ y $L_2=\langle S_2\rangle$, entonces $L_1+L_2=\langle S_1\cup S_2\rangle$. <b>Suma directa:</b> $L_1+L_2$ es directa $\iff L_1\cap L_2=\{\bar0\}\iff\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2$. <b>Suplementarios:</b> $L_1\oplus L_2=V$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Compruebo la inclusión sustituyendo las ecuaciones de $H$ en la de $G$; deduzco la suma y la intersección.
+  - pasos:
+    - |-
+      <b>Observa la inclusión $H\subset G$.</b> Todo vector de $H$ cumple $x_1=0$ (y además $x_2=x_3$), luego cumple la única ecuación de $G$. Entonces:
+            $$H\cap G=H,\qquad H\cup G=G.$$
+    - |-
+      <b>Si $H\subset G$, entonces $H+G=G$</b> (Def. 2.12, U p.93), en dos inclusiones.
+            <p><i>$H+G\subset G$:</i> un vector de $H+G$ es $h+g$ con $h\in H\subset G$ y $g\in G$; como $G$ es subespacio (cerrado para la suma, U p.62), $h+g\in G$.</p>
+            <p><i>$G\subset H+G$:</i> todo $g\in G$ es $g=0+g$ con $0\in H$.</p>
+    - |-
+      <b>A) Paramétricas de $H+G=G$.</b> $G$ solo impone $x_1=0$; $x_2,x_3$ son libres:
+            $$\begin{cases}x_1=0\\x_2=\alpha\\x_3=\beta\end{cases}\qquad(\alpha,\beta\in\mathbb R),\qquad\operatorname{Dim}(H+G)=2.$$
+    - |-
+      <b>B) ¿Es directa?</b> Por la caracterización (U p.97) lo es $\iff H\cap G=\{0\}$. Pero
+            $$H\cap G=H=\langle(0,1,1)\rangle\neq\{(0,0,0)\}:$$
+            <p>contiene, p. ej., $(0,1,1)$. <b>No es suma directa.</b></p>
+    - |-
+      <b>Comprobación con la definición</b> (Def. 2.13, U p.96): $(0,1,1)\in H+G$ tiene dos descomposiciones:
+            $$(0,1,1)=\underbrace{(0,1,1)}_{\in H}+\underbrace{(0,0,0)}_{\in G}=\underbrace{(0,0,0)}_{\in H}+\underbrace{(0,1,1)}_{\in G}.$$
+    - |-
+      <b>Comprobación con Grassmann</b> (U p.95):
+            $$\operatorname{Dim}(H+G)+\operatorname{Dim}(H\cap G)=2+1=3=\operatorname{Dim}H+\operatorname{Dim}G=1+2\ ✓$$
+  - resultado: |-
+      $H+G=G$, paramétricas $x_1=0,\ x_2=\alpha,\ x_3=\beta$; <b>no</b> es suma directa. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      antes de calcular nada, mira si un subespacio está contenido en el otro (sus ecuaciones incluyen las del otro). Si $H\subset G$: $H+G=G$ y $H\cap G=H$; la suma solo es directa si $H=\{0\}$.
+  - error: |-
+      confundir $H+G$ con $H\cup G$ (aquí coinciden porque $H\subset G$, pero en general la unión no es subespacio), o creer que $1+2=3$ es la dimensión de la suma.
+  - teoria: |-
+      Def. 2.12, U p.93 · Def. 2.13, U p.96 · caracterización, U p.97 · Grassmann, U p.95
+- id: ej2-33
+  clase: libro
+  titulo: |-
+    Ejercicio 2.33 — demostrar que $E=F$ y hallar cartesianas
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 2.33, p. 73
+    texto: |-
+      E p.73
+  cuerpo:
+  - enun: |-
+      Sean $E$ el subespacio de $\mathbb R^3$ generado por $(1,0,-1)$ y $(0,1,-1)$ y $F$ el subespacio generado por $(1,1,-2)$, $(2,1,-3)$ y $(0,1,-1)$, se pide: A) Demostrar que $E=F$. B) Ecuaciones cartesianas de $F$.
+  - html: |-
+      <p><i>Idea.</i> Dos subespacios son iguales si cada uno está contenido en el otro. Con dimensiones es más cómodo: si $E\subset F$ y $\operatorname{Dim}E=\operatorname{Dim}F$, entonces $E=F$.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Demostrar que dos subespacios, dados por generadores, son iguales, y hallar cartesianas.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Dos subespacios son iguales si cada generador de uno está en el otro (o si uno está contenido en el otro y tienen la misma dimensión). Calculo las dimensiones primero: si no coinciden, no pueden ser iguales.
+      - - |-
+          Qué uso
+        - |-
+          $E=F\iff$ cada generador de uno está en el otro (o: mismas dimensiones y una inclusión). Cartesianas: $n-r$ ecuaciones, $x\in\langle S\rangle\iff\operatorname{rang}(S\mid x)=r$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Dimensiones por rango; compruebo que los generadores de $E$ son combinaciones de los de $F$; cartesianas con un determinante.
+  - pasos:
+    - |-
+      <b>$\operatorname{Dim}E$.</b>
+            $$\operatorname{Dim}E=\operatorname{rang}\begin{pmatrix}1&0&-1\\0&1&-1\end{pmatrix}=2$$
+            <p>(el menor $\begin{vmatrix}1&0\\0&1\end{vmatrix}=1\neq0$; Teor. 2.5, U p.88).</p>
+    - |-
+      <b>$\operatorname{Dim}F$.</b> Calculo el determinante de la matriz de generadores:
+            $$\det\begin{pmatrix}1&1&-2\\2&1&-3\\0&1&-1\end{pmatrix}=1(-1+3)-1(-2-0)+(-2)(2-0)=2+2-4=0.$$
+            <p>Hay un menor $2\times2$ no nulo, $\begin{vmatrix}1&1\\2&1\end{vmatrix}=-1$: rango 2, $\operatorname{Dim}F=2$. (Dependencia explícita: $(0,1,-1)=2(1,1,-2)-(2,1,-3)$.)</p>
+    - |-
+      <b>$E\subset F$: los generadores de $E$ están en $F$.</b> $(0,1,-1)$ es un generador de $F$. Para $(1,0,-1)$ busco $a(1,1,-2)+b(2,1,-3)+c(0,1,-1)=(1,0,-1)$. Una solución es $a=-1$, $b=1$, $c=0$:
+            $$-(1,1,-2)+(2,1,-3)=(1,0,-1)\ ✓$$
+            <p>(hay infinitas, porque los generadores de $F$ son dependientes). Como $E$ es el <b>menor</b> subespacio que contiene a esos dos vectores (Teor. 2.8, U p.91) y $F$ es un subespacio que los contiene, $E\subset F$.</p>
+    - |-
+      <b>Igualdad.</b> $(1,0,-1),(0,1,-1)$ son dos vectores libres de $F$ y $\operatorname{Dim}F=2$: por el Teor. 2.6 (U p.88) forman una base de $F$. Por tanto $F=E$. ∎
+            <p><i>Alternativa por rangos:</i> $\operatorname{rang}(E)=\operatorname{rang}(F)=\operatorname{rang}(E\cup F)=2$ (los 5 vectores juntos tienen rango 2): si al juntar los generadores el rango no sube, cada subespacio está contenido en el otro.</p>
+    - |-
+      <b>B) Cartesianas de $F(=E)$.</b> Con la base $\{(1,0,-1),(0,1,-1)\}$, $(x_1,x_2,x_3)\in F$ si el rango no sube al añadirlo:
+            $$\begin{vmatrix}1&0&-1\\0&1&-1\\x_1&x_2&x_3\end{vmatrix}=1\cdot(x_3+x_2)+(-1)(0-x_1)=x_1+x_2+x_3=0.$$
+            <p>Equivalentemente: paramétricas $x_1=\alpha$, $x_2=\beta$, $x_3=-\alpha-\beta$, luego $x_3=-x_1-x_2$. Comprobación con los generadores de $F$:</p>
+            $$1+1-2=0,\qquad2+1-3=0,\qquad0+1-1=0\ ✓$$
+  - resultado: |-
+      $E=F$, y $F:\ x_1+x_2+x_3=0$. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      para probar $E=F$: (i) calcula ambas dimensiones por rango; (ii) comprueba que los generadores de uno están en el otro (o que el rango de todos juntos no sube); (iii) misma dimensión + inclusión $\Rightarrow$ igualdad.
+  - error: |-
+      pensar que $E\neq F$ porque tienen distinto número de generadores (2 frente a 3), o comprobar solo que las dimensiones coinciden: dos planos distintos de $\mathbb R^3$ tienen la misma dimensión y no son iguales.
+  - teoria: |-
+      Teor. 2.5 y 2.6, U p.88 · Teor. 2.8, U p.91 · cartesianas, U p.71
+- id: ej2-34
+  clase: libro
+  titulo: |-
+    Ejercicio 2.34 — base, suplementario y Grassmann en $\mathbb R^4$ (V/F)
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 2.34, p. 74
+    texto: |-
+      E p.74
+  cuerpo:
+  - enun: |-
+      Se pide comprobar si los conjuntos $U_1=\{(x_1,x_2,x_3,x_4)\mid x_4=-x_3\}$, subespacio de $\mathbb R^4$, y $B_1=\{(1,0,0,0),(0,1,0,0),(0,0,1,-1)\}$ y $B_2=\{(0,0,0,1)\}$ verifican: A) $B_1$ es base de $U_1$. B) $B_2$ es base de un suplementario, $U_2$, de $U_1$. C) Una base de $U_1$ y otra de $U_2$ forman base de $\mathbb R^4$. D) La dimensión de $U_1\cap U_2$ es cero.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Cuatro afirmaciones sobre una base de $U_1$, un suplementario, una base de $\mathbb R^4$ y la dimensión de la intersección.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Todas giran en torno a «suplementario»: suma que da todo $\mathbb R^4$ y intersección nula. Si las dimensiones suman 4 y la intersección es nula, entonces la unión de bases es base. Compruebo cada afirmación contra esa definición.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma directa:</b> $L_1+L_2$ es directa $\iff L_1\cap L_2=\{\bar0\}\iff\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2$. <b>Suplementarios:</b> $L_1\oplus L_2=V$. Una base de $V$ se obtiene uniendo bases de dos suplementarios.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Verifico que $B_1$ es base de $U_1$ y que $B_1\cup B_2$ es base de $\mathbb R^4$ (determinante); la intersección sale de ahí.
+  - pasos:
+    - |-
+      <b>A) Verdadera.</b> Hay que ver que $B_1\subset U_1$, que genera $U_1$ y que es libre (Def. 2.9, U p.82).
+            <p><i>Pertenencia:</i> los tres vectores cumplen $x_4=-x_3$ ($0=-0$, $0=-0$, $-1=-1$).</p>
+            <p><i>Generador:</i> un vector de $U_1$ es $(x_1,x_2,x_3,-x_3)$ y</p>
+            $$\begin{pmatrix}x_1\\x_2\\x_3\\-x_3\end{pmatrix}=x_1\begin{pmatrix}1\\0\\0\\0\end{pmatrix}+x_2\begin{pmatrix}0\\1\\0\\0\end{pmatrix}+x_3\begin{pmatrix}0\\0\\1\\-1\end{pmatrix}.$$
+            <p><i>Libre:</i></p>
+            $$\alpha(1,0,0,0)+\beta(0,1,0,0)+\gamma(0,0,1,-1)=(\alpha,\beta,\gamma,-\gamma)=0\ \Rightarrow\ \alpha=\beta=\gamma=0$$
+            <p>(Def. 2.6, U p.74). Luego $B_1$ es base y $\operatorname{Dim}U_1=3$.</p>
+    - |-
+      <b>B) Verdadera.</b> Sea $U_2=\langle(0,0,0,1)\rangle$, $\operatorname{Dim}U_2=1$. Hay que ver que $\mathbb R^4=U_1\oplus U_2$ (Def. 2.14, U p.97).
+            <p><i>Intersección:</i> un vector de $U_2$ es $(0,0,0,t)$; está en $U_1$ si $t=-0=0$. Luego $U_1\cap U_2=\{0\}$ y la suma es directa (U p.97).</p>
+            <p><i>Suma:</i> por Grassmann,</p>
+            $$\operatorname{Dim}(U_1+U_2)=3+1-0=4,$$
+            <p>y un subespacio de $\mathbb R^4$ de dimensión 4 es $\mathbb R^4$ (Teor. 2.6, U p.88).</p>
+            <p><i>Alternativa:</i> $B_1\cup B_2$ es base de $\mathbb R^4$ porque</p>
+            $$\det\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&1&-1\\0&0&0&1\end{pmatrix}=1\neq0$$
+            <p>(triangular superior: producto de la diagonal). Así $B_2$ es base de <b>un</b> suplementario (no es único: $\langle(0,0,1,0)\rangle$ también lo es).</p>
+    - |-
+      <b>C) Verdadera.</b> Es lo que acabamos de ver: $B_1\cup B_2$ es base de $\mathbb R^4$. En general, si $V=U_1\oplus U_2$, la unión de una base de $U_1$ y una de $U_2$ es base de $V$ (genera $U_1+U_2=V$, Ej. U 2.36, y tiene $\operatorname{Dim}U_1+\operatorname{Dim}U_2=\operatorname{Dim}V$ vectores; Teor. 2.6).
+    - |-
+      <b>D) Verdadera.</b> Grassmann:
+            $$4+\operatorname{Dim}(U_1\cap U_2)=3+1\ \Rightarrow\ \operatorname{Dim}(U_1\cap U_2)=0,$$
+            <p>es decir $U_1\cap U_2=\{0\}$ (ya visto en B).</p>
+  - resultado: |-
+      A, B, C y D son verdaderas. <i>(Verificado con sympy: $\det=1$.)</i>
+  - html: |-
+      <div class="recipe"><b>Receta (hallar un suplementario):</b> toma una base de $U$ y complétala hasta una base de $V$ (Teor. 2.7, base incompleta, U p.89) añadiendo vectores (suelen valer canónicos) mientras el determinante o rango lo confirme; el subespacio generado por los vectores añadidos es un suplementario.</div>
+  - error: |-
+      decir «<i>el</i> suplementario» como si fuera único, o creer que es el complemento conjuntista $V\setminus U$ (que ni contiene al $0$).
+  - teoria: |-
+      Def. 2.9, U p.82 · Teor. 2.6 y 2.7, U p.88-89 · Grassmann, U p.95 · Def. 2.14, U p.97
+- id: ej2-35
+  clase: libro
+  titulo: |-
+    Ejercicio 2.35 — intersección, suma directa y descomposición única (V/F)
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 2.35, p. 75-76
+    texto: |-
+      E p.75-76
+  cuerpo:
+  - enun: |-
+      Siendo $L_1=\langle(1,0,0),(0,0,1)\rangle$ y $L_2=\langle(1,1,1)\rangle$, se pide comprobar si se verifica: A) $L_1\cap L_2$ no es un subespacio vectorial. B) $(x_1,x_2,x_3)=\alpha(1,1,1)$ son ecuaciones paramétricas de $L_1\cap L_2$. C) $L_1+L_2$ es suma directa. D) Hay distintas posibilidades de descomponer el vector $(2,5,9)$ como suma de un vector de $L_1$ y uno de $L_2$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Cuatro afirmaciones sobre la intersección, suma directa y descomposición única de un vector.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Sé que la intersección de subespacios siempre es subespacio. Para ver si es solo el cero, miro si algún vector de la recta cumple la ecuación del plano. Si la suma es directa, la descomposición de cualquier vector es única.
+      - - |-
+          Qué uso
+        - |-
+          <b>Intersección:</b> $L_1\cap L_2$ = vectores que están en ambos; con cartesianas, se juntan <i>todas</i> las ecuaciones de los dos. <b>Suma directa:</b> $L_1+L_2$ es directa $\iff L_1\cap L_2=\{\bar0\}\iff\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2$. <b>Suplementarios:</b> $L_1\oplus L_2=V$. Si la suma es directa, la descomposición $v=u_1+u_2$ es <b>única</b>.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Calculo $L_1\cap L_2$; si es $\{0\}$, la suma es directa; descompongo $(2,5,9)$ resolviendo el sistema.
+  - pasos:
+    - |-
+      <b>A) Falsa.</b> La intersección de subespacios es <b>siempre</b> subespacio (U p.91). Motivo: si $u,v\in L_1\cap L_2$, entonces $u+\lambda v$ está en $L_1$ y en $L_2$, y $0$ está en ambos.
+    - |-
+      <b>Cálculo de $L_1\cap L_2$.</b>
+            <p>$L_1$: $\lambda(1,0,0)+\mu(0,0,1)=(\lambda,0,\mu)$, cartesiana $x_2=0$. $L_2$: vectores $(\alpha,\alpha,\alpha)$. Un vector de $L_2$ está en $L_1$ si $x_2=0$, es decir $\alpha=0$. Luego</p>
+            $$L_1\cap L_2=\{(0,0,0)\}.$$
+    - |-
+      <b>B) Falsa.</b> $\alpha(1,1,1)$ describe toda la recta $L_2$, pero la intersección es solo $\{0\}$ (p. ej. $(1,1,1)\notin L_1$, porque $x_2=1\neq0$).
+    - |-
+      <b>C) Verdadera.</b> Por la caracterización (U p.97): $L_1\cap L_2=\{0\}\iff$ suma directa. Además, por Grassmann,
+            $$\operatorname{Dim}(L_1+L_2)=2+1-0=3,$$
+            <p>luego $L_1\oplus L_2=\mathbb R^3$: son <b>suplementarios</b>. Comprobación directa:</p>
+            $$\det\begin{pmatrix}1&0&0\\0&0&1\\1&1&1\end{pmatrix}=1\cdot(0-1)=-1\neq0:$$
+            <p>los tres generadores juntos son base de $\mathbb R^3$.</p>
+    - |-
+      <b>D) Falsa.</b> Se buscan $\lambda,\mu,\alpha$ con $(2,5,9)=(\lambda,0,\mu)+(\alpha,\alpha,\alpha)$:
+            $$\left(\begin{array}{ccc|c}1&0&1&2\\0&0&1&5\\0&1&1&9\end{array}\right)\ (\text{incógnitas }\lambda,\mu,\alpha)\ \Rightarrow\ \alpha=5,\ \lambda=2-5=-3,\ \mu=9-5=4.$$
+            <p>Solución <b>única</b> (la matriz de coeficientes tiene $\det=-1\neq0$):</p>
+            $$(2,5,9)=\underbrace{(-3,0,4)}_{\in L_1}+\underbrace{(5,5,5)}_{\in L_2}.$$
+            <p>Es justo lo que garantiza la suma directa (Def. 2.13, U p.96). En general:</p>
+            $$(x_1,x_2,x_3)=(x_1-x_2,\ 0,\ x_3-x_2)+(x_2,x_2,x_2).$$
+  - resultado: |-
+      A falsa, B falsa, C verdadera, D falsa. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      para decidir si $U_1+U_2$ es directa, calcula $U_1\cap U_2$ (o, con bases, mira si la unión de las bases es libre: rango = suma de dimensiones). Para descomponer un vector en una suma directa, plantea $v=\sum\lambda_iu_i+\sum\alpha_jw_j$ y resuelve el sistema: la solución es única.
+  - error: |-
+      responder «verdadera» a B porque $\alpha(1,1,1)$ «está en $L_2$»: estar en $L_2$ no basta, hay que estar también en $L_1$.
+  - teoria: |-
+      intersección, U p.91 · Grassmann, U p.95 · Def. 2.13, U p.96 · caracterización y Def. 2.14, U p.97
+- id: ej2-36
+  clase: libro
+  titulo: |-
+    Ejercicio 2.36 — dimensiones de $L_1,L_2,L_1\cap L_2$ y $L_1+L_2$ en $\mathbb R^4$
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 2.36, p. 77
+    texto: |-
+      E p.77
+  cuerpo:
+  - enun: |-
+      Si $L_1$ y $L_2$ son $L_1=\langle(1,0,1,1),(1,0,0,0),(0,0,1,1)\rangle$ y $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$, se pide estudiar las dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y de la suma $L_1+L_2$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$ en $\mathbb R^4$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Tengo tres dimensiones fáciles de calcular (rango de generadores) y una que puedo obtener de Grassmann. Así que calculo suma e intersección por separado, o una de ellas por la fórmula.
+      - - |-
+          Qué uso
+        - |-
+          <b>Grassmann:</b> $\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)$. <b>Suma:</b> $L_1+L_2=\{u_1+u_2:\ u_1\in L_1,\ u_2\in L_2\}$; si $L_1=\langle S_1\rangle$ y $L_2=\langle S_2\rangle$, entonces $L_1+L_2=\langle S_1\cup S_2\rangle$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Rango de cada conjunto de generadores, rango de la unión de generadores para la suma, y Grassmann para la intersección.
+  - pasos:
+    - |-
+      <b>$\operatorname{Dim}L_1$.</b>
+            $$(1,0,1,1)=(1,0,0,0)+(0,0,1,1):$$
+            <p>el primer generador es combinación de los otros dos y se suprime (Teor. 2.1, U p.79). $\{(1,0,0,0),(0,0,1,1)\}$ es libre (no proporcionales): $\operatorname{Dim}L_1=2$.</p>
+    - |-
+      <b>$\operatorname{Dim}L_2$.</b> Sus tres generadores son $e_1,e_2,e_3$ canónicos (la matriz contiene la identidad $3\times3$): rango 3, $\operatorname{Dim}L_2=3$.
+    - |-
+      <b>Cartesianas.</b>
+            <p>$L_1$: $\alpha(1,0,0,0)+\beta(0,0,1,1)=(\alpha,0,\beta,\beta)$, luego</p>
+            $$x_2=0,\qquad x_3=x_4\qquad(4-2=2\text{ ecuaciones}\ ✓).$$
+            <p>$L_2$: $(\alpha,\beta,\gamma,0)$, luego $x_4=0$ ($4-3=1$ ✓).</p>
+    - |-
+      <b>$L_1\cap L_2$</b> (U p.91): se juntan $x_2=0$, $x_3=x_4$, $x_4=0$, lo que da
+            $$x_2=x_3=x_4=0,\qquad x_1\ \text{libre}.$$
+            <p>Luego $L_1\cap L_2=\langle(1,0,0,0)\rangle$, $\operatorname{Dim}(L_1\cap L_2)=1$ (el generador común). En consecuencia $L_1\cap L_2\neq\{0\}$ y <b>la suma no es directa</b> (U p.97).</p>
+    - |-
+      <b>$\operatorname{Dim}(L_1+L_2)$ por Grassmann</b> (U p.95):
+            $$2+3=\operatorname{Dim}(L_1+L_2)+1\ \Rightarrow\ \operatorname{Dim}(L_1+L_2)=4,$$
+            <p>luego $L_1+L_2=\mathbb R^4$. <i>Comprobación directa</i> (Ej. U 2.36, U p.94):</p>
+            $$L_1+L_2=\langle(1,0,0,0),(0,0,1,1),(0,1,0,0),(0,0,1,0)\rangle,$$
+            <p>que tiene rango 4.</p>
+  - resultado: |-
+      dimensiones $2,\ 3,\ 1,\ 4$; la suma no es directa. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      dimensiones de $U_1,U_2$ por rango de generadores $\to$ intersección por cartesianas $\to$ cuarta dimensión ($U_1+U_2$) por Grassmann, y comprobación con el rango de la unión de bases.
+  - error: |-
+      calcular $\operatorname{Dim}(L_1+L_2)=2+3=5$: en $\mathbb R^4$ es imposible, y además olvida restar la intersección.
+  - teoria: |-
+      Teor. 2.1, U p.79 · Teor. 2.5, U p.88 · intersección, U p.91 · suma y Grassmann, U p.94-95
+- id: ej2-37
+  clase: libro
+  titulo: |-
+    Ejercicio 2.37 — dimensiones de $A$ y $B$ y ¿es $A+B=A\oplus B$?
+  fuentes:
+  - l: E
+    ref: |-
+      Ejercicios de Álgebra, Ej. 2.37, p. 78
+    texto: |-
+      E p.78
+  cuerpo:
+  - enun: |-
+      Si $A$ es el subespacio de $\mathbb R^4$ generado por $\{(1,2,1,1),(-1,0,1,0),(2,2,0,1)\}$ y $B=\{(x_1,x_2,x_3,x_4)\mid 2x_1-2x_2+2x_3-x_4=0\}$ es otro subespacio de $\mathbb R^4$, se pide estudiar las dimensiones de $A$ y de $B$, y demostrar si verifica que $A+B=A\oplus B$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Dimensiones de $A$ y $B$ y si $A+B=A\oplus B$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          $A$ viene dado por generadores y $B$ por una ecuación. $B$ es un hiperplano de $\mathbb R^4$ (dimensión 3). La suma es directa solo si $A\cap B=\{0\}$; con $\dim A+\dim B=2+3=5>4$ eso sería imposible: la intersección no puede ser trivial.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma directa:</b> $L_1+L_2$ es directa $\iff L_1\cap L_2=\{\bar0\}\iff\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2$. <b>Suplementarios:</b> $L_1\oplus L_2=V$. <b>Grassmann:</b> $\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Dimensión de cada uno; con Grassmann y $\dim(A+B)\le4$ deduzco la intersección y la respuesta.
+  - pasos:
+    - |-
+      <b>$\operatorname{Dim}A$.</b>
+            $$(2,2,0,1)=(1,2,1,1)-(-1,0,1,0):$$
+            <p>el tercer generador sobra (Teor. 2.1, U p.79). $\{(1,2,1,1),(-1,0,1,0)\}$ es libre (no proporcionales: la 2.ª coordenada, $2\neq0$, lo impide). $\operatorname{Dim}A=2$.</p>
+    - |-
+      <b>$\operatorname{Dim}B$.</b> Despejando $x_4=2x_1-2x_2+2x_3$, con $x_1=\alpha$, $x_2=\beta$, $x_3=\delta$ libres:
+            $$\begin{pmatrix}x_1\\x_2\\x_3\\x_4\end{pmatrix}=\alpha\begin{pmatrix}1\\0\\0\\2\end{pmatrix}+\beta\begin{pmatrix}0\\1\\0\\-2\end{pmatrix}+\delta\begin{pmatrix}0\\0\\1\\2\end{pmatrix}.$$
+            <p>Los tres vectores generan $B$ y son libres (sus tres primeras coordenadas forman la identidad): base, $\operatorname{Dim}B=3$ (un hiperplano: $4-1$ ecuación).</p>
+    - |-
+      <b>$\operatorname{Dim}(A+B)$.</b> $A+B\supset B$, luego $\operatorname{Dim}(A+B)\ge3$. Veamos si $A\subset B$: el generador $(1,2,1,1)$ en la ecuación de $B$ da
+            $$2-4+2-1=-1\neq0,$$
+            <p>así que $(1,2,1,1)\notin B$. Entonces $A+B$ contiene estrictamente a $B$ y su dimensión es $>3$ (un subespacio que contiene estrictamente a otro tiene dimensión mayor, por (H2) de §9: si tuvieran la misma dimensión coincidirían); como está en $\mathbb R^4$, $\operatorname{Dim}(A+B)\le4$ (H2), luego $\operatorname{Dim}(A+B)=4$ y $A+B=\mathbb R^4$ (H2 otra vez).</p>
+    - |-
+      <b>Grassmann</b> (U p.95):
+            $$2+3=4+\operatorname{Dim}(A\cap B)\ \Rightarrow\ \operatorname{Dim}(A\cap B)=1.$$
+    - |-
+      <b>Conclusión.</b> $A\cap B\neq\{0\}$: por la caracterización (U p.97), <b>$A+B$ no es suma directa</b>: $A+B\neq A\oplus B$.
+    - |-
+      <b>Extra: quién es $A\cap B$</b> (no se pide, pero confirma). Cartesianas de $A$:
+            $$\alpha(1,2,1,1)+\beta(-1,0,1,0)=(\alpha-\beta,\ 2\alpha,\ \alpha+\beta,\ \alpha)\ \Rightarrow\ x_2=2x_4,\quad x_1+x_3=2x_4.$$
+            <p>Con la de $B$:</p>
+            $$2(x_1+x_3)-2x_2-x_4=4x_4-4x_4-x_4=-x_4=0\ \Rightarrow\ x_4=0,\ x_2=0,\ x_3=-x_1.$$
+            <p>Así $A\cap B=\langle(1,0,-1,0)\rangle$, y en efecto $(1,0,-1,0)=-(-1,0,1,0)\in A$ y $2-0-2-0=0$ ✓. Observa que $(1,0,-1,0)$ <b>no es</b> ninguno de los generadores dados.</p>
+  - resultado: |-
+      $\operatorname{Dim}A=2$, $\operatorname{Dim}B=3$, $\operatorname{Dim}(A+B)=4$, $\operatorname{Dim}(A\cap B)=1$; no es suma directa. <i>(Verificado con sympy: rango de los 5 generadores juntos $=4$.)</i>
+  - receta: |-
+      Grassmann tiene <b>cuatro</b> dimensiones: necesitas probar tres para despejar la cuarta. Las de los sumandos salen de rangos; la de la suma, del rango de la unión de bases (o del argumento «uno no está contenido en el otro» cuando uno es un hiperplano).
+  - error: |-
+      dar por hecho que $A+B=\mathbb R^4$ «porque $2+3\ge4$»: no es cierto en general (si $A\subset B$, $A+B=B$ tiene dimensión 3 y $A\cap B=A$ tiene dimensión 2).
+  - teoria: |-
+      Teor. 2.1, U p.79 · Teor. 2.5, U p.88 · Grassmann, U p.95 · caracterización, U p.97
+- id: sol-2_4-8
+  clase: propio
+  titulo: |-
+    Ejemplo propio 1 (fácil) — suplementario en $\mathbb R^3$ y descomposición de un vector
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      En $\mathbb R^3$, sean $U_1=\{x_1+x_2+x_3=0\}$ y $U_2=\langle(1,1,1)\rangle$. (a) Prueba que $\mathbb R^3=U_1\oplus U_2$. (b) Descompón $v=(3,0,0)$ como suma de un vector de $U_1$ y otro de $U_2$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Probar que $\mathbb R^3=U_1\oplus U_2$ y descomponer un vector.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Plano más recta fuera del plano suman todo $\mathbb R^3$. Compruebo que $(1,1,1)$ no cumple la ecuación del plano. Para descomponer: busco el múltiplo de $(1,1,1)$ que, restado a $v$, deja un vector del plano.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma directa:</b> $L_1+L_2$ es directa $\iff L_1\cap L_2=\{\bar0\}\iff\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2$. <b>Suplementarios:</b> $L_1\oplus L_2=V$. Si $\operatorname{Dim}U_1+\operatorname{Dim}U_2=\operatorname{Dim}V$ y $U_1\cap U_2=\{0\}$, entonces $U_1\oplus U_2=V$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Intersección = $\{0\}$ y dimensiones $2+1=3$; después una incógnita $t$ en $v-t(1,1,1)\in U_1$.
+  - pasos:
+    - |-
+      <b>Dimensiones.</b> $\operatorname{Dim}U_1=2$ (una ecuación en $\mathbb R^3$; base $\{(1,-1,0),(1,0,-1)\}$, despejando $x_1=-x_2-x_3$). $\operatorname{Dim}U_2=1$.
+    - |-
+      <b>Intersección.</b> Un vector de $U_2$ es $t(1,1,1)$; cumple la ecuación de $U_1$ si
+            $$3t=0\ \Rightarrow\ t=0.$$
+            <p>Luego $U_1\cap U_2=\{0\}$: suma directa (U p.97).</p>
+    - |-
+      <b>Suma.</b> Grassmann:
+            $$\operatorname{Dim}(U_1+U_2)=2+1-0=3,$$
+            <p>luego $U_1\oplus U_2=\mathbb R^3$: suplementarios (Def. 2.14). Comprobación: el determinante de $(1,-1,0),(1,0,-1),(1,1,1)$ es $3\neq0$.</p>
+    - |-
+      <b>(b)</b> Buscamos $v=t(1,1,1)+u$ con $u\in U_1$. Entonces $u=(3-t,-t,-t)$ debe cumplir
+            $$(3-t)-t-t=0\ \Rightarrow\ t=1.$$
+            <p>Luego:</p>
+            $$(3,0,0)=\underbrace{(2,-1,-1)}_{\in U_1}+\underbrace{(1,1,1)}_{\in U_2},$$
+            <p>y es la <b>única</b> descomposición (Def. 2.13). En general, $t=\tfrac{x_1+x_2+x_3}{3}$.</p>
+  - receta: |-
+      si un subespacio viene por ecuaciones y el otro por generadores, sustituye los generadores (en paramétricas) en las ecuaciones: obtienes la intersección directamente.
+  - error: |-
+      dar $U_1\cap U_2$ por vacía: nunca lo es, contiene al $0$; «suma directa» significa $U_1\cap U_2=\{0\}$, no $\varnothing$.
+- id: sol-2_4-9
+  clase: propio
+  titulo: |-
+    Ejemplo propio 2 (medio) — suma e intersección en $\mathbb R^4$ por generadores, y un suplementario de la suma
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      En $\mathbb R^4$, $U=\langle(1,1,0,0),(0,1,1,0)\rangle$ y $W=\langle(1,0,-1,0),(0,0,1,1)\rangle$. Halla $\operatorname{Dim}$, una base y ecuaciones cartesianas de $U+W$ y de $U\cap W$; ¿es directa la suma? Halla un suplementario de $U+W$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Suma e intersección de dos subespacios de $\mathbb R^4$ dados por generadores, y un suplementario de la suma.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Suma: uno todos los generadores y quito los sobrantes. Intersección: por Grassmann la dimensión, y el vector concreto lo encuentro buscando combinaciones comunes. Un suplementario se obtiene completando una base de la suma hasta una de $\mathbb R^4$.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma:</b> $L_1+L_2=\{u_1+u_2:\ u_1\in L_1,\ u_2\in L_2\}$; si $L_1=\langle S_1\rangle$ y $L_2=\langle S_2\rangle$, entonces $L_1+L_2=\langle S_1\cup S_2\rangle$. <b>Intersección:</b> $L_1\cap L_2$ = vectores que están en ambos; con cartesianas, se juntan <i>todas</i> las ecuaciones de los dos. <b>Grassmann:</b> $\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Escalono los cuatro generadores, saco cartesianas, aplico Grassmann y añado un vector canónico.
+  - pasos:
+    - |-
+      <b>Dimensiones de $U$ y $W$.</b> Cada par de generadores no es proporcional: $\operatorname{Dim}U=\operatorname{Dim}W=2$.
+    - |-
+      <b>Suma</b> (Def. 2.12 y Ej. U 2.36). $U+W$ está generado por los cuatro vectores; se escalona (filas):
+            $$\begin{pmatrix}1&1&0&0\\0&1&1&0\\1&0&-1&0\\0&0&1&1\end{pmatrix}\xrightarrow{F_3-F_1}\begin{pmatrix}1&1&0&0\\0&1&1&0\\0&-1&-1&0\\0&0&1&1\end{pmatrix}\xrightarrow{F_3+F_2}\begin{pmatrix}1&1&0&0\\0&1&1&0\\0&0&0&0\\0&0&1&1\end{pmatrix}.$$
+            <p>Rango 3: $\operatorname{Dim}(U+W)=3$, base $\{(1,1,0,0),(0,1,1,0),(0,0,1,1)\}$. La fila nula dice que $(1,0,-1,0)=(1,1,0,0)-(0,1,1,0)$: ese vector de $W$ ya está en $U$.</p>
+    - |-
+      <b>Cartesiana de $U+W$:</b>
+            $$\begin{vmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\\x_1&x_2&x_3&x_4\end{vmatrix}=-x_1+x_2-x_3+x_4=0\iff x_1-x_2+x_3-x_4=0.$$
+            <p>(Comprobación: los cuatro generadores la cumplen.)</p>
+    - |-
+      <b>Intersección por Grassmann:</b>
+            $$\operatorname{Dim}(U\cap W)=2+2-3=1.$$
+            <p><i>Cuál es:</i> cartesianas de $U$: $(\alpha,\alpha+\beta,\beta,0)\Rightarrow x_2=x_1+x_3,\ x_4=0$; de $W$: $(\gamma,0,-\gamma+\delta,\delta)\Rightarrow x_2=0,\ x_3=x_4-x_1$. Juntas: $x_2=0$, $x_4=0$, $x_3=-x_1$, es decir</p>
+            $$U\cap W=\langle(1,0,-1,0)\rangle.$$
+    - |-
+      <b>¿Directa?</b> No: $U\cap W\neq\{0\}$ (U p.97).
+    - |-
+      <b>Suplementario de $U+W$</b> (base incompleta, Teor. 2.7). Se añade $(0,0,0,1)$: el determinante de $\{(1,1,0,0),(0,1,1,0),(0,0,1,1),(0,0,0,1)\}$ es $1\neq0$ (triangular), luego
+            $$\mathbb R^4=(U+W)\oplus\langle(0,0,0,1)\rangle.$$
+            <p>(Atajo: $(0,0,0,1)$ no cumple $x_1-x_2+x_3-x_4=0$ y un vector fuera de un hiperplano genera un suplementario suyo.)</p>
+  - receta: |-
+      suma: junta generadores y escalona (las filas no nulas son base; partiendo de bases, las que se anulan cuentan la dimensión de la intersección). Intersección: cartesianas de ambos y sistema; cuadra con Grassmann.
+  - error: |-
+      tomar como base de $U+W$ los cuatro vectores «porque generan»: son ligados (rango 3).
+- id: sol-2_4-10
+  clase: propio
+  titulo: |-
+    Ejemplo propio 3 (difícil) — Grassmann con parámetro
+  fuentes:
+  - l: P
+    ref: |-
+      Ejemplo propio, verificado con sympy
+    texto: P
+  cuerpo:
+  - enun: |-
+      En $\mathbb R^4$, $U=\langle(1,0,1,0),(0,1,0,1)\rangle$ y $W_a=\langle(1,1,a,1),(0,1,1,a)\rangle$, $a\in\mathbb R$. Estudia, según $a$, $\operatorname{Dim}(U+W_a)$ y $\operatorname{Dim}(U\cap W_a)$. ¿Para qué valores es $\mathbb R^4=U\oplus W_a$?
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Estudiar según $a$ la dimensión de $U+W_a$ y $U\cap W_a$ y cuándo la suma es directa y da $\mathbb R^4$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Los cuatro generadores forman una matriz cuadrada $4\times4$ que depende de $a$. Si su determinante es no nulo, los cuatro son independientes y la suma es todo $\mathbb R^4$ con intersección nula. Los valores de $a$ que lo anulan son los casos especiales.
+      - - |-
+          Qué uso
+        - |-
+          <b>Grassmann:</b> $\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)$. <b>Suma directa:</b> $L_1+L_2$ es directa $\iff L_1\cap L_2=\{\bar0\}\iff\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2$. <b>Suplementarios:</b> $L_1\oplus L_2=V$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Determinante en función de $a$, discusión y Grassmann para la intersección.
+  - pasos:
+    - |-
+      <b>Dimensiones de los sumandos.</b> $\operatorname{Dim}U=2$ (no proporcionales). $\operatorname{Dim}W_a=2$ <b>para todo $a$</b>: el menor de las dos primeras coordenadas es
+            $$\begin{vmatrix}1&1\\0&1\end{vmatrix}=1\neq0.$$
+            <p>(Importante comprobarlo: si para algún $a$ los generadores de $W_a$ fueran dependientes, cambiaría Grassmann.)</p>
+    - |-
+      <b>Rango de la unión</b> (Ej. U 2.36). Se escalona:
+            $$\begin{pmatrix}1&0&1&0\\0&1&0&1\\1&1&a&1\\0&1&1&a\end{pmatrix}\xrightarrow[F_4-F_2]{F_3-F_1-F_2}\begin{pmatrix}1&0&1&0\\0&1&0&1\\0&0&a-1&0\\0&0&1&a-1\end{pmatrix},$$
+            <p>y</p>
+            $$\det=1\cdot1\cdot\begin{vmatrix}a-1&0\\1&a-1\end{vmatrix}=(a-1)^2.$$
+    - |-
+      <b>Caso $a\neq1$.</b> $\det\neq0$: rango 4, $\operatorname{Dim}(U+W_a)=4$ y, por Grassmann,
+            $$\operatorname{Dim}(U\cap W_a)=2+2-4=0.$$
+            <p>Entonces $\mathbb R^4=U\oplus W_a$.</p>
+    - |-
+      <b>Caso $a=1$.</b> La matriz escalonada tiene filas $(0,0,0,0)$ y $(0,0,1,0)$: rango 3. $\operatorname{Dim}(U+W_1)=3$ y
+            $$\operatorname{Dim}(U\cap W_1)=2+2-3=1.$$
+            <p>Concretamente $(1,1,1,1)=(1,0,1,0)+(0,1,0,1)\in U$ y es generador de $W_1$: $U\cap W_1=\langle(1,1,1,1)\rangle$. La suma no es directa.</p>
+    - |-
+      <b>Respuesta:</b> $\mathbb R^4=U\oplus W_a\iff a\neq1$.
+  - receta: |-
+      con parámetro: (i) comprueba la dimensión de cada sumando para todo valor; (ii) estudia el rango de la unión de bases (determinante si es cuadrada); (iii) en cada caso, Grassmann da la intersección.
+  - error: |-
+      concluir del determinante solo «$a\neq1$» sin estudiar el caso $a=1$ por separado (allí hay que calcular el rango), u olvidar comprobar que $\operatorname{Dim}W_a$ no depende de $a$.
+- id: ex-feb18b
+  clase: examen
+  titulo: |-
+    Feb. 2018 (tipo B), ejercicio 2 — suma directa, intersección y suplementarios con $U_1\subset U_2$ (V/F)
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2018 (tipo B), ejercicio 2
+    texto: |-
+      X Feb. 2018 (B)
+  cuerpo:
+  - enun: |-
+      Considerar $U_1=\{(x_1,x_2,x_3,x_4): x_1=x_2=x_3=x_4\}$ y $U_2=\{(x_1,x_2,x_3,x_4): x_1=x_2;\ x_3=x_4\}$. Justificar si son o no ciertas las siguientes afirmaciones: A) Su suma, $U_1+U_2$, es directa; B) La dimensión de $U_1\cap U_2$ es 0; C) $U_1$ y $U_2$ son subespacios suplementarios.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Tres afirmaciones sobre dos subespacios con $U_1\subset U_2$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Compruebo antes la posible inclusión: si todo vector de $U_1$ cumple las ecuaciones de $U_2$, la suma es $U_2$, la intersección es $U_1$ y las afirmaciones se deciden solas.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma directa:</b> $L_1+L_2$ es directa $\iff L_1\cap L_2=\{\bar0\}\iff\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2$. <b>Suplementarios:</b> $L_1\oplus L_2=V$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Bases de $U_1,U_2$, comprobación de la inclusión y consecuencias.
+  - pasos:
+    - |-
+      <b>Base de $U_1$.</b> Llamando $\alpha$ al valor común, $(x_1,\dots,x_4)=\alpha(1,1,1,1)$. $\{(1,1,1,1)\}$ genera $U_1$ y es libre (vector no nulo): base, $\operatorname{Dim}U_1=1$ (coincide con (H1): 3 ecuaciones independientes en $\mathbb R^4$, $4-3=1$).
+    - |-
+      <b>Base de $U_2$.</b> Con $x_1=x_2=\alpha$ y $x_3=x_4=\beta$:
+            $$\alpha(1,1,0,0)+\beta(0,0,1,1).$$
+            <p>Generan y son libres (no proporcionales): base, $\operatorname{Dim}U_2=2$.</p>
+    - |-
+      <b>Observación clave: $U_1\subset U_2$.</b> Hay que <b>comprobarlo</b>: un vector de $U_1$ es $(\alpha,\alpha,\alpha,\alpha)$, que cumple $x_1=x_2$ y $x_3=x_4$, luego está en $U_2$. Equivalentemente:
+            $$(1,1,1,1)=(1,1,0,0)+(0,0,1,1)\in U_2.$$
+    - |-
+      <b>Consecuencias.</b> $U_1\cap U_2=U_1$, de dimensión 1. $U_1+U_2=U_2$ (por un lado $U_2\subset U_1+U_2$, con $u_2=0+u_2$; por otro, si $u_1\in U_1\subset U_2$ y $u_2\in U_2$, $u_1+u_2\in U_2$ porque $U_2$ es subespacio), de dimensión 2. Grassmann:
+            $$2+1=1+2\ ✓$$
+    - |-
+      <b>A) Falsa.</b> Por la caracterización (U p.97), $U_1+U_2$ es directa $\iff U_1\cap U_2=\{0\}$, y aquí $U_1\cap U_2=U_1\neq\{0\}$. También con la Def. 2.13:
+            $$(1,1,1,1)=\underbrace{(1,1,1,1)}_{\in U_1}+\underbrace{(0,0,0,0)}_{\in U_2}=\underbrace{(0,0,0,0)}_{\in U_1}+\underbrace{(1,1,1,1)}_{\in U_2}.$$
+    - |-
+      <b>B) Falsa.</b> $\operatorname{Dim}(U_1\cap U_2)=\operatorname{Dim}U_1=1\neq0$.
+    - |-
+      <b>C) Falsa.</b> Serían suplementarios si $\mathbb R^4=U_1\oplus U_2$ (Def. 2.14). Fallan <b>las dos</b> condiciones: la suma no es directa (A) y $U_1+U_2=U_2$ tiene dimensión $2\neq4$.
+  - resultado: |-
+      las tres afirmaciones son falsas. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      antes de calcular suma e intersección, mira si un subespacio está <b>contenido</b> en el otro (comprobando que la base del pequeño cumple las ecuaciones del grande). Si $U_1\subset U_2$: $U_1\cap U_2=U_1$, $U_1+U_2=U_2$, y la suma solo es directa si $U_1=\{0\}$.
+  - error: |-
+      pensar que la suma es directa «porque $1+2\le4$» o «porque las bases juntas son 3 vectores»: el criterio es la intersección. Si las bases juntas son ligadas, la suma <b>no</b> es directa.
+- id: ex-feb19b
+  clase: examen
+  titulo: |-
+    Feb. 2019 (tipo B), ejercicio 2 — intersección de dos subespacios dados por cartesianas
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2019 (tipo B), ejercicio 2
+    texto: |-
+      X Feb. 2019 (B)
+  cuerpo:
+  - enun: |-
+      Encontrar unas ecuaciones paramétricas del subespacio $U_1\cap U_2$ siendo $U_1=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4: x_1=2x_2;\ x_3=x_4\}$ y $U_2=\{(x_1,x_2,x_3,x_4)\in\mathbb R^4: x_1=2x_3\}$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Paramétricas de $U_1\cap U_2$ si ambos vienen por cartesianas.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Intersección = juntar ecuaciones. Tres ecuaciones en $\mathbb R^4$: espero una recta si son independientes.
+      - - |-
+          Qué uso
+        - |-
+          <b>Intersección:</b> $L_1\cap L_2$ = vectores que están en ambos; con cartesianas, se juntan <i>todas</i> las ecuaciones de los dos.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Resuelvo el sistema homogéneo y escribo la solución con el parámetro libre.
+  - pasos:
+    - |-
+      <b>Qué es la intersección.</b> Un subespacio de $\mathbb R^4$ (U p.91) formado por los vectores que cumplen <b>todas</b> las ecuaciones de ambos (U Ej. 2.32-2.33):
+            $$U_1\cap U_2:\quad\begin{cases}x_1-2x_2=0\\ x_3-x_4=0\\ x_1-2x_3=0\end{cases}$$
+    - |-
+      <b>¿Cuántos parámetros? (H1).</b> La matriz de coeficientes es
+            $$\begin{pmatrix}1&-2&0&0\\0&0&1&-1\\1&0&-2&0\end{pmatrix}.$$
+            <p>Tiene rango 3: el menor de las columnas 1, 3 y 4 vale</p>
+            $$\begin{vmatrix}1&0&0\\0&1&-1\\1&-2&0\end{vmatrix}=1\cdot(0-2)=-2\neq0.$$
+            <p>Por Rouché (U p.30) la solución depende de $4-3=1$ parámetro: $\operatorname{Dim}(U_1\cap U_2)=1$.</p>
+    - |-
+      <b>Resolver.</b> Parámetro $x_2=\alpha$. De la 1.ª, $x_1=2\alpha$. De la 3.ª, $x_3=x_1/2=\alpha$. De la 2.ª, $x_4=x_3=\alpha$.
+    - |-
+      <b>Ecuaciones paramétricas:</b>
+            $$U_1\cap U_2:\ \begin{cases}x_1=2\alpha\\x_2=\alpha\\x_3=\alpha\\x_4=\alpha\end{cases}\quad\alpha\in\mathbb R,\qquad\text{es decir, } U_1\cap U_2=\langle(2,1,1,1)\rangle.$$
+    - |-
+      <b>Comprobación.</b> $(2,1,1,1)$: $2=2\cdot1$ ✓ y $1=1$ ✓ (está en $U_1$); $2=2\cdot1$ ✓ (está en $U_2$).
+  - resultado: |-
+      $U_1\cap U_2=\langle(2,1,1,1)\rangle$. <i>(Verificado con sympy: núcleo de la matriz del paso 2.)</i>
+  - receta: |-
+      intersección de subespacios por cartesianas: <b>juntar todas las ecuaciones</b> en un sistema homogéneo; nº de parámetros $=n-\text{rango}$; despejar en función de los parámetros.
+  - error: |-
+      dar como «paramétricas» unas ecuaciones que aún tienen relaciones entre las $x_i$ (eso son cartesianas), o poner tantos parámetros «a ojo» sin calcular el rango (aquí saldría un plano en lugar de una recta).
+- id: ex-sep19a
+  clase: examen
+  titulo: |-
+    Sept. 2019 (tipo A), ejercicio 2 — intersección de dos planos dados por generadores
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2019 (tipo A), ejercicio 2
+    texto: |-
+      X Sept. 2019 (A)
+  cuerpo:
+  - enun: |-
+      En el espacio vectorial $\mathbb R^3$ se consideran los subespacios: $S$ generado por los vectores $\{(1,0,1),(0,2,0)\}$ y $T$ generado por $\{(1,1,2),(0,0,1)\}$. Calcular el subespacio $S\cap T$.
+  - html: |-
+      <p><b>Método 1: pasar a cartesianas y juntar.</b></p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Calcular $S\cap T$ para dos planos de $\mathbb R^3$ dados por generadores.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Dos planos distintos de $\mathbb R^3$ se cortan en una recta. Para intersectar necesito las ecuaciones de los dos.
+      - - |-
+          Qué uso
+        - |-
+          <b>Intersección:</b> $L_1\cap L_2$ = vectores que están en ambos; con cartesianas, se juntan <i>todas</i> las ecuaciones de los dos. Cada plano por el origen de $\mathbb R^3$ tiene una cartesiana.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Cartesiana de cada plano por determinante y resolución del sistema de dos ecuaciones.
+  - pasos:
+    - |-
+      <b>Dimensiones.</b> $(1,0,1)$ y $(0,2,0)$ no son proporcionales: $\operatorname{Dim}S=2$ (Teor. 2.5, U p.88). Igual para $T$. Son dos planos por el origen.
+    - |-
+      <b>Cartesiana de $S$.</b>
+            $$a(1,0,1)+b(0,2,0)=(a,2b,a):\qquad x_1=a,\quad x_2=2b,\quad x_3=a.$$
+            <p>Solo hay una condición: $S:\ x_1-x_3=0$ (por (H1), $3-2=1$ ecuación; comprobación: $1-1=0$ y $0-0=0$ ✓).</p>
+    - |-
+      <b>Cartesiana de $T$.</b>
+            $$c(1,1,2)+d(0,0,1)=(c,\ c,\ 2c+d):$$
+            <p>$x_3$ libre (por $d$) y $x_1=x_2=c$: $T:\ x_1-x_2=0$ (comprobación: $1-1=0$, $0-0=0$ ✓).</p>
+    - |-
+      <b>Intersección:</b> $x_1=x_3$ y $x_1=x_2$; rango 2, $3-2=1$ parámetro:
+            $$x_1=x_2=x_3=\lambda,\qquad S\cap T=\langle(1,1,1)\rangle,\qquad\operatorname{Dim}(S\cap T)=1.$$
+  - html: |-
+      <p><b>Método 2: igualar combinaciones lineales.</b></p>
+  - html: |-
+      <ol class="steps" start="5">
+          <li>Un vector está en $S\cap T$ si es combinación de los generadores de $S$ <b>y</b> de los de $T$:
+            $$a(1,0,1)+b(0,2,0)=c(1,1,2)+d(0,0,1)\iff\begin{cases}a=c\\2b=c\\a=2c+d\end{cases}$$
+            De ahí $a=c$, $b=c/2$, $d=a-2c=-c$. Sustituyendo en el lado de $S$: $c(1,0,1)+\tfrac c2(0,2,0)=c(1,1,1)$: de nuevo $S\cap T=\langle(1,1,1)\rangle$.</li>
+          <li><b>Comprobación con Grassmann.</b> $S+T=\langle(1,0,1),(0,2,0),(1,1,2),(0,0,1)\rangle$ tiene rango 3 (p. ej. $\det\begin{pmatrix}1&0&1\\0&2&0\\0&0&1\end{pmatrix}=2\neq0$): $\operatorname{Dim}(S+T)=3$ y $\operatorname{Dim}(S\cap T)=2+2-3=1$ ✓.</li>
+        </ol>
+  - resultado: |-
+      $S\cap T=\langle(1,1,1)\rangle$. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      subespacios por <b>generadores</b>: o se pasan a cartesianas y se juntan (método 1), o se iguala «combinación de unos = combinación de otros» y se resuelve (método 2). Grassmann dice de antemano la dimensión que debe salir.
+  - error: |-
+      «como $S$ y $T$ no tienen generadores en común, $S\cap T=\{0\}$». <b>Falso</b>: la intersección se calcula con los <b>vectores</b> de los subespacios, no con los conjuntos de generadores. Dos planos distintos de $\mathbb R^3$ por el origen siempre se cortan en una recta ($2+2-3=1$).
+- id: ex-feb25
+  clase: examen
+  titulo: |-
+    Feb. 2025 (2.ª sem.), pregunta 2 — posibles dimensiones con Grassmann, sin vectores concretos
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2025 (2.ª sem.), pregunta 2
+    texto: |-
+      X Feb. 2025 (2.ª)
+  cuerpo:
+  - enun: |-
+      Sea $V$ un espacio vectorial de dimensión 9. Consideremos dos subespacios de $V$, $M$ y $N$. Si la dimensión de $M$ es 5 y la dimensión de $M\cap N$ es 3, señale todas las posibles dimensiones del subespacio $N$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Posibles dimensiones de $N$ sabiendo $\dim V=9$, $\dim M=5$, $\dim(M\cap N)=3$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Es un problema de aritmética de dimensiones: la fórmula de Grassmann une las cuatro. La incógnita $\dim(M+N)$ está acotada: no baja de 5 ni sube de 9.
+      - - |-
+          Qué uso
+        - |-
+          <b>Grassmann:</b> $\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)$. Además $\operatorname{Dim}(M+N)\le\operatorname{Dim}V$ y $\operatorname{Dim}(M+N)\ge\operatorname{Dim}M$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Despejo $\dim N$, acoto $\dim(M+N)$ y compruebo que todos los valores intermedios se alcanzan con un ejemplo.
+  - pasos:
+    - |-
+      <b>Grassmann</b> con los datos:
+            $$\operatorname{Dim}(M+N)+3=5+\operatorname{Dim}N\ \Rightarrow\ \operatorname{Dim}N=\operatorname{Dim}(M+N)-2.$$
+            <p>Acotar $\operatorname{Dim}N$ es acotar $\operatorname{Dim}(M+N)$.</p>
+    - |-
+      <b>Cota superior.</b> $M+N$ es un subespacio de $V$ (Def. 2.12), luego por (H2) $\operatorname{Dim}(M+N)\le9$ y $\operatorname{Dim}N\le7$.
+    - |-
+      <b>Cota inferior.</b> $M\subset M+N$ ($m=m+0$ con $0\in N$): $\operatorname{Dim}(M+N)\ge5$ y $\operatorname{Dim}N\ge3$. (Lo mismo sale de $M\cap N\subset N$.)
+    - |-
+      <b>Todas las intermedias son posibles</b> (paso necesario: el enunciado pide <i>todas</i> las posibles y una cota no garantiza que cada valor se alcance). Con $V=\mathbb R^9$, base canónica $e_1,\dots,e_9$, $M=\langle e_1,\dots,e_5\rangle$ y, para $k=0,\dots,4$,
+            $$N_k=\langle e_1,e_2,e_3,\ e_6,\dots,e_{5+k}\rangle\quad(\text{para }k=0,\ N_0=\langle e_1,e_2,e_3\rangle).$$
+            <p>Entonces $\operatorname{Dim}N_k=3+k$, $M\cap N_k=\langle e_1,e_2,e_3\rangle$ (dimensión 3) y $M+N_k=\langle e_1,\dots,e_{5+k}\rangle$. Se obtiene $\operatorname{Dim}N=3,4,5,6,7$.</p>
+  - resultado: |-
+      $\operatorname{Dim}N\in\{3,4,5,6,7\}$. <i>(Verificado con sympy para cada $k$.)</i>
+  - receta: |-
+      «posibles dimensiones»: escribe Grassmann, despeja la incógnita en función de $\operatorname{Dim}(U_1+U_2)$ y acota ésta entre $\max(\operatorname{Dim}U_1,\operatorname{Dim}U_2)$ y $\operatorname{Dim}V$. Luego da un ejemplo con vectores canónicos para cada valor.
+  - error: |-
+      escribir Grassmann con $\operatorname{Dim}V$ en lugar de $\operatorname{Dim}(M+N)$ (saldría solo $\operatorname{Dim}N=7$), o con $M\cup N$ en lugar de $M+N$.
+- id: ex-ene22
+  clase: examen
+  titulo: |-
+    Ene. 2022 (tipo A), ejercicio 2 — $F+G$, $F\cup G$ y $F\cap G$ cuando $G\subset F$ (polinomios)
+  fuentes:
+  - l: X
+    ref: |-
+      Ene. 2022 (tipo A), ejercicio 2
+    texto: |-
+      X Ene. 2022 (A)
+  cuerpo:
+  - enun: |-
+      Si $\{x^2,1\}$ y $\{x^2+1\}$ son sistemas generadores de dos subespacios $F$ y $G$, respectivamente, hallar $F+G$, $F\cup G$ y $F\cap G$.
+  - html: |-
+      <p><i>Los vectores son polinomios; se trabaja en los polinomios de grado $\le2$, con base canónica $\{1,x,x^2\}$. Este ejercicio ilustra también la cuestión de la unión de subespacios del <a href="tema_2_1_espacios_vectoriales.html#s5">tema 2.1</a> (cuándo la unión sí es subespacio).</i></p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Hallar $F+G$, $F\cup G$ y $F\cap G$ para dos subespacios de polinomios.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Miro si uno contiene al otro: el generador de $G$ es combinación de los generadores de $F$. Si es así, suma = el grande, intersección = el pequeño, y la unión sí es subespacio.
+      - - |-
+          Qué uso
+        - |-
+          $G\subset F\Rightarrow F+G=F$ y $F\cap G=G$. La unión de subespacios es un subespacio $\iff$ uno contiene al otro (Ej. 2.13).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Compruebo la inclusión escribiendo $x^2+1$ con los generadores de $F$.
+  - pasos:
+    - |-
+      <b>Qué son $F$ y $G$.</b>
+            $$F=\langle x^2,1\rangle=\{ax^2+b:\ a,b\in\mathbb R\},\qquad G=\langle x^2+1\rangle=\{c(x^2+1):\ c\in\mathbb R\}.$$
+            <p>($F$ son los polinomios sin término en $x$.)</p>
+    - |-
+      <b>Dimensiones.</b> $\{x^2,1\}$ es libre: $ax^2+b\cdot1=0$ (polinomio nulo) obliga a $a=b=0$ (Def. 2.6, U p.74), luego $\operatorname{Dim}F=2$. $\{x^2+1\}$ es un vector no nulo: $\operatorname{Dim}G=1$.
+    - |-
+      <b>Observación clave: $G\subset F$.</b>
+            $$x^2+1=1\cdot x^2+1\cdot1$$
+            <p>es combinación lineal de los generadores de $F$, así que está en $F$; y como $F$ es subespacio, $c(x^2+1)\in F$ para todo $c$. En coordenadas respecto de $\{1,x,x^2\}$: $(1,0,1)=(1,0,0)+(0,0,1)$.</p>
+    - |-
+      <b>Intersección.</b> Todo vector de $G$ está también en $F$, y $F\cap G\subset G$ siempre:
+            $$F\cap G=G=\langle x^2+1\rangle,\qquad\text{dimensión }1.$$
+    - |-
+      <b>Suma</b> (Def. 2.12, U p.93). $F\subset F+G$ (tomando $g=0$). Recíprocamente, si $f\in F$ y $g\in G\subset F$, entonces $f+g\in F$ por ser $F$ subespacio. Luego
+            $$F+G=F=\langle x^2,1\rangle,\qquad\text{dimensión }2.$$
+    - |-
+      <b>Comprobación con Grassmann</b> (U p.95):
+            $$\operatorname{Dim}(F+G)+\operatorname{Dim}(F\cap G)=2+1=3=\operatorname{Dim}F+\operatorname{Dim}G\ ✓$$
+    - |-
+      <b>Unión.</b> $F\cup G$ son los polinomios que están en $F$ o en $G$; como $G\subset F$, $F\cup G=F$. Aquí la unión <b>sí</b> es subespacio: es la excepción a «en general no» (U p.92), que ocurre justo cuando uno contiene al otro (véase la chuleta).
+  - resultado: |-
+      $F\cap G=G=\langle x^2+1\rangle$; $F+G=F=\langle x^2,1\rangle$; $F\cup G=F$. <i>(Verificado con sympy en coordenadas: rango de $\{(0,0,1),(1,0,0)\}$ = rango con $(1,0,1)$ añadido = 2.)</i>
+  - receta: |-
+      antes de operar, <b>mira si uno está contenido en el otro</b> (basta que los generadores del pequeño sean combinación de los del grande). Si $G\subset F$: $F\cap G=G$, $F+G=F$, $F\cup G=F$.
+  - error: |-
+      decir «$F\cap G=\{0\}$ porque los generadores son distintos», o afirmar que la unión «nunca» es subespacio.
+- id: ex-sep22
+  clase: examen
+  titulo: |-
+    Sept. 2022, problema b) — base, cartesianas y paramétricas de $F+G$ y un suplementario
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2022, problema b)
+    texto: |-
+      X Sept. 2022
+  cuerpo:
+  - enun: |-
+      Consideramos en $\mathbb R^3$ los subespacios vectoriales $F=\{(x_1,x_2,x_3)\in\mathbb R^3\mid x_3=x_2,\ x_1=-x_2\}$ y $G=\{\lambda(0,1,1),\ \forall\lambda\in\mathbb R\}$. Se pide calcular una base, las ecuaciones cartesianas y paramétricas del subespacio $F+G$. Hallar un subespacio suplementario de $F+G$.
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Base, cartesianas y paramétricas de $F+G$ y un suplementario.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Dos subespacios de dimensión 1 en $\mathbb R^3$: su suma, si son distintos, es un plano. Un suplementario del plano es una recta que no esté en él.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma:</b> $L_1+L_2=\{u_1+u_2:\ u_1\in L_1,\ u_2\in L_2\}$; si $L_1=\langle S_1\rangle$ y $L_2=\langle S_2\rangle$, entonces $L_1+L_2=\langle S_1\cup S_2\rangle$. Un suplementario de $W$ se obtiene completando una base de $W$ hasta una base de $V$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Generadores de $F$ y $G$, unirlos, determinante para la cartesiana y un vector fuera del plano.
+  - pasos:
+    - |-
+      <b>Generador de $F$.</b> Con $x_2=\alpha$: $x_3=\alpha$, $x_1=-\alpha$, luego
+            $$F=\langle(-1,1,1)\rangle$$
+            <p>(dos ecuaciones independientes: dimensión $3-2=1$, (H1)).</p>
+    - |-
+      <b>Generador de $G$.</b> Por definición $G=\langle(0,1,1)\rangle$.
+    - |-
+      <b>Generadores de $F+G$.</b> Todo vector es $u_1+u_2$ con $u_1=\alpha(-1,1,1)$ y $u_2=\beta(0,1,1)$ (Def. 2.12):
+            $$F+G=\langle(-1,1,1),(0,1,1)\rangle.$$
+    - |-
+      <b>Base y dimensión.</b> No son proporcionales (el primero tiene $x_1=-1$ y el segundo $x_1=0$): libres, base. $\operatorname{Dim}(F+G)=2$, un plano. <i>De paso:</i> $\operatorname{Dim}F+\operatorname{Dim}G=2=\operatorname{Dim}(F+G)$, así que por Grassmann $F\cap G=\{0\}$ y la suma es incluso <b>directa</b> (no se pide, pero es gratis).
+    - |-
+      <b>Ecuaciones paramétricas:</b>
+            $$F+G:\ \begin{cases}x_1=-\alpha\\x_2=\alpha+\beta\\x_3=\alpha+\beta\end{cases}\qquad\alpha,\beta\in\mathbb R.$$
+    - |-
+      <b>Ecuación cartesiana.</b> Un plano de $\mathbb R^3$ tiene $3-2=1$ ecuación. De las paramétricas, $x_2$ y $x_3$ valen lo mismo:
+            $$F+G:\ x_2-x_3=0.$$
+            <p>Comprobación: $(-1,1,1)$: $1-1=0$ ✓; $(0,1,1)$: $1-1=0$ ✓. (Con determinante:)</p>
+            $$\begin{vmatrix}x_1&x_2&x_3\\-1&1&1\\0&1&1\end{vmatrix}=x_2-x_3.$$
+    - |-
+      <b>Suplementario.</b> Se busca $W$ con $\mathbb R^3=(F+G)\oplus W$ (Def. 2.14). Por (H3) basta $\operatorname{Dim}W=3-2=1$ y $W\cap(F+G)=\{0\}$. Se toma un vector canónico que <b>no</b> cumpla $x_2=x_3$: $(0,1,0)$ ($1\neq0$). Sea $W=\langle(0,1,0)\rangle$. Un vector $\lambda(0,1,0)$ cumple $x_2=x_3$ solo si $\lambda=0$: $W\cap(F+G)=\{0\}$ (suma directa), y $\operatorname{Dim}((F+G)\oplus W)=2+1=3$, luego es $\mathbb R^3$ (H2). Equivalentemente:
+            $$\det\begin{pmatrix}-1&1&1\\0&1&1\\0&1&0\end{pmatrix}=-1\cdot(0-1)=1\neq0:$$
+            <p>base de $\mathbb R^3$ (se ha completado la base de $F+G$, Teor. 2.7).</p>
+  - resultado: |-
+      base $\{(-1,1,1),(0,1,1)\}$; paramétricas del paso 5; cartesiana $x_2=x_3$; un suplementario: $\langle(0,1,0)\rangle$ (también valdría $\langle(0,0,1)\rangle$, pero <b>no</b> $\langle(1,0,0)\rangle$). <i>(Verificado con sympy.)</i>
+  - receta: |-
+      suma: unir generadores, quitar los dependientes (base), escribir paramétricas y eliminar parámetros para la cartesiana. Suplementario: <b>completar la base</b> del subespacio con vectores canónicos que no cumplan sus ecuaciones, comprobando con un determinante $\neq0$.
+  - error: |-
+      elegir un vector canónico sin comprobarlo: $(1,0,0)$ <b>sí</b> cumple $x_2=x_3$ ($0=0$), está en $F+G$ (de hecho $(1,0,0)=-(-1,1,1)+(0,1,1)$) y $\langle(1,0,0)\rangle$ <b>no</b> es suplementario.
+- id: ex-feb20a
+  clase: examen
+  titulo: |-
+    Ene. 2020 (tipo A), problema a) — definir un subespacio, intersección y suplementario de la suma
+  fuentes:
+  - l: X
+    ref: |-
+      Ene. 2020 (tipo A), problema a)
+    texto: |-
+      X Ene. 2020 (A)
+  cuerpo:
+  - enun: |-
+      En el espacio vectorial $\mathbb R^3$, con las operaciones habituales, definir un subespacio $U$ de dimensión 2 mediante unas ecuaciones paramétricas (0.5 ptos.) y calcular el subespacio intersección $U\cap V$, indicando qué dimensión tiene, siendo $V$ el subespacio generado por $\{(1,1,1),(2,1,0),(0,1,2)\}$ (0.5 ptos.). Calcular un subespacio suplementario al subespacio $U+V$. (1 pto.)
+  - html: |-
+      <p><i>La respuesta depende del $U$ elegido.</i></p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Definir un subespacio de dimensión 2, hallar su intersección con otro y un suplementario de la suma.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Libertad de elección: tomo un plano sencillo. Para decidir la intersección con $V$ necesito las ecuaciones de ambos. La suma será todo $\mathbb R^3$ o un plano.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma:</b> $L_1+L_2=\{u_1+u_2:\ u_1\in L_1,\ u_2\in L_2\}$; si $L_1=\langle S_1\rangle$ y $L_2=\langle S_2\rangle$, entonces $L_1+L_2=\langle S_1\cup S_2\rangle$. <b>Intersección:</b> $L_1\cap L_2$ = vectores que están en ambos; con cartesianas, se juntan <i>todas</i> las ecuaciones de los dos. <b>Grassmann:</b> $\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Elijo $U$ con dos generadores, paso $V$ a cartesianas, intersección y Grassmann.
+  - pasos:
+    - |-
+      <b>Definir $U$.</b>
+            $$U:\ x=\alpha,\ y=\beta,\ z=-\alpha-\beta,\qquad\text{es decir}\quad U=\langle(1,0,-1),(0,1,-1)\rangle.$$
+            <p>Hay que <b>justificar</b> $\operatorname{Dim}U=2$: los dos vectores generan $U$ y son libres (no proporcionales): base. Eliminando parámetros, $U:\ x+y+z=0$.</p>
+    - |-
+      <b>Dimensión de $V$.</b> Los tres generadores son ligados:
+            $$(0,1,2)=2(1,1,1)-(2,1,0)\ ✓$$
+            <p>Por supresión (Teor. 2.1), $V=\langle(1,1,1),(2,1,0)\rangle$, no proporcionales: $\operatorname{Dim}V=2$.</p>
+    - |-
+      <b>Cartesiana de $V$.</b>
+            $$\begin{vmatrix}x&y&z\\1&1&1\\2&1&0\end{vmatrix}=-x+2y-z=0\iff V:\ x-2y+z=0.$$
+            <p>Comprobación: $(1,1,1)$: $1-2+1=0$ ✓; $(2,1,0)$: $2-2=0$ ✓; $(0,1,2)$: $-2+2=0$ ✓.</p>
+    - |-
+      <b>Intersección:</b> $x+y+z=0$ y $x-2y+z=0$. Restando, $3y=0\Rightarrow y=0$, y $z=-x$. Con $x=\lambda$:
+            $$U\cap V=\langle(1,0,-1)\rangle,\qquad\operatorname{Dim}(U\cap V)=1.$$
+    - |-
+      <b>$U+V$ por Grassmann:</b>
+            $$\operatorname{Dim}(U+V)=2+2-1=3;$$
+            <p>como $U+V\subset\mathbb R^3$, por (H2) $U+V=\mathbb R^3$.</p>
+    - |-
+      <b>Suplementario de $U+V=\mathbb R^3$.</b> Por (H3) necesita $\operatorname{Dim}W=3-3=0$: $W=\{0\}$. En efecto, $\mathbb R^3\cap\{0\}=\{0\}$ (directa) y $\mathbb R^3+\{0\}=\mathbb R^3$. El suplementario es <b>el subespacio trivial $\{0\}$</b> (y es el único).
+    - |-
+      <b>Si se elige otro $U$.</b> El resultado cambia. Si alguien tomara $U=V$ (paramétricas $x=\alpha$, $y=\beta$, $z=-\alpha+2\beta$), entonces $U\cap V=V$ (dimensión 2), $U+V=V$ y un suplementario sería $\langle(1,0,0)\rangle$ (pues $1-0+0\neq0$ y $2+1=3$). Cualquier elección correcta y bien justificada vale; lo que cuenta es la coherencia.
+  - resultado: |-
+      con el $U$ elegido, $U\cap V=\langle(1,0,-1)\rangle$ (dimensión 1), $U+V=\mathbb R^3$ y su suplementario es $\{0\}$. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      si Grassmann da $\operatorname{Dim}(U+V)=\operatorname{Dim}V_{\text{total}}$, la suma es todo el espacio y su único suplementario es $\{0\}$. En los ejercicios de «elija usted un subespacio», escoge uno sencillo y justifica su dimensión.
+  - error: |-
+      responder «no tiene suplementario» o dar una recta: $\{0\}$ es un subespacio (el trivial) y es el suplementario de todo el espacio.
+- id: ex-sep24
+  clase: examen
+  titulo: |-
+    Sept. 2024, problema 7 — definiciones, bases de la suma y de la intersección, y la unión
+  fuentes:
+  - l: X
+    ref: |-
+      Sept. 2024, problema 7
+    texto: |-
+      X Sept. 2024
+  cuerpo:
+  - enun: |-
+      (a) Sea $V$ un espacio vectorial, y $U_1$, $U_2$ subespacios vectoriales de $V$. Defina los subespacios suma $U_1+U_2$ e intersección $U_1\cap U_2$. (0.5 puntos) (b) Sean $U_1=\langle(2,0,2,1),(0,3,1,0)\rangle$ y $U_2=\{(x,y,z,t)\in\mathbb R^4: x=0,\ y-3z=0\}$ subespacios de $\mathbb R^4$. Calcule de manera razonada una base de $U_1+U_2$ y una base de $U_1\cap U_2$. (1 punto) (c) Considere el conjunto $U_1\cup U_2$ para los $U_1$, $U_2$ de (b). Determine de manera razonada si $U_1\cup U_2$ es o no un subespacio vectorial de $\mathbb R^4$. (0.5 puntos)
+  - html: |-
+      <p><b>(a) Definiciones</b> (U p.91 y Def. 2.12, p.93):
+          $$U_1\cap U_2=\{v\in V:\ v\in U_1\ \text{y}\ v\in U_2\},\qquad U_1+U_2=\{u_1+u_2:\ u_1\in U_1,\ u_2\in U_2\}.$$
+          Ambos son subespacios de $V$. Conviene añadir que $U_1+U_2$ es el menor subespacio que contiene a $U_1\cup U_2$ (U p.93).</p>
+  - html: |-
+      <p><b>(b)</b></p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Bases de $U_1+U_2$ y de $U_1\cap U_2$ y si la unión es subespacio.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Uno viene por generadores y otro por ecuaciones: sustituyo el vector genérico del primero en las ecuaciones del segundo para obtener la intersección. Para la unión recuerdo el criterio del Ej. 2.13.
+      - - |-
+          Qué uso
+        - |-
+          <b>Suma:</b> $L_1+L_2=\{u_1+u_2:\ u_1\in L_1,\ u_2\in L_2\}$; si $L_1=\langle S_1\rangle$ y $L_2=\langle S_2\rangle$, entonces $L_1+L_2=\langle S_1\cup S_2\rangle$. <b>Intersección:</b> $L_1\cap L_2$ = vectores que están en ambos; con cartesianas, se juntan <i>todas</i> las ecuaciones de los dos. Unión: subespacio $\iff$ uno contiene al otro (Ej. 2.13).
+      - - |-
+          Por dónde empiezo
+        - |-
+          Intersección por sustitución, suma uniendo bases y criterio de la unión.
+  - pasos:
+    - |-
+      <b>Base de $U_1$.</b> $(2,0,2,1)$ y $(0,3,1,0)$ no son proporcionales: libres, base, $\operatorname{Dim}U_1=2$.
+    - |-
+      <b>Base de $U_2$.</b> Con $x=0$ e $y=3z$, los parámetros son $z$ y $t$:
+            $$(0,3z,z,t)=z(0,3,1,0)+t(0,0,0,1).$$
+            <p>No proporcionales: base $\{(0,3,1,0),(0,0,0,1)\}$, $\operatorname{Dim}U_2=2$ (H1: $4-2$).</p>
+    - |-
+      <b>Intersección: vectores de $U_1$ que cumplen las ecuaciones de $U_2$.</b> Un vector genérico de $U_1$ es
+            $$a(2,0,2,1)+b(0,3,1,0)=(2a,\ 3b,\ 2a+b,\ a).$$
+            <p>Con $x=0$: $2a=0\Rightarrow a=0$. Con $y-3z=0$:</p>
+            $$3b-3(2a+b)=-6a=0,$$
+            <p>que ya se cumple con $a=0$. Quedan los vectores $b(0,3,1,0)$:</p>
+            $$U_1\cap U_2=\langle(0,3,1,0)\rangle,\quad\text{base }\{(0,3,1,0)\},\quad\operatorname{Dim}(U_1\cap U_2)=1.$$
+            <p>(Parametrizar uno e imponer las ecuaciones del otro es lo más rápido cuando uno viene por generadores y el otro por ecuaciones.)</p>
+    - |-
+      <b>Suma: unir bases y quitar sobrantes.</b>
+            $$U_1+U_2=\langle(2,0,2,1),(0,3,1,0),(0,3,1,0),(0,0,0,1)\rangle=\langle(2,0,2,1),(0,3,1,0),(0,0,0,1)\rangle$$
+            <p>(el repetido se suprime, Teor. 2.1). Por Grassmann, $\operatorname{Dim}(U_1+U_2)=2+2-1=3$; los 3 generadores que quedan generan un subespacio de dimensión 3, luego son libres y <b>base</b>. Comprobación del rango: el menor de las columnas 1, 2 y 4 es</p>
+            $$\begin{vmatrix}2&0&1\\0&3&0\\0&0&1\end{vmatrix}=6\neq0.$$
+            <p>Base de $U_1+U_2$: $\{(2,0,2,1),(0,3,1,0),(0,0,0,1)\}$ (su cartesiana, no pedida, es $3x+y-3z=0$).</p>
+  - html: |-
+      <p><b>(c)</b> $U_1\cup U_2$ <b>no es subespacio</b>: con $u=(2,0,2,1)\in U_1$ y $w=(0,0,0,1)\in U_2$, $u+w=(2,0,2,2)\notin U_1\cup U_2$. Desarrollo completo en <a href="tema_2_1_espacios_vectoriales.html#ex-sep24">el tema 2.1</a>.</p>
+  - resultado: |-
+      base de $U_1+U_2$: $\{(2,0,2,1),(0,3,1,0),(0,0,0,1)\}$; base de $U_1\cap U_2$: $\{(0,3,1,0)\}$; la unión no es subespacio. <i>(Verificado con sympy.)</i>
+  - receta: |-
+      uno por generadores y otro por ecuaciones: <b>intersección</b> = vector genérico del primero + ecuaciones del segundo; <b>suma</b> = unión de bases, quitando repetidos/dependientes; comprueba con Grassmann. <b>Unión:</b> busca un vector de cada subespacio (que no esté en el otro) cuya suma no esté en ninguno.
+  - error: |-
+      confundir suma con unión («$U_1+U_2=U_1\cup U_2$»): la suma es un subespacio, mucho más grande; la unión, en general, ni siquiera es subespacio.
+- id: ex-feb24p7
+  clase: examen
+  titulo: |-
+    Feb. 2024 (1.ª sem.), problema 7 — Grassmann en $\mathbb R^4$: dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$
+  fuentes:
+  - l: X
+    ref: |-
+      Feb. 2024 (1.ª sem.), problema 7
+    texto: |-
+      X Feb. 2024 (1.ª) P7
+  cuerpo:
+  - enun: |-
+      Sean $L_1$ y $L_2$ subespacios de $\mathbb R^4$: $L_1=\langle(3,-4,0,1),(2,2,0,-4),(1,-6,0,5)\rangle$, $L_2=\langle(1,0,0,0),(0,1,0,0),(0,0,1,0)\rangle$. Calcule de manera razonada las dimensiones de $L_1$ (0.5 p.), $L_2$ (0.5 p.), $L_1\cap L_2$ (0.5 p.) y $L_1+L_2$ (0.5 p.).
+  - html: |-
+      <p><i>Las dimensiones de $L_1$ y $L_2$ (pasos 1 y 2) se desarrollan con detalle en el <a href="tema_2_3_bases_dimension_coordenadas.html#ex-feb24p7">tema 2.3</a>; aquí se resumen y se desarrolla lo propio de este tema: intersección, suma y Grassmann.</i> Llamamos $v_1=(3,-4,0,1)$, $v_2=(2,2,0,-4)$, $v_3=(1,-6,0,5)$.</p>
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué me piden
+        - |-
+          Dimensiones de $L_1$, $L_2$, $L_1\cap L_2$ y $L_1+L_2$.
+      - - |-
+          Cómo lo pienso
+        - |-
+          Cuatro dimensiones, una fórmula que las relaciona. Dos las saco por rango; una de las otras dos por cálculo directo y la última por Grassmann.
+      - - |-
+          Qué uso
+        - |-
+          <b>Grassmann:</b> $\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)$.
+      - - |-
+          Por dónde empiezo
+        - |-
+          Rangos de generadores, intersección por ecuaciones y Grassmann para la suma.
+  - pasos:
+    - |-
+      <b>$\operatorname{Dim}L_1$.</b>
+            $$v_1-v_2=(1,-6,0,5)=v_3:$$
+            <p>$v_3$ es combinación de $v_1,v_2$ y, por supresión (Teor. 2.1, U p.79), $L_1=\langle v_1,v_2\rangle$. No son proporcionales (la 1.ª coordenada daría $\lambda=2/3$ y la 2.ª $\lambda=-1/2$): libres. $\operatorname{Dim}L_1=2$.</p>
+    - |-
+      <b>$\operatorname{Dim}L_2$.</b> Son tres vectores canónicos distintos: libres (la matriz que forman contiene la identidad $3\times3$, rango 3). $\operatorname{Dim}L_2=3$.
+    - |-
+      <b>Cartesianas de $L_1$</b> (para poder cortar). Un vector de $L_1$ es $\alpha v_1+\beta v_2$:
+            $$x_1=3\alpha+2\beta,\quad x_2=-4\alpha+2\beta,\quad x_3=0,\quad x_4=\alpha-4\beta.$$
+            <p>Con $\operatorname{Dim}L_1=2$ en $\mathbb R^4$ hay $4-2=2$ ecuaciones independientes (H1). Una es $x_3=0$. Para la otra se eliminan $\alpha,\beta$: $x_1+x_2=-\alpha+4\beta=-x_4$, es decir $x_1+x_2+x_4=0$.</p>
+            $$L_1:\ \begin{cases}x_3=0\\ x_1+x_2+x_4=0\end{cases}$$
+            <p>Comprobación: $v_1$: $3-4+1=0$ ✓; $v_2$: $2+2-4=0$ ✓.</p>
+    - |-
+      <b>Cartesiana de $L_2$.</b> $\alpha e_1+\beta e_2+\gamma e_3=(\alpha,\beta,\gamma,0)$: la 4.ª coordenada siempre es 0 y las otras tres son libres. $L_2:\ x_4=0$ ($4-3=1$ ecuación).
+    - |-
+      <b>Intersección: juntar todas las ecuaciones</b> (un vector de $L_1\cap L_2$ cumple las de ambos; U p.91, Ej. 2.33):
+            $$L_1\cap L_2:\ x_3=0,\quad x_1+x_2+x_4=0,\quad x_4=0\iff x_3=0,\ x_4=0,\ x_1+x_2=0.$$
+            <p>Las tres ecuaciones son independientes (cada una tiene una incógnita que no aparece en las otras: $x_3$, $x_4$, $x_1$): rango 3 y $4-3=1$ parámetro. Con $x_1=\lambda$, $x_2=-\lambda$:</p>
+            $$L_1\cap L_2=\langle(1,-1,0,0)\rangle,\qquad\operatorname{Dim}(L_1\cap L_2)=1.$$
+            <p><i>Vía más corta:</i> un vector $\alpha v_1+\beta v_2$ de $L_1$ está en $L_2$ si su 4.ª coordenada es 0: $\alpha-4\beta=0\Rightarrow\alpha=4\beta$ y queda</p>
+            $$\beta(4v_1+v_2)=\beta(14,-14,0,0)=14\beta(1,-1,0,0).$$
+            <p>Mismo resultado.</p>
+    - |-
+      <b>Suma: Grassmann</b> (U p.95) con las otras tres dimensiones ya calculadas:
+            $$\operatorname{Dim}(L_1+L_2)=\operatorname{Dim}L_1+\operatorname{Dim}L_2-\operatorname{Dim}(L_1\cap L_2)=2+3-1=4.$$
+            <p>$L_1+L_2$ es un subespacio de $\mathbb R^4$ de dimensión 4: por (H2), es todo $\mathbb R^4$.</p>
+    - |-
+      <b>Comprobación independiente.</b> $L_1+L_2=\langle v_1,v_2,e_1,e_2,e_3\rangle$ (Def. 2.12: se unen los generadores). $\det(e_1,e_2,e_3,v_1)$, desarrollando por la 4.ª fila $(0,0,0,1)$, vale $1\neq0$: rango 4 ✓.
+  - resultado: |-
+      $\operatorname{Dim}L_1=2$, $\operatorname{Dim}L_2=3$, $\operatorname{Dim}(L_1\cap L_2)=1$ ($L_1\cap L_2=\langle(1,-1,0,0)\rangle$), $\operatorname{Dim}(L_1+L_2)=4$ ($L_1+L_2=\mathbb R^4$). <i>(Verificado con sympy: rangos 2, 3, 4; det $=1$.)</i>
+  - receta: |-
+      con dos subespacios por generadores: (i) dimensión de cada uno = rango de sus generadores (quita los dependientes); (ii) pasa a cartesianas y <b>júntalas</b> para la intersección (o: vector genérico de uno + ecuaciones del otro); (iii) dimensión de la suma por <b>Grassmann</b>; comprueba con el rango de la unión de generadores.
+  - html: |-
+      <p><b>Fallo recurrente (señalado en el propio examen):</b> «confundir suma de subespacios con unión de subespacios», que en general no es un subespacio. <b>Error típico:</b> escribir $\operatorname{Dim}(L_1+L_2)=2+3=5$, imposible en $\mathbb R^4$: eso solo vale si la suma es directa, y aquí $L_1\cap L_2\neq\{0\}$.</p>
