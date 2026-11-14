@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="pilot">
 <head>
 <meta charset="utf-8">
 <!-- GENERADO desde datos/3_4/ con herramientas/datos_tema.py: no editar este fichero a mano (se pierde al reconstruir) -->
@@ -8,10 +8,12 @@
 <title>Álgebra · 3.4 Operaciones con aplicaciones lineales y con matrices</title>
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/resumen.css">
+<link rel="stylesheet" href="../assets/pedagogia.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/resumen.js"></script>
 <script defer src="../assets/animaciones.js"></script>
+<script defer src="../assets/pedagogia.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="in">
@@ -37,10 +39,41 @@
     — pasa el ratón (o toca) por cada etiqueta para ver libro y página; en pantallas anchas aparecen en el margen derecho.
   </div>
 </header>
+<div class="box esencial"><span class="h">Lo esencial en 5 minutos</span>
+  <p>Fijadas las bases, operar con aplicaciones lineales es operar con sus matrices, y casi todo el tema se reduce a no equivocarse con tamaños y con el orden.</p>
+  <ol>
+    <li><b>Suma y escalar:</b> $f+g\leftrightarrow A+B$ y $\lambda f\leftrightarrow\lambda A$, entrada a entrada. Solo se puede sumar si las dos aplicaciones tienen los mismos espacios de partida y llegada (matrices del mismo tamaño y en las mismas bases).</li>
+    <li><b>Composición:</b> $f\circ g\leftrightarrow A_fA_g$. Se aplica primero $g$ y su matriz va a la <b>derecha</b>. Existe si el espacio de llegada de $g$ es el de partida de $f$.</li>
+    <li><b>Tamaños:</b> $(n\times p)(p\times m)=n\times m$. Si las columnas de la izquierda no coinciden con las filas de la derecha, esa composición no existe.</li>
+    <li><b>Propiedades:</b> asociativa, distributiva, con neutro ($i$ o $I$); <b>no</b> conmutativa y puede haber producto nulo con factores no nulos.</li>
+    <li><b>Atajo de examen:</b> «halla $f\circ g$» se puede hacer por sustitución de fórmulas o con matrices; usa el que dé menos cuentas y comprueba con un vector.</li>
+  </ol>
+</div>
+
+<div class="box tip"><span class="h">Qué cae en el examen de este tema</span>
+  <p>En los exámenes de otros años hay <b>6 ejercicios</b> de este tema (resueltos en la pestaña <b>Examen</b>) y 2 en el libro de ejercicios (pestaña <b>Ejercicios</b>). Se reparten en 4 tipos; cada uno tiene su ficha y su práctica en la pestaña <b>Por tipo</b>:</p>
+  <table class="queCae">
+    <tr><th>Tipo de pregunta</th><th>Receta en una línea</th><th>Libro E</th><th>Examen</th></tr>
+    <tr><td>Matriz de $\lambda f+\mu g$ <small>(1 de 6)</small></td><td>Calcula la matriz de cada aplicación y combínalas entrada a entrada.</td>
+      <td><a href="#ej3-30">3.30</a></td>
+      <td><a href="#ex-sep23-p3">Sept. 23 preg. 3</a></td></tr>
+    <tr><td>Matriz de $f\circ g$ <small>(5 de 6)</small></td><td>Matriz de cada una y producto $A_fA_g$ (la que actúa primero, a la derecha).</td>
+      <td><a href="#ej3-30">3.30</a></td>
+      <td><a href="#ex-sep18a-3">Sept. 18 A ej. 3</a> · <a href="#ex-ene20a-3">Ene. 20 A ej. 3</a> · <a href="#ex-feb23-1p3">Feb. 23 (1.ª) preg. 3</a> · <a href="#ex-sep24-p3">Sept. 24 preg. 3</a> · <a href="#ex-feb25-1p7c">Feb. 25 (1.ª) p. 7</a></td></tr>
+    <tr><td>Verdadero o falso sobre propiedades <small>(0 de 6)</small></td><td>Traduce a matrices y busca un contraejemplo pequeño o aplica una propiedad conocida.</td>
+      <td><a href="#ej3-31">3.31</a></td>
+      <td>—</td></tr>
+    <tr><td>Potencias y relaciones $f\circ f-af+bi=0$ <small>(0 de 6)</small></td><td>Verifica la relación con matrices y úsala para despejar potencias e inversa.</td>
+      <td>—</td>
+      <td>—</td></tr>
+  </table>
+  <p><small>Lo más frecuente en examen es hallar la matriz de una composición $f\circ g$ (a veces con una fórmula o un valor concreto); la combinación $\lambda f+\mu g$ aparece menos.</small></p>
+</div>
+
 
 
 <!-- ============================ 0 ============================ -->
-<h2 id="prereq"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §3.4.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 117-118">U p.117-118</span></h2>
+<h2 id="prereq" data-vista="teoria"><span class="n">0</span>Antes de empezar <span class="src" data-l="U" data-ref="U §3.4.1 Elementos didácticos (Introducción, Orientaciones, Objetivos), p. 117-118">U p.117-118</span></h2>
 
 <div class="box intu"><span class="h">La idea del tema en una frase</span>
   <p>Una aplicación lineal «es» su matriz (una vez fijadas las bases). Por eso, <b>operar con aplicaciones</b> (sumarlas, escalarlas, encadenarlas) y <b>operar con matrices</b> (sumar, multiplicar por un número, multiplicar) son <b>lo mismo</b> dicho en dos idiomas. El producto de matrices, que al principio parece una regla rara de «fila por columna», es simplemente la matriz de «hacer una cosa y después la otra».</p>
@@ -75,7 +108,7 @@
 </div>
 
 <!-- ============================ 1 ============================ -->
-<h2 id="s1"><span class="n">1</span>La idea: cada operación con aplicaciones tiene su gemela con matrices <span class="src" data-l="U" data-ref="U §3.4.1 Orientaciones, p. 117 y §3.4.2, p. 118">U p.117-118</span></h2>
+<h2 id="s1" data-vista="teoria"><span class="n">1</span>La idea: cada operación con aplicaciones tiene su gemela con matrices <span class="src" data-l="U" data-ref="U §3.4.1 Orientaciones, p. 117 y §3.4.2, p. 118">U p.117-118</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Piensa en una <b>cadena de montaje</b>. Cada aplicación lineal es una máquina: entra un vector, sale otro. Puedes (1) <b>poner dos máquinas en paralelo y sumar lo que sale</b> ($f+g$), (2) <b>amplificar la salida</b> de una máquina ($\lambda f$), o (3) <b>conectar la salida de una máquina con la entrada de otra</b> ($f\circ g$). Cada máquina tiene su matriz; las tres conexiones tienen sus matrices, que se obtienen operando con las de las máquinas originales.</p>
@@ -98,7 +131,7 @@
 </div>
 
 <!-- ============================ 2 ============================ -->
-<h2 id="s2"><span class="n">2</span>Suma y producto por un escalar <span class="src" data-l="U" data-ref="U §3.4.3 Espacios vectoriales de aplicaciones lineales y de matrices asociadas, Def. 3.5-3.10, p. 118-121">U p.118-121</span></h2>
+<h2 id="s2" data-vista="teoria"><span class="n">2</span>Suma y producto por un escalar <span class="src" data-l="U" data-ref="U §3.4.3 Espacios vectoriales de aplicaciones lineales y de matrices asociadas, Def. 3.5-3.10, p. 118-121">U p.118-121</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Sumar aplicaciones es sumar <b>sus resultados vector a vector</b>: a cada $v$ le aplicas $f$ por un lado, $g$ por otro, y sumas. Solo tiene sentido si ambas devuelven vectores del mismo espacio (y aceptan los mismos vectores). En matrices, sumar elemento a elemento es lo mismo, y exige matrices del mismo tamaño: no se puede sumar una $3\times2$ con una $2\times3$.</p>
@@ -169,7 +202,7 @@
 </div>
 
 <!-- ============================ 3 ============================ -->
-<h2 id="s3"><span class="n">3</span>Composición de aplicaciones y producto de matrices <span class="src" data-l="U" data-ref="U §3.4.4 Composición de aplicaciones lineales y producto de matrices, Def. 3.11-3.13, p. 123-128">U p.123-128</span></h2>
+<h2 id="s3" data-vista="teoria"><span class="n">3</span>Composición de aplicaciones y producto de matrices <span class="src" data-l="U" data-ref="U §3.4.4 Composición de aplicaciones lineales y producto de matrices, Def. 3.11-3.13, p. 123-128">U p.123-128</span></h2>
 
 <div class="box intu"><span class="h">Idea intuitiva</span>
   <p>Componer es <b>encadenar</b>: el vector que sale de la primera máquina entra en la segunda. Si $g$ lleva $V$ a $W$ y $f$ lleva $W$ a $U$, el viaje completo $V\to W\to U$ es otra aplicación lineal, $f\circ g$. Se escribe con $f$ a la izquierda porque es como se escribe $f(g(x))$: <b>lo de dentro se hace primero</b>. Y el producto de matrices está <i>diseñado</i> para que la matriz del viaje completo sea el producto de las matrices de cada tramo.</p>
@@ -264,7 +297,7 @@
 </div>
 
 <!-- ============================ 4 ============================ -->
-<h2 id="s4"><span class="n">4</span>Propiedades y no conmutatividad <span class="src" data-l="U" data-ref="U §3.4.4, Propiedades de la composición y de la multiplicación de matrices, p. 128; Ejemplo 3.27, p. 129-130">U p.128-130</span></h2>
+<h2 id="s4" data-vista="teoria"><span class="n">4</span>Propiedades y no conmutatividad <span class="src" data-l="U" data-ref="U §3.4.4, Propiedades de la composición y de la multiplicación de matrices, p. 128; Ejemplo 3.27, p. 129-130">U p.128-130</span></h2>
 
 <div class="box thm"><span class="h">Propiedades de la composición y del producto de matrices</span>
   <table>
@@ -311,13 +344,73 @@
   <span class="src" data-l="P" data-ref="Observaciones propias a partir de U p.128 y E Ej. 3.31, p. 108">propio</span>
 </div>
 
+<h2 id="tipos" data-vista="tipos"><span class="n">P</span>Por tipo de problema: método y práctica</h2>
+
+<p>En el examen no te preguntan «el apartado 3.4»: te dan un problema y tienes que reconocer <b>de qué tipo es</b> y aplicar su método. Cada tipo tiene su <b>ficha</b> (cuándo se usa, pasos, error típico) y los <b>ejercicios resueltos</b> de ese tipo, del libro y de examen.</p>
+
+<section class="ficha" id="tipo-combinacion">
+  <h3>Tipo 1 — Matriz de $\lambda f+\mu g$</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «halla la matriz de $f+g$», «de $2f-3g$», «$f=3g-5h$».</p>
+  <ol class="pasos">
+    <li>Comprueba que $f$ y $g$ tienen los mismos espacios de partida y llegada, y que las matrices están en las mismas bases.</li>
+    <li>Escribe $A_f$ y $A_g$: cada componente de la fórmula es una <b>fila</b>, cada variable una columna.</li>
+    <li>Calcula $\lambda A_f+\mu A_g$ entrada a entrada.</li>
+    <li>Comprueba con un vector: aplica la matriz resultante y compara con $\lambda f(v)+\mu g(v)$.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$, $B=\begin{pmatrix}3&0\\1&1\end{pmatrix}$: $2A-B=\begin{pmatrix}2-3&4-0\\0-1&2-1\end{pmatrix}=\begin{pmatrix}-1&4\\-1&1\end{pmatrix}$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> sumar matrices de distinto tamaño · colocar los coeficientes de cada ecuación como columna en vez de fila · olvidar multiplicar todas las entradas por el escalar (incluidos los ceros).</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej3-30">3.30</a> · <a href="#ej-propio-1">Ejemplo propio 1</a> · <a href="#ex-propio-p1">Propio A</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep23-p3">Sept. 23 preg. 3</a></p>
+</section>
+
+<section class="ficha" id="tipo-composicion">
+  <h3>Tipo 2 — Matriz de $f\circ g$</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «halla la matriz de $f\circ g$», «la aplicación compuesta», «$(g\circ f)(3,2)$».</p>
+  <ol class="pasos">
+    <li>Mira los espacios: la llegada de $g$ debe ser la partida de $f$. Si no, la composición no existe.</li>
+    <li>Escribe $A_f$ ($n\times p$) y $A_g$ ($p\times m$) en las bases dadas.</li>
+    <li>Multiplica $A_fA_g$ (fila por columna); el resultado es $n\times m$.</li>
+    <li>Si piden la fórmula o un valor, aplica la matriz al vector, o sustituye $g(x)$ dentro de $f$ como comprobación.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $f(x,y)=(x+y,y)$ y $g(x,y)=(x,x)$: $A_f=\begin{pmatrix}1&1\\0&1\end{pmatrix}$, $A_g=\begin{pmatrix}1&0\\1&0\end{pmatrix}$, luego $f\circ g\leftrightarrow A_fA_g=\begin{pmatrix}2&0\\1&0\end{pmatrix}$, mientras que $A_gA_f=\begin{pmatrix}1&1\\1&1\end{pmatrix}$ corresponde a $g\circ f$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> multiplicar en el orden en que se leen las letras · no comprobar tamaños · confundir una matriz fila con una columna.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej3-30">3.30</a> · <a href="#ej-propio-2">Ejemplo propio 2</a> · <a href="#ej-propio-3">Ejemplo propio 3</a> · <a href="#ex-propio-p2">Propio B</a> &nbsp;|&nbsp; <b>De examen:</b> <a href="#ex-sep18a-3">Sept. 18 A ej. 3</a> · <a href="#ex-ene20a-3">Ene. 20 A ej. 3</a> · <a href="#ex-feb23-1p3">Feb. 23 (1.ª) preg. 3</a> · <a href="#ex-sep24-p3">Sept. 24 preg. 3</a> · <a href="#ex-feb25-1p7c">Feb. 25 (1.ª) p. 7</a></p>
+</section>
+
+<section class="ficha" id="tipo-propiedades">
+  <h3>Tipo 3 — Verdadero o falso sobre propiedades</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «¿es conmutativa?», «¿puede ser nula la composición de dos no nulas?», «¿existe elemento neutro?», «¿existen $f\circ g$ y $g\circ f$?».</p>
+  <ol class="pasos">
+    <li>Recuerda lo que sí vale: asociativa, distributiva, escalares que salen, neutro $i$ o $I$.</li>
+    <li>Lo que no vale en general (conmutatividad, cancelar factores, $AB=0\Rightarrow A=0$ o $B=0$) se refuta con un contraejemplo $2\times2$.</li>
+    <li>Para una afirmación «existe», da un ejemplo concreto (la identidad como neutro); para «siempre», una prueba general.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $M=\begin{pmatrix}1&1\\0&0\end{pmatrix}$, $N=\begin{pmatrix}1&0\\-1&0\end{pmatrix}$: $MN=0$ y $NM=\begin{pmatrix}1&1\\-1&-1\end{pmatrix}\neq0$. Ni $M$ ni $N$ son nulas y $MN\ne NM$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> cancelar un factor común como si fuera un número · dar un ejemplo en vez de una prueba cuando la afirmación es «siempre» · olvidar que $(A+B)^2=A^2+AB+BA+B^2$.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej3-31">3.31</a> · <a href="#ej-propio-2">Ejemplo propio 2</a> · <a href="#ex-propio-p2">Propio B</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
+<section class="ficha" id="tipo-potencias">
+  <h3>Tipo 4 — Potencias y relaciones $f\circ f-af+bi=0$</h3>
+  <p class="senal"><b>Cómo lo reconoces:</b> «calcula $f^3$», «comprueba que $f\circ f-3f+i=0$», «deduce la inversa sin más cuentas».</p>
+  <ol class="pasos">
+    <li>Calcula $A^2$ una vez y comprueba la relación $A^2-aA+bI=0$.</li>
+    <li>Despeja $f^2=af-bi$ y, multiplicando por $f$, encadena: $f^3=af^2-bf=\dots$</li>
+    <li>Para la inversa, saca $f$ factor común: $f\circ(af-\dots)=b\,i$ y divide entre $b$.</li>
+    <li>Usa $f^k=\alpha f+\beta i$ para evaluar sobre un vector sin elevar la matriz.</li>
+  </ol>
+  <div class="rel"><b>Ejemplo relámpago.</b> $A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$: $A^2=3A-I$, luego $A^3=3A^2-A=8A-3I=\begin{pmatrix}13&8\\8&5\end{pmatrix}$ y $A(3I-A)=I$.</div>
+  <p class="fallos"><b>Dónde se falla:</b> olvidar el término $I$ al despejar · sumar $f$ y $i$ sin escribir $i$ como matriz identidad · asumir que $f^2=f\cdot f$ entrada a entrada.</p>
+  <p class="vinculos"><b>Resueltos del libro:</b> <a href="#ej-propio-3">Ejemplo propio 3</a> &nbsp;|&nbsp; <b>De examen:</b> —</p>
+</section>
+
 <!-- ============================ 5 ============================ -->
-<h2 id="ejercicios"><span class="n">5</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, sección 3.4 Aplicaciones y matrices: operaciones, p. 105-108">E p.105-108</span></h2>
+<h2 id="ejercicios" data-vista="ejercicios"><span class="n">5</span>Ejercicios del libro, resueltos <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, sección 3.4 Aplicaciones y matrices: operaciones, p. 105-108">E p.105-108</span></h2>
 
 <p>Los ejercicios de frontera 3.24 y 3.29 están resueltos en el tema 3.2 (ver al final), y los ejemplos 3.20-3.27 están en los apartados 2-4.</p>
 
-<details class="sol" id="ej3-30"><summary>Ejercicio 3.30 — $f_A+2f_B$, $2f_B$, $f_A\circ f_B$, $f_B\circ f_A$ en $\mathbb R^2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.30, p. 106-107">E p.106</span></summary>
-  <p class="enun">Si $f_A(x_1,x_2)=(x_1,2x_2)$ y $f_B(x_1,x_2)=(x_1-x_2,-x_1+x_2)$ son endomorfismos de $\mathbb R^2$, se pide comprobar si es cierta alguna de las opciones siguientes: A) Las filas de la matriz asociada a $f_A+2f_B$ son $(3,-2)$ y $(-2,4)$. B) Las filas de la matriz asociada a $2f_B$ son $(2,-1)$ y $(-2,1)$. C) Las filas de la asociada a $f_A\circ f_B$ son $(1,-2)$ y $(-1,2)$. D) Las filas de la asociada a $f_B\circ f_A$ son $(1,-1)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Si $f_A(x_1,x_2)=(x_1,2x_2)$ y $f_B(x_1,x_2)=(x_1-x_2,-x_1+x_2)$ son endomorfismos de $\mathbb R^2$, se pide comprobar si es cierta alguna de las opciones siguientes: A) Las filas de la matriz asociada a $f_A+2f_B$ son $(3,-2)$ y $(-2,4)$. B) Las filas de la matriz asociada a $2f_B$ son $(2,-1)$ y $(-2,1)$. C) Las filas de la asociada a $f_A\circ f_B$ son $(1,-2)$ y $(-1,2)$. D) Las filas de la asociada a $f_B\circ f_A$ son $(1,-1)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Escribe primero la matriz de $f_A$ y la de $f_B$ (columnas = imágenes de $e_1$, $e_2$). Después suma y escala entrada a entrada, y para las composiciones multiplica poniendo a la izquierda la aplicación que actúa la última.</p></details>
+<details class="sol" id="ej3-30"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 3.30 — $f_A+2f_B$, $2f_B$, $f_A\circ f_B$, $f_B\circ f_A$ en $\mathbb R^2$ <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.30, p. 106-107">E p.106</span></summary>
   <p><b>Qué se pide.</b> Hay dos endomorfismos de $\mathbb R^2$ y hay que hallar la matriz (en la base canónica, porque no se dice otra) de cuatro aplicaciones construidas con ellos: una combinación $f_A+2f_B$, un múltiplo $2f_B$ y las dos composiciones. Después se comparan sus <b>filas</b> con las de cada opción. Puede haber varias ciertas.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matrices de $f_A+2f_B$, $2f_B$, $f_A\circ f_B$ y $f_B\circ f_A$.</dd>
@@ -363,8 +456,9 @@
   <p><b>Teoría:</b> Def. 3.5-3.10, U pp.118-121 · Def. 3.11-3.12, U pp.124-126.</p>
 </details>
 
-<details class="sol" id="ej3-31"><summary>Ejercicio 3.31 — propiedades de la composición: conmutatividad, producto nulo, neutro <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.31, p. 108">E p.108</span></summary>
-  <p class="enun">La composición de aplicaciones lineales verifica: A) Es conmutativa. B) La composición de dos aplicaciones no nulas puede ser nula. C) Existe una aplicación neutra para la composición.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La composición de aplicaciones lineales verifica: A) Es conmutativa. B) La composición de dos aplicaciones no nulas puede ser nula. C) Existe una aplicación neutra para la composición.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Traduce cada afirmación a matrices y busca un contraejemplo pequeño de $2\times2$. Para la C, piensa qué aplicación deja cada vector como está.</p></details>
+<details class="sol" id="ej3-31"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejercicio 3.31 — propiedades de la composición: conmutatividad, producto nulo, neutro <span class="src" data-l="E" data-ref="Ejercicios de Álgebra, Ej. 3.31, p. 108">E p.108</span></summary>
   <p><b>Qué se pide.</b> Decidir qué propiedades tiene la operación «componer». Una afirmación general («es conmutativa») se refuta con <b>un</b> contraejemplo; una afirmación de existencia («puede ser nula») se prueba con <b>un</b> ejemplo. Se razona con matrices porque la matriz de $f\circ g$ es $AB$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Tres propiedades de la composición: conmutatividad, producto nulo y neutro.</dd>
@@ -407,8 +501,9 @@
 
 <h3 id="propios">Ejemplos propios (de más fácil a más difícil)</h3>
 
-<details class="sol" id="ej-propio-1"><summary>Ejemplo propio 1 (fácil) — combinación $3f-2g$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Sean $f,g:\mathbb R^2\to\mathbb R^3$, $f(x,y)=(x+2y,\ y,\ -x+y)$ y $g(x,y)=(x,\ 2x-y,\ 3y)$. Halla la matriz de $3f-2g$ en las bases canónicas y la imagen de $(1,-1)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $f,g:\mathbb R^2\to\mathbb R^3$, $f(x,y)=(x+2y,\ y,\ -x+y)$ y $g(x,y)=(x,\ 2x-y,\ 3y)$. Halla la matriz de $3f-2g$ en las bases canónicas y la imagen de $(1,-1)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula la matriz $3\times2$ de $f$ y la de $g$ y combínalas como $3A-2B$. La imagen de $(1,-1)$ sale de multiplicar esa matriz por la columna $(1,-1)$.</p></details>
+<details class="sol" id="ej-propio-1"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ejemplo propio 1 (fácil) — combinación $3f-2g$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <p><b>Qué se pide.</b> La matriz $3\times2$ de la combinación y su valor en un vector, comprobado con la definición.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de $3f-2g$ y valor en $(1,-1)$.</dd>
@@ -435,8 +530,9 @@
   <p><b>Error típico:</b> intentar sumar $f:\mathbb R^2\to\mathbb R^3$ con $h:\mathbb R^3\to\mathbb R^2$: ni la suma de aplicaciones ni la de matrices ($3\times2$ y $2\times3$) está definida.</p>
 </details>
 
-<details class="sol" id="ej-propio-2"><summary>Ejemplo propio 2 (medio) — composiciones de tamaños distintos y endomorfismos que no conmutan <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Sean $f:\mathbb R^3\to\mathbb R^2$, $f(x,y,z)=(x+z,\ y-z)$ y $g:\mathbb R^2\to\mathbb R^3$, $g(x,y)=(x,\ x+y,\ y)$. a) Di qué composiciones $f\circ g$, $g\circ f$ existen, entre qué espacios van y su matriz. b) Con $p(x,y)=(x+y,\ y)$ y $q(x,y)=(x,\ x)$ (endomorfismos de $\mathbb R^2$), comprueba que $p\circ q\neq q\circ p$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $f:\mathbb R^3\to\mathbb R^2$, $f(x,y,z)=(x+z,\ y-z)$ y $g:\mathbb R^2\to\mathbb R^3$, $g(x,y)=(x,\ x+y,\ y)$. a) Di qué composiciones $f\circ g$, $g\circ f$ existen, entre qué espacios van y su matriz. b) Con $p(x,y)=(x+y,\ y)$ y $q(x,y)=(x,\ x)$ (endomorfismos de $\mathbb R^2$), comprueba que $p\circ q\neq q\circ p$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Para cada composición mira el espacio de llegada del que actúa primero y el de partida del segundo: ¿coinciden? Luego multiplica las matrices con el que actúa primero a la derecha.</p></details>
+<details class="sol" id="ej-propio-2"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Ejemplo propio 2 (medio) — composiciones de tamaños distintos y endomorfismos que no conmutan <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <p><b>Qué se pide.</b> Hallar el diagrama de espacios, las matrices de las composiciones y comprobar la no conmutatividad con un contraejemplo.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Composiciones entre $f:\mathbb R^3\to\mathbb R^2$ y $g:\mathbb R^2\to\mathbb R^3$.</dd>
@@ -469,8 +565,9 @@
   <p><b>Error típico:</b> pensar que si las dos composiciones existen y son del mismo tamaño entonces coinciden.</p>
 </details>
 
-<details class="sol" id="ej-propio-3"><summary>Ejemplo propio 3 (difícil, tipo examen) — potencias de un endomorfismo y la relación $f\circ f-3f+i=0$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; anticipa la inversa de U §3.5, p. 131">propio</span></summary>
-  <p class="enun">Sea $f:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(2x+y,\ x+y)$, e $i$ la identidad de $\mathbb R^2$. a) Halla la matriz de $f\circ f$ y comprueba que $f\circ f-3f+i=0$ (aplicación nula). b) Deduce, sin multiplicar más matrices, que $f\circ(3i-f)=i$ y $(3i-f)\circ f=i$; da la fórmula de $3i-f$. c) Expresa $f^3=f\circ f\circ f$ y $f^4$ como $\alpha f+\beta i$ y calcula $f^3(1,0)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $f:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(2x+y,\ x+y)$, e $i$ la identidad de $\mathbb R^2$. a) Halla la matriz de $f\circ f$ y comprueba que $f\circ f-3f+i=0$ (aplicación nula). b) Deduce, sin multiplicar más matrices, que $f\circ(3i-f)=i$ y $(3i-f)\circ f=i$; da la fórmula de $3i-f$. c) Expresa $f^3=f\circ f\circ f$ y $f^4$ como $\alpha f+\beta i$ y calcula $f^3(1,0)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula $A^2$ y comprueba la relación con matrices. Para el resto, despeja potencias de $f$ en función de $f$ e $i$ usando esa relación, sin volver a multiplicar matrices grandes.</p></details>
+<details class="sol" id="ej-propio-3"><summary><span class="nivel" title="Dificultad: difícil">★★★</span>Ejemplo propio 3 (difícil, tipo examen) — potencias de un endomorfismo y la relación $f\circ f-3f+i=0$ <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy; anticipa la inversa de U §3.5, p. 131">propio</span></summary>
   <p><b>Qué se pide.</b> Usar las propiedades de la composición (distributiva, identidad) para trabajar con «polinomios» en $f$ sin recalcular matrices.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Usar $f\circ f-3f+i=0$ para calcular potencias de $f$.</dd>
@@ -508,15 +605,16 @@
 </details>
 
 <!-- ============================ 6 ============================ -->
-<h2 id="examenes"><span class="n">6</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
+<h2 id="examenes" data-vista="examen"><span class="n">6</span>Ejemplos de examen <span class="src" data-l="X" data-ref="Exámenes de convocatorias anteriores (Álgebra, UNED)">X</span></h2>
 
 <p>Seis preguntas de exámenes de otros años cuyo contenido principal es esta sección, agrupadas por método: <b>A</b> matriz (o fórmula) de una composición; <b>B</b> combinación lineal de aplicaciones. Después, dos ejemplos propios y la lista de preguntas ya resueltas en otros temas. Todos los cálculos se han verificado con sympy.</p>
 
 <h3 id="metodoA">Método A — Matriz de una composición: «la matriz de $f\circ g$ es $A_fA_g$»</h3>
 <p><b>Idea común.</b> Si $g:V\to W$ y $f:W\to U$ son lineales, $(f\circ g)(x)=f(g(x))$ (Def. 3.11, U p.124): primero $g$, luego $f$. Con matrices canónicas, $g(x)=BX$, $f(y)=AY$ y $f(g(x))=A(BX)=(AB)X$ (U p.126). <b>Comprobación previa de tamaños</b> (U p.125): $B$ es $p\times m$, $A$ es $n\times p$ y $AB$ es $n\times m$. Dos caminos que se comprueban entre sí: <b>(i) sustitución</b> (meter $g(x)$ en la fórmula de $f$) y <b>(ii) producto de matrices</b>.</p>
 
-<details class="sol" id="ex-ene20a-3"><summary>Ene. 2020 (tipo A), ejercicio 3 — matriz de $f\circ g$, $g:\mathbb R^2\to\mathbb R$, $f:\mathbb R\to\mathbb R^3$ <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 3">X Ene. 2020 (A) ej. 3</span></summary>
-  <p class="enun">Considerando las aplicaciones lineales $f:\mathbb R\to\mathbb R^3$ definidas por $f(y)=(y,0,2y)$ y $g:\mathbb R^2\to\mathbb R$ por $g(x_1,x_2)=x_1-x_2$, calcular la matriz asociada a $f\circ g$ en las bases canónicas.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Considerando las aplicaciones lineales $f:\mathbb R\to\mathbb R^3$ definidas por $f(y)=(y,0,2y)$ y $g:\mathbb R^2\to\mathbb R$ por $g(x_1,x_2)=x_1-x_2$, calcular la matriz asociada a $f\circ g$ en las bases canónicas.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Halla la matriz de $g$ (fila $1\times2$) y la de $f$ (columna $3\times1$); la compuesta es el producto con $f$ a la izquierda. Comprueba los tamaños antes de multiplicar.</p></details>
+<details class="sol" id="ex-ene20a-3"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Ene. 2020 (tipo A), ejercicio 3 — matriz de $f\circ g$, $g:\mathbb R^2\to\mathbb R$, $f:\mathbb R\to\mathbb R^3$ <span class="src" data-l="X" data-ref="Ene. 2020 (tipo A), ejercicio 3">X Ene. 2020 (A) ej. 3</span></summary>
   <p><b>Qué se pide.</b> $f\circ g$ es «primero $g$, después $f$»: $\mathbb R^2\xrightarrow{g}\mathbb R\xrightarrow{f}\mathbb R^3$. Su matriz en canónicas es $3\times2$. (Es exactamente el Ej. 3.23-3.25 de U, con las mismas $f$ y $g$.)</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de $f\circ g$ con $g:\mathbb R^2\to\mathbb R$ y $f:\mathbb R\to\mathbb R^3$.</dd>
@@ -541,8 +639,9 @@
   <p><b>Error típico:</b> calcular $BA=\begin{pmatrix}1&-1\end{pmatrix}\begin{pmatrix}1\cr0\cr2\end{pmatrix}$: con estos tamaños ni se puede ($1\times2$ por $3\times1$), y $g\circ f$ no existe.</p>
 </details>
 
-<details class="sol" id="ex-feb23-1p3"><summary>Feb. 2023 (1.ª sem.), pregunta 3 — representación matricial de $f\circ g$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª sem.), pregunta 3">X Feb. 2023 (1.ª) P3</span></summary>
-  <p class="enun">Sean $f:\mathbb R\to\mathbb R^3$ y $g:\mathbb R^2\to\mathbb R$ las aplicaciones lineales definidas por $f(x)=(0,5x,x)$ y $g(x,y)=2x+y$. Halle la representación matricial de la aplicación compuesta $f\circ g$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $f:\mathbb R\to\mathbb R^3$ y $g:\mathbb R^2\to\mathbb R$ las aplicaciones lineales definidas por $f(x)=(0,5x,x)$ y $g(x,y)=2x+y$. Halle la representación matricial de la aplicación compuesta $f\circ g$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Una matriz por aplicación (de $g$ es $1\times2$, de $f$ es $3\times1$) y multiplica en el orden $A_fA_g$. El resultado debe ser $3\times2$.</p></details>
+<details class="sol" id="ex-feb23-1p3"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Feb. 2023 (1.ª sem.), pregunta 3 — representación matricial de $f\circ g$ <span class="src" data-l="X" data-ref="Feb. 2023 (1.ª sem.), pregunta 3">X Feb. 2023 (1.ª) P3</span></summary>
   <p><b>Qué se pide.</b> La expresión $Y=CX$ (Def. 3.13, U p.126) de $f\circ g:\mathbb R^2\to\mathbb R^3$ en canónicas, con $C$ de tamaño $3\times2$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Representación matricial de $f\circ g$.</dd>
@@ -566,8 +665,9 @@
   <p><b>Error típico:</b> escribir $A_f$ como fila $(0\ 5\ 1)$: tiene <b>3 filas</b> (dimensión de llegada) y 1 columna.</p>
 </details>
 
-<details class="sol" id="ex-sep24-p3"><summary>Sept. 2024, pregunta 3 — matriz de $g\circ f$ y valor $(g\circ f)(3,2)$ <span class="src" data-l="X" data-ref="Sept. 2024, pregunta 3">X Sept. 2024 P3</span></summary>
-  <p class="enun">Sean $f:\mathbb R^2\to\mathbb R^3$ y $g:\mathbb R^3\to\mathbb R$ las aplicaciones lineales definidas por $f(x,y)=(x+y,\ 5y,\ -2x)$ y $g(x,y,z)=3x-y+z$. Halle la representación matricial de la aplicación compuesta $g\circ f$ y calcule $(g\circ f)(3,2)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $f:\mathbb R^2\to\mathbb R^3$ y $g:\mathbb R^3\to\mathbb R$ las aplicaciones lineales definidas por $f(x,y)=(x+y,\ 5y,\ -2x)$ y $g(x,y,z)=3x-y+z$. Halle la representación matricial de la aplicación compuesta $g\circ f$ y calcule $(g\circ f)(3,2)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La matriz de $g\circ f$ es $A_gA_f$ (fila por matriz $3\times2$). Para el valor en $(3,2)$ puedes multiplicar la matriz por la columna o aplicar $f$ y luego $g$.</p></details>
+<details class="sol" id="ex-sep24-p3"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2024, pregunta 3 — matriz de $g\circ f$ y valor $(g\circ f)(3,2)$ <span class="src" data-l="X" data-ref="Sept. 2024, pregunta 3">X Sept. 2024 P3</span></summary>
   <p><b>Qué se pide.</b> Ahora el orden es el contrario: $g\circ f$ = «primero $f$, después $g$»: $\mathbb R^2\xrightarrow{f}\mathbb R^3\xrightarrow{g}\mathbb R$. Matriz $1\times2$ y su valor en $(3,2)$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Representación de $g\circ f$ y valor en $(3,2)$.</dd>
@@ -593,8 +693,9 @@
   <p><b>Error típico:</b> calcular $A_fA_g$ ($3\times2$ por $1\times3$: no se puede) o confundir $g\circ f$ con $f\circ g$.</p>
 </details>
 
-<details class="sol" id="ex-sep18a-3"><summary>Sept. 2018 (tipo A), ejercicio 3 — la aplicación $h=f\circ g$ por sustitución <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 3">X Sept. 2018 (A) ej. 3</span></summary>
-  <p class="enun">Hallar la aplicación lineal $h$ definida por $f\circ g$ ($f$ compuesta con $g$) siendo $f(x_1,x_2)=(x_1,\ x_2-x_1,\ 3x_1)$ y $g(y_1,y_2)=(2y_1-y_2,\ 0)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Hallar la aplicación lineal $h$ definida por $f\circ g$ ($f$ compuesta con $g$) siendo $f(x_1,x_2)=(x_1,\ x_2-x_1,\ 3x_1)$ y $g(y_1,y_2)=(2y_1-y_2,\ 0)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Aquí piden la fórmula de $f\circ g$: sustituye las componentes de $g(y_1,y_2)$ en $f$ (primero actúa $g$). Si prefieres matrices, calcula $A_fA_g$.</p></details>
+<details class="sol" id="ex-sep18a-3"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Sept. 2018 (tipo A), ejercicio 3 — la aplicación $h=f\circ g$ por sustitución <span class="src" data-l="X" data-ref="Sept. 2018 (tipo A), ejercicio 3">X Sept. 2018 (A) ej. 3</span></summary>
   <p><b>Qué se pide.</b> La fórmula de $h$. Hay que deducir los espacios: $g:\mathbb R^2\to\mathbb R^2$ y $f:\mathbb R^2\to\mathbb R^3$, luego $h:\mathbb R^2\to\mathbb R^3$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Fórmula de $h=f\circ g$ dadas $f$ y $g$ por fórmulas.</dd>
@@ -616,8 +717,9 @@
   <p><b>Error típico:</b> sustituir mal la posición, olvidando que la 2.ª componente de $f$ es $x_2-x_1$ con $x_2=0$; o hacer $g(f(\cdot))$.</p>
 </details>
 
-<details class="sol" id="ex-feb25-1p7c"><summary>Feb. 2025 (1.ª sem.), problema 7, 3.er apartado — matriz de $h\circ g$ ($4\times3$) <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), problema 7 (3.er apartado)">X Feb. 2025 (1.ª) P7c</span></summary>
-  <p class="enun">Consideremos $f:\mathbb R\to\mathbb R^5$, $g:\mathbb R^3\to\mathbb R^2$ y $h:\mathbb R^2\to\mathbb R^4$ definidas por $f(x)=(x,\ 2+x,\ 3x,\ 4x,\ 5x)$, $g(x,y,z)=(x+y+z,\ -5x-5y-5z)$ y $h(x,y)=(4x-5y,\ y,\ x,\ -3x+7y)$. <i>[1.er apartado: ¿$f$ lineal? → <a href="tema_3_1_conceptos_propiedades.html#ex-feb25a-p7">tema 3.1</a>; 2.º: núcleo e imagen de $g$ → <a href="tema_3_2_nucleo_imagen.html#ex-feb25-1p7">tema 3.2</a>.]</i> Calcule la matriz asociada a la aplicación lineal $h\circ g$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Consideremos $f:\mathbb R\to\mathbb R^5$, $g:\mathbb R^3\to\mathbb R^2$ y $h:\mathbb R^2\to\mathbb R^4$ definidas por $f(x)=(x,\ 2+x,\ 3x,\ 4x,\ 5x)$, $g(x,y,z)=(x+y+z,\ -5x-5y-5z)$ y $h(x,y)=(4x-5y,\ y,\ x,\ -3x+7y)$. <i>[1.er apartado: ¿$f$ lineal? → <a href="tema_3_1_conceptos_propiedades.html#ex-feb25a-p7">tema 3.1</a>; 2.º: núcleo e imagen de $g$ → <a href="tema_3_2_nucleo_imagen.html#ex-feb25-1p7">tema 3.2</a>.]</i> Calcule la matriz asociada a la aplicación lineal $h\circ g$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Solo intervienen $g$ y $h$; $f$ no se usa. Comprueba que $h:\mathbb R^2\to\mathbb R^4$ puede ir después de $g:\mathbb R^3\to\mathbb R^2$ y multiplica $A_hA_g$ ($4\times2$ por $2\times3$).</p></details>
+<details class="sol" id="ex-feb25-1p7c"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Feb. 2025 (1.ª sem.), problema 7, 3.er apartado — matriz de $h\circ g$ ($4\times3$) <span class="src" data-l="X" data-ref="Feb. 2025 (1.ª sem.), problema 7 (3.er apartado)">X Feb. 2025 (1.ª) P7c</span></summary>
   <p><b>Qué se pide.</b> $h\circ g:\mathbb R^3\xrightarrow{g}\mathbb R^2\xrightarrow{h}\mathbb R^4$; su matriz en canónicas es $4\times3$. ($f$ no interviene.)</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de $h\circ g$ de tamaño $4\times3$.</dd>
@@ -641,8 +743,9 @@
 <h3 id="metodoB">Método B — Combinación lineal de aplicaciones: «la matriz de $\lambda g+\mu h$ es $\lambda A_g+\mu A_h$»</h3>
 <p><b>Idea común.</b> Suma y producto por escalar se hacen <b>vector a vector</b> (Def. 3.5 y 3.8) y, con las mismas bases, la matriz de $\lambda g+\mu h$ es $\lambda A_g+\mu A_h$ (Def. 3.7 y 3.10). Solo se suman aplicaciones con el mismo espacio inicial y final. El modelo de U es el Ej. 3.22.</p>
 
-<details class="sol" id="ex-sep23-p3"><summary>Sept. 2023, pregunta 3 — representación matricial de $f=3g-5h$ <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 3">X Sept. 2023 P3</span></summary>
-  <p class="enun">Sea $f=3g-5h:\mathbb R^2\to\mathbb R^3$, en donde $g,h:\mathbb R^2\to\mathbb R^3$ son las aplicaciones $g(x,y)=(-y,\ 4y+7x,\ 3x)$ y $h(x,y)=\begin{pmatrix}1&-5\cr-3&0\cr2&-6\end{pmatrix}\begin{pmatrix}x\cr y\end{pmatrix}$. Halle la representación matricial de $f$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sea $f=3g-5h:\mathbb R^2\to\mathbb R^3$, en donde $g,h:\mathbb R^2\to\mathbb R^3$ son las aplicaciones $g(x,y)=(-y,\ 4y+7x,\ 3x)$ y $h(x,y)=\begin{pmatrix}1&-5\cr-3&0\cr2&-6\end{pmatrix}\begin{pmatrix}x\cr y\end{pmatrix}$. Halle la representación matricial de $f$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Pasa $g$ a matriz (cada componente es una fila) y usa la matriz dada de $h$. Después calcula $3A_g-5A_h$ entrada a entrada.</p></details>
+<details class="sol" id="ex-sep23-p3"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Sept. 2023, pregunta 3 — representación matricial de $f=3g-5h$ <span class="src" data-l="X" data-ref="Sept. 2023, pregunta 3">X Sept. 2023 P3</span></summary>
   <p><b>Qué se pide.</b> La matriz $3\times2$ de $f$ en canónicas y la expresión $Y=AX$. $h$ viene en forma matricial y $g$ en forma de fórmula: hay que poner las dos en el mismo formato.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de $f=3g-5h$ cuando $g$ viene por fórmula y $h$ por su matriz.</dd>
@@ -666,8 +769,9 @@
 
 <h3 id="propios-examen">Ejemplos propios de examen</h3>
 
-<details class="sol" id="ex-propio-p1"><summary>Propio A — $2f-3g$ en $\mathbb R^2$ (método B) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Sean $f,g:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(x+2y,\ 3x)$, $g(x,y)=(y,\ x-y)$. Halle la matriz de $2f-3g$ y compruébela en $(1,1)$.</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $f,g:\mathbb R^2\to\mathbb R^2$, $f(x,y)=(x+2y,\ 3x)$, $g(x,y)=(y,\ x-y)$. Halle la matriz de $2f-3g$ y compruébela en $(1,1)$.</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Obtén las dos matrices $2\times2$ y haz $2A_f-3A_g$ directamente. Comprueba aplicando la fórmula de $2f-3g$ al vector $(1,1)$.</p></details>
+<details class="sol" id="ex-propio-p1"><summary><span class="nivel" title="Dificultad: básico">★☆☆</span>Propio A — $2f-3g$ en $\mathbb R^2$ (método B) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <p><b>Qué se pide.</b> Matriz $2\times2$ de la combinación y comprobación con un vector.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matriz de $2f-3g$.</dd>
@@ -686,8 +790,9 @@
   <div class="recipe"><b>Receta:</b> matriz de cada aplicación, combina las matrices y comprueba en un vector.</div>
 </details>
 
-<details class="sol" id="ex-propio-p2"><summary>Propio B — $g\circ f$ y $f\circ g$ (método A) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
-  <p class="enun">Sean $f:\mathbb R^2\to\mathbb R^3$, $f(x,y)=(x,\ x+y,\ 2y)$ y $g:\mathbb R^3\to\mathbb R^2$, $g(x,y,z)=(x-z,\ y)$. Calcule las matrices de $g\circ f$ y de $f\circ g$. ¿Son iguales?</p>
+<div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Sean $f:\mathbb R^2\to\mathbb R^3$, $f(x,y)=(x,\ x+y,\ 2y)$ y $g:\mathbb R^3\to\mathbb R^2$, $g(x,y,z)=(x-z,\ y)$. Calcule las matrices de $g\circ f$ y de $f\circ g$. ¿Son iguales?</p></div>
+<details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Mira los tamaños: $g\circ f$ va de $\mathbb R^2$ a $\mathbb R^2$ y $f\circ g$ de $\mathbb R^3$ a $\mathbb R^3$. Multiplica en cada caso con el que actúa primero a la derecha.</p></details>
+<details class="sol" id="ex-propio-p2"><summary><span class="nivel" title="Dificultad: nivel examen">★★☆</span>Propio B — $g\circ f$ y $f\circ g$ (método A) <span class="src" data-l="P" data-ref="Ejemplo propio, verificado con sympy">propio</span></summary>
   <p><b>Qué se pide.</b> Las dos matrices, con sus tamaños, y compararlas.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Matrices de $g\circ f$ y $f\circ g$; ¿son iguales?</dd>
@@ -730,7 +835,7 @@
 </div>
 
 <!-- ============================ CHULETA ============================ -->
-<h2 id="chuleta"><span class="n">7</span>Chuleta, lista de comprobación y errores frecuentes</h2>
+<h2 id="chuleta" data-vista="teoria"><span class="n">7</span>Chuleta, lista de comprobación y errores frecuentes</h2>
 
 <table>
   <tr><th>Resultado</th><th>Fórmula / idea <i>(hipótesis)</i></th></tr>
@@ -769,6 +874,27 @@
   </ol>
 </div>
 
+<div class="quiz"><span class="h">Autoevaluación: ¿lo has entendido?</span>
+  <div class="qp"><p>$f:\mathbb R^2\to\mathbb R^3$ con matriz $F=\begin{pmatrix}1&0\\1&1\\0&2\end{pmatrix}$ y $g:\mathbb R^3\to\mathbb R^2$ con $G=\begin{pmatrix}1&0&-1\\0&1&0\end{pmatrix}$. ¿Qué matriz tiene $g\circ f$?</p>
+    <ul class="opts"><li data-ok>$GF=\begin{pmatrix}1&-2\\1&1\end{pmatrix}$, de tamaño $2\times2$.</li><li>$FG$, de tamaño $3\times3$.<span class="why">Esa es la matriz de $f\circ g$. En $g\circ f$ actúa primero $f$ y su matriz va a la derecha: $GF$.</span></li><li>No existe, porque las matrices son de tamaños distintos.<span class="why">Lo que importa es que la llegada de $f$ ($\mathbb R^3$) sea la partida de $g$; los tamaños distintos no impiden componer.</span></li></ul>
+    <p class="fb">Componer es multiplicar con la aplicación que actúa primero a la derecha: $g\circ f\leftrightarrow GF$, $(2\times3)(3\times2)=2\times2$.</p></div>
+  <div class="qp"><p>$f:\mathbb R^2\to\mathbb R^3$ y $h:\mathbb R^3\to\mathbb R^2$ son lineales. ¿Existe $f+h$?</p>
+    <ul class="opts"><li data-ok>No: no tienen los mismos espacios de partida y de llegada.</li><li>Sí: se suman las matrices $3\times2$ y $2\times3$ rellenando con ceros.<span class="why">Rellenar con ceros no tiene sentido: la suma exige el mismo tamaño y los mismos espacios.</span></li><li>Sí, pero solo en las bases canónicas.<span class="why">La obstrucción son los espacios, no las bases; con ninguna base coinciden los tamaños.</span></li></ul>
+    <p class="fb">Sumar aplicaciones exige mismos espacios de partida y llegada; $f$ va de $\mathbb R^2$ a $\mathbb R^3$ y $h$ al revés.</p></div>
+  <div class="qp"><p>Sean $M=\begin{pmatrix}1&1\\0&0\end{pmatrix}$ y $N=\begin{pmatrix}1&0\\-1&0\end{pmatrix}$. ¿Qué es cierto?</p>
+    <ul class="opts"><li data-ok>$MN=0$ pero $NM\neq0$.</li><li>Como $MN=0$, $M=0$ o $N=0$.<span class="why">Con matrices ese razonamiento es falso: $M$ y $N$ no son nulas y $MN=0$.</span></li><li>$MN=NM$, porque ambas son $2\times2$.<span class="why">Que tengan el mismo tamaño no basta: aquí $NM=\begin{pmatrix}1&1\\-1&-1\end{pmatrix}\neq MN$.</span></li></ul>
+    <p class="fb">Dos matrices no nulas pueden tener producto nulo, y el producto no es conmutativo: $MN=0$ pero $NM=\begin{pmatrix}1&1\\-1&-1\end{pmatrix}$.</p></div>
+  <div class="qp"><p>$f$ en $\mathbb R^2$ con matriz $A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ cumple $f\circ f-3f+i=0$. ¿Cuánto vale $f^3$?</p>
+    <ul class="opts"><li data-ok>$8f-3i$.</li><li>$3f-i$.<span class="why">Eso es $f^2$. Hay que multiplicar una vez más por $f$ y volver a sustituir $f^2$.</span></li><li>$9f-3i$.<span class="why">Al hacer $f^3=3f^2-f$ se te olvidó restar $f$ al sustituir $f^2=3f-i$: da $9f-3i-f=8f-3i$.</span></li></ul>
+    <p class="fb">De $f^2=3f-i$: $f^3=f\circ f^2=3f^2-f=3(3f-i)-f=8f-3i$.</p></div>
+  <div class="qp"><p>Para $P=\begin{pmatrix}1&2\\3&4\end{pmatrix}$ y $Q=\begin{pmatrix}0&1\\1&0\end{pmatrix}$, ¿cuál es la expresión correcta de $(P+Q)^2$?</p>
+    <ul class="opts"><li data-ok>$P^2+PQ+QP+Q^2$.</li><li>$P^2+2PQ+Q^2$.<span class="why">Solo vale si $PQ=QP$, y aquí $PQ=\begin{pmatrix}2&1\\4&3\end{pmatrix}\ne QP=\begin{pmatrix}3&4\\1&2\end{pmatrix}$.</span></li><li>$P^2+Q^2$.<span class="why">Se olvidan los productos cruzados; la distributiva obliga a incluir $PQ$ y $QP$.</span></li></ul>
+    <p class="fb">Al desarrollar el cuadrado hay que respetar el orden: $(P+Q)^2=P^2+PQ+QP+Q^2$.</p></div>
+  <div class="qp"><p>Con $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$ y $B=\begin{pmatrix}3&0\\1&1\end{pmatrix}$ (matrices de $f$ y $g$), ¿qué matriz tiene $2f-g$?</p>
+    <ul class="opts"><li data-ok>$\begin{pmatrix}-1&4\\-1&1\end{pmatrix}$.</li><li>$\begin{pmatrix}5&4\\1&3\end{pmatrix}$.<span class="why">Has sumado $2A+B$ en vez de restar $B$.</span></li><li>$\begin{pmatrix}-1&2\\-1&1\end{pmatrix}$.<span class="why">Has dejado sin multiplicar por 2 el elemento $(1,2)$ de $A$: el escalar afecta a todas las entradas.</span></li></ul>
+    <p class="fb">Se multiplica cada entrada de $A$ por 2 y se resta $B$: $2A-B=\begin{pmatrix}-1&4\\-1&1\end{pmatrix}$.</p></div>
+  <p class="score">Elige una opción en cada pregunta. </p><button type="button" class="reset">Reiniciar</button>
+</div>
 <h2 id="fuentes"><span class="n">★</span>Fuentes de este tema</h2>
 <details class="fuentes-toggle"><summary>Ver todas las fuentes citadas</summary>
 <div id="panel-fuentes"></div>

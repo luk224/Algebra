@@ -1,0 +1,270 @@
+ejercicios:
+  - id: ej3-30
+    nivel: 1
+    pista: |-
+      Escribe primero la matriz de $f_A$ y la de $f_B$ (columnas = imágenes de $e_1$, $e_2$). Después suma y escala entrada a entrada, y para las composiciones multiplica poniendo a la izquierda la aplicación que actúa la última.
+    problema: [combinacion, composicion]
+  - id: ej3-31
+    nivel: 1
+    pista: |-
+      Traduce cada afirmación a matrices y busca un contraejemplo pequeño de $2\times2$. Para la C, piensa qué aplicación deja cada vector como está.
+    problema: [propiedades]
+  - id: ej-propio-1
+    nivel: 1
+    pista: |-
+      Calcula la matriz $3\times2$ de $f$ y la de $g$ y combínalas como $3A-2B$. La imagen de $(1,-1)$ sale de multiplicar esa matriz por la columna $(1,-1)$.
+    problema: [combinacion]
+  - id: ej-propio-2
+    nivel: 2
+    pista: |-
+      Para cada composición mira el espacio de llegada del que actúa primero y el de partida del segundo: ¿coinciden? Luego multiplica las matrices con el que actúa primero a la derecha.
+    problema: [composicion, propiedades]
+  - id: ej-propio-3
+    nivel: 3
+    pista: |-
+      Calcula $A^2$ y comprueba la relación con matrices. Para el resto, despeja potencias de $f$ en función de $f$ e $i$ usando esa relación, sin volver a multiplicar matrices grandes.
+    problema: [potencias, composicion]
+  - id: ex-ene20a-3
+    nivel: 1
+    pista: |-
+      Halla la matriz de $g$ (fila $1\times2$) y la de $f$ (columna $3\times1$); la compuesta es el producto con $f$ a la izquierda. Comprueba los tamaños antes de multiplicar.
+    problema: [composicion]
+  - id: ex-feb23-1p3
+    nivel: 1
+    pista: |-
+      Una matriz por aplicación (de $g$ es $1\times2$, de $f$ es $3\times1$) y multiplica en el orden $A_fA_g$. El resultado debe ser $3\times2$.
+    problema: [composicion]
+  - id: ex-sep24-p3
+    nivel: 2
+    pista: |-
+      La matriz de $g\circ f$ es $A_gA_f$ (fila por matriz $3\times2$). Para el valor en $(3,2)$ puedes multiplicar la matriz por la columna o aplicar $f$ y luego $g$.
+    problema: [composicion]
+  - id: ex-sep18a-3
+    nivel: 1
+    pista: |-
+      Aquí piden la fórmula de $f\circ g$: sustituye las componentes de $g(y_1,y_2)$ en $f$ (primero actúa $g$). Si prefieres matrices, calcula $A_fA_g$.
+    problema: [composicion]
+  - id: ex-feb25-1p7c
+    nivel: 2
+    pista: |-
+      Solo intervienen $g$ y $h$; $f$ no se usa. Comprueba que $h:\mathbb R^2\to\mathbb R^4$ puede ir después de $g:\mathbb R^3\to\mathbb R^2$ y multiplica $A_hA_g$ ($4\times2$ por $2\times3$).
+    problema: [composicion]
+  - id: ex-sep23-p3
+    nivel: 2
+    pista: |-
+      Pasa $g$ a matriz (cada componente es una fila) y usa la matriz dada de $h$. Después calcula $3A_g-5A_h$ entrada a entrada.
+    problema: [combinacion]
+  - id: ex-propio-p1
+    nivel: 1
+    pista: |-
+      Obtén las dos matrices $2\times2$ y haz $2A_f-3A_g$ directamente. Comprueba aplicando la fórmula de $2f-3g$ al vector $(1,1)$.
+    problema: [combinacion]
+  - id: ex-propio-p2
+    nivel: 2
+    pista: |-
+      Mira los tamaños: $g\circ f$ va de $\mathbb R^2$ a $\mathbb R^2$ y $f\circ g$ de $\mathbb R^3$ a $\mathbb R^3$. Multiplica en cada caso con el que actúa primero a la derecha.
+    problema: [composicion, propiedades]
+esencial:
+  intro: |-
+    Fijadas las bases, operar con aplicaciones lineales es operar con sus matrices, y casi todo el tema se reduce a no equivocarse con tamaños y con el orden.
+  items:
+    - |-
+      <b>Suma y escalar:</b> $f+g\leftrightarrow A+B$ y $\lambda f\leftrightarrow\lambda A$, entrada a entrada. Solo se puede sumar si las dos aplicaciones tienen los mismos espacios de partida y llegada (matrices del mismo tamaño y en las mismas bases).
+    - |-
+      <b>Composición:</b> $f\circ g\leftrightarrow A_fA_g$. Se aplica primero $g$ y su matriz va a la <b>derecha</b>. Existe si el espacio de llegada de $g$ es el de partida de $f$.
+    - |-
+      <b>Tamaños:</b> $(n\times p)(p\times m)=n\times m$. Si las columnas de la izquierda no coinciden con las filas de la derecha, esa composición no existe.
+    - |-
+      <b>Propiedades:</b> asociativa, distributiva, con neutro ($i$ o $I$); <b>no</b> conmutativa y puede haber producto nulo con factores no nulos.
+    - |-
+      <b>Atajo de examen:</b> «halla $f\circ g$» se puede hacer por sustitución de fórmulas o con matrices; usa el que dé menos cuentas y comprueba con un vector.
+que_cae_nota: |-
+  Lo más frecuente en examen es hallar la matriz de una composición $f\circ g$ (a veces con una fórmula o un valor concreto); la combinación $\lambda f+\mu g$ aparece menos.
+tipos:
+  - id: combinacion
+    nombre: |-
+      Matriz de $\lambda f+\mu g$
+    receta: |-
+      Calcula la matriz de cada aplicación y combínalas entrada a entrada.
+    senal: |-
+      «halla la matriz de $f+g$», «de $2f-3g$», «$f=3g-5h$».
+    pasos:
+      - |-
+        Comprueba que $f$ y $g$ tienen los mismos espacios de partida y llegada, y que las matrices están en las mismas bases.
+      - |-
+        Escribe $A_f$ y $A_g$: cada componente de la fórmula es una <b>fila</b>, cada variable una columna.
+      - |-
+        Calcula $\lambda A_f+\mu A_g$ entrada a entrada.
+      - |-
+        Comprueba con un vector: aplica la matriz resultante y compara con $\lambda f(v)+\mu g(v)$.
+    ejemplo: |-
+      $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$, $B=\begin{pmatrix}3&0\\1&1\end{pmatrix}$: $2A-B=\begin{pmatrix}2-3&4-0\\0-1&2-1\end{pmatrix}=\begin{pmatrix}-1&4\\-1&1\end{pmatrix}$.
+    fallos: |-
+      sumar matrices de distinto tamaño · colocar los coeficientes de cada ecuación como columna en vez de fila · olvidar multiplicar todas las entradas por el escalar (incluidos los ceros).
+  - id: composicion
+    nombre: |-
+      Matriz de $f\circ g$
+    receta: |-
+      Matriz de cada una y producto $A_fA_g$ (la que actúa primero, a la derecha).
+    senal: |-
+      «halla la matriz de $f\circ g$», «la aplicación compuesta», «$(g\circ f)(3,2)$».
+    pasos:
+      - |-
+        Mira los espacios: la llegada de $g$ debe ser la partida de $f$. Si no, la composición no existe.
+      - |-
+        Escribe $A_f$ ($n\times p$) y $A_g$ ($p\times m$) en las bases dadas.
+      - |-
+        Multiplica $A_fA_g$ (fila por columna); el resultado es $n\times m$.
+      - |-
+        Si piden la fórmula o un valor, aplica la matriz al vector, o sustituye $g(x)$ dentro de $f$ como comprobación.
+    ejemplo: |-
+      $f(x,y)=(x+y,y)$ y $g(x,y)=(x,x)$: $A_f=\begin{pmatrix}1&1\\0&1\end{pmatrix}$, $A_g=\begin{pmatrix}1&0\\1&0\end{pmatrix}$, luego $f\circ g\leftrightarrow A_fA_g=\begin{pmatrix}2&0\\1&0\end{pmatrix}$, mientras que $A_gA_f=\begin{pmatrix}1&1\\1&1\end{pmatrix}$ corresponde a $g\circ f$.
+    fallos: |-
+      multiplicar en el orden en que se leen las letras · no comprobar tamaños · confundir una matriz fila con una columna.
+  - id: propiedades
+    nombre: |-
+      Verdadero o falso sobre propiedades
+    receta: |-
+      Traduce a matrices y busca un contraejemplo pequeño o aplica una propiedad conocida.
+    senal: |-
+      «¿es conmutativa?», «¿puede ser nula la composición de dos no nulas?», «¿existe elemento neutro?», «¿existen $f\circ g$ y $g\circ f$?».
+    pasos:
+      - |-
+        Recuerda lo que sí vale: asociativa, distributiva, escalares que salen, neutro $i$ o $I$.
+      - |-
+        Lo que no vale en general (conmutatividad, cancelar factores, $AB=0\Rightarrow A=0$ o $B=0$) se refuta con un contraejemplo $2\times2$.
+      - |-
+        Para una afirmación «existe», da un ejemplo concreto (la identidad como neutro); para «siempre», una prueba general.
+    ejemplo: |-
+      $M=\begin{pmatrix}1&1\\0&0\end{pmatrix}$, $N=\begin{pmatrix}1&0\\-1&0\end{pmatrix}$: $MN=0$ y $NM=\begin{pmatrix}1&1\\-1&-1\end{pmatrix}\neq0$. Ni $M$ ni $N$ son nulas y $MN\ne NM$.
+    fallos: |-
+      cancelar un factor común como si fuera un número · dar un ejemplo en vez de una prueba cuando la afirmación es «siempre» · olvidar que $(A+B)^2=A^2+AB+BA+B^2$.
+  - id: potencias
+    nombre: |-
+      Potencias y relaciones $f\circ f-af+bi=0$
+    receta: |-
+      Verifica la relación con matrices y úsala para despejar potencias e inversa.
+    senal: |-
+      «calcula $f^3$», «comprueba que $f\circ f-3f+i=0$», «deduce la inversa sin más cuentas».
+    pasos:
+      - |-
+        Calcula $A^2$ una vez y comprueba la relación $A^2-aA+bI=0$.
+      - |-
+        Despeja $f^2=af-bi$ y, multiplicando por $f$, encadena: $f^3=af^2-bf=\dots$
+      - |-
+        Para la inversa, saca $f$ factor común: $f\circ(af-\dots)=b\,i$ y divide entre $b$.
+      - |-
+        Usa $f^k=\alpha f+\beta i$ para evaluar sobre un vector sin elevar la matriz.
+    ejemplo: |-
+      $A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$: $A^2=3A-I$, luego $A^3=3A^2-A=8A-3I=\begin{pmatrix}13&8\\8&5\end{pmatrix}$ y $A(3I-A)=I$.
+    fallos: |-
+      olvidar el término $I$ al despejar · sumar $f$ y $i$ sin escribir $i$ como matriz identidad · asumir que $f^2=f\cdot f$ entrada a entrada.
+quiz:
+  - p: |-
+      $f:\mathbb R^2\to\mathbb R^3$ con matriz $F=\begin{pmatrix}1&0\\1&1\\0&2\end{pmatrix}$ y $g:\mathbb R^3\to\mathbb R^2$ con $G=\begin{pmatrix}1&0&-1\\0&1&0\end{pmatrix}$. ¿Qué matriz tiene $g\circ f$?
+    opciones:
+      - t: |-
+          $GF=\begin{pmatrix}1&-2\\1&1\end{pmatrix}$, de tamaño $2\times2$.
+        ok: true
+      - t: |-
+          $FG$, de tamaño $3\times3$.
+        ok: false
+        why: |-
+          Esa es la matriz de $f\circ g$. En $g\circ f$ actúa primero $f$ y su matriz va a la derecha: $GF$.
+      - t: |-
+          No existe, porque las matrices son de tamaños distintos.
+        ok: false
+        why: |-
+          Lo que importa es que la llegada de $f$ ($\mathbb R^3$) sea la partida de $g$; los tamaños distintos no impiden componer.
+    fb: |-
+      Componer es multiplicar con la aplicación que actúa primero a la derecha: $g\circ f\leftrightarrow GF$, $(2\times3)(3\times2)=2\times2$.
+  - p: |-
+      $f:\mathbb R^2\to\mathbb R^3$ y $h:\mathbb R^3\to\mathbb R^2$ son lineales. ¿Existe $f+h$?
+    opciones:
+      - t: |-
+          No: no tienen los mismos espacios de partida y de llegada.
+        ok: true
+      - t: |-
+          Sí: se suman las matrices $3\times2$ y $2\times3$ rellenando con ceros.
+        ok: false
+        why: |-
+          Rellenar con ceros no tiene sentido: la suma exige el mismo tamaño y los mismos espacios.
+      - t: |-
+          Sí, pero solo en las bases canónicas.
+        ok: false
+        why: |-
+          La obstrucción son los espacios, no las bases; con ninguna base coinciden los tamaños.
+    fb: |-
+      Sumar aplicaciones exige mismos espacios de partida y llegada; $f$ va de $\mathbb R^2$ a $\mathbb R^3$ y $h$ al revés.
+  - p: |-
+      Sean $M=\begin{pmatrix}1&1\\0&0\end{pmatrix}$ y $N=\begin{pmatrix}1&0\\-1&0\end{pmatrix}$. ¿Qué es cierto?
+    opciones:
+      - t: |-
+          $MN=0$ pero $NM\neq0$.
+        ok: true
+      - t: |-
+          Como $MN=0$, $M=0$ o $N=0$.
+        ok: false
+        why: |-
+          Con matrices ese razonamiento es falso: $M$ y $N$ no son nulas y $MN=0$.
+      - t: |-
+          $MN=NM$, porque ambas son $2\times2$.
+        ok: false
+        why: |-
+          Que tengan el mismo tamaño no basta: aquí $NM=\begin{pmatrix}1&1\\-1&-1\end{pmatrix}\neq MN$.
+    fb: |-
+      Dos matrices no nulas pueden tener producto nulo, y el producto no es conmutativo: $MN=0$ pero $NM=\begin{pmatrix}1&1\\-1&-1\end{pmatrix}$.
+  - p: |-
+      $f$ en $\mathbb R^2$ con matriz $A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ cumple $f\circ f-3f+i=0$. ¿Cuánto vale $f^3$?
+    opciones:
+      - t: |-
+          $8f-3i$.
+        ok: true
+      - t: |-
+          $3f-i$.
+        ok: false
+        why: |-
+          Eso es $f^2$. Hay que multiplicar una vez más por $f$ y volver a sustituir $f^2$.
+      - t: |-
+          $9f-3i$.
+        ok: false
+        why: |-
+          Al hacer $f^3=3f^2-f$ se te olvidó restar $f$ al sustituir $f^2=3f-i$: da $9f-3i-f=8f-3i$.
+    fb: |-
+      De $f^2=3f-i$: $f^3=f\circ f^2=3f^2-f=3(3f-i)-f=8f-3i$.
+  - p: |-
+      Para $P=\begin{pmatrix}1&2\\3&4\end{pmatrix}$ y $Q=\begin{pmatrix}0&1\\1&0\end{pmatrix}$, ¿cuál es la expresión correcta de $(P+Q)^2$?
+    opciones:
+      - t: |-
+          $P^2+PQ+QP+Q^2$.
+        ok: true
+      - t: |-
+          $P^2+2PQ+Q^2$.
+        ok: false
+        why: |-
+          Solo vale si $PQ=QP$, y aquí $PQ=\begin{pmatrix}2&1\\4&3\end{pmatrix}\ne QP=\begin{pmatrix}3&4\\1&2\end{pmatrix}$.
+      - t: |-
+          $P^2+Q^2$.
+        ok: false
+        why: |-
+          Se olvidan los productos cruzados; la distributiva obliga a incluir $PQ$ y $QP$.
+    fb: |-
+      Al desarrollar el cuadrado hay que respetar el orden: $(P+Q)^2=P^2+PQ+QP+Q^2$.
+  - p: |-
+      Con $A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$ y $B=\begin{pmatrix}3&0\\1&1\end{pmatrix}$ (matrices de $f$ y $g$), ¿qué matriz tiene $2f-g$?
+    opciones:
+      - t: |-
+          $\begin{pmatrix}-1&4\\-1&1\end{pmatrix}$.
+        ok: true
+      - t: |-
+          $\begin{pmatrix}5&4\\1&3\end{pmatrix}$.
+        ok: false
+        why: |-
+          Has sumado $2A+B$ en vez de restar $B$.
+      - t: |-
+          $\begin{pmatrix}-1&2\\-1&1\end{pmatrix}$.
+        ok: false
+        why: |-
+          Has dejado sin multiplicar por 2 el elemento $(1,2)$ de $A$: el escalar afecta a todas las entradas.
+    fb: |-
+      Se multiplica cada entrada de $A$ por 2 y se resta $B$: $2A-B=\begin{pmatrix}-1&4\\-1&1\end{pmatrix}$.
