@@ -171,7 +171,10 @@
 </div>
 
 <div class="box intu"><span class="h">Degeneradas: en la práctica, $|A|=0$</span>
-  <p>Con el cono geométrico, «degenerada» es «el plano pasa por el vértice» (un punto, una recta o dos rectas secantes). En la práctica (U p.286) se usa <b>$|A|=0\iff$ degenerada</b>, y ahí entran también las <b>rectas paralelas</b> (un cono con el vértice «en el infinito», es decir, un cilindro) y las curvas <b>sin puntos reales</b> (rectas imaginarias). Esas curvas no se ven como sección de un cono ordinario, pero son soluciones de una ecuación de segundo grado con $|A|=0$.</p>
+  <p>Con el cono geométrico, «degenerada» es «el plano pasa por el vértice» (un punto, una recta o dos rectas secantes). En la práctica (U p.286) se usa <b>$|A|=0\iff$ degenerada</b>.</p>
+  <details class="ampl"><summary>Más matices: paralelas e imaginarias</summary>
+  <p>Ahí entran también las <b>rectas paralelas</b> (un cono con el vértice «en el infinito», es decir, un cilindro) y las curvas <b>sin puntos reales</b> (rectas imaginarias). Esas curvas no se ven como sección de un cono ordinario, pero son soluciones de una ecuación de segundo grado con $|A|=0$.</p>
+  </details>
   <span class="src" data-l="U" data-ref="U §6.4.5, «Si |A| = 0, la cónica es degenerada», p. 286">U p.286</span>
   <span class="src" data-l="P" data-ref="Aclaración propia sobre el cilindro y las curvas sin puntos reales">propio</span>
 </div>
@@ -423,18 +426,23 @@
 
 <div class="box thm"><span class="h">Por qué funciona el cuadro (explicación propia)</span>
   <p>Tras girar y trasladar (que no cambian los invariantes), una cónica <b>con centro</b> queda $\lambda_1y_1^2+\lambda_2y_2^2+d=0$, con matriz $\operatorname{diag}(d,\lambda_1,\lambda_2)$. Entonces $|A|=d\lambda_1\lambda_2$, $A_{00}=\lambda_1\lambda_2$ y la traza es $\lambda_1+\lambda_2$.</p>
+  <details class="ampl"><summary>Deducción rama a rama y atajo de control</summary>
   <ul>
     <li>$A_{00}>0\iff\lambda_1,\lambda_2$ del <b>mismo signo</b> ⇒ tipo elipse. La traza tiene ese mismo signo, así que $(\lambda_1+\lambda_2)|A|$ tiene el signo de $\lambda_1\cdot d$: es $<0$ cuando $d$ tiene signo <b>opuesto</b> al de los $\lambda_i$, y entonces $\lambda_1y_1^2+\lambda_2y_2^2=-d$ <b>sí tiene soluciones</b> (elipse real). Si $d=0$, $|A|=0$: un punto.</li>
     <li>$A_{00}<0\iff$ signos <b>opuestos</b> ⇒ hipérbola ($d\neq0$) o dos rectas secantes ($d=0$).</li>
     <li>$A_{00}=0\Rightarrow$ un $\lambda$ es 0: $\lambda_2y_2^2+\beta y_1=0$, con matriz $\begin{pmatrix}0&\beta/2&0\\\beta/2&0&0\\0&0&\lambda_2\end{pmatrix}$ y $|A|=-\lambda_2\beta^2/4\neq0\iff\beta\neq0\iff$ parábola; si $\beta=0$ solo queda $\lambda_2y_2^2+d=0$: rectas paralelas, doble o imaginarias.</li>
   </ul>
   <p><b>Atajo de control.</b> Con $A_{00}\neq0$, la constante de la ecuación reducida $\lambda_1x_1''^2+\lambda_2x_2''^2+d=0$ es $d=\dfrac{|A|}{A_{00}}$ (porque $|A|=d\,A_{00}$). Sirve para <b>comprobar</b> una reducción.</p>
+  </details>
   <span class="src" data-l="P" data-ref="Deducción propia a partir de la Definición 6.19 y del cuadro de U p. 286; verificado con sympy">propio</span>
   <span class="src" data-l="L" data-ref="Lay §7.2, p. 403-405: xᵀAx = c es una elipse, una hipérbola, rectas, un punto o vacío según los signos de los valores propios">L p.403-405</span>
 </div>
 
 <div class="box thm"><span class="h">Por qué $|A|$, la traza y $A_{00}$ no cambian (idea)</span>
+  <p>Un giro seguido de una traslación se escribe $X=NX''$ con $N=\begin{pmatrix}1&0\\ c&P\end{pmatrix}$: la matriz nueva es $A''=N^tAN$, con $|A''|=|A|$, y su bloque cuadrático es $P^{-1}MP$, semejante a $M$ (misma traza y mismo $A_{00}$).</p>
+  <details class="ampl"><summary>Deducción completa</summary>
   <p>Un giro $x=Px'$ ($P$ ortogonal, $\det P=1$) seguido de una traslación se escribe $X=NX''$ con $N=\begin{pmatrix}1&0\\ c&P\end{pmatrix}$ (por bloques), donde $c$ es el vector de la traslación (en coordenadas originales): $x=c+Px''$ da $\binom1x=\begin{pmatrix}1&0\\ c&P\end{pmatrix}\binom1{x''}$. Entonces $X^tAX=X''^t(N^tAN)X''$ y la matriz nueva es $A''=N^tAN$: $|A''|=|N|^2|A|=(\det P)^2|A|=|A|$, y su bloque cuadrático es $P^tMP=P^{-1}MP$ (la traslación no toca los términos de grado 2), <b>semejante</b> a $M$, luego con la misma traza y el mismo determinante $A_{00}$. (Es el cambio de base $P^tAP$ de formas cuadráticas, tema 6.2, con la matriz ampliada.)</p>
+  </details>
   <span class="src" data-l="P" data-ref="Justificación propia; verificada con sympy para un giro de ángulo θ y una traslación general">propio</span>
 </div>
 
@@ -568,7 +576,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valores propios de la parte cuadrática de una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>La parte cuadrática es $x_1^2+x_2^2+2x_1x_2$: su matriz es $\begin{pmatrix}1&1\\1&1\end{pmatrix}$, que tiene filas iguales. Intuyo un valor propio $0$.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación matricial (U p.271-280):</b> $a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0\iff(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$, con $A$ simétrica $3\times3$ y parte cuadrática $A_{00}$ ($2\times2$). <b>Invariantes métricos:</b> $|A|$, $|A_{00}|$ y $a_{11}+a_{22}=\operatorname{tr}A_{00}$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación matricial</b> (U p.271-280): $(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$; invariantes $|A|$, $|A_{00}|$, $\operatorname{tr}A_{00}$ — <a href="#s2">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Escribo $A_{00}$ y resuelvo $|A_{00}-\lambda I|=0$.</dd>
   </dl></div>
   <ol class="steps">
@@ -594,7 +602,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Descomponer la ecuación en parte cuadrática, lineal y constante, y escribirlas con matrices.</dd>
     <dt>Cómo lo pienso</dt><dd>Cada parte tiene su matriz: la cuadrática $A_{00}$ ($2\times2$), la lineal con los coeficientes de $x_1,x_2$ (la mitad en cada posición) y la constante.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación matricial (U p.271-280):</b> $a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0\iff(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$, con $A$ simétrica $3\times3$ y parte cuadrática $A_{00}$ ($2\times2$). <b>Invariantes métricos:</b> $|A|$, $|A_{00}|$ y $a_{11}+a_{22}=\operatorname{tr}A_{00}$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación matricial</b> (U p.271-280): $(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$; invariantes $|A|$, $|A_{00}|$, $\operatorname{tr}A_{00}$ — <a href="#s2">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Leo los coeficientes de la ecuación y los distribuyo.</dd>
   </dl></div>
   <ol class="steps">
@@ -621,7 +629,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuación matricial e invariantes de una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>Construyo $A$ de orden 3 con la constante, la mitad de los lineales y la parte cuadrática; los invariantes son $|A|$, $|A_{00}|$ y la traza de $A_{00}$.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación matricial (U p.271-280):</b> $a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0\iff(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$, con $A$ simétrica $3\times3$ y parte cuadrática $A_{00}$ ($2\times2$). <b>Invariantes métricos:</b> $|A|$, $|A_{00}|$ y $a_{11}+a_{22}=\operatorname{tr}A_{00}$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación matricial</b> (U p.271-280): $(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$; invariantes $|A|$, $|A_{00}|$, $\operatorname{tr}A_{00}$ — <a href="#s2">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Matriz $A$ y tres números.</dd>
   </dl></div>
   <ol class="steps">
@@ -648,7 +656,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Clasificar una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>La parte cuadrática $x_1^2+4x_2^2$ es definida positiva: $|A_{00}|>0$, elipse o similar. Falta $|A|$ para saber si es real, imaginaria o un punto.</dd>
-    <dt>Qué uso</dt><dd><b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
+    <dt>Qué uso</dt><dd><b>Cuadro de clasificación</b> (U p.286): signo de $|A_{00}|$ y $|A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Calculo $|A|$ y la traza de $A_{00}$ y uso el cuadro.</dd>
   </dl></div>
   <ol class="steps">
@@ -670,7 +678,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Decidir si una ecuación es parábola, elipse imaginaria o hipérbola.</dd>
     <dt>Cómo lo pienso</dt><dd>Antes de calcular miro la parte cuadrática: $x_1^2+4x_2^2$ definida positiva descarta parábola e hipérbola.</dd>
-    <dt>Qué uso</dt><dd><b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
+    <dt>Qué uso</dt><dd><b>Cuadro de clasificación</b> (U p.286): signo de $|A_{00}|$ y $|A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Calculo $|A|$ y la traza para elegir entre elipse real, imaginaria o punto.</dd>
   </dl></div>
   <ol class="steps">
@@ -700,7 +708,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuación reducida de una cónica.</dd>
     <dt>Cómo lo pienso</dt><dd>Parte cuadrática diagonal: no hay giro, solo traslación. Completo cuadrados en cada variable.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación reducida</b> (Def. 6.18): giro (diagonalizar $A_{00}$) + traslación — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Completar cuadrados y dividir.</dd>
   </dl></div>
   <ol class="steps">
@@ -728,7 +736,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Ecuación de la cónica en una base paralela a sus ejes.</dd>
     <dt>Cómo lo pienso</dt><dd>La parte cuadrática tiene un valor propio $0$ (parábola) y otro $2$. Los ejes son los vectores propios de $A_{00}$.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación reducida</b> (Def. 6.18): giro (diagonalizar $A_{00}$) + traslación — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Diagonalizo $A_{00}$ y sustituyo.</dd>
   </dl></div>
   <ol class="steps">
@@ -758,7 +766,7 @@
   <p>La opción C, «$m=|\sqrt2|$», es solo $m=\sqrt2$, que anula $|A|$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $m$ para que la cónica sea degenerada.</dd>
-    <dt>Qué se usa</dt><dd><b>Condiciones con parámetros:</b> degenerada $\iff|A|=0$; parábola $\iff|A_{00}|=0$ y $|A|\neq0$; elipse real $\iff|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$.</dd>
+    <dt>Qué se usa</dt><dd><b>Condiciones con parámetros:</b> parábola $\iff|A_{00}|=0,\ |A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>Imponer $|A|=0$.</dd>
   </dl></div>
   <ol class="steps">
@@ -788,7 +796,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Valor de $\alpha$ para que sea parábola.</dd>
     <dt>Cómo lo pienso</dt><dd>Parábola ⇔ $|A_{00}|=0$ (y no degenerada). Esa condición es independiente de $\alpha$ si $\alpha$ solo aparece en la parte lineal. Luego $\alpha$ interviene en $|A|\neq0$.</dd>
-    <dt>Qué uso</dt><dd><b>Condiciones con parámetros:</b> degenerada $\iff|A|=0$; parábola $\iff|A_{00}|=0$ y $|A|\neq0$; elipse real $\iff|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$.</dd>
+    <dt>Qué uso</dt><dd><b>Condiciones con parámetros:</b> parábola $\iff|A_{00}|=0,\ |A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Impongo $|A_{00}|=0$ y $|A|\neq0$.</dd>
   </dl></div>
   <ol class="steps">
@@ -814,7 +822,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Condición para elipse real con dos parámetros.</dd>
     <dt>Cómo lo pienso</dt><dd>Elipse real ⇔ $|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$. Aquí la ecuación no tiene términos lineales, la constante es $-a$.</dd>
-    <dt>Qué uso</dt><dd><b>Condiciones con parámetros:</b> degenerada $\iff|A|=0$; parábola $\iff|A_{00}|=0$ y $|A|\neq0$; elipse real $\iff|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$.</dd>
+    <dt>Qué uso</dt><dd><b>Condiciones con parámetros:</b> parábola $\iff|A_{00}|=0,\ |A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Calculo $|A_{00}|$, $|A|$ y la traza.</dd>
   </dl></div>
   <ol class="steps">
@@ -845,7 +853,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Centro, semiejes, vértices y focos de una elipse sin giro.</dd>
     <dt>Cómo lo pienso</dt><dd>No hay término cruzado: sin giro. Completo cuadrados para trasladar al centro.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación reducida</b> (Def. 6.18): giro (diagonalizar $A_{00}$) + traslación — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Completar cuadrados y leer semiejes, focos $c^2=a^2-b^2$.</dd>
   </dl></div>
   <ol class="steps">
@@ -869,7 +877,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Reducir una hipérbola con giro.</dd>
     <dt>Cómo lo pienso</dt><dd>Término cruzado ⇒ giro. Diagonalizo $A_{00}$; con valores propios de distinto signo es hipérbola.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$. <b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación reducida</b> (Def. 6.18): giro (diagonalizar $A_{00}$) + traslación — <a href="#s3">ver teoría</a>. <b>Cuadro de clasificación</b> (U p.286): signo de $|A_{00}|$ y $|A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Giro por vectores propios y traslación.</dd>
   </dl></div>
   <ol class="steps">
@@ -902,7 +910,7 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Vértice, foco y directriz de una parábola con giro.</dd>
     <dt>Cómo lo pienso</dt><dd>$|A_{00}|=0$: parábola. El eje es la dirección del vector propio de $0$.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación reducida</b> (Def. 6.18): giro (diagonalizar $A_{00}$) + traslación — <a href="#s3">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Giro, traslación al vértice y parámetro $p$.</dd>
   </dl></div>
   <ol class="steps">
@@ -929,7 +937,7 @@
 <details class="sol"><summary>Ver solución paso a paso</summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Reconocer las cónicas degeneradas.</dd>
-    <dt>Qué se usa</dt><dd><b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
+    <dt>Qué se usa</dt><dd><b>Cuadro de clasificación</b> (U p.286): signo de $|A_{00}|$ y $|A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>Calcular $|A|$ y $|A_{00}|$ en cada caso.</dd>
   </dl></div>
   <ol class="steps">
@@ -953,7 +961,7 @@
 <details class="sol"><summary>Ver solución paso a paso</summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar para todo valor del parámetro.</dd>
-    <dt>Qué se usa</dt><dd><b>Condiciones con parámetros:</b> degenerada $\iff|A|=0$; parábola $\iff|A_{00}|=0$ y $|A|\neq0$; elipse real $\iff|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$. <b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
+    <dt>Qué se usa</dt><dd><b>Condiciones con parámetros:</b> parábola $\iff|A_{00}|=0,\ |A|\neq0$ — <a href="#s4">ver teoría</a>. <b>Cuadro de clasificación</b> (U p.286): signo de $|A_{00}|$ y $|A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>Invariantes en función de $k$ y casos frontera.</dd>
   </dl></div>
   <ol class="steps">
@@ -988,20 +996,27 @@
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué me piden</dt><dd>Definir y citar los invariantes métricos.</dd>
     <dt>Cómo lo pienso</dt><dd>Son los números que no cambian bajo giros y traslaciones: $|A|$, $|A_{00}|$, $\operatorname{tr}A_{00}$.</dd>
-    <dt>Qué uso</dt><dd><b>Ecuación matricial (U p.271-280):</b> $a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0\iff(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$, con $A$ simétrica $3\times3$ y parte cuadrática $A_{00}$ ($2\times2$). <b>Invariantes métricos:</b> $|A|$, $|A_{00}|$ y $a_{11}+a_{22}=\operatorname{tr}A_{00}$.</dd>
+    <dt>Qué uso</dt><dd><b>Ecuación matricial</b> (U p.271-280): $(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$; invariantes $|A|$, $|A_{00}|$, $\operatorname{tr}A_{00}$ — <a href="#s2">ver teoría</a>.</dd>
     <dt>Por dónde empiezo</dt><dd>Enuncio con la ecuación matricial.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li><p><b>Ecuación analítica</b> (U Def. 6.16):</p>
-      $$a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0,$$
-      <p>con matriz asociada $A$ (Def. 6.17) y matriz de la parte cuadrática</p>
-      $$M=\begin{pmatrix}a_{11}&a_{12}\\a_{12}&a_{22}\end{pmatrix}.$$</li>
-    <li><b>Definición</b> (U Def. 6.19): son los parámetros que no varían al pasar de un sistema de coordenadas a otro mediante un giro o una traslación.</li>
-    <li><b>Cuáles son:</b> $|A|$ (determinante de la matriz de la cónica); $a_{11}+a_{22}$ (traza de $M$); $A_{00}=a_{11}a_{22}-a_{12}^2$ (adjunto de $a_{00}$ en $A$, igual al determinante de $M$).</li>
-    <li><p><b>Ampliación (por qué lo son).</b> Un giro $x=Px'$ ($P$ ortogonal con $\det P=1$) seguido de una traslación se escribe $X=NX''$ con</p>
-      $$N=\begin{pmatrix}1&0\\ c&P\end{pmatrix}$$
-      <p>($c$ = vector de la traslación en coordenadas originales, de modo que $x=c+Px''$; por bloques). Entonces $X^tAX=X''^t(N^tAN)X''$, así que la matriz nueva es $A''=N^tAN$, con $|A''|=|N|^2|A|=(\det P)^2|A|=|A|$; y el bloque cuadrático nuevo es $P^tMP=P^{-1}MP$ (la traslación no toca los términos de grado 2), semejante a $M$ ⇒ misma traza y mismo determinante. Además $\operatorname{rang}A''=\operatorname{rang}A$, porque $N$ es regular.</p></li>
-  </ol>
+    <li><p><b>Ecuación analítica</b> (U Def. 6.16) de una cónica $\mathcal C$:</p>
+$$a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0,$$
+<p>con matriz asociada $A$ (Def. 6.17) y matriz de la parte cuadrática</p>
+$$M=\begin{pmatrix}a_{11}&a_{12}\\a_{12}&a_{22}\end{pmatrix}.$$</li>
+    <li><b>Definición</b> (U Def. 6.19): los invariantes métricos son los parámetros que no varían al pasar de un sistema de coordenadas a otro mediante un giro o una traslación.</li>
+    <li><b>Son tres:</b> $|A|$ (determinante de la matriz de la cónica); $a_{11}+a_{22}$ (traza de $M$); $A_{00}=a_{11}a_{22}-a_{12}^2$ (adjunto de $a_{00}$ en $A$, igual a $|M|$).</li>
+    <li><p><b>Por qué no cambian.</b> Un giro $x=Px'$ ($P$ ortogonal, $\det P=1$) seguido de una traslación se escribe $X=NX''$ con</p>
+$$N=\begin{pmatrix}1&0\\ c&P\end{pmatrix}.$$
+<p>Entonces $A''=N^tAN$ y $|A''|=|N|^2|A|=(\det P)^2|A|=|A|$. El bloque cuadrático nuevo es $P^tMP=P^{-1}MP$, semejante a $M$: misma traza y mismo determinante.</p></li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>En la solución, $c$ es el vector de la traslación en coordenadas originales ($x=c+Px''$, por bloques); la traslación no toca los términos de grado 2. Además $\operatorname{rang}A''=\operatorname{rang}A$, porque $N$ es regular.</li>
+      <li>Para «utilice su ecuación analítica» basta con escribirla y la matriz $A$; la línea de justificación es la que da la puntuación completa.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> escribe la ecuación analítica y la matriz; da los tres invariantes con su fórmula en términos de los $a_{ij}$; añade una línea de por qué no cambian.</div>
   <p><b>Error típico:</b> citar solo «el determinante» y olvidar la traza de $M$ y $A_{00}$, o confundir $|A|$ (matriz $3\times3$) con $|M|$.</p>
 </details>
@@ -1012,26 +1027,32 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcular los invariantes de la cónica $5x_1^2-3x_1x_2+x_2^2-3x_1+2x_2-5=0$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Arma $A$ con $a_{00}=-5$ arriba a la izquierda y las mitades de los coeficientes mixtos y lineales; luego $|A|$, $a_{11}+a_{22}$ y $A_{00}$.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <div class="box warn"><span class="h">Referencia</span><p>Es el Ejemplo 6.30; sus invariantes están en U <b>Ej. 6.32</b> (p.285).</p></div>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Calcular los invariantes de una cónica.</dd>
-    <dt>Qué se usa</dt><dd><b>Ecuación matricial (U p.271-280):</b> $a_{11}x_1^2+2a_{12}x_1x_2+a_{22}x_2^2+2a_{01}x_1+2a_{02}x_2+a_{00}=0\iff(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$, con $A$ simétrica $3\times3$ y parte cuadrática $A_{00}$ ($2\times2$). <b>Invariantes métricos:</b> $|A|$, $|A_{00}|$ y $a_{11}+a_{22}=\operatorname{tr}A_{00}$.</dd>
+    <dt>Qué se usa</dt><dd><b>Ecuación matricial</b> (U p.271-280): $(1\ x_1\ x_2)A\,(1\ x_1\ x_2)^t=0$; invariantes $|A|$, $|A_{00}|$, $\operatorname{tr}A_{00}$ — <a href="#s2">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>Matriz $A$ y los tres números.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
     <li><b>Coeficientes:</b> $a_{11}=5$, $2a_{12}=-3\Rightarrow a_{12}=-\tfrac32$, $a_{22}=1$, $2a_{01}=-3\Rightarrow a_{01}=-\tfrac32$, $2a_{02}=2\Rightarrow a_{02}=1$, $a_{00}=-5$.</li>
     <li><p><b>Matriz:</b></p>
-      $$A=\begin{pmatrix}-5&-\tfrac32&1\\-\tfrac32&5&-\tfrac32\\1&-\tfrac32&1\end{pmatrix}$$
-      <p>(es la de U Ej. 6.29, p.278).</p></li>
+$$A=\begin{pmatrix}-5&-\tfrac32&1\\-\tfrac32&5&-\tfrac32\\1&-\tfrac32&1\end{pmatrix}.$$</li>
     <li><p><b>$|A|$</b> (Sarrus): diagonales</p>
-      $$(-5)(5)(1)+(-\tfrac32)(-\tfrac32)(1)+(1)(-\tfrac32)(-\tfrac32)=-25+\tfrac94+\tfrac94=-\tfrac{41}2;$$
-      <p>antidiagonales</p>
-      $$(1)(5)(1)+(-5)(-\tfrac32)(-\tfrac32)+(-\tfrac32)(-\tfrac32)(1)=5-\tfrac{45}4+\tfrac94=-4.$$
-      <p>$|A|=-\tfrac{41}2-(-4)=-\tfrac{33}2$.</p></li>
-    <li><b>Traza</b> $=5+1=6$. <b>$A_{00}$</b> $=5\cdot1-\tfrac94=\tfrac{11}4$. (Coincide con U Ej. 6.32, p.285.)</li>
-    <li><b>Extra para «debidamente justificado»</b> (qué cónica es): $|A|\neq0$ ⇒ rango 3; $A_{00}>0$ ⇒ tipo elipse; $(a_{11}+a_{22})|A|=6\cdot(-\tfrac{33}2)=-99<0$ ⇒ <b>elipse real</b> (U Ej. 6.33, p.287). Su ecuación reducida está más abajo (ampliación, Bloque III).</li>
-  </ol>
-  <div class="recipe"><b>Receta (Bloque I):</b> (1) compara con (6.3) dividiendo entre 2 los coeficientes de $x_1x_2$, $x_1$ y $x_2$; (2) $a_{00}$ arriba a la izquierda; (3) $|A|$, traza de $M$ y $|M|$.</div>
+$$(-5)(5)(1)+(-\tfrac32)(-\tfrac32)(1)+(1)(-\tfrac32)(-\tfrac32)=-25+\tfrac94+\tfrac94=-\tfrac{41}2;$$
+<p>antidiagonales</p>
+$$(1)(5)(1)+(-5)(-\tfrac32)(-\tfrac32)+(-\tfrac32)(-\tfrac32)(1)=5-\tfrac{45}4+\tfrac94=-4.$$
+<p>$|A|=-\tfrac{41}2-(-4)=-\tfrac{33}2$.</p></li>
+    <li><b>Traza</b> $a_{11}+a_{22}=5+1=6$. <b>$A_{00}$</b> $=5\cdot1-\tfrac94=\tfrac{11}4$.</li>
+    <li><b>Invariantes:</b> $|A|=-\tfrac{33}2$, $a_{11}+a_{22}=6$, $A_{00}=\tfrac{11}4$.</li>
+    <li><p>Qué cónica es: $|A|\neq0$ ⇒ rango 3; $A_{00}>0$ ⇒ tipo elipse; $(a_{11}+a_{22})|A|=6\cdot(-\tfrac{33}2)=-99<0$ ⇒ <b>elipse real</b>.</p></li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Es el Ejemplo 6.30 de U; sus invariantes están en U <b>Ej. 6.32</b> (p.285) y la matriz es la de U Ej. 6.29 (p.278). El resultado coincide.</li>
+      <li>Clasificar es un extra «debidamente justificado» (U Ej. 6.33, p.287). Su ecuación reducida está en el ejercicio propio «Ampliación de Feb. 2018 (B)».</li>
+    </ul>
+  </details>
+  <div class="recipe"><b>Receta:</b> (1) compara con (6.3) dividiendo entre 2 los coeficientes de $x_1x_2$, $x_1$ y $x_2$; (2) $a_{00}$ arriba a la izquierda; (3) $|A|$, traza de $M$ y $|M|$.</div>
   <p><b>Error típico:</b> no dividir entre 2 (sale $a_{01}=-3$ en vez de $-\tfrac32$) o poner $a_{00}$ abajo a la derecha.</p>
 </details>
 </article>
@@ -1043,19 +1064,28 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Clasificar la cónica de ecuación $x_1^2+4x_2^2-6x_1+8x_2+9=0$.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Calcula los tres invariantes y entra en el cuadro. Con $A_{00}>0$ y $|A|\neq0$, mira el signo de $(a_{11}+a_{22})|A|$ para saber si es real o imaginaria.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p>Es la cónica del <a href="#ej6-30">E 6.30</a>.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Clasificar una cónica.</dd>
-    <dt>Qué se usa</dt><dd><b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
+    <dt>Qué se usa</dt><dd><b>Cuadro de clasificación</b> (U p.286): signo de $|A_{00}|$ y $|A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>Invariantes y cuadro.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li>$$A=\begin{pmatrix}9&-3&4\\-3&1&0\\4&0&4\end{pmatrix},$$
-      <p>$|A|=-16\neq0$ ⇒ rango 3, no degenerada.</p></li>
-    <li>$A_{00}=4>0$ ⇒ elipse; $(a_{11}+a_{22})|A|=5(-16)<0$ ⇒ <b>elipse real</b>.</li>
-    <li><b>Opcional (añade valor):</b> reducida $\dfrac{x_1''^2}{4}+x_2''^2=1$ con $x_1''=x_1-3$, $x_2''=x_2+1$. Centro $(3,-1)$; $a=2$, $b=1$, $c=\sqrt{4-1}=\sqrt3$; focos $(3\pm\sqrt3,-1)$; vértices $(1,-1)$, $(5,-1)$, $(3,0)$, $(3,-2)$.</li>
-  </ol>
-  <div class="recipe"><b>Receta (Bloque II):</b> $|A|$ → ¿degenerada?; $A_{00}$ → elipse/hipérbola/parábola; si elipse, signo de $(a_{11}+a_{22})|A|$. Si $|A|=0$: rango y la rama «rango 2/1».</div>
+    <li><p>Matriz asociada ($a_{00}=9$, $a_{01}=-3$, $a_{02}=4$, $a_{11}=1$, $a_{12}=0$, $a_{22}=4$):</p>
+$$A=\begin{pmatrix}9&-3&4\\-3&1&0\\4&0&4\end{pmatrix}.$$</li>
+    <li>$|A|=-16\neq0$ ⇒ rango 3, la cónica es no degenerada.</li>
+    <li>$A_{00}=1\cdot4-0=4>0$ ⇒ tipo elipse; $(a_{11}+a_{22})|A|=5\cdot(-16)<0$ ⇒ <b>elipse real</b>.</li>
+    <li><p>Para completar: la reducida es</p>
+$$\dfrac{x_1''^2}{4}+x_2''^2=1,\qquad x_1''=x_1-3,\ x_2''=x_2+1,$$
+<p>de centro $(3,-1)$, $a=2$, $b=1$.</p></li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Es la cónica del <a href="#ej6-30">E 6.30</a>.</li>
+      <li>Valores adicionales de la elipse: $c=\sqrt{4-1}=\sqrt3$; focos $(3\pm\sqrt3,-1)$; vértices $(1,-1)$, $(5,-1)$, $(3,0)$, $(3,-2)$. El enunciado solo pide clasificar, así que la reducida es opcional.</li>
+    </ul>
+  </details>
+  <div class="recipe"><b>Receta:</b> $|A|$ → ¿degenerada?; $A_{00}$ → elipse/hipérbola/parábola; si elipse, signo de $(a_{11}+a_{22})|A|$. Si $|A|=0$: rango y la rama «rango 2/1».</div>
   <p><b>Error típico:</b> decir «elipse» sin aclarar si es real o imaginaria.</p>
 </details>
 </article>
@@ -1065,27 +1095,30 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">La cónica de ecuación $x_2^2+2x_1x_2+x_1^2-2x_2+x_1+1=0$ es: A) Una parábola; B) Una elipse; C) Una recta doble; D) Ninguna de las anteriores.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>La parte cuadrática es $(x_1+x_2)^2$, así que $A_{00}=0$. Eso deja parábola o rectas paralelas o doble: calcula $|A|$ para distinguir.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p>Es la cónica del Ej. 6.34 de U (p.287); la respuesta correcta es «A) es cierta».</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Decidir qué cónica es entre varias opciones.</dd>
-    <dt>Qué se usa</dt><dd><b>Clasificación (cuadro de U p.286):</b> $|A_{00}|>0$ elipse (real, imaginaria o punto), $|A_{00}|<0$ hipérbola (o dos rectas secantes), $|A_{00}|=0$ parábola (o rectas paralelas/doble). Es no degenerada $\iff|A|\neq0$.</dd>
+    <dt>Qué se usa</dt><dd><b>Cuadro de clasificación</b> (U p.286): signo de $|A_{00}|$ y $|A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>$|A_{00}|=0$ y $|A|$.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
     <li><p><b>Coeficientes:</b> $a_{11}=1$, $a_{22}=1$, $a_{12}=1$, $a_{01}=\tfrac12$, $a_{02}=-1$, $a_{00}=1$:</p>
-      $$A=\begin{pmatrix}1&\tfrac12&-1\\\tfrac12&1&1\\-1&1&1\end{pmatrix}.$$</li>
+$$A=\begin{pmatrix}1&\tfrac12&-1\\\tfrac12&1&1\\-1&1&1\end{pmatrix}.$$</li>
     <li><p><b>$|A|$</b> (Sarrus):</p>
-      $$1\cdot1\cdot1+\tfrac12\cdot1\cdot(-1)+(-1)\cdot\tfrac12\cdot1-\big[(-1)\cdot1\cdot(-1)+1\cdot1\cdot1+1\cdot\tfrac12\cdot\tfrac12\big]=(1-\tfrac12-\tfrac12)-(1+1+\tfrac14)=-\tfrac94\neq0$$
-      <p>⇒ rango 3, no degenerada (descarta C: una recta doble tiene rango 1).</p></li>
-    <li><b>$A_{00}$</b> $=1\cdot1-1^2=0$ ⇒ <b>parábola</b> (descarta B, que exigiría $A_{00}>0$). Respuesta <b>A</b>.</li>
-    <li><p><b>Comprobación por reducción</b> (opcional):</p>
-      $$M=\begin{pmatrix}1&1\\1&1\end{pmatrix},$$
-      <p>valores propios $2$ y $0$ con $u_1=\tfrac1{\sqrt2}(1,1)$, $u_2=\tfrac1{\sqrt2}(-1,1)$;</p>
-      $$P=\tfrac1{\sqrt2}\begin{pmatrix}1&-1\\1&1\end{pmatrix}$$
-      <p>($\det P=1$, giro de 45°). La ecuación queda $2y_1^2-\tfrac{\sqrt2}2y_1-\tfrac{3\sqrt2}2y_2+1=0$ y, completando,</p>
-      $$2\big(y_1-\tfrac{\sqrt2}8\big)^2=\tfrac{3\sqrt2}2\big(y_2-\tfrac{5\sqrt2}{16}\big),$$
-      <p>es decir $y_1''^2=\tfrac{3\sqrt2}{4}\,y_2''$: parábola de vértice $(x_1,x_2)=(-\tfrac3{16},\tfrac7{16})$.</p></li>
-  </ol>
+$$1\cdot1\cdot1+\tfrac12\cdot1\cdot(-1)+(-1)\cdot\tfrac12\cdot1-\big[(-1)\cdot1\cdot(-1)+1\cdot1\cdot1+1\cdot\tfrac12\cdot\tfrac12\big]=(1-\tfrac12-\tfrac12)-(1+1+\tfrac14)=-\tfrac94\neq0.$$
+<p>Rango 3: no degenerada (descarta C, pues una recta doble tiene rango 1).</p></li>
+    <li><b>$A_{00}$</b> $=1\cdot1-1^2=0$ ⇒ <b>parábola</b> (descarta B, que exigiría $A_{00}>0$). Respuesta: <b>A</b>.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Es la cónica del Ej. 6.34 de U (p.287); la respuesta correcta es «A) es cierta».</li>
+      <li><p>Comprobación por reducción (opcional): $M=\begin{pmatrix}1&1\\1&1\end{pmatrix}$ tiene valores propios $2$ y $0$, con $u_1=\tfrac1{\sqrt2}(1,1)$, $u_2=\tfrac1{\sqrt2}(-1,1)$ y</p>
+$$P=\tfrac1{\sqrt2}\begin{pmatrix}1&-1\\1&1\end{pmatrix}\quad(\det P=1,\ \text{giro de }45^\circ).$$
+<p>La ecuación queda $2y_1^2-\tfrac{\sqrt2}2y_1-\tfrac{3\sqrt2}2y_2+1=0$ y, completando cuadrados,</p>
+$$2\big(y_1-\tfrac{\sqrt2}8\big)^2=\tfrac{3\sqrt2}2\big(y_2-\tfrac{5\sqrt2}{16}\big),$$
+<p>es decir $y_1''^2=\tfrac{3\sqrt2}{4}\,y_2''$: parábola de vértice $(x_1,x_2)=(-\tfrac3{16},\tfrac7{16})$.</p></li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> en un test, calcula $|A|$ y $A_{00}$ y descarta opciones con la condición que le falta a cada una.</div>
   <p><b>Error típico:</b> concluir «parábola» con $A_{00}=0$ sin comprobar $|A|\neq0$ (podrían ser rectas paralelas).</p>
 </details>
@@ -1098,18 +1131,26 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Calcular la ecuación reducida de la cónica $x_1^2+4x_2^2-4x_1-16x_2+19=0$ (2 puntos).</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Sin término cruzado no hay giro: completa cuadrados en $x_1$ y en $x_2$, traslada el origen al centro y divide por la constante para dejar un 1 a la derecha.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <div class="box warn"><span class="h">Nota</span><p>Es exactamente el <a href="#ej6-28">E 6.28</a>.</p></div>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Ecuación reducida de una cónica.</dd>
-    <dt>Qué se usa</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$.</dd>
+    <dt>Qué se usa</dt><dd><b>Ecuación reducida</b> (Def. 6.18): giro (diagonalizar $A_{00}$) + traslación — <a href="#s3">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>Giro y traslación.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li>No hay término $x_1x_2$ ($a_{12}=0$) ⇒ <b>no se necesita giro</b>.</li>
-    <li><b>Completar cuadrados:</b> $(x_1-2)^2+4(x_2-2)^2-1=0$.</li>
-    <li><b>Traslación</b> $x_1'=x_1-2$, $x_2'=x_2-2$ ⇒ <b>$x_1'^2+4x_2'^2=1$</b>, elipse de centro $(2,2)$ y semiejes $1$ y $\tfrac12$.</li>
-    <li><b>Comprobación por invariantes</b> (recomendable en un problema): $|A|=-4$, $A_{00}=4>0$, $5\cdot(-4)<0$ ⇒ elipse real ✓.</li>
-  </ol>
+    <li>No hay término $x_1x_2$ ($a_{12}=0$), luego <b>no se necesita giro</b>.</li>
+    <li><p><b>Completar cuadrados</b> en $x_1$ y en $x_2$:</p>
+$$(x_1-2)^2+4(x_2-2)^2-1=0.$$</li>
+    <li><p><b>Traslación</b> $x_1'=x_1-2$, $x_2'=x_2-2$:</p>
+$$x_1'^2+4x_2'^2=1,\qquad \text{es decir}\quad \frac{x_1'^2}{1}+\frac{x_2'^2}{1/4}=1.$$
+<p><b>Ecuación reducida</b> (en las coordenadas trasladadas): elipse de centro $(2,2)$ y semiejes $1$ y $\tfrac12$.</p></li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Es exactamente el <a href="#ej6-28">E 6.28</a>.</li>
+      <li>Comprobación por invariantes (recomendable en un problema): $|A|=-4$, $A_{00}=4>0$, $5\cdot(-4)<0$ ⇒ elipse real, coherente con la reducida.</li>
+    </ul>
+  </details>
   <div class="recipe"><b>Receta:</b> la del E 6.28; escribe siempre el cambio de variables.</div>
   <p><b>Error típico:</b> dar solo «$x_1^2+4x_2^2=1$» sin indicar que son coordenadas trasladadas.</p>
 </details>
@@ -1122,7 +1163,7 @@
 <details class="sol"><summary>Ver solución paso a paso</summary>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Reducir una cónica completa con giro y traslación.</dd>
-    <dt>Qué se usa</dt><dd><b>Ecuación reducida:</b> girar (diagonalizar $A_{00}$ ortogonalmente) y trasladar (completar cuadrados). Elipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$, hipérbola $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$, parábola $y^2=2px$.</dd>
+    <dt>Qué se usa</dt><dd><b>Ecuación reducida</b> (Def. 6.18): giro (diagonalizar $A_{00}$) + traslación — <a href="#s3">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>Valores propios racionales y completar cuadrados.</dd>
   </dl></div>
   <ol class="steps">
@@ -1157,20 +1198,28 @@
 <div class="ejer-enun"><span class="lbl">Enunciado</span><p class="enun">Determinar, si es posible, los valores de $\alpha\in\mathbb R$ para que la ecuación $1+x_1^2+2x_1x_2+x_2^2+2\alpha x_2=0$ defina una parábola.</p></div>
 <details class="pista"><summary>Pista (inténtalo antes de abrir la solución)</summary><p>Parábola exige $A_{00}=0$ y $|A|\neq0$. Aquí la parte cuadrática ya cumple lo primero; calcula $|A|$ en función de $\alpha$ y mira qué valores lo hacen distinto de cero.</p></details>
 <details class="sol"><summary>Ver solución paso a paso</summary>
-  <p>Es el <a href="#ej6-31">E 6.31</a> con $\lambda=\mu=1$ (ya cumple $\mu=\lambda^2$); $|A|=-\alpha^2$.</p>
   <div class="plan"><span class="h">Antes de calcular</span><dl>
     <dt>Qué se pide</dt><dd>Valores de $\alpha$ para parábola.</dd>
-    <dt>Qué se usa</dt><dd><b>Condiciones con parámetros:</b> degenerada $\iff|A|=0$; parábola $\iff|A_{00}|=0$ y $|A|\neq0$; elipse real $\iff|A_{00}|>0$ y $|A|\cdot\operatorname{tr}A_{00}<0$.</dd>
+    <dt>Qué se usa</dt><dd><b>Condiciones con parámetros:</b> parábola $\iff|A_{00}|=0,\ |A|\neq0$ — <a href="#s4">ver teoría</a>.</dd>
     <dt>Plan</dt><dd>$|A_{00}|=0$ y $|A|\neq0$.</dd>
   </dl></div>
+  <div class="box redaccion"><span class="h">✍️ Así se redacta en el examen</span>
   <ol class="steps">
-    <li>$$A=\begin{pmatrix}1&0&\alpha\\0&1&1\\\alpha&1&1\end{pmatrix};$$
-      <p>$A_{00}=1\cdot1-1^2=0$ para todo $\alpha$ (la parte cuadrática es $(x_1+x_2)^2$).</p></li>
-    <li>$|A|=1(1-1)-0+\alpha(0-\alpha)=-\alpha^2$.</li>
-    <li>Parábola $\iff|A|\neq0\iff$ <b>$\alpha\neq0$</b>.</li>
-    <li>Si $\alpha=0$: $(x_1+x_2)^2=-1$, rectas paralelas imaginarias (rango 2, $A_{11}=A_{22}=1>0$).</li>
-  </ol>
-  <div class="recipe"><b>Receta (Bloque IV):</b> escribe $A$ y $A_{00}$ en función del parámetro; traduce «parábola» a ($A_{00}=0$ y $|A|\neq0$) y resuelve; revisa los valores frontera.</div>
+    <li><p>Matriz asociada:</p>
+$$A=\begin{pmatrix}1&0&\alpha\\0&1&1\\\alpha&1&1\end{pmatrix}.$$
+<p>$A_{00}=1\cdot1-1^2=0$ para todo $\alpha$ (la parte cuadrática es $(x_1+x_2)^2$).</p></li>
+    <li><p>Determinante:</p>
+$$|A|=1(1-1)-0+\alpha(0-\alpha)=-\alpha^2.$$</li>
+    <li>Parábola $\iff A_{00}=0$ y $|A|\neq0\iff$ <b>$\alpha\neq0$</b>.</li>
+    <li>Para $\alpha=0$ la ecuación es $(x_1+x_2)^2=-1$: rectas paralelas imaginarias (rango 2), no parábola.</li>
+  </ol></div>
+  <details class="ampl"><summary>Comentarios y comprobaciones</summary>
+    <ul class="coment">
+      <li>Es el <a href="#ej6-31">E 6.31</a> con $\lambda=\mu=1$ (ya cumple $\mu=\lambda^2$); $|A|=-\alpha^2$.</li>
+      <li>En $\alpha=0$: rango 2 con $A_{11}=A_{22}=1>0$, lo que corresponde a rectas paralelas imaginarias.</li>
+    </ul>
+  </details>
+  <div class="recipe"><b>Receta:</b> escribe $A$ y $A_{00}$ en función del parámetro; traduce «parábola» a ($A_{00}=0$ y $|A|\neq0$) y resuelve; revisa los valores frontera.</div>
   <p><b>Error típico:</b> responder «para todo $\alpha$» porque $A_{00}=0$ siempre, sin ver que $|A|=-\alpha^2$ se anula en $\alpha=0$.</p>
 </details>
 </article>

@@ -56,18 +56,23 @@
 
 <div class="box thm"><span class="h">Por qué funciona el cuadro (explicación propia)</span>
   <p>Tras girar y trasladar (que no cambian los invariantes), una cónica <b>con centro</b> queda $\lambda_1y_1^2+\lambda_2y_2^2+d=0$, con matriz $\operatorname{diag}(d,\lambda_1,\lambda_2)$. Entonces $|A|=d\lambda_1\lambda_2$, $A_{00}=\lambda_1\lambda_2$ y la traza es $\lambda_1+\lambda_2$.</p>
+  <details class="ampl"><summary>Deducción rama a rama y atajo de control</summary>
   <ul>
     <li>$A_{00}>0\iff\lambda_1,\lambda_2$ del <b>mismo signo</b> ⇒ tipo elipse. La traza tiene ese mismo signo, así que $(\lambda_1+\lambda_2)|A|$ tiene el signo de $\lambda_1\cdot d$: es $<0$ cuando $d$ tiene signo <b>opuesto</b> al de los $\lambda_i$, y entonces $\lambda_1y_1^2+\lambda_2y_2^2=-d$ <b>sí tiene soluciones</b> (elipse real). Si $d=0$, $|A|=0$: un punto.</li>
     <li>$A_{00}<0\iff$ signos <b>opuestos</b> ⇒ hipérbola ($d\neq0$) o dos rectas secantes ($d=0$).</li>
     <li>$A_{00}=0\Rightarrow$ un $\lambda$ es 0: $\lambda_2y_2^2+\beta y_1=0$, con matriz $\begin{pmatrix}0&\beta/2&0\\\beta/2&0&0\\0&0&\lambda_2\end{pmatrix}$ y $|A|=-\lambda_2\beta^2/4\neq0\iff\beta\neq0\iff$ parábola; si $\beta=0$ solo queda $\lambda_2y_2^2+d=0$: rectas paralelas, doble o imaginarias.</li>
   </ul>
   <p><b>Atajo de control.</b> Con $A_{00}\neq0$, la constante de la ecuación reducida $\lambda_1x_1''^2+\lambda_2x_2''^2+d=0$ es $d=\dfrac{|A|}{A_{00}}$ (porque $|A|=d\,A_{00}$). Sirve para <b>comprobar</b> una reducción.</p>
+  </details>
   <span class="src" data-l="P" data-ref="Deducción propia a partir de la Definición 6.19 y del cuadro de U p. 286; verificado con sympy">propio</span>
   <span class="src" data-l="L" data-ref="Lay §7.2, p. 403-405: xᵀAx = c es una elipse, una hipérbola, rectas, un punto o vacío según los signos de los valores propios">L p.403-405</span>
 </div>
 
 <div class="box thm"><span class="h">Por qué $|A|$, la traza y $A_{00}$ no cambian (idea)</span>
+  <p>Un giro seguido de una traslación se escribe $X=NX''$ con $N=\begin{pmatrix}1&0\\ c&P\end{pmatrix}$: la matriz nueva es $A''=N^tAN$, con $|A''|=|A|$, y su bloque cuadrático es $P^{-1}MP$, semejante a $M$ (misma traza y mismo $A_{00}$).</p>
+  <details class="ampl"><summary>Deducción completa</summary>
   <p>Un giro $x=Px'$ ($P$ ortogonal, $\det P=1$) seguido de una traslación se escribe $X=NX''$ con $N=\begin{pmatrix}1&0\\ c&P\end{pmatrix}$ (por bloques), donde $c$ es el vector de la traslación (en coordenadas originales): $x=c+Px''$ da $\binom1x=\begin{pmatrix}1&0\\ c&P\end{pmatrix}\binom1{x''}$. Entonces $X^tAX=X''^t(N^tAN)X''$ y la matriz nueva es $A''=N^tAN$: $|A''|=|N|^2|A|=(\det P)^2|A|=|A|$, y su bloque cuadrático es $P^tMP=P^{-1}MP$ (la traslación no toca los términos de grado 2), <b>semejante</b> a $M$, luego con la misma traza y el mismo determinante $A_{00}$. (Es el cambio de base $P^tAP$ de formas cuadráticas, tema 6.2, con la matriz ampliada.)</p>
+  </details>
   <span class="src" data-l="P" data-ref="Justificación propia; verificada con sympy para un giro de ángulo θ y una traslación general">propio</span>
 </div>
 
