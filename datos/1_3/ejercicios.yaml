@@ -431,19 +431,34 @@
   pista: |-
     Convierte cada operación sobre columnas en un factor para el determinante. Al final, la traspuesta tiene el mismo determinante que la matriz.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $\det B^t$ tras varias operaciones sobre columnas de $A$ ($\det A=4$).
+      - - |-
+          Qué se usa
+        - |-
+          <b>Operaciones elementales y $\det A^t=\det A$</b> (U p.26-27): intercambio $\times(-1)$, escalar $\times\alpha$, reemplazo $\times1$ — <a href="#s6">ver teoría</a>.
+      - - Plan
+        - |-
+          Pasar cada operación de columnas a su factor, acumular y usar la traspuesta.
+  - redaccion:
     - |-
-      <b>Por qué valen para columnas las reglas de filas (P1).</b> Una operación sobre las columnas de $A$ es la misma operación sobre las filas de $A^t$, y $\det A=\det A^t$ (U p.26).
+      Una operación sobre columnas de $A$ es la misma operación sobre filas de $A^t$ y $\det A=\det A^t$, así que valen las reglas de filas.
     - |-
       $C_1\leftrightarrow C_6$: intercambio de dos columnas, el determinante cambia de signo: $4\cdot(-1)=-4$.
+      $C_3\to7C_3$: multiplicar una columna por $7$ multiplica el determinante por 7: $-4\cdot7=-28$.
     - |-
-      $C_3\to7C_3$: multiplicar una columna por $7\neq0$ multiplica por 7: $-4\cdot7=-28$.
+      $C_2\to C_2+C_4+C_5$: son dos reemplazos, $C_2\to C_2+C_4$ y luego $C_2\to C_2+C_5$. Un reemplazo $C_i\to C_i+\alpha C_j$ con $j\neq i$ no cambia el determinante: sigue valiendo $-28$. Así $\det B=-28$.
     - |-
-      $C_2\to C_2+C_4+C_5$: son dos reemplazos, $C_2\to C_2+C_4$ y luego $C_2\to C_2+C_5$ (las columnas 4 y 5 no han cambiado). Cada reemplazo $C_i\to C_i+\alpha C_j$ con $j\neq i$ no cambia el determinante: sigue valiendo $-28$. Así $\det B=-28$.
+      La traspuesta tiene el mismo determinante: $\det B^t=\det B=-28$. <b>Resultado: $\det B^t=-28$.</b>
+  - comentarios:
     - |-
-      <b>Traspuesta:</b> $\det B^t=\det B=-28$ (U p.26).
-  - resultado: |-
-      $\det B^t=-28$. <i>(Sympy: con una $A$ regular aleatoria de orden 6, $\det(B^t)/\det A=-7$.)</i>
+      Sympy: con una $A$ regular aleatoria de orden 6, $\det(B^t)/\det A=-7$.
   - receta: |-
       recorre las operaciones en orden y acumula un factor: intercambio $\to\times(-1)$; escalar $\alpha\to\times\alpha$; sumar a una fila/columna múltiplos de <b>otras</b> $\to\times1$. La traspuesta no cambia nada.
   - error: |-
@@ -466,17 +481,38 @@
   pista: |-
     Compara fila a fila la matriz nueva con $A$: ¿qué filas aparecen, en qué orden, con qué factor y cuáles son una suma de filas? Separa la fila suma en dos determinantes con la linealidad en esa fila y descarta el que tenga filas repetidas.
   cuerpo:
-  - html: |-
-      <p>Llamemos $F_1,\dots,F_5$ a las filas de $A$ y $M$ a la matriz pedida. La idea es <b>reconocer cada fila de $M$ como una fila de $A$ modificada</b>: no se calcula ningún determinante de orden 5 (con $a,b$ sería inviable).</p>
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $\det M$ para la matriz $M$ dada, sabiendo $\det A=15$ ($a,b$ simbólicos).
+      - - |-
+          Qué se usa
+        - |-
+          <b>Operaciones elementales</b> (U p.27): intercambio $\times(-1)$, escalar $\times\alpha$, reemplazo $\times1$ — <a href="#s6">ver teoría</a>.
+      - - Plan
+        - |-
+          Escribir cada fila de $M$ como fila de $A$ modificada, traducir a operaciones y acumular factores.
+  - redaccion:
     - |-
-      <b>Identificar filas.</b> Fila 1 de $M$: $(1,4,2,-2,6)=F_4$. Fila 2: $(21,0,-9,24,6)=3\cdot(7,0,-3,8,2)=3F_2$. Fila 3: $(1,2,9,3,a)=F_3$. Fila 4: $(3,-1,0,5,4)=F_1$. Fila 5: $(-4,6,10,3,a+b)=(-5+1,\,4+2,\,1+9,\,0+3,\,b+a)=F_5+F_3$.
+      Sean $F_1,\dots,F_5$ las filas de $A$ y $M$ la matriz pedida. Se identifica cada fila de $M$ con una fila de $A$ modificada.
     - |-
-      <b>Traducir a operaciones elementales (U p.27).</b> $F_1\leftrightarrow F_4$: cambia el signo, $15\cdot(-1)=-15$. $F_2\to3F_2$: multiplica por 3, $-45$. $F_5\to F_5+F_3$: reemplazo, sigue en $-45$. (Tras el intercambio, la fila 3 sigue siendo $F_3$, así que el reemplazo es correcto en ese orden.)
+      Fila 1 de $M$: $(1,4,2,-2,6)=F_4$. Fila 2: $(21,0,-9,24,6)=3F_2$. Fila 3: $(1,2,9,3,a)=F_3$. Fila 4: $(3,-1,0,5,4)=F_1$.
+      Fila 5: $(-4,6,10,3,a+b)=(-5+1,\,4+2,\,1+9,\,0+3,\,b+a)=F_5+F_3$.
     - |-
-      Estas tres operaciones llevan exactamente $A$ a $M$.
-  - resultado: |-
-      $\det M=15\cdot(-1)\cdot3=-45$. <i>(Sympy, con $a,b$ simbólicos: $\det M/\det A=-3$ idénticamente.)</i>
+      Operaciones: $F_1\leftrightarrow F_4$ cambia el signo, $15\cdot(-1)=-15$; $F_2\to3F_2$ multiplica por 3, $-45$; $F_5\to F_5+F_3$ es un reemplazo y sigue en $-45$. Estas tres operaciones llevan exactamente $A$ a $M$.
+    - |-
+      $$\det M=15\cdot(-1)\cdot3=-45.$$ <b>Resultado: $\det M=-45$.</b>
+  - comentarios:
+    - |-
+      No se calcula ningún determinante de orden 5 (con $a,b$ sería inviable): la idea es reconocer las filas.
+    - |-
+      Tras el intercambio, la fila 3 sigue siendo $F_3$, así que el reemplazo es correcto en ese orden.
+    - |-
+      Sympy, con $a,b$ simbólicos: $\det M/\det A=-3$ idénticamente.
   - receta: |-
       (1) escribe cada fila nueva como combinación de las antiguas; (2) tradúcelo a operaciones elementales; (3) multiplica $\det A$ por $(-1)^{\#\text{intercambios}}$ y por los escalares; los reemplazos no cuentan.
   - error: |-
@@ -499,15 +535,31 @@
   pista: |-
     Compara fila a fila la nueva matriz con $A$: identifica las filas intercambiadas, las multiplicadas por un número y las que resultan de sumar otra. Lo que sume una fila a otra no cambia el determinante; lo demás cuenta como factor.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $\det M$ para la matriz $M$ dada, sabiendo $\det A=7$ ($a,b$ simbólicos).
+      - - |-
+          Qué se usa
+        - |-
+          <b>Operaciones elementales</b> (U p.27): intercambio $\times(-1)$, escalar $\times\alpha$, reemplazo $\times1$ — <a href="#s6">ver teoría</a>.
+      - - Plan
+        - |-
+          Identificar las filas de $M$ en función de las de $A$, traducir a operaciones y acumular factores.
+  - redaccion:
     - |-
-      <b>Identificar filas</b> (filas de $A$: $F_1,\dots,F_4$; $M$ la matriz pedida). Fila 1 de $M$: $(a-9,\,1-2b,\,5,\,-6)=(a+(-9),\,1+(-2b),\,4+1,\,-7+1)=F_1+F_4$. Fila 2: $(1,5,a,0)=F_3$. Fila 3: $(0,10b,20,40)=10\cdot(0,b,2,4)=10F_2$. Fila 4: $F_4$.
+      Con $F_1,\dots,F_4$ las filas de $A$ y $M$ la matriz pedida: fila 1 de $M$: $(a-9,\,1-2b,\,5,\,-6)=F_1+F_4$. Fila 2: $(1,5,a,0)=F_3$. Fila 3: $(0,10b,20,40)=10F_2$. Fila 4: $F_4$.
     - |-
-      <b>Operaciones (U p.27).</b> $F_1\to F_1+F_4$: reemplazo, sigue valiendo 7. $F_2\to10F_2$: $\times10$, 70. $F_2\leftrightarrow F_3$: cambio de signo, $-70$.
+      Operaciones: $F_1\to F_1+F_4$ es un reemplazo, sigue valiendo 7; $F_2\to10F_2$ multiplica por 10, $70$; $F_2\leftrightarrow F_3$ cambia el signo, $-70$. Se obtiene exactamente $M$.
     - |-
-      Se obtiene exactamente $M$ (la fila $10F_2$ se coloca en el lugar 3 y $F_3$ en el 2).
-  - resultado: |-
-      $\det M=7\cdot10\cdot(-1)=-70$. <i>(Sympy: $\det M/\det A=-10$ con $a,b$ simbólicos.)</i>
+      $$\det M=7\cdot10\cdot(-1)=-70.$$ <b>Resultado: $\det M=-70$.</b>
+  - comentarios:
+    - |-
+      Sympy: $\det M/\det A=-10$ con $a,b$ simbólicos.
   - receta: |-
       la misma que en el ejemplo anterior (identificar filas, traducir a operaciones, acumular factores).
   - error: |-
@@ -530,18 +582,34 @@
   pista: |-
     Mira si las filas de $B$ son las de $A$ reordenadas o multiplicadas. Luego aplica $\det(ABA^t)=\det A\cdot\det B\cdot\det A^t$.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $\det(ABA^t)$ sabiendo $\det A=5$.
+      - - |-
+          Qué se usa
+        - |-
+          <b>$\det(XY)=\det X\det Y$ y $\det A^t=\det A$</b> (U p.26); operaciones elementales (U p.27) — <a href="#s5">ver teoría</a>.
+      - - Plan
+        - |-
+          Separar el producto, relacionar $B$ con $A$ por operaciones sobre filas y multiplicar.
+  - redaccion:
     - |-
-      <b>Determinante de un producto.</b> Por U p.26, $\det(ABA^t)=\det A\cdot\det B\cdot\det A^t$.
+      Por el determinante de un producto, $\det(ABA^t)=\det A\cdot\det B\cdot\det A^t$, y $\det A^t=\det A=5$.
     - |-
-      <b>Traspuesta.</b> $\det A^t=\det A=5$ (U p.26; vale para <b>cualquier</b> matriz cuadrada, no hace falta que $A$ sea simétrica, aunque aquí lo sea).
+      Filas de $A$: $F_1=(2,-1,0)$, $F_2=(-1,a,9)$, $F_3=(0,9,7)$. Filas de $B$: $(0,9,7)=F_3$; $(-3,3a,27)=3F_2$; $(2,-1,0)=F_1$. Luego $B$ sale de $A$ con $F_1\leftrightarrow F_3$ ($\times(-1)$) y $F_2\to3F_2$ ($\times3$): $$\det B=5\cdot(-1)\cdot3=-15.$$
     - |-
-      <b>Relacionar $B$ con $A$.</b> Filas de $A$: $F_1=(2,-1,0)$, $F_2=(-1,a,9)$, $F_3=(0,9,7)$. Filas de $B$: $(0,9,7)=F_3$; $(-3,3a,27)=3F_2$; $(2,-1,0)=F_1$. Luego $B$ sale de $A$ con $F_1\leftrightarrow F_3$ ($\times(-1)$) y $F_2\to3F_2$ ($\times3$) (U p.27): $\det B=5\cdot(-1)\cdot3=-15$.
+      $$\det(ABA^t)=5\cdot(-15)\cdot5=-375.$$ <b>Resultado: $-375$.</b>
+  - comentarios:
     - |-
-      <b>Juntar.</b> $\det(ABA^t)=5\cdot(-15)\cdot5=-375$.
-  - resultado: |-
-      $-375$. <i>(Sympy: $\det A=14a-169$, $\det B=-3\det A$; con $a=87/7$, $\det(ABA^t)=-375$.)</i>
-  - html: |-
+      $\det A^t=\det A$ vale para cualquier matriz cuadrada, no hace falta que $A$ sea simétrica (aquí lo es).
+    - |-
+      Sympy: $\det A=14a-169$, $\det B=-3\det A$; con $a=87/7$, $\det(ABA^t)=-375$.
+    - |-
       <div class="box warn"><span class="h">Fallo recurrente (señalado en el propio examen)</span><p>«Decir que el determinante de un producto de matrices es la suma de los determinantes. Decir que el determinante de la matriz traspuesta de $A$ es el inverso del determinante de $A$.» Lo correcto: $\det(XY)=\det X\det Y$ y $\det A^t=\det A$.</p></div>
   - receta: |-
       $\det$ de un producto = producto de $\det$; $\det A^t=\det A$; para $\det B$ busca qué operaciones elementales llevan $A$ a $B$.
@@ -565,19 +633,35 @@
   pista: |-
     Semejante a una diagonal significa $A=P^{-1}DP$ con $P$ regular. ¿Qué pasa con el determinante de un producto y con el de $P^{-1}$?
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $\det A$ si $A$ (orden 2) es semejante a $\operatorname{diag}(2,-1)$.
+      - - |-
+          Qué se usa
+        - |-
+          <b>$\det(XY)=\det X\det Y$ y $\det P^{-1}=1/\det P$</b> (U p.26-27); $A=P^{-1}DP$ (Def. 4.5) — <a href="#s5">ver teoría</a>.
+      - - Plan
+        - |-
+          Escribir $A=P^{-1}DP$, tomar determinantes y cancelar $P$.
+  - redaccion:
     - |-
-      <b>Qué significa «semejante».</b> Por la Definición 4.5 (U §4.1.3 p.148), existe una matriz regular $P$ con $A=P^{-1}DP$, $D=\begin{pmatrix}2&0\\0&-1\end{pmatrix}$. (Es lo mismo que $D=PAP^{-1}$; en todo este tema se usa la convención de U, $A=P^{-1}DP$.)
+      Por la Definición 4.5 (U §4.1.3 p.148) existe $P$ regular con $A=P^{-1}DP$, $D=\begin{pmatrix}2&0\\0&-1\end{pmatrix}$.
     - |-
-      <b>Determinante del producto</b> (U p.26, dos veces): $\det A=\det(P^{-1})\,\det D\,\det P$.
+      Por el determinante del producto: $\det A=\det(P^{-1})\,\det D\,\det P$. De $PP^{-1}=I$ sale $\det P\cdot\det P^{-1}=1$, y $\det P\neq0$ por ser regular (U p.27), luego $\det P^{-1}=1/\det P$.
     - |-
-      <b>Determinante de la inversa (P2).</b> De $PP^{-1}=I$: $\det P\cdot\det P^{-1}=1$; $P$ es regular, luego $\det P\neq0$ (U p.27) y $\det P^{-1}=1/\det P$.
+      $$\det A=\frac1{\det P}\cdot\det D\cdot\det P=\det D.$$ No hace falta conocer $P$: por eso «sí es posible».
     - |-
-      <b>Se cancela $P$:</b> $\det A=\dfrac1{\det P}\cdot\det D\cdot\det P=\det D$. No hace falta conocer $P$: por eso «sí es posible».
+      $D$ es diagonal, luego triangular: su determinante es el producto de la diagonal (U p.26), $2\cdot(-1)=-2$. <b>Resultado: $\det A=-2$.</b>
+  - comentarios:
     - |-
-      <b>$\det D$:</b> diagonal, luego triangular: producto de la diagonal (U p.26), $2\cdot(-1)=-2$.
-  - resultado: |-
-      $\det A=-2$. <i>(Sympy: con $P=\begin{pmatrix}1&2\\1&3\end{pmatrix}$, $\det(P^{-1}DP)=-2$.)</i>
+      Es lo mismo que $D=PAP^{-1}$; en todo este tema se usa la convención de U, $A=P^{-1}DP$.
+    - |-
+      Sympy: con $P=\begin{pmatrix}1&2\\1&3\end{pmatrix}$, $\det(P^{-1}DP)=-2$.
   - receta: |-
       matrices semejantes tienen el mismo determinante: $\det(P^{-1}DP)=\det D$. Si $D$ es diagonal (o triangular), $\det D$ = producto de la diagonal = producto de los autovalores contados con su multiplicidad.
   - error: |-
@@ -600,17 +684,30 @@
   pista: |-
     Una matriz semejante a $D$ tiene el mismo determinante que $D$. En una diagonal el determinante es el producto de los valores propios repetidos según su multiplicidad.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $\det A$ para $A$ de orden 5 semejante a una diagonal con valores propios $-5$ (mult. 1) y $-2$ (mult. 4).
+      - - |-
+          Qué se usa
+        - |-
+          <b>$\det(P^{-1}DP)=\det D$</b> y determinante de una diagonal = producto de la diagonal (U p.26) — <a href="#s5">ver teoría</a>.
+      - - Plan
+        - |-
+          Semejantes tienen el mismo determinante; calcular el producto de la diagonal de $D$.
+  - redaccion:
     - |-
-      <b>Semejanza.</b> Existe $P$ regular con $A=P^{-1}DP$ (Def. 4.5, U p.148).
+      $A$ es semejante a $D$: existe $P$ regular con $A=P^{-1}DP$ (Def. 4.5, U p.148).
     - |-
-      <b>Mismo determinante.</b> Por $\det(XY)=\det X\det Y$ y $\det P^{-1}=1/\det P$ (P2): $|A|=|P^{-1}|\,|D|\,|P|=|D|$.
+      Por $\det(XY)=\det X\det Y$ y $\det P^{-1}=1/\det P$: $$|A|=|P^{-1}|\,|D|\,|P|=|D|.$$
     - |-
-      <b>Quién es $D$.</b> Diagonal de orden 5 cuyos valores propios son sus elementos diagonales (si $D$ es diagonal, $|D-\lambda I|=\prod(d_{ii}-\lambda)$). Con las multiplicidades dadas la diagonal tiene una vez $-5$ y cuatro veces $-2$ (el orden no afecta al producto): $D=\operatorname{diag}(-5,-2,-2,-2,-2)$.
+      $D$ es diagonal de orden 5 y sus valores propios son los elementos diagonales; con las multiplicidades dadas, $D=\operatorname{diag}(-5,-2,-2,-2,-2)$ (el orden no afecta al producto).
     - |-
-      <b>Producto de la diagonal</b> (U p.26): $|D|=(-5)\cdot(-2)^4=(-5)\cdot16=-80$.
-  - resultado: |-
-      $|A|=-80$.
+      Producto de la diagonal (U p.26): $$|A|=|D|=(-5)\cdot(-2)^4=(-5)\cdot16=-80.$$ <b>Resultado: $|A|=-80$.</b>
   - receta: |-
       $\det A=\prod\lambda_i^{\,m_i}$ (cada autovalor elevado a su multiplicidad algebraica). Cuidado con el signo: $(-2)^4>0$.
   - error: |-
@@ -633,17 +730,35 @@
   pista: |-
     Una matriz semejante a $D$ tiene el mismo determinante que $D$. Multiplica los valores propios de la diagonal tantas veces como indica su multiplicidad.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $\det A$ para $A$ de orden 7 semejante a una diagonal con valores propios $-1$ (mult. 3) y $5$ (mult. 4).
+      - - |-
+          Qué se usa
+        - |-
+          <b>$\det(P^{-1}DP)=\det D$</b> y determinante de una diagonal = producto de la diagonal (U p.26) — <a href="#s5">ver teoría</a>.
+      - - Plan
+        - |-
+          Semejantes tienen el mismo determinante; calcular el producto de la diagonal de $D$.
+  - redaccion:
     - |-
-      $A$ semejante a $D$: existe $P$ regular con $A=P^{-1}DP$ (Def. 4.5, U p.148).
+      $A$ es semejante a $D$: existe $P$ regular con $A=P^{-1}DP$ (Def. 4.5, U p.148).
     - |-
-      $|A|=|P^{-1}|\,|D|\,|P|=\dfrac1{|P|}\,|D|\,|P|=|D|$ (U p.26 y P2).
+      $$|A|=|P^{-1}|\,|D|\,|P|=\frac1{|P|}\,|D|\,|P|=|D|.$$
     - |-
-      $D$ es diagonal de orden $3+4=7$ (se comprueba que las multiplicidades suman el orden) con diagonal $(-1,-1,-1,5,5,5,5)$ en algún orden.
+      $D$ es diagonal de orden $3+4=7$, con diagonal $(-1,-1,-1,5,5,5,5)$ en algún orden.
     - |-
-      $|A|=|D|=(-1)^3\cdot5^4=(-1)\cdot625=-625$.
-  - resultado: |-
-      $|A|=-625$. <i>(Sympy, construyendo $A=P^{-1}DP$ con una $P$ regular de orden 7: $\det A=-625$.)</i>
+      $$|A|=|D|=(-1)^3\cdot5^4=(-1)\cdot625=-625.$$ <b>Resultado: $|A|=-625$.</b>
+  - comentarios:
+    - |-
+      Se comprueba que las multiplicidades suman el orden de la matriz.
+    - |-
+      Sympy, construyendo $A=P^{-1}DP$ con una $P$ regular de orden 7: $\det A=-625$.
   - receta: |-
       igual que en el ejemplo anterior: comprobar que la suma de multiplicidades es el orden y multiplicar $\lambda^{m}$.
   - error: |-
@@ -666,19 +781,37 @@
   pista: |-
     Completa la permutación con los subíndices de columna que te dan, prueba las dos posibilidades para $(i,j)$ y cuenta los intercambios que necesita cada una.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          $(i,j)$ para que $a_{15}a_{2i}a_{3j}a_{42}a_{53}$ tenga signo negativo en un determinante de orden 5.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Def. 1.6</b> (U p.25): $\det A=\sum_{p\in S_5}\operatorname{sig}(p)\,a_{1p_1}\cdots a_{5p_5}$; signo = paridad de los intercambios — <a href="#s3">ver teoría</a>.
+      - - Plan
+        - |-
+          Completar la permutación, probar los dos casos y contar intercambios.
+  - redaccion:
     - |-
-      <b>Forma de los términos.</b> Por la Definición 1.6 (U p.25), $\det A=\sum_{p\in S_5}\operatorname{sig}(p)\,a_{1p_1}\cdots a_{5p_5}$: cada término tiene <b>un factor de cada fila</b> (primer subíndice $1,\dots,5$) y <b>los segundos subíndices forman una permutación</b> de $\{1,\dots,5\}$ (un factor de cada columna).
+      Cada término del desarrollo (Def. 1.6, U p.25) tiene un factor de cada fila y los segundos subíndices forman una permutación de $\{1,\dots,5\}$.
     - |-
-      <b>Permutación asociada.</b> Leyendo los segundos subíndices por filas: $p=(5,i,j,2,3)$. Ya están usadas las columnas 5, 2, 3; faltan 1 y 4. Como $i\neq j$, solo hay dos casos: $(i,j)=(1,4)$ o $(4,1)$.
+      Leyendo los segundos subíndices por filas: $p=(5,i,j,2,3)$. Faltan las columnas 1 y 4, y $i\neq j$: o bien $(i,j)=(1,4)$ o bien $(4,1)$.
     - |-
-      <b>Paridad de $(5,1,4,2,3)$</b> (intercambios hasta la identidad, U p.25): $(5,1,4,2,3)\to(3,1,4,2,5)\to(3,1,2,4,5)\to(1,3,2,4,5)\to(1,2,3,4,5)$: 4 intercambios, <b>par</b>, signo $+1$.
+      $(5,1,4,2,3)\to(3,1,4,2,5)\to(3,1,2,4,5)\to(1,3,2,4,5)\to(1,2,3,4,5)$: 4 intercambios, par, signo $+1$.
     - |-
-      <b>Paridad de $(5,4,1,2,3)$:</b> $(5,4,1,2,3)\to(3,4,1,2,5)\to(1,4,3,2,5)\to(1,2,3,4,5)$: 3 intercambios, <b>impar</b>, signo $-1$.
+      $(5,4,1,2,3)\to(3,4,1,2,5)\to(1,4,3,2,5)\to(1,2,3,4,5)$: 3 intercambios, impar, signo $-1$.
     - |-
-      <b>Comprobación por inversiones.</b> $(5,1,4,2,3)$ tiene $4+0+2+0=6$ inversiones (par); $(5,4,1,2,3)$ tiene $4+3+0+0=7$ (impar). Coincide: la paridad no depende de los intercambios elegidos (U p.25).
-  - resultado: |-
-      $(i,j)=(4,1)$. <i>(Sympy, <code>Permutation.signature()</code>: $+1$ y $-1$.)</i>
+      Como el signo debe ser negativo, <b>$(i,j)=(4,1)$</b>.
+  - comentarios:
+    - |-
+      Comprobación por inversiones: $(5,1,4,2,3)$ tiene $4+0+2+0=6$ (par); $(5,4,1,2,3)$ tiene $4+3+0+0=7$ (impar). La paridad no depende de los intercambios elegidos (U p.25).
+    - |-
+      Sympy, <code>Permutation.signature()</code>: $+1$ y $-1$.
   - receta: |-
       (1) escribe los segundos subíndices ordenando por filas; (2) completa con las columnas que faltan; (3) cuenta intercambios (o inversiones) hasta la identidad: par $\to+$, impar $\to-$.
   - error: |-
@@ -723,23 +856,41 @@
   pista: |-
     Un conjunto de $n$ vectores de $\mathbb R^n$ es base si el determinante de la matriz que forman es distinto de cero. En $S_2$ cuenta los vectores frente a la dimensión.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Probar que $S_1$ (4 vectores de $\mathbb R^4$) es base y que $S_2$ (4 vectores de $\mathbb R^3$) es ligado.
+      - - |-
+          Qué se usa
+        - |-
+          <b>$n$ vectores de $\mathbb R^n$ son base $\iff\det\neq0$</b>; reemplazos no cambian $\det$ (U p.27) — <a href="#s7">ver teoría</a>.
+      - - Plan
+        - |-
+          Calcular $\det S_1$ con reemplazos, adjuntos y Sarrus; en $S_2$ contar vectores frente a la dimensión.
+  - redaccion:
     - |-
-      <b>Por qué basta un determinante.</b> $S_1$ tiene 4 vectores en $\mathbb R^4$ (dimensión 4): son base $\iff$ son linealmente independientes $\iff$ la matriz $S$ con ellos por filas tiene rango 4 $\iff\det S\neq0$ (U p.27).
+      $S_1$ tiene 4 vectores en $\mathbb R^4$: son base $\iff$ la matriz $S$ con ellos por filas tiene rango 4 $\iff\det S\neq0$ (U p.27).
     - |-
-      <b>Hacer ceros en la columna 2</b> con el 1 de la posición $(1,2)$ como pivote (reemplazos: no cambian el determinante). $F_2\to F_2-4F_1$: $(2-16,\,0,\,-4+12,\,3+16)=(-14,0,8,19)$. $F_3\to F_3-3F_1$: $(2-12,\,0,\,1+9,\,3+12)=(-10,0,10,15)$. $F_4$ ya tiene 0. $$\det S=\det\begin{pmatrix}4&1&-3&-4\\-14&0&8&19\\-10&0&10&15\\4&0&-1&2\end{pmatrix}.$$
+      Ceros en la columna 2 con el 1 de la posición $(1,2)$ como pivote (reemplazos, no cambian el determinante): $F_2\to F_2-4F_1$ da $(-14,0,8,19)$ y $F_3\to F_3-3F_1$ da $(-10,0,10,15)$; $F_4$ ya tiene 0. $$\det S=\det\begin{pmatrix}4&1&-3&-4\\-14&0&8&19\\-10&0&10&15\\4&0&-1&2\end{pmatrix}.$$
     - |-
-      <b>Desarrollar por la columna 2</b> (U p.24): solo queda $a_{12}=1$, con signo $(-1)^{1+2}=-1$: $$\det S=-\det\begin{pmatrix}-14&8&19\\-10&10&15\\4&-1&2\end{pmatrix}.$$
+      Desarrollo por la columna 2 (U p.24): solo queda $a_{12}=1$, con signo $(-1)^{1+2}=-1$. $$\det S=-\det\begin{pmatrix}-14&8&19\\-10&10&15\\4&-1&2\end{pmatrix}.$$
     - |-
-      <b>Sacar factor 5 de la fila 2.</b> $F_2\to\tfrac15F_2$ divide el determinante por 5, así que fuera se multiplica por 5: $$\det\begin{pmatrix}-14&8&19\\-10&10&15\\4&-1&2\end{pmatrix}=5\det\begin{pmatrix}-14&8&19\\-2&2&3\\4&-1&2\end{pmatrix}.$$
+      Se saca factor 5 de la fila 2: $$\det\begin{pmatrix}-14&8&19\\-10&10&15\\4&-1&2\end{pmatrix}=5\det\begin{pmatrix}-14&8&19\\-2&2&3\\4&-1&2\end{pmatrix}.$$
     - |-
-      <b>Sarrus</b> (U p.26). Positivos: $(-14)(2)(2)+8\cdot3\cdot4+19\cdot(-2)(-1)=-56+96+38=78$. Negativos: $19\cdot2\cdot4+(-14)\cdot3\cdot(-1)+8\cdot(-2)\cdot2=152+42-32=162$. Determinante $=78-162=-84$.
+      Sarrus (U p.26). Positivos: $(-14)(2)(2)+8\cdot3\cdot4+19\cdot(-2)(-1)=78$. Negativos: $19\cdot2\cdot4+(-14)\cdot3\cdot(-1)+8\cdot(-2)\cdot2=162$. El determinante vale $78-162=-84$.
     - |-
-      <b>Juntar:</b> $\det S=-1\cdot5\cdot(-84)=420\neq0$: rango 4, $S_1$ libre y, con 4 vectores en dimensión 4, <b>base</b> de $\mathbb R^4$.
+      $\det S=-1\cdot5\cdot(-84)=420\neq0$: rango 4, $S_1$ es libre y, con 4 vectores en dimensión 4, <b>base de $\mathbb R^4$</b>.
     - |-
-      <b>$S_2$.</b> Son 4 vectores de $\mathbb R^3$: el rango de una matriz $4\times3$ es a lo sumo 3 $<4$, luego son linealmente dependientes (ligados). No hace falta ningún cálculo. (Sympy: rango 3.)
-  - resultado: |-
-      $\det S=420$ (sympy) $\Rightarrow$ $S_1$ base; $S_2$ ligado por tener más vectores que la dimensión.
+      $S_2$: son 4 vectores de $\mathbb R^3$; el rango de una matriz $4\times3$ es a lo sumo $3<4$, luego son <b>linealmente dependientes (ligados)</b>.
+  - comentarios:
+    - |-
+      Sympy: $\det S=420$ y rango de $S_2$ igual a 3.
+    - |-
+      Para $S_2$ no hay determinante que calcular: la matriz no es cuadrada (U p.23).
   - receta: |-
       $n$ vectores de $\mathbb R^n$ son base $\iff$ el determinante de la matriz que forman es $\neq0$. Para un $4\times4$: elige una fila/columna con un 1 (o ceros), haz ceros con reemplazos, desarrolla por adjuntos y acaba con Sarrus.
   - error: |-
