@@ -75,6 +75,6 @@ el más cargado —14—):
 - [x] F0 infraestructura (15-11-2026: bloques `redaccion`/`comentarios` en `datos_tema.py`, CSS, validación, `examenes.py`, regla 19 de CLAUDE.md, `prompt_academia.md`)
 - [x] F1 piloto 3.5 (15-11-2026: 3 redacciones de examen, 15 «Qué uso» acortados, teoría plegada)
 - [x] F1 piloto 4.3 (15-11-2026, vía agente redactor-tema: 13 redacciones de examen, 35 «Qué uso» acortados, teoría plegada; −11% de texto visible)
-- [ ] Aprobación del usuario
-- [ ] F2 módulos 4 · 6 · 5 · 1 · 2 · 3
-- [ ] F3 cierre
+- [x] Aprobación del usuario (15-11-2026: «adelante con F2», tema a tema con commit)
+- [x] F2 los 24 temas restantes convertidos, uno por commit (4.1-4.4, 6.1-6.5, 5.1-5.4, 1.2-1.5, 2.1-2.4, 3.1-3.4)
+- [x] F3 cierre: 219 redacciones de examen, 636 soluciones intactas, 26/26 sincronizados, `examenes.py` 0 errores; 3 entradas solo-enlace (1.3 ex-sep17a, 2.3 ex-feb18a, 1.4 ex-sep25p7) sin redacción por diseño
