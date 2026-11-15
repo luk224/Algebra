@@ -606,27 +606,42 @@
   pista: |-
     $A^2-B^2$ no es $(A+B)(A-B)$ en general. Halla primero $A$ y $B$ sumando y restando los datos (o usa que $(A+B)(A-B)+(A-B)(A+B)=2(A^2-B^2)$).
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Calcular $A^2-B^2$ sabiendo $A+B$ y $A-B$.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Producto no conmutativo</b> y distributiva (U p.12-13): $(A+B)(A-B)=A^2-AB+BA-B^2$ — <a href="#s3">ver teoría</a>.
+      - - Plan
+        - |-
+          Despejar $A$ y $B$ sumando y restando; calcular $A^2=AA$ y $B^2=BB$; restar.
+  - redaccion:
     - |-
-      <b>El atajo falla.</b> Con la distributiva (U p.12), $(A+B)(A-B)=A^2-AB+BA-B^2$, que solo es $A^2-B^2$ si $AB=BA$. El producto de matrices <b>no es conmutativo</b> en general (U p.13), así que hay que hallar $A$ y $B$.
+      El producto de matrices no es conmutativo, así que $(A+B)(A-B)=A^2-AB+BA-B^2$ no es $A^2-B^2$ en general. Se hallan $A$ y $B$.
     - |-
-      <b>Despejar $A$.</b> Sumando: $2A=(A+B)+(A-B)=\begin{pmatrix}5&5\\6&0\end{pmatrix}$, luego $A=\begin{pmatrix}5/2&5/2\\3&0\end{pmatrix}$.
+      Sumando y restando los datos:
+      $$2A=(A+B)+(A-B)=\begin{pmatrix}5&5\\6&0\end{pmatrix}\Rightarrow A=\begin{pmatrix}5/2&5/2\\3&0\end{pmatrix},$$
+      $$2B=(A+B)-(A-B)=\begin{pmatrix}1&-1\\8&0\end{pmatrix}\Rightarrow B=\begin{pmatrix}1/2&-1/2\\4&0\end{pmatrix}.$$
     - |-
-      <b>Despejar $B$.</b> Restando: $2B=(A+B)-(A-B)=\begin{pmatrix}1&-1\\8&0\end{pmatrix}$, luego $B=\begin{pmatrix}1/2&-1/2\\4&0\end{pmatrix}$.
+      Con el producto fila por columna:
+      $$A^2=AA=\begin{pmatrix}55/4&25/4\\15/2&15/2\end{pmatrix},\qquad B^2=BB=\begin{pmatrix}-7/4&-1/4\\2&-2\end{pmatrix}.$$
     - |-
-      <b>$A^2=AA$</b> (fila por columna): $A^2=\begin{pmatrix}55/4&25/4\\15/2&15/2\end{pmatrix}$.
+      Restando: $$A^2-B^2=\begin{pmatrix}31/2&13/2\\11/2&19/2\end{pmatrix}.$$ <b>Resultado: $A^2-B^2=\begin{pmatrix}31/2&13/2\\11/2&19/2\end{pmatrix}$.</b>
+  - comentarios:
     - |-
-      <b>$B^2=BB$:</b> $B^2=\begin{pmatrix}-7/4&-1/4\\2&-2\end{pmatrix}$.
+      Contraste: $(A+B)(A-B)=\begin{pmatrix}4&9\\14&21\end{pmatrix}\ne A^2-B^2$, porque aquí $AB=\begin{pmatrix}45/4&-5/4\\3/2&-3/2\end{pmatrix}\ne BA=\begin{pmatrix}-1/4&5/4\\10&10\end{pmatrix}$.
     - |-
-      <b>Restar:</b> $$A^2-B^2=\begin{pmatrix}31/2&13/2\\11/2&19/2\end{pmatrix}.$$
-    - |-
-      <b>Contraste.</b> $(A+B)(A-B)=\begin{pmatrix}4&9\\14&21\end{pmatrix}\ne A^2-B^2$, porque aquí $AB=\begin{pmatrix}45/4&-5/4\\3/2&-3/2\end{pmatrix}\ne BA=\begin{pmatrix}-1/4&5/4\\10&10\end{pmatrix}$.
-  - resultado: |-
-      $A^2-B^2=\begin{pmatrix}31/2&13/2\\11/2&19/2\end{pmatrix}$. <i>(Verificado con sympy.)</i>
+      Alternativa: $(A+B)(A-B)+(A-B)(A+B)=2(A^2-B^2)$, porque $-AB+BA$ y $AB-BA$ se cancelan.
   - receta: |-
       si te dan $A+B$ y $A-B$, $A=\tfrac12[(A+B)+(A-B)]$ y $B=\tfrac12[(A+B)-(A-B)]$. Calcula luego $A^2=AA$ y $B^2=BB$ por separado. Nunca uses $(A+B)(A-B)$ sin comprobar que $AB=BA$.
-  - html: |-
-      <p><b>Error típico</b> (lo señala el examen): «$A^2-B^2=(A+B)(A-B)$ en general», olvidando que el producto no conmuta.</p>
+  - error: |-
+      «$A^2-B^2=(A+B)(A-B)$ en general», olvidando que el producto no conmuta.
 - id: ex-sep24
   clase: examen
   fuentes:
@@ -645,27 +660,37 @@
   pista: |-
     Calcula primero $A$ y $B$ (suma y diferencia dividida entre 2) o desarrolla $(A+B)(A-B)$ y $(A-B)(A+B)$ y mira qué combinación da $A^2-B^2$.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Calcular $A^2-B^2$ sabiendo $A+B$ y $A-B$.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Producto no conmutativo</b> (U p.13): no vale $(A+B)(A-B)$ — <a href="#s3">ver teoría</a>.
+      - - Plan
+        - |-
+          Despejar $A$ y $B$; calcular $A^2=AA$ y $B^2=BB$; restar.
+  - redaccion:
     - |-
-      Misma razón que antes: el producto no conmuta (U p.13), no vale $(A+B)(A-B)$. Hay que hallar $A$ y $B$.
+      El producto no conmuta, luego no se puede usar $(A+B)(A-B)$: se hallan $A$ y $B$.
     - |-
-      $2A=(A+B)+(A-B)=\begin{pmatrix}4&2\\0&6\end{pmatrix}$, luego $A=\begin{pmatrix}2&1\\0&3\end{pmatrix}$.
+      $$2A=(A+B)+(A-B)=\begin{pmatrix}4&2\\0&6\end{pmatrix}\Rightarrow A=\begin{pmatrix}2&1\\0&3\end{pmatrix},\qquad 2B=(A+B)-(A-B)=\begin{pmatrix}2&4\\2&0\end{pmatrix}\Rightarrow B=\begin{pmatrix}1&2\\1&0\end{pmatrix}.$$
     - |-
-      $2B=(A+B)-(A-B)=\begin{pmatrix}2&4\\2&0\end{pmatrix}$, luego $B=\begin{pmatrix}1&2\\1&0\end{pmatrix}$.
+      $$A^2=\begin{pmatrix}2&1\\0&3\end{pmatrix}\begin{pmatrix}2&1\\0&3\end{pmatrix}=\begin{pmatrix}4&5\\0&9\end{pmatrix},\qquad B^2=\begin{pmatrix}1&2\\1&0\end{pmatrix}\begin{pmatrix}1&2\\1&0\end{pmatrix}=\begin{pmatrix}3&2\\1&2\end{pmatrix}.$$
     - |-
-      $A^2=\begin{pmatrix}2&1\\0&3\end{pmatrix}\begin{pmatrix}2&1\\0&3\end{pmatrix}=\begin{pmatrix}4&5\\0&9\end{pmatrix}$.
-    - |-
-      $B^2=\begin{pmatrix}1&2\\1&0\end{pmatrix}\begin{pmatrix}1&2\\1&0\end{pmatrix}=\begin{pmatrix}3&2\\1&2\end{pmatrix}$.
-    - |-
-      $A^2-B^2=\begin{pmatrix}1&3\\-1&7\end{pmatrix}$.
+      $$A^2-B^2=\begin{pmatrix}1&3\\-1&7\end{pmatrix}.$$ <b>Resultado: $A^2-B^2=\begin{pmatrix}1&3\\-1&7\end{pmatrix}$.</b>
+  - comentarios:
     - |-
       Contraste: $(A+B)(A-B)=\begin{pmatrix}0&6\\-2&8\end{pmatrix}\ne A^2-B^2$, pues $AB=\begin{pmatrix}3&4\\3&0\end{pmatrix}\ne BA=\begin{pmatrix}2&7\\2&1\end{pmatrix}$.
-  - resultado: |-
-      $\begin{pmatrix}1&3\\-1&7\end{pmatrix}$. <i>(Verificado con sympy.)</i>
   - receta: |-
       la misma que en Feb. 2018 (A): despejar $A$ y $B$, y elevar cada una al cuadrado con el producto fila por columna.
-  - html: |-
-      <p><b>Errores típicos</b> (literal del examen): calcular $A^2$ elevando al cuadrado cada elemento (recuerda $A^2=AA$) y usar $(A+B)(A-B)$.</p>
+  - error: |-
+      calcular $A^2$ elevando al cuadrado cada elemento (recuerda $A^2=AA$) y usar $(A+B)(A-B)$.
 - id: ex-sep18a
   clase: examen
   fuentes:
@@ -685,17 +710,32 @@
   pista: |-
     Desarrolla $(A-B)(A+B)$ sin suponer que el producto conmuta. Para las elementales, elige dos operaciones de tipos distintos y escríbelas sobre $I$.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          a) Justificar si $(A-B)(A+B)=A^2-B^2$ para matrices cuadradas; escribir dos elementales de distinto tipo.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Distributiva y no conmutatividad</b> (U p.12-13); <b>Def. 1.2</b> (U p.15): elemental = $I$ tras una operación — <a href="#s3">ver teoría</a>, <a href="#s5">elementales</a>.
+      - - Plan
+        - |-
+          Desarrollar sin conmutar y ver qué condición queda; contraejemplo $2\times2$; dos operaciones de tipos distintos sobre $I_3$.
+  - redaccion:
     - |-
-      <b>Desarrollo.</b> Por la distributiva (U p.12): $(A-B)(A+B)=A(A+B)-B(A+B)=A^2+AB-BA-B^2$.
+      Por la distributiva: $(A-B)(A+B)=A(A+B)-B(A+B)=A^2+AB-BA-B^2$. Por tanto $(A-B)(A+B)=A^2-B^2\iff AB=BA$.
     - |-
-      Luego $(A-B)(A+B)=A^2-B^2\iff AB-BA=0\iff AB=BA$.
+      <b>No es cierta en general</b>, pues el producto no es conmutativo. Contraejemplo: $A=\begin{pmatrix}1&1\\0&0\end{pmatrix}$, $B=\begin{pmatrix}1&0\\0&0\end{pmatrix}$. Aquí $AB=\begin{pmatrix}1&0\\0&0\end{pmatrix}\ne BA=\begin{pmatrix}1&1\\0&0\end{pmatrix}$; además $A^2=A$, $B^2=B$ y
+      $$A^2-B^2=\begin{pmatrix}0&1\\0&0\end{pmatrix},\qquad (A-B)(A+B)=\begin{pmatrix}0&1\\0&0\end{pmatrix}\begin{pmatrix}2&1\\0&0\end{pmatrix}=\begin{pmatrix}0&0\\0&0\end{pmatrix}.$$ Son distintas.
     - |-
-      <b>No es cierta en general</b>, pues el producto no es conmutativo (U p.13). Contraejemplo: $A=\begin{pmatrix}1&1\\0&0\end{pmatrix}$, $B=\begin{pmatrix}1&0\\0&0\end{pmatrix}$. Aquí $AB=\begin{pmatrix}1&0\\0&0\end{pmatrix}\ne BA=\begin{pmatrix}1&1\\0&0\end{pmatrix}$; además $A^2=A$, $B^2=B$, y $A^2-B^2=\begin{pmatrix}0&1\\0&0\end{pmatrix}$, mientras que $(A-B)(A+B)=\begin{pmatrix}0&1\\0&0\end{pmatrix}\begin{pmatrix}2&1\\0&0\end{pmatrix}=\begin{pmatrix}0&0\\0&0\end{pmatrix}$. Son distintas.
+      <b>Elementales de distinto tipo</b> (una sola operación sobre $I_3$): $F_1\leftrightarrow F_2$ da $E_1=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}$; $F_2\to2F_2$ da $E_2=\begin{pmatrix}1&0&0\\0&2&0\\0&0&1\end{pmatrix}$; $F_1\to F_1+5F_3$ da $E_3=\begin{pmatrix}1&0&5\\0&1&0\\0&0&1\end{pmatrix}$.
+  - comentarios:
     - |-
-      <b>Matiz:</b> la igualdad sí vale cuando $A$ y $B$ conmutan (por ejemplo $B=I$ o $B=A$).
-    - |-
-      <b>Elementales de distinto tipo</b> (Def. 1.2, U p.15: una sola operación elemental sobre $I$). En $I_3$: permutar $F_1\leftrightarrow F_2$ da $E_1=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}$; multiplicar $F_2\to2F_2$ da $E_2=\begin{pmatrix}1&0&0\\0&2&0\\0&0&1\end{pmatrix}$; y (tercer tipo) $F_1\to F_1+5F_3$ da $E_3=\begin{pmatrix}1&0&5\\0&1&0\\0&0&1\end{pmatrix}$.
+      Matiz: la igualdad sí vale cuando $A$ y $B$ conmutan (por ejemplo $B=I$ o $B=A$).
   - receta: |-
       para una «identidad notable» con matrices, desarrolla con la distributiva <b>sin conmutar</b> los factores, mira qué condición queda (casi siempre $AB=BA$) y da un contraejemplo $2\times2$. Una matriz elemental es $I$ tras <b>una</b> operación; indica cuál.
   - error: |-
@@ -718,21 +758,33 @@
   pista: |-
     Es un sistema de dos ecuaciones con matrices como incógnitas: trabájalo igual que uno de números (suma, resta, escalares). Quizá no necesites despejar $X$ e $Y$ por separado.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Con $2X+3Y=A$ y $X-Y=B$, calcular $X+Y$.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Suma y producto por escalar</b> (U p.11-12): asociativa, conmutativa, opuesto y distributivas — <a href="#s2">ver teoría</a>.
+      - - Plan
+        - |-
+          Despejar como un sistema numérico (sustitución), ya que no hay productos de matrices.
+  - redaccion:
     - |-
-      <b>Por qué se puede despejar como con números:</b> solo hay sumas y productos por escalares, que cumplen asociativa, conmutativa, opuesto y distributivas (U p.11-12). No aparece ningún producto de matrices.
+      Solo intervienen sumas y productos por escalares, que cumplen las mismas propiedades que con números; se puede despejar como en un sistema ordinario.
     - |-
-      De la 2.ª: $X=Y+B$.
+      De la segunda ecuación, $X=Y+B$. En la primera: $2(Y+B)+3Y=A\Rightarrow 5Y=A-2B\Rightarrow Y=\tfrac15(A-2B)$.
     - |-
-      En la 1.ª: $2(Y+B)+3Y=A\Rightarrow5Y=A-2B\Rightarrow Y=\tfrac15(A-2B)$.
+      $$A-2B=\begin{pmatrix}3&3\\-4&4\end{pmatrix},\quad Y=\begin{pmatrix}3/5&3/5\\-4/5&4/5\end{pmatrix},\quad X=Y+B=\begin{pmatrix}8/5&-2/5\\6/5&4/5\end{pmatrix}.$$
     - |-
-      $A-2B=\begin{pmatrix}3&3\\-4&4\end{pmatrix}$, luego $Y=\begin{pmatrix}3/5&3/5\\-4/5&4/5\end{pmatrix}$ y $X=Y+B=\begin{pmatrix}8/5&-2/5\\6/5&4/5\end{pmatrix}$.
+      $$X+Y=\begin{pmatrix}11/5&1/5\\2/5&8/5\end{pmatrix}.$$ <b>Resultado: $X+Y=\begin{pmatrix}11/5&1/5\\2/5&8/5\end{pmatrix}$.</b>
+  - comentarios:
     - |-
-      $X+Y=\begin{pmatrix}11/5&1/5\\2/5&8/5\end{pmatrix}$.
-    - |-
-      <b>Comprobación:</b> $2X+3Y=\begin{pmatrix}5&1\\0&4\end{pmatrix}=A$ y $X-Y=B$ ✓.
-  - resultado: |-
-      $X+Y=\begin{pmatrix}11/5&1/5\\2/5&8/5\end{pmatrix}$. <i></i>
+      Comprobación: $2X+3Y=\begin{pmatrix}5&1\\0&4\end{pmatrix}=A$ y $X-Y=B$ ✓.
   - receta: |-
       un sistema con matrices como incógnitas y solo sumas/escalares se resuelve como uno numérico (sustitución o reducción). Comprueba sustituyendo al final.
 - id: ex-feb17a2
@@ -753,19 +805,31 @@
   pista: |-
     Aplica las reglas $(AB)^{-1}=B^{-1}A^{-1}$ y $(AB)^t=B^tA^t$ (el orden se invierte) para simplificar cada factor antes de multiplicar.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Simplificar $[A(BC)^{-1}]^{-1}[A(A^tB^t)^t(BA)^{-1}]$ con $A,B,C$ regulares.
+      - - |-
+          Qué se usa
+        - |-
+          $(MN)^{-1}=N^{-1}M^{-1}$, $(M^{-1})^{-1}=M$ (U p.13); $(MN)^t=N^tM^t$ — <a href="#s4">ver teoría</a>.
+      - - Plan
+        - |-
+          Simplificar de dentro afuera cada corchete y multiplicar, cancelando solo pares contiguos.
+  - redaccion:
     - |-
-      Las inversas existen (todas regulares) y $(MN)^{-1}=N^{-1}M^{-1}$ (U p.13).
+      Todas son regulares, luego las inversas existen. Primer corchete: $[A(BC)^{-1}]^{-1}=\big((BC)^{-1}\big)^{-1}A^{-1}=(BC)A^{-1}$.
     - |-
-      <b>1.er corchete:</b> $[A(BC)^{-1}]^{-1}=\big((BC)^{-1}\big)^{-1}A^{-1}=(BC)A^{-1}$, usando $(M^{-1})^{-1}=M$.
+      Traspuesta interior: $(A^tB^t)^t=(B^t)^t(A^t)^t=BA$. Segundo corchete: $A\,(BA)\,(BA)^{-1}=A\,I=A$.
     - |-
-      <b>Traspuesta interior:</b> $(A^tB^t)^t=(B^t)^t(A^t)^t=BA$, por $(MN)^t=N^tM^t$ y $(M^t)^t=M$.
+      Producto, por la asociatividad: $$(BC)A^{-1}\cdot A=BC\,(A^{-1}A)=BC.$$ <b>Respuesta: C) $BC$.</b>
+  - comentarios:
     - |-
-      <b>2.º corchete:</b> $A\,(BA)\,(BA)^{-1}=A\,I=A$.
-    - |-
-      <b>Producto:</b> $(BC)A^{-1}\cdot A=BC\,(A^{-1}A)=BC$, por la asociatividad.
-  - html: |-
-      <p><b>Respuesta: C) $BC$.</b> <i>(Comprobado con sympy con matrices regulares aleatorias.)</i></p>
+      Comprobado con matrices regulares aleatorias.
   - receta: |-
       simplifica de dentro afuera con $(MN)^{-1}=N^{-1}M^{-1}$, $(MN)^t=N^tM^t$ (ambas <b>invierten el orden</b>), $(M^{-1})^{-1}=M$ y $(M^t)^t=M$. Cancela solo pares $MM^{-1}$ <b>contiguos</b>.
   - error: |-
@@ -788,17 +852,31 @@
   pista: |-
     Parte de $A^2=A$ y usa la hipótesis de regularidad: multiplica por $A^{-1}$.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Probar que si $A\in\mathcal M_n$ es regular y $A^2=A$, entonces $A=I_n$.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Matriz regular</b> (U p.13): existe $A^{-1}$ con $AA^{-1}=I$; asociatividad — <a href="#s4">ver teoría</a>.
+      - - Plan
+        - |-
+          Multiplicar $A^2=A$ por $A^{-1}$ (siempre por el mismo lado).
+  - redaccion:
     - |-
-      Por ser regular, existe $A^{-1}$ con $AA^{-1}=A^{-1}A=I_n$ (U p.13).
+      Por ser regular, existe $A^{-1}$ con $AA^{-1}=A^{-1}A=I_n$.
     - |-
-      Multiplicamos $AA=A$ <b>por la derecha</b> por $A^{-1}$ en ambos miembros (mismo lado, porque no hay conmutatividad): $(AA)A^{-1}=AA^{-1}$.
+      Multiplicamos $AA=A$ por la derecha por $A^{-1}$ en ambos miembros: $$(AA)A^{-1}=AA^{-1}.$$
     - |-
-      Por asociatividad (U p.12), el lado izquierdo es $A(AA^{-1})=AI_n=A$; el derecho es $I_n$.
+      Por la asociatividad, el lado izquierdo es $A(AA^{-1})=AI_n=A$; el derecho es $I_n$. Luego $A=I_n$. $\blacksquare$
+  - comentarios:
     - |-
-      Luego $A=I_n$. $\blacksquare$
-    - |-
-      <b>La hipótesis «regular» es necesaria:</b> $A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$ cumple $A^2=A$, no es $I_2$ y es singular (rango $1<2$, U p.22).
+      La hipótesis «regular» es necesaria: $A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$ cumple $A^2=A$, no es $I_2$ y es singular (rango $1<2$, U p.22).
   - receta: |-
       para «cancelar» una matriz, multiplica por su inversa <b>por el mismo lado</b> en los dos miembros, y solo si es regular; luego asociatividad y $MM^{-1}=I$.
   - error: |-
@@ -821,17 +899,33 @@
   pista: |-
     Parte de $A^t=A$ y calcula $(A^{-1})^t$ con la regla de la traspuesta de una inversa.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          ¿Es simétrica la inversa de una matriz regular simétrica?
+      - - |-
+          Qué se usa
+        - |-
+          <b>Simétrica</b> $A^t=A$ (U p.11); $(AB)^t=B^tA^t$ y $(A^{-1})^t=(A^t)^{-1}$ (U p.13) — <a href="#s4">ver teoría</a>.
+      - - Plan
+        - |-
+          Probar $(A^{-1})^t=A^{-1}$ partiendo de $A^t=A$.
+  - redaccion:
     - |-
-      <b>Qué probar:</b> $(A^{-1})^t=A^{-1}$ (simétrica: $A=A^t$, U p.11). Datos: $A^t=A$ y existe $A^{-1}$.
+      Hay que probar $(A^{-1})^t=A^{-1}$. Datos: $A^t=A$ y existe $A^{-1}$.
     - |-
-      <b>Vía 1 (propiedad de U p.13):</b> $(A^{-1})^t=(A^t)^{-1}=A^{-1}$. $\blacksquare$
+      Trasponiendo $AA^{-1}=I$ con la traspuesta del producto: $(A^{-1})^tA^t=I^t=I$. Como $A^t=A$, queda $(A^{-1})^tA=I$.
     - |-
-      <b>Vía 2 (solo con la traspuesta del producto).</b> De $AA^{-1}=I$, trasponiendo: $(A^{-1})^tA^t=I^t=I$. Como $A^t=A$: $(A^{-1})^tA=I$. Multiplicando por la derecha por $A^{-1}$: $(A^{-1})^t=A^{-1}$. $\blacksquare$
+      Multiplicando por la derecha por $A^{-1}$: $$(A^{-1})^t=A^{-1}.$$ <b>La proposición es cierta.</b> $\blacksquare$
+  - comentarios:
     - |-
-      <b>Ejemplo:</b> $A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ es simétrica y $A^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}$ también (sympy).
-  - resultado: |-
-      la proposición es <b>cierta</b>.
+      Otra vía, con la propiedad de U p.13: $(A^{-1})^t=(A^t)^{-1}=A^{-1}$.
+    - |-
+      Ejemplo: $A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ es simétrica y $A^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}$ también.
   - receta: |-
       para demostrar que $M$ es simétrica, prueba $M^t=M$. Parte de una igualdad conocida ($AA^{-1}=I$), traspónla con $(MN)^t=N^tM^t$ y sustituye la hipótesis $A^t=A$.
   - error: |-
@@ -854,15 +948,29 @@
   pista: |-
     Traduce «$AB$ simétrica» a una igualdad con traspuestas y desarrolla $(AB)^t$ usando que $A$ y $B$ son simétricas.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          V/F: si $A,B$ simétricas y $AB$ simétrica, entonces $AB=BA$.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Simétrica</b> $M^t=M$ (U p.11); $(MN)^t=N^tM^t$ (U p.13) — <a href="#s4">ver teoría</a>.
+      - - Plan
+        - |-
+          Escribir las hipótesis como igualdades con traspuestas y encadenarlas.
+  - redaccion:
     - |-
-      <b>Hipótesis como igualdades:</b> $A^t=A$, $B^t=B$ y $(AB)^t=AB$ (U p.11).
+      Hipótesis: $A^t=A$, $B^t=B$ y $(AB)^t=AB$.
     - |-
-      <b>Cadena:</b> $$AB\overset{(1)}{=}(AB)^t\overset{(2)}{=}B^tA^t\overset{(3)}{=}BA.$$ (1) $AB$ es simétrica; (2) traspuesta del producto, que invierte el orden (U p.13); (3) $A$ y $B$ son simétricas. $\blacksquare$
+      Cadena: $$AB\overset{(1)}{=}(AB)^t\overset{(2)}{=}B^tA^t\overset{(3)}{=}BA.$$ (1) $AB$ es simétrica; (2) traspuesta del producto, que invierte el orden; (3) $A$ y $B$ son simétricas. <b>Verdadera.</b> $\blacksquare$
+  - comentarios:
     - |-
-      <b>La hipótesis «$AB$ simétrica» no sobra:</b> $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$, $B=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ son simétricas, pero $AB=\begin{pmatrix}0&1\\2&0\end{pmatrix}$ no lo es y $BA=\begin{pmatrix}0&2\\1&0\end{pmatrix}\ne AB$.
-  - resultado: |-
-      <b>verdadera</b>.
+      La hipótesis «$AB$ simétrica» no sobra: $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$, $B=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ son simétricas, pero $AB=\begin{pmatrix}0&1\\2&0\end{pmatrix}$ no lo es y $BA=\begin{pmatrix}0&2\\1&0\end{pmatrix}\ne AB$.
   - receta: |-
       en afirmaciones sobre simétricas, escribe cada hipótesis como una igualdad con traspuestas ($M^t=M$) y encadénalas con $(MN)^t=N^tM^t$.
 - id: ex-feb23b
@@ -883,21 +991,35 @@
   pista: |-
     Compara cada fila de $B$ con las filas de $A$: ¿de cuál sale y con qué factor? Esas son las filas de $M$ (o descomponla en elementales).
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Hallar $M$ con $MA=B$ para cualesquiera $a_{ij}$ (filas de $A$ permutadas y escaladas).
+      - - |-
+          Qué se usa
+        - |-
+          <b>Teor. 1.1</b> (U p.18): operar por filas = multiplicar por la izquierda por la elemental — <a href="#s5">elementales</a>, <a href="#s6">teorema</a>.
+      - - Plan
+        - |-
+          Ver qué operaciones por filas llevan $A$ a $B$, escribir sus elementales y multiplicarlas con la última a la izquierda.
+  - redaccion:
     - |-
-      <b>Idea clave</b> (U p.16; Teorema 1.1, p.18): hacer una operación por filas en $A$ equivale a multiplicar por la <b>izquierda</b> por su matriz elemental. Varias operaciones $O_1,\dots,O_p$ (en ese orden) equivalen a $E_p\cdots E_1$.
+      Operar por filas en $A$ equivale a multiplicar por la <b>izquierda</b> por la matriz elemental; varias operaciones $O_1,\dots,O_p$ (en ese orden) equivalen a $E_p\cdots E_1$.
     - |-
-      <b>Identificar las operaciones.</b> Con $F_i$ = fila $i$ de $A$: fila 1 de $B$ = $F_3$, fila 2 = $F_2$, fila 3 = $-6F_1$. Se consigue con $O_1:\ F_1\to-6F_1$ y después $O_2:\ F_1\leftrightarrow F_3$.
+      Con $F_i$ la fila $i$ de $A$: fila 1 de $B$ $=F_3$, fila 2 $=F_2$, fila 3 $=-6F_1$. Se consigue con $O_1:\ F_1\to-6F_1$ y después $O_2:\ F_1\leftrightarrow F_3$.
     - |-
-      <b>Elementales</b> (operación hecha en $I_3$, Def. 1.2, U p.15): $E_1=\begin{pmatrix}-6&0&0\\0&1&0\\0&0&1\end{pmatrix}$, $E_2=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix}$.
+      Elementales (la operación hecha en $I_3$): $$E_1=\begin{pmatrix}-6&0&0\\0&1&0\\0&0&1\end{pmatrix},\qquad E_2=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix}.$$
     - |-
-      <b>Orden:</b> la última operación queda a la izquierda: $M=E_2E_1=\begin{pmatrix}0&0&1\\0&1&0\\-6&0&0\end{pmatrix}$.
+      La última operación queda a la izquierda: $$M=E_2E_1=\begin{pmatrix}0&0&1\\0&1&0\\-6&0&0\end{pmatrix}.$$ <b>Resultado: $M=\begin{pmatrix}0&0&1\\0&1&0\\-6&0&0\end{pmatrix}$.</b>
+  - comentarios:
     - |-
-      <b>Atajo.</b> La fila $i$ de $MA$ es (fila $i$ de $M$)$\cdot A$. Para obtener $F_3$ en la fila 1, la fila 1 de $M$ es $(0,0,1)$; para $F_2$, $(0,1,0)$; para $-6F_1$, $(-6,0,0)$. Es decir, $M$ es lo que resulta de hacer en $I_3$ las mismas operaciones que llevan $A$ a $B$.
+      Atajo: la fila $i$ de $MA$ es (fila $i$ de $M$)$\cdot A$. Para obtener $F_3$ en la fila 1, la fila 1 de $M$ es $(0,0,1)$; para $F_2$, $(0,1,0)$; para $-6F_1$, $(-6,0,0)$. Es decir, $M$ es lo que resulta de hacer en $I_3$ las mismas operaciones que llevan $A$ a $B$.
     - |-
-      <b>Comprobación:</b> $MA=B$ simbólicamente (sympy).
-  - resultado: |-
-      $M=\begin{pmatrix}0&0&1\\0&1&0\\-6&0&0\end{pmatrix}$.
+      Comprobación: $MA=B$ simbólicamente.
   - receta: |-
       si $B$ sale de $A$ por <b>filas</b>, $M$ va a la <b>izquierda</b> ($MA=B$) y su fila $i$ dice con qué combinación de filas de $A$ se forma la fila $i$ de $B$. Equivalente: aplica a $I$ las mismas operaciones. Por columnas sería $AM=B$.
   - error: |-
@@ -920,19 +1042,33 @@
   pista: |-
     La fila $i$ de $M$ dice cómo se forma la fila $i$ de $B$ a partir de las filas de $A$. Escribe esa combinación para cada fila.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Hallar $M$ con $MA=B$ para cualesquiera $a_{ij}$ (permutación cíclica con escalados).
+      - - |-
+          Qué se usa
+        - |-
+          <b>Teor. 1.1</b> (U p.18): $M$ a la izquierda; su fila $i$ dice cómo se forma la fila $i$ de $B$ — <a href="#s6">ver teoría</a>.
+      - - Plan
+        - |-
+          Leer, fila a fila, de qué fila de $A$ y con qué factor sale cada fila de $B$.
+  - redaccion:
     - |-
-      Igual que en el ejercicio anterior (U p.16, Teorema 1.1 p.18): $M$ va a la izquierda y su fila $i$ dice cómo se forma la fila $i$ de $B$.
+      $M$ va a la izquierda y su fila $i$ dice cómo se forma la fila $i$ de $B$ a partir de las filas de $A$.
     - |-
       Fila 1 de $B$ $=5F_3\Rightarrow$ fila 1 de $M$ es $(0,0,5)$. Fila 2 $=F_1\Rightarrow(1,0,0)$. Fila 3 $=-3F_2\Rightarrow(0,-3,0)$.
     - |-
-      $M=\begin{pmatrix}0&0&5\\1&0&0\\0&-3&0\end{pmatrix}$.
+      $$M=\begin{pmatrix}0&0&5\\1&0&0\\0&-3&0\end{pmatrix}.$$ <b>Resultado: $M=\begin{pmatrix}0&0&5\\1&0&0\\0&-3&0\end{pmatrix}$.</b>
+  - comentarios:
     - |-
-      <b>Como producto de elementales.</b> Primero la permutación cíclica de filas $(F_1,F_2,F_3)\to(F_3,F_1,F_2)$, con dos intercambios: $F_1\leftrightarrow F_3$ y después $F_2\leftrightarrow F_3$. Luego los escalados $F_1\to5F_1$ y $F_3\to-3F_3$. Con $E_{13},E_{23}$ los intercambios y $D_1,D_3$ los escalados, $M=D_3D_1E_{23}E_{13}$ (la última operación a la izquierda); se comprueba que da la misma $M$.
+      Como producto de elementales: primero la permutación cíclica de filas $(F_1,F_2,F_3)\to(F_3,F_1,F_2)$, con dos intercambios $F_1\leftrightarrow F_3$ y después $F_2\leftrightarrow F_3$; luego los escalados $F_1\to5F_1$ y $F_3\to-3F_3$. Con $E_{13},E_{23}$ los intercambios y $D_1,D_3$ los escalados, $M=D_3D_1E_{23}E_{13}$ (la última operación a la izquierda); da la misma $M$.
     - |-
-      <b>Comprobación:</b> $MA=B$ simbólicamente (sympy).
-  - resultado: |-
-      $M=\begin{pmatrix}0&0&5\\1&0&0\\0&-3&0\end{pmatrix}$.
+      Comprobación: $MA=B$ simbólicamente.
   - receta: |-
       la misma que en el ejercicio anterior; con el atajo basta leer qué fila de $A$ y con qué factor forma cada fila de $B$.
 - id: ex-sep19a1
@@ -953,19 +1089,35 @@
   pista: |-
     Prueba con ejemplos concretos de elementales de 3×3; recuerda que una elemental es regular y fíjate en qué le pasa a la suma de dos de ellas.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          V/F: la suma de dos matrices elementales $3\times3$ es elemental.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Def. 1.2</b> (U p.15): elemental = $I$ tras <b>una</b> operación por filas; las elementales son regulares (U p.16) — <a href="#s5">ver teoría</a>.
+      - - Plan
+        - |-
+          Buscar un contraejemplo: una suma que difiera de $I$ en más de una fila.
+  - redaccion:
     - |-
-      <b>Definición</b> (Def. 1.2, U p.15): elemental = $I$ tras <b>una sola</b> operación por filas. Difiere de $I_3$ en <b>una</b> fila (multiplicar $F_i$ por $\alpha\ne0$, o $F_i\to F_i+\alpha F_j$) o en <b>dos</b> filas intercambiadas (permutar).
+      Una elemental difiere de $I_3$ en <b>una</b> fila (escalar $F_i$ por $\alpha\ne0$, o $F_i\to F_i+\alpha F_j$) o en <b>dos</b> filas intercambiadas.
     - |-
-      <b>Contraejemplo 1.</b> $I_3$ es elemental ($F_1\to1\cdot F_1$; es el caso trivial admitido por la Def. 1.2, que solo exige $\alpha\ne0$), pero $I_3+I_3=2I_3$ difiere de $I_3$ en las tres filas; ninguna operación única hace eso. No es elemental.
+      <b>Contraejemplo.</b> $I_3$ es elemental ($F_1\to1\cdot F_1$), pero $I_3+I_3=2I_3$ difiere de $I_3$ en las tres filas: ninguna operación única hace eso. No es elemental.
     - |-
-      <b>Contraejemplo 2.</b> $A=\begin{pmatrix}1&0&0\\0&0&1\\0&1&0\end{pmatrix}$ ($F_2\leftrightarrow F_3$) y $B=I_3$: $A+B=\begin{pmatrix}2&0&0\\0&1&1\\0&1&1\end{pmatrix}$ tiene las filas 2 y 3 iguales; al restarlas aparece una fila nula, luego su rango es $2<3$ y es singular (U p.22). Las elementales, en cambio, son regulares (U p.16), así que $A+B$ no puede ser elemental. <i>(Atajo: $\det(A+B)=0$, tema 1.3.)</i>
+      Otro: $A=\begin{pmatrix}1&0&0\\0&0&1\\0&1&0\end{pmatrix}$ ($F_2\leftrightarrow F_3$) y $B=I_3$ dan $$A+B=\begin{pmatrix}2&0&0\\0&1&1\\0&1&1\end{pmatrix},$$ con las filas 2 y 3 iguales: rango $2<3$, es singular. Como las elementales son regulares, $A+B$ no es elemental.
     - |-
-      <b>Ejemplo mezclando dos tipos:</b> $\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}+\begin{pmatrix}1&5&0\\0&1&0\\0&0&1\end{pmatrix}=\begin{pmatrix}1&6&0\\1&1&0\\0&0&2\end{pmatrix}$ difiere de $I_3$ en las tres filas y no es un intercambio de dos filas: no es elemental (aquí la suma sí es regular, así que la regularidad por sí sola no basta para descartar).
+      Basta <b>un</b> contraejemplo para refutar una proposición universal. <b>Falsa.</b>
+  - comentarios:
     - |-
-      Basta <b>un</b> contraejemplo para refutar una proposición universal.
-  - resultado: |-
-      <b>falsa</b>.
+      Atajo: $\det(A+B)=0$ (tema 1.3).
+    - |-
+      Mezclando dos tipos: $\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}+\begin{pmatrix}1&5&0\\0&1&0\\0&0&1\end{pmatrix}=\begin{pmatrix}1&6&0\\1&1&0\\0&0&2\end{pmatrix}$ difiere de $I_3$ en las tres filas y no es un intercambio de dos filas: no es elemental (aquí la suma sí es regular, así que la regularidad por sí sola no basta para descartar).
   - receta: |-
       compara $M$ con $I$: debe diferir en una sola fila (escalada o con múltiplo de otra) o ser $I$ con dos filas intercambiadas. Atajo: si $\det M=0$ (tema 1.3), no es elemental.
   - error: |-
@@ -988,23 +1140,37 @@
   pista: |-
     El primer elemento de la primera fila es 0: necesitas un intercambio de filas antes de hacer ceros. Cuenta las filas no nulas al terminar.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Hallar una escalonada de $A$ y calcular su rango.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Def. 1.3</b> (U p.20) escalonada; <b>Def. 1.5</b> (U p.22) rango = filas no nulas — <a href="#s8">escalonadas</a>, <a href="#s9">rango</a>.
+      - - Plan
+        - |-
+          Gauss por columnas: pivote no nulo (permutando si hace falta) y ceros debajo; contar filas no nulas.
+  - redaccion:
     - |-
-      <b>Objetivo</b> (Def. 1.3, U p.20): ceros debajo de cada pivote, cada fila empieza con más ceros que la anterior, filas nulas al final. Solo operaciones elementales por filas, que dan matrices equivalentes por filas con el mismo rango (Teorema 1.3, U p.22).
+      Se usan solo operaciones elementales por filas, que dan matrices equivalentes por filas con el mismo rango.
     - |-
-      $F_1\leftrightarrow F_2$ (el elemento $(1,1)$ es 0 y no puede ser pivote): $\begin{pmatrix}1&5&0\\0&2&-1\\1&-1&2\end{pmatrix}$.
+      El elemento $(1,1)$ es 0 y no puede ser pivote: $F_1\leftrightarrow F_2$. $$\begin{pmatrix}0&2&-1\\1&5&0\\1&-1&2\end{pmatrix}\to\begin{pmatrix}1&5&0\\0&2&-1\\1&-1&2\end{pmatrix}.$$
     - |-
-      $F_3\to F_3-F_1$ (anula el 1 bajo el pivote): $\begin{pmatrix}1&5&0\\0&2&-1\\0&-6&2\end{pmatrix}$.
+      $F_3\to F_3-F_1$ (anula el 1 bajo el pivote): $$\begin{pmatrix}1&5&0\\0&2&-1\\0&-6&2\end{pmatrix}.$$
     - |-
-      $F_3\to F_3+3F_2$ (anula el $-6$; múltiplo $6/2=3$): $A_e=\begin{pmatrix}1&5&0\\0&2&-1\\0&0&-1\end{pmatrix}$.
+      $F_3\to F_3+3F_2$ (anula el $-6$; múltiplo $6/2=3$): $$A_e=\begin{pmatrix}1&5&0\\0&2&-1\\0&0&-1\end{pmatrix}.$$
     - |-
-      $A_e$ es escalonada: pivotes $1,2,-1$ en las columnas $1,2,3$, sin filas nulas.
+      $A_e$ es escalonada, con pivotes $1,2,-1$ y sin filas nulas: <b>$\operatorname{rang}A=3$</b>; como $A$ es $3\times3$, es regular.
+  - comentarios:
     - |-
-      <b>Rango</b> (Def. 1.5, U p.22) = nº de filas no nulas: $\operatorname{rang}A=3$; como $A$ es $3\times3$, es regular. Comprobación: $\det A=2\ne0$.
-  - resultado: |-
-      $\operatorname{rang}A=3$.
-  - html: |-
-      <div class="recipe"><b>Receta (Gauss para el rango):</b> columna a columna, elige un pivote no nulo (permuta si hace falta) y anula <b>solo lo de debajo</b> con $F_i\to F_i-\frac{a}{p}F_k$; pasa a la siguiente fila y columna; cuenta las filas no nulas. Indica siempre <b>sobre qué fila</b> actúas.</div>
+      Comprobación: $\det A=2\ne0$.
+  - receta: |-
+      <b>Gauss para el rango:</b> columna a columna, elige un pivote no nulo (permuta si hace falta) y anula <b>solo lo de debajo</b> con $F_i\to F_i-\frac{a}{p}F_k$; pasa a la siguiente fila y columna; cuenta las filas no nulas. Indica siempre <b>sobre qué fila</b> actúas.
   - error: |-
       tomar un 0 como pivote, o escribir operaciones como $F_3\to2F_3-F_1$ sin decir que son dos elementales (tipo 2 y tipo 3).
 - id: ex-feb17a2b
@@ -1025,15 +1191,31 @@
   pista: |-
     Usa la primera fila (pivote 1) para hacer ceros debajo en la primera columna y continúa. El rango son las filas no nulas de la escalonada final.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Rango de una matriz $4\times5$ por Gauss.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Def. 1.3 y 1.5</b> (U p.20-22) y <b>Teor. 1.3</b>: las operaciones elementales no cambian el rango — <a href="#s8">escalonadas</a>, <a href="#s9">rango</a>.
+      - - Plan
+        - |-
+          Escalonar con pivote 1 en las columnas 1 y 2 y contar filas no nulas.
+  - redaccion:
     - |-
-      Se escalona por filas (Def. 1.3, U p.20); el rango es el nº de filas no nulas (Def. 1.5, U p.22) y las operaciones elementales no lo cambian (Teorema 1.3, p.22).
+      Columna 1 (pivote 1): $F_2\to F_2-F_1$, $F_3\to F_3-F_1$, $F_4\to F_4-2F_1$: $$\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&-1&2&-1&-2\\0&-1&2&-1&-2\end{pmatrix}.$$
     - |-
-      <b>Columna 1</b> (pivote 1): $F_2\to F_2-F_1$, $F_3\to F_3-F_1$, $F_4\to F_4-2F_1$: $\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&-1&2&-1&-2\\0&-1&2&-1&-2\end{pmatrix}$.
+      Columna 2 (pivote 1): $F_3\to F_3+F_2$, $F_4\to F_4+F_2$: $$\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&0&0&0&0\\0&0&0&0&0\end{pmatrix}.$$
     - |-
-      <b>Columna 2</b> (pivote 1): $F_3\to F_3+F_2$, $F_4\to F_4+F_2$: $\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&0&0&0&0\\0&0&0&0&0\end{pmatrix}$.
+      Ya es escalonada, con dos filas no nulas: <b>rango 2</b>.
+  - comentarios:
     - |-
-      Ya es escalonada, con dos filas no nulas: <b>rango 2</b> (sympy ✓).
+      Las operaciones elementales no cambian el rango (Teor. 1.3, U p.22).
   - receta: |-
       la de Feb. 2019 (A). Si al escalonar aparecen filas iguales u opuestas, una resta las convierte en filas de ceros.
 - id: ex-sep22b
@@ -1054,15 +1236,31 @@
   pista: |-
     Escalona con Gauss; el pivote de la primera fila vale 1, así que haz ceros debajo sin fracciones. Rango = filas no nulas.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Rango de una matriz $3\times5$ por Gauss (y su reducida).
+      - - |-
+          Qué se usa
+        - |-
+          <b>Def. 1.3 y 1.5</b> (U p.20-22): escalonada y rango — <a href="#s8">escalonadas</a>, <a href="#s9">rango</a>.
+      - - Plan
+        - |-
+          Mismo método que la $4\times5$ anterior sin la cuarta fila.
+  - redaccion:
     - |-
-      Es la matriz anterior sin la cuarta fila; mismo método (U p.20-22).
+      $F_2\to F_2-F_1$, $F_3\to F_3-F_1$: $$\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&-1&2&-1&-2\end{pmatrix}.$$
     - |-
-      $F_2\to F_2-F_1$, $F_3\to F_3-F_1$: $\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&-1&2&-1&-2\end{pmatrix}$.
+      $F_3\to F_3+F_2$: $$\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&0&0&0&0\end{pmatrix}.$$
     - |-
-      $F_3\to F_3+F_2$: $\begin{pmatrix}1&1&2&2&-1\\0&1&-2&1&2\\0&0&0&0&0\end{pmatrix}$.
+      La matriz ya es escalonada y tiene dos filas no nulas: <b>rango 2</b>.
+  - comentarios:
     - |-
-      Dos filas no nulas: <b>rango 2</b>. Para quien quiera la reducida (única, U p.21), $F_1\to F_1-F_2$ da $\begin{pmatrix}1&0&4&1&-3\\0&1&-2&1&2\\0&0&0&0&0\end{pmatrix}$.
+      Si se quiere la reducida (única, U p.21), $F_1\to F_1-F_2$ da $\begin{pmatrix}1&0&4&1&-3\\0&1&-2&1&2\\0&0&0&0&0\end{pmatrix}$.
   - receta: |-
       la de Feb. 2019 (A). Justifica el final diciendo que la matriz <b>ya es escalonada</b> y contando sus filas no nulas (el examen dice solo «no se puede seguir escalonando»).
 - id: ex-feb26a
@@ -1083,29 +1281,39 @@
   pista: |-
     Escalona primero, normaliza los pivotes y haz ceros también por encima de cada pivote. Anota cada operación para razonar el proceso.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Forma escalonada reducida de $A$, de manera razonada.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Def. 1.3</b> (U p.20-21): reducida = pivotes 1 y ceros arriba y abajo; es única — <a href="#s8">ver teoría</a>.
+      - - Plan
+        - |-
+          Escalonar hacia abajo, normalizar pivotes y anular hacia arriba empezando por el último.
+  - redaccion:
     - |-
-      <b>Qué se busca</b> (Def. 1.3, U p.20): escalonada con pivotes iguales a 1 y ceros por encima y por debajo de cada pivote; es única (U p.21).
+      $F_3\to F_3+F_1$ (anula el $-1$ bajo el pivote): $$\begin{pmatrix}1&2&-3\\0&2&1\\0&2&0\end{pmatrix}.$$
     - |-
-      $F_3\to F_3+F_1$ (anula el $-1$ bajo el pivote): $\begin{pmatrix}1&2&-3\\0&2&1\\0&2&0\end{pmatrix}$.
+      $F_3\to F_3-F_2$ (anula el 2 bajo el pivote de la columna 2): $$\begin{pmatrix}1&2&-3\\0&2&1\\0&0&-1\end{pmatrix}.$$ Ya es escalonada; falta normalizar y subir.
     - |-
-      $F_3\to F_3-F_2$ (anula el 2 bajo el pivote de la columna 2): $\begin{pmatrix}1&2&-3\\0&2&1\\0&0&-1\end{pmatrix}$. Ya es escalonada; falta normalizar y subir.
+      $F_3\to-F_3$: $$\begin{pmatrix}1&2&-3\\0&2&1\\0&0&1\end{pmatrix}.$$
     - |-
-      $F_3\to-F_3$: $\begin{pmatrix}1&2&-3\\0&2&1\\0&0&1\end{pmatrix}$.
+      $F_2\to F_2-F_3$ y $F_1\to F_1+3F_3$ (ceros encima del pivote de la columna 3): $$\begin{pmatrix}1&2&0\\0&2&0\\0&0&1\end{pmatrix}.$$
     - |-
-      $F_2\to F_2-F_3$ y $F_1\to F_1+3F_3$ (ceros <b>encima</b> del pivote de la columna 3): $\begin{pmatrix}1&2&0\\0&2&0\\0&0&1\end{pmatrix}$.
+      $F_2\to\tfrac12F_2$ y $F_1\to F_1-2F_2$: $$\begin{pmatrix}1&2&0\\0&1&0\\0&0&1\end{pmatrix}\to I_3.$$ <b>La reducida es $I_3$</b>, luego $A$ es regular.
+  - comentarios:
     - |-
-      $F_2\to\tfrac12F_2$: $\begin{pmatrix}1&2&0\\0&1&0\\0&0&1\end{pmatrix}$.
+      Comprobación: $\det A=-2\ne0$.
     - |-
-      $F_1\to F_1-2F_2$: $I_3$.
-    - |-
-      <b>Conclusión:</b> la reducida es $I_3$, luego $A$ es regular (U p.22). Comprobación: $\det A=-2\ne0$.
-  - resultado: |-
-      la escalonada reducida de $A$ es $I_3$.
-  - html: |-
-      <div class="recipe"><b>Receta (Gauss-Jordan):</b> (1) escalona hacia abajo; (2) normaliza cada pivote a 1; (3) anula hacia arriba empezando por el <b>último</b> pivote, para no estropear los ceros ya logrados.</div>
-  - html: |-
-      <p><b>Notación:</b> $\leftrightarrow$ es solo para <b>intercambiar</b> filas; la sustitución se escribe $F_3\to F_3+F_1$ (U p.14).</p>
+      Notación: $\leftrightarrow$ es solo para <b>intercambiar</b> filas; la sustitución se escribe $F_3\to F_3+F_1$ (U p.14).
+  - receta: |-
+      <b>Gauss-Jordan:</b> (1) escalona hacia abajo; (2) normaliza cada pivote a 1; (3) anula hacia arriba empezando por el <b>último</b> pivote, para no estropear los ceros ya logrados.
 - id: ex-feb26b
   clase: examen
   fuentes:
@@ -1124,19 +1332,35 @@
   pista: |-
     Aquí los pivotes no están en la diagonal: escalona columna a columna saltando la columna que no tiene pivote, y luego haz ceros por encima.
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          Forma escalonada reducida de $A$ ($3\times4$), con pivotes fuera de la diagonal.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Def. 1.3</b> (U p.20-21): reducida única; una columna sin pivote se salta — <a href="#s8">ver teoría</a>.
+      - - Plan
+        - |-
+          Escalonar columna a columna saltando la que no tiene pivote, normalizar y hacer ceros por encima.
+  - redaccion:
     - |-
-      <b>Columna 1</b> (pivote 1): $F_2\to F_2-2F_1$, $F_3\to F_3+F_1$: $\begin{pmatrix}1&2&-1&3\\0&0&2&0\\0&0&0&0\end{pmatrix}$. La columna 2 no tiene pivote (bajo el 2 de la fila 1 solo hay ceros); el siguiente pivote es el 2 de la columna 3. Ya es escalonada, de rango 2.
+      Columna 1 (pivote 1): $F_2\to F_2-2F_1$, $F_3\to F_3+F_1$: $$\begin{pmatrix}1&2&-1&3\\0&0&2&0\\0&0&0&0\end{pmatrix}.$$ La columna 2 no tiene pivote (bajo el 2 de la fila 1 solo hay ceros); el siguiente pivote es el 2 de la columna 3. Ya es escalonada, de rango 2.
     - |-
-      $F_2\to\tfrac12F_2$ (normalizar): $\begin{pmatrix}1&2&-1&3\\0&0&1&0\\0&0&0&0\end{pmatrix}$.
+      $F_2\to\tfrac12F_2$ (normalizar): $$\begin{pmatrix}1&2&-1&3\\0&0&1&0\\0&0&0&0\end{pmatrix}.$$
     - |-
-      $F_1\to F_1+F_2$ (anula el $-1$ encima del pivote de la columna 3): $$A_r=\begin{pmatrix}1&2&0&3\\0&0&1&0\\0&0&0&0\end{pmatrix}.$$
+      $F_1\to F_1+F_2$ (anula el $-1$ encima del pivote de la columna 3): $$A_r=\begin{pmatrix}1&2&0&3\\0&0&1&0\\0&0&0&0\end{pmatrix}.$$ <b>Columnas pivote: 1 y 3.</b>
+  - comentarios:
     - |-
-      Comprobación con sympy (<code>rref</code>): coincide con $A_r$, columnas pivote 1 y 3 ✓. <i>(Los apartados de matriz asociada y núcleo son del tema 3.)</i>
+      Los apartados de matriz asociada y núcleo del examen son del tema 3.
+    - |-
+      Hay que indicar <b>sobre qué fila</b> se hace cada operación (no basta escribir «$F_1+F_2$»); la escalonada reducida no es una «triangular inferior equivalente».
   - receta: |-
       la de Gauss-Jordan del ejercicio anterior. Si una columna no tiene pivote, se salta y se sigue con la siguiente: los pivotes no tienen por qué estar en la diagonal.
-  - html: |-
-      <p><b>Fallos comunes</b> (literal del examen): la escalonada reducida no es una «triangular inferior equivalente»; y hay que indicar <b>sobre qué fila</b> se hace cada operación (no basta escribir «$F_1+F_2$»).</p>
 - id: ex-sep22e1
   clase: examen
   fuentes:
@@ -1156,10 +1380,28 @@
   pista: |-
     Recuerda qué parte de la forma escalonada es única y cuál no. Para la segunda, ¿qué tipo de operaciones relacionan dos sistemas equivalentes?
   cuerpo:
-  - pasos:
+  - plan:
+      titulo: |-
+        Antes de calcular
+      filas:
+      - - |-
+          Qué se pide
+        - |-
+          V/F: A) la reducida de $A$ no es única; B) las transformaciones elementales de ecuaciones dan un sistema equivalente.
+      - - |-
+          Qué se usa
+        - |-
+          <b>Unicidad de la reducida</b> (U p.21) y sistemas equivalentes (U p.31-32) — <a href="#s8">escalonadas</a>.
+      - - Plan
+        - |-
+          A) distinguir escalonada (no única) de reducida (única), con ejemplo; B) citar el resultado sobre sistemas equivalentes.
+  - redaccion:
     - |-
-      <b>A) Falsa.</b> U p.21: la escalonada <i>no</i> es única, pero la escalonada <b>reducida sí</b> lo es. Ejemplo (U Ej. 1.13-1.14): $\begin{pmatrix}1&2\\2&3\\1&1\end{pmatrix}$ tiene varias escalonadas, como $\begin{pmatrix}1&2\\0&-1\\0&0\end{pmatrix}$ o $\begin{pmatrix}1&2\\0&1\\0&0\end{pmatrix}$, pero una única reducida, $\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$. Lo que no es única es la escalonada «a secas»; la reducida queda determinada porque sus pivotes valen 1 y tiene ceros encima y debajo.
+      <b>A) Falsa.</b> La escalonada <i>no</i> es única, pero la escalonada <b>reducida sí</b> lo es. Ejemplo: $\begin{pmatrix}1&2\\2&3\\1&1\end{pmatrix}$ tiene varias escalonadas, como $\begin{pmatrix}1&2\\0&-1\\0&0\end{pmatrix}$ o $\begin{pmatrix}1&2\\0&1\\0&0\end{pmatrix}$, pero una única reducida, $\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}$. La reducida queda determinada porque sus pivotes valen 1 y tiene ceros encima y debajo.
     - |-
-      <b>B) Verdadera.</b> Es el resultado sobre sistemas equivalentes (U p.31-32), desarrollado completo en el <a href="tema_1_4_sistemas_ecuaciones.html#ex-sep22e1">tema 1.4</a>: se apoya en que las matrices elementales son regulares (U p.16).
+      <b>B) Verdadera.</b> Es el resultado sobre sistemas equivalentes (U p.31-32): las operaciones elementales sobre las ecuaciones se corresponden con multiplicar por matrices elementales, que son regulares (U p.16).
+  - comentarios:
+    - |-
+      El apartado B está desarrollado completo en el <a href="tema_1_4_sistemas_ecuaciones.html#ex-sep22e1">tema 1.4</a>. Ejemplo de A: U Ej. 1.13-1.14.
   - receta: |-
       en un V/F de teoría, cita el resultado exacto de U y añade un ejemplo pequeño.
