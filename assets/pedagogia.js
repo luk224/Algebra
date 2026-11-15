@@ -40,14 +40,15 @@
       if (!hay[x[0]]) return;   // no se muestra una pestaña sin contenido
       var b = d.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.v = x[0];
       b.innerHTML = x[1] + (cuenta[x[0]] ? '<span class="cnt">(' + cuenta[x[0]] + ')</span>' : '');
-      b.addEventListener('click', function () { setV(x[0]); window.scrollTo({ top: Math.max(0, bar.getBoundingClientRect().top + scrollY - (tb ? tb.offsetHeight : 45) - 4) }); });
+      b.addEventListener('click', function () { setV(x[0]); window.scrollTo({ top: Math.max(0, bar.getBoundingClientRect().top + scrollY - tbAlto() - 4) }); });
       bar.appendChild(b);
     });
     var first = main.querySelector('.box.esencial') || main.querySelector('h2[data-vista]');
     if (first) main.insertBefore(bar, first);
     /* la barra de pestañas se pega justo debajo de la barra superior, que en móvil ocupa varias líneas */
     var tb = d.querySelector('.topbar');
-    function ajustaTop() { if (tb) root.style.setProperty('--tbh', tb.offsetHeight + 'px'); }
+    function tbAlto() { return tb && getComputedStyle(tb).position === 'sticky' ? tb.offsetHeight : 0; }
+    function ajustaTop() { root.style.setProperty('--tbh', tbAlto() + 'px'); }
     ajustaTop(); window.addEventListener('resize', ajustaTop);
     function setV(v) {
       root.setAttribute('data-vista', v);
